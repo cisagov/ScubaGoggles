@@ -1,0 +1,29 @@
+# dependencies
+
+# testing
+
+# production
+
+# msc
+*.xml
+*.cer
+*.exe
+/M365/*.xml
+/PowerShell/output
+/PowerShell/example
+/PowerShell/M365Baseline*
+/output
+/example
+/M365Baseline*
+/Reports*
+/utils/Reports*
+/utils/output
+/utils/M365Baseline*
+
+# IDE
+/.vscode
+
+# Reports
+**/M365BaselineConformance*
+/Testing/Functional/Reports*
+/Testing/Functional/Archive*
