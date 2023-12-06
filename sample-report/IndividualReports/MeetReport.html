@@ -1,0 +1,275 @@
+<!DOCTYPE html> 
+<html lang="en">
+    <head>
+        <title>Google Meet Baseline Report</title>
+        <style>:root {
+    --background-primary: white;
+    --background-secondary: #b9bec2;
+    --test-pass: #d5ebd5;
+    --test-fail: #deb8b8;
+    --test-warning: #fff7d6;
+    --test-other: #ebebf2;
+    --test-deleted-bg: #b2beb5;
+    --test-deleted-color: #6f7478;
+    --cap-even: #0052882d;
+    --cap-hover: #00528850;
+    --header-color: #005288;
+    --note-color: #ee4e04;
+    --header-bottom: black;
+    --link-color: #85B065;
+    --text-color: black;
+    --border-color: black;
+    --toggle-height: 25px;
+    --toggle-width: 46px;
+    --toggle-radius: 18px;
+}
+
+body {
+    background-color: var(--background-secondary);
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+}
+
+table {
+    margin: auto;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 1000px;
+}
+
+h3 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+}
+
+h4 {
+    text-align: center;
+    justify-content: start;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--note-color);
+    margin-left:20%;
+    margin-right: 20%;
+    margin-bottom:5px;
+}
+
+
+.links {
+    display: flex;
+}
+
+header {
+    width: 1000px;
+    margin: auto;
+    border-bottom: 1px solid black;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 5px;
+}
+
+header h3 {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 5px solid rgba(0, 0, 0, 0);
+    color: var(--header-color);
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+header a {
+    text-decoration: none;
+}
+
+header h3:hover {
+    border-bottom: 5px solid var(--header-color);   
+}
+
+td {
+    padding: 4px;
+    margin: 0px;
+    overflow-wrap: break-word;
+}
+
+table, th, td {
+    border: 1px solid;
+}
+
+main {
+    background-color: white;
+    width: 1100px;
+    margin: auto;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+h1 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    font-size: 16px;
+    margin-top: 50px;
+}
+
+img {
+    width: 100px;
+}
+
+.setting {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.8);
+}</style>
+        <script>/**
+ * Adds the red, green, yellow, and gray coloring to the individual report pages.
+ */
+const colorRows = () => {
+    let rows = document.querySelectorAll('tr');
+    const requirementCol = 1
+    const statusCol = 2;
+    const criticalityCol = 3;
+    for (let i = 0; i < rows.length; i++) {
+        try {
+            if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
+                rows[i].style.color = "var(--test-deleted-color)";
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Fail") {
+                rows[i].style.background = "var(--test-fail)";
+            }
+            else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Warning") {
+                rows[i].style.background = "var(--test-warning)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Pass") {
+                rows[i].style.background = "var(--test-pass)";
+            }
+            else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
+                rows[i].style.background = "var(--test-fail)";
+                rows[i].querySelectorAll('td')[1].style.borderColor = "var(--border-color)";
+                rows[i].querySelectorAll('td')[1].style.color = "#d10000";
+            }
+        }
+        catch (error) {
+            console.error(`Error in colorRows, i = ${i}`);
+            console.error(error);
+        }
+    }
+}
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    colorRows();
+});</script>
+        </script>
+    </head>
+    <body>
+        <main>
+            <header>
+                <a href="../BaselineReports.html"><img src="images/cisa_logo.png" alt="Return to the report summary" title="Return to the report summary"></a>
+                <div class="links">
+                    <a href="https://www.cisa.gov/scuba" target="_blank"><h3 style="width: 210px;">Secure Cloud Business Applications (SCuBA)</h3></a>
+                    <div style="width:10px;"></div>
+                    <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank"><h3 style="width: 100px;">Baseline Documents</h3></a>
+                </div>
+            </header>
+            <h1>Google Meet Baseline Report</h1>
+            <h4><p><br/></p></h4>
+                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Name </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>Org Name</td><td>12/06/2023 11:15:27 Pacific Daylight Time</td><td>0.1</td><td>0.1.0</td></tr>         </table>
+            <h2>MEET-1         Meeting Access</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.MEET.1.1v0.1</td>
+      <td>Meeting access SHALL be restricted to users signed in with a Google Account or Dialing in using a phone.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+  </tbody>
+</table><h2>MEET-2         Internal Access to External Meetings</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.MEET.2.1v0.1</td>
+      <td>Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace tenant or organization.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+  </tbody>
+</table><h2>MEET-3         Host Management Meeting Features</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.MEET.3.1v0.1</td>
+      <td>Host Management meeting features SHALL be enabled so that they are available by default when a host starts their meeting.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+  </tbody>
+</table><h2>MEET-4         External Participants</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.MEET.4.1v0.1</td>
+      <td>Warn for external participants SHALL be enabled.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+  </tbody>
+</table>
+        </main>
+    </body>
+</html>

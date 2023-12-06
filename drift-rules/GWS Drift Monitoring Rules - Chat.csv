@@ -1,0 +1,11 @@
+PolicyId,Name,Data Source,Event (Is),Setting Name (Is),New Value (Is Not),Rule ID,Last Successful Test
+GWS.CHAT.1.1v0.1,Chat history SHOULD be enabled for information traceability.,Admin Log Event,Change Application Setting,DynamiteOTRSettingsProto off_the_record_state,ALWAYS_ON_THE_RECORD,rules/00gjdgxs1svgvm3,JK 08-01-23 @ 06:36
+GWS.CHAT.1.2v0.1,Users SHALL NOT be allowed to change their history setting.,Admin Log Event,Change Application Setting,DynamiteOTRSettingsProto off_the_record_state,ALWAYS_ON_THE_RECORD,rules/00gjdgxs18ozqwd,JK 08-01-23 @ 06:51
+GWS.CHAT.2.1v0.1,External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.,Admin Log Event,Change Application Setting,DynamiteFileSharingSettingsProto external_file_sharing_setting,NO_FILES,rules/00gjdgxs2l93fr0,JK 08-01-23 @ 07:01
+GWS.CHAT.3.1v0.1,Space history SHOULD be enabled for traceability of information.,Admin Log Event,Change Application Setting,RoomOtrSettingsProto otr_state,"ALWAYS_ON_THE_RECORD
+OR
+DEFAULT_ON_THE_RECORD",rules/00gjdgxs13kc3ei,JK 08-01-23 @ 11:58
+GWS.CHAT.4.1v0.1,"Allow users to send messages outside of Domain SHALL be set to ""On""",Admin Log Event,Change Application Setting,RestrictChatProto restrictChatToOrganization,false,rules/00gjdgxs3vz76ij,JK 08-01-23 @ 13:17
+GWS.CHAT.4.2v0.1,Only allow this for allowlisted domains SHALL be enabled.,Admin Log Event,Change Application Setting,RestrictChatProto externalChatRestriction,TRUSTED_DOMAINS,rules/00gjdgxs3exvv2u,JK 08-01-23 @ 13:27
+GWS.CHAT.5.1v0.1,User-level ability to install Chat apps SHALL be disabled.,Admin Log Event,Change Application Setting,Chat app Settings - Chat apps enabled,false,rules/00gjdgxs2g5w3mm,JK 08-01-23 @ 10:27
+GWS.CHAT.6.1v0.1,Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.,N/A,N/A,N/A,N/A,N/A,Not Alertable

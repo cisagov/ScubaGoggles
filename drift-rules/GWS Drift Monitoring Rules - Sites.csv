@@ -1,0 +1,2 @@
+PolicyId,Name,Data Source,Event (Is),Setting Name (Is),New Value (Is Not),Rule ID,Last Successful Test
+GWS.SITES.1.1v0.1,Sites Service SHOULD be disabled for all users.,Admin Log Event,Toggle Service Enabled,No Setting Name,FALSE,rules/00gjdgxs3gdgxe3,JK 07-28-23 @ 11:12

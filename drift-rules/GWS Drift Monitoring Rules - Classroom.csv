@@ -1,0 +1,6 @@
+PolicyId,Name,Data Source,Event (Is),Setting Name (Is),New Value (Is Not),Rule ID,Last Successful Test
+GWS.CLASSROOM.1.1v0.1,Who can join classes in your domain SHALL be set to Users in your domain only,Admin Log Events,Change Application Setting,ClassMembershipSettingProto who_can_join_classes,1,rules/00gjdgxs1c0jzhh,JK 10-20-23 @ 13:18
+GWS.CLASSROOM.1.2v0.1,Which classes can users in your domain join SHALL be set to Classes in your domain only,Admin Log Events,Change Application Setting,ClassMembershipSettingProto which_classes_can_users_join,1,rules/00gjdgxs0hj2dit,JK 10-20-23 @ 13:23
+GWS.CLASSROOM.2.1v0.1,Classroom API SHALL be disabled for users,Admin Log Events,Change Application Setting,ApiDataAccessSettingProto api_access_enabled,false,rules/00gjdgxs3aafl8p,JK 10-20-23 @ 13:31
+GWS.CLASSROOM.3.1v0.1,Roster import with Clever SHOULD be turned off,Admin Log Events,Change Application Setting,RosterImportSettingsProto sis_integrator,SIS_INTEGRATOR_NONE,rules/00gjdgxs25t0l8g,JK 10-20-23 @ 13:42
+GWS.CLASSROOM.4.1v0.1,Who can unenroll students from classes SHALL be set to Teachers Only,Admin Log Events,Change Application Setting,StudentUnenrollmentSettingsProto who_can_unenroll_students,ONLY_TEACHERS_CAN_UNENROLL_STUDENTS,rules/00gjdgxs44rgreu,JK 10-20-23 @ 13:50

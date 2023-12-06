@@ -1,0 +1,484 @@
+<!DOCTYPE html> 
+<html lang="en">
+    <head>
+        <title>Rules Baseline Report</title>
+        <style>:root {
+    --background-primary: white;
+    --background-secondary: #b9bec2;
+    --test-pass: #d5ebd5;
+    --test-fail: #deb8b8;
+    --test-warning: #fff7d6;
+    --test-other: #ebebf2;
+    --test-deleted-bg: #b2beb5;
+    --test-deleted-color: #6f7478;
+    --cap-even: #0052882d;
+    --cap-hover: #00528850;
+    --header-color: #005288;
+    --note-color: #ee4e04;
+    --header-bottom: black;
+    --link-color: #85B065;
+    --text-color: black;
+    --border-color: black;
+    --toggle-height: 25px;
+    --toggle-width: 46px;
+    --toggle-radius: 18px;
+}
+
+body {
+    background-color: var(--background-secondary);
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+}
+
+table {
+    margin: auto;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 1000px;
+}
+
+h3 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+}
+
+h4 {
+    text-align: center;
+    justify-content: start;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--note-color);
+    margin-left:20%;
+    margin-right: 20%;
+    margin-bottom:5px;
+}
+
+
+.links {
+    display: flex;
+}
+
+header {
+    width: 1000px;
+    margin: auto;
+    border-bottom: 1px solid black;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 5px;
+}
+
+header h3 {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 5px solid rgba(0, 0, 0, 0);
+    color: var(--header-color);
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+header a {
+    text-decoration: none;
+}
+
+header h3:hover {
+    border-bottom: 5px solid var(--header-color);   
+}
+
+td {
+    padding: 4px;
+    margin: 0px;
+    overflow-wrap: break-word;
+}
+
+table, th, td {
+    border: 1px solid;
+}
+
+main {
+    background-color: white;
+    width: 1100px;
+    margin: auto;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+h1 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    font-size: 16px;
+    margin-top: 50px;
+}
+
+img {
+    width: 100px;
+}
+
+.setting {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.8);
+}</style>
+        <script>/**
+ * Adds the red, green, yellow, and gray coloring to the individual report pages.
+ */
+const colorRows = () => {
+    let rows = document.querySelectorAll('tr');
+    const requirementCol = 1
+    const statusCol = 2;
+    const criticalityCol = 3;
+    for (let i = 0; i < rows.length; i++) {
+        try {
+            if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
+                rows[i].style.color = "var(--test-deleted-color)";
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Fail") {
+                rows[i].style.background = "var(--test-fail)";
+            }
+            else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Warning") {
+                rows[i].style.background = "var(--test-warning)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Pass") {
+                rows[i].style.background = "var(--test-pass)";
+            }
+            else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
+                rows[i].style.background = "var(--test-fail)";
+                rows[i].querySelectorAll('td')[1].style.borderColor = "var(--border-color)";
+                rows[i].querySelectorAll('td')[1].style.color = "#d10000";
+            }
+        }
+        catch (error) {
+            console.error(`Error in colorRows, i = ${i}`);
+            console.error(error);
+        }
+    }
+}
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    colorRows();
+});</script>
+        </script>
+    </head>
+    <body>
+        <main>
+            <header>
+                <a href="../BaselineReports.html"><img src="images/cisa_logo.png" alt="Return to the report summary" title="Return to the report summary"></a>
+                <div class="links">
+                    <a href="https://www.cisa.gov/scuba" target="_blank"><h3 style="width: 210px;">Secure Cloud Business Applications (SCuBA)</h3></a>
+                    <div style="width:10px;"></div>
+                    <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank"><h3 style="width: 100px;">Baseline Documents</h3></a>
+                </div>
+            </header>
+            <h1>Rules Baseline Report</h1>
+            <h4><p><br/></p></h4>
+                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Name </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>Org Name</td><td>12/06/2023 11:15:27 Pacific Daylight Time</td><td>0.1</td><td>0.1.0</td></tr>         </table>
+            <h2>RULES-15         System-defined Rules</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Rule Name</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Rule Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Domain data export initiated</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>A Super Administrator for your Google account has started exporting data from your domain.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>[Beta] Client-side encryption service unavailable</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>A problem has been detected with your client-side encryption service indicating an outage or misconfigured setting.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>User-reported phishing</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>A sender has sent messages to your domain that users have classified as phishings.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Suspicious message reported</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>A sender has sent messages to your domain that users have classified as spam.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Suspended user made active</td>
+      <td>No events found</td>
+      <td>Shall</td>
+      <td>A suspended user is made active.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>User granted Admin privilege</td>
+      <td>No events found</td>
+      <td>Shall</td>
+      <td>A user is granted an admin privilege.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>User's Admin privilege revoked</td>
+      <td>No events found</td>
+      <td>Shall</td>
+      <td>A user is revoked of their admin privilege.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>User suspended (by admin)</td>
+      <td>No events found</td>
+      <td>Shall</td>
+      <td>An admin has suspended the account.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Spike in user-reported spam</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>An unusually high volume of messages from a sender that users have marked as spam.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Google Voice configuration problem</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Auto attendants and ring groups with invalid references may hang up at unexpected times.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Directory sync cancelled due to safeguard threshold exceeded</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Directory sync has been automatically cancelled and disabled as the directory sync service detected a possibility to exceed deprovisioning safeguard threshold.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Account suspension warning</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Google Workspace accounts engaging in suspicious activity may have their account suspended. Google Workspace accounts must comply with the Google Workspace Terms of Service, Google Workspace for Education Terms of Service, Google Cloud Platform Terms of Service or Cloud Identity Terms of Service.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Suspicious login</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Google detected a sign-in attempt that doesn't match a user's normal behavior, such as a sign-in from an unusual location.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Leaked password</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Google detected compromised credentials requiring a reset of the user's password.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>User suspended (Google identity alert)</td>
+      <td>No events found</td>
+      <td>Shall</td>
+      <td>Google detected suspicious activity and suspended the account.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>User suspended for spamming</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Google detected suspicious activity such as spamming and suspended the account.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>User suspended for spamming through relay</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Google detected suspicious activity such as spamming through a SMTP relay service and suspended the account.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Suspicious programmatic login</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Google detected suspicious login attempts from potential applications or computer programs.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>User suspended due to suspicious activity</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Google suspended a user's account due to a potential compromise detected.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Gmail potential employee spoofing</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Incoming messages where a sender's name is in your Google Workspace directory, but the mail is not from your company's domains or domain aliases.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Phishing in inboxes due to bad whitelist</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Messages classified as spam by Gmail filters delivered to user inboxes due to whitelisting settings in the Google Admin console that override the spam filters.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Malware message detected post-delivery</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Messages detected as malware post-delivery that are automatically reclassified.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Phishing message detected post-delivery</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Messages detected as phishing post-delivery that are automatically reclassified.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Device compromised</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Provides details about devices in your domain that have entered a compromised state.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Google Operations</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Provides details about security and privacy issues that affect your Google Workspace services.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Suspicious device activity</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Provides details if device properties such as device ID, serial number, type of device, or device manufacturer are updated.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Government-backed attacks</td>
+      <td>No events found</td>
+      <td>Shall</td>
+      <td>Warnings about potential government-backed attacks.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Rate limited recipient</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>A high rate of incoming email indicating a potential malicious attack or misconfigured setting.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>New user added</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>A new user has been added to the domain.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>User deleted</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>A user has been deleted from the domain.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>App Maker Cloud SQL setup</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>A user has requested a Google Cloud SQL instance to be set up for use with App Maker.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Apps outage alert</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>Alerts about new, updated, or resolved outage on the Google Workspace Status Dashboard.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Smarthost failure</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>Alerts if a large number of messages can't be delivered to one of your smart host servers.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Calendar settings changed</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>An admin has changed Google Workspace Calendar settings.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Drive settings changed</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>An admin has changed Google Workspace Drive settings.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Email settings changed</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>An admin has changed Google Workspace Gmail settings.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Mobile settings changed</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>An admin has changed mobile management settings.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Exchange journaling failure</td>
+      <td>No events found</td>
+      <td>Should</td>
+      <td>Failures with Exchange journaling that ensures email traffic generated by Microsoft® Exchange server users is properly archived in Google Vault.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>TLS failure</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Messages requiring Transport Layer Security (TLS) can't be delivered.</td>
+    </tr>
+  </tbody>
+</table>
+        </main>
+    </body>
+</html>
