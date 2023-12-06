@@ -1,0 +1,674 @@
+<!DOCTYPE html> 
+<html lang="en">
+    <head>
+        <title>Common Controls Baseline Report</title>
+        <style>:root {
+    --background-primary: white;
+    --background-secondary: #b9bec2;
+    --test-pass: #d5ebd5;
+    --test-fail: #deb8b8;
+    --test-warning: #fff7d6;
+    --test-other: #ebebf2;
+    --test-deleted-bg: #b2beb5;
+    --test-deleted-color: #6f7478;
+    --cap-even: #0052882d;
+    --cap-hover: #00528850;
+    --header-color: #005288;
+    --note-color: #ee4e04;
+    --header-bottom: black;
+    --link-color: #85B065;
+    --text-color: black;
+    --border-color: black;
+    --toggle-height: 25px;
+    --toggle-width: 46px;
+    --toggle-radius: 18px;
+}
+
+body {
+    background-color: var(--background-secondary);
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+}
+
+table {
+    margin: auto;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 1000px;
+}
+
+h3 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+}
+
+h4 {
+    text-align: center;
+    justify-content: start;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--note-color);
+    margin-left:20%;
+    margin-right: 20%;
+    margin-bottom:5px;
+}
+
+
+.links {
+    display: flex;
+}
+
+header {
+    width: 1000px;
+    margin: auto;
+    border-bottom: 1px solid black;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 5px;
+}
+
+header h3 {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 5px solid rgba(0, 0, 0, 0);
+    color: var(--header-color);
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+header a {
+    text-decoration: none;
+}
+
+header h3:hover {
+    border-bottom: 5px solid var(--header-color);   
+}
+
+td {
+    padding: 4px;
+    margin: 0px;
+    overflow-wrap: break-word;
+}
+
+table, th, td {
+    border: 1px solid;
+}
+
+main {
+    background-color: white;
+    width: 1100px;
+    margin: auto;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+h1 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    font-size: 16px;
+    margin-top: 50px;
+}
+
+img {
+    width: 100px;
+}
+
+.setting {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.8);
+}</style>
+        <script>/**
+ * Adds the red, green, yellow, and gray coloring to the individual report pages.
+ */
+const colorRows = () => {
+    let rows = document.querySelectorAll('tr');
+    const requirementCol = 1
+    const statusCol = 2;
+    const criticalityCol = 3;
+    for (let i = 0; i < rows.length; i++) {
+        try {
+            if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
+                rows[i].style.color = "var(--test-deleted-color)";
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Fail") {
+                rows[i].style.background = "var(--test-fail)";
+            }
+            else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Warning") {
+                rows[i].style.background = "var(--test-warning)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Pass") {
+                rows[i].style.background = "var(--test-pass)";
+            }
+            else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
+                rows[i].style.background = "var(--test-other)";
+            }
+            else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
+                rows[i].style.background = "var(--test-fail)";
+                rows[i].querySelectorAll('td')[1].style.borderColor = "var(--border-color)";
+                rows[i].querySelectorAll('td')[1].style.color = "#d10000";
+            }
+        }
+        catch (error) {
+            console.error(`Error in colorRows, i = ${i}`);
+            console.error(error);
+        }
+    }
+}
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    colorRows();
+});</script>
+        </script>
+    </head>
+    <body>
+        <main>
+            <header>
+                <a href="../BaselineReports.html"><img src="images/cisa_logo.png" alt="Return to the report summary" title="Return to the report summary"></a>
+                <div class="links">
+                    <a href="https://www.cisa.gov/scuba" target="_blank"><h3 style="width: 210px;">Secure Cloud Business Applications (SCuBA)</h3></a>
+                    <div style="width:10px;"></div>
+                    <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank"><h3 style="width: 100px;">Baseline Documents</h3></a>
+                </div>
+            </header>
+            <h1>Common Controls Baseline Report</h1>
+            <h4><p><br/></p></h4>
+                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Name </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>Org Name</td><td>12/06/2023 11:15:27 Pacific Daylight Time</td><td>0.1</td><td>0.1.0</td></tr>         </table>
+            <h2>COMMONCONTROLS-1         Phishing-Resistant Multi-Factor Authentication</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.1.1v0.1</td>
+      <td>Phishing-Resistant MFA SHALL be required for all users.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Denise Rivera, Brian Mcgrath, Org Name, Laura Doyle, Thomas Carpenter.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.1.2v0.1</td>
+      <td>Google 2SV new user enrollment period SHALL be set to 1 week.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Denise Rivera.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.1.3v0.1</td>
+      <td>Allow users to trust the device SHALL be disabled.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Denise Rivera, Brian Mcgrath, Org Name, Laura Doyle, Thomas Carpenter.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.1.4v0.1</td>
+      <td>If phishing-resistant MFA is not yet tenable, an MFA method from the following list SHALL be used in the interim.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Denise Rivera, Org Name, Laura Doyle, Thomas Carpenter.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-2         Context-aware Access</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.2.1v0.1</td>
+      <td>Policies restricting access to GWS based on signals about enterprise devices SHOULD be implemented.</td>
+      <td>Pass</td>
+      <td>Should</td>
+      <td>Requirement met.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.2.2v0.1</td>
+      <td>Use of context-aware access for more granular controls, including using Advanced Mode (CEL), MAY be maximized and tailored if necessary.</td>
+      <td>N/A</td>
+      <td>May/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-3         Login Challenges</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.3.1v0.1</td>
+      <td>Login Challenges SHALL be enabled when third party SAML SSO is in use.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-4         User Session Duration</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.4.1v0.1</td>
+      <td>Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-5         Secure Passwords</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.5.1v0.1</td>
+      <td>User password strength SHALL be enforced.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.5.2v0.1</td>
+      <td>User password length SHALL be at least 12 characters.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.5.3v0.1</td>
+      <td>Password policy SHALL be enforced at next sign-in.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Org Name.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.5.4v0.1</td>
+      <td>User passwords SHALL NOT be reused.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Org Name.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.5.5v0.1</td>
+      <td>User passwords SHALL NOT expire.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-6         Highly Privileged Accounts</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.6.1v0.1</td>
+      <td>Agencies SHALL ensure that all accounts with highly privileged roles are separate administrative accounts, distinct from the ordinary day to day accounts of those personnel.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.6.2v0.1</td>
+      <td>All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency&#x27;s authoritative on-premises or federated identity system.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-7         Super Admin Accounts</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.7.1v0.1</td>
+      <td>A minimum of **two** and maximum of **four** separate and distinct Super Admin users SHALL be configured.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>The following super admins are configured: michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org, michael12@example.org. <i>Note: Exceptions are allowed for "break glass" super admin accounts, though we are not able to account for this automatically.</i></td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-8         Conflicting Account Management</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.8.1v0.1</td>
+      <td>Account conflict management SHALL be configured to replace conflicting unmanaged accounts with managed ones.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-9         Catastrophic Recovery Options for Super Admins</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.9.1v0.1</td>
+      <td>A second, &quot;break-glass&quot; Super Admin account SHALL be created and physically secured for each individual Super Admin user to mitigate account access issues resulting from catastrophic credential loss or compromise.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.9.2v0.1</td>
+      <td>Account self-recovery for Super Admins SHALL be disabled, forcing Super Admin users who have lost their login credentials to contact another Super Admin to recover their account.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Brian Mcgrath.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.9.3v0.1</td>
+      <td>&quot;Break-glass&quot; account credentials SHALL be used only if all Super Admins have lost their credentials.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.9.4v0.1</td>
+      <td>A geographically separate and secure location SHOULD be planned and implemented to store &quot;break-glass&quot; account credentials for Super Admins.</td>
+      <td>N/A</td>
+      <td>Should/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-10         GWS Advanced Protection Program</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.10.1v0.1</td>
+      <td>Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Program.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.10.2v0.1</td>
+      <td>All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program. This control enforces more secure protection of sensitive user accounts from targeted attacks. Sensitive user accounts include political appointees, Senior Executive Service (SES) officials, or other senior officials whose account compromise would pose a level of risk prohibitive to agency mission fulfillment.</td>
+      <td>N/A</td>
+      <td>Should/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-11         App Access to Google APIs</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.11.1v0.1</td>
+      <td>Agencies SHALL develop and implement a process to explicitly allow-list (trust) third-party app access to GWS services.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.11.2v0.1</td>
+      <td>Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>The following services allow access: DRIVE.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.11.3v0.1</td>
+      <td>Agencies SHALL NOT allow users to consent to access to low-risk scopes.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>The following services allow access: DRIVE.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.11.4v0.1</td>
+      <td>Agencies SHALL NOT trust unconfigured internal apps.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Org Name.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.11.5v0.1</td>
+      <td>Agencies SHALL NOT allow users to access unconfigured third-party apps.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Org Name.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-12         Authorized Google Marketplace Apps</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.12.1v0.1</td>
+      <td>Policy SHOULD be established dictating the app review and approval process.</td>
+      <td>N/A</td>
+      <td>Should/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.12.2v0.1</td>
+      <td>Only approved Google Workspace Marketplace applications SHOULD be allowed for installation.</td>
+      <td>Warning</td>
+      <td>Should</td>
+      <td>Requirement failed in Org Name.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-13         Less Secure Apps</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.13.1v0.1</td>
+      <td>Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>Requirement failed in Brian Mcgrath, Org Name.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-14         Google Takeout Services for Users</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.14.1v0.1</td>
+      <td>Google Takeout services SHALL be disabled for users.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>For apps with individual admin control: Requirement failed in Org Name.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-15         System-defined Rules</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.1v0.1</td>
+      <td>Required system-defined alerting rules, as listed in the Policy section, SHALL be active, with alerts enabled when available. Any system-defined rules not are considered optional but ought to be reviewed for consideration.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Results for GWS.COMMONCONTROLS.15 are listed in the <a href='../IndividualReports/RulesReport.html'>Rules Report</a>.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-16         Google Workspace Logs</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.16.1v0.1</td>
+      <td>The following critical logs SHALL be sent at a minimum.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.16.2v0.1</td>
+      <td>Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31. The logs SHALL be sent to the agency&#x27;s Security Operations Center (SOC) for monitoring.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-17         Data Regions</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.17.1v0.1</td>
+      <td>The data storage region SHALL be set to be the United States for all users in the agency&#x27;s GWS environment.</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-18         Supplemental Data Storage</h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.18.1v0.1</td>
+      <td>The supplemental data storage region SHALL NOT be set to &#x27;Russian Federation&#x27;.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
+    </tr>
+  </tbody>
+</table>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+on: 
+  workflow_dispatch:
+    inputs:
+      releaseName:
+        description: "Release Name (e.g., 1.2.4)"
+        required: true
+        type: string
+      version:
+        description: "Release Version (e.g., 1.2.4)"
+        required: true
+        type: string
+
+name: Build Release
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        path: repo
+        ref: main
+    - name: Package Repo for release
+      shell: pwsh
+      run: |
+        $PackageName = "scubagoggles"
+        Remove-Item -Recurse -Force repo -Include .git*
+        Move-Item -Path repo -Destination "${PackageName}-${env:RELEASE_VERSION}" -Force
+        Compress-Archive -Path "${PackageName}-${env:RELEASE_VERSION}" -DestinationPath "${PackageName}-${env:RELEASE_VERSION}.zip"
+        Get-ChildItem -Path . | Write-Output
+    - name: release
+      uses: softprops/action-gh-release@v1
+      id: create_release
+      with:
+        draft: true
+        prerelease: false
+        name: v${{ inputs.releaseName }}
+        tag_name: v${{ inputs.version }}
+        files: scubagoggles-${{ inputs.version }}.zip
+        generate_release_notes: true
+        fail_on_unmatched_files: true

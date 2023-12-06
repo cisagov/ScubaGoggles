@@ -1,0 +1,128 @@
+:root {
+    --background-primary: white;
+    --background-secondary: #b9bec2;
+    --test-pass: #d5ebd5;
+    --test-fail: #deb8b8;
+    --test-warning: #fff7d6;
+    --test-other: #ebebf2;
+    --test-deleted-bg: #b2beb5;
+    --test-deleted-color: #6f7478;
+    --cap-even: #0052882d;
+    --cap-hover: #00528850;
+    --header-color: #005288;
+    --note-color: #ee4e04;
+    --header-bottom: black;
+    --link-color: #85B065;
+    --text-color: black;
+    --border-color: black;
+    --toggle-height: 25px;
+    --toggle-width: 46px;
+    --toggle-radius: 18px;
+}
+
+body {
+    background-color: var(--background-secondary);
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+}
+
+table {
+    margin: auto;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 1000px;
+}
+
+h3 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+}
+
+h4 {
+    text-align: center;
+    justify-content: start;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--note-color);
+    margin-left:20%;
+    margin-right: 20%;
+    margin-bottom:5px;
+}
+
+
+.links {
+    display: flex;
+}
+
+header {
+    width: 1000px;
+    margin: auto;
+    border-bottom: 1px solid black;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 5px;
+}
+
+header h3 {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 5px solid rgba(0, 0, 0, 0);
+    color: var(--header-color);
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+header a {
+    text-decoration: none;
+}
+
+header h3:hover {
+    border-bottom: 5px solid var(--header-color);   
+}
+
+td {
+    padding: 4px;
+    margin: 0px;
+    overflow-wrap: break-word;
+}
+
+table, th, td {
+    border: 1px solid;
+}
+
+main {
+    background-color: white;
+    width: 1100px;
+    margin: auto;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+h1 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    font-size: 16px;
+    margin-top: 50px;
+}
+
+img {
+    width: 100px;
+}
+
+.setting {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.8);
+}

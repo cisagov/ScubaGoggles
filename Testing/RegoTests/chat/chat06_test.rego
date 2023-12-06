@@ -1,0 +1,25 @@
+package chat
+import future.keywords
+
+#
+# GWS.CHAT.6.1v0.1
+#--
+
+test_FromList_Correct_V1 if {
+    # Test enforcing MFA when there's only one event set to only key
+    PolicyId := "GWS.CHAT.6.1v0.1"
+    Output := tests with input as {
+        "chat_logs": {"items": [
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Currently not able to be tested automatically; please manually check."
+}
+#--

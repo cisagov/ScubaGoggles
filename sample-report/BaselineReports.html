@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+        <title>SCuBA GWS Security Baseline Conformance Reports</title>
+        <style>:root {
+    --background-primary: white;
+    --background-secondary: #b9bec2;
+    --test-pass: #d5ebd5;
+    --test-fail: #deb8b8;
+    --test-warning: #fff7d6;
+    --test-other: #ebebf2;
+    --test-deleted-bg: #b2beb5;
+    --test-deleted-color: #6f7478;
+    --cap-even: #0052882d;
+    --cap-hover: #00528850;
+    --header-color: #005288;
+    --note-color: #ee4e04;
+    --header-bottom: black;
+    --link-color: #85B065;
+    --text-color: black;
+    --border-color: black;
+    --toggle-height: 25px;
+    --toggle-width: 46px;
+    --toggle-radius: 18px;
+}
+
+body {
+    background-color: var(--background-secondary);
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+}
+
+table {
+    margin: auto;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 1000px;
+}
+
+h3 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+}
+
+h4 {
+    text-align: center;
+    justify-content: start;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--note-color);
+    margin-left:20%;
+    margin-right: 20%;
+    margin-bottom:5px;
+}
+
+
+.links {
+    display: flex;
+}
+
+header {
+    width: 1000px;
+    margin: auto;
+    border-bottom: 1px solid black;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 5px;
+}
+
+header h3 {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 5px solid rgba(0, 0, 0, 0);
+    color: var(--header-color);
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+header a {
+    text-decoration: none;
+}
+
+header h3:hover {
+    border-bottom: 5px solid var(--header-color);   
+}
+
+td {
+    padding: 4px;
+    margin: 0px;
+    overflow-wrap: break-word;
+}
+
+table, th, td {
+    border: 1px solid;
+}
+
+main {
+    background-color: white;
+    width: 1100px;
+    margin: auto;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+h1 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--header-color);
+    font-size: 16px;
+    margin-top: 50px;
+}
+
+img {
+    width: 100px;
+}
+
+.setting {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.8);
+}</style>
+        <style>main {
+    height: 115vh;
+    padding-bottom: 0px;
+}
+
+footer {
+    position: absolute;
+    bottom: 5px;
+    text-align: center;
+    width: 100%;
+}
+
+.summary {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 5px;
+    min-width: 140px;
+    text-align: center;
+}
+
+a.individual_reports:link {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #005288;
+    text-decoration: underline;
+}
+
+a.individual_reports:visited {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #85B065;
+}
+
+a.individual_reports:hover {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #85B065;
+    text-decoration: none;
+}
+
+a.individual_reports:active {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #85B065;
+    text-decoration: none;
+} 
+
+table.tenantdata tr:first-child {
+    color: black;
+}
+
+.failure { background-color: var(--test-fail); }
+.warning { background-color: var(--test-warning); }
+.pass { background-color: var(--test-pass); }
+.manual { background-color: var(--test-other); }
+
+.error {
+    background-color: #deb8b8; 
+    color: #d10000;
+}</style>
+    </head>
+    <body>
+        <main>
+            <header>
+                <a href=""><img src="./IndividualReports/images/cisa_logo.png" alt="Return to the report summary"></a>
+                <div class="links">
+                    <a href="https://www.cisa.gov/scuba" target="_blank"><h3 style="width: 210px;">Secure Cloud Business Applications (SCuBA)</h3></a>
+                    <div style="width:10px;"></div>
+                    <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank"><h3 style="width: 100px;">Baseline Documents</h3></a>
+                </div>
+            </header>
+            <h1>SCuBA GWS Security Baseline Conformance Reports</h1>
+                    <table style = "text-align:center;">             <colgroup><col/><col/><col/><col/></colgroup>             <tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th></tr>             <tr><td>Org Name</td><td>example.org</td><td>ABCDEFG</td><td>12/06/2023 11:15:27 Pacific Daylight Time</td></tr>         </table>
+            <br> <br/>
+            <table>
+  <thead>
+    <tr>
+      <th>Baseline Conformance Reports</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/CalendarReport.html>Google Calendar</a></td>
+      <td><div class='summary pass'>4 tests passed</div><div class='summary warning'>1 warning</div><div class='summary'></div><div class='summary manual'>3 manual checks needed</div></td>
+    </tr>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/ChatReport.html>Google Chat</a></td>
+      <td><div class='summary pass'>6 tests passed</div><div class='summary'></div><div class='summary failure'>1 test failed</div><div class='summary manual'>1 manual check needed</div></td>
+    </tr>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/ClassroomReport.html>Google Classroom</a></td>
+      <td><div class='summary pass'>3 tests passed</div><div class='summary'></div><div class='summary failure'>2 tests failed</div><div class='summary'></div></td>
+    </tr>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/CommoncontrolsReport.html>Common Controls</a></td>
+      <td><div class='summary pass'>30 tests passed</div><div class='summary warning'>1 warning</div><div class='summary failure'>14 tests failed</div><div class='summary manual'>31 manual checks needed</div></td>
+    </tr>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/DriveReport.html>Google Drive and Docs</a></td>
+      <td><div class='summary pass'>8 tests passed</div><div class='summary warning'>6 warnings</div><div class='summary failure'>3 tests failed</div><div class='summary manual'>1 manual check needed</div></td>
+    </tr>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/GmailReport.html>Gmail</a></td>
+      <td><div class='summary pass'>22 tests passed</div><div class='summary warning'>4 warnings</div><div class='summary failure'>6 tests failed</div><div class='summary manual'>11 manual checks needed</div></td>
+    </tr>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/GroupsReport.html>Groups for Business</a></td>
+      <td><div class='summary pass'>6 tests passed</div><div class='summary warning'>1 warning</div><div class='summary'></div><div class='summary'></div></td>
+    </tr>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/MeetReport.html>Google Meet</a></td>
+      <td><div class='summary pass'>4 tests passed</div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
+    </tr>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/RulesReport.html>Rules</a></td>
+      <td><div class='summary pass'>22 tests passed</div><div class='summary'></div><div class='summary'></div><div class='summary manual'>18 manual checks needed</div></td>
+    </tr>
+    <tr>
+      <td><a class="individual_reports" href=./IndividualReports/SitesReport.html>Google Sites</a></td>
+      <td><div class='summary pass'>1 test passed</div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
+    </tr>
+  </tbody>
+</table>
+            <br> <br/>
+            <footer>
+                Report generated with <a class="individual_reports" href="https://github.com/cisagov/ScubaGoggles">CISA's ScubaGoggles</a>  tool v0.1.0
+            </footer>
+        </main>
+   </body>
+</html>
