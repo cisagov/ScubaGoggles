@@ -1,6 +1,6 @@
 ---
 name: "\U0001F4A1 Idea"
-about: Describe this issue template's purpose here.
+about: 'Describe an idea, todo, feature, task, improvement, issue, epic, or story'
 title: ''
 labels: ''
 assignees: ''
