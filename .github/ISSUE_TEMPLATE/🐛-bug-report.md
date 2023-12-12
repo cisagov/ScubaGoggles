@@ -1,6 +1,6 @@
 ---
 name: "\U0001F41B Bug report"
-about: Create a report to help us improve
+about: 'Describe a bug, error, unexpected behavior, or other problem'
 title: ''
 labels: ''
 assignees: ''
