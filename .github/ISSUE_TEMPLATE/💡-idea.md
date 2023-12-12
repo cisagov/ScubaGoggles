@@ -1,5 +1,5 @@
 ---
-name: "\U0001F4A1 IDEA"
+name: "\U0001F4A1 Idea"
 about: Describe this issue template's purpose here.
 title: ''
 labels: ''
