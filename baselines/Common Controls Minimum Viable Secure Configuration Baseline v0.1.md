@@ -1272,6 +1272,12 @@ The data storage region SHALL be set to be the United States for all users in th
 	- FCEB agencies may need to meet specific regulations for various data classifications including data governance, security controls, privacy, and data residency. Being able to establish data sovereignty and identify residency regions can aid in these efforts.
 - Last Modified: October 30, 2023
 
+- MITRE ATT&CK TTP Mapping
+  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
+    - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+
 ### Resources
 -	[GWS Admin Help \| Data regions: Choose a geographic location for your data](https://support.google.com/a/answer/7630496)
 -	[GWS Admin Help \| What data is covered by a data region policy?](https://support.google.com/a/answer/9223653)
@@ -1305,6 +1311,12 @@ The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 - Rationale
 	- This policy is aligned with the concept of data sovereignty. Ensuring that data is not stored in a specific region affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
 - Last Modified: November 30, 2023
+
+- MITRE ATT&CK TTP Mapping
+  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
+    - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 ### Resources
 -	[GWS Admin Help \| Set up Supplemental Data Storage](https://support.google.com/a/answer/6281927)
