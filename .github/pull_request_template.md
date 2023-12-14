@@ -46,4 +46,4 @@ Uncomment this section if a screenshot is needed.
 ## ✅ Post-merge Checklist
 
 - [ ] Delete the branch to clean up.
-- [ ] Close issues resolved by this PR if the [closing keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword) did activate.
+- [ ] Close issues resolved by this PR if the [closing keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword) did not activate.
