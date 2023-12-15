@@ -1,6 +1,19 @@
 name: Pylint
-
-on: [push]
+on:
+  # Run tests on each commit, newly opened/reopened PR, and
+  # PR review submission (e.g. approval)
+  workflow_dispatch:
+  push:
+    paths:
+      - "**.py"
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - "main"
+    paths:
+      - "**.py"
+  pull_request_review:
+    types: [submitted]
 
 jobs:
   build:

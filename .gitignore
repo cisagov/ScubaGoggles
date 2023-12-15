@@ -3,15 +3,27 @@
 build
 scubagoggles.egg-info
 .DS_Store
+*.bak
 **/__pycache__
 **/.DS_Store
 **/file.txt
 **/token.json
 **/credentials.json
+
+# report files
 **/report/*
 **/output*
+**/ProviderSettingsExport.json
+**/TestResults.json
+**/BaselineReports.html
+**/IndividualReports/*
+!**/sample-report/TestResults.json
+!**/sample-report/ProviderSettingsExport.json
+!**/sample-report/BaselineReports.html
+!**/sample-report/IndividualReports/*
 **/GWSBaselineConformance*
-*.bak
+
+# opa
 opa
 opa_windows_amd64.exe
 opa_darwin_amd64

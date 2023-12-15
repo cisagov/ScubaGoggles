@@ -152,7 +152,7 @@ When running ScubaGoggles for the first time you will be prompted to consent to 
 3. Follow the [directions outlined in this guide to create a project](https://developers.google.com/workspace/guides/create-project)
 
 ### Create an OAuth credential
-1. Be signed into [http://console.cloud.google.com/]().
+1. Be signed into http://console.cloud.google.com/.
 1. From the hamburger menu on the left, select **APIs & Services** -> **OAuth consent screen**
 1. Select **Internal** for **User Type**
 1. Click **Create**
