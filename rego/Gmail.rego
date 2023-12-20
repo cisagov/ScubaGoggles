@@ -1229,7 +1229,7 @@ NoSuchEvent7_6(TopLevelOU) := false if {
 
 NonCompliantOUs7_6 contains OU if {
     some OU in OUsWithEvents
-    
+
     SettingA := concat("", [
         "Spoofing and authentication safety Protect against domain spoofing based on ",
         "similar domain names action"
