@@ -641,12 +641,11 @@ NonCompliantOUs5_5 contains OU if {
     count(Events_C) > 0
     LastEvent_C := GetLastEvent(Events_C)
 
-    Conditions := [
+    true in [
         LastEvent_A.NewValue == "Show warning",
         LastEvent_B.NewValue == "Show warning",
         LastEvent_C.NewValue == "Show warning"
     ]
-    count({Condition | some Condition in Conditions; Condition == true}) > 0
 }
 
 tests contains {
@@ -1233,7 +1232,8 @@ NonCompliantOUs7_6 contains OU if {
     count(EventsE) > 0
     LastEventE := GetLastEvent(EventsE)
 
-    Conditions := [
+    # OU is non-compliant if any of the following are true
+    true in [
         LastEventA.NewValue == "Show warning",
         LastEventB.NewValue == "Show warning",
         LastEventC.NewValue == "Show warning",
@@ -1241,7 +1241,6 @@ NonCompliantOUs7_6 contains OU if {
         LastEventD.NewValue == "No action",
         LastEventE.NewValue == "Show warning"
     ]
-    count([Condition | some Condition in Conditions; Condition == true]) > 0
 }
 
 tests contains {
