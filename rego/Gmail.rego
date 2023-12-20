@@ -65,14 +65,14 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
     FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # Simplest case: if input.tenant_info.topLevelOU is
     # non-empty, it contains the name of the top-level OU.
     input.tenant_info.topLevelOU != ""
-    name := input.tenant_info.topLevelOU
+    Name := input.tenant_info.topLevelOU
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # input.tenant_info.topLevelOU will be empty when
     # no custom OUs have been created, as in this case
     # the top-level OU cannot be determined via the API.
@@ -81,16 +81,16 @@ GetTopLevelOU() := name if {
     # the events and know that it is the top-level OU
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) > 0
-    name := GetLastEvent(SettingChangeEvents).OrgUnit
+    Name := GetLastEvent(SettingChangeEvents).OrgUnit
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # Extreme edge case: no custom OUs have been made
     # and the logs are empty. In this case, we really
     # have no way of determining the top-level OU name.
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) == 0
-    name := ""
+    Name := ""
 }
 
 OUsWithEvents contains Event.OrgUnit if {
@@ -225,7 +225,6 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", TopLevelOU)
     count(Events) == 0
 }
@@ -239,7 +238,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
@@ -428,7 +426,6 @@ tests contains {
     "NoSuchEvent": true
 } if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Attachment safety Enable: protect against encrypted attachments from untrusted senders"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) == 0
@@ -443,7 +440,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Attachment safety Enable: protect against encrypted attachments from untrusted senders"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) > 0
@@ -476,7 +472,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Attachment safety Enable: protect against attachments with scripts from untrusted senders"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) == 0
@@ -491,7 +486,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Attachment safety Enable: protect against attachments with scripts from untrusted senders"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) > 0
@@ -543,7 +537,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Attachment safety Enable: Protect against anomalous attachment types in emails"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) == 0
@@ -558,7 +551,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Attachment safety Enable: Protect against anomalous attachment types in emails"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) > 0
@@ -591,7 +583,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Attachment safety Enable: automatically enables all future added settings", TopLevelOU)
     count(Events) == 0
 }
@@ -605,7 +596,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Attachment safety Enable: automatically enables all future added settings", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_4) == 0
@@ -667,7 +657,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     NoSuchEvent5_5(TopLevelOU)
 }
 
@@ -680,7 +669,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     not NoSuchEvent5_5(TopLevelOU)
     Status := count(NonCompliantOUs5_5) == 0
 }
@@ -729,7 +717,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Links and external images safety Enable: identify links behind shortened URLs"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) == 0
@@ -744,7 +731,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Links and external images safety Enable: identify links behind shortened URLs"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) > 0
@@ -774,7 +760,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Links and external images safety Enable: scan linked images", TopLevelOU)
     count(Events) == 0
 }
@@ -788,7 +773,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Links and external images safety Enable: scan linked images", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs6_2) == 0
@@ -821,7 +805,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := concat("", [
         "Links and external images safety Enable: show warning prompt for click on links to ",
         "unstrusted domains" # NOTE: "unstrusted" really is the spelling the API uses
@@ -839,7 +822,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := concat("", [
         "Links and external images safety Enable: show warning prompt for click on links to ",
         "unstrusted domains" # NOTE: "unstrusted" really is the spelling the API uses
@@ -876,7 +858,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Links and external images safety Enable: automatically enables all future added settings"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) == 0
@@ -891,7 +872,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Links and external images safety Enable: automatically enables all future added settings"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) > 0
@@ -942,7 +922,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := concat("", [
         "Spoofing and authentication safety Enable: protect against domain spoofing using ",
         "similar domain names"
@@ -960,7 +939,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := concat("", [
         "Spoofing and authentication safety Enable: protect against domain spoofing using ",
         "similar domain names"
@@ -997,7 +975,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Spoofing and authentication safety Enable: protect against spoofing of employee names"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) == 0
@@ -1012,7 +989,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Spoofing and authentication safety Enable: protect against spoofing of employee names"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) > 0
@@ -1046,7 +1022,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) == 0
@@ -1061,7 +1036,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) > 0
@@ -1095,7 +1069,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Spoofing and authentication safety Enable: protect against any unauthenticated emails"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) == 0
@@ -1110,7 +1083,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Spoofing and authentication safety Enable: protect against any unauthenticated emails"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) > 0
@@ -1148,7 +1120,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := concat("", [
         "Spoofing and authentication safety Enable: protect your Groups from inbound emails ",
         "spoofing your domain"
@@ -1166,7 +1137,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := concat("", [
         "Spoofing and authentication safety Enable: protect your Groups from inbound emails ",
         "spoofing your domain"
@@ -1282,7 +1252,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     NoSuchEvent7_6(TopLevelOU)
 }
 
@@ -1295,7 +1264,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     not NoSuchEvent7_6(TopLevelOU)
     Status := count(NonCompliantOUs7_6) == 0
 }
@@ -1328,7 +1296,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "Spoofing and authentication safety Enable: automatically enables all future added settings"
     Events := FilterEvents(SettingName)
     count(Events) == 0
@@ -1393,7 +1360,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_EMAIL_USER_IMPORT", TopLevelOU)
     count(Events) == 0
 }
@@ -1407,7 +1373,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_EMAIL_USER_IMPORT", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs8_1) == 0
@@ -1440,7 +1405,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("IMAP_ACCESS", TopLevelOU)
     count(Events) == 0
 }
@@ -1454,7 +1418,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("IMAP_ACCESS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs9_1) == 0
@@ -1486,7 +1449,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_POP_ACCESS", TopLevelOU)
     count(Events) == 0
 }
@@ -1500,7 +1462,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_POP_ACCESS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs9_2) == 0
@@ -1534,7 +1495,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_OUTLOOK_SYNC", TopLevelOU)
     count(Events) == 0
 }
@@ -1548,7 +1508,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_OUTLOOK_SYNC", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs10_1) == 0
@@ -1586,7 +1545,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_EMAIL_AUTOFORWARDING", TopLevelOU)
     count(Events) == 0
 }
@@ -1600,7 +1558,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_EMAIL_AUTOFORWARDING", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs11_1) == 0
@@ -1636,7 +1593,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", TopLevelOU)
     count(Events) == 0
 }
@@ -1650,7 +1606,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs12_1) == 0
@@ -1686,7 +1641,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("OUTBOUND_RELAY_ENABLED", TopLevelOU)
     count(Events) == 0
 }
@@ -1700,7 +1654,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("OUTBOUND_RELAY_ENABLED", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs13_1) == 0
@@ -1737,7 +1690,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("OutOfDomainWarningProto disable_untrusted_recipient_warning", TopLevelOU)
     count(Events) == 0
 }
@@ -1751,7 +1703,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("OutOfDomainWarningProto disable_untrusted_recipient_warning", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs14_1) == 0
@@ -1848,7 +1799,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     SettingName := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) == 0
@@ -1863,7 +1813,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     SettingName := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
     Events := FilterEventsOU(SettingName, TopLevelOU)
     count(Events) > 0
@@ -1902,7 +1851,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("AttachmentDeepScanningSettingsProto deep_scanning_enabled", TopLevelOU)
     count(Events) == 0
 }
@@ -1916,7 +1864,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("AttachmentDeepScanningSettingsProto deep_scanning_enabled", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs17_1) == 0
