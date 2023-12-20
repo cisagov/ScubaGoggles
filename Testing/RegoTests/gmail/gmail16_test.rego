@@ -14,7 +14,10 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V1 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -26,7 +29,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -42,7 +45,10 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -52,7 +58,10 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -64,7 +73,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -80,7 +89,10 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -90,7 +102,10 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
                 "id": {"time": "2022-12-21T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -102,7 +117,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -118,7 +133,10 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V4 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -129,7 +147,10 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V4 if {
                 "events": [{
                     "name": "DELETE_APPLICATION_SETTING",
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -140,7 +161,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -168,12 +189,15 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended."
-}
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])}
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {
     # Test Enhanced Pre-Delivery Message Scanning when there's only one event and it's wrong
@@ -184,7 +208,10 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -196,7 +223,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -212,7 +239,10 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -222,7 +252,10 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -234,7 +267,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -250,7 +283,10 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V4 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -262,7 +298,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -278,7 +314,10 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -288,7 +327,10 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -300,7 +342,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent

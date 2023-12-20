@@ -14,7 +14,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V1 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -26,7 +29,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -42,7 +45,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -52,7 +58,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -64,7 +73,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -80,7 +89,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V3 if {
                 "id": {"time": "2022-12-20T00:03:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -90,7 +102,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V3 if {
                 "id": {"time": "2021-12-20T00:04:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -102,7 +117,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -118,7 +133,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V4 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -129,7 +147,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V4 if {
                 "events": [{
                     "name": "DELETE_APPLICATION_SETTING",
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -140,7 +161,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -168,11 +189,15 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V2 if {
@@ -184,7 +209,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -196,7 +224,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -212,7 +240,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -222,7 +253,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -234,7 +268,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -250,7 +284,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V4 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -262,7 +299,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -278,7 +315,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V5 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -288,7 +328,10 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V5 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: identify links behind shortened URLs"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: identify links behind shortened URLs"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -300,7 +343,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -321,7 +364,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V1 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -333,7 +379,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -349,7 +395,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -359,7 +408,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -371,7 +423,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V2 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -387,7 +439,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -397,7 +452,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -409,7 +467,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V3 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -425,7 +483,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V4 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -436,7 +497,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V4 if {
                 "events": [{
                     "name": "DELETE_APPLICATION_SETTING",
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -447,7 +511,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V4 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -475,11 +539,15 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
 }
 
 test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V2 if {
@@ -491,7 +559,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -503,7 +574,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -519,7 +590,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -529,7 +603,10 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: scan linked images"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Links and external images safety Enable: scan linked images"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
@@ -542,7 +619,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -562,7 +639,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V1 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -574,7 +657,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -590,7 +673,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -600,7 +689,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -612,7 +707,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -628,7 +723,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -638,7 +739,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -650,7 +757,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -667,7 +774,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -678,7 +791,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V3 if {
                 "events": [{
                     "name": "DELETE_APPLICATION_SETTING",
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -689,7 +808,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -717,11 +836,15 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V2 if {
@@ -733,7 +856,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -745,7 +874,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -761,7 +890,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -771,7 +906,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -783,7 +924,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -799,7 +940,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -811,7 +958,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -827,7 +974,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -837,7 +990,13 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: show warning prompt for click on links to unstrusted domains"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: show warning prompt for click on links to ",
+                                "unstrusted domains"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -849,7 +1008,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -869,7 +1028,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V1 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -881,7 +1046,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -897,7 +1062,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -907,7 +1078,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -919,7 +1096,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -935,7 +1112,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -945,7 +1128,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -957,7 +1146,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -973,7 +1162,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V4 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -984,7 +1179,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V4 if {
                 "events": [{
                     "name": "DELETE_APPLICATION_SETTING",
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -995,7 +1196,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -1023,11 +1224,15 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V2 if {
@@ -1039,7 +1244,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -1051,7 +1262,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -1067,7 +1278,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -1079,7 +1296,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -1095,7 +1312,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V4 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -1105,7 +1328,13 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V4 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "Links and external images safety Enable: automatically enables all future added settings"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Links and external images safety Enable: automatically enables all future added ",
+                                "settings"
+                            ])
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -1117,7 +1346,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
