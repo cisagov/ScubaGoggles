@@ -19,7 +19,9 @@ ReportDetailsArray(Status, Array1, Array2) := Detail if {
     Detail := Description(Fraction, " agency domain(s) found in violation: ", String)
 }
 
-AllDomains := {Domain.domain | some Domain in input.dkim_records}
+AllDomains contains Domain.domain if {
+    some Domain in input.dkim_records
+}
 
 FilterEvents(SettingName) := FilteredEvents if {
     Events := SettingChangeEvents
@@ -31,14 +33,14 @@ FilterEventsDomain(SettingName) := FilteredEvents if {
     FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
 }
 
-FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
+FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
     # If there exists at least the root OU and 1 more OU
     # filter out organizational units that don't exist
     input.organizational_unit_names
     count(input.organizational_unit_names) >=2
 
-    # Filter the events by both ServiceName and OrgUnit
-    Events := FilterEvents(ServiceName)
+    # Filter the events by both SettingName and OrgUnit
+    Events := FilterEvents(SettingName)
     FilteredEvents := [
         Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
@@ -53,7 +55,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
+    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -62,7 +64,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
+    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
 }
 
 TopLevelOU := Name if {
@@ -110,9 +112,9 @@ if {
     some Event in Item.events # For each event in the item...
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters]
-    "NEW_VALUE" in [Parameter.name | some Parameter in Event.parameters]
-    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
+    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
 
     # Extract the values
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
@@ -140,8 +142,8 @@ if {
     Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters]
-    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
 
     # Extract the values
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
@@ -162,9 +164,9 @@ if {
     some Event in Item.events # For each event in the item...
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters]
-    "NEW_VALUE" in [Parameter.name | some Parameter in Event.parameters]
-    "DOMAIN_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
+    "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
 
     # Extract the values
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
@@ -173,25 +175,25 @@ if {
 }
 
 GetEventOu(Event) := OrgUnit if {
-    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
 GetEventOu(Event) := "None" if {
-    not "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    not "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
 }
 
 GetEventDomain(Event) := DomainName if {
-    "DOMAIN_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
     DomainName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "DOMAIN_NAME"][0]
 }
 
 GetEventDomain(Event) := "None" if {
-    not "DOMAIN_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    not "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
 }
 
 GetLastEvent(Events) := Event if {
-    MaxTs := max([Event.Timestamp | some Event in Events])
+    MaxTs := max({Event.Timestamp | some Event in Events})
     some Event in Events
     Event.Timestamp == MaxTs
 }
@@ -644,7 +646,7 @@ NonCompliantOUs5_5 contains OU if {
         LastEvent_B.NewValue == "Show warning",
         LastEvent_C.NewValue == "Show warning"
     ]
-    count([Condition | some Condition in Conditions; Condition == true]) > 0
+    count({Condition | some Condition in Conditions; Condition == true}) > 0
 }
 
 tests contains {
