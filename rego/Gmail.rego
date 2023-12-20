@@ -19,16 +19,16 @@ ReportDetailsArray(Status, Array1, Array2) = Detail if {
     Detail := Description(Fraction, " agency domain(s) found in violation: ", String)
 }
 
-AllDomains := {Domain.domain | Domain = input.dkim_records[_]}
+AllDomains := {Domain.domain | some Domain in input.dkim_records}
 
 FilterEvents(SettingName) := FilteredEvents if {
     Events := SettingChangeEvents
-    FilteredEvents := [Event | Event = Events[_]; Event.Setting == SettingName]
+    FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
 }
 
 FilterEventsDomain(SettingName) := FilteredEvents if {
     Events := SettingChangeEventsDomain
-    FilteredEvents := [Event | Event = Events[_]; Event.Setting == SettingName]
+    FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
 }
 
 FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
@@ -40,7 +40,7 @@ FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
     # Filter the events by both ServiceName and OrgUnit
     Events := FilterEvents(ServiceName)
     FilteredEvents := [
-        Event | Event = Events[_];
+        Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.OrgUnit in input.organizational_unit_names
     ]
@@ -53,7 +53,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | Event = Events[_]; Event.OrgUnit == OrgUnit]
+    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -62,7 +62,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | Event = Events[_]; Event.OrgUnit == OrgUnit]
+    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
 }
 
 GetTopLevelOU() := name if {
@@ -94,7 +94,7 @@ GetTopLevelOU() := name if {
 }
 
 OUsWithEvents contains Event.OrgUnit if {
-    Event := SettingChangeEvents[_]
+    some Event in SettingChangeEvents
 }
 
 SettingChangeEvents contains {
@@ -106,17 +106,17 @@ SettingChangeEvents contains {
     "DomainName": DomainName
 }
 if {
-    Item := input.gmail_logs.items[_] # For each item...
-    Event := Item.events[_] # For each event in the item...
+    some Item in input.gmail_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
-    "NEW_VALUE" in [Parameter.name | Parameter = Event.parameters[_]]
-    "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "NEW_VALUE" in [Parameter.name | some Parameter in Event.parameters]
+    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
 
     # Extract the values
-    Setting := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "NEW_VALUE"][0]
+    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
+    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
     OrgUnit := GetEventOu(Event)
     DomainName := GetEventDomain(Event)
 }
@@ -135,16 +135,16 @@ SettingChangeEvents contains {
     "DomainName": DomainName
 }
 if {
-    Item := input.gmail_logs.items[_] # For each item...
-    Event := Item.events[_] # For each event in the item...
+    some Item in input.gmail_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
     Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
-    "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
 
     # Extract the values
-    Setting := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "SETTING_NAME"][0]
+    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
     NewValue := "DELETE_APPLICATION_SETTING"
     OrgUnit := GetEventOu(Event)
     DomainName := GetEventDomain(Event)
@@ -158,41 +158,41 @@ SettingChangeEventsDomain contains {
     "DomainName": DomainName
 }
 if {
-    Item := input.gmail_logs.items[_] # For each item...
-    Event := Item.events[_] # For each event in the item...
+    some Item in input.gmail_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
-    "NEW_VALUE" in [Parameter.name | Parameter = Event.parameters[_]]
-    "DOMAIN_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "NEW_VALUE" in [Parameter.name | some Parameter in Event.parameters]
+    "DOMAIN_NAME" in [Parameter.name | some Parameter in Event.parameters]
 
     # Extract the values
-    Setting := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "NEW_VALUE"][0]
+    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
+    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
     DomainName := GetEventDomain(Event)
 }
 
 GetEventOu(Event) := OrgUnit if {
-    "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
-    OrgUnit := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "ORG_UNIT_NAME"][0]
+    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
 GetEventOu(Event) := "None" if {
-    not "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    not "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
 }
 
 GetEventDomain(Event) := DomainName if {
-    "DOMAIN_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
-    DomainName := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "DOMAIN_NAME"][0]
+    "DOMAIN_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    DomainName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "DOMAIN_NAME"][0]
 }
 
 GetEventDomain(Event) := "None" if {
-    not "DOMAIN_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    not "DOMAIN_NAME" in [Parameter.name | some Parameter in Event.parameters]
 }
 
 GetLastEvent(Events) := Event if {
-    MaxTs := max([Event.Timestamp | Event = Events[_]])
-    Event := Events[_]
+    MaxTs := max([Event.Timestamp | some Event in Events])
+    some Event in Events
     Event.Timestamp == MaxTs
 }
 
@@ -205,7 +205,7 @@ GetLastEvent(Events) := Event if {
 # Baseline GWS.GMAIL.1.1v0.1
 #--
 NonCompliantOUs1_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -254,8 +254,8 @@ if {
 # Baseline GWS.GMAIL.2.1v0.1
 #--
 DomainsWithDkim contains DkimRecord.domain if {
-    DkimRecord := input.dkim_records[_]
-    Rdata := DkimRecord.rdata[_]
+    some DkimRecord in input.dkim_records
+    some Rdata in DkimRecord.rdata
     startswith(Rdata, "v=DKIM1;")
 }
 
@@ -282,8 +282,8 @@ if {
 # Baseline GWS.GMAIL.3.1v0.1
 #--
 DomainsWithSpf contains SpfRecord.domain if {
-    SpfRecord := input.spf_records[_]
-    Rdata := SpfRecord.rdata[_]
+    some SpfRecord in input.spf_records
+    some Rdata in SpfRecord.rdata
     startswith(Rdata, "v=spf1 ")
 }
 
@@ -310,8 +310,8 @@ if {
 # Baseline GWS.GMAIL.4.1v0.1
 #--
 DomainsWithDmarc contains DmarcRecord.domain if {
-    DmarcRecord := input.dmarc_records[_]
-    Rdata := DmarcRecord.rdata[_]
+    some DmarcRecord in input.dmarc_records
+    some Rdata in DmarcRecord.rdata
     startswith(Rdata, "v=DMARC1;")
 }
 
@@ -333,8 +333,8 @@ if {
 # Baseline GWS.GMAIL.4.2v0.1
 #--
 DomainsWithPreject contains DmarcRecord.domain if {
-    DmarcRecord := input.dmarc_records[_]
-    Rdata := DmarcRecord.rdata[_]
+    some DmarcRecord in input.dmarc_records
+    some Rdata in DmarcRecord.rdata
     contains(Rdata, "p=reject;")
 }
 
@@ -356,8 +356,8 @@ if {
 # Baseline GWS.GMAIL.4.3v0.1
 #--
 DomainsWithDHSContact contains DmarcRecord.domain if {
-    DmarcRecord := input.dmarc_records[_]
-    Rdata := DmarcRecord.rdata[_]
+    some DmarcRecord in input.dmarc_records
+    some Rdata in DmarcRecord.rdata
     contains(Rdata, "mailto:reports@dmarc.cyber.dhs.gov")
 }
 
@@ -379,8 +379,8 @@ if {
 # Baseline GWS.GMAIL.4.4v0.1
 #--
 DomainsWithAgencyContact contains DmarcRecord.domain if {
-    DmarcRecord := input.dmarc_records[_]
-    Rdata := DmarcRecord.rdata[_]
+    some DmarcRecord in input.dmarc_records
+    some Rdata in DmarcRecord.rdata
     count(split(Rdata, "@")) >= 3
 }
 
@@ -407,7 +407,7 @@ if {
 # Baseline GWS.GMAIL.5.1v0.1
 #--
 NonCompliantOUs5_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Attachment safety Enable: protect against encrypted attachments from untrusted senders", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -451,7 +451,7 @@ if {
 # Baseline GWS.GMAIL.5.2v0.1
 #--
 NonCompliantOUs5_2 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Attachment safety Enable: protect against attachments with scripts from untrusted senders", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -507,7 +507,7 @@ EncryptedAttachmentSettingDetailsStr(LastEvent) = Description if {
 # Baseline GWS.GMAIL.5.3v0.1
 #--
 NonCompliantOUs5_3 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Attachment safety Enable: Protect against anomalous attachment types in emails", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -553,7 +553,7 @@ if {
 # Baseline GWS.GMAIL.5.4v0.1
 #--
 NonCompliantOUs5_4 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Attachment safety Enable: automatically enables all future added settings", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -619,7 +619,7 @@ NoSuchEvent5_5(TopLevelOU) := false if {
 }
 
 NonCompliantOUs5_5 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events_A := FilterEventsOU("Attachment safety Encrypted attachment protection setting action", OU)
     count(Events_A) > 0
     LastEvent_A := GetLastEvent(Events_A)
@@ -633,7 +633,7 @@ NonCompliantOUs5_5 contains OU if {
     LastEvent_C := GetLastEvent(Events_C)
 
     Conditions := [LastEvent_A.NewValue == "Show warning", LastEvent_B.NewValue == "Show warning", LastEvent_C.NewValue == "Show warning"]
-    count([Condition | Condition = Conditions[_]; Condition == true]) > 0
+    count([Condition | some Condition in Conditions; Condition == true]) > 0
 }
 
 tests contains {
@@ -686,7 +686,7 @@ tests contains {
 # Baseline GWS.GMAIL.6.1v0.1
 #--
 NonCompliantOUs6_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Links and external images safety Enable: identify links behind shortened URLs", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -732,7 +732,7 @@ if {
 # Baseline GWS.GMAIL.6.2v0.1
 #--
 NonCompliantOUs6_2 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Links and external images safety Enable: scan linked images", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
@@ -775,7 +775,7 @@ if {
 # Baseline GWS.GMAIL.6.3v0.1
 #--
 NonCompliantOUs6_3 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Links and external images safety Enable: show warning prompt for click on links to unstrusted domains", OU)
     # NOTE: "unstrusted" really is the spelling the API uses
     count(Events) > 0
@@ -819,7 +819,7 @@ if {
 # Baseline GWS.GMAIL.6.4v0.1
 #--
 NonCompliantOUs6_4 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Links and external images safety Enable: automatically enables all future added settings", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -882,7 +882,7 @@ tests contains {
 # Baseline GWS.GMAIL.7.1v0.1
 #--
 NonCompliantOUs7_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Spoofing and authentication safety Enable: protect against domain spoofing using similar domain names", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
@@ -925,7 +925,7 @@ if {
 # Baseline GWS.GMAIL.7.2v0.1
 #--
 NonCompliantOUs7_2 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Spoofing and authentication safety Enable: protect against spoofing of employee names", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -971,7 +971,7 @@ if {
 # Baseline GWS.GMAIL.7.3v0.1
 #--
 NonCompliantOUs7_3 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1017,7 +1017,7 @@ if {
 # Baseline GWS.GMAIL.7.4v0.1
 #--
 NonCompliantOUs7_4 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Spoofing and authentication safety Enable: protect against any unauthenticated emails", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1064,7 +1064,7 @@ if {
 #--
 
 NonCompliantOUs7_5 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Spoofing and authentication safety Enable: protect your Groups from inbound emails spoofing your domain", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1143,7 +1143,7 @@ NoSuchEvent7_6(TopLevelOU) := false if {
 }
 
 NonCompliantOUs7_6 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events_A := FilterEventsOU("Spoofing and authentication safety Protect against domain spoofing based on similar domain names action", OU)
     count(Events_A) > 0
     LastEvent_A := GetLastEvent(Events_A)
@@ -1166,7 +1166,7 @@ NonCompliantOUs7_6 contains OU if {
 
     Conditions := [LastEvent_A.NewValue == "Show warning", LastEvent_B.NewValue == "Show warning", LastEvent_C.NewValue == "Show warning",
         LastEvent_D.NewValue == "Show warning", LastEvent_D.NewValue == "No action", LastEvent_E.NewValue == "Show warning"]
-    count([Condition | Condition = Conditions[_]; Condition == true]) > 0
+    count([Condition | some Condition in Conditions; Condition == true]) > 0
 }
 tests contains {
     "PolicyId": "GWS.GMAIL.7.6v0.1",
@@ -1202,7 +1202,7 @@ if {
 #--
 
 NonCompliantOUs7_7 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Spoofing and authentication safety Enable: automatically enables all future added settings", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1266,7 +1266,7 @@ tests contains {
 # Baseline GWS.GMAIL.8.1v0.1
 #--
 NonCompliantOUs8_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ENABLE_EMAIL_USER_IMPORT", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1315,7 +1315,7 @@ if {
 # Baseline GWS.GMAIL.9.1v0.1
 #--
 NonCompliantOUs9_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("IMAP_ACCESS", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
@@ -1358,7 +1358,7 @@ if {
 # Baseline GWS.GMAIL.9.2v0.1
 #--
 NonCompliantOUs9_2 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ENABLE_POP_ACCESS", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1409,7 +1409,7 @@ if {
 # Baseline GWS.GMAIL.10.1v0.1
 #--
 NonCompliantOUs10_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ENABLE_OUTLOOK_SYNC", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
@@ -1458,7 +1458,7 @@ if {
 #--
 
 NonCompliantOUs11_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ENABLE_EMAIL_AUTOFORWARDING", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1509,7 +1509,7 @@ if {
 # Baseline GWS.GMAIL.12.1v0.1
 #--
 NonCompliantOUs12_1 contains OU {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1559,7 +1559,7 @@ if {
 # Baseline GWS.GMAIL.13.1v0.1
 #--
 NonCompliantOUs13_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("OUTBOUND_RELAY_ENABLED", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1609,7 +1609,7 @@ if {
 # Baseline GWS.GMAIL.14.1v0.1
 #--
 NonCompliantOUs14_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("OutOfDomainWarningProto disable_untrusted_recipient_warning", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1707,7 +1707,7 @@ if {
 # Baseline GWS.GMAIL.16.1v0.1
 #--
 NonCompliantOUs16_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -1758,7 +1758,7 @@ if {
 # Baseline GWS.GMAIL.17.1v0.1
 #--
 NonCompliantOUs17_1 contains OU if {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("AttachmentDeepScanningSettingsProto deep_scanning_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
