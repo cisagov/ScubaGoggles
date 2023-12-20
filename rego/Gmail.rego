@@ -3,16 +3,16 @@ import future.keywords
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
 
-Format(Array) = format_int(count(Array), 10)
+Format(Array) := format_int(count(Array), 10)
 
-Description(String1, String2, String3) = trim(concat("", [String1, concat("", [String2, String3]), "."]), " ")
+Description(String1, String2, String3) := trim(concat("", [String1, concat("", [String2, String3]), "."]), " ")
 
-ReportDetailsArray(Status, _, _) =  Detail if {
+ReportDetailsArray(Status, _, _) :=  Detail if {
     Status == true
     Detail := "Requirement met."
 }
 
-ReportDetailsArray(Status, Array1, Array2) = Detail if {
+ReportDetailsArray(Status, Array1, Array2) := Detail if {
 	Status == false
     Fraction := concat(" of ", [Format(Array1), Format(Array2)])
 	String := concat(", ", Array1)
@@ -492,12 +492,12 @@ if {
     Status := count(NonCompliantOUs5_2) == 0
 }
 
-EncryptedAttachmentSettingDetailsStr(LastEvent) = Description if {
+EncryptedAttachmentSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "true"
     Description := concat("", ["<span class=setting>Attachment protection for encrypted attachments from untrusted senders is enabled</span> in ", LastEvent.OrgUnit])
 }
 
-EncryptedAttachmentSettingDetailsStr(LastEvent) = Description if {
+EncryptedAttachmentSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "false"
     Description := concat("", ["<span class=setting>Attachment protection for encrypted attachments from untrusted senders is not enabled</span> in ", LastEvent.OrgUnit])
 }
@@ -1659,12 +1659,12 @@ if {
 #
 # Baseline GWS.GMAIL.15.1v0.1
 #--
-EmailAllowlistSettingDetailsStr(LastEvent) = Description if {
+EmailAllowlistSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue != "[]"
     Description := concat("", ["<span class=setting>Email allowlists are enabled </span> in ", LastEvent.DomainName, "."])
 }
 
-EmailAllowlistSettingDetailsStr(LastEvent) = Description if {
+EmailAllowlistSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "[]"
     Description := concat("", ["<span class=setting>Email allowlists are not enabled </span> in ", LastEvent.DomainName, "."])
 }
