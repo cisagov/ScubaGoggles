@@ -96,7 +96,11 @@ test_EmailAllowlist_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Email Allowlist is set to default value."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs. ",
+        "While we are unable to determine the state from the logs, ",
+        "the default setting is non-compliant; manual check recommended."
+    ])
 }
 
 test_EmailAllowlist_Incorrect_V2 if {
