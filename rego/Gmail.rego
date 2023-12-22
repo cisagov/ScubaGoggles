@@ -1573,7 +1573,7 @@ if {
 #
 # Baseline GWS.GMAIL.12.1v0.1
 #--
-NonCompliantOUs12_1 contains OU {
+NonCompliantOUs12_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
