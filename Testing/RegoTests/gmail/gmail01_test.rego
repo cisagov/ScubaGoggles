@@ -26,7 +26,7 @@ test_MailDelegation_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -64,7 +64,7 @@ test_MailDelegation_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -102,7 +102,7 @@ test_MailDelegation_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -130,11 +130,15 @@ test_MailDelegation_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is compliant; manual check recommended."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is compliant; manual check recommended."
+    ])
 }
 
 test_MailDelegation_Incorrect_V2 if {
@@ -158,7 +162,7 @@ test_MailDelegation_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -196,7 +200,7 @@ test_MailDelegation_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -224,7 +228,7 @@ test_MailDelegation_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -262,7 +266,7 @@ test_MailDelegation_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent

@@ -12,18 +12,29 @@ test_DMARC_Correct_V1 if {
         "dkim_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             }
         ],
         "dmarc_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             }
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -37,7 +48,16 @@ test_DMARC_Correct_V2 if {
         "dkim_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             },
             {
                 "domain": "test2.name",
@@ -47,16 +67,20 @@ test_DMARC_Correct_V2 if {
         "dmarc_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             },
             {
                 "domain": "test2.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             }
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -70,7 +94,16 @@ test_DMARC_Incorrect_V1 if {
         "dkim_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             },
             {
                 "domain": "test2.name",
@@ -80,7 +113,9 @@ test_DMARC_Incorrect_V1 if {
         "dmarc_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             },
             {
                 "domain": "test2.name",
@@ -89,7 +124,7 @@ test_DMARC_Incorrect_V1 if {
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -103,7 +138,16 @@ test_DMARC_Incorrect_V2 if {
         "dkim_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             }
         ],
         "dmarc_records": [
@@ -114,7 +158,7 @@ test_DMARC_Incorrect_V2 if {
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -132,18 +176,29 @@ test_DMARCMessageReject_Correct_V1 if {
         "dkim_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             }
         ],
         "dmarc_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             }
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -157,7 +212,16 @@ test_DMARCMessageReject_Correct_V2 if {
         "dkim_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             },
             {
                 "domain": "test2.name",
@@ -167,16 +231,20 @@ test_DMARCMessageReject_Correct_V2 if {
         "dmarc_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             },
             {
                 "domain": "test2.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             }
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -190,7 +258,16 @@ test_DMARCMessageReject_Incorrect_V1 if {
         "dkim_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             },
             {
                 "domain": "test2.name",
@@ -200,7 +277,9 @@ test_DMARCMessageReject_Incorrect_V1 if {
         "dmarc_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             },
             {
                 "domain": "test2.name",
@@ -209,7 +288,7 @@ test_DMARCMessageReject_Incorrect_V1 if {
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -223,7 +302,16 @@ test_DMARCMessageReject_Incorrect_V2 if {
         "dkim_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             }
         ],
         "dmarc_records": [
@@ -234,7 +322,7 @@ test_DMARCMessageReject_Incorrect_V2 if {
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -252,18 +340,29 @@ test_DMARCAggregateReports_Correct_V1 if {
         "dkim_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             }
         ],
         "dmarc_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             }
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -277,7 +376,16 @@ test_DMARCAggregateReports_Correct_V2 if {
         "dkim_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             },
             {
                 "domain": "test2.name",
@@ -287,16 +395,20 @@ test_DMARCAggregateReports_Correct_V2 if {
         "dmarc_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             },
             {
                 "domain": "test2.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             }
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -310,7 +422,16 @@ test_DMARCAggregateReports_Incorrect_V1 if {
         "dkim_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             },
             {
                 "domain": "test2.name",
@@ -320,7 +441,9 @@ test_DMARCAggregateReports_Incorrect_V1 if {
         "dmarc_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             },
             {
                 "domain": "test2.name",
@@ -329,7 +452,7 @@ test_DMARCAggregateReports_Incorrect_V1 if {
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -343,7 +466,16 @@ test_DMARCAggregateReports_Incorrect_V2 if {
         "dkim_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             }
         ],
         "dmarc_records": [
@@ -354,7 +486,7 @@ test_DMARCAggregateReports_Incorrect_V2 if {
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -372,18 +504,29 @@ test_DMARCAgencyPOC_Correct_V1 if {
         "dkim_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             }
         ],
         "dmarc_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             }
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -397,7 +540,16 @@ test_DMARCAgencyPOC_Correct_V2 if {
         "dkim_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             },
             {
                 "domain": "test2.name",
@@ -407,16 +559,20 @@ test_DMARCAgencyPOC_Correct_V2 if {
         "dmarc_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             },
             {
                 "domain": "test2.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             }
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -430,7 +586,16 @@ test_DMARCAgencyPOC_Incorrect_V1 if {
         "dkim_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             },
             {
                 "domain": "test2.name",
@@ -440,7 +605,9 @@ test_DMARCAgencyPOC_Incorrect_V1 if {
         "dmarc_records": [
             {
                 "domain": "test1.name",
-                "rdata": ["v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                ]
             },
             {
                 "domain": "test2.name",
@@ -449,7 +616,7 @@ test_DMARCAgencyPOC_Incorrect_V1 if {
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -463,7 +630,16 @@ test_DMARCAgencyPOC_Incorrect_V2 if {
         "dkim_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" \"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"]
+                "rdata": [
+                    concat("", [
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+",
+                    "zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+",
+                    "pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszokyLKBm+",
+                    "OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHA\" ",
+                    "\"qC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f",
+                    "+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb4QIDAQAB"
+                    ])
+                ]
             }
         ],
         "dmarc_records": [
@@ -474,7 +650,7 @@ test_DMARCAgencyPOC_Incorrect_V2 if {
         ]
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent

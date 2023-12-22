@@ -26,11 +26,14 @@ test_EmailAllowlist_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "<span class=setting>Email allowlists are not enabled </span> in Test Top-Level Domain."
+    RuleOutput[0].ReportDetails == concat("", [
+        "<span class=setting>Email allowlists are not enabled </span> in ",
+        "Test Top-Level Domain."
+    ])
 }
 
 test_EmailAllowlist_Correct_V2 if {
@@ -64,12 +67,14 @@ test_EmailAllowlist_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "<span class=setting>Email allowlists are not enabled </span> in Test Top-Level Domain."
-}
+    RuleOutput[0].ReportDetails == concat("", [
+        "<span class=setting>Email allowlists are not enabled </span> in ",
+        "Test Top-Level Domain."
+    ])}
 
 test_EmailAllowlist_Incorrect_V1 if {
     # Test Email Allowlists when there are no relevant events
@@ -92,11 +97,15 @@ test_EmailAllowlist_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Email Allowlist is set to default value."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs. ",
+        "While we are unable to determine the state from the logs, ",
+        "the default setting is non-compliant; manual check recommended."
+    ])
 }
 
 test_EmailAllowlist_Incorrect_V2 if {
@@ -120,7 +129,7 @@ test_EmailAllowlist_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -158,7 +167,7 @@ test_EmailAllowlist_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
