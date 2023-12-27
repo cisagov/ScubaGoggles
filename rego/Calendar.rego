@@ -10,7 +10,7 @@ OUsWithEvents contains Event.OrgUnit if {
 FilterEvents(SettingName) := FilteredEvents if {
     # Filter the events by SettingName
     Events := SettingChangeEvents
-    FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
+    FilteredEvents := {Event | some Event in Events; Event.Setting == SettingName}
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -21,11 +21,11 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [
+    FilteredEvents := {
         Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.OrgUnit in input.organizational_unit_names
-    ]
+    }
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -35,7 +35,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
+    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -44,7 +44,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
+    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
 }
 
 TopLevelOU := Name if {
@@ -115,7 +115,7 @@ GetLastEvent(Events) := Event if {
     # Because CalendarSharingEvents returns a set instead
     # of an array, we can't just index it and get the last
     # value
-    MaxTs := max([Event.Timestamp | some Event in Events])
+    MaxTs := max({Event.Timestamp | some Event in Events})
     some Event in Events
     Event.Timestamp == MaxTs
 }
