@@ -124,9 +124,9 @@ GetLastEvent(Events) := Event if {
 }
 
 
-################
-# Baseline 1   #
-################
+##################
+# GWS.CALENDAR.1 #
+##################
 
 #
 # Baseline GWS.CALENDAR.1.1v0.1
@@ -174,7 +174,7 @@ if {
 
 #
 # Baseline GWS.CALENDAR.1.2v0.1
-#
+#--
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.2v0.1",
     "Criticality": "May/Not-Implemented",
@@ -185,9 +185,9 @@ tests contains {
 }
 #--
 
-################
-# Baseline 2   #
-################
+##################
+# GWS.CALENDAR.2 #
+##################
 
 #
 # Baseline GWS.CALENDAR.2.1v0.1
@@ -233,9 +233,9 @@ if {
 #--
 
 
-################
-# Baseline 3 #
-################
+##################
+# GWS.CALENDAR.3 #
+##################
 
 ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "SHOW_ONLY_FREE_BUSY_INFORMATION"
@@ -307,7 +307,7 @@ if {
 
 #
 # Baseline GWS.CALENDAR.3.2v0.1
-#
+#--
 tests contains {
     "PolicyId": "GWS.CALENDAR.3.2v0.1",
     "Criticality": "May/Not-Implemented",
@@ -320,9 +320,9 @@ tests contains {
 
 
 
-################
-# Baseline 4   #
-################
+##################
+# GWS.CALENDAR.4 #
+##################
 
 CalInteropManSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "true"
@@ -374,7 +374,6 @@ if {
 #--
 
 
-#--
 #
 # Baseline GWS.CALENDAR.4.2v0.1
 #--
@@ -388,14 +387,13 @@ tests contains {
 }
 #--
 
-################
-# Baseline 5   #
-################
+##################
+# GWS.CALENDAR.5 #
+##################
 
 # Extreme outlier. Logs for this event have no Domain
 # As such we need to create custom FilterEventsOU function and SettingChangeEvent
 # Functions
-
 SettingChangeEventsNoDomain contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
@@ -472,7 +470,6 @@ NonCompliantOUs5_1 contains OU if {
     LastEvent.NewValue != "false"
 }
 
-#--
 #
 # Baseline GWS.CALENDAR.5.1v0.1
 #--
