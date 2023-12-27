@@ -72,21 +72,19 @@ TopLevelOU := Name if {
     # have no way of determining the top-level OU name.
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) == 0
-    count(SettingChangeEventsNoDomain) == 0
     Name := ""
 }
 
-TopLevelOU := name if {
-    # input.tenant_info.topLevelOU will be empty when
-    # no custom OUs have been created, as in this case
-    # the top-level OU cannot be determined via the API.
-    # Fortunately, in this case, we know there's literally
-    # only one OU, so we can grab the OU listed on any of
-    # the events and know that it is the top-level OU
-    input.tenant_info.topLevelOU == ""
-    count(SettingChangeEvents) == 0
-    count(SettingChangeEventsNoDomain) > 0
-    name := GetLastEvent(SettingChangeEventsNoDomain).OrgUnit
+# Helper function so that the regular SettingChangeEvents
+# rule will work even for events that don't include the
+# domain name
+GetEventDomain(Event) := DomainName if {
+    "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    DomainName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "DOMAIN_NAME"][0]
+}
+
+GetEventDomain(Event) := "None" if {
+    not "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
 }
 
 SettingChangeEvents contains {
@@ -105,13 +103,12 @@ if {
     "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
     "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
     "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
 
     # Extract the values
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-    DomainName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "DOMAIN_NAME"][0]
+    DomainName := GetEventDomain(Event)
 }
 
 GetLastEvent(Events) := Event if {
@@ -391,77 +388,10 @@ tests contains {
 # GWS.CALENDAR.5 #
 ##################
 
-# Extreme outlier. Logs for this event have no Domain
-# As such we need to create custom FilterEventsOU function and SettingChangeEvent
-# Functions
-SettingChangeEventsNoDomain contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "NewValue": NewValue,
-    "Setting": Setting,
-    "OrgUnit": OrgUnit
-}
-if {
-    some Item in input.calendar_logs.items # For each item...
-    some Event in Item.events # For each event in the item...
-
-    # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
-    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-
-    # Extract the values
-    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-}
-
-FilterEventsNoDomain(SettingName) := FilteredEvents if {
-    # Filter the events by SettingName
-    Events := SettingChangeEventsNoDomain
-    FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
-}
-
-FilterNoDomainEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
-    # If there exists at least the root OU and 1 more OU
-    # filter out organizational units that don't exist
-    input.organizational_unit_names
-    count(input.organizational_unit_names) >=2
-
-    # Filter the events by both ServiceName and OrgUnit
-    Events := FilterEventsNoDomain(ServiceName)
-    FilteredEvents := [
-        Event | some Event in Events;
-        Event.OrgUnit == OrgUnit;
-        Event.OrgUnit in input.organizational_unit_names
-    ]
-}
-
-FilterNoDomainEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If only the root OU exists run like normal
-    input.organizational_unit_names
-    count(input.organizational_unit_names) < 2
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEventsNoDomain(SettingName)
-    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
-}
-
-FilterNoDomainEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If OUs variable does not exist run like normal
-    not input.organizational_unit_names
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEventsNoDomain(SettingName)
-    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
-}
-
-OUsWithEventsNoDomain contains Event.OrgUnit if {
-    some Event in SettingChangeEventsNoDomain
-}
 
 NonCompliantOUs5_1 contains OU if {
-    some OU in OUsWithEventsNoDomain
-    Events := FilterNoDomainEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
+    some OU in OUsWithEvents
+    Events := FilterEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -483,7 +413,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterNoDomainEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
+    Events := FilterEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
     count(Events) == 0
 }
 
@@ -496,7 +426,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterNoDomainEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
+    Events := FilterEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
