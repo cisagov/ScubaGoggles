@@ -47,14 +47,14 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
     FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # Simplest case: if input.tenant_info.topLevelOU is
     # non-empty, it contains the name of the top-level OU.
     input.tenant_info.topLevelOU != ""
-    name := input.tenant_info.topLevelOU
+    Name := input.tenant_info.topLevelOU
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # input.tenant_info.topLevelOU will be empty when
     # no custom OUs have been created, as in this case
     # the top-level OU cannot be determined via the API.
@@ -63,16 +63,30 @@ GetTopLevelOU() := name if {
     # the events and know that it is the top-level OU
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) > 0
-    name := GetLastEvent(SettingChangeEvents).OrgUnit
+    Name := GetLastEvent(SettingChangeEvents).OrgUnit
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # Extreme edge case: no custom OUs have been made
     # and the logs are empty. In this case, we really
     # have no way of determining the top-level OU name.
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) == 0
-    name := ""
+    count(SettingChangeEventsNoDomain) == 0
+    Name := ""
+}
+
+TopLevelOU := name if {
+    # input.tenant_info.topLevelOU will be empty when
+    # no custom OUs have been created, as in this case
+    # the top-level OU cannot be determined via the API.
+    # Fortunately, in this case, we know there's literally
+    # only one OU, so we can grab the OU listed on any of
+    # the events and know that it is the top-level OU
+    input.tenant_info.topLevelOU == ""
+    count(SettingChangeEvents) == 0
+    count(SettingChangeEventsNoDomain) > 0
+    name := GetLastEvent(SettingChangeEventsNoDomain).OrgUnit
 }
 
 SettingChangeEvents contains {
@@ -139,7 +153,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
     count(Events) == 0
 }
@@ -153,7 +166,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
@@ -201,7 +213,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_EXTERNAL_GUEST_PROMPT", TopLevelOU)
     count(Events) == 0
 }
@@ -215,7 +226,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_EXTERNAL_GUEST_PROMPT", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
@@ -229,22 +239,37 @@ if {
 
 ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "SHOW_ONLY_FREE_BUSY_INFORMATION"
-    Description := concat("", ["<span class=setting>Only free busy/information for secondary calendars </span> is shared outside ", LastEvent.DomainName])
+    Description := concat("", [
+        "<span class=setting>Only free busy/information for secondary calendars </span> is shared outside ",
+        LastEvent.DomainName
+    ])
 }
 
 ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "READ_ONLY_ACCESS"
-    Description := concat("", ["<span class=setting>All information for secondary calendars </span> is shared outside ", LastEvent.DomainName, " but outsiders cannot change calendars."])
+    Description := concat("", [
+        "<span class=setting>All information for secondary calendars </span> is shared outside ",
+        LastEvent.DomainName,
+        " but outsiders cannot change calendars."
+    ])
 }
 
 ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "READ_WRITE_ACCESS"
-    Description := concat("", ["<span class=setting>All information for secondary calendars </span> is shared outside ", LastEvent.DomainName, " and outsiders can change calendars."])
+    Description := concat("", [
+        "<span class=setting>All information for secondary calendars </span> is shared outside ",
+        LastEvent.DomainName,
+        " and outsiders can change calendars."
+    ])
 }
 
 ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "MANAGE_ACCESS"
-    Description := concat("", ["<span class=setting>All information for secondary calendars </span> is shared outside ", LastEvent.DomainName, " and outsiders can manage calendars"])
+    Description := concat("", [
+        "<span class=setting>All information for secondary calendars </span> is shared outside ",
+        LastEvent.DomainName,
+        " and outsiders can manage calendars"
+    ])
 }
 
 #
@@ -253,14 +278,15 @@ ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.3.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": "Sharing options for secondary calendars are set to the default value.",
-    "ActualValue": {"SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR": "--No setting change found in logs, the default value is likely still active--"},
-    "RequirementMet": false,
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
+    DefaultSafe := false
     Events := FilterEvents("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
-    count(Events) == 0 # If no events were logged, then the default value is still active
+    count(Events) == 0
 }
 
 tests contains {
@@ -300,12 +326,18 @@ tests contains {
 
 CalInteropManSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "true"
-    Description := concat("", ["<span class=setting>Calendar interop is enabled </span> for ", LastEvent.DomainName])
+    Description := concat("", [
+        "<span class=setting>Calendar interop is enabled </span> for ",
+        LastEvent.DomainName
+    ])
 }
 
 CalInteropManSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue == "false"
-    Description := concat("", ["<span class=setting>Calendar interop is not enabled </span> for ", LastEvent.DomainName])
+    Description := concat("", [
+        "<span class=setting>Calendar interop is not enabled </span> for ",
+        LastEvent.DomainName
+    ])
 }
 
 #
@@ -314,14 +346,15 @@ CalInteropManSettingDetailsStr(LastEvent) := Description if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.4.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": "Calendar Interop Management settings are set to the default value.",
-    "ActualValue": {"ENABLE_EWS_INTEROP": "--No setting change found in logs, the default value is likely still active--"},
-    "RequirementMet": false,
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
+    DefaultSafe := false
     Events := FilterEvents("ENABLE_EWS_INTEROP")
-    count(Events) == 0 # If no events were logged, then the default value is still active
+    count(Events) == 0
 }
 
 tests contains {
@@ -428,34 +461,6 @@ OUsWithEventsNoDomain contains Event.OrgUnit if {
     some Event in SettingChangeEventsNoDomain
 }
 
-GetTopLevelOUNoDomain() := name if {
-    # Simplest case: if input.tenant_info.topLevelOU is
-    # non-empty, it contains the name of the top-level OU.
-    input.tenant_info.topLevelOU != ""
-    name := input.tenant_info.topLevelOU
-}
-
-GetTopLevelOUNoDomain() := name if {
-    # input.tenant_info.topLevelOU will be empty when
-    # no custom OUs have been created, as in this case
-    # the top-level OU cannot be determined via the API.
-    # Fortunately, in this case, we know there's literally
-    # only one OU, so we can grab the OU listed on any of
-    # the events and know that it is the top-level OU
-    input.tenant_info.topLevelOU == ""
-    count(SettingChangeEventsNoDomain) > 0
-    name := GetLastEvent(SettingChangeEventsNoDomain).OrgUnit
-}
-
-GetTopLevelOUNoDomain() := name if {
-    # Extreme edge case: no custom OUs have been made
-    # and the logs are empty. In this case, we really
-    # have no way of determining the top-level OU name.
-    input.tenant_info.topLevelOU == ""
-    count(SettingChangeEventsNoDomain) == 0
-    name := ""
-}
-
 NonCompliantOUs5_1 contains OU if {
     some OU in OUsWithEventsNoDomain
     Events := FilterNoDomainEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
@@ -481,7 +486,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOUNoDomain()
     Events := FilterNoDomainEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
     count(Events) == 0
 }
@@ -495,7 +499,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOUNoDomain()
     Events := FilterNoDomainEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
