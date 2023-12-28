@@ -144,7 +144,7 @@ GetLastEvent(Events) := Event if {
 NonCompliantOUs1_1[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     contains("SHARING_NOT_ALLOWED SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES INHERIT_FROM_PARENT", LastEvent.NewValue) == false
 }
@@ -156,7 +156,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.1v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)    
+    Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)   
     count(Events) == 0 # If no Events were logged, then the default
 }
 
@@ -212,7 +212,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.2v0.1",
 NonCompliantOUs1_3[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     contains("SHARING_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == true
 }
@@ -246,7 +246,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.3v0.1",
 NonCompliantOUs1_4[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     contains("NOT_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == false
 }
@@ -258,7 +258,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.4v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", TopLevelOU)    
+    Events := FilterEventsOU("SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", TopLevelOU)   
     count(Events) == 0 # If no Events were logged, then the default
 }
 
@@ -280,7 +280,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.4v0.1",
 NonCompliantOUs1_5[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("PUBLISHING_TO_WEB", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     contains("ALLOWED", LastEvent.NewValue) == true
 }
@@ -292,7 +292,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.5v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("PUBLISHING_TO_WEB", TopLevelOU)    
+    Events := FilterEventsOU("PUBLISHING_TO_WEB", TopLevelOU)   
     count(Events) == 0 # If no Events were logged, then the default
 }
 
@@ -314,7 +314,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.5v0.1",
 NonCompliantOUs1_6[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_ACCESS_CHECKER_OPTIONS", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     contains("NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES INHERIT_FROM_PARENT", LastEvent.NewValue) == false
 }
@@ -326,8 +326,8 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.6v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent":true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("SHARING_ACCESS_CHECKER_OPTIONS",TopLevelOU)    
-    count(Events) == 0 # If no Events were logged, then the default 
+    Events := FilterEventsOU("SHARING_ACCESS_CHECKER_OPTIONS",TopLevelOU)   
+    count(Events) == 0 # If no Events were logged, then the default
     # value is still active
 }
 
@@ -349,7 +349,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.6v0.1",
 NonCompliantOUs1_7[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     contains("CROSS_DOMAIN_FROM_INTERNAL_ONLY CROSS_DOMAIN_MOVES_BLOCKED INHERIT_FROM_PARENT", LastEvent.NewValue) == false
 }
@@ -361,8 +361,8 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.7v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", TopLevelOU)    
-    count(Events) == 0 # If no Events were logged, then the default 
+    Events := FilterEventsOU("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", TopLevelOU)   
+    count(Events) == 0 # If no Events were logged, then the default
     # value is still active
 }
 
@@ -384,7 +384,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.7v0.1",
 NonCompliantOUs1_8[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("DEFAULT_LINK_SHARING_FOR_NEW_DOCS", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     LastEvent.NewValue != "PRIVATE"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
@@ -397,8 +397,8 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.8v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent":true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("DEFAULT_LINK_SHARING_FOR_NEW_DOCS",TopLevelOU)    
-    count(Events) == 0 # If no Events were logged, then the default 
+    Events := FilterEventsOU("DEFAULT_LINK_SHARING_FOR_NEW_DOCS",TopLevelOU)   
+    count(Events) == 0 # If no Events were logged, then the default
     # value is still active
 }
 
@@ -437,8 +437,8 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.1v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("Shared Drive Creation CanCreateSharedDrives", TopLevelOU)    
-    count(Events) == 0 # If no Events were logged, then the default 
+    Events := FilterEventsOU("Shared Drive Creation CanCreateSharedDrives", TopLevelOU)   
+    count(Events) == 0 # If no Events were logged, then the default
     # value is still active
 }
 
@@ -460,7 +460,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.1v0.1",
 NonCompliantOUs2_2[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_admin_only", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -473,8 +473,8 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.2v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("Shared Drive Creation new_team_drive_admin_only", TopLevelOU)    
-    count(Events) == 0 # If no Events were logged, then the default 
+    Events := FilterEventsOU("Shared Drive Creation new_team_drive_admin_only", TopLevelOU)   
+    count(Events) == 0 # If no Events were logged, then the default
     # value is still active
 }
 
@@ -496,7 +496,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.2v0.1",
 NonCompliantOUs2_3[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_cross_domain_access", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -509,8 +509,8 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_cross_domain_access", TopLevelOU)    
-    count(Events) == 0 # If no Events were logged, then the default 
+    Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_cross_domain_access", TopLevelOU)   
+    count(Events) == 0 # If no Events were logged, then the default
     # value is still active
 }
 
@@ -545,8 +545,8 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.4v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_direct_access", TopLevelOU)    
-    count(Events) == 0 # If no Events were logged, then the default 
+    Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_direct_access", TopLevelOU)   
+    count(Events) == 0 # If no Events were logged, then the default
     # value is still active
 }
 
@@ -601,7 +601,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.5v0.1",
 
 
 ################
-# GWS.DRIVEDOCS.3 
+# GWS.DRIVEDOCS.3
 ################
 
 #
@@ -610,13 +610,13 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.5v0.1",
 
 NoSuchEvent3_1(TopLevelOU) := true if {
     # No such event...
-    Events_A := FilterEventsOU("Link Security Update Settings allow_less_secure_link_user_restore", TopLevelOU) 
+    Events_A := FilterEventsOU("Link Security Update Settings allow_less_secure_link_user_restore", TopLevelOU)
     count(Events_A) == 0
 }
 
 NoSuchEvent3_1(TopLevelOU) := true if {
     # No such event...
-    Events := FilterEventsOU("Link Security Update Settings less_secure_link_option", TopLevelOU) 
+    Events := FilterEventsOU("Link Security Update Settings less_secure_link_option", TopLevelOU)
     count(Events) == 0
 }
 
@@ -625,11 +625,11 @@ default NoSuchEvent3_1(_) := false
 NonCompliantOUs3_1[OU] {
     some OU in OUsWithEvents
     Events_A := FilterEventsOU("Link Security Update Settings allow_less_secure_link_user_restore", OU)
-    count(Events_A) > 0  
+    count(Events_A) > 0 
     LastEvent_A := GetLastEvent(Events_A)
-    
+   
     Events_B := FilterEventsOU("Link Security Update Settings less_secure_link_option", OU)
-    count(Events_B) > 0  
+    count(Events_B) > 0 
     LastEvent_B := GetLastEvent(Events_B)
 
     Conditions := [LastEvent_A.NewValue != "false", LastEvent_B.NewValue != "REMOVE_LESS_SECURE_LINKS"]
@@ -709,7 +709,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.4.1v0.1",
 NonCompliantOUs5_1[OU] {
     some OU in OUsWithEvents
     Events := FilterEventsOU("ENABLE_DOCS_ADD_ONS", OU)
-    count(Events) > 0 
+    count(Events) > 0
     LastEvent := GetLastEvent(Events)
     LastEvent.NewValue != "false"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
@@ -722,8 +722,8 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.5.1v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    Events := FilterEventsOU("ENABLE_DOCS_ADD_ONS", TopLevelOU)    
-    count(Events) == 0 # If no Events were logged, then the default 
+    Events := FilterEventsOU("ENABLE_DOCS_ADD_ONS", TopLevelOU)   
+    count(Events) == 0 # If no Events were logged, then the default
     # value is still active
 
 }
@@ -741,7 +741,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.5.1v0.1",
 #--
 
 ################
-# GWS.DRIVEDOCS.6 
+# GWS.DRIVEDOCS.6
 ################
 
 #
@@ -772,10 +772,10 @@ NonCompliantOUs6_1[OU] {
     count(Events_B) > 0
     LastEvent_B := GetLastEvent(Events_B)
     LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
-    
+   
     Conditions := [LastEvent_A.NewValue != "true", LastEvent_B.NewValue != "true"]
     count([Condition | some Condition in Conditions; Condition == true]) > 0
-    
+   
 }
 
 tests[{ "PolicyId": "GWS.DRIVEDOCS.6.1v0.1",
@@ -801,10 +801,10 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.6.1v0.1",
 #--
 
 ################
-# GWS.DRIVEDOCS.7 
+# GWS.DRIVEDOCS.7
 ################
 
-# not implementable: Need a way to see when a rule is created. The fact that a rule is created gets logged but the rule's contents are not. 
+# not implementable: Need a way to see when a rule is created. The fact that a rule is created gets logged but the rule's contents are not.
 
 #
 # Baseline GWS.DRIVEDOCS.7.1v0.1
