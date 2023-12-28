@@ -133,13 +133,9 @@ GetLastEvent(Events) := Event if {
 # GWS.CLASSROOM.1 #
 ###################
 
-
 #
 # Baseline GWS.CLASSROOM.1.1v0.1
 #--
-
-#No OU to Inherit
-
 NonCompliantOUs1_1 contains OU if {
    some OU in OUsWithEvents
     Events := FilterEventsOU("ClassMembershipSettingsGroup who_can_join_classes", OU)
@@ -185,7 +181,6 @@ if {
 #
 # Baseline GWS.CLASSROOM.1.2v0.1
 #--
-
 NonCompliantOUs1_2 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", OU)
@@ -235,7 +230,6 @@ if {
 #
 # Baseline GWS.CLASSROOM.2.1v0.1
 #--
-
 NonCompliantOUs2_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", OU)
@@ -286,7 +280,6 @@ if {
 #
 # Baseline GWS.CLASSROOM.3.1v0.1
 #--
-
 NonCompliantOUs3_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", OU)
@@ -330,8 +323,6 @@ if {
 }
 #--
 
-#--
-
 ###################
 # GWS.CLASSROOM.4 #
 ###################
@@ -339,7 +330,6 @@ if {
 #
 # Baseline GWS.CLASSROOM.4.1v0.1
 #--
-
 NonCompliantOUs4_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
@@ -350,7 +340,6 @@ NonCompliantOUs4_1 contains OU if {
     LastEvent := GetLastEvent(Events)
     LastEvent.NewValue != "ONLY_TEACHERS_CAN_UNENROLL_STUDENTS"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-
 }
 
 tests contains {
