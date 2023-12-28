@@ -3,30 +3,29 @@ import future.keywords
 import data.utils.NoSuchEventDetails
 import data.utils.ReportDetailsOUs
 
-OUsWithEvents[Event.OrgUnit] {
-    Event := SettingChangeEvents[_]
+OUsWithEvents contains Event.OrgUnit if {
+    some Event in SettingChangeEvents
 }
 
-FilterEvents(SettingName) := FilteredEvents if
-{
+FilterEvents(SettingName) := FilteredEvents if {
     # Filter the events by SettingName
     Events := SettingChangeEvents
-    FilteredEvents := [Event | Event = Events[_]; Event.Setting == SettingName]
+    FilteredEvents := {Event | some Event in Events; Event.Setting == SettingName}
 }
 
-FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
+FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
     # If there exists at least the root OU and 1 more OU
     # filter out organizational units that don't exist
     input.organizational_unit_names
     count(input.organizational_unit_names) >=2
 
-    # Filter the events by both ServiceName and OrgUnit
-    Events := FilterEvents(ServiceName)
-    FilteredEvents := [
-        Event | Event = Events[_];
+    # Filter the events by both SettingName and OrgUnit
+    Events := FilterEvents(SettingName)
+    FilteredEvents := {
+        Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.OrgUnit in input.organizational_unit_names
-    ]
+    }
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -36,7 +35,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | Event = Events[_]; Event.OrgUnit == OrgUnit]
+    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -45,17 +44,17 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | Event = Events[_]; Event.OrgUnit == OrgUnit]
+    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # Simplest case: if input.tenant_info.topLevelOU is
     # non-empty, it contains the name of the top-level OU.
     input.tenant_info.topLevelOU != ""
-    name := input.tenant_info.topLevelOU
+    Name := input.tenant_info.topLevelOU
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # input.tenant_info.topLevelOU will be empty when
     # no custom OUs have been created, as in this case
     # the top-level OU cannot be determined via the API.
@@ -64,36 +63,38 @@ GetTopLevelOU() := name if {
     # the events and know that it is the top-level OU
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) > 0
-    name := GetLastEvent(SettingChangeEvents).OrgUnit
+    Name := GetLastEvent(SettingChangeEvents).OrgUnit
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # Extreme edge case: no custom OUs have been made
     # and the logs are empty. In this case, we really
     # have no way of determining the top-level OU name.
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) == 0
-    name := ""
+    Name := ""
 }
 
-SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
+SettingChangeEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
     "NewValue": NewValue,
     "Setting": Setting,
-    "OrgUnit": OrgUnit}] {
-
-    Item := input.drive_logs.items[_] # For each item...
-    Event := Item.events[_] # For each event in the item...
+    "OrgUnit": OrgUnit
+}
+if {
+    some Item in input.drive_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
-    "NEW_VALUE" in [Parameter.name | Parameter = Event.parameters[_]]
-    "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
+    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
 
     # Extract the values
-    Setting := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "NEW_VALUE"][0]
-    OrgUnit := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "ORG_UNIT_NAME"][0]
+    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
+    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
+    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
 # Secondary case that looks for the DELETE_APPLICATION_SETTING events.
@@ -101,32 +102,34 @@ SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
 # minimal special logic, this rule adds the DELETE_APPLICATION_SETTING
 # to the SettingChangeEvents set, with "DELETE_APPLICATION_SETTING" as
 # the NewValue.
-SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
+SettingChangeEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
     "NewValue": NewValue,
     "Setting": Setting,
-    "OrgUnit": OrgUnit}] {
-
-    Item := input.drive_logs.items[_] # For each item...
-    Event := Item.events[_] # For each event in the item...
+    "OrgUnit": OrgUnit
+}
+if {
+    some Item in input.drive_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
     Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | Parameter = Event.parameters[_]] 
-    "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
 
     # Extract the values
-    Setting := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "SETTING_NAME"][0]
+    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
     NewValue := "DELETE_APPLICATION_SETTING"
-    OrgUnit := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "ORG_UNIT_NAME"][0]
+    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
 GetLastEvent(Events) := Event if {
     # Because CalendarSharingEvents returns a set instead
     # of an array, we can't just index it and get the last
     # value
-    MaxTs := max([Event.Timestamp | Event = Events[_]])
-    Event := Events[_]
+    MaxTs := max({Event.Timestamp | some Event in Events})
+    some Event in Events
     Event.Timestamp == MaxTs
 }
 
@@ -153,7 +156,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.1v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default
 }
@@ -164,7 +166,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.1v0.1",
         "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
@@ -189,7 +190,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.2v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
     count(Events) == 0 # If no Events were logged, then the default
 }
@@ -200,7 +200,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.2v0.1",
         "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_2) == 0
@@ -225,7 +224,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.3v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
     count(Events) == 0 # If no Events were logged, then the default
 }
@@ -236,7 +234,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.3v0.1",
         "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_3},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_3) == 0
@@ -261,7 +258,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.4v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default
 }
@@ -272,7 +268,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.4v0.1",
         "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_4) == 0
@@ -297,7 +292,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.5v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("PUBLISHING_TO_WEB", TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default
 }
@@ -308,7 +302,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.5v0.1",
         "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_5},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("PUBLISHING_TO_WEB", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_5) == 0
@@ -333,7 +326,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.6v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent":true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_ACCESS_CHECKER_OPTIONS",TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default 
     # value is still active
@@ -345,7 +337,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.6v0.1",
         "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_6},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_ACCESS_CHECKER_OPTIONS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_6) == 0
@@ -370,7 +361,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.7v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default 
     # value is still active
@@ -382,7 +372,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.7v0.1",
         "ActualValue": {"NonComplaintOUs": NonCompliantOUs1_7},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_7) == 0
@@ -408,7 +397,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.8v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent":true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("DEFAULT_LINK_SHARING_FOR_NEW_DOCS",TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default 
     # value is still active
@@ -420,7 +408,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.8v0.1",
         "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_8},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("DEFAULT_LINK_SHARING_FOR_NEW_DOCS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_8) == 0
@@ -450,7 +437,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.1v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation CanCreateSharedDrives", TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default 
     # value is still active
@@ -462,7 +448,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.1v0.1",
         "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_1},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation CanCreateSharedDrives", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
@@ -488,7 +473,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.2v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_admin_only", TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default 
     # value is still active
@@ -500,7 +484,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.2v0.1",
         "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_2},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_admin_only", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_2) == 0
@@ -526,7 +509,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_cross_domain_access", TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default 
     # value is still active
@@ -538,7 +520,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
         "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_3},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_cross_domain_access", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_3) == 0
@@ -564,7 +545,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.4v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_direct_access", TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default 
     # value is still active
@@ -576,7 +556,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.4v0.1",
         "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_4},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_direct_access", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_4) == 0
@@ -602,7 +581,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.5v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_download", TopLevelOU)
     count(Events) == 0 # If no Events were logged, then the default
     # value is still active
@@ -614,7 +592,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.5v0.1",
         "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_5},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_download", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_5) == 0
@@ -666,7 +643,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.3.1v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     NoSuchEvent3_1(TopLevelOU)
 }
 
@@ -676,7 +652,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.3.1v0.1",
         "ActualValue" : {"NonComplaintOUs": NonCompliantOUs3_1},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     not NoSuchEvent3_1(TopLevelOU)
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -705,7 +680,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.4.1v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent":true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_DRIVE_APPS", TopLevelOU)
     count(Events) == 0 # If no Events were logged, then the default
     # value is still active
@@ -718,7 +692,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.4.1v0.1",
         "ActualValue": {"NonComplaintOUs": NonCompliantOUs4_1},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_DRIVE_APPS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
@@ -749,7 +722,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.5.1v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_DOCS_ADD_ONS", TopLevelOU)    
     count(Events) == 0 # If no Events were logged, then the default 
     # value is still active
@@ -762,7 +734,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.5.1v0.1",
         "ActualValue": {"NonComplaintOUs": NonCompliantOUs5_1},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ENABLE_DOCS_ADD_ONS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
@@ -814,7 +785,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.6.1v0.1",
         "RequirementMet": DefaultSafe,
         "NoSuchEvent": true}] {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     NoSuchEvent6_1(TopLevelOU)
 }
 
@@ -824,7 +794,6 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.6.1v0.1",
         "ActualValue" : {"NonComplaintOUs": NonCompliantOUs6_1},
         "RequirementMet": Status,
         "NoSuchEvent": false}] {
-    TopLevelOU := GetTopLevelOU()
     not NoSuchEvent6_1(TopLevelOU)
     Status := count(NonCompliantOUs6_1) == 0
 }
