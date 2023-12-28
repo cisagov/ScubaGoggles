@@ -144,14 +144,13 @@ GetLastEvent(Events) := Event if {
     Event.Timestamp == MaxTs
 }
 
-################
-# GWS.CHAT.1   #
-################
+##############
+# GWS.CHAT.1 #
+##############
 
 #
 # Baseline GWS.CHAT.1v1
 #--
-
 NonCompliantOUs1_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", OU)
@@ -195,7 +194,6 @@ if {
 #
 # Baseline GWS.CHAT.1.2v0.1
 #--
-
 NonCompliantOUs1_2 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("ChatArchivingProto allow_chat_archiving_setting_modification", OU)
@@ -237,14 +235,13 @@ if {
 #--
 
 
-################
-# GWS.CHAT.2   #
-################
+##############
+# GWS.CHAT.2 #
+##############
 
 #
 # Baseline GWS.CHAT.2.2v0.1
 #--
-
 NonCompliantOUs2_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
@@ -286,14 +283,13 @@ if {
 }
 #--
 
-################
-# GWS.CHAT.3   #
-################
+##############
+# GWS.CHAT.3 #
+##############
 
 #
 # Baseline GWS.CHAT.3.1v0.1
 #--
-
 NonCompliantOUs3_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("RoomOtrSettingsProto otr_state", OU)
@@ -334,9 +330,9 @@ if {
 }
 #--
 
-################
-# GWS.CHAT.4   #
-################
+##############
+# GWS.CHAT.4 #
+##############
 
 #
 # Baseline GWS.CHAT.4.1v0.1
@@ -424,14 +420,13 @@ if {
 }
 #--
 
-################
-# GWS.CHAT.5   #
-################
+##############
+# GWS.CHAT.5 #
+##############
 
 #
 # GWS.CHAT.5.1v0.1
 #--
-
 NonCompliantOUs5_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("Chat app Settings - Chat apps enabled", OU)
