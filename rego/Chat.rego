@@ -5,7 +5,7 @@ import data.utils.NoSuchEventDetails
 
 FilterEvents(SettingName) := FilteredEvents if {
     Events := SettingChangeEvents
-    FilteredEvents := [Event | Event = Events[_]; Event.Setting == SettingName]
+    FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
 }
 
 FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
@@ -17,7 +17,7 @@ FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
     # Filter the events by both ServiceName and OrgUnit
     Events := FilterEvents(ServiceName)
     FilteredEvents := [
-        Event | Event = Events[_];
+        Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.OrgUnit in input.organizational_unit_names
     ]
@@ -32,7 +32,7 @@ FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
     # Filter the events by both ServiceName and OrgUnit
     Events := FilterEvents(ServiceName)
     FilteredEvents := [
-        Event | Event = Events[_];
+        Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.OrgUnit in input.organizational_unit_names
     ]
@@ -45,7 +45,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | Event = Events[_]; Event.OrgUnit == OrgUnit]
+    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -54,7 +54,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | Event = Events[_]; Event.OrgUnit == OrgUnit]
+    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
 }
 
 GetTopLevelOU() := name if {
@@ -86,7 +86,7 @@ GetTopLevelOU() := name if {
 }
 
 OUsWithEvents[Event.OrgUnit] {
-    Event := SettingChangeEvents[_]
+    some Event in SettingChangeEvents
 }
 
 SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
@@ -95,18 +95,18 @@ SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "Setting": Setting,
     "OrgUnit": OrgUnit}] {
 
-    Item := input.chat_logs.items[_] # For each item...
-    Event := Item.events[_] # For each event in the item...
+    some Item in input.chat_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | Parameter = Event.parameters[_]] 
-    "NEW_VALUE" in [Parameter.name | Parameter = Event.parameters[_]]
-    "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters] 
+    "NEW_VALUE" in [Parameter.name | some Parameter in Event.parameters]
+    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
 
     # Extract the values
-    Setting := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "NEW_VALUE"][0]
-    OrgUnit := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "ORG_UNIT_NAME"][0]
+    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
+    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
+    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
 # Secondary case that looks for the DELETE_APPLICATION_SETTING events.
@@ -120,23 +120,23 @@ SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "Setting": Setting,
     "OrgUnit": OrgUnit}] {
 
-    Item := input.chat_logs.items[_] # For each item...
-    Event := Item.events[_] # For each event in the item...
+    some Item in input.chat_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
     Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | Parameter = Event.parameters[_]] 
-    "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters] 
+    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
 
     # Extract the values
-    Setting := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "SETTING_NAME"][0]
+    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
     NewValue := "DELETE_APPLICATION_SETTING"
-    OrgUnit := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "ORG_UNIT_NAME"][0]
+    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
 GetLastEvent(Events) := Event if {
-    MaxTs := max([Event.Timestamp | Event = Events[_]])
-    Event := Events[_]
+    MaxTs := max([Event.Timestamp | some Event in Events])
+    some Event in Events
     Event.Timestamp == MaxTs
 }
 
@@ -149,7 +149,7 @@ GetLastEvent(Events) := Event if {
 #--
 
 NonCompliantOUs1_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -189,7 +189,7 @@ tests[{ "PolicyId": "GWS.CHAT.1.1v0.1",
 #--
 
 NonCompliantOUs1_2[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ChatArchivingProto allow_chat_archiving_setting_modification", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -234,7 +234,7 @@ tests[{ "PolicyId": "GWS.CHAT.1.2v0.1",
 #--
 
 NonCompliantOUs2_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -279,7 +279,7 @@ tests[{ "PolicyId": "GWS.CHAT.2.1v0.1",
 #--
 
 NonCompliantOUs3_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("RoomOtrSettingsProto otr_state", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -322,7 +322,7 @@ tests[{ "PolicyId": "GWS.CHAT.3.1v0.1",
 # Baseline GWS.CHAT.4.1v0.1
 #--
 NonCompliantOUs4_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("RestrictChatProto restrictChatToOrganization", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -361,7 +361,7 @@ tests[{ "PolicyId": "GWS.CHAT.4.1v0.1",
 # Baseline GWS.CHAT.4.2v0.1
 #--
 NonCompliantOUs4_2[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("RestrictChatProto externalChatRestriction", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -405,7 +405,7 @@ tests[{ "PolicyId": "GWS.CHAT.4.2v0.1",
 #--
 
 NonCompliantOUs5_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Chat app Settings - Chat apps enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
