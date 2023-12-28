@@ -57,14 +57,14 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
     FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # Simplest case: if input.tenant_info.topLevelOU is
     # non-empty, it contains the name of the top-level OU.
     input.tenant_info.topLevelOU != ""
-    name := input.tenant_info.topLevelOU
+    Name := input.tenant_info.topLevelOU
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # input.tenant_info.topLevelOU will be empty when
     # no custom OUs have been created, as in this case
     # the top-level OU cannot be determined via the API.
@@ -73,16 +73,16 @@ GetTopLevelOU() := name if {
     # the events and know that it is the top-level OU
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) > 0
-    name := GetLastEvent(SettingChangeEvents).OrgUnit
+    Name := GetLastEvent(SettingChangeEvents).OrgUnit
 }
 
-GetTopLevelOU() := name if {
+TopLevelOU := Name if {
     # Extreme edge case: no custom OUs have been made
     # and the logs are empty. In this case, we really
     # have no way of determining the top-level OU name.
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) == 0
-    name := ""
+    Name := ""
 }
 
 OUsWithEvents contains Event.OrgUnit if {
@@ -173,7 +173,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)    
     count(Events) == 0
 }
@@ -187,7 +186,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)    
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
@@ -219,7 +217,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ChatArchivingProto allow_chat_archiving_setting_modification", TopLevelOU)    
     count(Events) == 0
 }
@@ -233,7 +230,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ChatArchivingProto allow_chat_archiving_setting_modification", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_2) == 0
@@ -271,7 +267,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)    
     count(Events) == 0
 }
@@ -285,7 +280,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)      
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
@@ -321,7 +315,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RoomOtrSettingsProto otr_state", TopLevelOU)
     count(Events) == 0
 }
@@ -335,7 +328,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RoomOtrSettingsProto otr_state", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
@@ -370,7 +362,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RestrictChatProto restrictChatToOrganization", TopLevelOU)
     count(Events) == 0
 }
@@ -384,7 +375,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RestrictChatProto restrictChatToOrganization", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
@@ -415,7 +405,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RestrictChatProto externalChatRestriction", TopLevelOU)
     count(Events) == 0
 }
@@ -429,7 +418,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RestrictChatProto externalChatRestriction", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_2) == 0
@@ -465,7 +453,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Chat app Settings - Chat apps enabled", TopLevelOU)
     count(Events) == 0
 }
@@ -480,7 +467,6 @@ tests contains
     "NoSuchEvent": false
 }
 if {
-    TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Chat app Settings - Chat apps enabled", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
