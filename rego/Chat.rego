@@ -5,7 +5,7 @@ import data.utils.NoSuchEventDetails
 
 FilterEvents(SettingName) := FilteredEvents if {
     Events := SettingChangeEvents
-    FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
+    FilteredEvents := {Event | some Event in Events; Event.Setting == SettingName}
 }
 
 FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
@@ -16,11 +16,11 @@ FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both ServiceName and OrgUnit
     Events := FilterEvents(ServiceName)
-    FilteredEvents := [
+    FilteredEvents := {
         Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.OrgUnit in input.organizational_unit_names
-    ]
+    }
 }
 
 FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
@@ -31,11 +31,11 @@ FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both ServiceName and OrgUnit
     Events := FilterEvents(ServiceName)
-    FilteredEvents := [
+    FilteredEvents := {
         Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.OrgUnit in input.organizational_unit_names
-    ]
+    }
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -45,7 +45,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
+    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
 }
 
 FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
@@ -54,7 +54,7 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
-    FilteredEvents := [Event | some Event in Events; Event.OrgUnit == OrgUnit]
+    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
 }
 
 TopLevelOU := Name if {
@@ -101,9 +101,9 @@ if {
     some Event in Item.events # For each event in the item...
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters] 
-    "NEW_VALUE" in [Parameter.name | some Parameter in Event.parameters]
-    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
+    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
 
     # Extract the values
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
@@ -129,8 +129,8 @@ if {
     Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters] 
-    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
 
     # Extract the values
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
@@ -139,7 +139,7 @@ if {
 }
 
 GetLastEvent(Events) := Event if {
-    MaxTs := max([Event.Timestamp | some Event in Events])
+    MaxTs := max({Event.Timestamp | some Event in Events})
     some Event in Events
     Event.Timestamp == MaxTs
 }
