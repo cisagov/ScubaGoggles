@@ -70,16 +70,18 @@ GetTopLevelOU() := name if {
     name := ""
 }
 
-OUsWithEvents[Event.OrgUnit] {
+OUsWithEvents contains Event.OrgUnit if {
     some Event in SettingChangeEvents
 }
 
-SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
+SettingChangeEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
     "NewValue": NewValue,
     "Setting": Setting,
-    "OrgUnit": OrgUnit}] {
-
+    "OrgUnit": OrgUnit
+}
+if {
     some Item in input.classroom_logs.items # For each item...
     some Event in Item.events # For each event in the item...
 
@@ -99,12 +101,14 @@ SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
 # minimal special logic, this rule adds the DELETE_APPLICATION_SETTING
 # to the SettingChangeEvents set, with "DELETE_APPLICATION_SETTING" as
 # the NewValue.
-SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
+SettingChangeEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
     "NewValue": NewValue,
     "Setting": Setting,
-    "OrgUnit": OrgUnit}] {
-
+    "OrgUnit": OrgUnit
+}
+if {
     some Item in input.classroom_logs.items # For each item...
     some Event in Item.events # For each event in the item...
     Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
@@ -136,7 +140,7 @@ GetLastEvent(Events) := Event if {
 
 #No OU to Inherit
 
-NonCompliantOUs1_1[OU] {
+NonCompliantOUs1_1 contains OU if {
    some OU in OUsWithEvents
     Events := FilterEventsOU("ClassMembershipSettingsGroup who_can_join_classes", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
@@ -147,24 +151,30 @@ NonCompliantOUs1_1[OU] {
     LastEvent.NewValue != "1"
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.1.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.1.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ClassMembershipSettingsGroup who_can_join_classes", TopLevelOU)
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.1.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_1),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.1.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ClassMembershipSettingsGroup who_can_join_classes", TopLevelOU)
     count(Events) > 0
@@ -176,8 +186,8 @@ tests[{ "PolicyId": "GWS.CLASSROOM.1.1v0.1",
 # Baseline GWS.CLASSROOM.1.2v0.1
 #--
 
-NonCompliantOUs1_2[OU] {
-   some OU in OUsWithEvents
+NonCompliantOUs1_2 contains OU if {
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -187,24 +197,30 @@ NonCompliantOUs1_2[OU] {
     LastEvent.NewValue != "1"
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.1.2v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.1.2v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", TopLevelOU)
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.1.2v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_2),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.1.2v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", TopLevelOU)
     count(Events) > 0
@@ -220,8 +236,8 @@ tests[{ "PolicyId": "GWS.CLASSROOM.1.2v0.1",
 # Baseline GWS.CLASSROOM.2.1v0.1
 #--
 
-NonCompliantOUs2_1[OU] {
-   some OU in OUsWithEvents
+NonCompliantOUs2_1 contains OU if {
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -232,24 +248,30 @@ NonCompliantOUs2_1[OU] {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.2.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.2.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", TopLevelOU)
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.2.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs2_1),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.2.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs2_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", TopLevelOU)
     count(Events) > 0
@@ -265,8 +287,8 @@ tests[{ "PolicyId": "GWS.CLASSROOM.2.1v0.1",
 # Baseline GWS.CLASSROOM.3.1v0.1
 #--
 
-NonCompliantOUs3_1[OU] {
-   some OU in OUsWithEvents
+NonCompliantOUs3_1 contains OU if {
+    some OU in OUsWithEvents
     Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -277,24 +299,30 @@ NonCompliantOUs3_1[OU] {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.3.1v0.1",
-        "Criticality": "Should",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.3.1v0.1",
+    "Criticality": "Should",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := true
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", TopLevelOU)
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.3.1v0.1",
-        "Criticality": "Should",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs3_1),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.3.1v0.1",
+    "Criticality": "Should",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs3_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", TopLevelOU)
     count(Events) > 0
@@ -312,8 +340,8 @@ tests[{ "PolicyId": "GWS.CLASSROOM.3.1v0.1",
 # Baseline GWS.CLASSROOM.4.1v0.1
 #--
 
-NonCompliantOUs4_1[OU] {
-   some OU in OUsWithEvents
+NonCompliantOUs4_1 contains OU if {
+    some OU in OUsWithEvents
     Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -325,24 +353,30 @@ NonCompliantOUs4_1[OU] {
 
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.4.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.4.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := true
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", TopLevelOU)
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CLASSROOM.4.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs4_1),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.4.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs4_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", TopLevelOU)
     count(Events) > 0
