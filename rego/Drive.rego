@@ -461,9 +461,9 @@ if {
 }
 #--
 
-################
+###################
 # GWS.DRIVEDOCS.2 #
-################
+###################
 
 #
 # Baseline GWS.DRIVEDOCS.2.1v0.1
@@ -671,14 +671,13 @@ if {
 #--
 
 
-################
-# GWS.DRIVEDOCS.3
-################
+###################
+# GWS.DRIVEDOCS.3 #
+###################
 
 #
 # Baseline GWS.DRIVEDOCS.3.1v0.1
 #--
-
 NoSuchEvent3_1(TopLevelOU) := true if {
     # No such event...
     Events_A := FilterEventsOU("Link Security Update Settings allow_less_secure_link_user_restore", TopLevelOU)
@@ -734,9 +733,9 @@ if {
 }
 #--
 
-################
-# GWS.DRIVEDOCS.4#
-################
+###################
+# GWS.DRIVEDOCS.4 #
+###################
 
 #
 # Baseline GWS.DRIVEDOCS.4.1v0.1
@@ -781,9 +780,9 @@ if {
 #--
 
 
-################
+###################
 # GWS.DRIVEDOCS.5 #
-################
+###################
 
 #
 # Baseline GWS.DRIVEDOCS.5.1v0.1
@@ -827,14 +826,13 @@ if {
 }
 #--
 
-################
-# GWS.DRIVEDOCS.6
-################
+###################
+# GWS.DRIVEDOCS.6 #
+###################
 
 #
 # Baseline GWS.DRIVEDOCS.6.1v0.1
 #--
-
 default NoSuchEvent6_1(_) := true
 
 NoSuchEvent6_1(TopLevelOU) := false if {
@@ -890,12 +888,11 @@ if {
     not NoSuchEvent6_1(TopLevelOU)
     Status := count(NonCompliantOUs6_1) == 0
 }
-
 #--
 
-################
-# GWS.DRIVEDOCS.7
-################
+###################
+# GWS.DRIVEDOCS.7 #
+###################
 
 #
 # Baseline GWS.DRIVEDOCS.7.1v0.1
