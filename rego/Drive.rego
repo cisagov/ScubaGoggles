@@ -142,7 +142,7 @@ GetLastEvent(Events) := Event if {
 #--
 # TODO: OU inheritence implementation pending after SCB updates, refer to #328
 NonCompliantOUs1_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -176,7 +176,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.1v0.1",
 # Baseline GWS.DRIVEDOCS.1.2v0.1
 #--
 NonCompliantOUs1_2[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
@@ -210,7 +210,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.2v0.1",
 # Baseline GWS.DRIVEDOCS.1.3v0.1
 #--
 NonCompliantOUs1_3[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -244,7 +244,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.3v0.1",
 # Baseline GWS.DRIVEDOCS.1.4v0.1
 #--
 NonCompliantOUs1_4[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -278,7 +278,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.4v0.1",
 # Baseline GWS.DRIVEDOCS.1.5v0.1
 #--
 NonCompliantOUs1_5[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("PUBLISHING_TO_WEB", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -312,7 +312,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.5v0.1",
 # Baseline GWS.DRIVEDOCS.1.6v0.1
 #--
 NonCompliantOUs1_6[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_ACCESS_CHECKER_OPTIONS", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -347,7 +347,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.6v0.1",
 # Baseline GWS.DRIVEDOCS.1.7v0.1
 #--
 NonCompliantOUs1_7[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -382,7 +382,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.7v0.1",
 # Baseline GWS.DRIVEDOCS.1.8v0.1
 #--
 NonCompliantOUs1_8[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("DEFAULT_LINK_SHARING_FOR_NEW_DOCS", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -422,7 +422,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.1.8v0.1",
 # Baseline GWS.DRIVEDOCS.2.1v0.1
 #--
 NonCompliantOUs2_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Shared Drive Creation CanCreateSharedDrives", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
@@ -458,7 +458,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.1v0.1",
 # Baseline GWS.DRIVEDOCS.2.2v0.1
 #--
 NonCompliantOUs2_2[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_admin_only", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -494,7 +494,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.2v0.1",
 # Baseline GWS.DRIVEDOCS.2.3v0.1
 #--
 NonCompliantOUs2_3[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_cross_domain_access", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -530,7 +530,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
 # Baseline GWS.DRIVEDOCS.2.4v0.1
 #--
 NonCompliantOUs2_4[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_direct_access", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
@@ -566,7 +566,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.2.4v0.1",
 # Baseline GWS.DRIVEDOCS.2.5v0.1
 #--
 NonCompliantOUs2_5[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("Shared Drive Creation new_team_drive_restricts_download", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
@@ -623,7 +623,7 @@ NoSuchEvent3_1(TopLevelOU) := true if {
 default NoSuchEvent3_1(_) := false
 
 NonCompliantOUs3_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events_A := FilterEventsOU("Link Security Update Settings allow_less_secure_link_user_restore", OU)
     count(Events_A) > 0  
     LastEvent_A := GetLastEvent(Events_A)
@@ -633,7 +633,7 @@ NonCompliantOUs3_1[OU] {
     LastEvent_B := GetLastEvent(Events_B)
 
     Conditions := [LastEvent_A.NewValue != "false", LastEvent_B.NewValue != "REMOVE_LESS_SECURE_LINKS"]
-    count([Condition | Condition = Conditions[_]; Condition == true]) > 0
+    count([Condition | some Condition in Conditions; Condition == true]) > 0
 }
 
 tests[{ "PolicyId": "GWS.DRIVEDOCS.3.1v0.1",
@@ -665,7 +665,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.3.1v0.1",
 # Baseline GWS.DRIVEDOCS.4.1v0.1
 #--
 NonCompliantOUs4_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ENABLE_DRIVE_APPS", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
@@ -707,7 +707,7 @@ tests[{ "PolicyId": "GWS.DRIVEDOCS.4.1v0.1",
 # Baseline GWS.DRIVEDOCS.5.1v0.1
 #--
 NonCompliantOUs5_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events := FilterEventsOU("ENABLE_DOCS_ADD_ONS", OU)
     count(Events) > 0 
     LastEvent := GetLastEvent(Events)
@@ -762,7 +762,7 @@ NoSuchEvent6_1(TopLevelOU) := false if {
 }
 
 NonCompliantOUs6_1[OU] {
-    OU := OUsWithEvents[_]
+    some OU in OUsWithEvents
     Events_A := FilterEventsOU("DriveFsSettingsProto drive_fs_enabled", OU)
     count(Events_A) > 0
     LastEvent_A := GetLastEvent(Events_A)
@@ -774,7 +774,7 @@ NonCompliantOUs6_1[OU] {
     LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
     
     Conditions := [LastEvent_A.NewValue != "true", LastEvent_B.NewValue != "true"]
-    count([Condition | Condition = Conditions[_]; Condition == true]) > 0
+    count([Condition | some Condition in Conditions; Condition == true]) > 0
     
 }
 
