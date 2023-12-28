@@ -5,7 +5,7 @@ import data.utils.NoSuchEventDetails
 
 FilterEvents(SettingName) := FilteredEvents if {
     Events := SettingChangeEvents
-    FilteredEvents := [Event | Event = Events[_]; Event.Setting == SettingName]
+    FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
 }
 
 FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
@@ -71,7 +71,7 @@ GetTopLevelOU() := name if {
 }
 
 OUsWithEvents[Event.OrgUnit] {
-    Event := SettingChangeEvents[_]
+    some Event in SettingChangeEvents
 }
 
 SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
@@ -80,18 +80,18 @@ SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "Setting": Setting,
     "OrgUnit": OrgUnit}] {
 
-    Item := input.classroom_logs.items[_] # For each item...
-    Event := Item.events[_] # For each event in the item...
+    some Item in input.classroom_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
-    "NEW_VALUE" in [Parameter.name | Parameter = Event.parameters[_]]
-    "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "NEW_VALUE" in [Parameter.name | some Parameter in Event.parameters]
+    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
 
     # Extract the values
-    Setting := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "NEW_VALUE"][0]
-    OrgUnit := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "ORG_UNIT_NAME"][0]
+    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
+    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
+    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
 # Secondary case that looks for the DELETE_APPLICATION_SETTING events.
@@ -105,23 +105,23 @@ SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "Setting": Setting,
     "OrgUnit": OrgUnit}] {
 
-    Item := input.classroom_logs.items[_] # For each item...
-    Event := Item.events[_] # For each event in the item...
+    some Item in input.classroom_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
     Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
 
     # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
-    "ORG_UNIT_NAME" in [Parameter.name | Parameter = Event.parameters[_]]
+    "SETTING_NAME" in [Parameter.name | some Parameter in Event.parameters]
+    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
 
     # Extract the values
-    Setting := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "SETTING_NAME"][0]
+    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
     NewValue := "DELETE_APPLICATION_SETTING"
-    OrgUnit := [Parameter.value | Parameter = Event.parameters[_]; Parameter.name == "ORG_UNIT_NAME"][0]
+    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
 GetLastEvent(Events) := Event if {
-    MaxTs := max([Event.Timestamp | Event = Events[_]])
-    Event := Events[_]
+    MaxTs := max([Event.Timestamp | some Event in Events])
+    some Event in Events
     Event.Timestamp == MaxTs
 }
 
@@ -137,7 +137,7 @@ GetLastEvent(Events) := Event if {
 #No OU to Inherit
 
 NonCompliantOUs1_1[OU] {
-    OU := OUsWithEvents[_]
+   some OU in OUsWithEvents
     Events := FilterEventsOU("ClassMembershipSettingsGroup who_can_join_classes", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -177,7 +177,7 @@ tests[{ "PolicyId": "GWS.CLASSROOM.1.1v0.1",
 #--
 
 NonCompliantOUs1_2[OU] {
-    OU := OUsWithEvents[_]
+   some OU in OUsWithEvents
     Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -221,7 +221,7 @@ tests[{ "PolicyId": "GWS.CLASSROOM.1.2v0.1",
 #--
 
 NonCompliantOUs2_1[OU] {
-    OU := OUsWithEvents[_]
+   some OU in OUsWithEvents
     Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -266,7 +266,7 @@ tests[{ "PolicyId": "GWS.CLASSROOM.2.1v0.1",
 #--
 
 NonCompliantOUs3_1[OU] {
-    OU := OUsWithEvents[_]
+   some OU in OUsWithEvents
     Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
@@ -313,7 +313,7 @@ tests[{ "PolicyId": "GWS.CLASSROOM.3.1v0.1",
 #--
 
 NonCompliantOUs4_1[OU] {
-    OU := OUsWithEvents[_]
+   some OU in OUsWithEvents
     Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
