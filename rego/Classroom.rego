@@ -8,14 +8,14 @@ FilterEvents(SettingName) := FilteredEvents if {
     FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
 }
 
-FilterEventsOU(ServiceName, OrgUnit) := FilteredEvents if {
+FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
     # If there exists at least the root OU and 1 more OU
     # filter out organizational units that don't exist
     input.organizational_unit_names
     count(input.organizational_unit_names) >=2
 
-    # Filter the events by both ServiceName and OrgUnit
-    Events := FilterEvents(ServiceName)
+    # Filter the events by both SettingName and OrgUnit
+    Events := FilterEvents(SettingName)
     FilteredEvents := [
         Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
