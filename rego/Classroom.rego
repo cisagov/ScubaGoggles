@@ -202,7 +202,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-
     Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", TopLevelOU)
     count(Events) == 0
 }
@@ -216,7 +215,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-
     Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_2) == 0
@@ -252,7 +250,6 @@ tests contains {
 }
 if {
     DefaultSafe := false
-
     Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", TopLevelOU)
     count(Events) == 0
 }
@@ -266,7 +263,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-
     Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
@@ -302,7 +298,6 @@ tests contains {
 }
 if {
     DefaultSafe := true
-
     Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", TopLevelOU)
     count(Events) == 0
 }
@@ -316,7 +311,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-
     Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
@@ -352,7 +346,6 @@ tests contains {
 }
 if {
     DefaultSafe := true
-
     Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", TopLevelOU)
     count(Events) == 0
 }
@@ -366,7 +359,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-
     Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
