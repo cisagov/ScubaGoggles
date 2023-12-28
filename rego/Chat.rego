@@ -173,7 +173,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)    
+    Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)
     count(Events) == 0
 }
 
@@ -186,7 +186,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)    
+    Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -217,7 +217,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("ChatArchivingProto allow_chat_archiving_setting_modification", TopLevelOU)    
+    Events := FilterEventsOU("ChatArchivingProto allow_chat_archiving_setting_modification", TopLevelOU)
     count(Events) == 0
 }
 
@@ -267,7 +267,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)    
+    Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)
     count(Events) == 0
 }
 
@@ -280,7 +280,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)      
+    Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -457,8 +457,7 @@ if {
     count(Events) == 0
 }
 
-tests contains 
-{
+tests contains {
     "PolicyId": "GWS.CHAT.5.1v0.1",
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsOUs(NonCompliantOUs5_1),
