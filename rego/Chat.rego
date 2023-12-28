@@ -85,16 +85,18 @@ GetTopLevelOU() := name if {
     name := ""
 }
 
-OUsWithEvents[Event.OrgUnit] {
+OUsWithEvents contains Event.OrgUnit if {
     some Event in SettingChangeEvents
 }
 
-SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
+SettingChangeEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
     "NewValue": NewValue,
     "Setting": Setting,
-    "OrgUnit": OrgUnit}] {
-
+    "OrgUnit": OrgUnit
+}
+if {
     some Item in input.chat_logs.items # For each item...
     some Event in Item.events # For each event in the item...
 
@@ -114,12 +116,14 @@ SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
 # minimal special logic, this rule adds the DELETE_APPLICATION_SETTING
 # to the SettingChangeEvents set, with "DELETE_APPLICATION_SETTING" as
 # the NewValue.
-SettingChangeEvents[{"Timestamp": time.parse_rfc3339_ns(Item.id.time),
+SettingChangeEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
     "NewValue": NewValue,
     "Setting": Setting,
-    "OrgUnit": OrgUnit}] {
-
+    "OrgUnit": OrgUnit
+}
+if {
     some Item in input.chat_logs.items # For each item...
     some Event in Item.events # For each event in the item...
     Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
@@ -148,7 +152,7 @@ GetLastEvent(Events) := Event if {
 # Baseline GWS.CHAT.1v1
 #--
 
-NonCompliantOUs1_1[OU] {
+NonCompliantOUs1_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
@@ -159,24 +163,30 @@ NonCompliantOUs1_1[OU] {
     LastEvent.NewValue == "true"
 }
 
-tests[{ "PolicyId": "GWS.CHAT.1.1v0.1",
-        "Criticality": "Should",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.1.1v0.1",
+    "Criticality": "Should",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)    
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CHAT.1.1v0.1",
-        "Criticality": "Should",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_1),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.1.1v0.1",
+    "Criticality": "Should",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)    
     count(Events) > 0
@@ -188,7 +198,7 @@ tests[{ "PolicyId": "GWS.CHAT.1.1v0.1",
 # Baseline GWS.CHAT.1.2v0.1
 #--
 
-NonCompliantOUs1_2[OU] {
+NonCompliantOUs1_2 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("ChatArchivingProto allow_chat_archiving_setting_modification", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
@@ -199,24 +209,30 @@ NonCompliantOUs1_2[OU] {
     LastEvent.NewValue == "true"
 }
 
-tests[{ "PolicyId": "GWS.CHAT.1.2v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.1.2v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ChatArchivingProto allow_chat_archiving_setting_modification", TopLevelOU)    
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CHAT.1.2v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_2),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.1.2v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("ChatArchivingProto allow_chat_archiving_setting_modification", TopLevelOU)
     count(Events) > 0
@@ -233,7 +249,7 @@ tests[{ "PolicyId": "GWS.CHAT.1.2v0.1",
 # Baseline GWS.CHAT.2.2v0.1
 #--
 
-NonCompliantOUs2_1[OU] {
+NonCompliantOUs2_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
@@ -245,24 +261,30 @@ NonCompliantOUs2_1[OU] {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
-tests[{ "PolicyId": "GWS.CHAT.2.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event for the top-level OU in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.2.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)    
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CHAT.2.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs2_1),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.2.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs2_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)      
     count(Events) > 0
@@ -278,7 +300,7 @@ tests[{ "PolicyId": "GWS.CHAT.2.1v0.1",
 # Baseline GWS.CHAT.3.1v0.1
 #--
 
-NonCompliantOUs3_1[OU] {
+NonCompliantOUs3_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("RoomOtrSettingsProto otr_state", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
@@ -289,24 +311,30 @@ NonCompliantOUs3_1[OU] {
     not contains("DEFAULT_ON_THE_RECORD ALWAYS_ON_THE_RECORD", LastEvent.NewValue)
 }
 
-tests[{ "PolicyId": "GWS.CHAT.3.1v0.1",
-        "Criticality": "Should",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event for the top-level OU in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.3.1v0.1",
+    "Criticality": "Should",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RoomOtrSettingsProto otr_state", TopLevelOU)
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CHAT.3.1v0.1",
-        "Criticality": "Should",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs3_1),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.3.1v0.1",
+    "Criticality": "Should",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs3_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RoomOtrSettingsProto otr_state", TopLevelOU)
     count(Events) > 0
@@ -321,7 +349,7 @@ tests[{ "PolicyId": "GWS.CHAT.3.1v0.1",
 #
 # Baseline GWS.CHAT.4.1v0.1
 #--
-NonCompliantOUs4_1[OU] {
+NonCompliantOUs4_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("RestrictChatProto restrictChatToOrganization", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
@@ -332,24 +360,30 @@ NonCompliantOUs4_1[OU] {
     LastEvent.NewValue == "true"
 }
 
-tests[{ "PolicyId": "GWS.CHAT.4.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event for the top-level OU in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.4.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RestrictChatProto restrictChatToOrganization", TopLevelOU)
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CHAT.4.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs4_1),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.4.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs4_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RestrictChatProto restrictChatToOrganization", TopLevelOU)
     count(Events) > 0
@@ -360,7 +394,7 @@ tests[{ "PolicyId": "GWS.CHAT.4.1v0.1",
 #
 # Baseline GWS.CHAT.4.2v0.1
 #--
-NonCompliantOUs4_2[OU] {
+NonCompliantOUs4_2 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("RestrictChatProto externalChatRestriction", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
@@ -371,24 +405,30 @@ NonCompliantOUs4_2[OU] {
     LastEvent.NewValue == "NO_RESTRICTION"
 }
 
-tests[{ "PolicyId": "GWS.CHAT.4.2v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event for the top-level OU in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.4.2v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RestrictChatProto externalChatRestriction", TopLevelOU)
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CHAT.4.2v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs4_2),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_2},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.4.2v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs4_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("RestrictChatProto externalChatRestriction", TopLevelOU)
     count(Events) > 0
@@ -404,7 +444,7 @@ tests[{ "PolicyId": "GWS.CHAT.4.2v0.1",
 # GWS.CHAT.5.1v0.1
 #--
 
-NonCompliantOUs5_1[OU] {
+NonCompliantOUs5_1 contains OU if {
     some OU in OUsWithEvents
     Events := FilterEventsOU("Chat app Settings - Chat apps enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
@@ -415,24 +455,31 @@ NonCompliantOUs5_1[OU] {
     LastEvent.NewValue == "true"
 }
 
-tests[{ "PolicyId": "GWS.CHAT.5.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
-        "ActualValue": "No relevant event for the top-level OU in the current logs",
-        "RequirementMet": DefaultSafe,
-        "NoSuchEvent": true}]{
+tests contains {
+    "PolicyId": "GWS.CHAT.5.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
     DefaultSafe := false
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Chat app Settings - Chat apps enabled", TopLevelOU)
     count(Events) == 0
 }
 
-tests[{ "PolicyId": "GWS.CHAT.5.1v0.1",
-        "Criticality": "Shall",
-        "ReportDetails": ReportDetailsOUs(NonCompliantOUs5_1),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
-        "RequirementMet": Status,
-        "NoSuchEvent": false}]{
+tests contains 
+{
+    "PolicyId": "GWS.CHAT.5.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetailsOUs(NonCompliantOUs5_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
     TopLevelOU := GetTopLevelOU()
     Events := FilterEventsOU("Chat app Settings - Chat apps enabled", TopLevelOU)
     count(Events) > 0
@@ -440,12 +487,12 @@ tests[{ "PolicyId": "GWS.CHAT.5.1v0.1",
 }
 #--
 
-tests[{ "PolicyId": "GWS.CHAT.6.1v0.1",
-        "Criticality": "Should/Not-Implemented",
-        "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-        "ActualValue": "",
-        "RequirementMet": false,
-        "NoSuchEvent": true}]{
-    true
+tests contains {
+    "PolicyId": "GWS.CHAT.6.1v0.1",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
 }
 #--
