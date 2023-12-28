@@ -146,7 +146,8 @@ NonCompliantOUs1_1 contains OU if {
     Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
-    contains("SHARING_NOT_ALLOWED SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES INHERIT_FROM_PARENT", LastEvent.NewValue) == false
+    SettingValue := "SHARING_NOT_ALLOWED SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES INHERIT_FROM_PARENT"
+    contains(SettingValue, LastEvent.NewValue) == false
 }
 
 tests contains {
@@ -386,7 +387,8 @@ NonCompliantOUs1_7 contains OU if {
     Events := FilterEventsOU("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
-    contains("CROSS_DOMAIN_FROM_INTERNAL_ONLY CROSS_DOMAIN_MOVES_BLOCKED INHERIT_FROM_PARENT", LastEvent.NewValue) == false
+    SettingValue := "CROSS_DOMAIN_FROM_INTERNAL_ONLY CROSS_DOMAIN_MOVES_BLOCKED INHERIT_FROM_PARENT"
+    contains(SettingValue, LastEvent.NewValue) == false
 }
 
 tests contains {
@@ -895,12 +897,12 @@ if {
 # GWS.DRIVEDOCS.7
 ################
 
-# not implementable: Need a way to see when a rule is created. The fact that a rule is created gets logged but the rule's contents are not.
-
 #
 # Baseline GWS.DRIVEDOCS.7.1v0.1
 #--
-
+# not implementable: Need a way to see when a rule is created.
+# The fact that a rule is created gets logged but the rule's
+# contents are not.
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.7.1v0.1",
     "Criticality": "Should/Not-Implemented",
