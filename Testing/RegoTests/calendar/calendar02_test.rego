@@ -102,7 +102,7 @@ test_ExtInvitationsWarning_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -153,7 +153,7 @@ test_ExtInvitationsWarning_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -338,5 +338,4 @@ test_ExtInvitationsWarning_Incorrect_V5 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
 }
-
 #--

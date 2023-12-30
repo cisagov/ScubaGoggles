@@ -97,7 +97,7 @@ test_CalendarAppointmentSlot_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -261,7 +261,7 @@ test_CalendarAppointmentSlot_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 

@@ -102,7 +102,7 @@ test_ExtSharingPrimaryCal_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -153,7 +153,7 @@ test_ExtSharingPrimaryCal_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -164,7 +164,7 @@ test_ExtSharingPrimaryCal_Correct_V4 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_ExtSharingPrimaryCal_Correct_V4 if {
+test_ExtSharingPrimaryCal_Correct_V5 if {
     # Test external sharing for primary, inherit from parent
     PolicyId := "GWS.CALENDAR.1.1v0.1"
     Output := tests with input as {
@@ -204,7 +204,7 @@ test_ExtSharingPrimaryCal_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
