@@ -1,11 +1,8 @@
 package meet
 import future.keywords
+import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
-
-OUsWithEvents contains Event.OrgUnit if {
-    some Event in SettingChangeEvents
-}
 
 FilterEvents(SettingName) := FilteredEvents if {
     # Filter the events by SettingName

@@ -29,3 +29,12 @@ ReportDetailsOUs(OUs) := Message if {
     count(OUs) > 0
     Message := concat("", ["Requirement failed in ", concat(", ", OUs), "."])
 }
+
+OUsWithEvents contains OrgUnit if {
+    some Log in input
+    some Item in Log.items
+    some Event in Item.events
+    some Parameter in Event.parameters
+    Parameter.name == "ORG_UNIT_NAME"
+    OrgUnit := Parameter.value
+}

@@ -1,5 +1,6 @@
 package commoncontrols
 import future.keywords
+import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
 
@@ -218,18 +219,6 @@ TopLevelOU := Name if {
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) == 0
     Name := ""
-}
-
-# The simpler version of OUsWithEvents won't work
-# here because common controls has the two alt SettingChangeEvents
-# rules, which means the simpler version might not find all OUs that
-# have an event.
-#
-OUsWithEvents contains OrgUnit if {
-    some Item in input.commoncontrols_logs.items
-    some Event in Item.events
-    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
 ########################

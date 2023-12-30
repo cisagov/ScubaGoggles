@@ -1,5 +1,6 @@
 package sites
 import future.keywords
+import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
 
@@ -63,14 +64,6 @@ if {
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 
     ServiceName == "Sites"
-}
-
-OUsWithEvents contains OrgUnit if {
-    some Item in input.sites_logs.items
-    some Event in Item.events
-    some Parameter in Event.parameters
-    Parameter.name == "ORG_UNIT_NAME"
-    OrgUnit := Parameter.value
 }
 
 TopLevelOU := Name if {

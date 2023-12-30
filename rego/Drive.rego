@@ -1,11 +1,8 @@
 package drive
 import future.keywords
+import data.utils.OUsWithEvents
 import data.utils.NoSuchEventDetails
 import data.utils.ReportDetailsOUs
-
-OUsWithEvents contains Event.OrgUnit if {
-    some Event in SettingChangeEvents
-}
 
 FilterEvents(SettingName) := FilteredEvents if {
     # Filter the events by SettingName

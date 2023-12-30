@@ -1,5 +1,6 @@
 package groups
 import future.keywords
+import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
 
@@ -82,10 +83,6 @@ TopLevelOU := Name if {
     input.tenant_info.topLevelOU == ""
     count(SettingChangeEvents) == 0
     Name := ""
-}
-
-OUsWithEvents contains Event.OrgUnit if {
-    some Event in SettingChangeEvents
 }
 
 SettingChangeEvents contains {
