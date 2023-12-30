@@ -702,8 +702,10 @@ NonCompliantOUs3_1 contains OU if {
     count(Events_B) > 0
     LastEvent_B := GetLastEvent(Events_B)
 
-    Conditions := [LastEvent_A.NewValue != "false", LastEvent_B.NewValue != "REMOVE_LESS_SECURE_LINKS"]
-    count([Condition | some Condition in Conditions; Condition == true]) > 0
+    true in {
+        LastEvent_A.NewValue != "false",
+        LastEvent_B.NewValue != "REMOVE_LESS_SECURE_LINKS"
+    }
 }
 
 tests contains {
@@ -858,9 +860,10 @@ NonCompliantOUs6_1 contains OU if {
     LastEvent_B := GetLastEvent(Events_B)
     LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
 
-    Conditions := [LastEvent_A.NewValue != "true", LastEvent_B.NewValue != "true"]
-    count([Condition | some Condition in Conditions; Condition == true]) > 0
-
+    true in {
+        LastEvent_A.NewValue != "true",
+        LastEvent_B.NewValue != "true"
+    }
 }
 
 tests contains {
