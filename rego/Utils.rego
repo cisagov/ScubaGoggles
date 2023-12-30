@@ -21,7 +21,10 @@ NoSuchEventDetails(DefaultSafe, TopLevelOU) := Message if {
     ])
 }
 
-ReportDetailsOUs(OUs) := "Requirement met in all OUs." if {count(OUs) == 0}
+ReportDetailsOUs(OUs) := "Requirement met in all OUs." if {
+    count(OUs) == 0
+}
+
 ReportDetailsOUs(OUs) := Message if {
     count(OUs) > 0
     Message := concat("", ["Requirement failed in ", concat(", ", OUs), "."])
