@@ -102,7 +102,7 @@ test_CleverRosterDisabled_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -150,7 +150,7 @@ test_CleverRosterDisabled_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -291,7 +291,7 @@ test_CleverRosterDisabled_Incorrect_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -428,7 +428,7 @@ test_CleverRosterDisabled_Incorrect_V8 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
