@@ -195,7 +195,7 @@ test_GroupOwnersHideGroups_Incorrect_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
