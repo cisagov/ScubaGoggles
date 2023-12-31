@@ -113,7 +113,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -157,7 +157,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -339,7 +339,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -463,7 +463,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -615,7 +615,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -753,7 +753,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -804,7 +804,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -1004,7 +1004,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -1142,7 +1142,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -1192,7 +1192,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -1342,7 +1342,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 

@@ -127,7 +127,7 @@ test_AttachmentProetectionAttachmentsScriptsUntrustedSenders_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -187,7 +187,7 @@ test_AttachmentProtectionEncryptedAttachmentsUntrustedSenders_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -381,7 +381,7 @@ test_AttachmentProtectionEncryptedAttachmentsUntrustedSenders_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -520,7 +520,7 @@ test_AttachmentProetectionAttachmentsScriptsUntrustedSenders_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -570,7 +570,7 @@ test_AttachmentProetectionAttachmentsScriptsUntrustedSenders_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -770,7 +770,7 @@ test_AttachmentProtectionAttachmentsScriptsUntrustedSenders_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -894,7 +894,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -938,7 +938,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -1120,7 +1120,7 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -1243,7 +1243,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -1287,7 +1287,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -1469,7 +1469,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
