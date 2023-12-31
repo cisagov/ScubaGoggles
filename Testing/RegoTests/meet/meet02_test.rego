@@ -98,7 +98,7 @@ test_JoinExternalPers_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -146,7 +146,7 @@ test_History_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -250,7 +250,7 @@ test_JoinExternalPers_Correct_V7 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -298,7 +298,7 @@ test_History_Correct_V8 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -435,7 +435,7 @@ test_JoinExternalPers_Incorrect_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -535,7 +535,7 @@ test_JoinExternalPers_Incorrect_V7 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 

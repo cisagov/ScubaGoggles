@@ -97,7 +97,7 @@ test_HostMan_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -145,7 +145,7 @@ test_Access_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -281,7 +281,7 @@ test_HostMan_Incorrect_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
