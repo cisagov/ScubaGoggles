@@ -26,7 +26,6 @@ test_Security_Correct_V1 if {
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    print(RuleOutput[0].ReportDetails)
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -131,7 +130,6 @@ test_Security_Incorrect_V1 if {
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    print(RuleOutput)
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
