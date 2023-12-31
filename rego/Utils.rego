@@ -77,3 +77,9 @@ TopLevelOU := Name if {
     count(OUsWithEvents) == 0
     Name := ""
 }
+
+GetLastEvent(Events) := Event if {
+    MaxTs := max({Event.Timestamp | some Event in Events})
+    some Event in Events
+    Event.Timestamp == MaxTs
+}

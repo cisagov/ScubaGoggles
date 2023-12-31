@@ -1,6 +1,7 @@
 package sites
 import future.keywords
 import data.utils.TopLevelOU
+import data.utils.GetLastEvent
 import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
@@ -37,12 +38,6 @@ FilterEventsOU(OrgUnit) := FilteredEvents if {
     # Filter the events by OrgUnit
     Events := ToggleServiceEvents
     FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
-}
-
-GetLastEvent(Events) := Event if {
-    MaxTs := max({Event.Timestamp | some Event in Events})
-    some Event in Events
-    Event.Timestamp == MaxTs
 }
 
 ToggleServiceEvents contains {

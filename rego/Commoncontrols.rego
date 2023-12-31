@@ -1,6 +1,7 @@
 package commoncontrols
 import future.keywords
 import data.utils.TopLevelOU
+import data.utils.GetLastEvent
 import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
@@ -124,12 +125,6 @@ if {
     # Extract the values
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-}
-
-GetLastEvent(Events) := Event if {
-    MaxTs := max({Event.Timestamp | some Event in Events})
-    some Event in Events
-    Event.Timestamp == MaxTs
 }
 
 FilterEventsAlt(EventName) := Events if {

@@ -1,6 +1,7 @@
 package groups
 import future.keywords
 import data.utils.TopLevelOU
+import data.utils.GetLastEvent
 import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
@@ -78,15 +79,6 @@ if {
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-}
-
-GetLastEvent(Events) := Event if {
-    # Because CalendarSharingEvents returns a set instead
-    # of an array, we can't just index it and get the last
-    # value
-    MaxTs := max({Event.Timestamp | some Event in Events})
-    some Event in Events
-    Event.Timestamp == MaxTs
 }
 
 

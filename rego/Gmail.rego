@@ -1,6 +1,7 @@
 package gmail
 import future.keywords
 import data.utils.TopLevelOU
+import data.utils.GetLastEvent
 import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
@@ -160,12 +161,6 @@ GetEventDomain(Event) := DomainName if {
 
 GetEventDomain(Event) := "None" if {
     not "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
-}
-
-GetLastEvent(Events) := Event if {
-    MaxTs := max({Event.Timestamp | some Event in Events})
-    some Event in Events
-    Event.Timestamp == MaxTs
 }
 
 
