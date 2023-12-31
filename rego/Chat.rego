@@ -1,5 +1,6 @@
 package chat
 import future.keywords
+import data.utils.TopLevelOU
 import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
@@ -56,34 +57,6 @@ FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
     # Filter the events by both SettingName and OrgUnit
     Events := FilterEvents(SettingName)
     FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
-}
-
-TopLevelOU := Name if {
-    # Simplest case: if input.tenant_info.topLevelOU is
-    # non-empty, it contains the name of the top-level OU.
-    input.tenant_info.topLevelOU != ""
-    Name := input.tenant_info.topLevelOU
-}
-
-TopLevelOU := Name if {
-    # input.tenant_info.topLevelOU will be empty when
-    # no custom OUs have been created, as in this case
-    # the top-level OU cannot be determined via the API.
-    # Fortunately, in this case, we know there's literally
-    # only one OU, so we can grab the OU listed on any of
-    # the events and know that it is the top-level OU
-    input.tenant_info.topLevelOU == ""
-    count(SettingChangeEvents) > 0
-    Name := GetLastEvent(SettingChangeEvents).OrgUnit
-}
-
-TopLevelOU := Name if {
-    # Extreme edge case: no custom OUs have been made
-    # and the logs are empty. In this case, we really
-    # have no way of determining the top-level OU name.
-    input.tenant_info.topLevelOU == ""
-    count(SettingChangeEvents) == 0
-    Name := ""
 }
 
 SettingChangeEvents contains {
