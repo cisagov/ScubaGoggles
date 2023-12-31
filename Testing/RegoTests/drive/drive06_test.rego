@@ -51,7 +51,7 @@ test_DriveFs_Setting_Correct_V1 if {
             },
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -167,7 +167,7 @@ test_DriveFs_Setting_Correct_V3 if {
             },
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -301,7 +301,7 @@ test_DriveFs_Setting_InCorrect_V2 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -379,7 +379,7 @@ test_DriveFs_Setting_InCorrect_V3 if {
             },
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 

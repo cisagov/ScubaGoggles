@@ -98,7 +98,7 @@ test_Sharing_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -235,7 +235,7 @@ test_Sharing_Incorrect_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
