@@ -1,10 +1,7 @@
 package sites
+
+import data.utils
 import future.keywords
-import data.utils.TopLevelOU
-import data.utils.GetLastEvent
-import data.utils.OUsWithEvents
-import data.utils.ReportDetailsOUs
-import data.utils.NoSuchEventDetails
 
 FilterEventsOU(OrgUnit) := FilteredEvents if {
     # If there exists at least the root OU and 1 more OU
@@ -70,13 +67,13 @@ if {
 # Baseline GWS.SITES.1.1v0.1
 #--
 NonCompliantOUs1_1 contains OU if {
-    some OU in OUsWithEvents
+    some OU in utils.OUsWithEvents
     Events := FilterEventsOU(OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
@@ -84,27 +81,27 @@ NonCompliantOUs1_1 contains OU if {
 tests contains {
     "PolicyId": "GWS.SITES.1.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU(TopLevelOU)
+    Events := FilterEventsOU(utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.SITES.1.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU(TopLevelOU)
+    Events := FilterEventsOU(utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }

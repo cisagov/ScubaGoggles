@@ -1,11 +1,7 @@
 package chat
+
+import data.utils
 import future.keywords
-import data.utils.TopLevelOU
-import data.utils.FilterEvents
-import data.utils.GetLastEvent
-import data.utils.OUsWithEvents
-import data.utils.ReportDetailsOUs
-import data.utils.NoSuchEventDetails
 
 ##############
 # GWS.CHAT.1 #
@@ -15,40 +11,40 @@ import data.utils.NoSuchEventDetails
 # Baseline GWS.CHAT.1v1
 #--
 NonCompliantOUs1_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents("ChatArchivingProto chatsDefaultToOffTheRecord", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents("ChatArchivingProto chatsDefaultToOffTheRecord", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.1.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents( "ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)
+    Events := utils.FilterEvents( "ChatArchivingProto chatsDefaultToOffTheRecord", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.1.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents( "ChatArchivingProto chatsDefaultToOffTheRecord", TopLevelOU)
+    Events := utils.FilterEvents( "ChatArchivingProto chatsDefaultToOffTheRecord", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -58,40 +54,40 @@ if {
 # Baseline GWS.CHAT.1.2v0.1
 #--
 NonCompliantOUs1_2 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents( "ChatArchivingProto allow_chat_archiving_setting_modification", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents( "ChatArchivingProto allow_chat_archiving_setting_modification", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.1.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents( "ChatArchivingProto allow_chat_archiving_setting_modification", TopLevelOU)
+    Events := utils.FilterEvents( "ChatArchivingProto allow_chat_archiving_setting_modification", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.1.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_2),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents( "ChatArchivingProto allow_chat_archiving_setting_modification", TopLevelOU)
+    Events := utils.FilterEvents( "ChatArchivingProto allow_chat_archiving_setting_modification", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_2) == 0
 }
@@ -106,13 +102,13 @@ if {
 # Baseline GWS.CHAT.2.2v0.1
 #--
 NonCompliantOUs2_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents( "DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents( "DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "NO_FILES"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
@@ -120,27 +116,27 @@ NonCompliantOUs2_1 contains OU if {
 tests contains {
     "PolicyId": "GWS.CHAT.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents( "DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)
+    Events := utils.FilterEvents( "DynamiteFileSharingSettingsProto external_file_sharing_setting", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs2_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents( "DynamiteFileSharingSettingsProto external_file_sharing_setting", TopLevelOU)
+    Events := utils.FilterEvents( "DynamiteFileSharingSettingsProto external_file_sharing_setting", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -154,40 +150,40 @@ if {
 # Baseline GWS.CHAT.3.1v0.1
 #--
 NonCompliantOUs3_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents( "RoomOtrSettingsProto otr_state", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents( "RoomOtrSettingsProto otr_state", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     not contains("DEFAULT_ON_THE_RECORD ALWAYS_ON_THE_RECORD", LastEvent.NewValue)
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.3.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents( "RoomOtrSettingsProto otr_state", TopLevelOU)
+    Events := utils.FilterEvents( "RoomOtrSettingsProto otr_state", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.3.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs3_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs3_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents( "RoomOtrSettingsProto otr_state", TopLevelOU)
+    Events := utils.FilterEvents( "RoomOtrSettingsProto otr_state", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -201,40 +197,40 @@ if {
 # Baseline GWS.CHAT.4.1v0.1
 #--
 NonCompliantOUs4_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents( "RestrictChatProto restrictChatToOrganization", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents( "RestrictChatProto restrictChatToOrganization", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents( "RestrictChatProto restrictChatToOrganization", TopLevelOU)
+    Events := utils.FilterEvents( "RestrictChatProto restrictChatToOrganization", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs4_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents( "RestrictChatProto restrictChatToOrganization", TopLevelOU)
+    Events := utils.FilterEvents( "RestrictChatProto restrictChatToOrganization", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
@@ -244,40 +240,40 @@ if {
 # Baseline GWS.CHAT.4.2v0.1
 #--
 NonCompliantOUs4_2 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents( "RestrictChatProto externalChatRestriction", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents( "RestrictChatProto externalChatRestriction", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "NO_RESTRICTION"
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.4.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents( "RestrictChatProto externalChatRestriction", TopLevelOU)
+    Events := utils.FilterEvents( "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.4.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs4_2),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents( "RestrictChatProto externalChatRestriction", TopLevelOU)
+    Events := utils.FilterEvents( "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_2) == 0
 }
@@ -291,40 +287,40 @@ if {
 # GWS.CHAT.5.1v0.1
 #--
 NonCompliantOUs5_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents( "Chat app Settings - Chat apps enabled", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents( "Chat app Settings - Chat apps enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.5.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents( "Chat app Settings - Chat apps enabled", TopLevelOU)
+    Events := utils.FilterEvents( "Chat app Settings - Chat apps enabled", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.5.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs5_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents( "Chat app Settings - Chat apps enabled", TopLevelOU)
+    Events := utils.FilterEvents( "Chat app Settings - Chat apps enabled", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }

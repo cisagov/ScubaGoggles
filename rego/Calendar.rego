@@ -1,12 +1,7 @@
 package calendar
+
+import data.utils
 import future.keywords
-import data.utils.TopLevelOU
-import data.utils.FilterEvents
-import data.utils.GetLastEvent
-import data.utils.OUsWithEvents
-import data.utils.ReportDetailsOUs
-import data.utils.FilterEventsNoOU
-import data.utils.NoSuchEventDetails
 
 ##################
 # GWS.CALENDAR.1 #
@@ -16,13 +11,13 @@ import data.utils.NoSuchEventDetails
 # Baseline GWS.CALENDAR.1.1v0.1
 #--
 NonCompliantOUs1_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents("SHARING_OUTSIDE_DOMAIN", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "SHOW_ONLY_FREE_BUSY_INFORMATION"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
@@ -30,27 +25,27 @@ NonCompliantOUs1_1 contains OU if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs.",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
+    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
+    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -77,40 +72,40 @@ tests contains {
 # Baseline GWS.CALENDAR.2.1v0.1
 #--
 NonCompliantOUs2_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
 }
 
 tests contains {
     "PolicyId": "GWS.CALENDAR.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", TopLevelOU)
+    Events := utils.FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CALENDAR.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs2_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", TopLevelOU)
+    Events := utils.FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -162,14 +157,14 @@ ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.3.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsNoOU("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
+    Events := utils.FilterEventsNoOU("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
     count(Events) == 0
 }
 
@@ -182,9 +177,9 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsNoOU("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
+    Events := utils.FilterEventsNoOU("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
     count(Events) > 0
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     Status := LastEvent.NewValue == "SHOW_ONLY_FREE_BUSY_INFORMATION"
 }
 #--
@@ -230,14 +225,14 @@ CalInteropManSettingDetailsStr(LastEvent) := Description if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.4.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsNoOU("ENABLE_EWS_INTEROP")
+    Events := utils.FilterEventsNoOU("ENABLE_EWS_INTEROP")
     count(Events) == 0
 }
 
@@ -250,9 +245,9 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsNoOU("ENABLE_EWS_INTEROP")
+    Events := utils.FilterEventsNoOU("ENABLE_EWS_INTEROP")
     count(Events) > 0
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     Status := LastEvent.NewValue == "false"
 }
 #--
@@ -277,13 +272,13 @@ tests contains {
 
 
 NonCompliantOUs5_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
 }
 
@@ -293,27 +288,27 @@ NonCompliantOUs5_1 contains OU if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.5.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs.",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
+    Events := utils.FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CALENDAR.5.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs5_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
+    Events := utils.FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }

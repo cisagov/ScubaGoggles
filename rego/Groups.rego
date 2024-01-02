@@ -1,11 +1,7 @@
 package groups
+
+import data.utils
 import future.keywords
-import data.utils.TopLevelOU
-import data.utils.GetLastEvent
-import data.utils.FilterEvents
-import data.utils.OUsWithEvents
-import data.utils.ReportDetailsOUs
-import data.utils.NoSuchEventDetails
 
 NoGroupsDetails(Groups) := "No Groups found in Organization." if {
     count(Groups) == 0
@@ -28,40 +24,40 @@ ReportDetailsGroups(Groups) := Message if {
 # Baseline GWS.GROUPS.1.1v0.1
 #--
 NonCompliantOUs1_1 contains OU if {
-     some OU in OUsWithEvents
-     Events := FilterEvents("GroupsSharingSettingsProto collaboration_policy", OU)
+     some OU in utils.OUsWithEvents
+     Events := utils.FilterEvents("GroupsSharingSettingsProto collaboration_policy", OU)
      count(Events) > 0 # Ignore OUs without any events. We're already
      # asserting that the top-level OU has at least one event; for all
      # other OUs we assume they inherit from a parent OU if they have
      # no events.
-     LastEvent := GetLastEvent(Events)
+     LastEvent := utils.GetLastEvent(Events)
      LastEvent.NewValue != "CLOSED"
  }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("GroupsSharingSettingsProto collaboration_policy", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto collaboration_policy", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs1_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("GroupsSharingSettingsProto collaboration_policy", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto collaboration_policy", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -76,40 +72,40 @@ if {
 # Baseline GWS.GROUPS.2.1v0.1
 #--
 NonCompliantOUs2_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents("GroupsSharingSettingsProto owners_can_allow_external_members", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents("GroupsSharingSettingsProto owners_can_allow_external_members", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.2.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("GroupsSharingSettingsProto owners_can_allow_external_members", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto owners_can_allow_external_members", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.2.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs2_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
     "ActualValue": {"NonCompliantOUs":NonCompliantOUs2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("GroupsSharingSettingsProto owners_can_allow_external_members", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto owners_can_allow_external_members", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -123,40 +119,42 @@ if {
 # Baseline GWS.GROUPS.3.1v0.1
 #--
 NonCompliantOUs3_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents("GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents("GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.3.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", TopLevelOU)
+    SettingName := "GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public"
+    Events := utils.FilterEvents(SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.3.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs3_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs3_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", TopLevelOU)
+    SettingName := "GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public"
+    Events := utils.FilterEvents(SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -171,40 +169,40 @@ if {
 # Baseline GWS.GROUPS.4.1v0.1
 #--
 NonCompliantOUs4_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents("GroupsSharingSettingsProto who_can_create_groups", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents("GroupsSharingSettingsProto who_can_create_groups", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "ADMIN_ONLY"
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.4.1v0.1",
     "Criticality": "Should",
-    "ReportDetails":NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails":utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("GroupsSharingSettingsProto who_can_create_groups", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto who_can_create_groups", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.4.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs4_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("GroupsSharingSettingsProto who_can_create_groups", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto who_can_create_groups", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
@@ -219,40 +217,40 @@ if {
 # Baseline GWS.GROUPS.5.1v0.1
 #--
 NonCompliantOUs5_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents("GroupsSharingSettingsProto default_view_topics_access_level", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents("GroupsSharingSettingsProto default_view_topics_access_level", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "MEMBERS"
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.5.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("GroupsSharingSettingsProto default_view_topics_access_level", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto default_view_topics_access_level", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.5.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsOUs(NonCompliantOUs5_1),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("GroupsSharingSettingsProto default_view_topics_access_level", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto default_view_topics_access_level", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
@@ -267,40 +265,40 @@ if {
 # Baseline GWS.GROUPS.6.1v0.1
 #--
 NonCompliantOUs6_1 contains OU if {
-    some OU in OUsWithEvents
-    Events := FilterEvents("GroupsSharingSettingsProto allow_unlisted_groups", OU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents("GroupsSharingSettingsProto allow_unlisted_groups", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
     # no events.
-    LastEvent := GetLastEvent(Events)
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.6.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": NoSuchEventDetails(DefaultSafe, TopLevelOU),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue":"No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("GroupsSharingSettingsProto allow_unlisted_groups", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.GROUPS.6.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails":ReportDetailsOUs(NonCompliantOUs6_1),
+    "ReportDetails":utils.ReportDetailsOUs(NonCompliantOUs6_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("GroupsSharingSettingsProto allow_unlisted_groups", TopLevelOU)
+    Events := utils.FilterEvents("GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs6_1) == 0
 }

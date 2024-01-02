@@ -7,9 +7,6 @@ import subprocess
 import argparse
 from sys import platform
 
-# to_do move items from the commented out list below as the tests
-#  are implemented so they will be run by default
-
 gws_baselines = [
     "gmail",
     "calendar",

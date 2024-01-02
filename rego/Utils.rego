@@ -252,9 +252,7 @@ FilterEvents(SettingName, OrgUnit) := FilteredEvents if {
 }
 
 # Filter the events by just SettingName, ignoring OU
-FilterEventsNoOU(SettingName) := FilteredEvents if {
-    FilteredEvents := {
+FilterEventsNoOU(SettingName) := {
         Event | some Event in SettingChangeEvents;
         Event.Setting == SettingName
-    }
 }
