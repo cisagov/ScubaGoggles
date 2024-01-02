@@ -213,9 +213,9 @@ test_Individual_Correct_V5 if {
     RuleOutput := [Result | some Result in Output; 
             Result.PolicyId == PolicyId; 
             Result.Criticality == "Shall"] 
-             # Note the additional filter: this is because 
-        # there are actually two tests with the same requirement string for this one,
-        # as it has both a testable portion and a not-implementable portion
+            # Note the additional filter: this is because 
+            # there are actually two tests with the same requirement string for this one,
+            # as it has both a testable portion and a not-implementable portion
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent

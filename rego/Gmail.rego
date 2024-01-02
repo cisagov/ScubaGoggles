@@ -2,8 +2,10 @@ package gmail
 import future.keywords
 import data.utils.TopLevelOU
 import data.utils.GetLastEvent
+import data.utils.FilterEvents
 import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
+import data.utils.FilterEventsNoOU
 import data.utils.NoSuchEventDetails
 
 Format(Array) := format_int(count(Array), 10)
@@ -26,143 +28,6 @@ AllDomains contains Domain.domain if {
     some Domain in input.dkim_records
 }
 
-FilterEvents(SettingName) := FilteredEvents if {
-    Events := SettingChangeEvents
-    FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
-}
-
-FilterEventsDomain(SettingName) := FilteredEvents if {
-    Events := SettingChangeEventsDomain
-    FilteredEvents := [Event | some Event in Events; Event.Setting == SettingName]
-}
-
-FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If there exists at least the root OU and 1 more OU
-    # filter out organizational units that don't exist
-    input.organizational_unit_names
-    count(input.organizational_unit_names) >=2
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEvents(SettingName)
-    FilteredEvents := [
-        Event | some Event in Events;
-        Event.OrgUnit == OrgUnit;
-        Event.OrgUnit in input.organizational_unit_names
-    ]
-}
-
-FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If only the root OU exists run like normal
-    input.organizational_unit_names
-    count(input.organizational_unit_names) < 2
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEvents(SettingName)
-    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
-}
-
-FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If OUs variable does not exist run like normal
-    not input.organizational_unit_names
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEvents(SettingName)
-    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
-}
-
-SettingChangeEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "NewValue": NewValue,
-    "Setting": Setting,
-    "OrgUnit": OrgUnit,
-    "DomainName": DomainName
-}
-if {
-    some Item in input.gmail_logs.items # For each item...
-    some Event in Item.events # For each event in the item...
-
-    # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
-    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-
-    # Extract the values
-    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
-    OrgUnit := GetEventOu(Event)
-    DomainName := GetEventDomain(Event)
-}
-
-# Secondary case that looks for the DELETE_APPLICATION_SETTING events.
-# These events don't have a NEW_VALUE. To make these events work with
-# minimal special logic, this rule adds the DELETE_APPLICATION_SETTING
-# to the SettingChangeEvents set, with "DELETE_APPLICATION_SETTING" as
-# the NewValue.
-SettingChangeEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "NewValue": NewValue,
-    "Setting": Setting,
-    "OrgUnit": OrgUnit,
-    "DomainName": DomainName
-}
-if {
-    some Item in input.gmail_logs.items # For each item...
-    some Event in Item.events # For each event in the item...
-    Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
-
-    # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-
-    # Extract the values
-    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
-    NewValue := "DELETE_APPLICATION_SETTING"
-    OrgUnit := GetEventOu(Event)
-    DomainName := GetEventDomain(Event)
-}
-
-SettingChangeEventsDomain contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "NewValue": NewValue,
-    "Setting": Setting,
-    "DomainName": DomainName
-}
-if {
-    some Item in input.gmail_logs.items # For each item...
-    some Event in Item.events # For each event in the item...
-
-    # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
-    "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
-
-    # Extract the values
-    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
-    DomainName := GetEventDomain(Event)
-}
-
-GetEventOu(Event) := OrgUnit if {
-    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-}
-
-GetEventOu(Event) := "None" if {
-    not "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-}
-
-GetEventDomain(Event) := DomainName if {
-    "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    DomainName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "DOMAIN_NAME"][0]
-}
-
-GetEventDomain(Event) := "None" if {
-    not "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
-}
-
 
 ###############
 # GWS.GMAIL.1 #
@@ -173,7 +38,7 @@ GetEventDomain(Event) := "None" if {
 #--
 NonCompliantOUs1_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", OU)
+    Events := FilterEvents("ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -192,7 +57,7 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := FilterEventsOU("ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", TopLevelOU)
+    Events := FilterEvents("ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", TopLevelOU)
     count(Events) == 0
 }
 
@@ -205,7 +70,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", TopLevelOU)
+    Events := FilterEvents("ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -374,7 +239,7 @@ if {
 NonCompliantOUs5_1 contains OU if {
     some OU in OUsWithEvents
     SettingName := "Attachment safety Enable: protect against encrypted attachments from untrusted senders"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -394,7 +259,7 @@ tests contains {
 } if {
     DefaultSafe := false
     SettingName := "Attachment safety Enable: protect against encrypted attachments from untrusted senders"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -408,7 +273,7 @@ tests contains {
 }
 if {
     SettingName := "Attachment safety Enable: protect against encrypted attachments from untrusted senders"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
@@ -419,7 +284,7 @@ if {
 NonCompliantOUs5_2 contains OU if {
     some OU in OUsWithEvents
     SettingName := "Attachment safety Enable: protect against attachments with scripts from untrusted senders"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -440,7 +305,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Attachment safety Enable: protect against attachments with scripts from untrusted senders"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -454,7 +319,7 @@ tests contains {
 }
 if {
     SettingName := "Attachment safety Enable: protect against attachments with scripts from untrusted senders"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_2) == 0
 }
@@ -484,7 +349,7 @@ EncryptedAttachmentSettingDetailsStr(LastEvent) := Description if {
 NonCompliantOUs5_3 contains OU if {
     some OU in OUsWithEvents
     SettingName := "Attachment safety Enable: Protect against anomalous attachment types in emails"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -505,7 +370,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Attachment safety Enable: Protect against anomalous attachment types in emails"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -519,7 +384,7 @@ tests contains {
 }
 if {
     SettingName := "Attachment safety Enable: Protect against anomalous attachment types in emails"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_3) == 0
 }
@@ -530,7 +395,7 @@ if {
 #--
 NonCompliantOUs5_4 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("Attachment safety Enable: automatically enables all future added settings", OU)
+    Events := FilterEvents("Attachment safety Enable: automatically enables all future added settings", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -550,7 +415,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("Attachment safety Enable: automatically enables all future added settings", TopLevelOU)
+    Events := FilterEvents("Attachment safety Enable: automatically enables all future added settings", TopLevelOU)
     count(Events) == 0
 }
 
@@ -563,7 +428,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("Attachment safety Enable: automatically enables all future added settings", TopLevelOU)
+    Events := FilterEvents("Attachment safety Enable: automatically enables all future added settings", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_4) == 0
 }
@@ -576,33 +441,33 @@ default NoSuchEvent5_5(_) := true
 
 NoSuchEvent5_5(TopLevelOU) := false if {
     # No such event...
-    Events := FilterEventsOU("Attachment safety Encrypted attachment protection setting action", TopLevelOU)
+    Events := FilterEvents("Attachment safety Encrypted attachment protection setting action", TopLevelOU)
     count(Events) != 0
 }
 
 NoSuchEvent5_5(TopLevelOU) := false if {
     # No such event...
-    Events := FilterEventsOU("Attachment safety Attachment with scripts protection action", TopLevelOU)
+    Events := FilterEvents("Attachment safety Attachment with scripts protection action", TopLevelOU)
     count(Events) != 0
 }
 
 NoSuchEvent5_5(TopLevelOU) := false if {
     # No such event...
-    Events := FilterEventsOU("Attachment safety Anomalous attachment protection setting action", TopLevelOU)
+    Events := FilterEvents("Attachment safety Anomalous attachment protection setting action", TopLevelOU)
     count(Events) != 0
 }
 
 NonCompliantOUs5_5 contains OU if {
     some OU in OUsWithEvents
-    Events_A := FilterEventsOU("Attachment safety Encrypted attachment protection setting action", OU)
+    Events_A := FilterEvents("Attachment safety Encrypted attachment protection setting action", OU)
     count(Events_A) > 0
     LastEvent_A := GetLastEvent(Events_A)
 
-    Events_B := FilterEventsOU("Attachment safety Attachment with scripts protection action", OU)
+    Events_B := FilterEvents("Attachment safety Attachment with scripts protection action", OU)
     count(Events_B) > 0
     LastEvent_B := GetLastEvent(Events_B)
 
-    Events_C := FilterEventsOU("Attachment safety Anomalous attachment protection setting action", OU)
+    Events_C := FilterEvents("Attachment safety Anomalous attachment protection setting action", OU)
     count(Events_C) > 0
     LastEvent_C := GetLastEvent(Events_C)
 
@@ -663,7 +528,7 @@ tests contains {
 NonCompliantOUs6_1 contains OU if {
     some OU in OUsWithEvents
     SettingName := "Links and external images safety Enable: identify links behind shortened URLs"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -684,7 +549,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Links and external images safety Enable: identify links behind shortened URLs"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -698,7 +563,7 @@ tests contains {
 }
 if {
     SettingName := "Links and external images safety Enable: identify links behind shortened URLs"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs6_1) == 0
 }
@@ -709,7 +574,7 @@ if {
 #--
 NonCompliantOUs6_2 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("Links and external images safety Enable: scan linked images", OU)
+    Events := FilterEvents("Links and external images safety Enable: scan linked images", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -726,7 +591,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("Links and external images safety Enable: scan linked images", TopLevelOU)
+    Events := FilterEvents("Links and external images safety Enable: scan linked images", TopLevelOU)
     count(Events) == 0
 }
 
@@ -739,7 +604,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("Links and external images safety Enable: scan linked images", TopLevelOU)
+    Events := FilterEvents("Links and external images safety Enable: scan linked images", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs6_2) == 0
 }
@@ -754,7 +619,7 @@ NonCompliantOUs6_3 contains OU if {
         "Links and external images safety Enable: show warning prompt for click on links to ",
         "unstrusted domains" # NOTE: "unstrusted" really is the spelling the API uses
     ])
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -775,7 +640,7 @@ if {
         "Links and external images safety Enable: show warning prompt for click on links to ",
         "unstrusted domains" # NOTE: "unstrusted" really is the spelling the API uses
     ])
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -792,7 +657,7 @@ if {
         "Links and external images safety Enable: show warning prompt for click on links to ",
         "unstrusted domains" # NOTE: "unstrusted" really is the spelling the API uses
     ])
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs6_3) == 0
 }
@@ -804,7 +669,7 @@ if {
 NonCompliantOUs6_4 contains OU if {
     some OU in OUsWithEvents
     SettingName := "Links and external images safety Enable: automatically enables all future added settings"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -825,7 +690,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Links and external images safety Enable: automatically enables all future added settings"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -839,7 +704,7 @@ tests contains {
 }
 if {
     SettingName := "Links and external images safety Enable: automatically enables all future added settings"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs6_4) == 0
 }
@@ -871,7 +736,7 @@ NonCompliantOUs7_1 contains OU if {
         "Spoofing and authentication safety Enable: protect against domain spoofing using ",
         "similar domain names"
     ])
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -892,7 +757,7 @@ if {
         "Spoofing and authentication safety Enable: protect against domain spoofing using ",
         "similar domain names"
     ])
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -909,7 +774,7 @@ if {
         "Spoofing and authentication safety Enable: protect against domain spoofing using ",
         "similar domain names"
     ])
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs7_1) == 0
 }
@@ -921,7 +786,7 @@ if {
 NonCompliantOUs7_2 contains OU if {
     some OU in OUsWithEvents
     SettingName := "Spoofing and authentication safety Enable: protect against spoofing of employee names"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -942,7 +807,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Spoofing and authentication safety Enable: protect against spoofing of employee names"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -956,7 +821,7 @@ tests contains {
 }
 if {
     SettingName := "Spoofing and authentication safety Enable: protect against spoofing of employee names"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs7_2) == 0
 }
@@ -968,7 +833,7 @@ if {
 NonCompliantOUs7_3 contains OU if {
     some OU in OUsWithEvents
     SettingName := "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -989,7 +854,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -1003,7 +868,7 @@ tests contains {
 }
 if {
     SettingName := "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs7_3) == 0
 }
@@ -1015,7 +880,7 @@ if {
 NonCompliantOUs7_4 contains OU if {
     some OU in OUsWithEvents
     SettingName := "Spoofing and authentication safety Enable: protect against any unauthenticated emails"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1036,7 +901,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Spoofing and authentication safety Enable: protect against any unauthenticated emails"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -1050,7 +915,7 @@ tests contains {
 }
 if {
     SettingName := "Spoofing and authentication safety Enable: protect against any unauthenticated emails"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs7_4) == 0
 }
@@ -1066,7 +931,7 @@ NonCompliantOUs7_5 contains OU if {
         "Spoofing and authentication safety Enable: protect your Groups from inbound emails ",
         "spoofing your domain"
     ])
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1090,7 +955,7 @@ if {
         "Spoofing and authentication safety Enable: protect your Groups from inbound emails ",
         "spoofing your domain"
     ])
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -1107,7 +972,7 @@ if {
         "Spoofing and authentication safety Enable: protect your Groups from inbound emails ",
         "spoofing your domain"
     ])
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs7_5) == 0
 }
@@ -1125,14 +990,14 @@ NoSuchEvent7_6(TopLevelOU) := false if {
         "Spoofing and authentication safety Protect against domain spoofing based on similar ",
         "domain names action"
     ])
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) != 0
 }
 
 NoSuchEvent7_6(TopLevelOU) := false if {
     # No such event...
     SettingName := "Spoofing and authentication safety Protect against spoofing of employee names action"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) != 0
 }
 
@@ -1142,14 +1007,14 @@ NoSuchEvent7_6(TopLevelOU) := false if {
         "Spoofing and authentication safety Protect against domain spoofing based on similar ",
         "domain names action"
     ])
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) != 0
 }
 
 NoSuchEvent7_6(TopLevelOU) := false if {
     # No such event...
     SettingName := "Spoofing and authentication safety Protect against any unauthenticated emails action"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) != 0
 }
 
@@ -1159,7 +1024,7 @@ NoSuchEvent7_6(TopLevelOU) := false if {
         "Spoofing and authentication safety Protect your Groups from inbound emails spoofing ",
         "your domain action"
     ])
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) != 0
 }
 
@@ -1170,22 +1035,22 @@ NonCompliantOUs7_6 contains OU if {
         "Spoofing and authentication safety Protect against domain spoofing based on ",
         "similar domain names action"
     ])
-    EventsA := FilterEventsOU(SettingA, OU)
+    EventsA := FilterEvents(SettingA, OU)
     count(EventsA) > 0
     LastEventA := GetLastEvent(EventsA)
 
     SettingB := "Spoofing and authentication safety Protect against spoofing of employee names action"
-    EventsB := FilterEventsOU(SettingB, OU)
+    EventsB := FilterEvents(SettingB, OU)
     count(EventsB) > 0
     LastEventB := GetLastEvent(EventsB)
 
     SettingC := "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
-    EventsC := FilterEventsOU(SettingC, OU)
+    EventsC := FilterEvents(SettingC, OU)
     count(EventsC) > 0
     LastEventC := GetLastEvent(EventsC)
 
     SettingD := "Spoofing and authentication safety Protect against any unauthenticated emails action"
-    EventsD := FilterEventsOU(SettingD, OU)
+    EventsD := FilterEvents(SettingD, OU)
     count(EventsD) > 0
     LastEventD := GetLastEvent(EventsD)
 
@@ -1193,7 +1058,7 @@ NonCompliantOUs7_6 contains OU if {
         "Spoofing and authentication safety Protect your Groups from inbound emails spoofing ",
         "your domain action"
     ])
-    EventsE := FilterEventsOU(SettingE, OU)
+    EventsE := FilterEvents(SettingE, OU)
     count(EventsE) > 0
     LastEventE := GetLastEvent(EventsE)
 
@@ -1242,7 +1107,7 @@ if {
 NonCompliantOUs7_7 contains OU if {
     some OU in OUsWithEvents
     SettingName := "Spoofing and authentication safety Enable: automatically enables all future added settings"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1263,7 +1128,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Spoofing and authentication safety Enable: automatically enables all future added settings"
-    Events := FilterEvents(SettingName)
+    Events := FilterEventsNoOU(SettingName)
     count(Events) == 0
 }
 
@@ -1277,7 +1142,7 @@ tests contains {
 }
 if {
     SettingName := "Spoofing and authentication safety Enable: automatically enables all future added settings"
-    Events := FilterEvents(SettingName)
+    Events := FilterEventsNoOU(SettingName)
     count(Events) > 0
     Status := count(NonCompliantOUs7_7) == 0
 }
@@ -1307,7 +1172,7 @@ tests contains {
 #--
 NonCompliantOUs8_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("ENABLE_EMAIL_USER_IMPORT", OU)
+    Events := FilterEvents("ENABLE_EMAIL_USER_IMPORT", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1326,7 +1191,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("ENABLE_EMAIL_USER_IMPORT", TopLevelOU)
+    Events := FilterEvents("ENABLE_EMAIL_USER_IMPORT", TopLevelOU)
     count(Events) == 0
 }
 
@@ -1339,7 +1204,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("ENABLE_EMAIL_USER_IMPORT", TopLevelOU)
+    Events := FilterEvents("ENABLE_EMAIL_USER_IMPORT", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs8_1) == 0
 }
@@ -1354,7 +1219,7 @@ if {
 #--
 NonCompliantOUs9_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("IMAP_ACCESS", OU)
+    Events := FilterEvents("IMAP_ACCESS", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
     LastEvent.NewValue != "DISABLED"
@@ -1371,7 +1236,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("IMAP_ACCESS", TopLevelOU)
+    Events := FilterEvents("IMAP_ACCESS", TopLevelOU)
     count(Events) == 0
 }
 
@@ -1384,7 +1249,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("IMAP_ACCESS", TopLevelOU)
+    Events := FilterEvents("IMAP_ACCESS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs9_1) == 0
 }
@@ -1395,7 +1260,7 @@ if {
 #--
 NonCompliantOUs9_2 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("ENABLE_POP_ACCESS", OU)
+    Events := FilterEvents("ENABLE_POP_ACCESS", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1415,7 +1280,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("ENABLE_POP_ACCESS", TopLevelOU)
+    Events := FilterEvents("ENABLE_POP_ACCESS", TopLevelOU)
     count(Events) == 0
 }
 
@@ -1428,7 +1293,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("ENABLE_POP_ACCESS", TopLevelOU)
+    Events := FilterEvents("ENABLE_POP_ACCESS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs9_2) == 0
 }
@@ -1444,7 +1309,7 @@ if {
 #--
 NonCompliantOUs10_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("ENABLE_OUTLOOK_SYNC", OU)
+    Events := FilterEvents("ENABLE_OUTLOOK_SYNC", OU)
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
     LastEvent.NewValue == "true"
@@ -1461,7 +1326,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("ENABLE_OUTLOOK_SYNC", TopLevelOU)
+    Events := FilterEvents("ENABLE_OUTLOOK_SYNC", TopLevelOU)
     count(Events) == 0
 }
 
@@ -1474,7 +1339,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("ENABLE_OUTLOOK_SYNC", TopLevelOU)
+    Events := FilterEvents("ENABLE_OUTLOOK_SYNC", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs10_1) == 0
 }
@@ -1491,7 +1356,7 @@ if {
 
 NonCompliantOUs11_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("ENABLE_EMAIL_AUTOFORWARDING", OU)
+    Events := FilterEvents("ENABLE_EMAIL_AUTOFORWARDING", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1511,7 +1376,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("ENABLE_EMAIL_AUTOFORWARDING", TopLevelOU)
+    Events := FilterEvents("ENABLE_EMAIL_AUTOFORWARDING", TopLevelOU)
     count(Events) == 0
 }
 
@@ -1524,7 +1389,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("ENABLE_EMAIL_AUTOFORWARDING", TopLevelOU)
+    Events := FilterEvents("ENABLE_EMAIL_AUTOFORWARDING", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs11_1) == 0
 }
@@ -1540,7 +1405,7 @@ if {
 #--
 NonCompliantOUs12_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", OU)
+    Events := FilterEvents("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1559,7 +1424,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", TopLevelOU)
+    Events := FilterEvents("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", TopLevelOU)
     count(Events) == 0
 }
 
@@ -1572,7 +1437,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", TopLevelOU)
+    Events := FilterEvents("NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs12_1) == 0
 }
@@ -1588,7 +1453,7 @@ if {
 #--
 NonCompliantOUs13_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("OUTBOUND_RELAY_ENABLED", OU)
+    Events := FilterEvents("OUTBOUND_RELAY_ENABLED", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1607,7 +1472,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("OUTBOUND_RELAY_ENABLED", TopLevelOU)
+    Events := FilterEvents("OUTBOUND_RELAY_ENABLED", TopLevelOU)
     count(Events) == 0
 }
 
@@ -1620,7 +1485,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("OUTBOUND_RELAY_ENABLED", TopLevelOU)
+    Events := FilterEvents("OUTBOUND_RELAY_ENABLED", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs13_1) == 0
 }
@@ -1636,7 +1501,7 @@ if {
 #--
 NonCompliantOUs14_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("OutOfDomainWarningProto disable_untrusted_recipient_warning", OU)
+    Events := FilterEvents("OutOfDomainWarningProto disable_untrusted_recipient_warning", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1656,7 +1521,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("OutOfDomainWarningProto disable_untrusted_recipient_warning", TopLevelOU)
+    Events := FilterEvents("OutOfDomainWarningProto disable_untrusted_recipient_warning", TopLevelOU)
     count(Events) == 0
 }
 
@@ -1669,7 +1534,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("OutOfDomainWarningProto disable_untrusted_recipient_warning", TopLevelOU)
+    Events := FilterEvents("OutOfDomainWarningProto disable_untrusted_recipient_warning", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs14_1) == 0
 }
@@ -1714,7 +1579,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    Events := FilterEventsDomain("EMAIL_SPAM_ALLOWLIST")
+    Events := FilterEventsNoOU("EMAIL_SPAM_ALLOWLIST")
     count(Events) == 0
 }
 
@@ -1727,7 +1592,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsDomain("EMAIL_SPAM_ALLOWLIST")
+    Events := FilterEventsNoOU("EMAIL_SPAM_ALLOWLIST")
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
     Status := LastEvent.NewValue == "[]"
@@ -1745,7 +1610,7 @@ if {
 NonCompliantOUs16_1 contains OU if {
     some OU in OUsWithEvents
     SettingName := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
-    Events := FilterEventsOU(SettingName, OU)
+    Events := FilterEvents(SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1766,7 +1631,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) == 0
 }
 
@@ -1780,7 +1645,7 @@ tests contains {
 }
 if {
     SettingName := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
-    Events := FilterEventsOU(SettingName, TopLevelOU)
+    Events := FilterEvents(SettingName, TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs16_1) == 0
 }
@@ -1796,7 +1661,7 @@ if {
 #--
 NonCompliantOUs17_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("AttachmentDeepScanningSettingsProto deep_scanning_enabled", OU)
+    Events := FilterEvents("AttachmentDeepScanningSettingsProto deep_scanning_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1817,7 +1682,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("AttachmentDeepScanningSettingsProto deep_scanning_enabled", TopLevelOU)
+    Events := FilterEvents("AttachmentDeepScanningSettingsProto deep_scanning_enabled", TopLevelOU)
     count(Events) == 0
 }
 
@@ -1830,7 +1695,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("AttachmentDeepScanningSettingsProto deep_scanning_enabled", TopLevelOU)
+    Events := FilterEvents("AttachmentDeepScanningSettingsProto deep_scanning_enabled", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs17_1) == 0
 }

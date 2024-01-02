@@ -1,99 +1,11 @@
 package classroom
 import future.keywords
 import data.utils.TopLevelOU
+import data.utils.FilterEvents
 import data.utils.GetLastEvent
 import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
 import data.utils.NoSuchEventDetails
-
-FilterEvents(SettingName) := FilteredEvents if {
-    Events := SettingChangeEvents
-    FilteredEvents := {Event | some Event in Events; Event.Setting == SettingName}
-}
-
-FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If there exists at least the root OU and 1 more OU
-    # filter out organizational units that don't exist
-    input.organizational_unit_names
-    count(input.organizational_unit_names) >=2
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEvents(SettingName)
-    FilteredEvents := {
-        Event | some Event in Events;
-        Event.OrgUnit == OrgUnit;
-        Event.OrgUnit in input.organizational_unit_names
-    }
-}
-
-FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If only the root OU exists run like normal
-    input.organizational_unit_names
-    count(input.organizational_unit_names) < 2
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEvents(SettingName)
-    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
-}
-
-FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If OUs variable does not exist run like normal
-    not input.organizational_unit_names
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEvents(SettingName)
-    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
-}
-
-SettingChangeEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "NewValue": NewValue,
-    "Setting": Setting,
-    "OrgUnit": OrgUnit
-}
-if {
-    some Item in input.classroom_logs.items # For each item...
-    some Event in Item.events # For each event in the item...
-
-    # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
-    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-
-    # Extract the values
-    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-}
-
-# Secondary case that looks for the DELETE_APPLICATION_SETTING events.
-# These events don't have a NEW_VALUE. To make these events work with
-# minimal special logic, this rule adds the DELETE_APPLICATION_SETTING
-# to the SettingChangeEvents set, with "DELETE_APPLICATION_SETTING" as
-# the NewValue.
-SettingChangeEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "NewValue": NewValue,
-    "Setting": Setting,
-    "OrgUnit": OrgUnit
-}
-if {
-    some Item in input.classroom_logs.items # For each item...
-    some Event in Item.events # For each event in the item...
-    Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
-
-    # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-
-    # Extract the values
-    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
-    NewValue := "DELETE_APPLICATION_SETTING"
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-}
-
 
 ###################
 # GWS.CLASSROOM.1 #
@@ -104,7 +16,7 @@ if {
 #--
 NonCompliantOUs1_1 contains OU if {
    some OU in OUsWithEvents
-    Events := FilterEventsOU("ClassMembershipSettingsGroup who_can_join_classes", OU)
+    Events := FilterEvents("ClassMembershipSettingsGroup who_can_join_classes", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -123,8 +35,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-
-    Events := FilterEventsOU("ClassMembershipSettingsGroup who_can_join_classes", TopLevelOU)
+    Events := FilterEvents("ClassMembershipSettingsGroup who_can_join_classes", TopLevelOU)
     count(Events) == 0
 }
 
@@ -138,7 +49,7 @@ tests contains {
 }
 if {
 
-    Events := FilterEventsOU("ClassMembershipSettingsGroup who_can_join_classes", TopLevelOU)
+    Events := FilterEvents("ClassMembershipSettingsGroup who_can_join_classes", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -149,7 +60,7 @@ if {
 #--
 NonCompliantOUs1_2 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", OU)
+    Events := FilterEvents("ClassMembershipSettingsGroup which_classes_can_users_join", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -168,7 +79,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", TopLevelOU)
+    Events := FilterEvents("ClassMembershipSettingsGroup which_classes_can_users_join", TopLevelOU)
     count(Events) == 0
 }
 
@@ -181,7 +92,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("ClassMembershipSettingsGroup which_classes_can_users_join", TopLevelOU)
+    Events := FilterEvents("ClassMembershipSettingsGroup which_classes_can_users_join", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_2) == 0
 }
@@ -196,7 +107,7 @@ if {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", OU)
+    Events := FilterEvents("ApiDataAccessSettingProto api_access_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -216,7 +127,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", TopLevelOU)
+    Events := FilterEvents("ApiDataAccessSettingProto api_access_enabled", TopLevelOU)
     count(Events) == 0
 }
 
@@ -229,7 +140,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("ApiDataAccessSettingProto api_access_enabled", TopLevelOU)
+    Events := FilterEvents("ApiDataAccessSettingProto api_access_enabled", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -244,7 +155,7 @@ if {
 #--
 NonCompliantOUs3_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", OU)
+    Events := FilterEvents("RosterImportSettingsProto sis_integrator", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -264,7 +175,7 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", TopLevelOU)
+    Events := FilterEvents("RosterImportSettingsProto sis_integrator", TopLevelOU)
     count(Events) == 0
 }
 
@@ -277,7 +188,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("RosterImportSettingsProto sis_integrator", TopLevelOU)
+    Events := FilterEvents("RosterImportSettingsProto sis_integrator", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -292,7 +203,7 @@ if {
 #--
 NonCompliantOUs4_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
+    Events := FilterEvents("StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -312,7 +223,7 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", TopLevelOU)
+    Events := FilterEvents("StudentUnenrollmentSettingsProto who_can_unenroll_students", TopLevelOU)
     count(Events) == 0
 }
 
@@ -325,7 +236,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("StudentUnenrollmentSettingsProto who_can_unenroll_students", TopLevelOU)
+    Events := FilterEvents("StudentUnenrollmentSettingsProto who_can_unenroll_students", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }

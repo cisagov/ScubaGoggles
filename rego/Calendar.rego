@@ -1,87 +1,12 @@
 package calendar
 import future.keywords
 import data.utils.TopLevelOU
+import data.utils.FilterEvents
 import data.utils.GetLastEvent
 import data.utils.OUsWithEvents
 import data.utils.ReportDetailsOUs
+import data.utils.FilterEventsNoOU
 import data.utils.NoSuchEventDetails
-
-FilterEvents(SettingName) := FilteredEvents if {
-    # Filter the events by SettingName
-    Events := SettingChangeEvents
-    FilteredEvents := {Event | some Event in Events; Event.Setting == SettingName}
-}
-
-FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If there exists at least the root OU and 1 more OU
-    # filter out organizational units that don't exist
-    input.organizational_unit_names
-    count(input.organizational_unit_names) >=2
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEvents(SettingName)
-    FilteredEvents := {
-        Event | some Event in Events;
-        Event.OrgUnit == OrgUnit;
-        Event.OrgUnit in input.organizational_unit_names
-    }
-}
-
-FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If only the root OU exists run like normal
-    input.organizational_unit_names
-    count(input.organizational_unit_names) < 2
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEvents(SettingName)
-    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
-}
-
-FilterEventsOU(SettingName, OrgUnit) := FilteredEvents if {
-    # If OUs variable does not exist run like normal
-    not input.organizational_unit_names
-
-    # Filter the events by both SettingName and OrgUnit
-    Events := FilterEvents(SettingName)
-    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
-}
-
-# Helper function so that the regular SettingChangeEvents
-# rule will work even for events that don't include the
-# domain name
-GetEventDomain(Event) := DomainName if {
-    "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    DomainName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "DOMAIN_NAME"][0]
-}
-
-GetEventDomain(Event) := "None" if {
-    not "DOMAIN_NAME" in {Parameter.name | some Parameter in Event.parameters}
-}
-
-SettingChangeEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "NewValue": NewValue,
-    "Setting": Setting,
-    "OrgUnit": OrgUnit,
-    "DomainName": DomainName
-}
-if {
-    some Item in input.calendar_logs.items # For each item...
-    some Event in Item.events # For each event in the item...
-
-    # Does this event have the parameters we're looking for?
-    "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
-    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-
-    # Extract the values
-    Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
-    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-    DomainName := GetEventDomain(Event)
-}
-
 
 ##################
 # GWS.CALENDAR.1 #
@@ -92,7 +17,7 @@ if {
 #--
 NonCompliantOUs1_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", OU)
+    Events := FilterEvents("SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -112,7 +37,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
+    Events := FilterEvents("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
     count(Events) == 0
 }
 
@@ -125,7 +50,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
+    Events := FilterEvents("SHARING_OUTSIDE_DOMAIN", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -153,7 +78,7 @@ tests contains {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("ENABLE_EXTERNAL_GUEST_PROMPT", OU)
+    Events := FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -172,7 +97,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("ENABLE_EXTERNAL_GUEST_PROMPT", TopLevelOU)
+    Events := FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", TopLevelOU)
     count(Events) == 0
 }
 
@@ -185,7 +110,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("ENABLE_EXTERNAL_GUEST_PROMPT", TopLevelOU)
+    Events := FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -244,7 +169,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
+    Events := FilterEventsNoOU("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
     count(Events) == 0
 }
 
@@ -257,7 +182,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
+    Events := FilterEventsNoOU("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
     Status := LastEvent.NewValue == "SHOW_ONLY_FREE_BUSY_INFORMATION"
@@ -312,7 +237,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEvents("ENABLE_EWS_INTEROP")
+    Events := FilterEventsNoOU("ENABLE_EWS_INTEROP")
     count(Events) == 0
 }
 
@@ -325,7 +250,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEvents("ENABLE_EWS_INTEROP")
+    Events := FilterEventsNoOU("ENABLE_EWS_INTEROP")
     count(Events) > 0
     LastEvent := GetLastEvent(Events)
     Status := LastEvent.NewValue == "false"
@@ -353,7 +278,7 @@ tests contains {
 
 NonCompliantOUs5_1 contains OU if {
     some OU in OUsWithEvents
-    Events := FilterEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
+    Events := FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -375,7 +300,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
+    Events := FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
     count(Events) == 0
 }
 
@@ -388,7 +313,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
+    Events := FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
