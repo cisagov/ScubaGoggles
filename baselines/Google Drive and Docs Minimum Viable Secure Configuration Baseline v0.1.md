@@ -196,16 +196,6 @@ This section covers whether users can create new shared drives to share with oth
 
 ### Policies
 
-#### GWS.DRIVEDOCS.2.1v0.1
-Agencies SHOULD enable shared drive creation to allow for effective collaboration.
-
-- Rationale
-  - Disabling shared drives would make collaboration difficult. Shared drives allow users in the organization to work together on one or multiple documents concurrently.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
 #### GWS.DRIVEDOCS.2.2v0.1
 Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.
 
