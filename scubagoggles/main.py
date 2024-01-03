@@ -117,7 +117,7 @@ def dive():
 
     subparsers = parser.add_subparsers(dest='scuba_cmd')
 
-    gws_parser_help = "Run the SCuBA automated conformance" \
+    gws_parser_help = "Run the SCuBA automated conformance " \
     "check against one or more Google Workspace products"
     gws_parser = subparsers.add_parser('gws', help=gws_parser_help)
     get_gws_args(gws_parser)
