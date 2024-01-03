@@ -318,39 +318,39 @@ if {
 #
 # Baseline GWS.GROUPS.7.1v0.1
 #--
-# This sets up for a logical OR between all the settings. If one of them is false,
-# it will trigger the function and add the group to the list.
-IsGroupRestricted(Group) {
+NonCompliantGroups7_1 contains Group.name if {
+    some Group in input.group_settings
     Group.whoCanJoin != "CAN_REQUEST_TO_JOIN"
-}
-
-IsGroupRestricted(Group) {
-    Group.whoCanViewMembership != "ALL_MEMBERS_CAN_VIEW"
-}
-
-IsGroupRestricted(Group) {
-    Group.whoCanViewGroup != "ALL_MEMBERS_CAN_VIEW"
-}
-
-IsGroupRestricted(Group) {
-    Group.whoCanModerateMembers != "OWNERS_AND_MANAGERS"
-}
-
-IsGroupRestricted(Group) {
-    Group.allowExternalMembers != "false"
-}
-
-IsGroupRestricted(Group) {
-    Group.whoCanPostMessage != "ALL_MEMBERS_CAN_POST"
-}
-
-IsGroupRestricted(Group) {
-    Group.whoCanContactOwner != "ANYONE_CAN_CONTACT"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
     some Group in input.group_settings
-    IsGroupRestricted(Group)
+    Group.whoCanViewMembership != "ALL_MEMBERS_CAN_VIEW"
+}
+
+NonCompliantGroups7_1 contains Group.name if {
+    some Group in input.group_settings
+    Group.whoCanViewGroup != "ALL_MEMBERS_CAN_VIEW"
+}
+
+NonCompliantGroups7_1 contains Group.name if {
+    some Group in input.group_settings
+    Group.whoCanModerateMembers != "OWNERS_AND_MANAGERS"
+}
+
+NonCompliantGroups7_1 contains Group.name if {
+    some Group in input.group_settings
+    Group.allowExternalMembers != "false"
+}
+
+NonCompliantGroups7_1 contains Group.name if {
+    some Group in input.group_settings
+    Group.whoCanPostMessage != "ALL_MEMBERS_CAN_POST"
+}
+
+NonCompliantGroups7_1 contains Group.name if {
+    some Group in input.group_settings
+    Group.whoCanContactOwner != "ANYONE_CAN_CONTACT"
 }
 
 # if there are no groups, it has to be safe.
