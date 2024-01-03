@@ -3,6 +3,8 @@ package calendar
 import data.utils
 import future.keywords
 
+LogEvents := utils.GetEvents("calendar_logs")
+
 ##################
 # GWS.CALENDAR.1 #
 ##################
@@ -12,7 +14,7 @@ import future.keywords
 #--
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", OU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -32,7 +34,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -45,7 +47,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -73,7 +75,7 @@ tests contains {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", OU)
+    Events := utils.FilterEvents(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -92,7 +94,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -105,7 +107,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -164,7 +166,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEventsNoOU("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
+    Events := utils.FilterEventsNoOU(LogEvents, "SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
     count(Events) == 0
 }
 
@@ -177,7 +179,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsNoOU("SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
+    Events := utils.FilterEventsNoOU(LogEvents, "SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR")
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     Status := LastEvent.NewValue == "SHOW_ONLY_FREE_BUSY_INFORMATION"
@@ -232,7 +234,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEventsNoOU("ENABLE_EWS_INTEROP")
+    Events := utils.FilterEventsNoOU(LogEvents, "ENABLE_EWS_INTEROP")
     count(Events) == 0
 }
 
@@ -245,7 +247,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsNoOU("ENABLE_EWS_INTEROP")
+    Events := utils.FilterEventsNoOU(LogEvents, "ENABLE_EWS_INTEROP")
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     Status := LastEvent.NewValue == "false"
@@ -273,7 +275,7 @@ tests contains {
 
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
+    Events := utils.FilterEvents(LogEvents, "CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -295,7 +297,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", utils.TopLevelOU)
+    SettingName := "CalendarAppointmentSlotAdminSettingsProto payments_enabled"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -308,7 +311,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("CalendarAppointmentSlotAdminSettingsProto payments_enabled", utils.TopLevelOU)
+    SettingName := "CalendarAppointmentSlotAdminSettingsProto payments_enabled"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }

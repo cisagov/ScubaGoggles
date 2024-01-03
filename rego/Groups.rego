@@ -3,6 +3,8 @@ package groups
 import data.utils
 import future.keywords
 
+LogEvents := utils.GetEvents("groups_logs")
+
 NoGroupsDetails(Groups) := "No Groups found in Organization." if {
     count(Groups) == 0
 }
@@ -25,7 +27,7 @@ ReportDetailsGroups(Groups) := Message if {
 #--
 NonCompliantOUs1_1 contains OU if {
      some OU in utils.OUsWithEvents
-     Events := utils.FilterEvents("GroupsSharingSettingsProto collaboration_policy", OU)
+     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto collaboration_policy", OU)
      count(Events) > 0 # Ignore OUs without any events. We're already
      # asserting that the top-level OU has at least one event; for all
      # other OUs we assume they inherit from a parent OU if they have
@@ -44,7 +46,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("GroupsSharingSettingsProto collaboration_policy", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto collaboration_policy", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -57,7 +59,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("GroupsSharingSettingsProto collaboration_policy", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto collaboration_policy", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -73,7 +75,8 @@ if {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("GroupsSharingSettingsProto owners_can_allow_external_members", OU)
+    SettingName := "GroupsSharingSettingsProto owners_can_allow_external_members"
+    Events := utils.FilterEvents(LogEvents, SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -92,7 +95,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("GroupsSharingSettingsProto owners_can_allow_external_members", utils.TopLevelOU)
+    SettingName := "GroupsSharingSettingsProto owners_can_allow_external_members"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -105,7 +109,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("GroupsSharingSettingsProto owners_can_allow_external_members", utils.TopLevelOU)
+    SettingName := "GroupsSharingSettingsProto owners_can_allow_external_members"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -120,7 +125,7 @@ if {
 #--
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", OU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -140,7 +145,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public"
-    Events := utils.FilterEvents(SettingName, utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -154,7 +159,7 @@ tests contains {
 }
 if {
     SettingName := "GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public"
-    Events := utils.FilterEvents(SettingName, utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -170,7 +175,7 @@ if {
 #--
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("GroupsSharingSettingsProto who_can_create_groups", OU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto who_can_create_groups", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -189,7 +194,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("GroupsSharingSettingsProto who_can_create_groups", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto who_can_create_groups", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -202,7 +207,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("GroupsSharingSettingsProto who_can_create_groups", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto who_can_create_groups", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
@@ -218,7 +223,7 @@ if {
 #--
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("GroupsSharingSettingsProto default_view_topics_access_level", OU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto default_view_topics_access_level", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -237,7 +242,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("GroupsSharingSettingsProto default_view_topics_access_level", utils.TopLevelOU)
+    SettingName := "GroupsSharingSettingsProto default_view_topics_access_level"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -250,7 +256,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("GroupsSharingSettingsProto default_view_topics_access_level", utils.TopLevelOU)
+    SettingName := "GroupsSharingSettingsProto default_view_topics_access_level"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
@@ -266,7 +273,7 @@ if {
 #--
 NonCompliantOUs6_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("GroupsSharingSettingsProto allow_unlisted_groups", OU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto allow_unlisted_groups", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -285,7 +292,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -298,7 +305,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs6_1) == 0
 }

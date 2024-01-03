@@ -3,6 +3,8 @@ package drive
 import data.utils
 import future.keywords
 
+LogEvents := utils.GetEvents("drive_logs")
+
 ###################
 # GWS.DRIVEDOCS.1 #
 ###################
@@ -13,7 +15,7 @@ import future.keywords
 # TODO: OU inheritence implementation pending after SCB updates, refer to #328
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", OU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     SettingValue := "SHARING_NOT_ALLOWED SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES INHERIT_FROM_PARENT"
@@ -30,7 +32,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -43,7 +45,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -54,7 +56,7 @@ if {
 #--
 NonCompliantOUs1_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", OU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("SHARING_NOT_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == false
@@ -70,7 +72,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -83,7 +85,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_2) == 0
 }
@@ -94,7 +96,7 @@ if {
 #--
 NonCompliantOUs1_3 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", OU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("SHARING_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == true
@@ -110,7 +112,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -123,7 +125,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_3) == 0
 }
@@ -134,7 +136,7 @@ if {
 #--
 NonCompliantOUs1_4 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("NOT_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == false
@@ -150,7 +152,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -163,7 +165,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_4) == 0
 }
@@ -174,7 +176,7 @@ if {
 #--
 NonCompliantOUs1_5 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("PUBLISHING_TO_WEB", OU)
+    Events := utils.FilterEvents(LogEvents, "PUBLISHING_TO_WEB", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("ALLOWED", LastEvent.NewValue) == true
@@ -190,7 +192,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("PUBLISHING_TO_WEB", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "PUBLISHING_TO_WEB", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -203,7 +205,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("PUBLISHING_TO_WEB", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "PUBLISHING_TO_WEB", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_5) == 0
 }
@@ -214,7 +216,7 @@ if {
 #--
 NonCompliantOUs1_6 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SHARING_ACCESS_CHECKER_OPTIONS", OU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES INHERIT_FROM_PARENT", LastEvent.NewValue) == false
@@ -230,7 +232,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SHARING_ACCESS_CHECKER_OPTIONS",utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS",utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -243,7 +245,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SHARING_ACCESS_CHECKER_OPTIONS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_6) == 0
 }
@@ -254,7 +256,7 @@ if {
 #--
 NonCompliantOUs1_7 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", OU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     SettingValue := "CROSS_DOMAIN_FROM_INTERNAL_ONLY CROSS_DOMAIN_MOVES_BLOCKED INHERIT_FROM_PARENT"
@@ -271,7 +273,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -284,7 +286,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_7) == 0
 }
@@ -295,7 +297,7 @@ if {
 #--
 NonCompliantOUs1_8 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("DEFAULT_LINK_SHARING_FOR_NEW_DOCS", OU)
+    Events := utils.FilterEvents(LogEvents, "DEFAULT_LINK_SHARING_FOR_NEW_DOCS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "PRIVATE"
@@ -312,7 +314,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("DEFAULT_LINK_SHARING_FOR_NEW_DOCS",utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "DEFAULT_LINK_SHARING_FOR_NEW_DOCS",utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -325,7 +327,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("DEFAULT_LINK_SHARING_FOR_NEW_DOCS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "DEFAULT_LINK_SHARING_FOR_NEW_DOCS", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_8) == 0
 }
@@ -340,7 +342,7 @@ if {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Shared Drive Creation CanCreateSharedDrives", OU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation CanCreateSharedDrives", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -357,7 +359,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Shared Drive Creation CanCreateSharedDrives", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation CanCreateSharedDrives", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -370,7 +372,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Shared Drive Creation CanCreateSharedDrives", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation CanCreateSharedDrives", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -381,7 +383,7 @@ if {
 #--
 NonCompliantOUs2_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_admin_only", OU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -398,7 +400,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -411,7 +413,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_2) == 0
 }
@@ -422,7 +424,7 @@ if {
 #--
 NonCompliantOUs2_3 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_restricts_cross_domain_access", OU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_cross_domain_access", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -439,7 +441,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_restricts_cross_domain_access", utils.TopLevelOU)
+    SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -452,7 +455,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_restricts_cross_domain_access", utils.TopLevelOU)
+    SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_3) == 0
 }
@@ -463,7 +467,7 @@ if {
 #--
 NonCompliantOUs2_4 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_restricts_direct_access", OU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_direct_access", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -480,7 +484,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_restricts_direct_access", utils.TopLevelOU)
+    SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -493,7 +498,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_restricts_direct_access", utils.TopLevelOU)
+    SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_4) == 0
 }
@@ -504,7 +510,7 @@ if {
 #--
 NonCompliantOUs2_5 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_restricts_download", OU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("false", LastEvent.NewValue) == false
@@ -521,7 +527,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -534,7 +540,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_5) == 0
 }
@@ -550,13 +556,14 @@ if {
 #--
 NoSuchEvent3_1(TopLevelOU) := true if {
     # No such event...
-    Events_A := utils.FilterEvents("Link Security Update Settings allow_less_secure_link_user_restore", TopLevelOU)
+    SettingName := "Link Security Update Settings allow_less_secure_link_user_restore"
+    Events_A := utils.FilterEvents(LogEvents, SettingName, TopLevelOU)
     count(Events_A) == 0
 }
 
 NoSuchEvent3_1(TopLevelOU) := true if {
     # No such event...
-    Events := utils.FilterEvents("Link Security Update Settings less_secure_link_option", TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Link Security Update Settings less_secure_link_option", TopLevelOU)
     count(Events) == 0
 }
 
@@ -564,11 +571,11 @@ default NoSuchEvent3_1(_) := false
 
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events_A := utils.FilterEvents("Link Security Update Settings allow_less_secure_link_user_restore", OU)
+    Events_A := utils.FilterEvents(LogEvents, "Link Security Update Settings allow_less_secure_link_user_restore", OU)
     count(Events_A) > 0
     LastEvent_A := utils.GetLastEvent(Events_A)
 
-    Events_B := utils.FilterEvents("Link Security Update Settings less_secure_link_option", OU)
+    Events_B := utils.FilterEvents(LogEvents, "Link Security Update Settings less_secure_link_option", OU)
     count(Events_B) > 0
     LastEvent_B := utils.GetLastEvent(Events_B)
 
@@ -614,7 +621,7 @@ if {
 #--
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("ENABLE_DRIVE_APPS", OU)
+    Events := utils.FilterEvents(LogEvents, "ENABLE_DRIVE_APPS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
@@ -631,7 +638,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("ENABLE_DRIVE_APPS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ENABLE_DRIVE_APPS", utils.TopLevelOU)
     count(Events) == 0
 
 }
@@ -645,7 +652,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("ENABLE_DRIVE_APPS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ENABLE_DRIVE_APPS", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
@@ -661,7 +668,7 @@ if {
 #--
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("ENABLE_DOCS_ADD_ONS", OU)
+    Events := utils.FilterEvents(LogEvents, "ENABLE_DOCS_ADD_ONS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
@@ -678,7 +685,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
     count(Events) == 0
 
 }
@@ -692,7 +699,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
@@ -708,24 +715,24 @@ if {
 default NoSuchEvent6_1(_) := true
 
 NoSuchEvent6_1(TopLevelOU) := false if {
-    Events := utils.FilterEvents("DriveFsSettingsProto drive_fs_enabled", TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "DriveFsSettingsProto drive_fs_enabled", TopLevelOU)
     count(Events) != 0
 }
 
 NoSuchEvent6_1(TopLevelOU) := false if {
     # No such event...
-    Events := utils.FilterEvents("DriveFsSettingsProto company_owned_only_enabled", TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "DriveFsSettingsProto company_owned_only_enabled", TopLevelOU)
     count(Events) != 0
 }
 
 NonCompliantOUs6_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events_A := utils.FilterEvents("DriveFsSettingsProto drive_fs_enabled", OU)
+    Events_A := utils.FilterEvents(LogEvents, "DriveFsSettingsProto drive_fs_enabled", OU)
     count(Events_A) > 0
     LastEvent_A := utils.GetLastEvent(Events_A)
     LastEvent_A.NewValue != "DELETE_APPLICATION_SETTING"
 
-    Events_B := utils.FilterEvents("DriveFsSettingsProto company_owned_only_enabled", OU)
+    Events_B := utils.FilterEvents(LogEvents, "DriveFsSettingsProto company_owned_only_enabled", OU)
     count(Events_B) > 0
     LastEvent_B := utils.GetLastEvent(Events_B)
     LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"

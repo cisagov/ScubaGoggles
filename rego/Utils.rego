@@ -135,8 +135,7 @@ SettingChangeEvents contains {
     "AppName": AppName
 }
 if {
-    some Log in input
-    some Item in Log.items
+    some Item in input[data.LogName].items
     some Event in Item.events
 
     # Does this event have the parameters we're looking for?
@@ -168,8 +167,7 @@ SettingChangeEvents contains {
     "AppName": AppName
 }
 if {
-    some Log in input
-    some Item in Log.items
+    some Item in input[data.LogName].items
     some Event in Item.events
     Event.name == "DELETE_APPLICATION_SETTING" # Only look at delete events
 
@@ -197,9 +195,8 @@ SettingChangeEvents contains {
     "AppName": "NA"
 }
 if {
-    some Log in input
-    some Item in Log.items # For each item...
-    some Event in Item.events # For each event in the item...
+    some Item in input[data.LogName].items
+    some Event in Item.events
 
     Event.name == "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA"
 
@@ -211,7 +208,7 @@ if {
     OrgUnit := GetEventOu(Event)
 }
 
-FilterEvents(SettingName, OrgUnit) := FilteredEvents if {
+FilterEvents(Events, SettingName, OrgUnit) := FilteredEvents if {
     # If there exists at least the root OU and 1 more OU
     # filter out organizational units that don't exist
     input.organizational_unit_names
@@ -219,40 +216,44 @@ FilterEvents(SettingName, OrgUnit) := FilteredEvents if {
 
     # Filter the events by both SettingName and OrgUnit
     FilteredEvents := {
-        Event | some Event in SettingChangeEvents;
+        Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.Setting == SettingName;
         Event.OrgUnit in input.organizational_unit_names
     }
 }
 
-FilterEvents(SettingName, OrgUnit) := FilteredEvents if {
+FilterEvents(Events, SettingName, OrgUnit) := FilteredEvents if {
     # If only the root OU exists run like normal
     input.organizational_unit_names
     count(input.organizational_unit_names) < 2
 
     # Filter the events by both SettingName and OrgUnit
     FilteredEvents := {
-        Event | some Event in SettingChangeEvents;
+        Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.Setting == SettingName
     }
 }
 
-FilterEvents(SettingName, OrgUnit) := FilteredEvents if {
+FilterEvents(Events, SettingName, OrgUnit) := FilteredEvents if {
     # If OUs variable does not exist run like normal
     not input.organizational_unit_names
 
     # Filter the events by both SettingName and OrgUnit
     FilteredEvents := {
-        Event | some Event in SettingChangeEvents;
+        Event | some Event in Events;
         Event.OrgUnit == OrgUnit;
         Event.Setting == SettingName
     }
 }
 
 # Filter the events by just SettingName, ignoring OU
-FilterEventsNoOU(SettingName) := {
-    Event | some Event in SettingChangeEvents;
+FilterEventsNoOU(Events, SettingName) := {
+    Event | some Event in Events;
     Event.Setting == SettingName
+}
+
+GetEvents(LogName) := Events if {
+    Events := SettingChangeEvents with data.LogName as LogName
 }

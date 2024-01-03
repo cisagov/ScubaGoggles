@@ -3,6 +3,8 @@ package classroom
 import data.utils
 import future.keywords
 
+LogEvents := utils.GetEvents("classroom_logs")
+
 ###################
 # GWS.CLASSROOM.1 #
 ###################
@@ -12,7 +14,7 @@ import future.keywords
 #--
 NonCompliantOUs1_1 contains OU if {
    some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("ClassMembershipSettingsGroup who_can_join_classes", OU)
+    Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -31,7 +33,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("ClassMembershipSettingsGroup who_can_join_classes", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -45,7 +47,7 @@ tests contains {
 }
 if {
 
-    Events := utils.FilterEvents("ClassMembershipSettingsGroup who_can_join_classes", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -56,7 +58,7 @@ if {
 #--
 NonCompliantOUs1_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("ClassMembershipSettingsGroup which_classes_can_users_join", OU)
+    Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup which_classes_can_users_join", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -75,7 +77,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("ClassMembershipSettingsGroup which_classes_can_users_join", utils.TopLevelOU)
+    SettingName := "ClassMembershipSettingsGroup which_classes_can_users_join"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -88,7 +91,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("ClassMembershipSettingsGroup which_classes_can_users_join", utils.TopLevelOU)
+    SettingName := "ClassMembershipSettingsGroup which_classes_can_users_join"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_2) == 0
 }
@@ -103,7 +107,7 @@ if {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("ApiDataAccessSettingProto api_access_enabled", OU)
+    Events := utils.FilterEvents(LogEvents, "ApiDataAccessSettingProto api_access_enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -123,7 +127,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("ApiDataAccessSettingProto api_access_enabled", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ApiDataAccessSettingProto api_access_enabled", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -136,7 +140,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("ApiDataAccessSettingProto api_access_enabled", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "ApiDataAccessSettingProto api_access_enabled", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -151,7 +155,7 @@ if {
 #--
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("RosterImportSettingsProto sis_integrator", OU)
+    Events := utils.FilterEvents(LogEvents, "RosterImportSettingsProto sis_integrator", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -171,7 +175,7 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := utils.FilterEvents("RosterImportSettingsProto sis_integrator", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "RosterImportSettingsProto sis_integrator", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -184,7 +188,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("RosterImportSettingsProto sis_integrator", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "RosterImportSettingsProto sis_integrator", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -199,7 +203,7 @@ if {
 #--
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
+    Events := utils.FilterEvents(LogEvents, "StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -219,7 +223,8 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := utils.FilterEvents("StudentUnenrollmentSettingsProto who_can_unenroll_students", utils.TopLevelOU)
+    SettingName := "StudentUnenrollmentSettingsProto who_can_unenroll_students"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -232,7 +237,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("StudentUnenrollmentSettingsProto who_can_unenroll_students", utils.TopLevelOU)
+    SettingName := "StudentUnenrollmentSettingsProto who_can_unenroll_students"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }

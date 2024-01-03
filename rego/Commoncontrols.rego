@@ -65,6 +65,7 @@ if {
     OrgUnit := GetEventOu(Event)
 }
 
+LogEvents := utils.GetEvents("commoncontrols_logs")
 
 ########################
 # GWS.COMMONCONTROLS.1 #
@@ -347,7 +348,7 @@ tests contains {
 
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SsoPolicyProto challenge_selection_behavior", OU)
+    Events := utils.FilterEvents(LogEvents, "SsoPolicyProto challenge_selection_behavior", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -367,7 +368,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SsoPolicyProto challenge_selection_behavior", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SsoPolicyProto challenge_selection_behavior", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -380,7 +381,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SsoPolicyProto challenge_selection_behavior", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SsoPolicyProto challenge_selection_behavior", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -406,7 +407,7 @@ IsGoodLimit(ActualLim) := false if {
 
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Session management settings - Session length in seconds", OU)
+    Events := utils.FilterEvents(LogEvents, "Session management settings - Session length in seconds", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -426,7 +427,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Session management settings - Session length in seconds", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Session management settings - Session length in seconds", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -439,7 +440,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Session management settings - Session length in seconds", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Session management settings - Session length in seconds", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
@@ -455,7 +456,7 @@ if {
 
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Password Management - Enforce strong password", OU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Enforce strong password", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -475,7 +476,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Password Management - Enforce strong password", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Enforce strong password", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -487,7 +488,7 @@ tests contains {
     "RequirementMet": Status,
     "NoSuchEvent": false
 } if {
-    Events := utils.FilterEvents("Password Management - Enforce strong password", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Enforce strong password", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
@@ -499,7 +500,7 @@ tests contains {
 
 NonCompliantOUs5_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Password Management - Minimum password length", OU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Minimum password length", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -520,7 +521,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Password Management - Minimum password length", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Minimum password length", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -533,7 +534,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Password Management - Minimum password length", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Minimum password length", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_2) == 0
 }
@@ -545,7 +546,7 @@ if {
 
 NonCompliantOUs5_3 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Password Management - Enforce password policy at next login", OU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Enforce password policy at next login", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -565,7 +566,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Password Management - Enforce password policy at next login", utils.TopLevelOU)
+    SettingName := "Password Management - Enforce password policy at next login"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -578,7 +580,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Password Management - Enforce password policy at next login", utils.TopLevelOU)
+    SettingName := "Password Management - Enforce password policy at next login"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_3) == 0
 }
@@ -590,7 +593,7 @@ if {
 
 NonCompliantOUs5_4 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Password Management - Enable password reuse", OU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Enable password reuse", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -610,7 +613,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Password Management - Enable password reuse", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Enable password reuse", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -623,7 +626,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Password Management - Enable password reuse", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Enable password reuse", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_4) == 0
 }
@@ -635,7 +638,7 @@ if {
 
 NonCompliantOUs5_5 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Password Management - Password reset frequency", OU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Password reset frequency", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -655,7 +658,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("Password Management - Password reset frequency", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Password reset frequency", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -668,7 +671,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("Password Management - Password reset frequency", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Password Management - Password reset frequency", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_5) == 0
 }
@@ -773,7 +776,7 @@ tests contains {
 
 NonCompliantOUs9_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("AdminAccountRecoverySettingsProto Enable admin account recovery", OU)
+    Events := utils.FilterEvents(LogEvents, "AdminAccountRecoverySettingsProto Enable admin account recovery", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -793,7 +796,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("AdminAccountRecoverySettingsProto Enable admin account recovery", utils.TopLevelOU)
+    SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -805,7 +809,8 @@ tests contains {
     "RequirementMet": Status,
     "NoSuchEvent": false
 } if {
-    Events := utils.FilterEvents("AdminAccountRecoverySettingsProto Enable admin account recovery", utils.TopLevelOU)
+    SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs9_2) == 0
 }
@@ -1210,12 +1215,12 @@ tests contains {
 # Custom NoSuchEvent function needed as we're checking
 # two different settings simultaneously.
 NoSuchEvent12_2 := true if {
-    Events := utils.FilterEvents("Apps Access Setting Allowlist access", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Apps Access Setting Allowlist access", utils.TopLevelOU)
     count(Events) == 0
 }
 
 NoSuchEvent12_2 := true if {
-    Events := utils.FilterEvents("Apps Access Setting allow_all_internal_apps", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Apps Access Setting allow_all_internal_apps", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -1223,7 +1228,7 @@ default NoSuchEvent12_2 := false
 
 NonCompliantOUs12_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Apps Access Setting Allowlist access", OU)
+    Events := utils.FilterEvents(LogEvents, "Apps Access Setting Allowlist access", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1235,7 +1240,7 @@ NonCompliantOUs12_2 contains OU if {
 
 NonCompliantOUs12_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Apps Access Setting allow_all_internal_apps", OU)
+    Events := utils.FilterEvents(LogEvents, "Apps Access Setting allow_all_internal_apps", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1336,7 +1341,7 @@ Apps := {"Blogger", "Google Books", "Google Pay", "Google Photos", "Google Play"
     "Google Play Console", "Location History", "YouTube"}
 
 AppsAllowingTakoutOU contains App {
-    Events := utils.FilterEventsNoOU("UserTakeoutSettingsProto User Takeout ")
+    Events := utils.FilterEventsNoOU(LogEvents, "UserTakeoutSettingsProto User Takeout ")
     some App in Apps
     Filtered := {Event | some Event in Events; Event.AppName == App; Event.OrgUnit == data.OrgUnit}
     # Note the data.OrgUnit. This means this
@@ -1349,7 +1354,7 @@ AppsAllowingTakoutOU contains App {
 
 NonCompliantOUs14_1 contains OU {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("UserTakeoutSettingsProto User Takeout ", OU)
+    Events := utils.FilterEvents(LogEvents, "UserTakeoutSettingsProto User Takeout ", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1375,7 +1380,7 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := utils.FilterEvents("UserTakeoutSettingsProto User Takeout ", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "UserTakeoutSettingsProto User Takeout ", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -1391,7 +1396,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("UserTakeoutSettingsProto User Takeout ", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "UserTakeoutSettingsProto User Takeout ", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs14_1) == 0
 }
@@ -1440,7 +1445,8 @@ tests contains {
 
 NonCompliantOUs16_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("Data Sharing Settings between GCP and Google Workspace \"Sharing Options\"", OU)
+    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
+    Events := utils.FilterEvents(LogEvents, SettingName, OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1460,7 +1466,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
-    Events := utils.FilterEvents(SettingName, utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -1474,7 +1480,7 @@ tests contains {
 }
 if {
     SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
-    Events := utils.FilterEvents(SettingName, utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs16_1) == 0
 }
@@ -1521,7 +1527,7 @@ tests contains {
 
 NonCompliantOUs18_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", OU)
+    Events := utils.FilterEvents(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -1540,7 +1546,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -1553,7 +1559,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs18_1) == 0
 }

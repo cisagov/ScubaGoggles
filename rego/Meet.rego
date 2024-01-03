@@ -3,6 +3,8 @@ package meet
 import data.utils
 import future.keywords
 
+LogEvents := utils.GetEvents("meet_logs")
+
 ##############
 # GWS.MEET.1 #
 ##############
@@ -12,7 +14,7 @@ import future.keywords
 #--
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SafetyDomainLockProto users_allowed_to_join", OU)
+    Events := utils.FilterEvents(LogEvents, "SafetyDomainLockProto users_allowed_to_join", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "ALL"
@@ -29,7 +31,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SafetyDomainLockProto users_allowed_to_join", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SafetyDomainLockProto users_allowed_to_join", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -42,7 +44,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SafetyDomainLockProto users_allowed_to_join", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SafetyDomainLockProto users_allowed_to_join", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
     # as long as it is not all, this is disabled.
@@ -59,7 +61,7 @@ if {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SafetyAccessLockProto meetings_allowed_to_join", OU)
+    Events := utils.FilterEvents(LogEvents, "SafetyAccessLockProto meetings_allowed_to_join", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "ALL"
@@ -76,7 +78,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SafetyAccessLockProto meetings_allowed_to_join", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SafetyAccessLockProto meetings_allowed_to_join", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -89,7 +91,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SafetyAccessLockProto meetings_allowed_to_join", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SafetyAccessLockProto meetings_allowed_to_join", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -105,7 +107,7 @@ if {
 #--
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("SafetyModerationLockProto host_management_enabled", OU)
+    Events := utils.FilterEvents(LogEvents, "SafetyModerationLockProto host_management_enabled", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -122,7 +124,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents("SafetyModerationLockProto host_management_enabled", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SafetyModerationLockProto host_management_enabled", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -135,7 +137,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents("SafetyModerationLockProto host_management_enabled", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "SafetyModerationLockProto host_management_enabled", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -151,7 +153,7 @@ if {
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Warn for external participants External or unidentified participants in a meeting are given a label"
-    Events := utils.FilterEvents(SettingName, OU)
+    Events := utils.FilterEvents(LogEvents, SettingName, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -169,7 +171,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Warn for external participants External or unidentified participants in a meeting are given a label"
-    Events := utils.FilterEvents(SettingName, utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -183,7 +185,7 @@ tests contains {
 }
 if {
     SettingName := "Warn for external participants External or unidentified participants in a meeting are given a label"
-    Events := utils.FilterEvents(SettingName, utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }

@@ -3,6 +3,8 @@ package chat
 import data.utils
 import future.keywords
 
+LogEvents := utils.GetEvents("chat_logs")
+
 ##############
 # GWS.CHAT.1 #
 ##############
@@ -12,7 +14,7 @@ import future.keywords
 #--
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents("ChatArchivingProto chatsDefaultToOffTheRecord", OU)
+    Events := utils.FilterEvents(LogEvents, "ChatArchivingProto chatsDefaultToOffTheRecord", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -31,7 +33,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents( "ChatArchivingProto chatsDefaultToOffTheRecord", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "ChatArchivingProto chatsDefaultToOffTheRecord", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -44,7 +46,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents( "ChatArchivingProto chatsDefaultToOffTheRecord", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "ChatArchivingProto chatsDefaultToOffTheRecord", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -55,7 +57,7 @@ if {
 #--
 NonCompliantOUs1_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents( "ChatArchivingProto allow_chat_archiving_setting_modification", OU)
+    Events := utils.FilterEvents(LogEvents,  "ChatArchivingProto allow_chat_archiving_setting_modification", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -74,7 +76,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents( "ChatArchivingProto allow_chat_archiving_setting_modification", utils.TopLevelOU)
+    SettingName := "ChatArchivingProto allow_chat_archiving_setting_modification"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -87,7 +90,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents( "ChatArchivingProto allow_chat_archiving_setting_modification", utils.TopLevelOU)
+    SettingName := "ChatArchivingProto allow_chat_archiving_setting_modification"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_2) == 0
 }
@@ -103,7 +107,7 @@ if {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents( "DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
+    Events := utils.FilterEvents(LogEvents,  "DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -123,7 +127,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents( "DynamiteFileSharingSettingsProto external_file_sharing_setting", utils.TopLevelOU)
+    SettingName := "DynamiteFileSharingSettingsProto external_file_sharing_setting"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -136,7 +141,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents( "DynamiteFileSharingSettingsProto external_file_sharing_setting", utils.TopLevelOU)
+    SettingName := "DynamiteFileSharingSettingsProto external_file_sharing_setting"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -151,7 +157,7 @@ if {
 #--
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents( "RoomOtrSettingsProto otr_state", OU)
+    Events := utils.FilterEvents(LogEvents,  "RoomOtrSettingsProto otr_state", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -170,7 +176,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents( "RoomOtrSettingsProto otr_state", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "RoomOtrSettingsProto otr_state", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -183,7 +189,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents( "RoomOtrSettingsProto otr_state", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "RoomOtrSettingsProto otr_state", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -198,7 +204,7 @@ if {
 #--
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents( "RestrictChatProto restrictChatToOrganization", OU)
+    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto restrictChatToOrganization", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -217,7 +223,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents( "RestrictChatProto restrictChatToOrganization", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto restrictChatToOrganization", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -230,7 +236,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents( "RestrictChatProto restrictChatToOrganization", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto restrictChatToOrganization", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
@@ -241,7 +247,7 @@ if {
 #--
 NonCompliantOUs4_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents( "RestrictChatProto externalChatRestriction", OU)
+    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -260,7 +266,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents( "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -273,7 +279,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents( "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_2) == 0
 }
@@ -288,7 +294,7 @@ if {
 #--
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents( "Chat app Settings - Chat apps enabled", OU)
+    Events := utils.FilterEvents(LogEvents,  "Chat app Settings - Chat apps enabled", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
     # other OUs we assume they inherit from a parent OU if they have
@@ -307,7 +313,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents( "Chat app Settings - Chat apps enabled", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "Chat app Settings - Chat apps enabled", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -320,7 +326,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents( "Chat app Settings - Chat apps enabled", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents,  "Chat app Settings - Chat apps enabled", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
