@@ -1340,7 +1340,7 @@ if {
 Apps := {"Blogger", "Google Books", "Google Pay", "Google Photos", "Google Play",
     "Google Play Console", "Location History", "YouTube"}
 
-AppsAllowingTakoutOU contains App {
+AppsAllowingTakoutOU contains App if {
     Events := utils.FilterEventsNoOU(LogEvents, "UserTakeoutSettingsProto User Takeout ")
     some App in Apps
     Filtered := {Event | some Event in Events; Event.AppName == App; Event.OrgUnit == data.OrgUnit}
@@ -1352,7 +1352,7 @@ AppsAllowingTakoutOU contains App {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
-NonCompliantOUs14_1 contains OU {
+NonCompliantOUs14_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "UserTakeoutSettingsProto User Takeout ", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
