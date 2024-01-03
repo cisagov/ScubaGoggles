@@ -110,7 +110,7 @@ test_Group_Incorrect_V1 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Group 1."
 }
 
-test_Group_Correct_V2 if {
+test_Group_Incorrect_V2 if {
     # Test multiple groups where 1 is incorrect
     PolicyId := "GWS.GROUPS.7.1v0.1"
     Output := tests with input as {
@@ -147,7 +147,7 @@ test_Group_Correct_V2 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Group 2."
 }
 
-test_Group_Correct_V3 if {
+test_Group_Incorrect_V3 if {
     # Test multiple groups where both are incorrect
     PolicyId := "GWS.GROUPS.7.1v0.1"
     Output := tests with input as {
@@ -184,7 +184,7 @@ test_Group_Correct_V3 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Group 1, Group 2."
 }
 
-test_Group_Correct_V3 if {
+test_Group_Incorrect_V4 if {
     # Test multiple groups where both are incorrect in multiple ways
     PolicyId := "GWS.GROUPS.7.1v0.1"
     Output := tests with input as {

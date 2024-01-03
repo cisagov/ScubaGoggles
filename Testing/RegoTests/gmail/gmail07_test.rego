@@ -1270,7 +1270,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V3 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V3 if {
+test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
     PolicyId := "GWS.GMAIL.7.4v0.1"
     Output := tests with input as {

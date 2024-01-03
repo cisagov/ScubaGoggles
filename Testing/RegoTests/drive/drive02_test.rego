@@ -277,9 +277,9 @@ test_Sharing_Incorrect_V5 if {
 }
 
 #
-# Baseline 2.2 - Policy 2
+# GWS.DRIVEDOCS.2.2v0.1
 #--
-test_Sharing_Correct_V1 if {
+test_Managers_Correct_V1 if {
     # Test sharing setting when there's only one event
     PolicyId := "GWS.DRIVEDOCS.2.2v0.1"
     Output := tests with input as {
@@ -307,7 +307,7 @@ test_Sharing_Correct_V1 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Correct_V2 if {
+test_Managers_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
     PolicyId := "GWS.DRIVEDOCS.2.2v0.1"
     Output := tests with input as {
@@ -345,7 +345,7 @@ test_Sharing_Correct_V2 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Correct_V3 if {
+test_Managers_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
     PolicyId := "GWS.DRIVEDOCS.2.2v0.1"
     Output := tests with input as {
@@ -383,7 +383,7 @@ test_Sharing_Correct_V3 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Incorrect_V1 if {
+test_Managers_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
     PolicyId := "GWS.DRIVEDOCS.2.2v0.1"
     Output := tests with input as {
@@ -415,7 +415,7 @@ test_Sharing_Incorrect_V1 if {
     ])
 }
 
-test_Sharing_Incorrect_V2 if {
+test_Managers_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
     PolicyId := "GWS.DRIVEDOCS.2.2v0.1"
     Output := tests with input as {
@@ -443,7 +443,7 @@ test_Sharing_Incorrect_V2 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
-test_Sharing_Incorrect_V3 if {
+test_Managers_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
     PolicyId := "GWS.DRIVEDOCS.2.2v0.1"
     Output := tests with input as {
@@ -481,7 +481,7 @@ test_Sharing_Incorrect_V3 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
-test_Sharing_Incorrect_V4 if {
+test_Managers_Incorrect_V4 if {
     # Test sharing setting when top OU is correct but secondary isn't
     PolicyId := "GWS.DRIVEDOCS.2.2v0.1"
     Output := tests with input as {
@@ -519,7 +519,7 @@ test_Sharing_Incorrect_V4 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
 }
 
-test_Sharing_Incorrect_V5 if {
+test_Managers_Incorrect_V5 if {
     # Test sharing setting when top OU is missing
     PolicyId := "GWS.DRIVEDOCS.2.2v0.1"
     Output := tests with input as {
@@ -552,9 +552,9 @@ test_Sharing_Incorrect_V5 if {
 }
 
 #
-# Baseline 2.2 - Policy 3
+# GWS.DRIVEDOCS.2.3v0.1
 #--
-test_Sharing_Correct_V1 if {
+test_Outside_Correct_V1 if {
     # Test sharing setting when there's only one event
     PolicyId := "GWS.DRIVEDOCS.2.3v0.1"
     Output := tests with input as {
@@ -585,7 +585,7 @@ test_Sharing_Correct_V1 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Correct_V2 if {
+test_Outside_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
     PolicyId := "GWS.DRIVEDOCS.2.3v0.1"
     Output := tests with input as {
@@ -629,7 +629,7 @@ test_Sharing_Correct_V2 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Correct_V3 if {
+test_Outside_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
     PolicyId := "GWS.DRIVEDOCS.2.3v0.1"
     Output := tests with input as {
@@ -673,7 +673,7 @@ test_Sharing_Correct_V3 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Incorrect_V1 if {
+test_Outside_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
     PolicyId := "GWS.DRIVEDOCS.2.3v0.1"
     Output := tests with input as {
@@ -705,7 +705,7 @@ test_Sharing_Incorrect_V1 if {
     ])
 }
 
-test_Sharing_Incorrect_V2 if {
+test_Outside_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
     PolicyId := "GWS.DRIVEDOCS.2.3v0.1"
     Output := tests with input as {
@@ -736,7 +736,7 @@ test_Sharing_Incorrect_V2 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
-test_Sharing_Incorrect_V3 if {
+test_Outside_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
     PolicyId := "GWS.DRIVEDOCS.2.3v0.1"
     Output := tests with input as {
@@ -780,7 +780,7 @@ test_Sharing_Incorrect_V3 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
-test_Sharing_Incorrect_V4 if {
+test_Outside_Incorrect_V4 if {
     # Test sharing setting when top OU is correct but secondary isn't
     PolicyId := "GWS.DRIVEDOCS.2.3v0.1"
     Output := tests with input as {
@@ -824,7 +824,7 @@ test_Sharing_Incorrect_V4 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
 }
 
-test_Sharing_Incorrect_V5 if {
+test_Outside_Incorrect_V5 if {
     # Test sharing setting when top OU is missing
     PolicyId := "GWS.DRIVEDOCS.2.3v0.1"
     Output := tests with input as {
@@ -860,9 +860,9 @@ test_Sharing_Incorrect_V5 if {
 }
 
 #
-# Baseline 2.2 - Policy 4
+# GWS.DRIVEDOCS.2.4v0.1
 #--
-test_Sharing_Correct_V1 if {
+test_SharedDrive_Correct_V1 if {
     # Test sharing setting when there's only one event
     PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
     Output := tests with input as {
@@ -893,7 +893,7 @@ test_Sharing_Correct_V1 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Correct_V2 if {
+test_SharedDrive_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
     PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
     Output := tests with input as {
@@ -937,7 +937,7 @@ test_Sharing_Correct_V2 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Correct_V3 if {
+test_SharedDrive_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
     PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
     Output := tests with input as {
@@ -981,7 +981,7 @@ test_Sharing_Correct_V3 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Incorrect_V1 if {
+test_SharedDrive_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
     PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
     Output := tests with input as {
@@ -1013,7 +1013,7 @@ test_Sharing_Incorrect_V1 if {
     ])
 }
 
-test_Sharing_Incorrect_V2 if {
+test_SharedDrive_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
     PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
     Output := tests with input as {
@@ -1044,7 +1044,7 @@ test_Sharing_Incorrect_V2 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
-test_Sharing_Incorrect_V3 if {
+test_SharedDrive_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
     PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
     Output := tests with input as {
@@ -1088,7 +1088,7 @@ test_Sharing_Incorrect_V3 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
-test_Sharing_Incorrect_V4 if {
+test_SharedDrive_Incorrect_V4 if {
     # Test sharing setting when top OU is correct but secondary isn't
     PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
     Output := tests with input as {
@@ -1132,7 +1132,7 @@ test_Sharing_Incorrect_V4 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
 }
 
-test_Sharing_Incorrect_V5 if {
+test_SharedDrive_Incorrect_V5 if {
     # Test sharing setting when top OU is missing
     PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
     Output := tests with input as {
@@ -1168,9 +1168,9 @@ test_Sharing_Incorrect_V5 if {
 }
 
 #
-# Baseline 2.2 - Policy 5
+# GWS.DRIVEDOCS.2.5v0.1
 #--
-test_Sharing_Correct_V1 if {
+test_Viewers_Correct_V1 if {
     # Test sharing setting when there's only one event
     PolicyId := "GWS.DRIVEDOCS.2.5v0.1"
     Output := tests with input as {
@@ -1198,7 +1198,7 @@ test_Sharing_Correct_V1 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Correct_V2 if {
+test_Viewers_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
     PolicyId := "GWS.DRIVEDOCS.2.5v0.1"
     Output := tests with input as {
@@ -1236,7 +1236,7 @@ test_Sharing_Correct_V2 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Correct_V3 if {
+test_Viewers_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
     PolicyId := "GWS.DRIVEDOCS.2.5v0.1"
     Output := tests with input as {
@@ -1274,7 +1274,7 @@ test_Sharing_Correct_V3 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_Sharing_Incorrect_V1 if {
+test_Viewers_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
     PolicyId := "GWS.DRIVEDOCS.2.5v0.1"
     Output := tests with input as {
@@ -1306,7 +1306,7 @@ test_Sharing_Incorrect_V1 if {
     ])
 }
 
-test_Sharing_Incorrect_V2 if {
+test_Viewers_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
     PolicyId := "GWS.DRIVEDOCS.2.5v0.1"
     Output := tests with input as {
@@ -1334,7 +1334,7 @@ test_Sharing_Incorrect_V2 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
-test_Sharing_Incorrect_V3 if {
+test_Viewers_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
     PolicyId := "GWS.DRIVEDOCS.2.5v0.1"
     Output := tests with input as {
@@ -1372,7 +1372,7 @@ test_Sharing_Incorrect_V3 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
-test_Sharing_Incorrect_V4 if {
+test_Viewers_Incorrect_V4 if {
     # Test sharing setting when top OU is correct but secondary isn't
     PolicyId := "GWS.DRIVEDOCS.2.5v0.1"
     Output := tests with input as {
@@ -1410,7 +1410,7 @@ test_Sharing_Incorrect_V4 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
 }
 
-test_Sharing_Incorrect_V5 if {
+test_Viewers_Incorrect_V5 if {
     # Test sharing setting when top OU is missing
     PolicyId := "GWS.DRIVEDOCS.2.5v0.1"
     Output := tests with input as {

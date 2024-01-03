@@ -244,7 +244,7 @@ test_Sharing_Incorrect_V4 if {
     RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
 }
 
-test_Sharing_Incorrect_V4 if {
+test_Sharing_Incorrect_V5 if {
     # Test sharing setting when top level OU is missing
     PolicyId := "GWS.DRIVEDOCS.5.1v0.1"
     Output := tests with input as {

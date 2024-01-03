@@ -714,7 +714,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
+test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V3 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
     PolicyId := "GWS.GMAIL.6.3v0.1"
     Output := tests with input as {
@@ -765,7 +765,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
 }
 
 
-test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V3 if {
+test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V4 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
     PolicyId := "GWS.GMAIL.6.3v0.1"
     Output := tests with input as {

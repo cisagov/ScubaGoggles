@@ -319,7 +319,7 @@ test_Limit_Incorrect_V4 if {
         "is non-compliant; manual check recommended."
     ])}
 
-test_Limit_Incorrect_V4 if {
+test_Limit_Incorrect_V5 if {
     # Test no relevant events in top-level OU
     PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
     Output := tests with input as {
