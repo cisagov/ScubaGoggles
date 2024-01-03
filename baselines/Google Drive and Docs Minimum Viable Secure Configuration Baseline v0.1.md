@@ -56,7 +56,7 @@ Agencies SHOULD disable sharing outside of the organization's domain.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.2v0.1
-If disabling sharing outside of the organization's domain, then agencies SHOULD also disable users' receiving files from outside of the organization's domain.
+Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
 - Rationale
   - If the agency decides that external sharing should be disabled, users should not be able to receive files from outside the organization as well. Disabling external sharing ensures that all communication stays within the organization, which helps mitigate risk from malicious files from an external source.
@@ -324,7 +324,7 @@ This section covers whether users have access to Google Drive with the Drive SDK
 ### Policies
 
 #### GWS.DRIVEDOCS.4.1v0.1
-Agencies SHOULD disable Drive SDK access to restrict information sharing and prevent data leakage.
+Agencies SHOULD disable Drive SDK access.
 
 - Rationale
   - The Drive SDK allows third-party external applications to access data and files from within Drive. Disabling the Drive SDK prevents third party applications from accessing the files and data from within the organization, which protects against data leakage and unintentional information sharing.
@@ -361,7 +361,7 @@ This section covers whether users can use add-ons in file editors within Google 
 ### Policies
 
 #### GWS.DRIVEDOCS.5.1v0.1
-Agencies SHALL disable Add-Ons with the exception of those that are approved within the organization.
+Agencies SHALL disable Add-Ons.
 
 - Rationale
   - Google Docs Add-Ons can pose a great security risk based on the permissions the add-on is given. Add-ons can be given full access to the google drive, permission to add or edit existing documents, share documents, connect to external services, and more. Any add-on needs to be fully vetted before given access to the google workspace. Therefore, unapproved add-ons need to be disabled.
@@ -393,7 +393,7 @@ To configure the settings for add-ons:
 
 ## 6. Drive for Desktop
 
-This section covers that Google Drive for Desktop, if not disabled entirely, should only be allowed on authorized devices.
+This section covers the implications of not disabling Drive for Desktop and considerations around authorized device use.
 
 ### Policies
 
