@@ -46,16 +46,6 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.CALENDAR.1.2v0.1
-External sharing options for primary calendars between multiple components within an organization MAY be configured.
-
-- Rationale
-  - Prevent data leakage by restricting the information viewable by internal users when a user shares their calendar by configuring additional settings on shared information between components.
-- Last Modified: November 14, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
 ### Resources
 
 -   [Google Workspace Admin Help: Set Calendar sharing options](https://support.google.com/a/answer/60765?hl=en#zippy=%2Cset-a-default-for-internal-sharing%2Callow-or-restrict-external-sharing)
@@ -131,17 +121,6 @@ External sharing options for secondary calendars SHALL be configured to "Only fr
 
 - Rationale
   - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-#### GWS.CALENDAR.3.2v0.1
-
-External sharing options for secondary calendars between multiple components within an organization MAY be configured.
-
-- Rationale
-  - Prevent data leakage by restricting the information viewable by internal users when a user shares their calendar by configuring additional settings on shared information between components.
 - Last Modified: July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
