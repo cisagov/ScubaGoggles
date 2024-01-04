@@ -46,6 +46,9 @@ Additionally, some events will not be visible due to data retention time limits,
 
 Many of the these controls can be scoped down to the organizational unit level. We recommend [creating a new organization unit](https://support.google.com/a/answer/182537?hl=en#:~:text=An%20organizational%20unit%20is%20simply,level%20(parent)%20organizational%20unit) and applying these controls just to that new organizational unit for testing. Rerun ScubaGoggles after you've saved your configuration changes to see if the policy requirement is met.
 
+> [!IMPORTANT]
+> Use of this tool requires access to an internet browser to authenticate with Google Workspace as well as view the html report output.
+
 ## Getting started
 
 ### Downloading the Latest Release
@@ -294,6 +297,33 @@ If an authorization error similar to the one below appears:
 <HttpError 403 when requesting https://admin.googleapis.com/admin/directory/v1/customers/my_customer?alt=json returned "Not Authorized to access this resource/api">
 ```
 Ensure that you consented to the following API scopes as a user with the proper [permissions to consent](#permissions) and have enabled the required [APIs and Services](#create-an-oauth-credential).
+
+### Unable to view HTML report due to environment limitations 
+
+If you are unable to view the HTML report in a browser window, the results of the complicance scan can be viewed in their raw JSON format. 
+
+We recommend running the compliance report in quiet mode. This can be done with the `--quiet` command: 
+
+```scubagoggles gws --quiet```
+
+Once the scan is complete, navigate to the output folder and open the `TestResults.json` file. 
+
+Each baseline will appear in the following format: 
+
+```
+    {
+        "ActualValue": {
+            "NonCompliantOUs": []
+        },
+        "Criticality": "Shall",
+        "NoSuchEvent": false,
+        "PolicyId": "GWS.CHAT.5.1v0.1",
+        "ReportDetails": "Requirement met in all OUs.",
+        "RequirementMet": true
+    },
+
+```
+The `RequirementMet` field indicates whether the baseline associated with the given PolicyId is compliant or not. 
 
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative Commons Zero license. With developer approval, contributions may be submitted with an alternate compatible license. If accepted, those contributions will be listed herein with the appropriate license.
