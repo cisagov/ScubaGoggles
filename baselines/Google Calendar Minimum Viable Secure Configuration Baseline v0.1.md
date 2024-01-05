@@ -66,9 +66,6 @@ To configure the settings for External Sharing in Primary Calendar:
 4.  Select **Only free/busy information (hide event details)**.
 5.  Select **Save**.
 
-#### GWS.CALENDAR.1.2v0.1 Instructions
-1.  There is no implementation for this policy
-
 ## 2. External Invitations Warnings
 
 This section determines whether users are warned when inviting one or more guests from outside of their domain.
@@ -146,10 +143,6 @@ To configure the settings for External Sharing in secondary calendars:
 3.  Select **General settings -\> External sharing options for secondary calendars**.
 4.  Select **Only free/busy information (hide event details)**.
 5.  Select **Save**.
-
-#### GWS.CALENDAR.3.2v0.1 Instructions
-
-1.  There is no implementation for this policy
 
 ## 4. Calendar Interop Management
 
