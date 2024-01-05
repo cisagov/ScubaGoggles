@@ -696,7 +696,7 @@ To configure the settings for Spoofing and Authentication Protection:
 
 ## 8. User Email Uploads
 
-This section enables users to import their email and contacts from non-Google webmail accounts such as Yahoo!, Hotmail, or AOL.
+This section deals with the feature that allows users to upload emails.
 
 ### Policies
 
