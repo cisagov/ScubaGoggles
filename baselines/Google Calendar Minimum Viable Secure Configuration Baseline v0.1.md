@@ -37,7 +37,7 @@ This section determines what information is shared from primary calendars with e
 ### Policies
 
 #### GWS.CALENDAR.1.1v0.1
-External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)".
+External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."
 
 - Rationale
   - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
