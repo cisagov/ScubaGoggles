@@ -197,16 +197,6 @@ This section covers whether users can create new shared drives to share with oth
 ### Policies
 
 #### GWS.DRIVEDOCS.2.1v0.1
-Agencies SHOULD enable shared drive creation to allow for effective collaboration.
-
-- Rationale
-  - Disabling shared drives would make collaboration difficult. Shared drives allow users in the organization to work together on one or multiple documents concurrently.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-#### GWS.DRIVEDOCS.2.2v0.1
 Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.
 
 - Rationale
@@ -216,7 +206,7 @@ Agencies SHOULD NOT allow members with manager access to override shared drive c
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.DRIVEDOCS.2.3v0.1
+#### GWS.DRIVEDOCS.2.2v0.1
 Agencies SHOULD NOT allow users outside of their organization to access files in shared drives.
 
 - Rationale
@@ -226,7 +216,7 @@ Agencies SHOULD NOT allow users outside of their organization to access files in
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.DRIVEDOCS.2.4v0.1
+#### GWS.DRIVEDOCS.2.3v0.1
 Agencies SHALL allow users who are not shared drive members to be added to files.
 
 - Rationale
@@ -236,7 +226,7 @@ Agencies SHALL allow users who are not shared drive members to be added to files
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.DRIVEDOCS.2.5v0.1
+#### GWS.DRIVEDOCS.2.4v0.1
 Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.
 
 - Rationale
@@ -267,18 +257,15 @@ To configure the settings for Shared drive creation:
 5.  Select **Save**
 
 #### GWS.DRIVEDOCS.2.1v0.1 Instructions
-1.  Uncheck the **Prevent users in organization from creating new shared drives** checkbox.
-
-#### GWS.DRIVEDOCS.2.2v0.1 Instructions
 1.  Uncheck the **Allow members with manager access to override the settings below** checkbox.
 
-#### GWS.DRIVEDOCS.2.3v0.1 Instructions
+#### GWS.DRIVEDOCS.2.2v0.1 Instructions
 1.  Uncheck the **Allow users outside organization to access files in shared drives** checkbox.
 
-#### GWS.DRIVEDOCS.2.4v0.1 Instructions
+#### GWS.DRIVEDOCS.2.3v0.1 Instructions
 1.  Check the **Allow people who aren't shared drive members to be added to files** checkbox.
 
-#### GWS.DRIVEDOCS.2.5v0.1 Instructions
+#### GWS.DRIVEDOCS.2.4v0.1 Instructions
 1.  Check the **Allow viewers and commenters to download, print, and copy files** checkbox.
 
 ## 3. Security Updates for Files
