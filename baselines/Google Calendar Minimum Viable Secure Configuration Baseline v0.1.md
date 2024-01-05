@@ -46,16 +46,6 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.CALENDAR.1.2v0.1
-External sharing options for primary calendars between multiple components within an organization MAY be configured.
-
-- Rationale
-  - Prevent data leakage by restricting the information viewable by internal users when a user shares their calendar by configuring additional settings on shared information between components.
-- Last Modified: November 14, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
 ### Resources
 
 -   [Google Workspace Admin Help: Set Calendar sharing options](https://support.google.com/a/answer/60765?hl=en#zippy=%2Cset-a-default-for-internal-sharing%2Callow-or-restrict-external-sharing)
@@ -75,9 +65,6 @@ To configure the settings for External Sharing in Primary Calendar:
 3.  Select **Sharing settings** -\> **External sharing options for primary calendars**.
 4.  Select **Only free/busy information (hide event details)**.
 5.  Select **Save**.
-
-#### GWS.CALENDAR.1.2v0.1 Instructions
-1.  There is no implementation for this policy
 
 ## 2. External Invitations Warnings
 
@@ -136,17 +123,6 @@ External sharing options for secondary calendars SHALL be configured to "Only fr
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.CALENDAR.3.2v0.1
-
-External sharing options for secondary calendars between multiple components within an organization MAY be configured.
-
-- Rationale
-  - Prevent data leakage by restricting the information viewable by internal users when a user shares their calendar by configuring additional settings on shared information between components.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
 ### Resources
 
 -   [Google Workspace Admin Help: Set Calendar sharing options](https://support.google.com/a/answer/60765?hl=en#zippy=%2Cset-a-default-for-internal-sharing%2Callow-or-restrict-external-sharing)
@@ -167,10 +143,6 @@ To configure the settings for External Sharing in secondary calendars:
 3.  Select **General settings -\> External sharing options for secondary calendars**.
 4.  Select **Only free/busy information (hide event details)**.
 5.  Select **Save**.
-
-#### GWS.CALENDAR.3.2v0.1 Instructions
-
-1.  There is no implementation for this policy
 
 ## 4. Calendar Interop Management
 
