@@ -127,7 +127,7 @@ This section determines what information is shared from secondary calendars with
 ### Policies
 
 #### GWS.CALENDAR.3.1v0.1
-External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)".
+External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)."
 
 - Rationale
   - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
