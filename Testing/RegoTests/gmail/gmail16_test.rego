@@ -113,7 +113,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -157,7 +157,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -338,7 +338,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 

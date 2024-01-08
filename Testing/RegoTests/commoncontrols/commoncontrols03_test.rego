@@ -250,7 +250,7 @@ test_SSO_Incorrect_V4 if {
         "is non-compliant; manual check recommended."
     ])}
 
-test_SSO_Incorrect_V4 if {
+test_SSO_Incorrect_V5 if {
     # Test multiple OUs
     PolicyId := "GWS.COMMONCONTROLS.3.1v0.1"
     Output := tests with input as {

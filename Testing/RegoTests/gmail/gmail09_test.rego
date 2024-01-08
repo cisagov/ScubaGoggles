@@ -99,7 +99,7 @@ test_ImapAccess_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -137,7 +137,7 @@ test_ImapAccess_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -300,7 +300,7 @@ test_ImapAccess_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
@@ -408,7 +408,7 @@ test_PopAccess_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -419,7 +419,7 @@ test_PopAccess_Correct_V3 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_PopAccess_Correct_V3 if {
+test_PopAccess_Correct_V4 if {
     # Test POP Access when there's correct events in multiple OUs
     PolicyId := "GWS.GMAIL.9.2v0.1"
     Output := tests with input as {
@@ -446,7 +446,7 @@ test_PopAccess_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -610,7 +610,7 @@ test_PopAccess_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
