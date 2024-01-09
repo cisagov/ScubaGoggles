@@ -393,7 +393,7 @@ To configure the settings for add-ons:
 
 ## 6. Drive for Desktop
 
-This section covers the implications of not disabling Drive for Desktop and considerations around authorized device use.
+This section addresses Drive for Desktop, a feature that enables users to interact with their Drive files directly through their desktop's file explorer or finder, rather than through the browser.
 
 ### Policies
 
