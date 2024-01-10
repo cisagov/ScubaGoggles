@@ -962,12 +962,12 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 #### GWS.COMMONCONTROLS.11.4v0.1 Instructions
 1.  Select **Settings.**
-2.  Select **Unconfigured third-party apps** and select **Don't allow users to access any third-party apps**
+2.  Select **Internal apps** and uncheck the box next to **Trust internal apps.**
 3.  Select **SAVE.**
 
 #### GWS.COMMONCONTROLS.11.5v0.1 Instructions
 1.  Select **Settings.**
-2.  Select **Internal apps** and uncheck the box next to **Trust internal apps.**
+2.  Select **Unconfigured third-party apps** and select **Don't allow users to access any third-party apps**
 3.  Select **SAVE.**
 
 It should be noted that admins will have to manually approve each trusted app. The implementation steps for this activity are outlined in Google's [documentation on controlling which third-party & internal apps access GWS data](https://support.google.com/a/answer/7281227) (also listed under Resources).
