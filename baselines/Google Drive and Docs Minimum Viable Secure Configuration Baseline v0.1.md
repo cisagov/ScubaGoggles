@@ -60,7 +60,7 @@ Agencies SHOULD disable users' receiving files from outside of the organization'
 
 - Rationale
   - If the agency decides that external sharing should be disabled, users should not be able to receive files from outside the organization as well. Disabling external sharing ensures that all communication stays within the organization, which helps mitigate risk from malicious files from an external source.
-- Last Modified: July 10, 2023
+- Last Modified: January 9, 2024
 - Note:
   - This policy only applies if sharing outside was disabled in Policy 1.1
 
@@ -365,7 +365,7 @@ Agencies SHALL disable Add-Ons.
 
 - Rationale
   - Google Docs Add-Ons can pose a great security risk based on the permissions the add-on is given. Add-ons can be given full access to the google drive, permission to add or edit existing documents, share documents, connect to external services, and more. Any add-on needs to be fully vetted before given access to the google workspace. Therefore, unapproved add-ons need to be disabled.
-- Last Modified: July 10, 2023
+- Last Modified: January 9, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
