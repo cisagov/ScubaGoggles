@@ -46,10 +46,10 @@ Additionally, some events will not be visible due to data retention time limits,
 
 Many of the these controls can be scoped down to the organizational unit level. We recommend [creating a new organization unit](https://support.google.com/a/answer/182537?hl=en#:~:text=An%20organizational%20unit%20is%20simply,level%20(parent)%20organizational%20unit) and applying these controls just to that new organizational unit for testing. Rerun ScubaGoggles after you've saved your configuration changes to see if the policy requirement is met.
 
-> [!IMPORTANT]
-> Use of this tool requires access to an internet browser to authenticate with Google Workspace as well as view the html report output.
-
 ## Getting started
+
+> [!IMPORTANT]
+> Use of this tool requires access to an internet browser for initial setup and to view the html report output.
 
 ### Downloading the Latest Release
 To download ScubaGoggles:
@@ -300,13 +300,15 @@ Ensure that you consented to the following API scopes as a user with the proper 
 
 ### Unable to view HTML report due to environment limitations 
 
-If you are unable to view the HTML report in a browser window, the results of the complicance scan can be viewed in their raw JSON format. 
+If you are unable to view the HTML report in a browser window, the results of the conformance scan can be viewed in their raw JSON format. 
 
-We recommend running the compliance report in quiet mode. This can be done with the `--quiet` command: 
+We recommend running the conformance report in quiet mode to stop the web browser from being opened automatically. This can be done with the `--quiet` command: 
 
 ```scubagoggles gws --quiet```
 
-Once the scan is complete, navigate to the output folder and open the `TestResults.json` file. 
+Once the scan is complete, navigate to the output folder. Within the output folder, we can access the generated HTML reports, or view the results in JSON format. 
+
+To view the JSON, open the `TestResults.json` file. 
 
 Each baseline will appear in the following format: 
 
@@ -324,6 +326,7 @@ Each baseline will appear in the following format:
 
 ```
 The `RequirementMet` field indicates whether the baseline associated with the given PolicyId is compliant or not. 
+
 
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative Commons Zero license. With developer approval, contributions may be submitted with an alternate compatible license. If accepted, those contributions will be listed herein with the appropriate license.
