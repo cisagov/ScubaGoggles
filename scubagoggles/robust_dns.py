@@ -68,8 +68,8 @@ class RobustDNSClient:
         while try_number < max_tries:
             try_number += 1
             try:
-                # No exception was thrown, we got our answer, so break out of the retry loop and set
-                # success to True, no need to retry the traditional query or retry with DoH.
+                # No exception was thrown, we got our answer, so break out of the retry loop and
+                # set success to True, no need to retry the traditional query or retry with DoH.
                 response = dns.resolver.resolve(qname, "TXT")
                 for answer in response:
                     answers.append(answer.to_text().strip('"')) # Strip
@@ -82,8 +82,8 @@ class RobustDNSClient:
                     "query_result": f"Query returned {len(response)} txt records"})
                 break
             except dns.resolver.NoAnswer:
-                # The answer section was empty. This usually means that while the domain exists, but
-                # there are no records of the requested type. No need to retry the traditional
+                # The answer section was empty. This usually means that while the domain exists,
+                # but there are no records of the requested type. No need to retry the traditional
                 # query, this was not a transient failure. Don't set success to True though, as we
                 # want to retry this query from a public resolver, in case the internal DNS server
                 # returns a different answer than what is served to the public (i.e., split horizon
@@ -95,8 +95,9 @@ class RobustDNSClient:
                     "query_result": "Query returned 0 txt records"})
                 break
             except dns.resolver.NXDOMAIN:
-                # The server returned NXDomain, no need to retry the traditional query or retry with
-                # DoH, this was not a transient failure. Break out of loop and set success to True
+                # The server returned NXDomain, no need to retry the traditional query or retry
+                # with DoH, this was not a transient failure. Break out of loop and set success to
+                # True
                 success = True
                 log_entries.append({
                     "query_name": qname,
@@ -104,7 +105,8 @@ class RobustDNSClient:
                     "query_result": "Query returned NXDOMAIN"})
                 break
             except Exception as exception:
-                # The query failed, possibly a transient failure. Retry if we haven't reached max_tries.
+                # The query failed, possibly a transient failure. Retry if we haven't reached
+                # max_tries.
                 log_entries.append({
                     "query_name": qname,
                     "query_method": "traditional",
@@ -171,19 +173,20 @@ class RobustDNSClient:
                     response = requests.get(uri, headers=headers, timeout=5).json()
                     if response['Status'] == 0:
                         # 0 indicates there was no error
+                        nanswers = len(response['Answer'])
                         log_entries.append({
                             "query_name": qname,
                             "query_method": "DoH",
-                            "query_result": f"Query returned {len(response['Answer'])} txt records"})
+                            "query_result": f"Query returned {nanswers} txt records"})
                         for answer in response['Answer']:
                             answers.append(answer['data'].replace('"', ''))
                         success = True
                         break
                     if response['Status'] == 3:
-                        # 3 indicates NXDomain. The DNS query succeeded, but the domain did not exist.
-                        # Set success to True, because event though the domain does not exist, the
-                        # query succeeded, and this came from an external resolver so split horizon is
-                        # not an issue here.
+                        # 3 indicates NXDomain. The DNS query succeeded, but the domain did not
+                        # exist. Set success to True, because event though the domain does not
+                        # exist, the query succeeded, and this came from an external resolver so
+                        # split horizon is not an issue here.
                         log_entries.append({
                             "query_name": qname,
                             "query_method": "DoH",
@@ -197,8 +200,8 @@ class RobustDNSClient:
                         "query_method": "DoH",
                         "query_result": f"Query returned response code {response['Status']}"})
                 except Exception as exception:
-                    # The DoH query failed, likely due to a network issue. Retry if we haven't reached
-                    # $MaxTries.
+                    # The DoH query failed, likely due to a network issue. Retry if we haven't
+                    # reached max_trues.
                     log_entries.append({
                         "query_name": qname,
                         "query_method": "DoH",
