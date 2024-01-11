@@ -148,7 +148,6 @@ def traditional_query(qname, max_tries):
     while try_number < max_tries:
         try_number += 1
         try:
-            x/2
             # No exception was thrown, we got our answer, so break out of the retry loop and set
             # success to True, no need to retry the traditional query or retry with DoH.
             response = dns.resolver.resolve(qname, "TXT")
@@ -209,7 +208,6 @@ def get_doh_server() -> str:
             # arbitrary, as we don't care what the answer is, only if the query succeeds/fails.
             # a.root-servers.net, the address of one of the DNS root servers, was chosen as a
             # benign, highly-available domain.
-            print("DoH query")
             uri = f"https://{server}/dns-query?name=a.root-servers.net"
             headers = {"accept":"application/dns-json"}
             requests.get(uri, headers=headers, timeout=2).json()
@@ -251,7 +249,6 @@ def doh_query(qname, max_tries):
             uri = f"https://{doh_server}/dns-query?name={qname}&type=txt"
             headers = {"accept":"application/dns-json"}
             try:
-                print("DoH query")
                 response = requests.get(uri, headers=headers, timeout=5).json()
                 if response['Status'] == 0:
                     # 0 indicates there was no error
