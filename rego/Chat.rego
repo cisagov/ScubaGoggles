@@ -103,7 +103,7 @@ if {
 ##############
 
 #
-# Baseline GWS.CHAT.2.2v0.1
+# Baseline GWS.CHAT.2.1v0.1
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
