@@ -48,9 +48,9 @@ if {
     some Event in Item.events
     Event.name == "TOGGLE_SERVICE_ENABLED"
 
-    "SERVICE_NAME" in [Parameter.name | some Parameter in Event.parameters]
-    "ORG_UNIT_NAME" in [Parameter.name | some Parameter in Event.parameters]
-    "NEW_VALUE" in [Parameter.name | some Parameter in Event.parameters]
+    "SERVICE_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
 
     ServiceName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SERVICE_NAME"][0]
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
