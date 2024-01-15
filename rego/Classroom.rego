@@ -13,7 +13,7 @@ LogEvents := utils.GetEvents("classroom_logs")
 # Baseline GWS.CLASSROOM.1.1v0.1
 #--
 NonCompliantOUs1_1 contains OU if {
-   some OU in utils.OUsWithEvents
+    some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", OU)
     count(Events) > 0 # Ignore OUs without any events. We're already
     # asserting that the top-level OU has at least one event; for all
