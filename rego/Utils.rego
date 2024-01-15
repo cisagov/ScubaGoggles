@@ -145,6 +145,7 @@ if {
     # Extract the values that are there for every event
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
+
     # Extract the values that are there for only some of the events
     DomainName := GetEventDomain(Event)
     AppName := GetEventApp(Event)
