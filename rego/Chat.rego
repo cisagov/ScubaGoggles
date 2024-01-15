@@ -15,10 +15,10 @@ LogEvents := utils.GetEvents("chat_logs")
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ChatArchivingProto chatsDefaultToOffTheRecord", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
@@ -58,10 +58,10 @@ if {
 NonCompliantOUs1_2 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "ChatArchivingProto allow_chat_archiving_setting_modification", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
@@ -108,10 +108,10 @@ if {
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "NO_FILES"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -158,10 +158,10 @@ if {
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "RoomOtrSettingsProto otr_state", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     not contains("DEFAULT_ON_THE_RECORD ALWAYS_ON_THE_RECORD", LastEvent.NewValue)
 }
@@ -205,10 +205,10 @@ if {
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "RestrictChatProto restrictChatToOrganization", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
@@ -248,10 +248,10 @@ if {
 NonCompliantOUs4_2 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "NO_RESTRICTION"
 }
@@ -295,10 +295,10 @@ if {
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "Chat app Settings - Chat apps enabled", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }

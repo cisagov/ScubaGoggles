@@ -15,10 +15,10 @@ LogEvents := utils.GetEvents("classroom_logs")
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "1"
 }
@@ -59,10 +59,10 @@ if {
 NonCompliantOUs1_2 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup which_classes_can_users_join", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "1"
 }
@@ -108,10 +108,10 @@ if {
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ApiDataAccessSettingProto api_access_enabled", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -156,10 +156,10 @@ if {
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "RosterImportSettingsProto sis_integrator", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "SIS_INTEGRATOR_NONE"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -204,10 +204,10 @@ if {
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "ONLY_TEACHERS_CAN_UNENROLL_STUDENTS"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"

@@ -35,10 +35,10 @@ LogEvents := utils.GetEvents("gmail_logs")
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
@@ -236,10 +236,10 @@ NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Attachment safety Enable: protect against encrypted attachments from untrusted senders"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -281,10 +281,10 @@ NonCompliantOUs5_2 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Attachment safety Enable: protect against attachments with scripts from untrusted senders"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -346,10 +346,10 @@ NonCompliantOUs5_3 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Attachment safety Enable: Protect against anomalous attachment types in emails"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -393,10 +393,10 @@ NonCompliantOUs5_4 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Attachment safety Enable: automatically enables all future added settings"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -531,10 +531,10 @@ NonCompliantOUs6_1 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Links and external images safety Enable: identify links behind shortened URLs"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -674,10 +674,10 @@ NonCompliantOUs6_4 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Links and external images safety Enable: automatically enables all future added settings"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -791,10 +791,10 @@ NonCompliantOUs7_2 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Spoofing and authentication safety Enable: protect against spoofing of employee names"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -838,10 +838,10 @@ NonCompliantOUs7_3 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -885,10 +885,10 @@ NonCompliantOUs7_4 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Spoofing and authentication safety Enable: protect against any unauthenticated emails"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -936,10 +936,10 @@ NonCompliantOUs7_5 contains OU if {
         "spoofing your domain"
     ])
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -1112,10 +1112,10 @@ NonCompliantOUs7_7 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Spoofing and authentication safety Enable: automatically enables all future added settings"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -1177,10 +1177,10 @@ tests contains {
 NonCompliantOUs8_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ENABLE_EMAIL_USER_IMPORT", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
@@ -1265,10 +1265,10 @@ if {
 NonCompliantOUs9_2 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ENABLE_POP_ACCESS", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
@@ -1361,10 +1361,10 @@ if {
 NonCompliantOUs11_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ENABLE_EMAIL_AUTOFORWARDING", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
@@ -1410,10 +1410,10 @@ if {
 NonCompliantOUs12_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "1"
 }
@@ -1458,10 +1458,10 @@ if {
 NonCompliantOUs13_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "OUTBOUND_RELAY_ENABLED", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
@@ -1506,10 +1506,10 @@ if {
 NonCompliantOUs14_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "OutOfDomainWarningProto disable_untrusted_recipient_warning", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -1617,10 +1617,10 @@ NonCompliantOUs16_1 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -1668,10 +1668,10 @@ if {
 NonCompliantOUs17_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "AttachmentDeepScanningSettingsProto deep_scanning_enabled", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"

@@ -28,10 +28,10 @@ ReportDetailsGroups(Groups) := Message if {
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto collaboration_policy", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "CLOSED"
 }
@@ -77,10 +77,10 @@ NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "GroupsSharingSettingsProto owners_can_allow_external_members"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
 }
@@ -126,10 +126,10 @@ if {
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
 }
@@ -176,10 +176,10 @@ if {
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto who_can_create_groups", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "ADMIN_ONLY"
 }
@@ -224,10 +224,10 @@ if {
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto default_view_topics_access_level", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "MEMBERS"
 }
@@ -274,10 +274,10 @@ if {
 NonCompliantOUs6_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto allow_unlisted_groups", OU)
-    count(Events) > 0 # Ignore OUs without any events. We're already
-    # asserting that the top-level OU has at least one event; for all
-    # other OUs we assume they inherit from a parent OU if they have
-    # no events.
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
 }
