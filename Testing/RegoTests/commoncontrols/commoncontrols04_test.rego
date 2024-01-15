@@ -35,7 +35,7 @@ test_Limit_Correct_V1 if {
 
 test_Limit_Correct_V2 if {
     # Test 1 event, smaller limit than needed
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1" 
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -301,7 +301,6 @@ test_Limit_Incorrect_V4 if {
     PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
-            
         ]},
         "tenant_info": {
             "topLevelOU": "Test Top-Level OU"

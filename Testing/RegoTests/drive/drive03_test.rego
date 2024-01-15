@@ -21,7 +21,7 @@ test_Sharing_Correct_V1 if {
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
-            }, 
+            },
             {
                 "id": {"time": "2022-12-20T00:02:27.672Z"},
                 "events": [{
@@ -224,7 +224,7 @@ test_Sharing_Incorrect_V2 if {
                 }]
             }
         ]},
-        
+
         "tenant_info": {
             "topLevelOU": ""
         }
@@ -372,7 +372,7 @@ test_Sharing_Incorrect_V5 if {
                         {"name": "ORG_UNIT_NAME", "value": "Test Secondary OU"},
                     ]
                 }]
-            }, 
+            },
             {
             "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{

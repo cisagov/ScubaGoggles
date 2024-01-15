@@ -320,7 +320,7 @@ test_External_Chat_Setting_Incorrect_V5 if {
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
-            }   
+            }
         ]},
         "tenant_info": {
             "topLevelOU": "Test Top-Level OU"
@@ -606,7 +606,7 @@ test_AllowListed_Setting_Incorrect_V5 if {
                         {"name": "ORG_UNIT_NAME", "value": "Some other OU"},
                     ]
                 }]
-            }    
+            }
         ]},
         "tenant_info": {
             "topLevelOU": "Test Top-Level OU"

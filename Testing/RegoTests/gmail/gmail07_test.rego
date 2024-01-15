@@ -19,7 +19,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V1 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -53,7 +53,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V2 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -69,7 +69,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V2 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -103,7 +103,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V3 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -119,7 +119,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V3 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
@@ -153,7 +153,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V4 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -170,7 +170,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V4 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
@@ -235,7 +235,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V2 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -269,7 +269,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V3 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -285,7 +285,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V3 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -319,7 +319,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V4 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
@@ -353,7 +353,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V5 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
@@ -369,7 +369,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V5 if {
                             "value": concat("", [
                                 "Spoofing and authentication safety Enable: protect against domain spoofing using ",
                                 "similar domain names"
-                            ]) 
+                            ])
                         },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},

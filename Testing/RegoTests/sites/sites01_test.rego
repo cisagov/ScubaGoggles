@@ -227,7 +227,7 @@ test_Sites_Disabled_Incorrect_V1 if {
                 "events": [{
                     "name": "TOGGLE_SERVICE_ENABLED",
                     "parameters": [
-                        {"name": "SERVICE_NAME", "value": "Something else"}, 
+                        {"name": "SERVICE_NAME", "value": "Something else"},
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -238,7 +238,7 @@ test_Sites_Disabled_Incorrect_V1 if {
                 "events": [{
                     "name": "TOGGLE_SERVICE_ENABLED",
                     "parameters": [
-                        {"name": "SERVICE_NAME", "value": "Sites"}, 
+                        {"name": "SERVICE_NAME", "value": "Sites"},
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -405,7 +405,7 @@ test_Sites_Disabled_Incorrect_V6 if {
                 "events": [{
                     "name": "TOGGLE_SERVICE_ENABLED",
                     "parameters": [
-                        {"name": "SERVICE_NAME", "value": "Something else"}, 
+                        {"name": "SERVICE_NAME", "value": "Something else"},
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]

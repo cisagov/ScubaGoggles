@@ -72,7 +72,7 @@ test_CalInteropMan_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == 
+    RuleOutput[0].ReportDetails ==
                                 "<span class=setting>Calendar interop is not enabled </span> for Test Top-Level Domain"
 }
 

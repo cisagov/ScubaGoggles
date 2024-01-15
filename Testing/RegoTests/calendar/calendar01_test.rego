@@ -390,7 +390,6 @@ test_ExtSharingPrimaryCal_Incorrect_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
-    
 }
 
 #
