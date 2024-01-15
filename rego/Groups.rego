@@ -26,14 +26,14 @@ ReportDetailsGroups(Groups) := Message if {
 # Baseline GWS.GROUPS.1.1v0.1
 #--
 NonCompliantOUs1_1 contains OU if {
-     some OU in utils.OUsWithEvents
-     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto collaboration_policy", OU)
-     count(Events) > 0 # Ignore OUs without any events. We're already
-     # asserting that the top-level OU has at least one event; for all
-     # other OUs we assume they inherit from a parent OU if they have
-     # no events.
-     LastEvent := utils.GetLastEvent(Events)
-     LastEvent.NewValue != "CLOSED"
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto collaboration_policy", OU)
+    count(Events) > 0 # Ignore OUs without any events. We're already
+    # asserting that the top-level OU has at least one event; for all
+    # other OUs we assume they inherit from a parent OU if they have
+    # no events.
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "CLOSED"
 }
 
 tests contains {
