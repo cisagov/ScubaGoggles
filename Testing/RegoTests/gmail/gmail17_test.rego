@@ -98,7 +98,7 @@ test_SecuritySandbox_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -127,7 +127,7 @@ test_SecuritySandbox_Correct_V3 if {
             {
                 "id": {"time": "2022-12-21T00:02:28.672Z"},
                 "events": [{
-                    "name": "DELETE_APPLICATION_SETTING", 
+                    "name": "DELETE_APPLICATION_SETTING",
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "AttachmentDeepScanningSettingsProto deep_scanning_enabled"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
@@ -136,7 +136,7 @@ test_SecuritySandbox_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
@@ -300,7 +300,7 @@ test_SecuritySandbox_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 

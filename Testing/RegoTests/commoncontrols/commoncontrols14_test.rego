@@ -26,10 +26,10 @@ test_Individual_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; 
-            Result.PolicyId == PolicyId; 
-            Result.Criticality == "Shall"] 
-             # Note the additional filter: this is because 
+    RuleOutput := [Result | some Result in Output;
+            Result.PolicyId == PolicyId;
+            Result.Criticality == "Shall"]
+             # Note the additional filter: this is because
         # there are actually two tests with the same requirement string for this one,
         # as it has both a testable portion and a not-implementable portion
     count(RuleOutput) == 1
@@ -71,10 +71,10 @@ test_Individual_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; 
-            Result.PolicyId == PolicyId; 
-            Result.Criticality == "Shall"] 
-             # Note the additional filter: this is because 
+    RuleOutput := [Result | some Result in Output;
+            Result.PolicyId == PolicyId;
+            Result.Criticality == "Shall"]
+             # Note the additional filter: this is because
         # there are actually two tests with the same requirement string for this one,
         # as it has both a testable portion and a not-implementable portion
     count(RuleOutput) == 1
@@ -127,12 +127,12 @@ test_Individual_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; 
-            Result.PolicyId == PolicyId; 
-            Result.Criticality == "Shall"] 
-             # Note the additional filter: this is because 
-        # there are actually two tests with the same requirement string for this one,
-        # as it has both a testable portion and a not-implementable portion
+    RuleOutput := [Result | some Result in Output;
+            Result.PolicyId == PolicyId;
+            Result.Criticality == "Shall"]
+    # Note the additional filter: this is because
+    # there are actually two tests with the same requirement string for this one,
+    # as it has both a testable portion and a not-implementable portion
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -151,12 +151,12 @@ test_Individual_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; 
-            Result.PolicyId == PolicyId; 
-            Result.Criticality == "Shall"] 
-             # Note the additional filter: this is because 
-        # there are actually two tests with the same requirement string for this one,
-        # as it has both a testable portion and a not-implementable portion
+    RuleOutput := [Result | some Result in Output;
+            Result.PolicyId == PolicyId;
+            Result.Criticality == "Shall"]
+    # Note the additional filter: this is because
+    # there are actually two tests with the same requirement string for this one,
+    # as it has both a testable portion and a not-implementable portion
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
@@ -210,12 +210,12 @@ test_Individual_Correct_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; 
-            Result.PolicyId == PolicyId; 
-            Result.Criticality == "Shall"] 
-             # Note the additional filter: this is because 
-        # there are actually two tests with the same requirement string for this one,
-        # as it has both a testable portion and a not-implementable portion
+    RuleOutput := [Result | some Result in Output;
+            Result.PolicyId == PolicyId;
+            Result.Criticality == "Shall"]
+            # Note the additional filter: this is because
+            # there are actually two tests with the same requirement string for this one,
+            # as it has both a testable portion and a not-implementable portion
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -287,11 +287,11 @@ test_Individual_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; 
-            Result.PolicyId == PolicyId; 
-            Result.Criticality == "Shall"] 
-            
-    count(RuleOutput) == 1 
+    RuleOutput := [Result | some Result in Output;
+            Result.PolicyId == PolicyId;
+            Result.Criticality == "Shall"]
+
+    count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == "For apps with individual admin control: Requirement failed in Test Top-Level OU."
@@ -341,11 +341,11 @@ test_Individual_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; 
-            Result.PolicyId == PolicyId; 
-            Result.Criticality == "Shall"] 
-            
-    count(RuleOutput) == 1 
+    RuleOutput := [Result | some Result in Output;
+            Result.PolicyId == PolicyId;
+            Result.Criticality == "Shall"]
+
+    count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == "For apps with individual admin control: Requirement failed in Test Top-Level OU."
@@ -373,10 +373,10 @@ test_Individual_Inorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; 
-            Result.PolicyId == PolicyId; 
-            Result.Criticality == "Shall"] 
-             # Note the additional filter: this is because 
+    RuleOutput := [Result | some Result in Output;
+            Result.PolicyId == PolicyId;
+            Result.Criticality == "Shall"]
+             # Note the additional filter: this is because
         # there are actually two tests with the same requirement string for this one,
         # as it has both a testable portion and a not-implementable portion
     count(RuleOutput) == 1
@@ -431,11 +431,11 @@ test_Individual_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; 
-            Result.PolicyId == PolicyId; 
-            Result.Criticality == "Shall"] 
-            
-    count(RuleOutput) == 1 
+    RuleOutput := [Result | some Result in Output;
+            Result.PolicyId == PolicyId;
+            Result.Criticality == "Shall"]
+
+    count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
