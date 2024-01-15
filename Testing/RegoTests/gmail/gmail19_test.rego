@@ -5,8 +5,8 @@ import future.keywords
 #
 # GWS.GMAIL.19.1v0.1
 #--
-test_BlockedSendersList_Correct_V1 if {
-    # Test Blocked Senders List when there's only one event
+test_AttachmentComplianceFiltering_Correct_V1 if {
+    # Test Attachment Compliance Filtering when there's only one event
     PolicyId := "GWS.GMAIL.19.1v0.1"
     Output := tests with input as {
         "gmail_logs": {"items": [
