@@ -142,7 +142,7 @@ if {
     "SETTING_NAME" in {Parameter.name | some Parameter in Event.parameters}
     "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
 
-    # Extract the values that are there for every event    
+    # Extract the values that are there for every event
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
     
