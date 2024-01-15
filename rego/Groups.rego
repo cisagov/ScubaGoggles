@@ -34,7 +34,7 @@ NonCompliantOUs1_1 contains OU if {
      # no events.
      LastEvent := utils.GetLastEvent(Events)
      LastEvent.NewValue != "CLOSED"
- }
+}
 
 tests contains {
     "PolicyId": "GWS.GROUPS.1.1v0.1",
