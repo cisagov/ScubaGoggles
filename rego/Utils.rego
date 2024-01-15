@@ -176,7 +176,7 @@ if {
 
     NewValue := "DELETE_APPLICATION_SETTING"
 
-    # Extract the values that are there for every event    
+    # Extract the values that are there for every event
     Setting := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SETTING_NAME"][0]
 
     # Extract the values that are there for only some of the events
