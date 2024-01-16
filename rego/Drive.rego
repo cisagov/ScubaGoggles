@@ -342,7 +342,7 @@ if {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation CanCreateSharedDrives", OU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -359,7 +359,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation CanCreateSharedDrives", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -372,7 +372,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation CanCreateSharedDrives", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -383,7 +383,7 @@ if {
 #--
 NonCompliantOUs2_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", OU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_cross_domain_access", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -400,7 +400,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
+    SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -413,7 +414,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
+    SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_2) == 0
 }
@@ -424,7 +426,7 @@ if {
 #--
 NonCompliantOUs2_3 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_cross_domain_access", OU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_direct_access", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -433,7 +435,7 @@ NonCompliantOUs2_3 contains OU if {
 
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -441,21 +443,21 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
+    SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
     Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_3),
     "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
+    SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
     Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_3) == 0
@@ -467,10 +469,10 @@ if {
 #--
 NonCompliantOUs2_4 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_direct_access", OU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("true", LastEvent.NewValue) == false
+    contains("false", LastEvent.NewValue) == false
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
@@ -484,8 +486,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -498,51 +499,9 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_4) == 0
-}
-#--
-
-#
-# Baseline GWS.DRIVEDOCS.2.5v0.1
-#--
-NonCompliantOUs2_5 contains OU if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    contains("false", LastEvent.NewValue) == false
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
-
-tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.5v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.5v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_5),
-    "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_5},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
-    count(Events) > 0
-    Status := count(NonCompliantOUs2_5) == 0
 }
 #--
 
