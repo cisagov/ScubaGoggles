@@ -37,6 +37,7 @@ For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://git
 - [Design](#project-license)
 - [Troubleshooting](#troubleshooting)
   - [Not Authorized to Access this Resource](#not-authorized-to-access-this-resource)
+  - [Unable to view HTML report due to environment limitations](#Unable-to-view-HTML-report-due-to-environment-limitations)
 - [Project License](#project-license)
 
 ## Limitations of the tool
