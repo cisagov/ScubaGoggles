@@ -53,19 +53,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.CALENDAR.1.2v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.CALENDAR.1.2v0.1",
-    "Criticality": "May/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
 ##################
 # GWS.CALENDAR.2 #
 ##################
@@ -185,20 +172,6 @@ if {
     Status := LastEvent.NewValue == "SHOW_ONLY_FREE_BUSY_INFORMATION"
 }
 #--
-
-#
-# Baseline GWS.CALENDAR.3.2v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.CALENDAR.3.2v0.1",
-    "Criticality": "May/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
 
 
 ##################

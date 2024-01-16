@@ -2,7 +2,7 @@ package calendar
 import future.keywords
 
 #
-# Policy 1
+# GWS.CALENDAR.1.1v0.1
 #--
 test_ExtSharingPrimaryCal_Correct_V1 if {
     # Test external sharing for primary calendars when there's only one event
@@ -390,27 +390,5 @@ test_ExtSharingPrimaryCal_Incorrect_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
-}
-
-#
-# GWS.CALENDAR.1.2v0.1
-#--
-
-test_External_Sharing_Options_V1 if {
-    # Not-Implemented
-    PolicyId := "GWS.CALENDAR.1.2v0.1"
-    Output := tests with input as {
-        "calendar_logs": {"items": [
-        ]},
-        "tenant_info": {
-            "topLevelOU": "Test Top-Level OU"
-        }
-    }
-
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Currently not able to be tested automatically; please manually check."
 }
 #--
