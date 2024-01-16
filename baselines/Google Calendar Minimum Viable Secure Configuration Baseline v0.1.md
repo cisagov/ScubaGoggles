@@ -30,7 +30,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 # Baseline Policies
 
-## 1. External Sharing Options for Primary Calendars
+## 1. External Sharing Options
 
 This section determines what information is shared from primary calendars with external entities.
 
@@ -38,6 +38,16 @@ This section determines what information is shared from primary calendars with e
 
 #### GWS.CALENDAR.1.1v0.1
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)" to restrict information sharing and prevent data leakage.
+
+- Rationale
+  - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
+- Last Modified: July 10, 2023
+
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
+#### GWS.CALENDAR.1.2v0.1
+External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)" to restrict information sharing and prevent data leakage.
 
 - Rationale
   - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
@@ -63,6 +73,16 @@ To configure the settings for External Sharing in Primary Calendar:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Calendar**.
 3.  Select **Sharing settings** -\> **External sharing options for primary calendars**.
+4.  Select **Only free/busy information (hide event details)**.
+5.  Select **Save**.
+
+#### GWS.CALENDAR.1.2v0.1 Instructions
+
+To configure the settings for External Sharing in secondary calendars:
+
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Apps -\> Google Workspace -\> Calendar**.
+3.  Select **General settings -\> External sharing options for secondary calendars**.
 4.  Select **Only free/busy information (hide event details)**.
 5.  Select **Save**.
 
@@ -105,43 +125,6 @@ To configure the settings for Confidential Mode:
 2.  Select **Apps** -\> **Google Workspace** -\> **Calendar**.
 3.  Select **Sharing settings** -\> **External Invitations**.
 4.  Check the **Warn users when inviting guests outside of the domain** checkbox.
-5.  Select **Save**.
-
-## 3. External Sharing Options for Secondary Calendars
-
-This section determines what information is shared from secondary calendars with external entities.
-
-### Policies
-
-#### GWS.CALENDAR.3.1v0.1
-External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)" to restrict information sharing and prevent data leakage.
-
-- Rationale
-  - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-### Resources
-
--   [Google Workspace Admin Help: Set Calendar sharing options](https://support.google.com/a/answer/60765?hl=en#zippy=%2Cset-a-default-for-internal-sharing%2Callow-or-restrict-external-sharing)
--   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
-
-### Prerequisites
-
--   N/A
-
-### Implementation
-
-#### GWS.CALENDAR.3.1v0.1 Instructions
-
-To configure the settings for External Sharing in secondary calendars:
-
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Apps -\> Google Workspace -\> Calendar**.
-3.  Select **General settings -\> External sharing options for secondary calendars**.
-4.  Select **Only free/busy information (hide event details)**.
 5.  Select **Save**.
 
 ## 4. Calendar Interop Management
