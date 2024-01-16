@@ -127,7 +127,7 @@ To configure the settings for Confidential Mode:
 4.  Check the **Warn users when inviting guests outside of the domain** checkbox.
 5.  Select **Save**.
 
-## 4. Calendar Interop Management
+## 3. Calendar Interop Management
 
 This section determines whether Microsoft Exchange and Google Calendar can be configured to work together to allow users in both systems to share their availability status so they can view each other's schedules. The availability and event information that will be shared between Exchange and Calendar include availability for users, group or team calendars, and calendar resources (such as meeting rooms). Calendar Interop respects event-level privacy settings from either Exchange or Calendar.
 
@@ -135,7 +135,7 @@ Due to the added complexity and attack surface associated with configuring Calen
 
 ### Policies
 
-#### GWS.CALENDAR.4.1v0.1
+#### GWS.CALENDAR.3.1v0.1
 Calendar Interop SHOULD be disabled unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar.
 
 - Rationale
@@ -146,7 +146,7 @@ Calendar Interop SHOULD be disabled unless agency mission fulfillment requires c
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
 
-#### GWS.CALENDAR.4.2v0.1
+#### GWS.CALENDAR.3.2v0.1
 OAuth 2.0 SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.
 
 - Rationale
@@ -166,7 +166,7 @@ OAuth 2.0 SHALL be used in lieu of basic authentication to establish connectivit
 
 ### Implementation
 
-#### GWS.CALENDAR.4.1v0.1 Instructions
+#### GWS.CALENDAR.3.1v0.1 Instructions
 
 To configure the settings for Calendar Interop:
 
@@ -176,7 +176,7 @@ To configure the settings for Calendar Interop:
 4.  Uncheck the **Enable Interoperability for Calendar** checkbox.
 5.  Select **Save**.
 
-#### GWS.CALENDAR.4.2v0.1 Instructions
+#### GWS.CALENDAR.3.2v0.1 Instructions
 
 To configure the settings for Calendar Interop:
 
@@ -186,13 +186,13 @@ To configure the settings for Calendar Interop:
 4.  Select **OAuth 2.0 client credentials**
 5.  Select **Save**.
 
-## 5. Paid Appointments
+## 4. Paid Appointments
 
 This section covers whether or not the paid appointment booking feature is enabled.
 
 ### Policies
 
-#### GWS.CALENDAR.5.1v0.1
+#### GWS.CALENDAR.4.1v0.1
 Appointment Schedule with Payments SHALL be disabled.
 
 - Rationale
@@ -214,7 +214,7 @@ Appointment Schedule with Payments SHALL be disabled.
 
 ### Implementation
 
-#### GWS.CALENDAR.5.1v0.1 Instructions
+#### GWS.CALENDAR.4.1v0.1 Instructions
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
