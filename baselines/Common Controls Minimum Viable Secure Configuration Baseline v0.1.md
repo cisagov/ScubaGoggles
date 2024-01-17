@@ -17,15 +17,13 @@ This baseline is based on Google documentation and addresses the following:
 - [Highly Privileged Accounts](#6-highly-privileged-accounts)
 - [Conflicting Account Management](#7-conflicting-account-management)
 - [Catastrophic Recovery Options](#8-catastrophic-recovery-options-for-super-admins)
-- [GWS Advanced Protection Program](#10-gws-advanced-protection-program)
-- [App Access to Google APIs](#11-app-access-to-google-apis)
-- [Authorized Marketplace Apps](#12-authorized-google-marketplace-apps)
-- [Less Secure Apps](#13-less-secure-apps)
-- [Google Takeout Service](#14-google-takeout-services-for-users)
-- [System-Defined Rules](#15-system-defined-rules)
-- [Google Workspace Logs](#16-google-workspace-logs)
-- [Data Regions](#17-data-regions)
-- [Supplemental Data Storage](#18-supplemental-data-storage)
+- [GWS Advanced Protection Program](#9-gws-advanced-protection-program)
+- [App Access to Google APIs](#10-app-access-to-google-apis)
+- [Authorized Marketplace Apps](#11-authorized-google-marketplace-apps)
+- [Google Takeout Service](#12-google-takeout-services-for-users)
+- [System-Defined Rules](#13-system-defined-rules)
+- [Google Workspace Logs](#14-google-workspace-logs)
+- [Data Regions](#15-data-regions)
 
 ## Assumptions
 
@@ -1121,7 +1119,7 @@ The following critical logs SHALL be sent at a minimum.
 5.  Click **Save**.
 
 
-## 15. Data Regions
+## 15. Data Regions and Storage
 
 Google Workspace administrators can choose to store data in a specific geographic region (currently the United States or Europe) by using a data region policy. The policy can be applied to a specific organizational unit (OU) in a tenant or at the parent OU. For the interests of Federal agencies, the best practice is to restrict stored data for all users to the U.S. This means applying this setting at the parent OU. Data region storage covers the primary data-at-rest (including backups) for Google Workspace core services (see resources section for services in scope).
 
