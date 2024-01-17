@@ -23,7 +23,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Google Takeout Service](#12-google-takeout-services-for-users)
 - [System-Defined Rules](#13-system-defined-rules)
 - [Google Workspace Logs](#14-google-workspace-logs)
-- [Data Regions](#15-data-regions)
+- [Data Regions](#15-data-regions-and-storage)
 
 ## Assumptions
 
