@@ -31,7 +31,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## 1. External Sharing Options
 
-This section determines what information is shared from primary calendars with external entities.
+This section determines what information is shared from calendars with external entities.
 
 ### Policies
 
