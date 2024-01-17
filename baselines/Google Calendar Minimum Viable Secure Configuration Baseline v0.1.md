@@ -10,7 +10,7 @@ The information in this document is being provided "as is" for INFORMATIONAL PUR
 
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Set Calendar sharing options](https://support.google.com/a/answer/60765?hl=en#zippy=%2Cset-a-default-for-internal-sharing%2Callow-or-restrict-external-sharing) and addresses the following:
 
--   [External Sharing Options for Primary Calendars](#1-external-sharing-options-for-primary-calendars)
+-   [External Sharing Options for Primary Calendars](#1-external-sharing-options)
 -   [External Invitations Warnings](#2-external-invitations-warnings)
 -   [Calendar Interop Management](#3-calendar-interop-management)
 -   [Paid Appointments](#4-paid-appointments)
