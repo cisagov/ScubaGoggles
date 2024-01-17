@@ -36,7 +36,7 @@ This section determines what information is shared from calendars with external 
 ### Policies
 
 #### GWS.CALENDAR.1.1v0.1
-External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)" to restrict information sharing and prevent data leakage.
+External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."
 
 - Rationale
   - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
@@ -46,7 +46,7 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
 #### GWS.CALENDAR.1.2v0.1
-External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)" to restrict information sharing and prevent data leakage.
+External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)."
 
 - Rationale
   - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
@@ -135,11 +135,13 @@ Due to the added complexity and attack surface associated with configuring Calen
 ### Policies
 
 #### GWS.CALENDAR.3.1v0.1
-Calendar Interop SHOULD be disabled unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar.
+Calendar Interop SHOULD be disabled.
 
 - Rationale
-  - Prevent information exchange between Microsoft and Google calendars for users using both services, unless it is required by the organization.
+  - Minimize attack surface by not enabling this feature which relies on Exchange Web Services for information exchange between Microsoft and Google calendars, unless required by the organization.
 - Last Modified: July 10, 2023
+- Notes
+  - This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
