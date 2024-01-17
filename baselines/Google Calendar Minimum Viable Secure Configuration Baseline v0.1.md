@@ -12,9 +12,8 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 
 -   [External Sharing Options for Primary Calendars](#1-external-sharing-options-for-primary-calendars)
 -   [External Invitations Warnings](#2-external-invitations-warnings)
--   [External Sharing Options for Secondary Calendars](#3-external-sharing-options-for-secondary-calendars)
--   [Calendar Interop Management](#4-calendar-interop-management)
--   [Paid Appointments](#5-paid-appointments)
+-   [Calendar Interop Management](#3-calendar-interop-management)
+-   [Paid Appointments](#4-paid-appointments)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
