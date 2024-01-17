@@ -56,11 +56,11 @@ Agencies SHOULD disable sharing outside of the organization's domain.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.2v0.1
-If disabling sharing outside of the organization's domain, then agencies SHOULD also disable users' receiving files from outside of the organization's domain.
+Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
 - Rationale
   - If the agency decides that external sharing should be disabled, users should not be able to receive files from outside the organization as well. Disabling external sharing ensures that all communication stays within the organization, which helps mitigate risk from malicious files from an external source.
-- Last Modified: July 10, 2023
+- Last Modified: January 3, 2024
 - Note:
   - This policy only applies if sharing outside was disabled in Policy 1.1
 
@@ -197,16 +197,6 @@ This section covers whether users can create new shared drives to share with oth
 ### Policies
 
 #### GWS.DRIVEDOCS.2.1v0.1
-Agencies SHOULD enable shared drive creation to allow for effective collaboration.
-
-- Rationale
-  - Disabling shared drives would make collaboration difficult. Shared drives allow users in the organization to work together on one or multiple documents concurrently.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-#### GWS.DRIVEDOCS.2.2v0.1
 Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.
 
 - Rationale
@@ -216,7 +206,7 @@ Agencies SHOULD NOT allow members with manager access to override shared drive c
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.DRIVEDOCS.2.3v0.1
+#### GWS.DRIVEDOCS.2.2v0.1
 Agencies SHOULD NOT allow users outside of their organization to access files in shared drives.
 
 - Rationale
@@ -226,7 +216,7 @@ Agencies SHOULD NOT allow users outside of their organization to access files in
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.DRIVEDOCS.2.4v0.1
+#### GWS.DRIVEDOCS.2.3v0.1
 Agencies SHALL allow users who are not shared drive members to be added to files.
 
 - Rationale
@@ -236,7 +226,7 @@ Agencies SHALL allow users who are not shared drive members to be added to files
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.DRIVEDOCS.2.5v0.1
+#### GWS.DRIVEDOCS.2.4v0.1
 Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.
 
 - Rationale
@@ -267,18 +257,15 @@ To configure the settings for Shared drive creation:
 5.  Select **Save**
 
 #### GWS.DRIVEDOCS.2.1v0.1 Instructions
-1.  Uncheck the **Prevent users in organization from creating new shared drives** checkbox.
-
-#### GWS.DRIVEDOCS.2.2v0.1 Instructions
 1.  Uncheck the **Allow members with manager access to override the settings below** checkbox.
 
-#### GWS.DRIVEDOCS.2.3v0.1 Instructions
+#### GWS.DRIVEDOCS.2.2v0.1 Instructions
 1.  Uncheck the **Allow users outside organization to access files in shared drives** checkbox.
 
-#### GWS.DRIVEDOCS.2.4v0.1 Instructions
+#### GWS.DRIVEDOCS.2.3v0.1 Instructions
 1.  Check the **Allow people who aren't shared drive members to be added to files** checkbox.
 
-#### GWS.DRIVEDOCS.2.5v0.1 Instructions
+#### GWS.DRIVEDOCS.2.4v0.1 Instructions
 1.  Check the **Allow viewers and commenters to download, print, and copy files** checkbox.
 
 ## 3. Security Updates for Files
@@ -324,11 +311,11 @@ This section covers whether users have access to Google Drive with the Drive SDK
 ### Policies
 
 #### GWS.DRIVEDOCS.4.1v0.1
-Agencies SHOULD disable Drive SDK access to restrict information sharing and prevent data leakage.
+Agencies SHOULD disable Drive SDK access.
 
 - Rationale
   - The Drive SDK allows third-party external applications to access data and files from within Drive. Disabling the Drive SDK prevents third party applications from accessing the files and data from within the organization, which protects against data leakage and unintentional information sharing.
-- Last Modified: July 10, 2023
+- Last Modified: January 3, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
@@ -361,11 +348,11 @@ This section covers whether users can use add-ons in file editors within Google 
 ### Policies
 
 #### GWS.DRIVEDOCS.5.1v0.1
-Agencies SHALL disable Add-Ons with the exception of those that are approved within the organization.
+Agencies SHALL disable Add-Ons.
 
 - Rationale
   - Google Docs Add-Ons can pose a great security risk based on the permissions the add-on is given. Add-ons can be given full access to the google drive, permission to add or edit existing documents, share documents, connect to external services, and more. Any add-on needs to be fully vetted before given access to the google workspace. Therefore, unapproved add-ons need to be disabled.
-- Last Modified: July 10, 2023
+- Last Modified: January 3, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
@@ -393,7 +380,7 @@ To configure the settings for add-ons:
 
 ## 6. Drive for Desktop
 
-This section covers that Google Drive for Desktop, if not disabled entirely, should only be allowed on authorized devices.
+This section addresses Drive for Desktop, a feature that enables users to interact with their Drive files directly through their desktop's file explorer or finder, rather than through the browser.
 
 ### Policies
 

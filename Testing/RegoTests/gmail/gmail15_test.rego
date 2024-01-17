@@ -5,8 +5,8 @@ import future.keywords
 #
 # GWS.GMAIL.15.1v0.1
 #--
-test_EmailAllowlist_Correct_V1 if {
-    # Test Email Allowlists when there's only one event
+test_EnhancedPreDeliveryMessageScanning_Correct_V1 if {
+    # Test Enhanced Pre-Delivery Message Scanning when there's only one event
     PolicyId := "GWS.GMAIL.15.1v0.1"
     Output := tests with input as {
         "gmail_logs": {"items": [
@@ -14,9 +14,12 @@ test_EmailAllowlist_Correct_V1 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
             }
@@ -30,14 +33,11 @@ test_EmailAllowlist_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>Email allowlists are not enabled </span> in ",
-        "Test Top-Level Domain."
-    ])
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
-test_EmailAllowlist_Correct_V2 if {
-    # Test Email Allowlists when there's multiple events and the most recent is correct
+test_EnhancedPreDeliveryMessageScanning_Correct_V2 if {
+    # Test Enhanced Pre-Delivery Message Scanning when there's multiple events and the most recent is correct
     PolicyId := "GWS.GMAIL.15.1v0.1"
     Output := tests with input as {
         "gmail_logs": {"items": [
@@ -45,9 +45,12 @@ test_EmailAllowlist_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
             },
@@ -55,9 +58,12 @@ test_EmailAllowlist_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[123.456.7.89]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
             }
@@ -71,13 +77,99 @@ test_EmailAllowlist_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>Email allowlists are not enabled </span> in ",
-        "Test Top-Level Domain."
-    ])}
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+}
 
-test_EmailAllowlist_Incorrect_V1 if {
-    # Test Email Allowlists when there are no relevant events
+test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
+    # Test Enhanced Pre-Delivery Message Scanning when there's correct events in multiple OUs
+    PolicyId := "GWS.GMAIL.15.1v0.1"
+    Output := tests with input as {
+        "gmail_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-21T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+}
+
+test_EnhancedPreDeliveryMessageScanning_Correct_V4 if {
+    # Test Enhanced Pre-Delivery Message Scanning when there's correct events in multiple OUs and inherited setting
+    PolicyId := "GWS.GMAIL.15.1v0.1"
+    Output := tests with input as {
+        "gmail_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-21T00:02:28.672Z"},
+                "events": [{
+                    "name": "DELETE_APPLICATION_SETTING",
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+}
+
+test_EnhancedPreDeliveryMessageScanning_Incorrect_V1 if {
+    # Test Enhanced Pre-Delivery Message Scanning when there are no relevant events
     PolicyId := "GWS.GMAIL.15.1v0.1"
     Output := tests with input as {
         "gmail_logs": {"items": [
@@ -86,8 +178,8 @@ test_EmailAllowlist_Incorrect_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Something else"},
-                        {"name": "NEW_VALUE", "value": "[]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
             }
@@ -102,14 +194,13 @@ test_EmailAllowlist_Incorrect_V1 if {
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs. ",
-        "While we are unable to determine the state from the logs, ",
-        "the default setting is non-compliant; manual check recommended."
-    ])
-}
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])}
 
-test_EmailAllowlist_Incorrect_V2 if {
-    # Test Email Allowlists when there's only one event and it's wrong
+test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {
+    # Test Enhanced Pre-Delivery Message Scanning when there's only one event and it's wrong
     PolicyId := "GWS.GMAIL.15.1v0.1"
     Output := tests with input as {
         "gmail_logs": {"items": [
@@ -117,9 +208,12 @@ test_EmailAllowlist_Incorrect_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[123.456.7.89]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
             }
@@ -133,11 +227,11 @@ test_EmailAllowlist_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "<span class=setting>Email allowlists are enabled </span> in Test Top-Level Domain."
+    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
-test_EmailAllowlist_Incorrect_V3 if {
-    # Test Email Allowlists when there are multiple events and the most recent is wrong
+test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
+    # Test Enhanced Pre-Delivery Message Scanning when there are multiple events and the most recent is wrong
     PolicyId := "GWS.GMAIL.15.1v0.1"
     Output := tests with input as {
         "gmail_logs": {"items": [
@@ -145,9 +239,12 @@ test_EmailAllowlist_Incorrect_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[123.456.7.89]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
             },
@@ -155,8 +252,11 @@ test_EmailAllowlist_Incorrect_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[]"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -171,6 +271,81 @@ test_EmailAllowlist_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "<span class=setting>Email allowlists are enabled </span> in Test Top-Level Domain."
+    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+}
+
+test_EnhancedPreDeliveryMessageScanning_Incorrect_V4 if {
+    # Test Enhanced Pre-Delivery Message Scanning when there's only one event and it's wrong
+    PolicyId := "GWS.GMAIL.15.1v0.1"
+    Output := tests with input as {
+        "gmail_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": ""
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+}
+
+test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
+    # Test Enhanced Pre-Delivery Message Scanning when there are multiple events and the most recent is wrong
+    PolicyId := "GWS.GMAIL.15.1v0.1"
+    Output := tests with input as {
+        "gmail_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2021-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
+                        },
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        },
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
 }
 #--

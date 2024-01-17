@@ -25,7 +25,7 @@ test_History_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -63,7 +63,7 @@ test_History_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -97,11 +97,11 @@ test_History_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -145,11 +145,11 @@ test_History_Correct_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -193,12 +193,11 @@ test_History_Correct_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
-    print(RuleOutput)
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -226,11 +225,15 @@ test_History_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
 }
 
 test_History_Incorrect_V2 if {
@@ -254,7 +257,7 @@ test_History_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -292,7 +295,7 @@ test_History_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -320,11 +323,15 @@ test_History_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
 }
 #--
 
@@ -359,7 +366,7 @@ test_History_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -379,7 +386,10 @@ test_Change_History_Setting_Correct_V1 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -391,7 +401,7 @@ test_Change_History_Setting_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -407,7 +417,10 @@ test_Change_History_Setting_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -417,7 +430,10 @@ test_Change_History_Setting_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -429,7 +445,7 @@ test_Change_History_Setting_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -445,7 +461,10 @@ test_Change_History_Setting_Correct_V3 if {
                 "id": {"time": "2020-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -456,7 +475,10 @@ test_Change_History_Setting_Correct_V3 if {
                 "events": [{
                     "name": "DELETE_APPLICATION_SETTING",
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "ORG_UNIT_NAME", "value": "Test Second-Level OU"},
                     ]
                 }]
@@ -465,7 +487,10 @@ test_Change_History_Setting_Correct_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Second-Level OU"},
                     ]
@@ -473,12 +498,11 @@ test_Change_History_Setting_Correct_V3 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
-    print(RuleOutput)
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -506,11 +530,15 @@ test_Change_History_Setting_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
 }
 
 test_Change_History_Setting_Incorrect_V2 if {
@@ -522,7 +550,10 @@ test_Change_History_Setting_Incorrect_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -534,7 +565,7 @@ test_Change_History_Setting_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -550,7 +581,10 @@ test_Change_History_Setting_Incorrect_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -560,7 +594,10 @@ test_Change_History_Setting_Incorrect_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -572,7 +609,7 @@ test_Change_History_Setting_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -589,7 +626,10 @@ test_Change_History_Setting_Incorrect_V4 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -599,7 +639,10 @@ test_Change_History_Setting_Incorrect_V4 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Secondary OU"},
                     ]
@@ -607,11 +650,11 @@ test_Change_History_Setting_Incorrect_V4 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level OU"
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -628,7 +671,10 @@ test_Change_History_Setting_Incorrect_V5 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "ChatArchivingProto allow_chat_archiving_setting_modification"},
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "ChatArchivingProto allow_chat_archiving_setting_modification"
+                        },
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Secondary OU"},
                     ]
@@ -640,10 +686,14 @@ test_Change_History_Setting_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | Result = Output[_]; Result.PolicyId == PolicyId]
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended."
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
 }
 #--

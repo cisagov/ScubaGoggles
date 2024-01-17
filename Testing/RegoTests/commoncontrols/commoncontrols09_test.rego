@@ -351,8 +351,7 @@ test_SelfRecovery_Incorrect_V5 if {
     # not lists, hence the startswith/contains checks below rather
     # than a simple ==
 
-    # For this reason, we can't check for a period at the end of the phrase. 
-    
+    # For this reason, we can't check for a period at the end of the phrase.
     startswith(RuleOutput[0].ReportDetails, "Requirement failed in")
     contains(RuleOutput[0].ReportDetails, "Test Top-Level OU")
     contains(RuleOutput[0].ReportDetails, "Test Second-Level OU")

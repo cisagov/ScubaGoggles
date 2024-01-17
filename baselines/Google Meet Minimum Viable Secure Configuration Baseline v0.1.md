@@ -118,11 +118,11 @@ Note: When this feature is not enabled, any attendee that is a member of the hos
 ### Policies
 
 #### GWS.MEET.3.1v0.1
-Host Management meeting features SHALL be enabled so that they are available by default when a host starts their meeting.
+Host Management meeting features SHALL be enabled.
 
 - Rationale
-  - Enabling these features does not pose any security risk and provides better collaboration features to users. If this setting was disabled then any participant could take control of the meeting.
-- Last Modified: July 3, 2023
+  - Enabling these features does not pose any security risk and provides better collaboration features to users. If this setting was disabled then any participant could take control of the meeting. When enabled, they are available by default when a host starts their meeting.
+- Last Modified: January 10, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1562:001: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
