@@ -10,11 +10,10 @@ The information in this document is being provided "as is" for INFORMATIONAL PUR
 
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Set Calendar sharing options](https://support.google.com/a/answer/60765?hl=en#zippy=%2Cset-a-default-for-internal-sharing%2Callow-or-restrict-external-sharing) and addresses the following:
 
--   [External Sharing Options for Primary Calendars](#1-external-sharing-options-for-primary-calendars)
+-   [External Sharing Options for Primary Calendars](#1-external-sharing-options)
 -   [External Invitations Warnings](#2-external-invitations-warnings)
--   [External Sharing Options for Secondary Calendars](#3-external-sharing-options-for-secondary-calendars)
--   [Calendar Interop Management](#4-calendar-interop-management)
--   [Paid Appointments](#5-paid-appointments)
+-   [Calendar Interop Management](#3-calendar-interop-management)
+-   [Paid Appointments](#4-paid-appointments)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
@@ -30,9 +29,9 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 # Baseline Policies
 
-## 1. External Sharing Options for Primary Calendars
+## 1. External Sharing Options
 
-This section determines what information is shared from primary calendars with external entities.
+This section determines what information is shared from calendars with external entities.
 
 ### Policies
 
@@ -47,11 +46,11 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
 #### GWS.CALENDAR.1.2v0.1
-External sharing options for primary calendars between multiple components within an organization MAY be configured.
+External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)" to restrict information sharing and prevent data leakage.
 
 - Rationale
-  - Prevent data leakage by restricting the information viewable by internal users when a user shares their calendar by configuring additional settings on shared information between components.
-- Last Modified: November 14, 2023
+  - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
+- Last Modified: July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -77,7 +76,14 @@ To configure the settings for External Sharing in Primary Calendar:
 5.  Select **Save**.
 
 #### GWS.CALENDAR.1.2v0.1 Instructions
-1.  There is no implementation for this policy
+
+To configure the settings for External Sharing in secondary calendars:
+
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Apps -\> Google Workspace -\> Calendar**.
+3.  Select **General settings -\> External sharing options for secondary calendars**.
+4.  Select **Only free/busy information (hide event details)**.
+5.  Select **Save**.
 
 ## 2. External Invitations Warnings
 
@@ -120,59 +126,7 @@ To configure the settings for Confidential Mode:
 4.  Check the **Warn users when inviting guests outside of the domain** checkbox.
 5.  Select **Save**.
 
-## 3. External Sharing Options for Secondary Calendars
-
-This section determines what information is shared from secondary calendars with external entities.
-
-### Policies
-
-#### GWS.CALENDAR.3.1v0.1
-External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)" to restrict information sharing and prevent data leakage.
-
-- Rationale
-  - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-#### GWS.CALENDAR.3.2v0.1
-
-External sharing options for secondary calendars between multiple components within an organization MAY be configured.
-
-- Rationale
-  - Prevent data leakage by restricting the information viewable by internal users when a user shares their calendar by configuring additional settings on shared information between components.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-### Resources
-
--   [Google Workspace Admin Help: Set Calendar sharing options](https://support.google.com/a/answer/60765?hl=en#zippy=%2Cset-a-default-for-internal-sharing%2Callow-or-restrict-external-sharing)
--   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
-
-### Prerequisites
-
--   N/A
-
-### Implementation
-
-#### GWS.CALENDAR.3.1v0.1 Instructions
-
-To configure the settings for External Sharing in secondary calendars:
-
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Apps -\> Google Workspace -\> Calendar**.
-3.  Select **General settings -\> External sharing options for secondary calendars**.
-4.  Select **Only free/busy information (hide event details)**.
-5.  Select **Save**.
-
-#### GWS.CALENDAR.3.2v0.1 Instructions
-
-1.  There is no implementation for this policy
-
-## 4. Calendar Interop Management
+## 3. Calendar Interop Management
 
 This section determines whether Microsoft Exchange and Google Calendar can be configured to work together to allow users in both systems to share their availability status so they can view each other's schedules. The availability and event information that will be shared between Exchange and Calendar include availability for users, group or team calendars, and calendar resources (such as meeting rooms). Calendar Interop respects event-level privacy settings from either Exchange or Calendar.
 
@@ -180,7 +134,7 @@ Due to the added complexity and attack surface associated with configuring Calen
 
 ### Policies
 
-#### GWS.CALENDAR.4.1v0.1
+#### GWS.CALENDAR.3.1v0.1
 Calendar Interop SHOULD be disabled unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar.
 
 - Rationale
@@ -191,7 +145,7 @@ Calendar Interop SHOULD be disabled unless agency mission fulfillment requires c
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
 
-#### GWS.CALENDAR.4.2v0.1
+#### GWS.CALENDAR.3.2v0.1
 OAuth 2.0 SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.
 
 - Rationale
@@ -211,7 +165,7 @@ OAuth 2.0 SHALL be used in lieu of basic authentication to establish connectivit
 
 ### Implementation
 
-#### GWS.CALENDAR.4.1v0.1 Instructions
+#### GWS.CALENDAR.3.1v0.1 Instructions
 
 To configure the settings for Calendar Interop:
 
@@ -221,7 +175,7 @@ To configure the settings for Calendar Interop:
 4.  Uncheck the **Enable Interoperability for Calendar** checkbox.
 5.  Select **Save**.
 
-#### GWS.CALENDAR.4.2v0.1 Instructions
+#### GWS.CALENDAR.3.2v0.1 Instructions
 
 To configure the settings for Calendar Interop:
 
@@ -231,13 +185,13 @@ To configure the settings for Calendar Interop:
 4.  Select **OAuth 2.0 client credentials**
 5.  Select **Save**.
 
-## 5. Paid Appointments
+## 4. Paid Appointments
 
 This section covers whether or not the paid appointment booking feature is enabled.
 
 ### Policies
 
-#### GWS.CALENDAR.5.1v0.1
+#### GWS.CALENDAR.4.1v0.1
 Appointment Schedule with Payments SHALL be disabled.
 
 - Rationale
@@ -259,7 +213,7 @@ Appointment Schedule with Payments SHALL be disabled.
 
 ### Implementation
 
-#### GWS.CALENDAR.5.1v0.1 Instructions
+#### GWS.CALENDAR.4.1v0.1 Instructions
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Calendar**.

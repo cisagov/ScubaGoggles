@@ -1,11 +1,12 @@
 package calendar
 import future.keywords
 
+
 #
 # Policy 1
 #--
-test_ExtSharingSecondaryCal_Correct_V1 if {
- # Test external sharing for secondary calendars when there's only one event
+test_CalInteropMan_Correct_V1 if {
+# Test calendar interop management when there's only one event
     PolicyId := "GWS.CALENDAR.3.1v0.1"
     Output := tests with input as {
         "calendar_logs": {"items": [
@@ -13,8 +14,8 @@ test_ExtSharingSecondaryCal_Correct_V1 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR"},
-                        {"name": "NEW_VALUE", "value": "SHOW_ONLY_FREE_BUSY_INFORMATION"},
+                        {"name": "SETTING_NAME", "value": "ENABLE_EWS_INTEROP"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
                     ]
@@ -30,14 +31,12 @@ test_ExtSharingSecondaryCal_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>Only free busy/information for secondary calendars </span>",
-        " is shared outside Test Top-Level Domain"
-    ])
+    RuleOutput[0].ReportDetails ==
+                                "<span class=setting>Calendar interop is not enabled </span> for Test Top-Level Domain"
 }
 
-test_ExtSharingSecondaryCal_Correct_V2 if {
-    # Test external sharing for secondary calendars when there's multiple events and the most most recent is correct
+test_CalInteropMan_Correct_V2 if {
+    # Test calendar interop management when there's multiple events and the most most recent is correct
     PolicyId := "GWS.CALENDAR.3.1v0.1"
     Output := tests with input as {
         "calendar_logs": {"items": [
@@ -45,8 +44,8 @@ test_ExtSharingSecondaryCal_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR"},
-                        {"name": "NEW_VALUE", "value": "SHOW_ONLY_FREE_BUSY_INFORMATION"},
+                        {"name": "SETTING_NAME", "value": "ENABLE_EWS_INTEROP"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
                     ]
@@ -56,8 +55,8 @@ test_ExtSharingSecondaryCal_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR"},
-                        {"name": "NEW_VALUE", "value": "READ_ONLY_ACCESS"},
+                        {"name": "SETTING_NAME", "value": "ENABLE_EWS_INTEROP"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
                     ]
@@ -73,14 +72,12 @@ test_ExtSharingSecondaryCal_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>Only free busy/information for secondary calendars </span> ",
-        "is shared outside Test Top-Level Domain"
-    ])
+    RuleOutput[0].ReportDetails ==
+                                "<span class=setting>Calendar interop is not enabled </span> for Test Top-Level Domain"
 }
 
-test_ExtSharingSecondaryCal_Incorrect_V1 if {
-    # Test external sharing for secondary calendars when there are no relevant events
+test_CalInteropMan_Incorrect_V1 if {
+    # Test calendar interop management when there are no relevant events
     PolicyId := "GWS.CALENDAR.3.1v0.1"
     Output := tests with input as {
         "calendar_logs": {"items": [
@@ -112,8 +109,8 @@ test_ExtSharingSecondaryCal_Incorrect_V1 if {
     ])
 }
 
-test_ExtSharingSecondaryCal_Incorrect_V2 if {
-    # Test external sharing for secondary calendars when there's only one event and it's wrong
+test_CalInteropMan_Incorrect_V2 if {
+    # Test calendar interop management when there's only one event and it's wrong
     PolicyId := "GWS.CALENDAR.3.1v0.1"
     Output := tests with input as {
         "calendar_logs": {"items": [
@@ -121,8 +118,8 @@ test_ExtSharingSecondaryCal_Incorrect_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR"},
-                        {"name": "NEW_VALUE", "value": "READ_ONLY_ACCESS"},
+                        {"name": "SETTING_NAME", "value": "ENABLE_EWS_INTEROP"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
                     ]
@@ -138,14 +135,11 @@ test_ExtSharingSecondaryCal_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>All information for secondary calendars </span>",
-        " is shared outside Test Top-Level Domain but outsiders cannot change calendars."
-    ])
+    RuleOutput[0].ReportDetails == "<span class=setting>Calendar interop is enabled </span> for Test Top-Level Domain"
 }
 
-test_ExtSharingSecondaryCal_Incorrect_V3 if {
-    # Test external sharing for secondary calendars when there are multiple events and the most recent is wrong
+test_CalInteropMan_Incorrect_V3 if {
+    # Test calendar interop management when there are multiple events and the most recent is wrong
     PolicyId := "GWS.CALENDAR.3.1v0.1"
     Output := tests with input as {
         "calendar_logs": {"items": [
@@ -153,8 +147,8 @@ test_ExtSharingSecondaryCal_Incorrect_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR"},
-                        {"name": "NEW_VALUE", "value": "READ_ONLY_ACCESS"},
+                        {"name": "SETTING_NAME", "value": "ENABLE_EWS_INTEROP"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
                     ]
@@ -164,8 +158,8 @@ test_ExtSharingSecondaryCal_Incorrect_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR"},
-                        {"name": "NEW_VALUE", "value": "READ_WRITE_ACCESS"},
+                        {"name": "SETTING_NAME", "value": "ENABLE_EWS_INTEROP"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
                     ]
@@ -181,17 +175,15 @@ test_ExtSharingSecondaryCal_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>All information for secondary calendars </span>",
-        " is shared outside Test Top-Level Domain but outsiders cannot change calendars."
-    ])
+    RuleOutput[0].ReportDetails == "<span class=setting>Calendar interop is enabled </span> for Test Top-Level Domain"
 }
+#--
 
 #
 # GWS.CALENDAR.3.2v0.1
 #--
 
-test_ExternalSharingOptions_Secondary__Correct_V1 if {
+test_OAuth_Correct_V1 if {
     # Not-Implemented
     PolicyId := "GWS.CALENDAR.3.2v0.1"
     Output := tests with input as {
