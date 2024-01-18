@@ -457,20 +457,24 @@ def get_tenant_info(service) -> dict:
     :param service: a directory_v1 service instance
     '''
     try:
-        response = service.customers().get(customerKey="my_customer").execute()
-        return {'id': response['id'],
-        'domain': response['customerDomain'],
-        'name': response['postalAddress']['organizationName'],
-        'topLevelOU': get_toplevel_ou(service)}
+        response = service.domains().list(customer="my_customer").execute()
+        primary_domain = ""
+        for domain in response['domains']:
+            if domain['isPrimary']:
+                primary_domain = domain['domainName']
+        return {
+            'domain': primary_domain,
+            'topLevelOU': get_toplevel_ou(service)
+        }
     except Exception as exc:
         warnings.warn(
             f"An exception was thrown trying to get the tenant info: {exc}",
             RuntimeWarning
         )
-        return {'id': 'Error Retrieving',
-        'domain': 'Error Retrieving',
-        'name': 'Error Retrieving',
-        'topLevelOU': 'Error Retrieving'}
+        return {
+            'domain': 'Error Retrieving',
+            'topLevelOU': 'Error Retrieving'
+        }
 
 
 def get_gws_logs(products: list, service, event: str) -> dict:
@@ -561,7 +565,7 @@ def get_group_settings(services) -> dict:
         domain_service = services['directory']
         # gather all of the domains within a suite to get groups
         response = domain_service.domains().list(customer="my_customer").execute()
-        domains = {d['domainName'] for d in response['domains']}
+        domains = {d['domainName'] for d in response['domains'] if d['verified']}
 
         # get the group settings for each groups
         group_settings = []
