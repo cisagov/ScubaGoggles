@@ -522,7 +522,7 @@ Pre-Built GWS Admin Roles considered highly privileged:
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.6.2v0.1
+#### GWS.COMMONCONTROLS.6.1v0.1
 All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
 - Rationale
