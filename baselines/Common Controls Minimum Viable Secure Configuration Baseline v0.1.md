@@ -567,7 +567,7 @@ A minimum of **two** and maximum of **four** separate and distinct Super Admin u
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.6.2v0.1 Instructions
+#### GWS.COMMONCONTROLS.6.1v0.1 Instructions
 1.  The implementation process for this can be located [here](https://support.google.com/a/answer/9807615).
 
 #### GWS.COMMONCONTROLS.6.2v0.1 Instructions
