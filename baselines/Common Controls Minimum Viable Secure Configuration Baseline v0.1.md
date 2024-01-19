@@ -644,15 +644,15 @@ To configure account conflict management per the policy:
 
 ## 8. Catastrophic Recovery Options for Super Admins
 
-If a catastrophic event occurs in which the GWS Super Admin credentials are lost or stolen, this control is in place to require "break-glass" Super Admin accounts. These accounts are to be physically secured in a highly secure location as a recovery option, with the account self-recovery feature disabled in GWS.
+This section covers the admin self-recovery setting that is in Google Admin console.
 
 ### Policies
 
 #### GWS.COMMONCONTROLS.8.1v0.1
-Account self-recovery for Super Admins SHALL be disabled, forcing Super Admin users who have lost their login credentials to contact another Super Admin to recover their account.
+Account self-recovery for Super Admins SHALL be disabled
 
 - Rationale
-  - This makes it more difficult for a potential adversary from being able to attempt to gain access to a super admin account through the method of account recovery.
+  - This forces Super Admin users who have lost their login credentials to contact another Super Admin to recover their account. This makes it more difficult for a potential adversary from being able to attempt to gain access to a super admin account through the method of account recovery.
 - Last Modified: July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -883,7 +883,11 @@ It should be noted that admins will have to manually approve each trusted app. T
 
 ## 11. Authorized Google Marketplace Apps
 
-This section enables the ability to restrict the installation of Google Workspace Marketplace apps to a defined list provided and configured in the app allowlist. This guidance includes and applies to internally developed applications.
+This section enables the ability to restrict the installation of Google Workspace Marketplace apps to a defined list provided and configured in the app allowlist. This guidance includes and applies to internally developed applications. This control disables legacy authentication and requires the use of modern authentication protocols based on federation for access from applications.
+
+Some older versions of common software may break when this control is implemented. Examples of these apps include:
+-   Mails configured with POP3
+-   Older versions of Outlook
 
 ### Policies
 
@@ -917,6 +921,7 @@ Access to Google Workspace applications by less secure apps that do not meet sec
 
 -   [GWS Admin Help \| Manage Google Workspace Marketplace apps on your allowlist](https://support.google.com/a/answer/6089179?fl=1)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
+-   [GWS Admin Help \| Control access to less secure apps](https://support.google.com/a/answer/6260879?hl=en)
 
 ### Prerequisites
 
