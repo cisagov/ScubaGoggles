@@ -56,7 +56,7 @@ Agencies SHOULD disable sharing outside of the organization's domain.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 <details>
-<summary>If Sharing Outside Domain is Disabled</summary>
+<summary><strong>If Sharing Outside Domain is Disabled</strong></summary>
 <strong>GWS.DRIVEDOCS.1.2v0.1</strong><br>
 Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
