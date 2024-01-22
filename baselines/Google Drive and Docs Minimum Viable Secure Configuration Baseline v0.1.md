@@ -57,7 +57,7 @@ Agencies SHOULD disable sharing outside of the organization's domain.
 
 <details>
 <summary>If Sharing Outside Domain is Disabled</summary>
-<strong>GWS.DRIVEDOCS.1.2v0.1</strong>
+<strong>GWS.DRIVEDOCS.1.2v0.1</strong><br>
 Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
 - Rationale
