@@ -1185,3 +1185,70 @@ To configure Supplemental Data Storage per the policy:
 3.	Click the **Supplemental Data Storage** card.
 4.	Ensure the checkbox for "**Russian Federation**" is unchecked.
 6.	Click **Save**.
+
+## 16. Google Workspace Logs
+
+Configure GWS to send critical logs to the agency's centralized SIEM so that they can be audited and queried. Configure GWS to send logs to a storage account and retain them for when incident response is needed.
+
+### Policy
+
+#### GWS.COMMONCONTROLS.16.1v0.1
+The following critical logs SHALL be sent at a minimum.
+
+        > Admin Audit logs
+
+        > Enterprise Groups Audit logs
+
+        > Login Audit logs
+
+        > OAuth Token Audit logs
+
+        > SAML Audit log
+
+        > Context Aware Access logs
+
+- Rationale
+  - OMB M-21-31, Improving the Federal Government's Investigative and Remediation Capabilities Related to Cybersecurity Incidents, provides guidance on log retention for federal agencies. The memorandum defines the types of logs that must be retained at each maturity level for log retention.
+- Last Modified: July 10, 2023
+
+- MITRE ATT&CK TTP Mapping
+  - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
+    - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
+
+#### GWS.COMMONCONTROLS.16.2v0.1
+Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31. The logs SHALL be sent to the agency's Security Operations Center (SOC) for monitoring.
+
+- Rationale
+  - OMB M-21-31, Improving the Federal Government's Investigative and Remediation Capabilities Related to Cybersecurity Incidents, provides guidance on log retention for federal agencies. The memorandum defines three maturity levels for log retention, with each level requiring different minimum retention periods.
+- Last Modified: July 10, 2023
+
+- MITRE ATT&CK TTP Mapping
+  - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
+    - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
+
+### Resources
+
+-   [GWS Admin Help \| Share data with Google Cloud Platform services](https://support.google.com/a/answer/9320190)
+-   [Google Cloud Operations Suite \| Audit logs for Google Workspace](https://cloud.google.com/logging/docs/audit/gsuite-audit-logging)
+-   [Google Cloud Operations Suite \| View and manage audit logs for Google Workspace](https://cloud.google.com/logging/docs/audit/configure-gsuite-audit-logs)
+-   [Google Cloud Operations Suite \| Aggregate and store your organization's logs](https://cloud.google.com/logging/docs/central-log-storage)
+-   [Google Cloud Architecture Center \| Google Logging export scenarios](https://cloud.google.com/architecture/design-patterns-for-exporting-stackdriver-logging?hl=en#logging_export_scenarios)
+-   [GWS Admin Help \| Data sources for GWS Audit and investigation page](https://support.google.com/a/answer/9725452)
+-   [Google Cloud Operations Suite \| Configure and Manage sinks – Google Cloud](https://cloud.google.com/logging/docs/export/configure_export_v2)
+-   [OMB M-21-31 \| Office of Management and Budget](https://www.whitehouse.gov/wp-content/uploads/2021/08/M-21-31-Improving-the-Federal-Governments-Investigative-and-Remediation-Capabilities-Related-to-Cybersecurity-Incidents.pdf)
+
+### Prerequisites
+
+-   None
+
+### Implementation
+
+#### GWS.COMMONCONTROLS.16.1v0.1 Instructions
+1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.  Go to Menu [Account \> Account settings \> Legal and compliance](https://admin.google.com/ac/companyprofile/legal).
+3.  Click **Sharing options.**
+4.  Select **Enabled.**
+5.  Click **Save**.
+
+#### GWS.COMMONCONTROLS.16.2v0.1 Instructions
+1.  There is no implementation for this policy.
