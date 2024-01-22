@@ -2,13 +2,11 @@
 provider.py is where the GWS api calls are made.
 
 """
-import json
 import warnings
-import dns.resolver
-import requests
 from tqdm import tqdm
 
 from scubagoggles.utils import create_subset_inverted_dict, create_key_to_list, merge_dicts
+from scubagoggles.robust_dns import RobustDNSClient
 
 EVENTS = {
     'calendar': [
@@ -21,8 +19,7 @@ EVENTS = {
         'CREATE_APPLICATION_SETTING',
         'DELETE_APPLICATION_SETTING'
     ],
-    'commoncontrols':
-    [
+    'commoncontrols': [
         'CREATE_APPLICATION_SETTING',
         'CHANGE_APPLICATION_SETTING',
         'TOGGLE_CAA_ENABLEMENT',
@@ -41,20 +38,20 @@ EVENTS = {
         'DELETE_APPLICATION_SETTING',
         'CHANGE_DATA_LOCALIZATION_FOR_RUSSIA'
     ],
-    'drive':[
+    'drive': [
         'CHANGE_APPLICATION_SETTING',
         'CHANGE_DOCS_SETTING',
         'DELETE_APPLICATION_SETTING'
     ],
-    'gmail':[
+    'gmail': [
         'CHANGE_GMAIL_SETTING',
         'CHANGE_APPLICATION_SETTING',
         'CHANGE_EMAIL_SETTING',
         'CREATE_APPLICATION_SETTING',
         'DELETE_APPLICATION_SETTING'
     ],
-    'groups':['CHANGE_APPLICATION_SETTING'],
-    'meet':[
+    'groups': ['CHANGE_APPLICATION_SETTING'],
+    'meet': [
         'CHANGE_APPLICATION_SETTING',
         'CREATE_APPLICATION_SETTING',
         'DELETE_APPLICATION_SETTING'
@@ -87,160 +84,7 @@ selectors = ["google", "selector1", "selector2"]
 #    beginning of the domain name up to the first period
 #
 
-def robust_query(qname : str, max_tries : int = 2) -> dict:
-    '''
-    Requests the TXT record for the given qname. First tries to make
-    the query over traditional DNS but retries over DoH in the event of
-    failure.
-
-    :param qname: The query name (ie domain name).
-    :param max_tries: The number of times to retry each kind of query.
-            If all queries are unsuccessful, the traditional queries and
-            the DoH queries will each be made $MaxTries times. Default 2.
-    '''
-    # First attempt the query over traditional DNS
-    result = traditional_query(qname, max_tries)
-    success = result['success']
-    trad_empty_or_nx = result['trad_empty_or_nx']
-    answers = result['answers']
-    log_entries = result['log_entries']
-
-    if not success:
-        # The traditional DNS query(ies) failed. Retry with DoH
-        result = doh_query(qname, max_tries)
-        success = result['success']
-        answers.extend(result['answers'])
-        log_entries.extend(result['log_entries'])
-
-    # There are three possible outcomes of this function:
-    # - Full confidence: we know conclusively that the domain exists or not, either via a positive
-    # answer from traditional DNS, an answer from DoH, or NXDomain from DoH.
-    # - Medium confidence: domain likely doesn't exist, but there is some doubt (NXDomain or no
-    # answer from traditional DNS and DoH failed).
-    # No confidence: all queries failed. Throw an exception in this case.
-    if success:
-        return {"Answers": answers, "HighConfidence": True, "LogEntries": log_entries}
-    if trad_empty_or_nx:
-        return {"Answers": answers, "HighConfidence": False, "LogEntries": log_entries}
-    log = '\n'.join([json.dumps(entry) for entry in log_entries])
-    raise Exception(f"Failed to resolve {qname}. \n{log}")
-
-def traditional_query(qname, max_tries):
-    '''
-    Requests the TXT record for the given qname over DoH.
-
-        :param qname: The query name (ie domain name).
-        :param max_tries: The number of times to retry the query.
-    '''
-    try_number = 0
-    answers = []
-    log_entries = []
-    success = False
-    trad_empty_or_nx = False
-
-    while try_number < max_tries:
-        try_number += 1
-        try:
-            # No exception was thrown, we got our answer, so break out of the retry loop and set
-            # success to True, no need to retry the traditional query or retry with DoH.
-            response = dns.resolver.resolve(qname, "TXT")
-            for answer in response:
-                answers.append(answer.to_text().strip('"')) # Strip
-                # the quotes because the actual response comes wrapped in
-                # quotes, resulting in duplicate quotes in the json output
-            success = True
-            log_entries.append({
-                "query_name": qname,
-                "query_method": "traditional",
-                "query_result": f"Query returned {len(response)} txt records"})
-            break
-        except dns.resolver.NoAnswer:
-            # The answer section was empty. This usually means that while the domain exists, but
-            # there are no records of the requested type. No need to retry the traditional query,
-            # this was not a transient failure. Don't set success to True though, as we want to
-            # retry this query from a public resolver, in case the internal DNS server returns a
-            # different answer than what is served to the public (i.e., split horizon DNS).
-            trad_empty_or_nx = True
-            log_entries.append({
-                "query_name": qname,
-                "query_method": "traditional",
-                "query_result": "Query returned 0 txt records"})
-            break
-        except dns.resolver.NXDOMAIN:
-            # The server returned NXDomain, no need to retry the traditional query, this was not
-            # a transient failure. Don't set success to True though, as we want to retry this
-            # query from a public resolver, in case the internal DNS server returns a different
-            # answer than what is served to the public (i.e., split horizon DNS).
-            trad_empty_or_nx = True
-            log_entries.append({
-                "query_name": qname,
-                "query_method": "traditional",
-                "query_result": "Query returned NXDOMAIN"})
-            break
-        except Exception as exception:
-            # The query failed, possibly a transient failure. Retry if we haven't reached max_tries.
-            log_entries.append({
-                "query_name": qname,
-                "query_method": "traditional",
-                "query_result": f"Query resulted in exception {exception}"})
-
-    return {"success": success,
-        "trad_empty_or_nx": trad_empty_or_nx,
-        "answers": answers,
-        "log_entries": log_entries}
-
-def doh_query(qname, max_tries):
-    '''
-    Requests the TXT record for the given qname over DoH.
-
-    :param qname: The query name (ie domain name).
-    :param max_tries: The number of times to retry the query.
-    '''
-    try_number = 0
-    answers = []
-    log_entries = []
-    success = False
-    while try_number < max_tries:
-        try_number += 1
-        uri = f"https://1.1.1.1/dns-query?name={qname})&type=txt"
-        headers = {"accept":"application/dns-json"}
-        try:
-            response = requests.get(uri, headers=headers, timeout=5).json()
-            if response['Status'] == 0:
-                # 0 indicates there was no error
-                log_entries.append({
-                    "query_name": qname,
-                    "query_method": "DoH",
-                    "query_result": f"Query returned {len(response['Answer'])} txt records"})
-                for answer in response['Answers']:
-                    answers.append(answer['data'].replace('"', ''))
-                success = True
-                break
-            if response['Status'] == 3:
-                # 3 indicates NXDomain. The DNS query succeeded, but the domain did not exist.
-                # Set success to True, because event though the domain does not exist, the
-                # query succeeded, and this came from an external resolver so split horizon is
-                # not an issue here.
-                log_entries.append({
-                    "query_name": qname,
-                    "query_method": "DoH",
-                    "query_result": "Query returned NXDomain"})
-                success = True
-                break
-            # The remainder of the response codes indicate that the query did not succeed.
-            # Retry if we haven't reached max_tries.
-            log_entries.append({
-                "query_name": qname,
-                "query_method": "DoH",
-                "query_result": f"Query returned response code {response['Status']}"})
-        except Exception as exception:
-            # The DoH query failed, likely due to a network issue. Retry if we haven't reached
-            # $MaxTries.
-            log_entries.append({
-                "query_name": qname,
-                "query_method": "DoH",
-                "query_result": f"Query resulted in exception {exception}"})
-    return {"success": success, "answers": answers, "log_entries": log_entries}
+DNSClient = RobustDNSClient()
 
 def get_spf_records(domains: list) -> list:
     '''
@@ -251,7 +95,7 @@ def get_spf_records(domains: list) -> list:
     results = []
     n_low_confidence = 0
     for domain in domains:
-        result = robust_query(domain)
+        result = DNSClient.query(domain)
         if not result['HighConfidence']:
             n_low_confidence += 1
         results.append({
@@ -261,7 +105,7 @@ def get_spf_records(domains: list) -> list:
         })
     if n_low_confidence > 0:
         warnings.warn(f"get_spf_records: for {n_low_confidence} domain(s), \
-the traditional DNS queries returned either NXDomain or an empty answer \
+the traditional DNS queries returned an empty answer \
 section and the DoH queries failed. Will assume SPF not configured, but \
 can't guarantee that failure isn't due to something like split horizon DNS. \
 See ProviderSettingsExport.json under 'spf_records' for more details.", RuntimeWarning)
@@ -279,7 +123,7 @@ def get_dkim_records(domains : list) -> list:
         qnames = [f"{selector}._domainkey.{domain}" for selector in selectors]
         log_entries = []
         for qname in qnames:
-            result = robust_query(qname)
+            result = DNSClient.query(qname)
             log_entries.extend(result['LogEntries'])
             if len(result['Answers']) == 0:
                 # The DKIM record does not exist with this selector, we need to try again with
@@ -298,7 +142,7 @@ def get_dkim_records(domains : list) -> list:
 
     if n_low_confidence > 0:
         warnings.warn(f"get_dkim_records: for {n_low_confidence} domain(s), \
-the traditional DNS queries returned either NXDomain or an empty answer \
+the traditional DNS queries returned an empty answer \
 section and the DoH queries failed. Will assume DKIM not configured, but \
 can't guarantee that failure isn't due to something like split horizon DNS. \
 See ProviderSettingsExport.json under 'dkim_records' for more details.", RuntimeWarning)
@@ -315,14 +159,14 @@ def get_dmarc_records(domains : list) -> list:
     for domain in domains:
         log_entries = []
         qname = f"_dmarc.{domain}"
-        result = robust_query(qname)
+        result = DNSClient.query(qname)
         log_entries.extend(result['LogEntries'])
         if len(result["Answers"]) == 0:
             # The domain does not exist. If the record is not available at the full domain
             # level, we need to check at the organizational domain level.
             labels = domain.split(".")
             org_domain = f"{labels[-2]}.{labels[-1]}"
-            result = robust_query(f"_dmarc.{org_domain}")
+            result = DNSClient.query(f"_dmarc.{org_domain}")
             log_entries.extend(result['LogEntries'])
         if not result['HighConfidence']:
             n_low_confidence += 1
@@ -333,7 +177,7 @@ def get_dmarc_records(domains : list) -> list:
         })
     if n_low_confidence > 0:
         warnings.warn(f"get_dmarc_records: for {n_low_confidence} domain(s), \
-the traditional DNS queries returned either NXDomain or an empty answer \
+the traditional DNS queries returned an empty answer \
 section and the DoH queries failed. Will assume DMARC not configured, but \
 can't guarantee that failure isn't due to something like split horizon DNS. \
 See ProviderSettingsExport.json under 'dmarc_records' for more details.", RuntimeWarning)
@@ -345,7 +189,7 @@ def get_dnsinfo(service):
 
     :param service: a directory_v1 service instance
     '''
-    output = {"spf_records": [], "dkim_records": [], "dmarc_records": []}
+    output = {"domains": [], "spf_records": [], "dkim_records": [], "dmarc_records": []}
 
     # Determine the tenant's domains via the API
     response = service.domains().list(customer="my_customer").execute()
@@ -354,6 +198,8 @@ def get_dnsinfo(service):
     if len(domains) == 0:
         warnings.warn("No domains found.", RuntimeWarning)
         return output
+
+    output["domains"].extend(domains)
 
     try:
         output["spf_records"] = get_spf_records(domains)
