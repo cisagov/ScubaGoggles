@@ -55,9 +55,7 @@ Agencies SHOULD disable sharing outside of the organization's domain.
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-<details>
-<summary><strong>If Sharing Outside Domain is Disabled</strong></summary>
-<strong>GWS.DRIVEDOCS.1.2v0.1</strong><br>
+#### GWS.DRIVEDOCS.1.2v0.1
 Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
 - Rationale
@@ -69,7 +67,6 @@ Agencies SHOULD disable users' receiving files from outside of the organization'
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
-  </details>
 
 #### GWS.DRIVEDOCS.1.3v0.1
 Warnings SHOULD be enabled when a user is attempting to share something outside the domain.
@@ -83,6 +80,7 @@ Warnings SHOULD be enabled when a user is attempting to share something outside 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+  </details>
 
 #### GWS.DRIVEDOCS.1.4v0.1
 If sharing outside of the organization, then agencies SHALL disable sharing of files with individuals who are not using a Google account.
@@ -164,6 +162,8 @@ To configure the settings for Sharing options:
 #### GWS.DRIVEDOCS.1.1v0.1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Select **Sharing outside of your domain** -\> **OFF – Files owned by users in your domain cannot be shared outside of your domain**
+
+### This Policy Only Applies if External Sharing is Disabled
 
 #### GWS.DRIVEDOCS.1.2v0.1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
