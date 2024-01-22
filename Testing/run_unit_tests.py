@@ -35,7 +35,7 @@ parser.add_argument('-b', '--baselines', type = str, nargs="+",
 default=gws_baselines, help="Space-separated list of baselines to test. By default all are run.")
 
 parser.add_argument('-c', '--controls', type = str, nargs="+",
-default=[], help="Space-separated list of controls to test within a specific baseline."
+default=[], help="Space-separated list of control group numbers to test within a specific baseline."
 "Can only be used when a single baseline is specified. By default all are run.")
 
 parser.add_argument('-o', '--opapath', type=str, default='../', metavar='',
@@ -74,11 +74,11 @@ for b in args.baselines:
     b = b.lower()
     if len(args.controls) > 0:
         for c in args.controls:
-            print(f"\n==== Testing {b} Control 2.{c} ====")
+            print(f"\n==== Testing {b} control {c} ====")
             c = c.zfill(2)
             command = f"{OPA_EXE} test ../Rego/ ./RegoTests/{b}/{b}{c}_test.rego {V_FLAG}"
             print(command)
-            subprocess.run(command.split(), check=True)
+            subprocess.run(command.split(), check=False)
     else:
         print(f"\n==== Testing {b} ====")
         command = f"{OPA_EXE} test ../Rego/ ./RegoTests/{b} {V_FLAG}"
