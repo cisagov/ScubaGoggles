@@ -55,6 +55,8 @@ Agencies SHOULD disable sharing outside of the organization's domain.
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
+<details>
+<summary>If Sharing Outside Domain is Disabled</summary>
 #### GWS.DRIVEDOCS.1.2v0.1
 Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
@@ -67,6 +69,7 @@ Agencies SHOULD disable users' receiving files from outside of the organization'
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+  </details>
 
 #### GWS.DRIVEDOCS.1.3v0.1
 Warnings SHOULD be enabled when a user is attempting to share something outside the domain.
