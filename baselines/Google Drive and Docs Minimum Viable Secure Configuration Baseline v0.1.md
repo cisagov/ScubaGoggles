@@ -169,6 +169,8 @@ To configure the settings for Sharing options:
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Deselect **Allow users to receive files from users or shared drives outside of the organization**
 
+### The Following Policies Only Apply if External Sharing is Enabled
+
 #### GWS.DRIVEDOCS.1.3v0.1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Select **Warn when files owned by users or shared drives in your organization are shared outside of your organization.**
