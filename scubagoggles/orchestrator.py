@@ -208,6 +208,7 @@ def run_reporter(args):
         n_warn = stats["Warning"]
         n_fail = stats["Fail"]
         n_manual = stats["N/A"] + stats["No events found"]
+        n_error = stats["Error"]
 
         pass_summary = (f"<div class='summary pass'>{n_success}"
         f" {pluralize('test', 'tests', n_success)} passed</div>")
@@ -218,6 +219,7 @@ def run_reporter(args):
         warning_summary = "<div class='summary'></div>"
         failure_summary = "<div class='summary'></div>"
         manual_summary = "<div class='summary'></div>"
+        error_summary = "<div class='summary'></div>"
 
         if n_warn > 0:
             warning_summary = (f"<div class='summary warning'>{n_warn}"
@@ -228,10 +230,14 @@ def run_reporter(args):
         if n_manual > 0:
             manual_summary = (f"<div class='summary manual'>{n_manual} manual"
             f" {pluralize('check', 'checks', n_manual)} needed</div>")
+        if n_error > 0:
+            error_summary = (f"<div class='summary error'>{n_error}"
+            f" {pluralize('error', 'errors', n_error)}</div>")
 
         table_data.append({
-        "Baseline Conformance Reports": link,
-        "Details": f"{pass_summary}{warning_summary}{failure_summary}{manual_summary}"
+            "Baseline Conformance Reports": link,
+            "Details": f"{pass_summary}{warning_summary}{failure_summary}{manual_summary}\
+                {error_summary}"
         })
 
     fragments.append(reporter.create_html_table(table_data))

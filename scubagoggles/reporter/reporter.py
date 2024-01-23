@@ -5,9 +5,12 @@ Currently utilizes pandas to generate the HTML table fragments
 """
 import os
 import time
+import warnings
 from datetime import datetime
 import pandas as pd
 from scubagoggles.utils import rel_abs_path
+
+SCUBA_GITHUB_URL = "https://github.com/cisagov/scubagoggles"
 
 def get_test_result(requirement_met : bool, criticality : str, no_such_events : bool) -> str:
     '''
@@ -164,56 +167,72 @@ tenant_name : str, main_report_name : str, prod_to_fullname: dict, product_polic
         "Warning": 0,
         "Fail": 0,
         "N/A": 0,
-        "No events found": 0
+        "No events found": 0,
+        "Error": 0
     }
 
     for baseline_group in product_policies:
         table_data = []
         for control in baseline_group['Controls']:
             tests = [test for test in test_results_data if test['PolicyId'] == control['Id']]
-            for test in tests:
-                result = get_test_result(test['RequirementMet'], test['Criticality'],
-                test['NoSuchEvent'])
-                report_stats[result] = report_stats[result] + 1
-                details = test['ReportDetails']
-
-                if result == "No events found":
-                    warning_icon = "<object data='./images/triangle-exclamation-solid.svg'\
-                        width='15'\
-                        height='15'>\
-                        </object>"
-                    details = warning_icon + " " + test['ReportDetails']
-
-                # As rules doesn't have it's own baseline, Rules and Common Controls
-                # need to be handled specially
-                if product_capitalized == "Rules":
-                    if 'Not-Implemented' in test['Criticality']:
-                        # The easiest way to identify the GWS.COMMONCONTROLS.14.1v1
-                        # results that belong to the Common Controls report is they're
-                        # marked as Not-Implemented. This if excludes them from the
-                        # rules report.
-                        continue
-                    table_data.append({
-                        'Control ID': control['Id'],
-                        'Rule Name': test['Requirement'],
-                        'Result': result,
-                        'Criticality': test['Criticality'],
-                        'Rule Description': test['ReportDetails']})
-                elif product_capitalized == "Commoncontrols" \
-                    and baseline_group['GroupName'] == 'System-defined Rules' \
-                    and 'Not-Implemented' not in test['Criticality']:
-                    # The easiest way to identify the System-defined Rules
-                    # results that belong to the Common Controls report is they're
-                    # marked as Not-Implemented. This if excludes the full results
-                    # from the Common Controls report.
-                    continue
-                else:
-                    table_data.append({
+            if len(tests) == 0:
+                # Handle the case where Rego doesn't output anything for a given control
+                report_stats['Error'] += 1
+                issues_link = f'<a href="{SCUBA_GITHUB_URL}/issues" target="_blank">GitHub</a>'
+                table_data.append({
                     'Control ID': control['Id'],
                     'Requirement': control['Value'],
-                    'Result': result,
-                    'Criticality': test['Criticality'],
-                    'Details': details})
+                    'Result': "Error - Test results missing",
+                    'Criticality': "-",
+                    'Details': f'Report issue on {issues_link}'
+                })
+                warnings.warn(f"No test results found for Control Id {control['Id']}",
+                    RuntimeWarning)
+            else:
+                for test in tests:
+                    result = get_test_result(test['RequirementMet'], test['Criticality'],
+                        test['NoSuchEvent'])
+                    report_stats[result] = report_stats[result] + 1
+                    details = test['ReportDetails']
+
+                    if result == "No events found":
+                        warning_icon = "<object data='./images/triangle-exclamation-solid.svg'\
+                            width='15'\
+                            height='15'>\
+                            </object>"
+                        details = warning_icon + " " + test['ReportDetails']
+
+                    # As rules doesn't have its own baseline, Rules and Common Controls
+                    # need to be handled specially
+                    if product_capitalized == "Rules":
+                        if 'Not-Implemented' in test['Criticality']:
+                            # The easiest way to identify the GWS.COMMONCONTROLS.13.1v1
+                            # results that belong to the Common Controls report is they're
+                            # marked as Not-Implemented. This if excludes them from the
+                            # rules report.
+                            continue
+                        table_data.append({
+                            'Control ID': control['Id'],
+                            'Rule Name': test['Requirement'],
+                            'Result': result,
+                            'Criticality': test['Criticality'],
+                            'Rule Description': test['ReportDetails']})
+                    elif product_capitalized == "Commoncontrols" \
+                        and baseline_group['GroupName'] == 'System-defined Rules' \
+                        and 'Not-Implemented' not in test['Criticality']:
+                        # The easiest way to identify the System-defined Rules
+                        # results that belong to the Common Controls report is they're
+                        # marked as Not-Implemented. This if excludes the full results
+                        # from the Common Controls report.
+                        continue
+                    else:
+                        table_data.append({
+                            'Control ID': control['Id'],
+                            'Requirement': control['Value'],
+                            'Result': result,
+                            'Criticality': test['Criticality'],
+                            'Details': details
+                        })
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
