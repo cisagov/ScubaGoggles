@@ -1699,23 +1699,3 @@ tests contains {
     "NoSuchEvent": false
 }
 #--
-
-
-################
-# GWS.GMAIL.19 #
-################
-
-#
-# Baseline GWS.GMAIL.19.1v0.1
-#--
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
-tests contains {
-    "PolicyId": "GWS.GMAIL.19.1v0.1",
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
