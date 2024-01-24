@@ -1754,6 +1754,33 @@ tests contains {
 }
 #--
 
+#
+# Baseline GWS.GMAIL.18.2v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.18.2v0.1",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.GMAIL.18.3v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.18.3v0.1",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
 
 ################
 # GWS.GMAIL.19 #
