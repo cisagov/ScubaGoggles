@@ -19,9 +19,7 @@ ReportDetailsArray(Status, Array1, Array2) := Detail if {
     Detail := Description(Fraction, " agency domain(s) found in violation: ", String)
 }
 
-AllDomains contains Domain.domain if {
-    some Domain in input.dkim_records
-}
+AllDomains := {Domain | some Domain in input.domains}
 
 LogEvents := utils.GetEvents("gmail_logs")
 
