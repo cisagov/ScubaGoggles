@@ -1362,6 +1362,18 @@ if {
 }
 #--
 
+#
+# Baseline GWS.GMAIL.10.2v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.10.2v0.1",
+    "Criticality": "May/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false}
+#--
 
 ################
 # GWS.GMAIL.11 #
