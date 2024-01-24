@@ -119,6 +119,42 @@ def pluralize(singular : str, plural : str, count : int) -> str:
         return singular
     return plural
 
+def generate_summary(stats : dict) -> str:
+    """
+    Craft the html-formatted summary from the stats dictionary.
+    """
+    n_success = stats["Pass"]
+    n_warn = stats["Warning"]
+    n_fail = stats["Fail"]
+    n_manual = stats["N/A"] + stats["No events found"]
+    n_error = stats["Error"]
+
+    pass_summary = (f"<div class='summary pass'>{n_success}"
+    f" {pluralize('test', 'tests', n_success)} passed</div>")
+
+    # The warnings, failures, and manuals are only shown if they are
+    # greater than zero. Reserve the space for them here. They will
+    # be filled next if needed.
+    warning_summary = "<div class='summary'></div>"
+    failure_summary = "<div class='summary'></div>"
+    manual_summary = "<div class='summary'></div>"
+    error_summary = "<div class='summary'></div>"
+
+    if n_warn > 0:
+        warning_summary = (f"<div class='summary warning'>{n_warn}"
+        f" {pluralize('warning', 'warnings', n_warn)}</div>")
+    if n_fail > 0:
+        failure_summary = (f"<div class='summary failure'>{n_fail}"
+        f" {pluralize('test', 'tests', n_fail)} failed</div>")
+    if n_manual > 0:
+        manual_summary = (f"<div class='summary manual'>{n_manual} manual"
+        f" {pluralize('check', 'checks', n_manual)} needed</div>")
+    if n_error > 0:
+        error_summary = (f"<div class='summary error'>{n_error}"
+        f" {pluralize('error', 'errors', n_error)}</div>")
+
+    return f"{pass_summary}{warning_summary}{failure_summary}{manual_summary}{error_summary}"
+
 def run_reporter(args):
     """
     Creates the indvididual reports and the front page
@@ -203,41 +239,9 @@ def run_reporter(args):
         full_name = prod_to_fullname[product]
         link_path =  "./IndividualReports/" f"{product_capitalize}Report.html"
         link = f"<a class=\"individual_reports\" href={link_path}>{full_name}</a>"
-        ## Build the "Details" column
-        n_success = stats["Pass"]
-        n_warn = stats["Warning"]
-        n_fail = stats["Fail"]
-        n_manual = stats["N/A"] + stats["No events found"]
-        n_error = stats["Error"]
-
-        pass_summary = (f"<div class='summary pass'>{n_success}"
-        f" {pluralize('test', 'tests', n_success)} passed</div>")
-
-        # The warnings, failures, and manuals are only shown if they are
-        # greater than zero. Reserve the space for them here. They will
-        # be filled next if needed.
-        warning_summary = "<div class='summary'></div>"
-        failure_summary = "<div class='summary'></div>"
-        manual_summary = "<div class='summary'></div>"
-        error_summary = "<div class='summary'></div>"
-
-        if n_warn > 0:
-            warning_summary = (f"<div class='summary warning'>{n_warn}"
-            f" {pluralize('warning', 'warnings', n_warn)}</div>")
-        if n_fail > 0:
-            failure_summary = (f"<div class='summary failure'>{n_fail}"
-            f" {pluralize('test', 'tests', n_fail)} failed</div>")
-        if n_manual > 0:
-            manual_summary = (f"<div class='summary manual'>{n_manual} manual"
-            f" {pluralize('check', 'checks', n_manual)} needed</div>")
-        if n_error > 0:
-            error_summary = (f"<div class='summary error'>{n_error}"
-            f" {pluralize('error', 'errors', n_error)}</div>")
-
         table_data.append({
             "Baseline Conformance Reports": link,
-            "Details": f"{pass_summary}{warning_summary}{failure_summary}{manual_summary}\
-                {error_summary}"
+            "Details": generate_summary(stats)
         })
 
     fragments.append(reporter.create_html_table(table_data))
