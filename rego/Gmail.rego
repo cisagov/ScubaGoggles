@@ -114,7 +114,8 @@ tests contains {
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
-    "NoSuchEvent": false}
+    "NoSuchEvent": false
+}
 #--
 
 #
@@ -530,7 +531,8 @@ tests contains {
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
-    "NoSuchEvent": false}
+    "NoSuchEvent": false
+}
 #--
 
 ###############
@@ -1372,7 +1374,8 @@ tests contains {
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
-    "NoSuchEvent": false}
+    "NoSuchEvent": false
+}
 #--
 
 ################
@@ -1633,6 +1636,19 @@ if {
 }
 #--
 
+#
+# Baseline GWS.GMAIL.15.2v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.15.2v0.1",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
 
 ################
 # GWS.GMAIL.16 #
