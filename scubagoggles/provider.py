@@ -516,8 +516,8 @@ class Provider:
                 )
                 self.successful_calls.add("reports/v1/activity/list")
         except Exception as exc:
-            warnings.warn(f"Provider Exception thrown while getting the logs; "\
-                "outputs will be incorrect: {exc}", RuntimeWarning)
+            warnings.warn("Provider Exception thrown while getting the logs; "\
+                f"outputs will be incorrect: {exc}", RuntimeWarning)
             self.unsuccessful_calls.add("reports/v1/activity/list")
 
         # repacks the main aggregator into the original form
