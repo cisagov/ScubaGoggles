@@ -151,10 +151,10 @@ def get_failed_prereqs(test : dict, successful_calls : set, unsuccessful_calls :
     :param successful_calls: a set with the successful provider calls
     :param unsuccessful_calls: a set with the unsuccessful provider calls
     '''
-    # The following if/else makes the error handling backwards compatible until
-    # all Regos are updated.
     if 'Prerequisites' not in test:
-        prereqs = set()
+        # If Prerequisites is not defined, assume the test just depends on the
+        # reports API.
+        prereqs = set(["reports/v1/activities/list"])
     else:
         prereqs = set(test['Prerequisites'])
 
