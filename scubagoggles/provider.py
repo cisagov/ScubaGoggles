@@ -207,21 +207,21 @@ class Provider:
         output["domains"].extend(domains)
 
         try:
-            output["spf_records"] = get_spf_records(domains)
+            output["spf_records"] = self.get_spf_records(domains)
             self.successful_calls.add("get_spf_records")
         except Exception as exc:
             output["spf_records"] = []
             warnings.warn(f"An exception was thrown by get_spf_records: {exc}", RuntimeWarning)
             self.unsuccessful_calls.add("get_spf_records")
         try:
-            output["dkim_records"] = get_dkim_records(domains)
+            output["dkim_records"] = self.get_dkim_records(domains)
             self.successful_calls.add("get_dkim_records")
         except Exception as exc:
             output["dkim_records"] = []
             warnings.warn(f"An exception was thrown by get_dkim_records: {exc}", RuntimeWarning)
             self.unsuccessful_calls.add("get_dkim_records")
         try:
-            output["dmarc_records"] = get_dmarc_records(domains)
+            output["dmarc_records"] = self.get_dmarc_records(domains)
             self.successful_calls.add("get_dmarc_records")
         except Exception as exc:
             output["dmarc_records"] = []
