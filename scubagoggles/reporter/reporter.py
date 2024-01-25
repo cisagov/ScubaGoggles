@@ -9,6 +9,28 @@ from datetime import datetime
 import pandas as pd
 from scubagoggles.utils import rel_abs_path
 
+def get_reference_a_tag(api_call : str) -> str:
+    '''
+    Craft the link to the documentation page for each API call.
+    
+    :param api_call: a string representing the API call, such as "directory/v1/users/list".
+    '''
+    api = api_call.split('/')[0]
+    call = '/'.join(api_call.split('/')[1:])
+    # All APIs except for the groups-settings api have "rest/" after "reference/"
+    api_type = "" if api == "groups-settings" else "rest/"
+    return f'<a href="https://developers.google.com/admin-sdk/{api}/reference/{api_type}{call}"> \
+        {api_call}</a>'
+
+API_LINKS = {api_call: get_reference_a_tag(api_call) for api_call in [
+    "directory/v1/users/list",
+    "directory/v1/orgunits/list",
+    "directory/v1/domains/list",
+    "directory/v1/groups/list",
+    "reports/v1/activities/list",
+    "group-settings/v1/groups/get"
+]}
+
 def get_test_result(requirement_met : bool, criticality : str, no_such_events : bool) -> str:
     '''
     Checks the Rego to see if the baseline passed or failed and indicates the criticality
@@ -141,7 +163,8 @@ tenant_name : str, main_report_name: str) -> str:
     return html
 
 def rego_json_to_html(test_results_data : str, product : list, out_path : str,
-tenant_name : str, main_report_name : str, prod_to_fullname: dict, product_policies) -> None:
+tenant_name : str, main_report_name : str, prod_to_fullname: dict, product_policies,
+successful_calls : set, unsuccessful_calls : set) -> None:
     '''
     Transforms the Rego JSON output into HTML
 
@@ -152,6 +175,8 @@ tenant_name : str, main_report_name : str, prod_to_fullname: dict, product_polic
     :param main_report_name: report_name: Name of the main report HTML file.
     :param prod_to_fullname: dict containing mapping of the product full names
     :param product_policies: dict containing policies read from the baseline markdown
+    :param successful_calls: set with the set of successful calls
+    :param unsuccessful_calls: set with the set of unsuccessful calls
     '''
 
     product_capitalized = product.capitalize()
@@ -164,7 +189,8 @@ tenant_name : str, main_report_name : str, prod_to_fullname: dict, product_polic
         "Warning": 0,
         "Fail": 0,
         "N/A": 0,
-        "No events found": 0
+        "No events found": 0,
+        "Error": 0
     }
 
     for baseline_group in product_policies:
@@ -172,48 +198,83 @@ tenant_name : str, main_report_name : str, prod_to_fullname: dict, product_polic
         for control in baseline_group['Controls']:
             tests = [test for test in test_results_data if test['PolicyId'] == control['Id']]
             for test in tests:
-                result = get_test_result(test['RequirementMet'], test['Criticality'],
-                test['NoSuchEvent'])
-                report_stats[result] = report_stats[result] + 1
-                details = test['ReportDetails']
-
-                if result == "No events found":
-                    warning_icon = "<object data='./images/triangle-exclamation-solid.svg'\
-                        width='15'\
-                        height='15'>\
-                        </object>"
-                    details = warning_icon + " " + test['ReportDetails']
-
-                # As rules doesn't have it's own baseline, Rules and Common Controls
-                # need to be handled specially
-                if product_capitalized == "Rules":
-                    if 'Not-Implemented' in test['Criticality']:
-                        # The easiest way to identify the GWS.COMMONCONTROLS.14.1v1
-                        # results that belong to the Common Controls report is they're
-                        # marked as Not-Implemented. This if excludes them from the
-                        # rules report.
-                        continue
+                # The following if/else makes the error handling backwards compatible until
+                # all Regos are updated.
+                if 'Prerequisites' not in test:
+                    prereqs = set()
+                else:
+                    prereqs = set(test['Prerequisites'])
+                # A call is failed if it is either missing from the successful_calls set
+                # or present in the unsuccessful_calls
+                failed_calls = set().union(
+                    prereqs.difference(successful_calls),
+                    prereqs.intersection(unsuccessful_calls)
+                )
+                if len(failed_calls) > 0:
+                    result = "Error"
+                    report_stats["Error"] += 1
+                    failed_api_links = [API_LINKS[api] for api in failed_calls if api in API_LINKS]
+                    failed_functions = [call for call in failed_calls if call not in API_LINKS]
+                    failed_details = ""
+                    if len(failed_api_links) > 0:
+                        links = ', '.join(failed_api_links)
+                        failed_details += f"This test depends on the following API call(s) " \
+                            f"which did not execute successfully: {links}. " \
+                            "See terminal output for more details. "
+                    if len(failed_functions) > 0:
+                        failed_details += f"This test depends on the following function(s) " \
+                            f"which did not execute successfully: {', '.join(failed_functions)}." \
+                            "See terminal output for more details."
                     table_data.append({
                         'Control ID': control['Id'],
-                        'Rule Name': test['Requirement'],
+                        'Requirement': control['Value'],
+                        'Result': "Error",
+                        'Criticality': test['Criticality'],
+                        'Details': failed_details
+                    })
+                else:
+                    result = get_test_result(test['RequirementMet'], test['Criticality'],
+                    test['NoSuchEvent'])
+                    report_stats[result] = report_stats[result] + 1
+                    details = test['ReportDetails']
+
+                    if result == "No events found":
+                        warning_icon = "<object data='./images/triangle-exclamation-solid.svg'\
+                            width='15'\
+                            height='15'>\
+                            </object>"
+                        details = warning_icon + " " + test['ReportDetails']
+
+                    # As rules doesn't have it's own baseline, Rules and Common Controls
+                    # need to be handled specially
+                    if product_capitalized == "Rules":
+                        if 'Not-Implemented' in test['Criticality']:
+                            # The easiest way to identify the GWS.COMMONCONTROLS.14.1v1
+                            # results that belong to the Common Controls report is they're
+                            # marked as Not-Implemented. This if excludes them from the
+                            # rules report.
+                            continue
+                        table_data.append({
+                            'Control ID': control['Id'],
+                            'Rule Name': test['Requirement'],
+                            'Result': result,
+                            'Criticality': test['Criticality'],
+                            'Rule Description': test['ReportDetails']})
+                    elif product_capitalized == "Commoncontrols" \
+                        and baseline_group['GroupName'] == 'System-defined Rules' \
+                        and 'Not-Implemented' not in test['Criticality']:
+                        # The easiest way to identify the System-defined Rules
+                        # results that belong to the Common Controls report is they're
+                        # marked as Not-Implemented. This if excludes the full results
+                        # from the Common Controls report.
+                        continue
+                    else:
+                        table_data.append({
+                        'Control ID': control['Id'],
+                        'Requirement': control['Value'],
                         'Result': result,
                         'Criticality': test['Criticality'],
-                        'Rule Description': test['ReportDetails']})
-                elif product_capitalized == "Commoncontrols" \
-                    and baseline_group['GroupName'] == 'System-defined Rules' \
-                    and 'Not-Implemented' not in test['Criticality']:
-                    # The easiest way to identify the System-defined Rules
-                    # results that belong to the Common Controls report is they're
-                    # marked as Not-Implemented. This if excludes the full results
-                    # from the Common Controls report.
-                    continue
-                else:
-                    table_data.append({
-                    'Control ID': control['Id'],
-                    'Requirement': control['Value'],
-                    'Result': result,
-                    'Criticality': test['Criticality'],
-                    'Details': details})
+                        'Details': details})
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
