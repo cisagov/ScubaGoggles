@@ -356,7 +356,7 @@ NonCompliantGroups7_1 contains Group.name if {
 # if there are no groups, it has to be safe.
 tests contains {
     "PolicyId": "GWS.GROUPS.7.1v0.1",
-    "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list"],
+    "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list", "group-settings/v1/groups/get"],
     "Criticality": "Should",
     "ReportDetails": NoGroupsDetails(Groups),
     "ActualValue": NoGroupsDetails(Groups),
