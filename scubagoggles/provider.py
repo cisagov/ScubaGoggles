@@ -453,6 +453,7 @@ class Provider:
                 for group in response.get('groups'):
                     email = group.get('email')
                     group_settings.append(group_service.groups().get(groupUniqueId=email).execute())
+            self.successful_calls.add("directory/v1/groups/list")
             self.successful_calls.add("groups-settings/v1/groups/get")
             return {'group_settings': group_settings}
         except Exception as exc:
@@ -460,6 +461,7 @@ class Provider:
                 f"Exception thrown while getting group settings; outputs will be incorrect: {exc}",
                 RuntimeWarning
             )
+            self.unsuccessful_calls.add("directory/v1/groups/list")
             self.unsuccessful_calls.add("groups-settings/v1/groups/get")
             return {'group_settings': []}
 

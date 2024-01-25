@@ -87,6 +87,7 @@ DomainsWithDkim contains DkimRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.2.1v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dkim_records"],
     "Criticality": "Should",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDkim, AllDomains),
     "ActualValue": input.dkim_records,
@@ -129,6 +130,7 @@ DomainsWithSpf contains SpfRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.3.2v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutSpf, AllDomains),
     "ActualValue": DomainsWithoutSpf,
@@ -157,6 +159,7 @@ DomainsWithDmarc contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.1v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -180,6 +183,7 @@ DomainsWithPreject contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.2v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -203,6 +207,7 @@ DomainsWithDHSContact contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.3v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -226,6 +231,7 @@ DomainsWithAgencyContact contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.4v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Should",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains),
     "ActualValue": input.dmarc_records,
