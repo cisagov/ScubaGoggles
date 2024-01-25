@@ -321,6 +321,7 @@ class Provider:
         :param service: a directory_v1 service instance
         '''
         try:
+<<<<<<< HEAD
             response = service.domains().list(customer="my_customer").execute()
             self.successful_calls.add("directory/v1/domains/list")
             primary_domain = ""
@@ -331,16 +332,31 @@ class Provider:
                 'domain': primary_domain,
                 'topLevelOU': self.get_toplevel_ou(service)
             }
+=======
+            response = service.customers().get(customerKey="my_customer").execute()
+            self.successful_calls.add("directory/v1/domains/list")
+            return {'id': response['id'],
+            'domain': response['customerDomain'],
+            'name': response['postalAddress']['organizationName'],
+            'topLevelOU': self.get_toplevel_ou(service)}
+>>>>>>> c2770e6c5b19decfe58f4118157ec3bdabbed6a3
         except Exception as exc:
             warnings.warn(
                 f"An exception was thrown trying to get the tenant info: {exc}",
                 RuntimeWarning
             )
             self.unsuccessful_calls.add("directory/v1/domains/list")
+<<<<<<< HEAD
             return {
                 'domain': 'Error Retrieving',
                 'topLevelOU': 'Error Retrieving'
             }
+=======
+            return {'id': 'Error Retrieving',
+            'domain': 'Error Retrieving',
+            'name': 'Error Retrieving',
+            'topLevelOU': 'Error Retrieving'}
+>>>>>>> c2770e6c5b19decfe58f4118157ec3bdabbed6a3
 
 
     def get_gws_logs(self, products: list, service, event: str) -> dict:
@@ -430,7 +446,11 @@ class Provider:
         try:
             # gather all of the domains within a suite to get groups
             response = domain_service.domains().list(customer="my_customer").execute()
+<<<<<<< HEAD
             domains = {d['domainName'] for d in response['domains'] if d['verified']}
+=======
+            domains = {d['domainName'] for d in response['domains']}
+>>>>>>> c2770e6c5b19decfe58f4118157ec3bdabbed6a3
             self.successful_calls.add("directory/v1/domains/list")
         except Exception as exc:
             warnings.warn(
