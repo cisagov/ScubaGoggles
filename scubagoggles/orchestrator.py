@@ -207,7 +207,7 @@ def run_reporter(args):
     with open(f'{out_folder}/{args.outputproviderfilename}.json',
     mode='r',encoding='UTF-8') as file:
         tenant_info = json.load(file)['tenant_info']
-        tenant_name = tenant_info['name']
+        tenant_domain = tenant_info['domain']
 
 
     # Create the the individual report files
@@ -221,7 +221,7 @@ def run_reporter(args):
             test_results_data,
             product,
             out_folder,
-            tenant_name,
+            tenant_domain,
             main_report_name,
             prod_to_fullname,
             baseline_policies[product]
