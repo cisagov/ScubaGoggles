@@ -516,11 +516,11 @@ class Provider:
                         event=event
                     )
                 )
-                self.successful_calls.add("reports/v1/activity/list")
+                self.successful_calls.add("reports/v1/activities/list")
         except Exception as exc:
             warnings.warn("Provider Exception thrown while getting the logs; "\
                 f"outputs will be incorrect: {exc}", RuntimeWarning)
-            self.unsuccessful_calls.add("reports/v1/activity/list")
+            self.unsuccessful_calls.add("reports/v1/activities/list")
 
         # repacks the main aggregator into the original form
         # that the api returns the data in; under an 'items' key.
