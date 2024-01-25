@@ -87,6 +87,10 @@ selectors = ["google", "selector1", "selector2"]
 DNSClient = RobustDNSClient()
 
 class Provider:
+    '''
+    Class for making the GWS api calls and tracking the results.
+    '''
+
     def __init__(self):
         self.successful_calls = set()
         self.unsuccessful_calls = set()
@@ -236,7 +240,6 @@ class Provider:
         :param service: a directory_v1 service instance
         '''
         try:
-            x/0
             response = service.users().list(customer="my_customer", query="isAdmin=True").execute()
             admins = []
             for user in response['users']:
@@ -301,7 +304,8 @@ class Provider:
                 # changes have to apply to the top-level OU.
                 return ""
             parent_ou = response['organizationUnits'][0]['parentOrgUnitId']
-            response = service.orgunits().get(customerId='my_customer', orgUnitPath=parent_ou).execute()
+            response = service.orgunits().get(customerId='my_customer', orgUnitPath=parent_ou)\
+                .execute()
             ou_name = response['name']
             self.successful_calls.add("directory/v1/orgunits/list")
             return ou_name
@@ -512,10 +516,8 @@ class Provider:
                 )
                 self.successful_calls.add("reports/v1/activity/list")
         except Exception as exc:
-            warnings.warn(
-                f"Provider Exception thrown while getting the logs; outputs will be incorrect: {exc}",
-                RuntimeWarning
-            )
+            warnings.warn(f"Provider Exception thrown while getting the logs; "\
+                "outputs will be incorrect: {exc}", RuntimeWarning)
             self.unsuccessful_calls.add("reports/v1/activity/list")
 
         # repacks the main aggregator into the original form

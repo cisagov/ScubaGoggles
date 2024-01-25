@@ -230,7 +230,9 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                     if len(failed_calls) > 0:
                         result = "Error"
                         report_stats["Error"] += 1
-                        failed_api_links = [API_LINKS[api] for api in failed_calls if api in API_LINKS]
+                        failed_api_links = [
+                            API_LINKS[api] for api in failed_calls if api in API_LINKS
+                        ]
                         failed_functions = [call for call in failed_calls if call not in API_LINKS]
                         failed_details = ""
                         if len(failed_api_links) > 0:
