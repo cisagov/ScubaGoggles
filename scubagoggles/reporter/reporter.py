@@ -12,28 +12,6 @@ from scubagoggles.utils import rel_abs_path
 
 SCUBA_GITHUB_URL = "https://github.com/cisagov/scubagoggles"
 
-def get_reference_a_tag(api_call : str) -> str:
-    '''
-    Craft the link to the documentation page for each API call.
-    
-    :param api_call: a string representing the API call, such as "directory/v1/users/list".
-    '''
-    api = api_call.split('/')[0]
-    call = '/'.join(api_call.split('/')[1:])
-    # All APIs except for the groups-settings api have "rest/" after "reference/"
-    api_type = "" if api == "groups-settings" else "rest/"
-    return f'<a href="https://developers.google.com/admin-sdk/{api}/reference/{api_type}{call}"> \
-        {api_call}</a>'
-
-API_LINKS = {api_call: get_reference_a_tag(api_call) for api_call in [
-    "directory/v1/users/list",
-    "directory/v1/orgunits/list",
-    "directory/v1/domains/list",
-    "directory/v1/groups/list",
-    "reports/v1/activities/list",
-    "group-settings/v1/groups/get"
-]}
-
 def get_test_result(requirement_met : bool, criticality : str, no_such_events : bool) -> str:
     '''
     Checks the Rego to see if the baseline passed or failed and indicates the criticality
@@ -165,6 +143,75 @@ tenant_domain : str, main_report_name: str) -> str:
     html = html.replace('{{TABLES}}', collected)
     return html
 
+def get_failed_prereqs(test : dict, successful_calls : set, unsuccessful_calls : set) -> set:
+    '''
+    Given the output of a specific Rego test and the set of successful and unsuccessful
+    calls, determine the set of prerequisites that were not met.
+    :param test: a dictionary representing the output of a Rego test
+    :param successful_calls: a set with the successful provider calls
+    :param unsuccessful_calls: a set with the unsuccessful provider calls
+    '''
+    # The following if/else makes the error handling backwards compatible until
+    # all Regos are updated.
+    if 'Prerequisites' not in test:
+        prereqs = set()
+    else:
+        prereqs = set(test['Prerequisites'])
+
+    # A call is failed if it is either missing from the successful_calls set
+    # or present in the unsuccessful_calls
+    failed_prereqs = set().union(
+        prereqs.difference(successful_calls),
+        prereqs.intersection(unsuccessful_calls)
+    )
+
+    return failed_prereqs
+
+def get_reference_a_tag(api_call : str) -> str:
+    '''
+    Craft the link to the documentation page for a given API call.
+    
+    :param api_call: a string representing the API call, such as "directory/v1/users/list".
+    '''
+    api = api_call.split('/')[0]
+    call = '/'.join(api_call.split('/')[1:])
+    # All APIs except for the groups-settings api have "rest/" after "reference/"
+    api_type = "" if api == "groups-settings" else "rest/"
+    return f'<a href="https://developers.google.com/admin-sdk/{api}/reference/{api_type}{call}"> \
+        {api_call}</a>'
+
+def get_failed_details(failed_prereqs : set) -> str:
+    '''
+    Create the string used for the Details column of the report when one
+    or more of the API calls/functions failed.
+
+    :param failed_prereqs: A set of strings with the API calls/function prerequisites
+        that were not met for a given test.
+    '''
+    api_links = {
+        api_call: get_reference_a_tag(api_call) for api_call in [
+            "directory/v1/users/list",
+            "directory/v1/orgunits/list",
+            "directory/v1/domains/list",
+            "directory/v1/groups/list",
+            "reports/v1/activities/list",
+            "group-settings/v1/groups/get"
+        ]
+    }
+
+    failed_apis = [api_links[api] for api in failed_prereqs if api in api_links]
+    failed_functions = [call for call in failed_prereqs if call not in api_links]
+    failed_details = ""
+    if len(failed_apis) > 0:
+        links = ', '.join(failed_apis)
+        failed_details += f"This test depends on the following API call(s) " \
+            f"which did not execute successfully: {links}. "
+    if len(failed_functions) > 0:
+        failed_details += f"This test depends on the following function(s) " \
+            f"which did not execute successfully: {', '.join(failed_functions)}. "
+    failed_details += "See terminal output for more details."
+    return failed_details
+
 def rego_json_to_html(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
 successful_calls : set, unsuccessful_calls : set) -> None:
@@ -215,35 +262,11 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                     RuntimeWarning)
             else:
                 for test in tests:
-                    # The following if/else makes the error handling backwards compatible until
-                    # all Regos are updated.
-                    if 'Prerequisites' not in test:
-                        prereqs = set()
-                    else:
-                        prereqs = set(test['Prerequisites'])
-                    # A call is failed if it is either missing from the successful_calls set
-                    # or present in the unsuccessful_calls
-                    failed_calls = set().union(
-                        prereqs.difference(successful_calls),
-                        prereqs.intersection(unsuccessful_calls)
-                    )
-                    if len(failed_calls) > 0:
+                    failed_prereqs = get_failed_prereqs(test, successful_calls, unsuccessful_calls)
+                    if len(failed_prereqs) > 0:
                         result = "Error"
                         report_stats["Error"] += 1
-                        failed_api_links = [
-                            API_LINKS[api] for api in failed_calls if api in API_LINKS
-                        ]
-                        failed_functions = [call for call in failed_calls if call not in API_LINKS]
-                        failed_details = ""
-                        if len(failed_api_links) > 0:
-                            links = ', '.join(failed_api_links)
-                            failed_details += f"This test depends on the following API call(s) " \
-                                f"which did not execute successfully: {links}. " \
-                                "See terminal output for more details. "
-                        if len(failed_functions) > 0:
-                            failed_details += f"This test depends on the following function(s) " \
-                                f"which did not execute successfully: {', '.join(failed_functions)}." \
-                                "See terminal output for more details."
+                        failed_details = get_failed_details(failed_prereqs)
                         table_data.append({
                             'Control ID': control['Id'],
                             'Requirement': control['Value'],
