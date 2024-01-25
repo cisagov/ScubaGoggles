@@ -713,6 +713,7 @@ tests contains {
 #--
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.7.1v0.1",
+    "Prerequisites": ["directory/v1/users/list"],
     "Criticality": "Shall",
     "ReportDetails": concat("", [
         concat("", ["The following super admins are configured: ", concat(", ", SuperAdmins)]),

@@ -12,7 +12,7 @@ from tqdm import tqdm
 from googleapiclient.discovery import build
 
 from scubagoggles.auth import gws_auth
-from scubagoggles.provider import call_gws_providers
+from scubagoggles.provider import Provider
 from scubagoggles.run_rego import opa_eval
 from scubagoggles.reporter import reporter, md_parser
 from scubagoggles.utils import rel_abs_path
@@ -63,8 +63,10 @@ def run_gws_providers(args, services):
     out_folder = args.outputpath
     provider_dict = {}
 
-    provider_dict = call_gws_providers(products, services, args.quiet)
-
+    provider = Provider()
+    provider_dict = provider.call_gws_providers(products, services, args.quiet)
+    provider_dict['successful_calls'] = list(provider.successful_calls)
+    provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
     settings_json = json.dumps(provider_dict, indent = 4)
     out_path = out_folder + f'/{args.outputproviderfilename}.json'
     with open(out_path, mode="w", encoding='UTF-8') as outfile:
@@ -182,8 +184,14 @@ def run_reporter(args):
     with open(test_results_json, mode='r', encoding='UTF-8') as file:
         test_results_data = json.load(file)
 
-    # baseline_path
+    # Get the successful/unsuccessful commands
+    settings_name = f'{out_folder}/{args.outputproviderfilename}.json'
+    with open(settings_name, mode='r', encoding='UTF-8') as file:
+        settings_data = json.load(file)
+    successful_calls = set(settings_data['successful_calls'])
+    unsuccessful_calls = set(settings_data['unsuccessful_calls'])
 
+    # baseline_path
     subset_prod_to_fullname = {
         key: prod_to_fullname[key]
         for key in args.baselines
@@ -224,7 +232,9 @@ def run_reporter(args):
             tenant_domain,
             main_report_name,
             prod_to_fullname,
-            baseline_policies[product]
+            baseline_policies[product],
+            successful_calls,
+            unsuccessful_calls
         )
 
     # Make the report front page
