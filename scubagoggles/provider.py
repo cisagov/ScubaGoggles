@@ -431,6 +431,7 @@ class Provider:
             # gather all of the domains within a suite to get groups
             response = domain_service.domains().list(customer="my_customer").execute()
             domains = {d['domainName'] for d in response['domains'] if d['verified']}
+
             self.successful_calls.add("directory/v1/domains/list")
         except Exception as exc:
             warnings.warn(
