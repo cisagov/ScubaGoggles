@@ -74,20 +74,20 @@ def build_front_page_html(fragments : list, tenant_info : dict) -> str:
     meta_data = f"\
         <table style = \"text-align:center;\"> \
             <colgroup><col/><col/><col/><col/></colgroup> \
-            <tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th></tr> \
-            <tr><td>{tenant_info['name']}</td><td>{tenant_info['domain']}</td><td>{tenant_info['id']}</td><td>{report_date}</td></tr> \
+            <tr><th>Customer Domain</th><th>Report Date</th></tr> \
+            <tr><td>{tenant_info['domain']}</td><td>{report_date}</td></tr> \
         </table>"
     html = html.replace('{{TENANT_DETAILS}}', meta_data)
     return html
 
 def build_report_html(fragments : list, product : str,
-tenant_name : str, main_report_name: str) -> str:
+tenant_domain : str, main_report_name: str) -> str:
     '''
     Adds data into HTML Template and formats the page accordingly
 
     :param fragments: list object containing each baseline
     :param product: str object containing name of Google Product being evaluated
-    :param tenant_name: the name of the tenant.
+    :param tenant_domain: the primary domain of the tenant.
     :param main_report_name: Name of the main report HTML file.
     '''
     reporter_path = str(rel_abs_path(__file__,"./"))
@@ -129,8 +129,8 @@ tenant_name : str, main_report_name: str) -> str:
     meta_data = f"\
         <table style = \"text-align:center;\"> \
             <colgroup><col/><col/><col/></colgroup> \
-            <tr><th>Customer Name </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr> \
-            <tr><td>{tenant_name}</td><td>{report_date}</td><td>{baseline_version}</td><td>{tool_version}</td></tr> \
+            <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr> \
+            <tr><td>{tenant_domain}</td><td>{report_date}</td><td>{baseline_version}</td><td>{tool_version}</td></tr> \
         </table>"
 
     html = html.replace('{{METADATA}}', meta_data)
@@ -141,14 +141,14 @@ tenant_name : str, main_report_name: str) -> str:
     return html
 
 def rego_json_to_html(test_results_data : str, product : list, out_path : str,
-tenant_name : str, main_report_name : str, prod_to_fullname: dict, product_policies) -> None:
+tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies) -> None:
     '''
     Transforms the Rego JSON output into HTML
 
     :param test_results_data: json object with results of Rego test
     :param product: list of products being tested
     :param out_path: output path where HTML should be saved
-    :param tenant_name: The name of the GWS org
+    :param tenant_domain: The primary domain of the GWS org
     :param main_report_name: report_name: Name of the main report HTML file.
     :param prod_to_fullname: dict containing mapping of the product full names
     :param product_policies: dict containing policies read from the baseline markdown
@@ -217,7 +217,7 @@ tenant_name : str, main_report_name : str, prod_to_fullname: dict, product_polic
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
-    html = build_report_html(fragments, prod_to_fullname[product], tenant_name, main_report_name)
+    html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
     with open(f"{out_path}/IndividualReports/{ind_report_name}",
     mode='w', encoding='UTF-8') as file:
         file.write(html)

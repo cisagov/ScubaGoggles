@@ -142,7 +142,6 @@ chmod +x opa_darwin_amd64 # give the opa executable execute permissions
 The tool uses the following OAUTH API scopes.
 - `https://www.googleapis.com/auth/admin.reports.audit.readonly`
 - `https://www.googleapis.com/auth/admin.directory.domain.readonly`
-- `https://www.googleapis.com/auth/admin.directory.customer.readonly`
 - `https://www.googleapis.com/auth/admin.directory.group.readonly`
 - `https://www.googleapis.com/auth/admin.directory.orgunit.readonly`
 - `https://www.googleapis.com/auth/admin.directory.user.readonly`
