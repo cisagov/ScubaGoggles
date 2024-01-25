@@ -163,11 +163,7 @@ tenant_domain : str, main_report_name: str) -> str:
     return html
 
 def rego_json_to_html(test_results_data : str, product : list, out_path : str,
-<<<<<<< HEAD
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
-=======
-tenant_name : str, main_report_name : str, prod_to_fullname: dict, product_policies,
->>>>>>> c2770e6c5b19decfe58f4118157ec3bdabbed6a3
 successful_calls : set, unsuccessful_calls : set) -> None:
     '''
     Transforms the Rego JSON output into HTML
