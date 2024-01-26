@@ -63,7 +63,7 @@ def run_gws_providers(args, services):
     out_folder = args.outputpath
     provider_dict = {}
 
-    provider_dict = call_gws_providers(products, services, args.quiet)
+    provider_dict = call_gws_providers(products, services, args.quiet, args.customer)
 
     settings_json = json.dumps(provider_dict, indent = 4)
     out_path = out_folder + f'/{args.outputproviderfilename}.json'
@@ -310,7 +310,7 @@ def start_automation(args):
         args.outputpath = os.path.abspath(args.outputpath)
 
         # authenticate
-        creds = gws_auth(args.credentials)
+        creds = gws_auth(args.credentials, args.subjectemail)
         services = {}
         services['reports'] = build('admin', 'reports_v1', credentials=creds)
         services['directory'] = build('admin', 'directory_v1', credentials=creds)

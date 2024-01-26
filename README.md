@@ -31,6 +31,7 @@ For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://git
   - [Create a Project](#create-a-project)
   - [Create an OAuth credential](#create-an-oauth-credential)
   - [Add the Oauth App to the allowlist](#add-the-oauth-app-to-the-allowlist)
+  - [Using a service account](#using-a-service-account)
 - [Usage](#usage)
   - [Examples](#example-1-run-an-assessment-against-all-gws-products)
 - [Organization](#organization)
@@ -201,24 +202,45 @@ If you've limited application access to Google's APIs in your organization, the 
 5. Select your root organization as the domain
 6. Select **Trusted**
 
+### Using a Service Account
+
+1. In GCP navigate to **IAM & Admin** -> **Service Accounts**
+1. Select **CREATE SERVICE ACCOUNT**. Fill out the id field and then select **DONE**
+1. Click on the new service account then **KEYS** -> **ADD KEY** -> **Create new key** -> **JSON** -> **CREATE**
+1. Move the downloaded file (begins with `<service account>*.json`) to the root directory folder of this repo, rename to `credentials.json`
+1. In GWS navigate to **Security** -> **Access and data control** -> **API controls**
+1. Select **MANAGE DOMAIN WIDE DELEGATION**
+1. Select **Add new**
+1. Enter the client id from the downloaded credentials (also available in GCP)
+1. Enter each OAuth scope as listed in [OAuth API Scopes](#oauth-api-scopes)
+1. Select **AUTHORIZE**
+1. Finally run ScubaGoggles with the `--customer` option set to the customer ID (found in GWS under **Account** -> **Account settings**) 
+and the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
+
 ## Usage
 Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS, all commands will be under the `gws` subparser.
 
 ```
 scubagoggles gws -h
-usage: scubagoggles gws [-h] [-b  [...]] [-o] [-c] [--opapath] [--regopath] [--documentpath] [--runcached]
-                        [--skipexport] [--outputfoldername] [--outputproviderfilename] [--outputregofilename]
-                        [--outputreportfilename] [--debug]
+usage: scuba.py gws [-h] [-b  [...]] [-o] [-c] [--subjectemail] [--customer] [--opapath] [--regopath] [--documentpath]
+                    [--runcached] [--skipexport] [--outputfoldername] [--outputproviderfilename]
+                    [--outputregofilename] [--outputreportfilename] [--omitsudo] [--quiet] [--debug]
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -b  [ ...], --baselines  [ ...]
-                        A list of one or more abbreviated GWS baseline names that the tool will assess. Defaults to all
-                        baselines. Choices: gmail, calendar, groups, chat, drive, meet, sites, commoncontrols, rules
+                        A list of one or more abbreviated GWS baseline names that the tool will assess. Defaults to
+                        all baselines. Choices: gmail, calendar, groups, chat, drive, meet, sites, commoncontrols,
+                        rules, classroom
   -o , --outputpath     The folder path where both the output JSON & HTML report will be created. Defaults to "./" The
                         current directory.
-  -c , --credentials    The relative path and name of the OAuth credentials json file. Defaults to "./credentials.json"
-                        which means the tool will look for the file named credentials.json in the current directory.
+  -c , --credentials    The relative path and name of the OAuth / service account credentials json file. Defaults to
+                        "./credentials.json" which means the tool will look for the file named credentials.json in the
+                        current directory.
+  --subjectemail        Only applicable when using a service account. The email address of a user the service account
+                        should act on behalf of. This user must have the necessary privileges to run scubagoggles.
+  --customer            The customer ID the tool should run on. Defaults to "my_customer" which will be the user's
+                        domain when using OAuth
   --opapath             The relative path to the directory containing the OPA executable. Defaults to "./" the current
                         executing directory.
   --regopath            The relative path to the directory contain the folder containing the rego files. Defaults to
@@ -232,16 +254,16 @@ options:
   --outputfoldername    The name of the folder created in --outputpath where both the output JSON and the HTML report
                         will be created. Defaults to GWSBaselineConformance. The client's local timestamp will be
                         appended to this name.
-  --outputproviderfilename
+  --outputproviderfilename 
                         The name of the Provider output json in --outputpath. Defaults to ProviderSettingsExport.
-  --outputregofilename
+  --outputregofilename 
                         The name of the Rego output json in --outputpath. Defaults to TestResults.
-  --outputreportfilename
+  --outputreportfilename 
                         The name of the main html file homepage created in --outputpath. Defaults to BaselineReports.
   --omitsudo            This switch prevents running the OPA executable with sudo.
-  --quiet               This switch suppresses automatically launching a web browser to open the html report output and
-                        the loading bar output.
-  --debug               This switch is used to print debugging information for OPA
+  --quiet               This switch suppresses automatically launching a web browser to open the html report output
+                        and the loading bar output.
+  --debug               This switch is used to print debugging information for OPA.
 ```
 
 ### Example 1: Run an assessment against all GWS products
@@ -265,6 +287,11 @@ scubagoggles gws -b calendar gmail groups chat meet sites -o ./output
 # used for running against a cached provider json
 
 scubagoggles gws --runcached --skipexport
+```
+
+### Example 5: Run with a service account
+```
+scubagoggles gws --customer <customer_id> --subjectemail admin@example.com
 ```
 
 See the `help` options yourself
