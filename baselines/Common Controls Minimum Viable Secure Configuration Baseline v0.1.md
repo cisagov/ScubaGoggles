@@ -1071,12 +1071,12 @@ Required system-defined alerting rules, as listed in the Policy section, SHALL b
 
 ## 14. Google Workspace Logs
 
-Configure GWS to send critical logs to the agency's centralized SIEM so that they can be audited and queried. Configure GWS to send logs to a storage account and retain them for when incident response is needed.
+Configure GWS to send critical logs to the agency's centralized Security Information and Event Management (SIEM) so that they can be audited and queried. Configure GWS to send logs to a storage account and retain them for when incident response is needed.
 
 ### Policy
 
 #### GWS.COMMONCONTROLS.14.1v0.1
-The following critical logs SHALL be sent at a minimum.
+The following critical logs SHALL be sent to the agency's centralized SIEM.
 
         > Admin Audit logs
 
