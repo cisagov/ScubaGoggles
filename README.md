@@ -230,7 +230,7 @@ Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS, all com
 
 ```
 scubagoggles gws -h
-usage: scubagoggles gws [-h] [-b  [...]] [-o] [-c] [--subjectemail] [--customer] [--opapath] [--regopath] [--documentpath]
+usage: scubagoggles gws [-h] [-b  [...]] [-o] [-c] [--subjectemail] [--customerid] [--opapath] [--regopath] [--documentpath]
                     [--runcached] [--skipexport] [--outputfoldername] [--outputproviderfilename]
                     [--outputregofilename] [--outputreportfilename] [--omitsudo] [--quiet] [--debug]
 
