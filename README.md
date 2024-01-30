@@ -197,7 +197,7 @@ If you've limited application access to Google's APIs in your organization, the 
 1. Select **API's & Services** from the top left hamburger icon
 1. Select **Credentials**
 1. Copy your client ID under **OAuth 2.0 Client IDs**
-1. Now login to admin.google.com and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
+1. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
 1. Select **Add App** -> **Oauth App Name** or **Client ID**
 1. Search by your **OAuth client ID**
 1. Select the App
