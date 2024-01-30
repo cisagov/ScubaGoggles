@@ -958,7 +958,7 @@ This section prevents users from downloading a copy of the Google Takeout servic
 ### Policies
 
 #### GWS.COMMONCONTROLS.12.1v0.1
-Google Takeout services SHALL be disabled for users.
+Google Takeout services SHALL be disabled.
 
 - Rationale
   - Google Takeout is a service that allows you to download a copy of your data stored within 40+ Google products and services. This includes data from Gmail, Drive, Photos, Calendar, and many others. You can download your data in a variety of formats, including ZIP, TAR, and XML. While there may be a valid use case for individuals to backup their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
