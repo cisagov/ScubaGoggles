@@ -21,7 +21,7 @@ SCOPES = ['https://www.googleapis.com/auth/admin.reports.audit.readonly',
     "https://www.googleapis.com/auth/apps.groups.settings"]
 
 
-def gws_auth(cred_path:str, subject_email: str):
+def gws_auth(cred_path:str, subject_email: str = None):
     """
     Generates an Oauth token for accessing Google's APIs
 

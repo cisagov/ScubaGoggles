@@ -63,7 +63,7 @@ def run_gws_providers(args, services):
     out_folder = args.outputpath
     provider_dict = {}
 
-    provider_dict = call_gws_providers(products, services, args.quiet, args.customer)
+    provider_dict = call_gws_providers(products, services, args.quiet, args.customerid)
 
     settings_json = json.dumps(provider_dict, indent = 4)
     out_path = out_folder + f'/{args.outputproviderfilename}.json'

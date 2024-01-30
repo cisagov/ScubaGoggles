@@ -29,9 +29,7 @@ For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://git
   - [Downloading the OPA executable](#download-the-opa-executable)
   - [Permissions](#permissions)
   - [Create a Project](#create-a-project)
-  - [Create an OAuth credential](#create-an-oauth-credential)
-  - [Add the Oauth App to the allowlist](#add-the-oauth-app-to-the-allowlist)
-  - [Using a service account](#using-a-service-account)
+  - [Authentication](#authentication)
 - [Usage](#usage)
   - [Examples](#example-1-run-an-assessment-against-all-gws-products)
 - [Organization](#organization)
@@ -155,7 +153,14 @@ When running ScubaGoggles for the first time you will be prompted to consent to 
 2. Otherwise start by signing into http://console.cloud.google.com/.
 3. Follow the [directions outlined in this guide to create a project](https://developers.google.com/workspace/guides/create-project)
 
-### Create an OAuth credential
+### Authentication
+
+ScubaGoggles supports both OAuth and Service Accounts for authentication.
+OAuth requires regular user consent while using a service account allows for more automation.
+Follow the instructions below for the authentication method of your choice.
+
+
+#### Create an OAuth credential
 1. Be signed into http://console.cloud.google.com/.
 1. From the hamburger menu on the left, select **APIs & Services** -> **OAuth consent screen**
 1. Select **Internal** for **User Type**
@@ -184,38 +189,39 @@ When running ScubaGoggles for the first time you will be prompted to consent to 
 1. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
 with an account with the necessary privileges and click allow.
 
-### Add the Oauth App to the allowlist
+##### Add the Oauth App to the allowlist
 If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](https://github.com/cisagov/ScubaGoggles/blob/main/baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.1.md#11-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
 
 1. Login to https://console.cloud.google.com
-2. Navigate to the appropriate project
-3. Select **API's & Services** from the top left hamburger icon
-4. Select **Credentials**
-5. Copy your client ID under **OAuth 2.0 Client IDs**
+1. Navigate to the appropriate project
+1. Select **API's & Services** from the top left hamburger icon
+1. Select **Credentials**
+1. Copy your client ID under **OAuth 2.0 Client IDs**
+1. Now login to admin.google.com and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
+1. Select **Add App** -> **Oauth App Name** or **Client ID**
+1. Search by your **OAuth client ID**
+1. Select the App
+1. Select your root organization as the domain
+1. Select **Trusted**
 
-#### GWS Admin Console
+#### Using a Service Account
 
-1. Navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
-2. Select **Add App** -> **Oauth App Name** or **Client ID**
-3. Search by your **OAuth client ID**
-4. Select the App
-5. Select your root organization as the domain
-6. Select **Trusted**
+> [!Important]
+> ScubaGoggles requires the service account to have [domain-wide delegation of authority](https://support.google.com/a/answer/162106?hl=en) to function. 
 
-### Using a Service Account
-
-1. In GCP navigate to **IAM & Admin** -> **Service Accounts**
-1. Select **CREATE SERVICE ACCOUNT**. Fill out the id field and then select **DONE**
-1. Click on the new service account then **KEYS** -> **ADD KEY** -> **Create new key** -> **JSON** -> **CREATE**
+1. Login to https://console.cloud.google.com and navigate to your GCP project. 
+1. From the hamburger menu, select **IAM & Admin** -> **Service Accounts**
+1. Double click on the newly created service account then click **KEYS** -> **ADD KEY** -> **Create new key** -> **JSON** -> **CREATE**
 1. Move the downloaded file (begins with `<service account>*.json`) to the root directory folder of this repo, rename to `credentials.json`
-1. In GWS navigate to **Security** -> **Access and data control** -> **API controls**
+1. Now login to admin.google.com and navigate to **Security** -> **Access and data control** -> **API controls**
 1. Select **MANAGE DOMAIN WIDE DELEGATION**
 1. Select **Add new**
-1. Enter the client id from the downloaded credentials (also available in GCP)
+1. Enter the `client_id` from the downloaded credentials (also visible after double clicking on the created Service account under Details -> Unique ID)
 1. Enter each OAuth scope as listed in [OAuth API Scopes](#oauth-api-scopes)
 1. Select **AUTHORIZE**
-1. Finally run ScubaGoggles with the `--customer` option set to the customer ID (found in GWS under **Account** -> **Account settings**) 
-and the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
+1. Finally, run ScubaGoggles with the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
+
+[!NOTE] ScubaGoggles can be run using a service account in a different organization. To do so, specify the `--customerid` argument with the customer ID of the target organization (found in admin.google.com under **Account** -> **Account settings**) 
 
 ## Usage
 Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS, all commands will be under the `gws` subparser.
@@ -239,8 +245,8 @@ optional arguments:
                         current directory.
   --subjectemail        Only applicable when using a service account. The email address of a user the service account
                         should act on behalf of. This user must have the necessary privileges to run scubagoggles.
-  --customer            The customer ID the tool should run on. Defaults to "my_customer" which will be the user's
-                        domain when using OAuth
+  --customerid          The customer ID the tool should run on. Defaults to "my_customer" which will be the domain of 
+                        the user / service account authenticating.
   --opapath             The relative path to the directory containing the OPA executable. Defaults to "./" the current
                         executing directory.
   --regopath            The relative path to the directory contain the folder containing the rego files. Defaults to
@@ -289,7 +295,7 @@ scubagoggles gws -b calendar gmail groups chat meet sites -o ./output
 scubagoggles gws --runcached --skipexport
 ```
 
-### Example 5: Run with a service account
+### Example 5: Run with a service account on a different tenant
 ```
 scubagoggles gws --customer <customer_id> --subjectemail admin@example.com
 ```
