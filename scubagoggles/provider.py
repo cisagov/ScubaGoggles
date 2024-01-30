@@ -183,16 +183,17 @@ can't guarantee that failure isn't due to something like split horizon DNS. \
 See ProviderSettingsExport.json under 'dmarc_records' for more details.", RuntimeWarning)
     return results
 
-def get_dnsinfo(service):
+def get_dnsinfo(service, customer_id):
     '''
     Gets DNS Information for Gmail baseline
 
     :param service: a directory_v1 service instance
+    :param customer_id: the ID of the customer to run against
     '''
     output = {"domains": [], "spf_records": [], "dkim_records": [], "dmarc_records": []}
 
     # Determine the tenant's domains via the API
-    response = service.domains().list(customer="my_customer").execute()
+    response = service.domains().list(customer=customer_id).execute()
     domains = {d['domainName'] for d in response['domains']}
 
     if len(domains) == 0:
@@ -218,14 +219,15 @@ def get_dnsinfo(service):
         warnings.warn(f"An exception was thrown by get_dmarc_records: {exc}", RuntimeWarning)
     return output
 
-def get_super_admins(service) -> dict:
+def get_super_admins(service, customer_id) -> dict:
     '''
     Gets the org unit/primary email of all super admins, using the directory API
 
     :param service: a directory_v1 service instance
+    :param customer_id: the ID of the customer to run against
     '''
     try:
-        response = service.users().list(customer="my_customer", query="isAdmin=True").execute()
+        response = service.users().list(customer=customer_id, query="isAdmin=True").execute()
         admins = []
         for user in response['users']:
             org_unit = user['orgUnitPath']
@@ -241,15 +243,16 @@ def get_super_admins(service) -> dict:
         )
         return {'super_admins': []}
 
-def get_ous(service) -> dict:
+def get_ous(service, customer_id) -> dict:
     '''
     Gets the organizational units using the directory API
 
     :param service: a directory_v1 service instance
+    :param customer_id: the ID of the customer to run against
     '''
 
     try:
-        response = service.orgunits().list(customerId='my_customer').execute()
+        response = service.orgunits().list(customerId=customer_id).execute()
         if 'organizationUnits' not in response:
             return {}
         return response
@@ -260,15 +263,16 @@ def get_ous(service) -> dict:
         )
         return {}
 
-def get_toplevel_ou(service) -> str:
+def get_toplevel_ou(service, customer_id) -> str:
     '''
     Gets the tenant name using the directory API
 
     :param service: a directory_v1 service instance
+    :param customer_id: the ID of the customer to run against
     '''
 
     try:
-        response = service.orgunits().list(customerId='my_customer',
+        response = service.orgunits().list(customerId=customer_id,
                                     orgUnitPath='/',
                                     type='children').execute()
         # Because we set orgUnitPath to / and type to children, the API call will only
@@ -285,7 +289,7 @@ def get_toplevel_ou(service) -> str:
             # changes have to apply to the top-level OU.
             return ""
         parent_ou = response['organizationUnits'][0]['parentOrgUnitId']
-        response = service.orgunits().get(customerId='my_customer', orgUnitPath=parent_ou).execute()
+        response = service.orgunits().get(customerId=customer_id, orgUnitPath=parent_ou).execute()
         ou_name = response['name']
         return ou_name
     except Exception as exc:
@@ -296,21 +300,22 @@ def get_toplevel_ou(service) -> str:
         return ""
 
 
-def get_tenant_info(service) -> dict:
+def get_tenant_info(service, customer_id) -> dict:
     '''
     Gets the high-level tenant info using the directory API
 
     :param service: a directory_v1 service instance
+    :param customer_id: the ID of the customer to run against
     '''
     try:
-        response = service.domains().list(customer="my_customer").execute()
+        response = service.domains().list(customer=customer_id).execute()
         primary_domain = ""
         for domain in response['domains']:
             if domain['isPrimary']:
                 primary_domain = domain['domainName']
         return {
             'domain': primary_domain,
-            'topLevelOU': get_toplevel_ou(service)
+            'topLevelOU': get_toplevel_ou(service, customer_id)
         }
     except Exception as exc:
         warnings.warn(
@@ -398,11 +403,12 @@ def get_gws_logs(products: list, service, event: str) -> dict:
         )
     return products_to_logs
 
-def get_group_settings(services) -> dict:
+def get_group_settings(services, customer_id) -> dict:
     '''
     Gets all of the group info using the directory API and group settings API
 
     :param services: a service instance
+    :param customer_id: the ID of the customer to run against
     '''
 
     try:
@@ -410,7 +416,7 @@ def get_group_settings(services) -> dict:
         group_service = services['groups']
         domain_service = services['directory']
         # gather all of the domains within a suite to get groups
-        response = domain_service.domains().list(customer="my_customer").execute()
+        response = domain_service.domains().list(customer=customer_id).execute()
         domains = {d['domainName'] for d in response['domains'] if d['verified']}
 
         # get the group settings for each groups
@@ -428,7 +434,7 @@ def get_group_settings(services) -> dict:
         )
         return {'group_settings': []}
 
-def call_gws_providers(products: list, services, quiet) -> dict:
+def call_gws_providers(products: list, services, quiet, customer_id) -> dict:
     '''
     Calls the relevant GWS APIs to get the data we need for the baselines.
     Data such as the admin audit log, super admin users etc.
@@ -436,6 +442,7 @@ def call_gws_providers(products: list, services, quiet) -> dict:
     :param products: list of product names to check
     :param services: a dict of service objects.
     :param quiet: suppress tqdm output
+    :param customer_id: the ID of the customer to run against
     service is a Google reports API object, created from successfully authenticating in auth.py
     '''
     # create a inverse dictionary containing a mapping of event => list of products
@@ -449,9 +456,9 @@ def call_gws_providers(products: list, services, quiet) -> dict:
     ou_ids.add("") # certain settings have no OU
     try:
         # Add top level organization unit name
-        ou_ids.add(get_toplevel_ou(services['directory']))
+        ou_ids.add(get_toplevel_ou(services['directory'], customer_id))
         # get all organizational unit data
-        product_to_items['organizational_units'] = get_ous(services['directory'])
+        product_to_items['organizational_units'] = get_ous(services['directory'], customer_id)
         for orgunit in product_to_items['organizational_units']['organizationUnits']:
             ou_ids.add(orgunit['name'])
         # add just organizational unit names to a field]
@@ -494,16 +501,16 @@ def call_gws_providers(products: list, services, quiet) -> dict:
             product_to_items[key_name] = {'items': logs}
 
         # get tenant metadata for report front page header
-        product_to_items['tenant_info'] = get_tenant_info(services['directory'])
+        product_to_items['tenant_info'] = get_tenant_info(services['directory'], customer_id)
 
         if 'gmail' in product_to_logs: # add dns info if gmail is being run
-            product_to_items.update(get_dnsinfo(services['directory']))
+            product_to_items.update(get_dnsinfo(services['directory'], customer_id))
 
         if 'commoncontrols' in product_to_logs: # add list of super admins if CC is being run
-            product_to_items.update(get_super_admins(services['directory']))
+            product_to_items.update(get_super_admins(services['directory'], customer_id))
 
         if 'groups' in product_to_logs:
-            product_to_items.update(get_group_settings(services=services))
+            product_to_items.update(get_group_settings(services, customer_id))
 
     except Exception as exc:
         warnings.warn(
