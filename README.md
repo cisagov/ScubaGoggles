@@ -299,7 +299,7 @@ scubagoggles gws --runcached --skipexport
 
 ### Example 5: Run with a service account on a different tenant
 ```
-scubagoggles gws --customer <customer_id> --subjectemail admin@example.com
+scubagoggles gws --customerid <customer_id> --subjectemail admin@example.com
 ```
 
 See the `help` options yourself
