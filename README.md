@@ -213,7 +213,7 @@ If you've limited application access to Google's APIs in your organization, the 
 1. From the hamburger menu, select **IAM & Admin** -> **Service Accounts**
 1. Double click on the newly created service account then click **KEYS** -> **ADD KEY** -> **Create new key** -> **JSON** -> **CREATE**
 1. Move the downloaded file (begins with `<service account>*.json`) to the root directory folder of this repo, rename to `credentials.json`
-1. Now login to admin.google.com and navigate to **Security** -> **Access and data control** -> **API controls**
+1. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and data control** -> **API controls**
 1. Select **MANAGE DOMAIN WIDE DELEGATION**
 1. Select **Add new**
 1. Enter the `client_id` from the downloaded credentials (also visible after double clicking on the created Service account under Details -> Unique ID)
