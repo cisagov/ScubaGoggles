@@ -176,11 +176,10 @@ def get_reference_a_tag(api_call : str) -> str:
     if api_call == "groups-settings/v1/groups/get":
         # The reference URL for this API is structured differently than the others
         return "https://developers.google.com/admin-sdk/groups-settings/v1/reference/groups/get"
-    else:
-        api = api_call.split('/')[0]
-        call = '/'.join(api_call.split('/')[1:])
-        return f'<a href="https://developers.google.com/admin-sdk/{api}/reference/rest/{call}"> \
-            {api_call}</a>'
+    api = api_call.split('/')[0]
+    call = '/'.join(api_call.split('/')[1:])
+    return f'<a href="https://developers.google.com/admin-sdk/{api}/reference/rest/{call}"> \
+        {api_call}</a>'
 
 def get_failed_details(failed_prereqs : set) -> str:
     '''
