@@ -338,7 +338,7 @@ class Provider:
                     primary_domain = domain['domainName']
             return {
                 'domain': primary_domain,
-                'topLevelOU': self.get_toplevel_ou(service)
+                'topLevelOU': self.get_toplevel_ou(service, customer_id)
             }
         except Exception as exc:
             warnings.warn(
