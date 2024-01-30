@@ -221,7 +221,9 @@ If you've limited application access to Google's APIs in your organization, the 
 1. Select **AUTHORIZE**
 1. Finally, run ScubaGoggles with the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
 
-[!NOTE] ScubaGoggles can be run using a service account in a different organization. To do so, specify the `--customerid` argument with the customer ID of the target organization (found in admin.google.com under **Account** -> **Account settings**) 
+> [!NOTE] 
+> ScubaGoggles can be run using a service account in a different organization. 
+> To do so, specify the `--customerid` argument with the customer ID of the target organization (found in admin.google.com under **Account** -> **Account settings**) 
 
 ## Usage
 Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS, all commands will be under the `gws` subparser.
