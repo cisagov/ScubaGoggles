@@ -19,9 +19,7 @@ ReportDetailsArray(Status, Array1, Array2) := Detail if {
     Detail := Description(Fraction, " agency domain(s) found in violation: ", String)
 }
 
-AllDomains contains Domain.domain if {
-    some Domain in input.dkim_records
-}
+AllDomains := {Domain | some Domain in input.domains}
 
 LogEvents := utils.GetEvents("gmail_logs")
 
@@ -1752,53 +1750,6 @@ tests contains {
 # and not available within the generated logs
 tests contains {
     "PolicyId": "GWS.GMAIL.18.1v0.1",
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-#
-# Baseline GWS.GMAIL.18.2v0.1
-#--
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": "GWS.GMAIL.18.2v0.1",
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-#
-# Baseline GWS.GMAIL.18.3v0.1
-#--
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": "GWS.GMAIL.18.3v0.1",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-################
-# GWS.GMAIL.19 #
-################
-
-#
-# Baseline GWS.GMAIL.19.1v0.1
-#--
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
-tests contains {
-    "PolicyId": "GWS.GMAIL.19.1v0.1",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",

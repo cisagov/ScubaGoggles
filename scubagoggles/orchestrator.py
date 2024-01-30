@@ -64,9 +64,10 @@ def run_gws_providers(args, services):
     provider_dict = {}
 
     provider = Provider()
-    provider_dict = provider.call_gws_providers(products, services, args.quiet)
+    provider_dict = provider.call_gws_providers(products, services, args.quiet, args.customerid)
     provider_dict['successful_calls'] = list(provider.successful_calls)
     provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
+
     settings_json = json.dumps(provider_dict, indent = 4)
     out_path = out_folder + f'/{args.outputproviderfilename}.json'
     with open(out_path, mode="w", encoding='UTF-8') as outfile:
@@ -330,7 +331,7 @@ def start_automation(args):
         args.outputpath = os.path.abspath(args.outputpath)
 
         # authenticate
-        creds = gws_auth(args.credentials)
+        creds = gws_auth(args.credentials, args.subjectemail)
         services = {}
         services['reports'] = build('admin', 'reports_v1', credentials=creds)
         services['directory'] = build('admin', 'directory_v1', credentials=creds)

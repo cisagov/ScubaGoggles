@@ -9,6 +9,7 @@ import os.path
 from pathlib import Path
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from google.oauth2.service_account import Credentials as SvcCredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 # If modifying these scopes, delete the file token.json.
@@ -20,16 +21,25 @@ SCOPES = ['https://www.googleapis.com/auth/admin.reports.audit.readonly',
     "https://www.googleapis.com/auth/apps.groups.settings"]
 
 
-def gws_auth(cred_path:str):
+def gws_auth(cred_path:str, subject_email: str = None):
     """
     Generates an Oauth token for accessing Google's APIs
 
     :param cred_path: directory containing the credentials file
+    :param subject_email: if set, assumes credentials are for service account and uses
+        this email as the subject
     """
     cred_dir = Path(cred_path).parent
-    oauth_token = (cred_dir / 'token.json').resolve()
-
     creds = None
+
+    if subject_email is not None:
+        creds = SvcCredentials.from_service_account_file(cred_path, scopes=SCOPES,
+                                                         subject=subject_email)
+        if not creds.valid:
+            creds.refresh(Request())
+        return creds
+
+    oauth_token = (cred_dir / 'token.json').resolve()
     if os.path.exists(oauth_token):
         creds = Credentials.from_authorized_user_file(oauth_token, SCOPES)
     # If there are no (valid) credentials available, let the user log in.

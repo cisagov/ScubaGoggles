@@ -259,7 +259,7 @@ NonCompliantOUs1_7 contains OU if {
     Events := utils.FilterEvents(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    SettingValue := "CROSS_DOMAIN_FROM_INTERNAL_ONLY CROSS_DOMAIN_MOVES_BLOCKED INHERIT_FROM_PARENT"
+    SettingValue := "CROSS_DOMAIN_MOVES_BLOCKED INHERIT_FROM_PARENT"
     contains(SettingValue, LastEvent.NewValue) == false
 }
 
