@@ -1099,11 +1099,11 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
 
 #### GWS.COMMONCONTROLS.14.2v0.1
-Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31. The logs SHALL be sent to the agency's Security Operations Center (SOC) for monitoring.
+Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31.
 
 - Rationale
   - OMB M-21-31, Improving the Federal Government's Investigative and Remediation Capabilities Related to Cybersecurity Incidents, provides guidance on log retention for federal agencies. The memorandum defines three maturity levels for log retention, with each level requiring different minimum retention periods.
-- Last Modified: July 10, 2023
+- Last Modified: January 30, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
