@@ -1029,7 +1029,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 ### Policies
 
 #### GWS.COMMONCONTROLS.13.1v0.1
-Required system-defined alerting rules, as listed in the Policy section, SHALL be active, with alerts enabled when available.
+Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
 - Rationale
   - System-defined rules can allow an administrator to be notified of specific activity within a domain—such as a suspicious sign-in attempt, a compromised mobile device, or when another administrator changes settings.
