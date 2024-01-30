@@ -495,7 +495,8 @@ class Provider:
             # Add top level organization unit name
             ou_ids.add(self.get_toplevel_ou(services['directory'], customer_id))
             # get all organizational unit data
-            product_to_items['organizational_units'] = self.get_ous(services['directory'], customer_id)
+            product_to_items['organizational_units'] = self.get_ous(services['directory'],
+                customer_id)
             for orgunit in product_to_items['organizational_units']['organizationUnits']:
                 ou_ids.add(orgunit['name'])
             # add just organizational unit names to a field]
@@ -538,7 +539,8 @@ class Provider:
                 product_to_items[key_name] = {'items': logs}
 
             # get tenant metadata for report front page header
-            product_to_items['tenant_info'] = self.get_tenant_info(services['directory'], customer_id)
+            product_to_items['tenant_info'] = self.get_tenant_info(services['directory'],
+                customer_id)
 
             if 'gmail' in product_to_logs: # add dns info if gmail is being run
                 product_to_items.update(self.get_dnsinfo(services['directory'], customer_id))
