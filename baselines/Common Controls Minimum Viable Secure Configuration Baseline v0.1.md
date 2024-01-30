@@ -1035,7 +1035,7 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
   - System-defined rules can allow an administrator to be notified of specific activity within a domain—such as a suspicious sign-in attempt, a compromised mobile device, or when another administrator changes settings.
 - Last Modified: July 10, 2023
 - Notes
-  - Any system-defined rules not considered optional but ought to be reviewed for consideration.
+  - Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
