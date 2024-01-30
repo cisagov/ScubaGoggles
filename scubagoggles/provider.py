@@ -547,7 +547,7 @@ class Provider:
                 product_to_items.update(self.get_super_admins(services['directory'], customer_id))
 
             if 'groups' in product_to_logs:
-                product_to_items.update(self.get_group_settings(services=services, customer_id))
+                product_to_items.update(self.get_group_settings(services, customer_id))
 
         except Exception as exc:
             warnings.warn(
