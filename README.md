@@ -223,7 +223,7 @@ If you've limited application access to Google's APIs in your organization, the 
 
 > [!NOTE] 
 > ScubaGoggles can be run using a service account in a different organization. 
-> To do so, specify the `--customerid` argument with the customer ID of the target organization (found in admin.google.com under **Account** -> **Account settings**) 
+> To do so, specify the `--customerid` argument with the customer ID of the target organization (found in [admin.google.com](https://admin.google.com/) under **Account** -> **Account settings**) 
 
 ## Usage
 Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS, all commands will be under the `gws` subparser.
