@@ -113,11 +113,12 @@ class Provider:
                 self.domains = self.services['directory'].domains().list(customer=self.customer_id)\
                     .execute()['domains']
                 self.successful_calls.add("directory/v1/domains/list")
-            except:
+            except Exception as exc:
                 self.domains = []
+                warnings.warn(f"An exception was thrown by list_domains: {exc}", RuntimeWarning)
                 self.unsuccessful_calls.add("directory/v1/domains/list")
         return self.domains
-        
+
     def get_spf_records(self, domains: list) -> list:
         '''
         Gets the SPF records for each domain in domains.
