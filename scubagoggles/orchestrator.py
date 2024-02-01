@@ -63,8 +63,8 @@ def run_gws_providers(args, services):
     out_folder = args.outputpath
     provider_dict = {}
 
-    provider = Provider()
-    provider_dict = provider.call_gws_providers(products, services, args.quiet, args.customerid)
+    provider = Provider(services)
+    provider_dict = provider.call_gws_providers(products, args.quiet, args.customerid)
     provider_dict['successful_calls'] = list(provider.successful_calls)
     provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
 
