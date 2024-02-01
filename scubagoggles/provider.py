@@ -101,7 +101,23 @@ class Provider:
         self.successful_calls = set()
         self.unsuccessful_calls = set()
         self.dns_client = RobustDNSClient()
+        self.domains = None
 
+    def list_domains(self) -> list:
+        '''
+        Return the customer's domains. Ensures that the domains API is called only once and that
+        the domains used throughout the provider are consistent.
+        '''
+        if self.domains is None:
+            try:
+                self.domains = self.services['directory'].domains().list(customer=self.customer_id)\
+                    .execute()['domains']
+                self.successful_calls.add("directory/v1/domains/list")
+            except:
+                self.domains = []
+                self.unsuccessful_calls.add("directory/v1/domains/list")
+        return self.domains
+        
     def get_spf_records(self, domains: list) -> list:
         '''
         Gets the SPF records for each domain in domains.
@@ -204,11 +220,7 @@ class Provider:
         Gets DNS Information for Gmail baseline
         '''
         output = {"domains": [], "spf_records": [], "dkim_records": [], "dmarc_records": []}
-
-        # Determine the tenant's domains via the API
-        response = self.services['directory'].domains().list(customer=self.customer_id).execute()
-        domains = {d['domainName'] for d in response['domains']}
-
+        domains = {d['domainName'] for d in self.list_domains()}
         if len(domains) == 0:
             warnings.warn("No domains found.", RuntimeWarning)
             return output
@@ -315,36 +327,21 @@ class Provider:
                 RuntimeWarning
             )
             self.unsuccessful_calls.add("directory/v1/orgunits/list")
-            return ""
+            return "Error Retrieving"
 
 
     def get_tenant_info(self) -> dict:
         '''
         Gets the high-level tenant info using the directory API
         '''
-        try:
-            response = self.services['directory'].domains().list(customer=self.customer_id)\
-                .execute()
-            self.successful_calls.add("directory/v1/domains/list")
-            primary_domain = ""
-            for domain in response['domains']:
-                if domain['isPrimary']:
-                    primary_domain = domain['domainName']
-            return {
-                'domain': primary_domain,
-                'topLevelOU': self.get_toplevel_ou()
-            }
-        except Exception as exc:
-            warnings.warn(
-                f"An exception was thrown trying to get the tenant info: {exc}",
-                RuntimeWarning
-            )
-            self.unsuccessful_calls.add("directory/v1/domains/list")
-            return {
-                'domain': 'Error Retrieving',
-                'topLevelOU': 'Error Retrieving'
-            }
-
+        primary_domain = "Error Retrieving"
+        for domain in self.list_domains():
+            if domain['isPrimary']:
+                primary_domain = domain['domainName']
+        return {
+            'domain': primary_domain,
+            'topLevelOU': self.get_toplevel_ou()
+        }
 
     def get_gws_logs(self, products: list, event: str) -> dict:
         '''
@@ -426,25 +423,14 @@ class Provider:
         '''
 
         group_service = self.services['groups']
-        domain_service = self.services['directory']
-        try:
-            # gather all of the domains within a suite to get groups
-            response = domain_service.domains().list(customer=self.customer_id).execute()
-            domains = {d['domainName'] for d in response['domains'] if d['verified']}
-            self.successful_calls.add("directory/v1/domains/list")
-        except Exception as exc:
-            warnings.warn(
-                f"Exception thrown while getting group settings; outputs will be incorrect: {exc}",
-                RuntimeWarning
-            )
-            self.unsuccessful_calls.add("directory/v1/domains/list")
-            return {'group_settings': []}
+        directory_service = self.services['directory']
+        domains = {d['domainName'] for d in self.list_domains() if d['verified']}
 
         try:
             # get the group settings for each groups
             group_settings = []
             for domain in domains:
-                response = domain_service.groups().list(domain=domain).execute()
+                response = directory_service.groups().list(domain=domain).execute()
                 for group in response.get('groups'):
                     email = group.get('email')
                     group_settings.append(group_service.groups().get(groupUniqueId=email).execute())
