@@ -51,20 +51,20 @@ def gws_products() -> dict:
     }
     return gws
 
-def run_gws_providers(args, services):
+def run_gws_providers(args, services : dict):
     """
     Runs the provider scripts and outputs a json to path
 
     :param args: the command line arguments to this script
-    :param services: a Google API services object
+    :param services: a dictionary of Google API service objects
     """
 
     products = args.baselines
     out_folder = args.outputpath
     provider_dict = {}
 
-    provider = Provider(services)
-    provider_dict = provider.call_gws_providers(products, args.quiet, args.customerid)
+    provider = Provider(services, args.customerid)
+    provider_dict = provider.call_gws_providers(products, args.quiet)
     provider_dict['successful_calls'] = list(provider.successful_calls)
     provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
 

@@ -66,7 +66,7 @@ EVENTS = {
     'all': [None]
 }
 
-selectors = ["google", "selector1", "selector2"]
+SELECTORS = ["google", "selector1", "selector2"]
 # For DKIM.
 # Unfortunately, hard-coded. Ideally, we'd be able to use an API to get
 # the selectors used programmatically, but it doesn't seem like there is
@@ -84,22 +84,23 @@ selectors = ["google", "selector1", "selector2"]
 #    beginning of the domain name up to the first period
 #
 
-DNSClient = RobustDNSClient()
-
 class Provider:
     '''
     Class for making the GWS api calls and tracking the results.
     '''
 
-    def __init__(self, services : dict):
+    def __init__(self, services : dict, customer_id : str):
         '''
         Initialize the Provider.
 
         :param services: a dict of service objects.
+        :param customer_id: the ID of the customer to run against.
         '''
+        self.services = services
+        self.customer_id = customer_id
         self.successful_calls = set()
         self.unsuccessful_calls = set()
-        self.services = services
+        self.dns_client = RobustDNSClient()
 
     def get_spf_records(self, domains: list) -> list:
         '''
@@ -110,7 +111,7 @@ class Provider:
         results = []
         n_low_confidence = 0
         for domain in domains:
-            result = DNSClient.query(domain)
+            result = self.dns_client.query(domain)
             if not result['HighConfidence']:
                 n_low_confidence += 1
             results.append({
@@ -135,10 +136,10 @@ class Provider:
         results = []
         n_low_confidence = 0
         for domain in domains:
-            qnames = [f"{selector}._domainkey.{domain}" for selector in selectors]
+            qnames = [f"{selector}._domainkey.{domain}" for selector in SELECTORS]
             log_entries = []
             for qname in qnames:
-                result = DNSClient.query(qname)
+                result = self.dns_client.query(qname)
                 log_entries.extend(result['LogEntries'])
                 if len(result['Answers']) == 0:
                     # The DKIM record does not exist with this selector, we need to try again with
@@ -174,14 +175,14 @@ class Provider:
         for domain in domains:
             log_entries = []
             qname = f"_dmarc.{domain}"
-            result = DNSClient.query(qname)
+            result = self.dns_client.query(qname)
             log_entries.extend(result['LogEntries'])
             if len(result["Answers"]) == 0:
                 # The domain does not exist. If the record is not available at the full domain
                 # level, we need to check at the organizational domain level.
                 labels = domain.split(".")
                 org_domain = f"{labels[-2]}.{labels[-1]}"
-                result = DNSClient.query(f"_dmarc.{org_domain}")
+                result = self.dns_client.query(f"_dmarc.{org_domain}")
                 log_entries.extend(result['LogEntries'])
             if not result['HighConfidence']:
                 n_low_confidence += 1
@@ -198,16 +199,14 @@ class Provider:
     See ProviderSettingsExport.json under 'dmarc_records' for more details.", RuntimeWarning)
         return results
 
-    def get_dnsinfo(self,customer_id):
+    def get_dnsinfo(self):
         '''
         Gets DNS Information for Gmail baseline
-
-        :param customer_id: the ID of the customer to run against
         '''
         output = {"domains": [], "spf_records": [], "dkim_records": [], "dmarc_records": []}
 
         # Determine the tenant's domains via the API
-        response = self.services['directory'].domains().list(customer=customer_id).execute()
+        response = self.services['directory'].domains().list(customer=self.customer_id).execute()
         domains = {d['domainName'] for d in response['domains']}
 
         if len(domains) == 0:
@@ -239,15 +238,13 @@ class Provider:
             self.unsuccessful_calls.add("get_dmarc_records")
         return output
 
-    def get_super_admins(self, customer_id) -> dict:
+    def get_super_admins(self) -> dict:
         '''
         Gets the org unit/primary email of all super admins, using the directory API
-
-        :param customer_id: the ID of the customer to run against
         '''
         try:
             response = self.services['directory'].users()\
-                .list(customer=customer_id, query="isAdmin=True").execute()
+                .list(customer=self.customer_id, query="isAdmin=True").execute()
             admins = []
             for user in response['users']:
                 org_unit = user['orgUnitPath']
@@ -265,15 +262,14 @@ class Provider:
             self.unsuccessful_calls.add("directory/v1/users/list")
             return {'super_admins': []}
 
-    def get_ous(self, customer_id) -> dict:
+    def get_ous(self) -> dict:
         '''
         Gets the organizational units using the directory API
-
-        :param customer_id: the ID of the customer to run against
         '''
 
         try:
-            response = self.services['directory'].orgunits().list(customerId=customer_id).execute()
+            response = self.services['directory'].orgunits().list(customerId=self.customer_id)\
+                .execute()
             self.successful_calls.add("directory/v1/orgunits/list")
             if 'organizationUnits' not in response:
                 return {}
@@ -286,16 +282,14 @@ class Provider:
             self.unsuccessful_calls.add("directory/v1/orgunits/list")
             return {}
 
-    def get_toplevel_ou(self, customer_id) -> str:
+    def get_toplevel_ou(self) -> str:
         '''
         Gets the tenant name using the directory API
-
-        :param customer_id: the ID of the customer to run against
         '''
 
         try:
             response = self.services['directory'].orgunits()\
-                .list(customerId=customer_id, orgUnitPath='/', type='children').execute()
+                .list(customerId=self.customer_id, orgUnitPath='/', type='children').execute()
             # Because we set orgUnitPath to / and type to children, the API call will only
             # return the second-level OUs, meaning the parentOrgUnitId of any of the OUs returned
             # will point us to OU of the entire organization
@@ -311,7 +305,7 @@ class Provider:
                 return ""
             parent_ou = response['organizationUnits'][0]['parentOrgUnitId']
             response = self.services['directory'].orgunits()\
-                .get(customerId=customer_id, orgUnitPath=parent_ou).execute()
+                .get(customerId=self.customer_id, orgUnitPath=parent_ou).execute()
             ou_name = response['name']
             self.successful_calls.add("directory/v1/orgunits/list")
             return ou_name
@@ -324,14 +318,13 @@ class Provider:
             return ""
 
 
-    def get_tenant_info(self, customer_id) -> dict:
+    def get_tenant_info(self) -> dict:
         '''
         Gets the high-level tenant info using the directory API
-
-        :param customer_id: the ID of the customer to run against
         '''
         try:
-            response = self.services['directory'].domains().list(customer=customer_id).execute()
+            response = self.services['directory'].domains().list(customer=self.customer_id)\
+                .execute()
             self.successful_calls.add("directory/v1/domains/list")
             primary_domain = ""
             for domain in response['domains']:
@@ -339,7 +332,7 @@ class Provider:
                     primary_domain = domain['domainName']
             return {
                 'domain': primary_domain,
-                'topLevelOU': self.get_toplevel_ou(customer_id)
+                'topLevelOU': self.get_toplevel_ou()
             }
         except Exception as exc:
             warnings.warn(
@@ -427,20 +420,17 @@ class Provider:
             )
         return products_to_logs
 
-    def get_group_settings(self, customer_id) -> dict:
+    def get_group_settings(self) -> dict:
         '''
         Gets all of the group info using the directory API and group settings API
-
-        :param customer_id: the ID of the customer to run against
         '''
 
         group_service = self.services['groups']
         domain_service = self.services['directory']
         try:
             # gather all of the domains within a suite to get groups
-            response = domain_service.domains().list(customer=customer_id).execute()
+            response = domain_service.domains().list(customer=self.customer_id).execute()
             domains = {d['domainName'] for d in response['domains'] if d['verified']}
-
             self.successful_calls.add("directory/v1/domains/list")
         except Exception as exc:
             warnings.warn(
@@ -470,14 +460,13 @@ class Provider:
             self.unsuccessful_calls.add("groups-settings/v1/groups/get")
             return {'group_settings': []}
 
-    def call_gws_providers(self, products: list, quiet, customer_id) -> dict:
+    def call_gws_providers(self, products: list, quiet) -> dict:
         '''
         Calls the relevant GWS APIs to get the data we need for the baselines.
         Data such as the admin audit log, super admin users etc.
 
         :param products: list of product names to check
         :param quiet: suppress tqdm output
-        :param customer_id: the ID of the customer to run against
         '''
         # create a inverse dictionary containing a mapping of event => list of products
         events_to_products = create_subset_inverted_dict(EVENTS, products)
@@ -490,9 +479,9 @@ class Provider:
         ou_ids.add("") # certain settings have no OU
         try:
             # Add top level organization unit name
-            ou_ids.add(self.get_toplevel_ou(customer_id))
+            ou_ids.add(self.get_toplevel_ou())
             # get all organizational unit data
-            product_to_items['organizational_units'] = self.get_ous(customer_id)
+            product_to_items['organizational_units'] = self.get_ous()
             for orgunit in product_to_items['organizational_units']['organizationUnits']:
                 ou_ids.add(orgunit['name'])
             # add just organizational unit names to a field]
@@ -531,16 +520,16 @@ class Provider:
                 product_to_items[key_name] = {'items': logs}
 
             # get tenant metadata for report front page header
-            product_to_items['tenant_info'] = self.get_tenant_info(customer_id)
+            product_to_items['tenant_info'] = self.get_tenant_info()
 
             if 'gmail' in product_to_logs: # add dns info if gmail is being run
-                product_to_items.update(self.get_dnsinfo(customer_id))
+                product_to_items.update(self.get_dnsinfo())
 
             if 'commoncontrols' in product_to_logs: # add list of super admins if CC is being run
-                product_to_items.update(self.get_super_admins(customer_id))
+                product_to_items.update(self.get_super_admins())
 
             if 'groups' in product_to_logs:
-                product_to_items.update(self.get_group_settings(customer_id))
+                product_to_items.update(self.get_group_settings())
 
         except Exception as exc:
             warnings.warn(
