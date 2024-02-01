@@ -16,8 +16,8 @@ class ApiUrl(Enum):
     LIST_DOMAINS = f"{BASE_URL}/directory/reference/rest/v1/domains/list"
     LIST_GROUPS = f"{BASE_URL}/directory/reference/rest/v1/groups/list"
     LIST_ACTIVITIES = f"{BASE_URL}/reports/reference/rest/v1/activities/list"
-    GET_GROUP = f"{BASE_URL}/groups-settings/v1/reference/"
+    GET_GROUP = f"{BASE_URL}/groups-settings/v1/reference/groups/get"
 
 API_LINKS = {
-    api.value: f'<a href="{ApiUrl[api.name]}">{api.value}</a>' for api in ApiReference
+    api.value: f'<a href="{ApiUrl[api.name].value}">{api.value}</a>' for api in ApiReference
 }
