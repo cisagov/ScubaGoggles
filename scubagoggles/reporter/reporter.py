@@ -9,6 +9,7 @@ import warnings
 from datetime import datetime
 import pandas as pd
 from scubagoggles.utils import rel_abs_path
+from scubagoggles.api_reference import API_LINKS
 
 SCUBA_GITHUB_URL = "https://github.com/cisagov/scubagoggles"
 
@@ -167,21 +168,6 @@ def get_failed_prereqs(test : dict, successful_calls : set, unsuccessful_calls :
 
     return failed_prereqs
 
-def get_reference_a_tag(api_call : str) -> str:
-    '''
-    Craft the link to the documentation page for a given API call.
-    
-    :param api_call: a string representing the API call, such as "directory/v1/users/list".
-    '''
-    if api_call == "groups-settings/v1/groups/get":
-        # The reference URL for this API is structured differently than the others
-        return '<a href="https://developers.google.com/admin-sdk/groups-settings/v1/reference/' \
-            f'groups/get">{api_call}</a>'
-    api = api_call.split('/')[0]
-    call = '/'.join(api_call.split('/')[1:])
-    return f'<a href="https://developers.google.com/admin-sdk/{api}/reference/rest/{call}">' \
-        f'{api_call}</a>'
-
 def get_failed_details(failed_prereqs : set) -> str:
     '''
     Create the string used for the Details column of the report when one
@@ -190,19 +176,9 @@ def get_failed_details(failed_prereqs : set) -> str:
     :param failed_prereqs: A set of strings with the API calls/function prerequisites
         that were not met for a given test.
     '''
-    api_links = {
-        api_call: get_reference_a_tag(api_call) for api_call in [
-            "directory/v1/users/list",
-            "directory/v1/orgunits/list",
-            "directory/v1/domains/list",
-            "directory/v1/groups/list",
-            "reports/v1/activities/list",
-            "groups-settings/v1/groups/get"
-        ]
-    }
 
-    failed_apis = [api_links[api] for api in failed_prereqs if api in api_links]
-    failed_functions = [call for call in failed_prereqs if call not in api_links]
+    failed_apis = [API_LINKS[api] for api in failed_prereqs if api in API_LINKS]
+    failed_functions = [call for call in failed_prereqs if call not in API_LINKS]
     failed_details = ""
     if len(failed_apis) > 0:
         links = ', '.join(failed_apis)

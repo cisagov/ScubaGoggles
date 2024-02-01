@@ -6,6 +6,7 @@ import warnings
 from tqdm import tqdm
 
 from scubagoggles.utils import create_subset_inverted_dict, create_key_to_list, merge_dicts
+from scubagoggles.api_reference import ApiReference
 from scubagoggles.robust_dns import RobustDNSClient
 
 EVENTS = {
@@ -66,6 +67,7 @@ EVENTS = {
     'all': [None]
 }
 
+
 SELECTORS = ["google", "selector1", "selector2"]
 # For DKIM.
 # Unfortunately, hard-coded. Ideally, we'd be able to use an API to get
@@ -112,11 +114,11 @@ class Provider:
             try:
                 self.domains = self.services['directory'].domains().list(customer=self.customer_id)\
                     .execute()['domains']
-                self.successful_calls.add("directory/v1/domains/list")
+                self.successful_calls.add(ApiReference.LIST_DOMAINS.value)
             except Exception as exc:
                 self.domains = []
                 warnings.warn(f"An exception was thrown by list_domains: {exc}", RuntimeWarning)
-                self.unsuccessful_calls.add("directory/v1/domains/list")
+                self.unsuccessful_calls.add(ApiReference.LIST_DOMAINS.value)
         return self.domains
 
     def get_spf_records(self, domains: list) -> list:
@@ -265,14 +267,14 @@ class Provider:
                 org_unit = org_unit[1:] if org_unit.startswith('/') else org_unit
                 email = user['primaryEmail']
                 admins.append({'primaryEmail': email, 'orgUnitPath': org_unit})
-            self.successful_calls.add("directory/v1/users/list")
+            self.successful_calls.add(ApiReference.LIST_USERS.value)
             return {'super_admins': admins}
         except Exception as exc:
             warnings.warn(
                 f"Exception thrown while getting super admins; outputs will be incorrect: {exc}",
                 RuntimeWarning
             )
-            self.unsuccessful_calls.add("directory/v1/users/list")
+            self.unsuccessful_calls.add(ApiReference.LIST_USERS.value)
             return {'super_admins': []}
 
     def get_ous(self) -> dict:
@@ -283,7 +285,7 @@ class Provider:
         try:
             response = self.services['directory'].orgunits().list(customerId=self.customer_id)\
                 .execute()
-            self.successful_calls.add("directory/v1/orgunits/list")
+            self.successful_calls.add(ApiReference.LIST_OUS.value)
             if 'organizationUnits' not in response:
                 return {}
             return response
@@ -292,7 +294,7 @@ class Provider:
                 f"Exception thrown while getting top level OU: {exc}",
                 RuntimeWarning
             )
-            self.unsuccessful_calls.add("directory/v1/orgunits/list")
+            self.unsuccessful_calls.add(ApiReference.LIST_OUS.value)
             return {}
 
     def get_toplevel_ou(self) -> str:
@@ -320,14 +322,14 @@ class Provider:
             response = self.services['directory'].orgunits()\
                 .get(customerId=self.customer_id, orgUnitPath=parent_ou).execute()
             ou_name = response['name']
-            self.successful_calls.add("directory/v1/orgunits/list")
+            self.successful_calls.add(ApiReference.LIST_OUS.value)
             return ou_name
         except Exception as exc:
             warnings.warn(
                 f"Exception thrown while getting top level OU: {exc}",
                 RuntimeWarning
             )
-            self.unsuccessful_calls.add("directory/v1/orgunits/list")
+            self.unsuccessful_calls.add(ApiReference.LIST_OUS.value)
             return "Error Retrieving"
 
 
@@ -435,16 +437,16 @@ class Provider:
                 for group in response.get('groups'):
                     email = group.get('email')
                     group_settings.append(group_service.groups().get(groupUniqueId=email).execute())
-            self.successful_calls.add("directory/v1/groups/list")
-            self.successful_calls.add("groups-settings/v1/groups/get")
+            self.successful_calls.add(ApiReference.LIST_GROUPS.value)
+            self.successful_calls.add(ApiReference.GET_GROUP.value)
             return {'group_settings': group_settings}
         except Exception as exc:
             warnings.warn(
                 f"Exception thrown while getting group settings; outputs will be incorrect: {exc}",
                 RuntimeWarning
             )
-            self.unsuccessful_calls.add("directory/v1/groups/list")
-            self.unsuccessful_calls.add("groups-settings/v1/groups/get")
+            self.unsuccessful_calls.add(ApiReference.LIST_GROUPS.value)
+            self.unsuccessful_calls.add(ApiReference.GET_GROUP.value)
             return {'group_settings': []}
 
     def call_gws_providers(self, products: list, quiet) -> dict:
@@ -492,11 +494,11 @@ class Provider:
                     product_to_logs,
                     self.get_gws_logs(products=product_list, event=event)
                 )
-                self.successful_calls.add("reports/v1/activities/list")
+                self.successful_calls.add(ApiReference.LIST_ACTIVITIES.value)
         except Exception as exc:
             warnings.warn("Provider Exception thrown while getting the logs; "\
                 f"outputs will be incorrect: {exc}", RuntimeWarning)
-            self.unsuccessful_calls.add("reports/v1/activities/list")
+            self.unsuccessful_calls.add(ApiReference.LIST_ACTIVITIES.value)
 
         # repacks the main aggregator into the original form
         # that the api returns the data in; under an 'items' key.
