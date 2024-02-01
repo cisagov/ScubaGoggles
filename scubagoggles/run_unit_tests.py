@@ -1,33 +1,32 @@
-# Non-rego Unit Tests for ScubaGoggles
-
-#auth
-#main
-#orcehstrator
-#provider
-#robust_dns
-#run_rego
-#utils
-
-from provider import get_super_admins, get_ous, get_toplevel_ou, get_tenant_info, get_gws_logs, get_group_settings, call_gws_providers # partial list of provider.py functions
+#Todo:
+#provider, orchestrator, auth, main, robust_dns, run_rego, utils, reporter.py, md_parser.py
+import unittest
+import sys
+import os
+from pathlib import Path
+from provider import get_spf_records, get_dkim_records, get_dmarc_records, get_super_admins, get_dnsinfo, get_ous, get_toplevel_ou, get_tenant_info, get_gws_logs, get_group_settings, call_gws_providers
 from auth import gws_auth
 from googleapiclient.discovery import build
+import argparse
 
-creds = gws_auth("../credentials.json", "gbrown@scubagws.org")
+creds = gws_auth((Path.cwd() / "../credentials.json").resolve())
+
 services = {}
 services['reports'] = build('admin', 'reports_v1', credentials=creds)
 services['directory'] = build('admin', 'directory_v1', credentials=creds)
 services['groups'] = build('groupssettings', 'v1', credentials=creds)
 
-def test_get_super_admins1(service, customer_id): #Given a true super admin
-    get_super_admins(service, customer_id)
+class ProviderTests(unittest.TestCase):
+    """Test cases for provider"""
 
-def test_get_super_admins2(service, customer_id): #Given a non super admin
-    get_super_admins(service, customer_id)
+    def test_is_dict(self):
+        gsa_out = get_super_admins(services["directory"], "C03ymv5su")
+        self.assertIsInstance(gsa_out,dict)
 
-def test_get_super_admins3(service, customer_id): #Given a non-existent user
-    get_super_admins(service, customer_id)
+    def test_contains_list(self):
+        gsa_out = get_super_admins(services["directory"], "C03ymv5su")
+        self.assertIsInstance(gsa_out['super_admins'],list)
 
-def main():
-    test_get_super_admins1(services["directory"], "794320852228-324qfr3cihsitfr2efm79kb99jq9g02e.apps.googleusercontent.com") #Grant
-    test_get_super_admins1(services["directory"], "1057411921045-pl8io0gsv9h9hk2fh2pik55ntn5e4a1p.apps.googleusercontent.com") #Nestor
-    test_get_super_admins1(services["directory"], "blahblahnotrealuser") 
+#unit_argv = [sys.argv[0]] + unittestArgs
+if __name__ == '__main__':
+    unittest.main()
