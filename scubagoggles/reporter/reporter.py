@@ -9,7 +9,7 @@ import warnings
 from datetime import datetime
 import pandas as pd
 from scubagoggles.utils import rel_abs_path
-from scubagoggles.api_reference import API_LINKS
+from scubagoggles.types import API_LINKS
 
 SCUBA_GITHUB_URL = "https://github.com/cisagov/scubagoggles"
 
