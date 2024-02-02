@@ -12,9 +12,7 @@ import argparse
 creds = gws_auth((Path.cwd() / "../credentials.json").resolve())
 
 services = {}
-services['reports'] = build('admin', 'reports_v1', credentials=creds)
 services['directory'] = build('admin', 'directory_v1', credentials=creds)
-services['groups'] = build('groupssettings', 'v1', credentials=creds)
 
 class ProviderTests(unittest.TestCase):
     """Test cases for provider"""
