@@ -240,7 +240,17 @@ if {
 #
 # Baseline GWS.CHAT.4.1v0.1
 #--
-NonCompliantOUs4_1 contains OU if {
+GetFriendlyValue4_1(Value) := "OFF" if {
+    Value == "true"
+} else := "ON" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue4_1(LastEvent.NewValue)
+}
+ if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "RestrictChatProto restrictChatToOrganization", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -268,7 +278,8 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
+    "ReportDetails": utils.ReportDetailsDetailedOU("Allow users to send messages outside organization",
+        NonCompliantOUs4_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -283,7 +294,16 @@ if {
 #
 # Baseline GWS.CHAT.4.2v0.1
 #--
-NonCompliantOUs4_2 contains OU if {
+
+GetFriendlyValue4_2(Value) := "false" if {
+    Value == "NO_RESTRICTION"
+} else := Value
+
+NonCompliantOUs4_2 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue4_2(LastEvent.NewValue)
+}
+if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -311,7 +331,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.4.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_2),
+    "ReportDetails": utils.ReportDetailsDetailedOU("Only allow this for allowlisted domains", NonCompliantOUs4_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
