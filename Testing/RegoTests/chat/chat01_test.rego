@@ -258,10 +258,12 @@ test_History_Incorrect_V2 if {
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    print(RuleOutput)
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Default conversation history is set to History is OFF</li></ul>"])
 }
 
 test_History_Incorrect_V3 if {
@@ -299,7 +301,8 @@ test_History_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Default conversation history is set to History is OFF</li></ul>"])
 }
 
 test_History_Incorrect_V4 if {
@@ -370,7 +373,8 @@ test_History_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Default conversation history is set to History is OFF</li></ul>"])
 }
 #--
 
