@@ -6,13 +6,22 @@ import os
 from pathlib import Path
 from provider import get_spf_records, get_dkim_records, get_dmarc_records, get_super_admins, get_dnsinfo, get_ous, get_toplevel_ou, get_tenant_info, get_gws_logs, get_group_settings, call_gws_providers
 from auth import gws_auth
+from orchestrator import gws_products
 from googleapiclient.discovery import build
 import argparse
 
-creds = gws_auth((Path.cwd() / "../credentials.json").resolve())
+creds = gws_auth((Path.cwd() / "../credentials.json").resolve(), "amart24@scubagws.org")
 
 services = {}
 services['directory'] = build('admin', 'directory_v1', credentials=creds)
+services['reports'] = build('admin', 'reports_v1', credentials=creds)
+services['groups'] = build('groupssettings','v1', credentials=creds)
+
+class args:
+
+    self.baselines = gws_products()
+
+
 
 class ProviderTests(unittest.TestCase):
     """Test cases for provider"""
@@ -37,29 +46,40 @@ class ProviderTests(unittest.TestCase):
         gsa_out = get_super_admins(services["directory"], "C03ymv5su")
         self.assertIsInstance(gsa_out['super_admins'],list)
 
-    # def test_get_ous(self):
-    #     print("test")
+    def test_get_ous(self):
+        ou_out = get_ous(services["directory"], "C03ymv5su")
+        self.assertIsInstance(ou_out,dict)
 
-    # def test_get_toplevel_ou(self):
-    #     print("test")
+    def test_get_toplevel_ou(self):
+        tlou_out = get_toplevel_ou(services["reports"], "C03ymv5su")
+        self.assertIsInstance(tlou_out,str)
 
-    # def test_get_tenant_info(self):
-    #     print("test")
+    def test_get_tenant_info(self):
+        ti_out = get_tenant_info(services["reports"], "C03ymv5su")
+        self.assertIsInstance(ti_out,dict)
 
-    # def test_get_gws_logs(self):
-    #     print("test")
+    def test_get_gws_logs(self):
+        print("test")
+        logs_out = get_gws_logs(gws_products()["gws_baselines"], services["reports"], "CHANGE_APPLICATION_SETTING")
+        self.assertIsInstance(logs_out,dict)
 
-    # def test_get_group_settings(self):
-    #     print("test")
+    def test_get_group_settings(self):
+        print("test")
+        gs_out = get_tenant_info(services["groups"], "C03ymv5su")
+        self.assertIsInstance(gs_out,dict)
 
-    # def test_call_gws_providers(self):
-    #     print("test")
+    def test_call_gws_providers(self):
+        print("test")
+        gp_out = call_gws_providers(gws_products()["gws_baselines"], services["groups"], True, "C03ymv5su")
+        self.assertIsInstance(gp_out,dict)
         
 # class OrchestratorTests(unittest.TestCase):
 #     """Test cases for orchestrator"""
 
-#     def test_gws_products(self):
-#         print("test")
+    def test_gws_products(self):
+        print("test")
+        prod_out = gws_products()
+        self.assertIsInstance(prod_out,dict)
 
 #     def test_run_gws_providers(self):
 #         print("test")
