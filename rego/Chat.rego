@@ -64,7 +64,11 @@ if {
 #
 # Baseline GWS.CHAT.1.2v0.1
 #--
-NonCompliantOUs1_2 contains OU if {
+NonCompliantOUs1_2 contains {
+    "Name": OU,
+    "Value": LastEvent.NewValue
+}
+if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "ChatArchivingProto allow_chat_archiving_setting_modification", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -93,7 +97,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.1.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_2),
+    "ReportDetails": utils.ReportDetailsDetailedOU("Allow users to change their history setting", NonCompliantOUs1_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
     "RequirementMet": Status,
     "NoSuchEvent": false

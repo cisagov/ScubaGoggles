@@ -573,7 +573,8 @@ test_Change_History_Setting_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Allow users to change their history setting is set to true</li></ul>"])
 }
 
 test_Change_History_Setting_Incorrect_V3 if {
@@ -617,7 +618,8 @@ test_Change_History_Setting_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Allow users to change their history setting is set to true</li></ul>"])
 }
 #--
 
@@ -662,7 +664,8 @@ test_Change_History_Setting_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ",
+        "Allow users to change their history setting is set to true</li></ul>"])
 }
 #--
 
