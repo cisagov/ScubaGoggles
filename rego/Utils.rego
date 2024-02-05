@@ -34,7 +34,7 @@ ReportDetailsBoolean(true) := "Requirement met."
 
 ReportDetailsBoolean(false) := "Requirement not met."
 
-ReportDetailsDetailedOU(SettingDescription, NonCompOUs) := "Requirement met in all OUs." if {
+ReportDetailsDetailedOU(_, NonCompOUs) := "Requirement met in all OUs." if {
     count(NonCompOUs) == 0
 }
 
