@@ -12,7 +12,16 @@ LogEvents := utils.GetEvents("chat_logs")
 #
 # Baseline GWS.CHAT.1v1
 #--
-NonCompliantOUs1_1 contains OU if {
+UserFriendlyValues1_1 := {
+    "true": "History is OFF",
+    "false": "History is ON"
+}
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": UserFriendlyValues1_1[LastEvent.NewValue]
+}
+if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ChatArchivingProto chatsDefaultToOffTheRecord", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -40,7 +49,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.1.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
+    "ReportDetails": utils.ReportDetailsDetailedOU("Default conversation history", NonCompliantOUs1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
