@@ -17,9 +17,15 @@ UserFriendlyValues1_1 := {
     "false": "History is ON"
 }
 
+GetFriendlyValue1_1(Value) := "History is OFF" if {
+    Value == "true"
+} else := "History is ON" if {
+    Value == "false"
+} else := Value
+
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": UserFriendlyValues1_1[LastEvent.NewValue]
+    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
 }
 if {
     some OU in utils.OUsWithEvents
@@ -118,7 +124,17 @@ if {
 #
 # Baseline GWS.CHAT.2.1v0.1
 #--
-NonCompliantOUs2_1 contains OU if {
+GetFriendlyValue2_1(Value) := "Allow all files" if {
+    Value == "ALL_FILES"
+} else := "Images only" if {
+    Value == "IMAGES_ONLY"
+} else := Value
+
+NonCompliantOUs2_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue2_1(LastEvent.NewValue)
+}
+if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -148,7 +164,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
+    "ReportDetails": utils.ReportDetailsDetailedOU("External filesharing", NonCompliantOUs2_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
