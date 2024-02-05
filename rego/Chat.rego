@@ -350,7 +350,11 @@ if {
 #
 # GWS.CHAT.5.1v0.1
 #--
-NonCompliantOUs5_1 contains OU if {
+NonCompliantOUs5_1 contains {
+    "Name": OU,
+    "Value": LastEvent.NewValue
+}
+if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "Chat app Settings - Chat apps enabled", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -378,7 +382,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.5.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_1),
+    "ReportDetails": utils.ReportDetailsDetailedOU("Allow users to install Chat apps", NonCompliantOUs5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -390,6 +394,9 @@ if {
 }
 #--
 
+#
+# GWS.CHAT.6.1v0.1
+#--
 tests contains {
     "PolicyId": "GWS.CHAT.6.1v0.1",
     "Criticality": "Should/Not-Implemented",
