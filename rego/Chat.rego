@@ -184,7 +184,16 @@ if {
 #
 # Baseline GWS.CHAT.3.1v0.1
 #--
-NonCompliantOUs3_1 contains OU if {
+GetFriendlyValue3_1(Value) := "History is OFF by default" if {
+    Value == "DEFAULT_OFF_THE_RECORD"
+} else := "History is ALWAYS OFF" if {
+    Value == "ALWAYS_OFF_THE_RECORD"
+} else := Value
+
+NonCompliantOUs3_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue3_1(LastEvent.NewValue)
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "RoomOtrSettingsProto otr_state", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -212,7 +221,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.3.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs3_1),
+    "ReportDetails": utils.ReportDetailsDetailedOU("Conversation history settings for spaces", NonCompliantOUs3_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false

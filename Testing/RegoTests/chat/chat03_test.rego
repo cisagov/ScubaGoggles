@@ -193,7 +193,8 @@ test_Space_History_Setting_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Conversation history settings for spaces is set to History is ALWAYS OFF</li></ul>"])
 }
 
 test_Space_History_Setting_Incorrect_V3 if {
@@ -221,7 +222,8 @@ test_Space_History_Setting_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Conversation history settings for spaces is set to History is OFF by default</li></ul>"])
 }
 
 test_Space_History_Setting_Incorrect_V4 if {
@@ -259,7 +261,8 @@ test_Space_History_Setting_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Conversation history settings for spaces is set to History is OFF by default</li></ul>"])
 }
 
 test_Space_History_Setting_Incorrect_V5 if {
@@ -297,7 +300,8 @@ test_Space_History_Setting_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Conversation history settings for spaces is set to History is ALWAYS OFF</li></ul>"])
 }
 
 test_Space_History_Setting_Incorrect_V6 if {
@@ -367,6 +371,10 @@ test_Space_History_Setting_Incorrect_V7 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Some other OU, Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul>",
+        "<li>Some other OU: Conversation history settings for spaces is set to History is ALWAYS OFF</li>",
+        "<li>Test Top-Level OU: Conversation history settings for spaces is set to History is ALWAYS OFF</li>",
+        "</ul>"
+    ])
 }
 #--
