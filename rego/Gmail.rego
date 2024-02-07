@@ -85,6 +85,7 @@ DomainsWithDkim contains DkimRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.2.1v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dkim_records"],
     "Criticality": "Should",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDkim, AllDomains),
     "ActualValue": input.dkim_records,
@@ -105,6 +106,20 @@ if {
 #
 # Baseline GWS.GMAIL.3.1v0.1
 #--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.3.1v0.1",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.GMAIL.3.2v0.1
+#--
 DomainsWithSpf contains SpfRecord.domain if {
     some SpfRecord in input.spf_records
     some Rdata in SpfRecord.rdata
@@ -112,7 +127,8 @@ DomainsWithSpf contains SpfRecord.domain if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.3.1v0.1",
+    "PolicyId": "GWS.GMAIL.3.2v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutSpf, AllDomains),
     "ActualValue": DomainsWithoutSpf,
@@ -141,6 +157,7 @@ DomainsWithDmarc contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.1v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -164,6 +181,7 @@ DomainsWithPreject contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.2v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -187,6 +205,7 @@ DomainsWithDHSContact contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.3v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -210,6 +229,7 @@ DomainsWithAgencyContact contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.4v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Should",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -515,7 +535,8 @@ tests contains {
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
-    "NoSuchEvent": false}
+    "NoSuchEvent": false
+}
 #--
 
 ###############
@@ -1347,6 +1368,19 @@ if {
 }
 #--
 
+#
+# Baseline GWS.GMAIL.10.2v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.10.2v0.1",
+    "Criticality": "May/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
 
 ################
 # GWS.GMAIL.11 #
@@ -1606,6 +1640,19 @@ if {
 }
 #--
 
+#
+# Baseline GWS.GMAIL.15.2v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.15.2v0.1",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
 
 ################
 # GWS.GMAIL.16 #
@@ -1658,6 +1705,19 @@ if {
 }
 #--
 
+#
+# Baseline GWS.GMAIL.16.2v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.16.2v0.1",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
 
 ################
 # GWS.GMAIL.17 #
@@ -1691,6 +1751,36 @@ tests contains {
 tests contains {
     "PolicyId": "GWS.GMAIL.18.1v0.1",
     "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.GMAIL.18.2v0.1
+#--
+# At this time we are unable to test because settings are configured in the GWS Admin Console
+# and not available within the generated logs
+tests contains {
+    "PolicyId": "GWS.GMAIL.18.2v0.1",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.GMAIL.18.3v0.1
+#--
+# At this time we are unable to test because settings are configured in the GWS Admin Console
+# and not available within the generated logs
+tests contains {
+    "PolicyId": "GWS.GMAIL.18.3v0.1",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
