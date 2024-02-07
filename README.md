@@ -334,7 +334,7 @@ If an authorization error similar to the one below appears:
 ```
 Ensure that you consented to the following API scopes as a user with the proper [permissions to consent](#permissions) and have enabled the required [APIs and Services](#create-an-oauth-credential).
 
-## Scubagoggles Not Found 
+### Scubagoggles Not Found 
 If an error similar to the one below appears: 
 ```
 command not found: scubagoggles
