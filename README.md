@@ -342,7 +342,7 @@ command not found: scubagoggles
 
 Ensure that you have properly [configured the virtual environment](#installing-in-a-virtual-environment) and have activated the virtual environment using the OS appropriate commands. 
 
-To run scubagoggles without using a virutal environment, you can replace the `scubagoggles` command with `python scuba.py` . 
+Alternatively, to run scubagoggles without installing it as a package, you can replace the `scubagoggles` command with `python scuba.py`. 
 
 ### Unable to view HTML report due to environment limitations 
 
