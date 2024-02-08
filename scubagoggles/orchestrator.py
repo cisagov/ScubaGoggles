@@ -12,7 +12,7 @@ from tqdm import tqdm
 from googleapiclient.discovery import build
 
 from scubagoggles.auth import gws_auth
-from scubagoggles.provider import call_gws_providers
+from scubagoggles.provider import Provider
 from scubagoggles.run_rego import opa_eval
 from scubagoggles.reporter import reporter, md_parser
 from scubagoggles.utils import rel_abs_path
@@ -51,19 +51,22 @@ def gws_products() -> dict:
     }
     return gws
 
-def run_gws_providers(args, services):
+def run_gws_providers(args, services : dict):
     """
     Runs the provider scripts and outputs a json to path
 
     :param args: the command line arguments to this script
-    :param services: a Google API services object
+    :param services: a dictionary of Google API service objects
     """
 
     products = args.baselines
     out_folder = args.outputpath
     provider_dict = {}
 
-    provider_dict = call_gws_providers(products, services, args.quiet)
+    provider = Provider(services, args.customerid)
+    provider_dict = provider.call_gws_providers(products, args.quiet)
+    provider_dict['successful_calls'] = list(provider.successful_calls)
+    provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
 
     settings_json = json.dumps(provider_dict, indent = 4)
     out_path = out_folder + f'/{args.outputproviderfilename}.json'
@@ -119,6 +122,42 @@ def pluralize(singular : str, plural : str, count : int) -> str:
         return singular
     return plural
 
+def generate_summary(stats : dict) -> str:
+    """
+    Craft the html-formatted summary from the stats dictionary.
+    """
+    n_success = stats["Pass"]
+    n_warn = stats["Warning"]
+    n_fail = stats["Fail"]
+    n_manual = stats["N/A"] + stats["No events found"]
+    n_error = stats["Error"]
+
+    pass_summary = (f"<div class='summary pass'>{n_success}"
+    f" {pluralize('test', 'tests', n_success)} passed</div>")
+
+    # The warnings, failures, and manuals are only shown if they are
+    # greater than zero. Reserve the space for them here. They will
+    # be filled next if needed.
+    warning_summary = "<div class='summary'></div>"
+    failure_summary = "<div class='summary'></div>"
+    manual_summary = "<div class='summary'></div>"
+    error_summary = "<div class='summary'></div>"
+
+    if n_warn > 0:
+        warning_summary = (f"<div class='summary warning'>{n_warn}"
+        f" {pluralize('warning', 'warnings', n_warn)}</div>")
+    if n_fail > 0:
+        failure_summary = (f"<div class='summary failure'>{n_fail}"
+        f" {pluralize('test', 'tests', n_fail)} failed</div>")
+    if n_manual > 0:
+        manual_summary = (f"<div class='summary manual'>{n_manual} manual"
+        f" {pluralize('check', 'checks', n_manual)} needed</div>")
+    if n_error > 0:
+        error_summary = (f"<div class='summary error'>{n_error}"
+        f" {pluralize('error', 'errors', n_error)}</div>")
+
+    return f"{pass_summary}{warning_summary}{failure_summary}{manual_summary}{error_summary}"
+
 def run_reporter(args):
     """
     Creates the indvididual reports and the front page
@@ -146,8 +185,14 @@ def run_reporter(args):
     with open(test_results_json, mode='r', encoding='UTF-8') as file:
         test_results_data = json.load(file)
 
-    # baseline_path
+    # Get the successful/unsuccessful commands
+    settings_name = f'{out_folder}/{args.outputproviderfilename}.json'
+    with open(settings_name, mode='r', encoding='UTF-8') as file:
+        settings_data = json.load(file)
+    successful_calls = set(settings_data['successful_calls'])
+    unsuccessful_calls = set(settings_data['unsuccessful_calls'])
 
+    # baseline_path
     subset_prod_to_fullname = {
         key: prod_to_fullname[key]
         for key in args.baselines
@@ -171,7 +216,7 @@ def run_reporter(args):
     with open(f'{out_folder}/{args.outputproviderfilename}.json',
     mode='r',encoding='UTF-8') as file:
         tenant_info = json.load(file)['tenant_info']
-        tenant_name = tenant_info['name']
+        tenant_domain = tenant_info['domain']
 
 
     # Create the the individual report files
@@ -185,10 +230,12 @@ def run_reporter(args):
             test_results_data,
             product,
             out_folder,
-            tenant_name,
+            tenant_domain,
             main_report_name,
             prod_to_fullname,
-            baseline_policies[product]
+            baseline_policies[product],
+            successful_calls,
+            unsuccessful_calls
         )
 
     # Make the report front page
@@ -203,35 +250,9 @@ def run_reporter(args):
         full_name = prod_to_fullname[product]
         link_path =  "./IndividualReports/" f"{product_capitalize}Report.html"
         link = f"<a class=\"individual_reports\" href={link_path}>{full_name}</a>"
-        ## Build the "Details" column
-        n_success = stats["Pass"]
-        n_warn = stats["Warning"]
-        n_fail = stats["Fail"]
-        n_manual = stats["N/A"] + stats["No events found"]
-
-        pass_summary = (f"<div class='summary pass'>{n_success}"
-        f" {pluralize('test', 'tests', n_success)} passed</div>")
-
-        # The warnings, failures, and manuals are only shown if they are
-        # greater than zero. Reserve the space for them here. They will
-        # be filled next if needed.
-        warning_summary = "<div class='summary'></div>"
-        failure_summary = "<div class='summary'></div>"
-        manual_summary = "<div class='summary'></div>"
-
-        if n_warn > 0:
-            warning_summary = (f"<div class='summary warning'>{n_warn}"
-            f" {pluralize('warning', 'warnings', n_warn)}</div>")
-        if n_fail > 0:
-            failure_summary = (f"<div class='summary failure'>{n_fail}"
-            f" {pluralize('test', 'tests', n_fail)} failed</div>")
-        if n_manual > 0:
-            manual_summary = (f"<div class='summary manual'>{n_manual} manual"
-            f" {pluralize('check', 'checks', n_manual)} needed</div>")
-
         table_data.append({
-        "Baseline Conformance Reports": link,
-        "Details": f"{pass_summary}{warning_summary}{failure_summary}{manual_summary}"
+            "Baseline Conformance Reports": link,
+            "Details": generate_summary(stats)
         })
 
     fragments.append(reporter.create_html_table(table_data))
@@ -310,7 +331,7 @@ def start_automation(args):
         args.outputpath = os.path.abspath(args.outputpath)
 
         # authenticate
-        creds = gws_auth(args.credentials)
+        creds = gws_auth(args.credentials, args.subjectemail)
         services = {}
         services['reports'] = build('admin', 'reports_v1', credentials=creds)
         services['directory'] = build('admin', 'directory_v1', credentials=creds)

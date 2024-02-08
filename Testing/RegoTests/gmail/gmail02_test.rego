@@ -14,7 +14,8 @@ test_DKIM_Correct_V1 if {
                 "domain": "test.name",
                 "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt"]
             }
-        ]
+        ],
+        "domains": ["test.name"]
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
@@ -37,7 +38,8 @@ test_DKIM_Correct_V2 if {
                 "domain": "test2.name",
                 "rdata": ["v=DKIM1;"]
             }
-        ]
+        ],
+        "domains": ["test1.name", "test2.name"]
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
@@ -60,7 +62,8 @@ test_DKIM_Incorrect_V1 if {
                 "domain": "test2.name",
                 "rdata": []
             }
-        ]
+        ],
+        "domains": ["test1.name", "test2.name"]
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
@@ -79,7 +82,8 @@ test_DKIM_Incorrect_V2 if {
                 "domain": "test.name",
                 "rdata": []
             }
-        ]
+        ],
+        "domains": ["test.name"]
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]

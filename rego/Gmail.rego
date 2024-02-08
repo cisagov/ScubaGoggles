@@ -19,9 +19,7 @@ ReportDetailsArray(Status, Array1, Array2) := Detail if {
     Detail := Description(Fraction, " agency domain(s) found in violation: ", String)
 }
 
-AllDomains contains Domain.domain if {
-    some Domain in input.dkim_records
-}
+AllDomains := {Domain | some Domain in input.domains}
 
 LogEvents := utils.GetEvents("gmail_logs")
 
@@ -87,6 +85,7 @@ DomainsWithDkim contains DkimRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.2.1v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dkim_records"],
     "Criticality": "Should",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDkim, AllDomains),
     "ActualValue": input.dkim_records,
@@ -107,6 +106,20 @@ if {
 #
 # Baseline GWS.GMAIL.3.1v0.1
 #--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.3.1v0.1",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.GMAIL.3.2v0.1
+#--
 DomainsWithSpf contains SpfRecord.domain if {
     some SpfRecord in input.spf_records
     some Rdata in SpfRecord.rdata
@@ -114,7 +127,8 @@ DomainsWithSpf contains SpfRecord.domain if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.3.1v0.1",
+    "PolicyId": "GWS.GMAIL.3.2v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutSpf, AllDomains),
     "ActualValue": DomainsWithoutSpf,
@@ -143,6 +157,7 @@ DomainsWithDmarc contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.1v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -166,6 +181,7 @@ DomainsWithPreject contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.2v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -189,6 +205,7 @@ DomainsWithDHSContact contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.3v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -212,6 +229,7 @@ DomainsWithAgencyContact contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.4.4v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Should",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains),
     "ActualValue": input.dmarc_records,
@@ -517,7 +535,8 @@ tests contains {
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
-    "NoSuchEvent": false}
+    "NoSuchEvent": false
+}
 #--
 
 ###############
@@ -1349,6 +1368,19 @@ if {
 }
 #--
 
+#
+# Baseline GWS.GMAIL.10.2v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.10.2v0.1",
+    "Criticality": "May/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
 
 ################
 # GWS.GMAIL.11 #
@@ -1357,7 +1389,6 @@ if {
 #
 # Baseline GWS.GMAIL.11.1v0.1
 #--
-
 NonCompliantOUs11_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ENABLE_EMAIL_AUTOFORWARDING", OU)
@@ -1409,18 +1440,18 @@ if {
 #--
 NonCompliantOUs12_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", OU)
+    Events := utils.FilterEvents(LogEvents, "OUTBOUND_RELAY_ENABLED", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "1"
+    LastEvent.NewValue == "true"
 }
 
 tests contains {
     "PolicyId": "GWS.GMAIL.12.1v0.1",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
@@ -1428,20 +1459,20 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "OUTBOUND_RELAY_ENABLED", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.GMAIL.12.1v0.1",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs12_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS", utils.TopLevelOU)
+    Events := utils.FilterEvents(LogEvents, "OUTBOUND_RELAY_ENABLED", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs12_1) == 0
 }
@@ -1457,13 +1488,14 @@ if {
 #--
 NonCompliantOUs13_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "OUTBOUND_RELAY_ENABLED", OU)
+    Events := utils.FilterEvents(LogEvents, "OutOfDomainWarningProto disable_untrusted_recipient_warning", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
+    LastEvent.NewValue != "false"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
 tests contains {
@@ -1476,7 +1508,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "OUTBOUND_RELAY_ENABLED", utils.TopLevelOU)
+    SettingName := "OutOfDomainWarningProto disable_untrusted_recipient_warning"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -1489,7 +1522,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "OUTBOUND_RELAY_ENABLED", utils.TopLevelOU)
+    SettingName := "OutOfDomainWarningProto disable_untrusted_recipient_warning"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs13_1) == 0
 }
@@ -1502,57 +1536,6 @@ if {
 
 #
 # Baseline GWS.GMAIL.14.1v0.1
-#--
-NonCompliantOUs14_1 contains OU if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "OutOfDomainWarningProto disable_untrusted_recipient_warning", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
-
-tests contains {
-    "PolicyId": "GWS.GMAIL.14.1v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    SettingName := "OutOfDomainWarningProto disable_untrusted_recipient_warning"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.GMAIL.14.1v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs14_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs14_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    SettingName := "OutOfDomainWarningProto disable_untrusted_recipient_warning"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) > 0
-    Status := count(NonCompliantOUs14_1) == 0
-}
-#--
-
-
-################
-# GWS.GMAIL.15 #
-################
-
-#
-# Baseline GWS.GMAIL.15.1v0.1
 #--
 EmailAllowlistSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue != "[]"
@@ -1573,7 +1556,7 @@ EmailAllowlistSettingDetailsStr(LastEvent) := Description if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.15.1v0.1",
+    "PolicyId": "GWS.GMAIL.14.1v0.1",
     "Criticality": "Should",
     "ReportDetails": concat("", [
         "No relevant event in the current logs. ",
@@ -1590,7 +1573,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.15.1v0.1",
+    "PolicyId": "GWS.GMAIL.14.1v0.1",
     "Criticality": "Should",
     "ReportDetails": EmailAllowlistSettingDetailsStr(LastEvent),
     "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
@@ -1607,13 +1590,13 @@ if {
 
 
 ################
-# GWS.GMAIL.16 #
+# GWS.GMAIL.15 #
 ################
 
 #
-# Baseline GWS.GMAIL.16.1v0.1
+# Baseline GWS.GMAIL.15.1v0.1
 #--
-NonCompliantOUs16_1 contains OU if {
+NonCompliantOUs15_1 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
@@ -1627,7 +1610,7 @@ NonCompliantOUs16_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.16.1v0.1",
+    "PolicyId": "GWS.GMAIL.15.1v0.1",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1642,10 +1625,10 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.16.1v0.1",
+    "PolicyId": "GWS.GMAIL.15.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs16_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_1},
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs15_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -1653,19 +1636,32 @@ if {
     SettingName := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
     Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs16_1) == 0
+    Status := count(NonCompliantOUs15_1) == 0
 }
 #--
 
+#
+# Baseline GWS.GMAIL.15.2v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.15.2v0.1",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
 
 ################
-# GWS.GMAIL.17 #
+# GWS.GMAIL.16 #
 ################
 
 #
-# Baseline GWS.GMAIL.17.1v0.1
+# Baseline GWS.GMAIL.16.1v0.1
 #--
-NonCompliantOUs17_1 contains OU if {
+NonCompliantOUs16_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "AttachmentDeepScanningSettingsProto deep_scanning_enabled", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -1679,7 +1675,7 @@ NonCompliantOUs17_1 contains OU if {
 
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.17.1v0.1",
+    "PolicyId": "GWS.GMAIL.16.1v0.1",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1694,10 +1690,10 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.17.1v0.1",
+    "PolicyId": "GWS.GMAIL.16.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs17_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs17_1},
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs16_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -1705,7 +1701,40 @@ if {
     SettingName := "AttachmentDeepScanningSettingsProto deep_scanning_enabled"
     Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs17_1) == 0
+    Status := count(NonCompliantOUs16_1) == 0
+}
+#--
+
+#
+# Baseline GWS.GMAIL.16.2v0.1
+#--
+# No implementation steps provided for this policy
+tests contains {
+    "PolicyId": "GWS.GMAIL.16.2v0.1",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+################
+# GWS.GMAIL.17 #
+################
+
+#
+# Baseline GWS.GMAIL.17.1v0.1
+#--
+# At this time we are unable to test because settings are configured in the GWS Admin Console
+# and not available within the generated logs
+tests contains {
+    "PolicyId": "GWS.GMAIL.17.1v0.1",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
 }
 #--
 
@@ -1729,18 +1758,13 @@ tests contains {
 }
 #--
 
-
-################
-# GWS.GMAIL.19 #
-################
-
 #
-# Baseline GWS.GMAIL.19.1v0.1
+# Baseline GWS.GMAIL.18.2v0.1
 #--
 # At this time we are unable to test because settings are configured in the GWS Admin Console
 # and not available within the generated logs
 tests contains {
-    "PolicyId": "GWS.GMAIL.19.1v0.1",
+    "PolicyId": "GWS.GMAIL.18.2v0.1",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1749,79 +1773,14 @@ tests contains {
 }
 #--
 
-
-################
-# GWS.GMAIL.20 #
-################
-
 #
-# Baseline GWS.GMAIL.20.1v0.1
+# Baseline GWS.GMAIL.18.3v0.1
 #--
 # At this time we are unable to test because settings are configured in the GWS Admin Console
 # and not available within the generated logs
 tests contains {
-    "PolicyId": "GWS.GMAIL.20.1v0.1",
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-
-################
-# GWS.GMAIL.21 #
-################
-
-#
-# Baseline GWS.GMAIL.21.1v0.1
-#--
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
-tests contains {
-    "PolicyId": "GWS.GMAIL.21.1v0.1",
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-
-################
-# GWS.GMAIL.22 #
-################
-
-#
-# Baseline GWS.GMAIL.22.1v0.1
-#--
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
-tests contains {
-    "PolicyId": "GWS.GMAIL.22.1v0.1",
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-
-################
-# GWS.GMAIL.23 #
-################
-
-#
-# Baseline GWS.GMAIL.23.1v0.1
-#--
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
-tests contains {
-    "PolicyId": "GWS.GMAIL.23.1v0.1",
-    "Criticality": "Should/Not-Implemented",
+    "PolicyId": "GWS.GMAIL.18.3v0.1",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,

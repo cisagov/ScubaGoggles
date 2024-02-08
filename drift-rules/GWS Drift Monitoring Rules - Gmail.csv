@@ -40,28 +40,14 @@ GWS.GMAIL.9.2v0.1,POP and IMAP access MAY be enabled on a per-user and per-appli
 GWS.GMAIL.10.1v0.1,Google Workspace Sync SHOULD be disabled.,Admin Log Event,Change Email Setting,ENABLE_OUTLOOK_SYNC,false,rules/00gjdgxs2caikn5,JK 07-31-23 @ 11:39
 GWS.GMAIL.10.2v0.1,Google Workspace Sync MAY be enabled on a per-user basis as needed.,N/A,N/A,N/A,N/A,N/A,Not Alertable
 GWS.GMAIL.11.1v0.1,"Automatic forwarding SHOULD be disabled, especially to external domains.",Admin Log Event,Change Email Setting,ENABLE_EMAIL_AUTOFORWARDING,false,rules/00gjdgxs3bfgdir,JK 07-31-23 @ 11:50
-GWS.GMAIL.12.1v0.1,Image URL proxy whitelists SHOULD be enabled to avoid broken links to images that are dependent on internal IP addresses within an organization’s domain.,Admin Log Event,Change Email Setting,NUMBER_OF_EMAIL_IMAGE_URL_WHITELIST_PATTERNS,DEFAULT,rules/00gjdgxs1eu3lea,JK 08-01-23 @ 11:32
-GWS.GMAIL.13.1v0.1,Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers SHALL be disabled.,Admin Log Event,Change Email Setting,OUTBOUND_RELAY_ENABLED,false,rules/00gjdgxs0wkcpwf,JK 07-31-23 @ 11:38
-GWS.GMAIL.14.1v0.1,Unintended external reply warnings SHALL be enabled to avoid unintentional replies and remind users to treat external messages with caution.,Admin Log Event,Change Application Setting,OutOfDomainWarningProto disable_untrusted_recipient_warning,true,rules/00gjdgxs0o6v2pe,JK 07-31-23 @ 13:56
-GWS.GMAIL.15.1v0.1,An email allowlist SHOULD not be implemented.,Admin Log Event,Change Email Setting,EMAIL_SPAM_ALLOWLIST,[],rules/00gjdgxs17hggqa,JK 08-01-23 @ 11:36
-GWS.GMAIL.15.2v0.1,A connection filter policy to create a Blocked Senders list MAY be implemented.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.16.1v0.1,Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.,Admin Log Event,Change Application Setting,DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email,true,rules/00gjdgxs0z436wh,JK 07-13-23 @ 15:18
-GWS.GMAIL.16.2v0.1,Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.17.1v0.1,Security sandbox SHOULD be enabled to provide additional protections for their email messages.,Admin Log Event,Change Application Setting,AttachmentDeepScanningSettingsProto deep_scanning_enabled,true,rules/00gjdgxs2e64nj2,JK 07-13-23 @ 15:42
-GWS.GMAIL.17.2v0.1,Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.18.1v0.1,A spam approved senders list SHOULD be configured to ensure legitimate emails are not sent to the spam folder.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.18.2v0.1,An allowed senders list MAY be added but SHOULD NOT add allowed domains.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.18.3v0.1,Any third-party or outside application selected for spam approved senders’ lists SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.18.4v0.1,Addresses added to the allowed senders list SHALL be set to require authentication.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.19.1v0.1,A blocked senders list SHOULD be configured to prevent emails from known malicious sources.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.19.2v0.1,Blocked senders or domains MAY be added to the blocked senders list.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.20.1v0.1,Comprehensive mail storage SHOULD be enabled to ensure information can be tracked across applications.,Admin Log Event,Change Gmail Setting,COMPREHENSIVE_MAIL_STORAGE,No Value,rules/00gjdgxs388y21u,
-GWS.GMAIL.21.1v0.1,Content filtering SHOULD be enabled within Gmail messages.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.21.2v0.1,Any third-party or outside application selected for advanced email content filtering SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.21.3v0.1,"Gmail or third-party applications SHALL be configured to protect PII and sensitive information as defined by the agency. At a minimum, credit card numbers, taxpayer Identification Numbers (TIN), and Social Security Numbers (SSN) SHALL be blocked.",N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.22.1v0.1,Word lists SHOULD be enabled to filter objectionable content within Gmail messages.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.22.2v0.1,Any third-party or outside application selected for objectionable content filtering SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.23.1v0.1,Attachment compliance SHOULD be enabled to filter specific attachments within Gmail messages.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.23.2v0.1,The attachment filter SHOULD attempt to determine the true file type and assess the file extension.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.23.3v0.1,The set of disallowed file types SHALL be determined.,N/A,N/A,N/A,N/A,N/A,Not Alertable
-GWS.GMAIL.23.4v0.1,Any third-party or outside application selected for attachment compliance filtering SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
+GWS.GMAIL.12.1v0.1,Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers SHALL be disabled.,Admin Log Event,Change Email Setting,OUTBOUND_RELAY_ENABLED,false,rules/00gjdgxs0wkcpwf,JK 07-31-23 @ 11:38
+GWS.GMAIL.13.1v0.1,Unintended external reply warnings SHALL be enabled to avoid unintentional replies and remind users to treat external messages with caution.,Admin Log Event,Change Application Setting,OutOfDomainWarningProto disable_untrusted_recipient_warning,true,rules/00gjdgxs0o6v2pe,JK 07-31-23 @ 13:56
+GWS.GMAIL.14.1v0.1,An email allowlist SHOULD not be implemented.,Admin Log Event,Change Email Setting,EMAIL_SPAM_ALLOWLIST,[],rules/00gjdgxs17hggqa,JK 08-01-23 @ 11:36
+GWS.GMAIL.15.1v0.1,Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.,Admin Log Event,Change Application Setting,DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email,true,rules/00gjdgxs0z436wh,JK 07-13-23 @ 15:18
+GWS.GMAIL.15.2v0.1,Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
+GWS.GMAIL.16.1v0.1,Security sandbox SHOULD be enabled to provide additional protections for their email messages.,Admin Log Event,Change Application Setting,AttachmentDeepScanningSettingsProto deep_scanning_enabled,true,rules/00gjdgxs2e64nj2,JK 07-13-23 @ 15:42
+GWS.GMAIL.16.2v0.1,Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
+GWS.GMAIL.17.1v0.1,Comprehensive mail storage SHOULD be enabled to ensure information can be tracked across applications.,Admin Log Event,Change Gmail Setting,COMPREHENSIVE_MAIL_STORAGE,No Value,rules/00gjdgxs388y21u,
+GWS.GMAIL.18.1v0.1,Content filtering SHOULD be enabled within Gmail messages.,N/A,N/A,N/A,N/A,N/A,Not Alertable
+GWS.GMAIL.18.2v0.1,Any third-party or outside application selected for advanced email content filtering SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
+GWS.GMAIL.18.3v0.1,"Gmail or third-party applications SHALL be configured to protect PII and sensitive information as defined by the agency. At a minimum, credit card numbers, taxpayer Identification Numbers (TIN), and Social Security Numbers (SSN) SHALL be blocked.",N/A,N/A,N/A,N/A,N/A,Not Alertable

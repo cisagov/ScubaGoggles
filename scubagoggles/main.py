@@ -34,9 +34,18 @@ def get_gws_args(parser):
     ' Defaults to "./" The current directory. ')
 
     parser.add_argument('-c','--credentials', type=str,default='./credentials.json', metavar='',
-    help='The relative path and name of the OAuth credentials json file. ' +
+    help='The relative path and name of the OAuth / service account credentials json file. ' +
     'Defaults to "./credentials.json" which means the tool will look ' +
     'for the file named credentials.json in the current directory.')
+
+    parser.add_argument('--subjectemail', type=str, default=None, metavar='',
+    help='Only applicable when using a service account. ' +
+    'The email address of a user the service account should act on behalf of. ' +
+    'This user must have the necessary privileges to run scubagoggles.')
+
+    parser.add_argument("--customerid", type=str, default="my_customer", metavar='',
+    help='The customer ID the tool should run on. Defaults to "my_customer" which will be' +
+    ' the domain of the user / service account authenticating.')
 
     parser.add_argument('--opapath', type=str, default='./', metavar='',
     help='The relative path to the directory containing the OPA executable. ' +

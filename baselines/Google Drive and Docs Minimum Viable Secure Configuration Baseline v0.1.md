@@ -184,7 +184,7 @@ To configure the settings for Sharing options:
 
 #### GWS.DRIVEDOCS.1.7v0.1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Select **Distributing content outside of your domain** -\> **Only users in your organization.**
+2.  Select **Distributing content outside of your domain** -\> **No one**
 
 #### GWS.DRIVEDOCS.1.8v0.1 Instructions
 1.  Select **Sharing settings -\> General access default.**
