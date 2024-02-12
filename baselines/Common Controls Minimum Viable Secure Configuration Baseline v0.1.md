@@ -15,18 +15,15 @@ This baseline is based on Google documentation and addresses the following:
 - [User Session Duration](#4-user-session-duration)
 - [Secure Passwords](#5-secure-passwords)
 - [Highly Privileged Accounts](#6-highly-privileged-accounts)
-- [Super Admin Accounts](#7-super-admin-accounts)
-- [Conflicting Account Management](#8-conflicting-account-management)
-- [Catastrophic Recovery Options](#9-catastrophic-recovery-options-for-super-admins)
-- [GWS Advanced Protection Program](#10-gws-advanced-protection-program)
-- [App Access to Google APIs](#11-app-access-to-google-apis)
-- [Authorized Marketplace Apps](#12-authorized-google-marketplace-apps)
-- [Less Secure Apps](#13-less-secure-apps)
-- [Google Takeout Service](#14-google-takeout-services-for-users)
-- [System-Defined Rules](#15-system-defined-rules)
-- [Google Workspace Logs](#16-google-workspace-logs)
-- [Data Regions](#17-data-regions)
-- [Supplemental Data Storage](#18-supplemental-data-storage)
+- [Conflicting Account Management](#7-conflicting-account-management)
+- [Catastrophic Recovery Options](#8-catastrophic-recovery-options-for-super-admins)
+- [GWS Advanced Protection Program](#9-gws-advanced-protection-program)
+- [App Access to Google APIs](#10-app-access-to-google-apis)
+- [Authorized Marketplace Apps](#11-authorized-google-marketplace-apps)
+- [Google Takeout Service](#12-google-takeout-services-for-users)
+- [System-Defined Rules](#13-system-defined-rules)
+- [Google Workspace Logs](#14-google-workspace-logs)
+- [Data Regions](#15-data-regions-and-storage)
 
 ## Assumptions
 
@@ -526,21 +523,6 @@ Pre-Built GWS Admin Roles considered highly privileged:
 ### Policies
 
 #### GWS.COMMONCONTROLS.6.1v0.1
-Agencies SHALL ensure that all accounts with highly privileged roles are separate administrative accounts, distinct from the ordinary day to day accounts of those personnel.
-
-- Rationale
-  - This helps ensure that the accounts with admin privileges are only used when performing admin tasks and that for ordinary tasks personnel use a lower-privileged account.
-- Last Modified: July 11, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
-    - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
-    - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
-    - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
-
-#### GWS.COMMONCONTROLS.6.2v0.1
 All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
 - Rationale
@@ -555,33 +537,7 @@ All highly privileged accounts SHALL leverage Google Account authentication with
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
-### Resources
-
--   [Google Cloud Architecture Center \| Best practices for planning accounts and organizations](https://cloud.google.com/architecture/identity/best-practices-for-planning)
--   [GWS Admin Help \| Create, edit, and delete custom admin roles](https://support.google.com/a/answer/2406043)
--   [GWA Admin Help \| Assign Specific Admin Roles](https://support.google.com/a/answer/9807615?hl=en)
--   [GWA Admin Help \| Pre-Built Admin Roles](https://support.google.com/a/answer/2405986?hl=en)
-
-### Prerequisites
-
--   Super admin users cannot log in to admin.google.com with a 3rd party IdP when using Super Admin level accounts—they must use Google Login as the authentication mechanism. This policy extends this rule to other Admin types.
--   Delegated accounts, including the ones defined as highly privileged above, can by default, use a third-party IdP to access admin.google.com: however, this policy prohibits that practice. All highly privileged accounts must use phishing resistant Google Authentication.
-
-### Implementation
-
-#### GWS.COMMONCONTROLS.6.1v0.1 Instructions
-1.  The implementation process for this can be located [here](https://support.google.com/a/answer/9807615).
-
-#### GWS.COMMONCONTROLS.6.2v0.1 Instructions
-1.  The implementation process for this can be located [here](https://support.google.com/a/answer/9807615).
-
-## 7. Super Admin Accounts
-
-Super Admin is the highest privileged role in GWS because it provides unfettered access to the organization. Therefore, if a user's credential with these permissions were to be compromised, it would present significant risks to the security of the organization. Limit the number of users that are assigned the role of Super Administrator. Assign users to finer-grained administrative roles that they need to perform their duties instead of being assigned the Super Administrator role.
-
-### Policies
-
-#### GWS.COMMONCONTROLS.7.1v0.1
+#### GWS.COMMONCONTROLS.6.2v0.1
 A minimum of **two** and maximum of **four** separate and distinct Super Admin users SHALL be configured.
 
 - Rationale
@@ -601,18 +557,20 @@ A minimum of **two** and maximum of **four** separate and distinct Super Admin u
 
 -   [Google Cloud Architecture Center \| Best practices for planning accounts and organizations](https://cloud.google.com/architecture/identity/best-practices-for-planning)
 -   [GWS Admin Help \| Create, edit, and delete custom admin roles](https://support.google.com/a/answer/2406043)
--   [GWS Admin Help \| Assign Specific Admin Roles](https://support.google.com/a/answer/9807615?hl=en)
--   [GWS Admin Help \| Pre-Built Admin Roles](https://support.google.com/a/answer/2405986?hl=en)
--   [GWS Admin SDK Documentation \| Make User Super Admin](https://developers.google.com/admin-sdk/directory/reference/rest/v1/users/makeAdmin)
--   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
+-   [GWA Admin Help \| Assign Specific Admin Roles](https://support.google.com/a/answer/9807615?hl=en)
+-   [GWA Admin Help \| Pre-Built Admin Roles](https://support.google.com/a/answer/2405986?hl=en)
 
 ### Prerequisites
 
--   None
+-   Super admin users cannot log in to admin.google.com with a 3rd party IdP when using Super Admin level accounts—they must use Google Login as the authentication mechanism. This policy extends this rule to other Admin types.
+-   Delegated accounts, including the ones defined as highly privileged above, can by default, use a third-party IdP to access admin.google.com: however, this policy prohibits that practice. All highly privileged accounts must use phishing resistant Google Authentication.
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.7.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.6.1v0.1 Instructions
+1.  The implementation process for this can be located [here](https://support.google.com/a/answer/9807615).
+
+#### GWS.COMMONCONTROLS.6.2v0.1 Instructions
 To obtain a list of all GWS Super Admins:
 
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
@@ -620,7 +578,7 @@ To obtain a list of all GWS Super Admins:
 3.  Click the **Super Admin** role in the list of roles
 4.  The subsequent dialog provides a list of Super Admins.
 
-## 8. Conflicting Account Management
+## 7. Conflicting Account Management
 
 It is possible for employees of an organization to create conflicting, unmanaged accounts that are unmanaged by an enterprise's Google Workspace tenant. Unmanaged accounts are defined as users who independently created a Google account using the organization's domain. For example, a user with an enterprise/corporate email of user@company.com could create a personal, unmanaged Google account using that email address. This would create an account conflict in a GWS tenant licensed to company.com since email addresses are unique.
 
@@ -639,7 +597,7 @@ By changing the email address, the user resolves the conflict by ensuring that t
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.8.1v0.1
+#### GWS.COMMONCONTROLS.7.1v0.1
 Account conflict management SHALL be configured to replace conflicting unmanaged accounts with managed ones.
 
 - Rationale
@@ -675,7 +633,7 @@ Account conflict management SHALL be configured to replace conflicting unmanaged
 -   Super Admin privileges
 
 ### Implementation
-#### GWS.COMMONCONTROLS.8.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.7.1v0.1 Instructions
 
 To configure account conflict management per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
@@ -684,53 +642,17 @@ To configure account conflict management per the policy:
 4.	Select the radio button option: **"Replace conflicting unmanaged accounts with managed ones."**
 5.	Click **Save.**
 
-## 9. Catastrophic Recovery Options for Super Admins
+## 8. Catastrophic Recovery Options for Super Admins
 
-If a catastrophic event occurs in which the GWS Super Admin credentials are lost or stolen, this control is in place to require "break-glass" Super Admin accounts. These accounts are to be physically secured in a highly secure location as a recovery option, with the account self-recovery feature disabled in GWS.
+This section covers the admin self-recovery setting that is in Google Admin console.
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.9.1v0.1
-A second, "break-glass" Super Admin account SHALL be created and physically secured for each individual Super Admin user to mitigate account access issues resulting from catastrophic credential loss or compromise.
+#### GWS.COMMONCONTROLS.8.1v0.1
+Account self-recovery for Super Admins SHALL be disabled
 
 - Rationale
-  - Having a "break-glass" account for each super admin is important in case the super admin loses access to their account and needs to recover it.
-  - Only using this account for recovery provides a benefit of being able to track when they recover their account as the access to the "break-glass" account would indicate a recovery.
-  - Keeping it physically secure ensures there is no unauthorized access to the account.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
-
-#### GWS.COMMONCONTROLS.9.2v0.1
-Account self-recovery for Super Admins SHALL be disabled, forcing Super Admin users who have lost their login credentials to contact another Super Admin to recover their account.
-
-- Rationale
-  - This makes it more difficult for a potential adversary from being able to attempt to gain access to a super admin account through the method of account recovery.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
-
-#### GWS.COMMONCONTROLS.9.3v0.1
-"Break-glass" account credentials SHALL be used only if all Super Admins have lost their credentials.
-
-- Rationale
-  - This helps ensure that their is limited access to the "break-glass" account keeping the credentials to those accounts secure and not exposing them to potentially being leaked.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
-
-#### GWS.COMMONCONTROLS.9.4v0.1
-A geographically separate and secure location SHOULD be planned and implemented to store "break-glass" account credentials for Super Admins.
-
-- Rationale
-  - Keeping break glass credentials in a separate and secure location helps prevent against losing the credentials if something happens to the primary location.
-  - In addition, provides extra security as the credentials are kept separate from where an attacker would most likely look.
+  - This forces Super Admin users who have lost their login credentials to contact another Super Admin to recover their account. This makes it more difficult for a potential adversary from being able to attempt to gain access to a super admin account through the method of account recovery.
 - Last Modified: July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -748,17 +670,7 @@ A geographically separate and secure location SHOULD be planned and implemented 
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.9.1v0.1 Instructions
-To configure break glass Super Admin account:
-
-1.  Follow standard instructions for setting up a GWS normal user
-2.  Follow these instructions for upgrading user to a Super Admin
-3.  Link: [https://support.google.com/a/answer/172176](https://support.google.com/a/answer/172176?hl=en&fl=1)
-4.  Follow the guidance in this document for setting up phishing resistant MFA for the Super Admin
-5.  Store the MFA credentials for this account in a highly protected safe or secured room
-6.  Set up multi-factor and/or multi-person access to the secured area
-
-#### GWS.COMMONCONTROLS.9.2v0.1 Instructions
+#### GWS.COMMONCONTROLS.8.1v0.1 Instructions
 To disable Super Admin account self-recovery:
 
 1.  Sign in to https://admin.google.com as an administrator.
@@ -770,13 +682,7 @@ To disable Super Admin account self-recovery:
 7.  Click **Save**.
 8.  Ask your Super Admins to set up a recovery phone number or email address for receiving password recovery instructions.
 
-#### GWS.COMMONCONTROLS.9.3v0.1 Instructions
-1.  There are no implementation steps for this policy.
-
-#### GWS.COMMONCONTROLS.9.4v0.1 Instructions
-1.  There are no implementation steps for this policy.
-
-## 10. GWS Advanced Protection Program
+## 9. GWS Advanced Protection Program
 
 This control enforces more secure protection of highly privileged, senior executive and sensitive users accounts from targeted attacks. It enforces optional GWS user security features like:
 
@@ -789,7 +695,7 @@ This control enforces more secure protection of highly privileged, senior execut
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.10.1v0.1
+#### GWS.COMMONCONTROLS.9.1v0.1
 Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Program.
 
 - Rationale
@@ -805,13 +711,15 @@ Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Prog
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
-#### GWS.COMMONCONTROLS.10.2v0.1
-All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program. This control enforces more secure protection of sensitive user accounts from targeted attacks. Sensitive user accounts include political appointees, Senior Executive Service (SES) officials, or other senior officials whose account compromise would pose a level of risk prohibitive to agency mission fulfillment.
+#### GWS.COMMONCONTROLS.9.2v0.1
+All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program.
 
 - Rationale
   - Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password.
   - The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - Last Modified: July 10, 2023
+- Notes:
+  - This control enforces more secure protection of sensitive user accounts from targeted attacks. Sensitive user accounts include political appointees, Senior Executive Service (SES) officials, or other senior officials whose account compromise would pose a level of risk prohibitive to agency mission fulfillment
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -833,7 +741,7 @@ All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection 
 
 ### Implementation
 
-#### Policy Group 10 Instructions
+#### Policy Group 9 Instructions
 To allow all users to enroll:
 
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
@@ -843,13 +751,13 @@ To allow all users to enroll:
 5.  Select **Enable user enrollment.**
 6.  Click **SAVE.**
 
-## 11. App Access to Google APIs
+## 10. App Access to Google APIs
 
 Agencies need to have a process in place to manage and control application access to GWS data. This control enables the ability to restrict access to Google Workspace APIs from other applications and is aimed at mitigating the significant cybersecurity risk posed by the potential compromise of OAuth tokens. The baseline policy statements are written to allow implementers to balance operational need with risk posed by granting app access.
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.11.1v0.1
+#### GWS.COMMONCONTROLS.10.1v0.1
 Agencies SHALL develop and implement a process to explicitly allow-list (trust) third-party app access to GWS services.
 
 - Rationale
@@ -864,7 +772,7 @@ Agencies SHALL develop and implement a process to explicitly allow-list (trust) 
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.11.2v0.1
+#### GWS.COMMONCONTROLS.10.2v0.1
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
 
 - Rationale
@@ -879,7 +787,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.11.3v0.1
+#### GWS.COMMONCONTROLS.10.3v0.1
 Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 
 - Rationale
@@ -894,7 +802,7 @@ Agencies SHALL NOT allow users to consent to access to low-risk scopes.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.11.4v0.1
+#### GWS.COMMONCONTROLS.10.4v0.1
 Agencies SHALL NOT trust unconfigured internal apps.
 
 - Rationale
@@ -909,7 +817,7 @@ Agencies SHALL NOT trust unconfigured internal apps.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.11.5v0.1
+#### GWS.COMMONCONTROLS.10.5v0.1
 Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 - Rationale
@@ -939,57 +847,51 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 ### Implementation
 
-#### Policy Group 11 Instructions
+#### Policy Group 10 Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com).
 2.  Go to **Security** -\> **Access and Data Control** -\> **API controls.**
 
-#### GWS.COMMONCONTROLS.11.1v0.1 instructions:
+#### GWS.COMMONCONTROLS.10.1v0.1 instructions:
 1.  There are no implementation steps for this policy
 
-#### GWS.COMMONCONTROLS.11.2v0.1 instructions:
+#### GWS.COMMONCONTROLS.10.2v0.1 instructions:
 1.  Select **Manage Google Services.**
 2.  Select the **Services box** to check all services boxes.
 3.  Once this box is selected, then the **Change access** link at the top of console will be available; select it.
 4.  Select **Restricted: Only trusted apps can access a service.**
 5.  Select **Change** then **confirm** if prompted.
 
-#### GWS.COMMONCONTROLS.11.3v0.1 instructions:
+#### GWS.COMMONCONTROLS.10.3v0.1 instructions:
 1.  Select **Manage Google Services.**
 2.  Select the **Services box** to check all services boxes.
 3.  Once this box is selected, then the **Change access** link at the top of console will be available; select it.
 4.  Ensure to uncheck the check box next to **For apps that are not trusted, allow users to give access to OAuth scopes that aren't classified as high-risk.**
 5.  Select **Change** then **confirm** if prompted.
 
-#### GWS.COMMONCONTROLS.11.4v0.1 Instructions
+#### GWS.COMMONCONTROLS.10.4v0.1 Instructions
 1.  Select **Settings.**
 2.  Select **Internal apps** and uncheck the box next to **Trust internal apps.**
 3.  Select **SAVE.**
 
-#### GWS.COMMONCONTROLS.11.5v0.1 Instructions
+#### GWS.COMMONCONTROLS.10.5v0.1 Instructions
 1.  Select **Settings.**
 2.  Select **Unconfigured third-party apps** and select **Don't allow users to access any third-party apps**
 3.  Select **SAVE.**
 
 It should be noted that admins will have to manually approve each trusted app. The implementation steps for this activity are outlined in Google's [documentation on controlling which third-party & internal apps access GWS data](https://support.google.com/a/answer/7281227) (also listed under Resources).
 
-## 12. Authorized Google Marketplace Apps
 
-This section enables the ability to restrict the installation of Google Workspace Marketplace apps to a defined list provided and configured in the app allowlist. This guidance includes and applies to internally developed applications.
+## 11. Authorized Google Marketplace Apps
+
+This section enables the ability to restrict the installation of Google Workspace Marketplace apps to a defined list provided and configured in the app allowlist. This guidance includes and applies to internally developed applications. This control disables legacy authentication and requires the use of modern authentication protocols based on federation for access from applications.
+
+Some older versions of common software may break when this control is implemented. Examples of these apps include:
+-   Mails configured with POP3
+-   Older versions of Outlook
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.12.1v0.1
-Policy SHOULD be established dictating the app review and approval process.
-
-- Rationale
-  - Helps ensures a standardized procedure for approving apps for marketplace and ensures it is documented.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
-    - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
-
-#### GWS.COMMONCONTROLS.12.2v0.1
+#### GWS.COMMONCONTROLS.11.1v0.1
 Only approved Google Workspace Marketplace applications SHOULD be allowed for installation.
 
 - Rationale
@@ -1000,47 +902,7 @@ Only approved Google Workspace Marketplace applications SHOULD be allowed for in
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
     - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
 
-### Resources
-
--   [GWS Admin Help \| Manage Google Workspace Marketplace apps on your allowlist](https://support.google.com/a/answer/6089179?fl=1)
--   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
-
-### Prerequisites
-
--   None
-
-### Implementation
-
-#### GWS.COMMONCONTROLS.12.1v0.1 Instructions
-1.  There are no implementation steps for this policy
-
-#### GWS.COMMONCONTROLS.12.2v0.1 Instructions
-1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.  Select **Apps** -\> **Google Workspace Marketplace apps** -\> **Settings.**
-3.  Select **Allow users to install and run allowlisted apps from the Marketplace.**
-4.  Ensure that the **Allow exception for internal apps. Users can install and run any internal app, even if it is not allowlisted.** checkbox is unchecked.
-5.  Click **Save.**
-
-To add an app to the allowlist:
-1.  On the left-hand side above **Setting,** click **Apps lists.**
-2.  Click the **ALLOWLIST APP** to add an app to the allow list.
-
-    or
-
-3.  Click **Allowlisted Apps** to manage the allow list.
-
-## 13. Less Secure Apps
-
-This control disables legacy authentication and requires the use of modern authentication protocols based on federation for access from applications.
-
-Some older versions of common software may break when this control is implemented. Examples of these apps include:
-
--   Mails configured with POP3
--   Older versions of Outlook
-
-### Policies
-
-#### GWS.COMMONCONTROLS.13.1v0.1
+#### GWS.COMMONCONTROLS.11.2v0.1
 Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
 - Rationale
@@ -1057,8 +919,9 @@ Access to Google Workspace applications by less secure apps that do not meet sec
 
 ### Resources
 
--   [GWS Admin Help \| Control access to less secure apps](https://support.google.com/a/answer/6260879?hl=en)
+-   [GWS Admin Help \| Manage Google Workspace Marketplace apps on your allowlist](https://support.google.com/a/answer/6089179?fl=1)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
+-   [GWS Admin Help \| Control access to less secure apps](https://support.google.com/a/answer/6260879?hl=en)
 
 ### Prerequisites
 
@@ -1066,21 +929,36 @@ Access to Google Workspace applications by less secure apps that do not meet sec
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.13.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.11.1v0.1 Instructions
+1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.  Select **Apps** -\> **Google Workspace Marketplace apps** -\> **Settings.**
+3.  Select **Allow users to install and run allowlisted apps from the Marketplace.**
+4.  Ensure that the **Allow exception for internal apps. Users can install and run any internal app, even if it is not allowlisted.** checkbox is unchecked.
+5.  Click **Save.**
+
+To add an app to the allowlist:
+1.  On the left-hand side above **Setting,** click **Apps lists.**
+2.  Click the **ALLOWLIST APP** to add an app to the allow list.
+
+    or
+
+3.  Click **Allowlisted Apps** to manage the allow list.
+
+#### GWS.COMMONCONTROLS.11.2v0.1 Instructions
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Select **Security.**
 3.  Select **Access and data control** -\> **Less secure apps.**
 4.  Select **Disable access to less secure apps (Recommended).**
 5.  Click **Save** to commit this configuration change.
 
-## 14. Google Takeout Services for Users
+## 12. Google Takeout Services for Users
 
 This section prevents users from downloading a copy of the Google Takeout service's data to their user accounts. Services include Google Blogger, Books, Maps, Pay, Photos, Play, Play Console, Location History and YouTube, among numerous others.
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.14.1v0.1
-Google Takeout services SHALL be disabled for users.
+#### GWS.COMMONCONTROLS.12.1v0.1
+Google Takeout services SHALL be disabled.
 
 - Rationale
   - Google Takeout is a service that allows you to download a copy of your data stored within 40+ Google products and services. This includes data from Gmail, Drive, Photos, Calendar, and many others. You can download your data in a variety of formats, including ZIP, TAR, and XML. While there may be a valid use case for individuals to backup their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
@@ -1100,7 +978,7 @@ Google Takeout services SHALL be disabled for users.
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.14.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.12.1v0.1 Instructions
 1.  Sign in to https://admin.google.com as an administrator.
 2.  Select **Account** then **Google Takeout.**
 3.  Select **User access to Takeout for Google services**.
@@ -1110,7 +988,7 @@ Google Takeout services SHALL be disabled for users.
 7.  For services with an individual admin control, under **apps** select the checkbox next to **Service name** and select **Don't allow**.
 8.  Click **Save.**
 
-## 15. System-defined Rules
+## 13. System-defined Rules
 
 GWS includes system-defined alerting rules that provide situational awareness into risky events and actions. A security best practice is to enable the following list of rules. Please note that some, but not all, of these rules may be set to "on" by default. Rules that are not listed may be useful but not security relevant. Review all system-defined rules to implement the appropriate configuration based on individual requirements.
 
@@ -1150,12 +1028,14 @@ GWS includes system-defined alerting rules that provide situational awareness in
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.15.1v0.1
-Required system-defined alerting rules, as listed in the Policy section, SHALL be active, with alerts enabled when available. Any system-defined rules not are considered optional but ought to be reviewed for consideration.
+#### GWS.COMMONCONTROLS.13.1v0.1
+Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
 - Rationale
   - System-defined rules can allow an administrator to be notified of specific activity within a domain—such as a suspicious sign-in attempt, a compromised mobile device, or when another administrator changes settings.
 - Last Modified: July 10, 2023
+- Notes
+  - Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -1172,7 +1052,7 @@ Required system-defined alerting rules, as listed in the Policy section, SHALL b
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.15.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.13.1v0.1 Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com).
 2.  On the left navigation pane, click the hamburger menu above **Home**-\>**Show more**.
 3.  Click **Rules**.
@@ -1189,14 +1069,14 @@ Required system-defined alerting rules, as listed in the Policy section, SHALL b
 14. Click **Next: Review**.
 15. Review the updated rule details, and then click **Update Rule**.
 
-## 16. Google Workspace Logs
+## 14. Google Workspace Logs
 
-Configure GWS to send critical logs to the agency's centralized SIEM so that they can be audited and queried. Configure GWS to send logs to a storage account and retain them for when incident response is needed.
+Configure GWS to send critical logs to the agency's centralized Security Information and Event Management (SIEM) so that they can be audited and queried. Configure GWS to send logs to a storage account and retain them for when incident response is needed.
 
 ### Policy
 
-#### GWS.COMMONCONTROLS.16.1v0.1
-The following critical logs SHALL be sent at a minimum.
+#### GWS.COMMONCONTROLS.14.1v0.1
+The following critical logs SHALL be sent to the agency's centralized SIEM.
 
         > Admin Audit logs
 
@@ -1218,12 +1098,12 @@ The following critical logs SHALL be sent at a minimum.
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
 
-#### GWS.COMMONCONTROLS.16.2v0.1
-Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31. The logs SHALL be sent to the agency's Security Operations Center (SOC) for monitoring.
+#### GWS.COMMONCONTROLS.14.2v0.1
+Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31.
 
 - Rationale
   - OMB M-21-31, Improving the Federal Government's Investigative and Remediation Capabilities Related to Cybersecurity Incidents, provides guidance on log retention for federal agencies. The memorandum defines three maturity levels for log retention, with each level requiring different minimum retention periods.
-- Last Modified: July 10, 2023
+- Last Modified: January 30, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -1246,17 +1126,17 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.16.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.14.1v0.1 Instructions
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Go to Menu [Account \> Account settings \> Legal and compliance](https://admin.google.com/ac/companyprofile/legal).
 3.  Click **Sharing options.**
 4.  Select **Enabled.**
 5.  Click **Save**.
 
-#### GWS.COMMONCONTROLS.16.2v0.1 Instructions
+#### GWS.COMMONCONTROLS.14.2v0.1 Instructions
 1.  There is no implementation for this policy.
 
-## 17. Data Regions
+## 15. Data Regions and Storage
 
 Google Workspace administrators can choose to store data in a specific geographic region (currently the United States or Europe) by using a data region policy. The policy can be applied to a specific organizational unit (OU) in a tenant or at the parent OU. For the interests of Federal agencies, the best practice is to restrict stored data for all users to the U.S. This means applying this setting at the parent OU. Data region storage covers the primary data-at-rest (including backups) for Google Workspace core services (see resources section for services in scope).
 
@@ -1264,13 +1144,26 @@ At the time of writing, data region policies cannot be applied to data types not
 
 ### Policy
 
-#### GWS.COMMONCONTROLS.17.1v0.1
+#### GWS.COMMONCONTROLS.15.1v0.1
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
 - Rationale
 	- This policy is aligned with the concept of data sovereignty. Ensuring that data is stored in a specific region (in this case, the U.S. for FCEB agencies) affords the administrator of the GWS environment a degree of control and governance over their cloud data.
 	- FCEB agencies may need to meet specific regulations for various data classifications including data governance, security controls, privacy, and data residency. Being able to establish data sovereignty and identify residency regions can aid in these efforts.
 - Last Modified: October 30, 2023
+
+- MITRE ATT&CK TTP Mapping
+  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
+    - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+
+#### GWS.COMMONCONTROLS.15.2v0.1
+The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
+
+- Rationale
+	- This policy is aligned with the concept of data sovereignty. Ensuring that data is not stored in a specific region affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
+- Last Modified: November 30, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
@@ -1288,7 +1181,7 @@ The data storage region SHALL be set to be the United States for all users in th
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.17.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.15.1v0.1 Instructions
 To configure Data Regions per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Account** -> **Account settings**.
@@ -1297,36 +1190,7 @@ To configure Data Regions per the policy:
 5.	Select the radio button option: "**United States**"
 6.	Click **Save**.
 
-## 18. Supplemental Data Storage
-
-Google Workspace administrators have the option to store a copy of users’ data in a specific country. This is accomplished by enabling Supplemental Data Storage in the Google Admin console. You can do this for some or all of your users. Google will then store those users’ data on servers based in the country you select, in addition to Google’s existing data centers. The following Google Workspace core services are included in this feature: Gmail, Google Calendar, Google Groups for Business, Google Drive, and Google Contacts. 
-
-Google will periodically backup users’ data to servers located in the country specified.
-
-### Policy
-
-#### GWS.COMMONCONTROLS.18.1v0.1
-The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
-
-- Rationale
-	- This policy is aligned with the concept of data sovereignty. Ensuring that data is not stored in a specific region affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
-- Last Modified: November 30, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
-    - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
-
-### Resources
--	[GWS Admin Help \| Set up Supplemental Data Storage](https://support.google.com/a/answer/6281927)
-
-### Prerequisites
-- Super Admin role
-
-### Implementation
-
-#### GWS.COMMONCONTROLS.18.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.15.2v0.1 Instructions
 To configure Supplemental Data Storage per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Account** -> **Account settings**.
