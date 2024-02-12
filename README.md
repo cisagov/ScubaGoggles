@@ -36,6 +36,7 @@ For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://git
 - [Design](#project-license)
 - [Troubleshooting](#troubleshooting)
   - [Not Authorized to Access this Resource](#not-authorized-to-access-this-resource)
+  - [ScubaGoggles not Found](#scubagoggles-not-found)
   - [Unable to view HTML report due to environment limitations](#Unable-to-view-HTML-report-due-to-environment-limitations)
 - [Project License](#project-license)
 
@@ -333,6 +334,16 @@ If an authorization error similar to the one below appears:
 <HttpError 403 when requesting https://admin.googleapis.com/admin/directory/v1/customers/my_customer?alt=json returned "Not Authorized to access this resource/api">
 ```
 Ensure that you consented to the following API scopes as a user with the proper [permissions to consent](#permissions) and have enabled the required [APIs and Services](#create-an-oauth-credential).
+
+### Scubagoggles Not Found 
+If an error similar to the one below appears: 
+```
+command not found: scubagoggles
+```
+
+Ensure that you have properly [configured the virtual environment](#installing-in-a-virtual-environment) and have activated the virtual environment using the OS appropriate commands. 
+
+Alternatively, to run scubagoggles without installing it as a package, you can replace the `scubagoggles` command with `python scuba.py`. 
 
 ### Unable to view HTML report due to environment limitations 
 
