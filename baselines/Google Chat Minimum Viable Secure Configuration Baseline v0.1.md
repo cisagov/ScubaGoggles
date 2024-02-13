@@ -38,7 +38,7 @@ This section covers chat history retention for users within the organization and
 ### Policies
 
 #### GWS.CHAT.1.1v0.1
-Chat history SHOULD be enabled for information traceability.
+Chat history SHALL be enabled for information traceability.
 
 - Rationale
   - Helps ensure there is a record of chats sent to receive in the case that it needs to be reviewed in the future for legal or compliance issues.
@@ -300,3 +300,72 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 9.  Select the appropriate action to warn or block sharing, based upon the agency's individual requirements.
 10. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 11. Review the rule details, mark the rule as **Active**, and click **Create.**
+
+## 7. Content Reporting
+
+This section covers the content reporting functionality.
+
+### Policies
+
+#### GWS.CHAT.7.1v0.1
+Chat Content Reporting SHALL be Enabled.
+
+- Rationale
+  - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
+- Last Modified: February 13, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - None
+
+#### GWS.CHAT.7.2v0.1
+All Conversation Types SHALL be Selected.
+
+- Rationale
+  - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
+- Last Modified: February 13, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - None
+
+  #### GWS.CHAT.7.3v0.1
+Spam, Confidential Information, and Sensitive Information SHALL be Selected.
+
+- Rationale
+  - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
+- Last Modified: February 13, 2024
+- Notes
+  - The other reporting categories can be implemented depending on agency needs.
+
+- MITRE ATT&CK TTP Mapping
+  - None
+
+### Resources
+
+- [Set-up content moderation for Chat](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13471510%3Fhl%3Den&assistant_id=generic-unu&product_context=13471510&product_name=UnuFlow&trigger_context=a)
+
+### Prerequisites
+
+-   None
+
+### Implementation
+
+#### GWS.CHAT.7.1v0.1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
+3.  Click **Content Reporting**.
+4.  Ensure **Allow users to report content in Chat** is enabled.
+5.  Click **Save**
+
+#### GWS.CHAT.7.2v0.1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
+3.  Click **Content Reporting**.
+4.  Ensure **1:1 direct messages**, **Group direct messages**, and **Spaces** with **All spaces** is enabled.
+5.  Click **Save**
+
+#### GWS.CHAT.7.3v0.1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
+3.  Click **Content Reporting**.
+4.  Ensure **Spam**, **Confidential Information**, and **Sensitive Information** is enabled.
+5.  Click **Save**
