@@ -10,7 +10,7 @@ from scubagoggles.main import get_gws_args
 from scubagoggles.orchestrator import gws_products, run_gws_providers, rego_eval, pluralize, run_reporter, run_cached, start_automation, generate_summary
 from googleapiclient.discovery import build
 import argparse
-
+from datetime import datetime
 
 #creds = gws_auth((Path.cwd() / "../credentials.json").resolve(), "amart24@scubagws.org")
 creds = gws_auth("../credentials.json")
@@ -105,8 +105,20 @@ class OrchestratorTests(unittest.TestCase):
     def test_run_gws_providers(self):
         test_args = TestArgs()
         run_gws_providers(test_args, services)
-        print(os.listdir('../'))
-        self.assertEqual(1,1)
+        
+        head_dir = os.listdir('../')
+        gwsbaselineconformances = []
+        for item in head_dir:
+            if item[:22] == "GWSBaselineConformance":
+                gwsbaselineconformances.append(item)
+        output_dirs = []
+        for item in gwsbaselineconformances:
+            output_dirs.append(datetime.strptime(gwsbaselineconformances[0][23:], "%Y_%m_%d_%H_%M_%S"))
+        most_recent_output_dir = max(output_dirs)
+        
+        most_recent_output_dir = "GWSBaselineConformance" + datetime.strftime(most_recent_output_dir, "%Y_%m_%d_%H_%M_%S")
+        
+        self.assertEqual(os.path.isfile('../' + most_recent_output_dir + '/ProviderSettingsExport.json'), True)
 
     # def test_rego_eval(self):
     #     #rego_eval produces a test results json file 
