@@ -12,8 +12,8 @@ from googleapiclient.discovery import build
 import argparse
 
 
-#creds = gws_auth((Path.cwd() / "../credentials.json").resolve(), "amart24@scubagws.org")
-creds = gws_auth("../credentials.json")
+creds = gws_auth((Path.cwd() / "../credentials.json").resolve(), "amart24@scubagws.org")
+#creds = gws_auth("../credentials.json")
 
 services = {}
 services['directory'] = build('admin', 'directory_v1', credentials=creds)
@@ -118,7 +118,7 @@ class OrchestratorTests(unittest.TestCase):
     #         failure = true
     #     self.assertEqual(failure, False)   
 
-#     def test_pluralize(self):
+#     def test_pluralize(self): TODO: unit test probably not needed for this funciton
 #         print("test")
 
 #     def test_run_reporter(self):
