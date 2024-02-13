@@ -1197,3 +1197,37 @@ To configure Supplemental Data Storage per the policy:
 3.	Click the **Supplemental Data Storage** card.
 4.	Ensure the checkbox for "**Russian Federation**" is unchecked.
 6.	Click **Save**.
+
+## 16. Log Formatting
+This section covers which time format logs should appear in the admin console.
+
+### Policy
+
+#### GWS.COMMONCONTROLS.15.1v0.1
+Logs SHALL be configured to show the time stamp in Coordinated Universal Time (UTC)
+
+- Rationale
+	- This provides a standard time for logs so organizations that have individuals in different timezones can work with and dicss logs without having to keep track of time changes.
+- Last Modified: February 13, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - None
+
+### Resources
+- [Change the timezone in the investigationn tool](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F7583722%3Fhl%3Den&assistant_id=generic-unu&product_context=7583722&product_name=UnuFlow&trigger_context=a)
+
+### Prerequisites
+
+- None
+
+### Implementation
+
+#### GWS.COMMONCONTROLS.16.1v0.1 Instructions
+To configure Data Regions per the policy:
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.	Click **Security** Tab.
+3.	Click the **Security Center** Tab.
+4.	Click the **Investigation Tool** Tab.
+5.	Click the settings gear icon on the right.
+6.  In the dropdown menu for timezone, select **(GMT+00:00) Greenwich Mean Time- Danmarkshavn**
+6.	Click **Save**.
