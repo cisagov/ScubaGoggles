@@ -242,7 +242,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    NoSuchEvent6_1(utils.TopLevelOU)
+    NoSuchEvent4_1(utils.TopLevelOU)
 }
 
 tests contains {
