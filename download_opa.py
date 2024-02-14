@@ -95,6 +95,11 @@ OPA_VERSION_SHA256_HASHES = {
         'windows': 'da61c5745c545b64047efe6c5a730f38f63dfa1d07c29e1f1297fe235a28ddd7',
         'macos': 'c9b11f32e2adcb0783275be0f1ee69c2d78b3496b4992d64a3f41f4f3f678685',
         'linux': '7bb75b14c9bcb5798d42bed5fc45c438ee5bb783894733ce553ba3445f66034f'
+    },
+    '0.59.0': {
+        'windows': '0167f2bd69b72993ccdca222d0bc5d9278ffb194f9c87fddc1b55ecc9edf17df',
+        'macos': '3edddc7dded91a7b2fe7fbe3d862778dccc28eff6ee515c41b38d65474d5e9f4',
+        'linux': '5f615343a1cae1deb2f2f514b2f4b46456495fe1c828b17e779eb583aced0cc3'
     }
 }
 
@@ -157,8 +162,8 @@ def main():
     parser = argparse.ArgumentParser(add_help = True,
                                      description="Download executable the OPA executable" \
                                      " file required to run this SCuBA tool.")
-    parser.add_argument('-v', default='0.57.1', choices=supported_opa_versions,
-                        help='What version of OPA to download: Default version: 0.57.1')
+    parser.add_argument('-v', default='0.59.0', choices=supported_opa_versions,
+                        help='What version of OPA to download: Default version: 0.59.0')
     parser.add_argument('-os', default='windows', choices=['windows', 'macos', 'linux'],
                         help='Operating system version of OPA to download. Default os: windows')
     parser.add_argument('--disablessl', action='store_true',

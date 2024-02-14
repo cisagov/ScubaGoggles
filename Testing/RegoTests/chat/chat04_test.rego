@@ -213,7 +213,8 @@ test_External_Chat_Setting_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Allow users to send messages outside organization is set to OFF</li></ul>"])
 }
 
 test_External_Chat_Setting_Incorrect_V3 if {
@@ -251,7 +252,8 @@ test_External_Chat_Setting_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Allow users to send messages outside organization is set to OFF</li></ul>"])
 }
 
 test_External_Chat_Setting_Incorrect_V4 if {
@@ -331,7 +333,8 @@ test_External_Chat_Setting_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Some other OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Some other OU: ",
+        "Allow users to send messages outside organization is set to OFF</li></ul>"])
 }
 #--
 
@@ -509,7 +512,8 @@ test_AllowListed_Setting_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Only allow this for allowlisted domains is set to false</li></ul>"])
 }
 
 test_AllowListed_Setting_Incorrect_V3 if {
@@ -547,7 +551,8 @@ test_AllowListed_Setting_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Only allow this for allowlisted domains is set to false</li></ul>"])
 }
 
 test_AllowListed_Setting_Incorrect_V4 if {
@@ -617,6 +622,7 @@ test_AllowListed_Setting_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Only allow this for allowlisted domains is set to false</li></ul>"])
 }
 #--

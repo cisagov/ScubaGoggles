@@ -34,6 +34,28 @@ ReportDetailsBoolean(true) := "Requirement met."
 
 ReportDetailsBoolean(false) := "Requirement not met."
 
+ReportDetailsDetailedOU(_, NonCompOUs) := "Requirement met in all OUs." if {
+    count(NonCompOUs) == 0
+}
+
+ReportDetailsDetailedOU(SettingDescription, NonCompOUs) := Description if {
+    count(NonCompOUs) > 0
+    Description := concat("", [
+        "The following OUs are non-compliant:",
+        "<ul>",
+        concat("", [concat("", [
+            "<li>",
+            OU.Name,
+            ": ",
+            SettingDescription,
+            " is set to ",
+            OU.Value,
+            "</li>"
+        ]) | some OU in NonCompOUs]),
+        "</ul>"
+    ])
+}
+
 OUsWithEvents contains OrgUnit if {
     some Log in input
     some Item in Log.items
