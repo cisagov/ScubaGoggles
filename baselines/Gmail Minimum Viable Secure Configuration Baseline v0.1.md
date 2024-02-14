@@ -163,7 +163,7 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
 ### Implementation
 
 #### GWS.GMAIL.3.1v0.1 Instructions
-First, identify any approved senders specific to your agency (see [Identify all email senders for your organization](https://support.google.com/a/answer/10686639#senders) for tips). Approved senders are indicated by IP address or CIDR range. However, note that SPF allows you to [include](https://www.rfc-editor.org/rfc/rfc7208#section-5.2) the IP addresses indicated by a separate SPF policy, refered to by domain name. See [Define your SPF record—Basic setup](https://support.google.com/a/answer/10685031) for inclusions required for Google to send email on behalf of your domain.
+First, identify any approved senders specific to your agency (see [Identify all email senders for your organization](https://support.google.com/a/answer/10686639#senders) for tips). SPF allows you to indicate approved senders by IP address or CIDR range. However, note that SPF allows you to [include](https://www.rfc-editor.org/rfc/rfc7208#section-5.2) the IP addresses indicated by a separate SPF policy, refered to by domain name. See [Define your SPF record—Basic setup](https://support.google.com/a/answer/10685031) for inclusions required for Google to send email on behalf of your domain.
 
 SPF is not configured through the Google Workspace admin center, but rather via DNS records hosted by the agency's domain. Thus, the exact steps needed to set up SPF varies from agency to agency. See [Add your SPF record at your domain provider](https://support.google.com/a/answer/10684623) for more details.
 
