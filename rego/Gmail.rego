@@ -106,20 +106,6 @@ if {
 #
 # Baseline GWS.GMAIL.3.1v0.1
 #--
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": "GWS.GMAIL.3.1v0.1",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-#
-# Baseline GWS.GMAIL.3.2v0.1
-#--
 DomainsWithSpf contains SpfRecord.domain if {
     some SpfRecord in input.spf_records
     some Rdata in SpfRecord.rdata
@@ -127,7 +113,7 @@ DomainsWithSpf contains SpfRecord.domain if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.3.2v0.1",
+    "PolicyId": "GWS.GMAIL.3.1v0.1",
     "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutSpf, AllDomains),
