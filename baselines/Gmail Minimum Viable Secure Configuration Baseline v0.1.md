@@ -132,31 +132,16 @@ To test your DKIM configuration, consider using a web-based tool, such as the [G
 
 ## 3. Sender Policy Framework
 
-The Sender Policy Framework (SPF) is a mechanism that allows domain administrators to specify which IP addresses are explicitly approved to send email on behalf of the domain, facilitating detection of spoofed emails. SPF isn't configured through the Google Admin Console, but rather via DNS records hosted by the agency's domain. Thus, the exact steps needed to set up SPF varies from agency to agency, but Google's documentation provides some helpful starting points.
+The Sender Policy Framework (SPF) is a mechanism that allows administrators to specify which IP addresses are explicitly approved to send email on behalf of the domain, facilitating detection of spoofed emails. SPF isn't configured through the Google Admin Console, but rather via DNS records hosted by the agency's domain. Thus, the exact steps needed to set up SPF varies from agency to agency, but Google's documentation provides some helpful starting points.
 
 ### Policies
 
 #### GWS.GMAIL.3.1v0.1
-A list of approved IP addresses for sending mail SHALL be maintained.
-
-- Rationale
-- Failing to maintain an accurate list of authorized IP addresses may result in spoofed email messages or failure to deliver legitimate messages when SPF is enabled. Maintaining such a list helps ensure that unauthorized servers sending spoofed messages can be detected, and permits message delivery from legitimate senders.
-- Last Modified: July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
-    - [T1078:004: Valid Accounts: Cloud Accounts](https://attack.mitre.org/techniques/T1078/004/)
-  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
-    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
-    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
-    - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
-
-#### GWS.GMAIL.3.2v0.1
-An SPF policy SHALL be published for each domain, designating only these addresses as approved senders.
+An SPF policy SHALL be published for each domain that fails all non-approved senders.
 
 - Rationale
   -  An adversary may modify the `FROM` field of an email such that it appears to be a legitimate email sent by an agency, facilitating phishing attacks. Publishing an SPF policy for each agency domain mitigates forged `FROM` fields by providing a means for recipients to detect emails spoofed in this way. SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
-- Last Modified: November 13, 2023
+- Last Modified: February 14, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
@@ -173,22 +158,22 @@ An SPF policy SHALL be published for each domain, designating only these address
 -   [Google Workspace Admin Help: Help prevent spoofing and spam with SPF](https://support.google.com/a/answer/33786#to-do)
 
 ### Prerequisites
-
--   None
+-   A list of approved IP addresses for sending mail must be maintained. Failing to maintain an accurate list of authorized IP addresses may result in spoofed email messages or failure to deliver legitimate messages when SPF is enabled. Maintaining such a list helps ensure that unauthorized servers sending spoofed messages can be detected, and permits message delivery from legitimate senders.
 
 ### Implementation
 
 #### GWS.GMAIL.3.1v0.1 Instructions
-Identify any approved senders specific to your agency (see [Identify all email senders for your organization](https://support.google.com/a/answer/10686639#senders) for tips). Additionally, see [Define your SPF record—Basic setup](https://support.google.com/a/answer/10685031) for inclusions required for Google to send email on behalf of your domain.
+First, identify any approved senders specific to your agency (see [Identify all email senders for your organization](https://support.google.com/a/answer/10686639#senders) for tips). Approved senders are indicated by IP address or CIDR range. However, note that SPF allows you to [include](https://www.rfc-editor.org/rfc/rfc7208#section-5.2) the IP addresses indicated by a separate SPF policy, refered to by domain name. See [Define your SPF record—Basic setup](https://support.google.com/a/answer/10685031) for inclusions required for Google to send email on behalf of your domain.
 
-#### GWS.GMAIL.3.2v0.1 Instructions
 SPF is not configured through the Google Workspace admin center, but rather via DNS records hosted by the agency's domain. Thus, the exact steps needed to set up SPF varies from agency to agency. See [Add your SPF record at your domain provider](https://support.google.com/a/answer/10684623) for more details.
 
 To test your SPF configuration, consider using a web-based tool, such as the [Google Admin Toolbox](https://toolbox.googleapps.com/apps/checkmx/).  Additionally, SPF records can be requested using the command line tool `dig`. For example:
 ```
 dig example.com txt
 ```
-If SPF is configured, a response resembling `v=spf1 include:_spf.google.com -all` will be returned; though by necessity, the contents of the SPF policy may vary by agency. In this example, the SPF policy indicates the IP addresses listed by the policy for "_spf.google.com" are the only approved senders for "example.com." These IPs can be determined via additional SPF lookups, starting with "_spf.google.com." Ensure the IP addresses listed as approved senders for your domain are those identified for GWS.GMAIL.3.1v0.1. See [Define your SPF record—Advanced setup](https://support.google.com/a/answer/10683907) for a more in-depth discussion of SPF record syntax.
+If SPF is configured, a response resembling `v=spf1 include:_spf.google.com -all` will be returned; though by necessity, the contents of the SPF policy may vary by agency. In this example, the SPF policy indicates the IP addresses listed by the policy for "_spf.google.com" are the only approved senders for "example.com." These IPs can be determined via additional SPF lookups, starting with "_spf.google.com."
+
+Ensure the IP addresses listed as approved senders for your domains are correct. Additionally, ensure that each policy either ends in `-all` or [redirects](https://www.rfc-editor.org/rfc/rfc7208#section-6.1) to one that does; this directive indicates that all IPs that don't match the policy should fail. See [Define your SPF record—Advanced setup](https://support.google.com/a/answer/10683907) for a more in-depth discussion of SPF record syntax.
 
 ## 4. Domain-based Message Authentication, Reporting, and Conformance
 
