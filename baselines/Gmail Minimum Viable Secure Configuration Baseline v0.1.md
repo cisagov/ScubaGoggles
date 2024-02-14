@@ -143,7 +143,7 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
   -  An adversary may modify the `FROM` field of an email such that it appears to be a legitimate email sent by an agency, facilitating phishing attacks. Publishing an SPF policy for each agency domain mitigates forged `FROM` fields by providing a means for recipients to detect emails spoofed in this way. SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - Last Modified: February 14, 2024
 - Notes
-  - SPF defines two different "fail" mechanisms, fail (indicated by `-`, sometimes refered to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`). 
+  - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes refered to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`). 
 
 - MITRE ATT&CK TTP Mapping
   - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
