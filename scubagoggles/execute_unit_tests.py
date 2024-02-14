@@ -31,7 +31,7 @@ class TestArgs:
         self.credentials='../credentials.json'
         self.subjectemail=None
         self.customerid='my_customer'
-        self.opapath='../'
+        self.opapath='../' #this exe is windows-specific. Future unit tests need to be os-agnostic.
         self.regopath='../rego'
         self.documentpath='../baselines'
         self.runcached=False
@@ -104,6 +104,16 @@ class OrchestratorTests(unittest.TestCase):
     #test takes too long to run for developing. Uncomment when unit tests are complete. Runs provider. 
     def test_run_gws_providers(self):
         test_args = TestArgs()
+
+        #Get date time
+        now = datetime.now()
+        folder_time = now.strftime("%Y_%m_%d_%H_%M_%S")
+
+        test_args.outputpath="../GWSBaselineConformance_"+folder_time
+
+        Path(test_args.outputpath).mkdir(parents=True, exist_ok=True)
+        test_args.outputpath = os.path.abspath(test_args.outputpath)
+
         run_gws_providers(test_args, services)
         
         head_dir = os.listdir('../')
@@ -113,22 +123,48 @@ class OrchestratorTests(unittest.TestCase):
                 gwsbaselineconformances.append(item)
         output_dirs = []
         for item in gwsbaselineconformances:
-            output_dirs.append(datetime.strptime(gwsbaselineconformances[0][23:], "%Y_%m_%d_%H_%M_%S"))
+            output_dirs.append(datetime.strptime(item[23:], "%Y_%m_%d_%H_%M_%S"))
+
+        print(output_dirs)
         most_recent_output_dir = max(output_dirs)
+        print(most_recent_output_dir)
+        most_recent_output_dir = "GWSBaselineConformance_" + datetime.strftime(most_recent_output_dir, "%Y_%m_%d_%H_%M_%S")
         
-        most_recent_output_dir = "GWSBaselineConformance" + datetime.strftime(most_recent_output_dir, "%Y_%m_%d_%H_%M_%S")
-        
+        print('../' + most_recent_output_dir + '/ProviderSettingsExport.json')
+
         self.assertEqual(os.path.isfile('../' + most_recent_output_dir + '/ProviderSettingsExport.json'), True)
 
-    # def test_rego_eval(self):
-    #     #rego_eval produces a test results json file 
-    #     test_args = TestArgs()
-    #     failure = False
-    #     try:
-    #         rego_eval(test_args)
-    #     except:
-    #         failure = true
-    #     self.assertEqual(failure, False)   
+    def test_rego_eval(self):
+        test_args = TestArgs()
+
+        #Get date time
+        now = datetime.now()
+        folder_time = now.strftime("%Y_%m_%d_%H_%M_%S")
+
+        test_args.outputpath="../GWSBaselineConformance_"+folder_time
+
+        Path(test_args.outputpath).mkdir(parents=True, exist_ok=True)
+        test_args.outputpath = os.path.abspath(test_args.outputpath)
+
+        rego_eval(test_args)
+        
+        head_dir = os.listdir('../')
+        gwsbaselineconformances = []
+        for item in head_dir:
+            if item[:22] == "GWSBaselineConformance":
+                gwsbaselineconformances.append(item)
+        output_dirs = []
+        for item in gwsbaselineconformances:
+            output_dirs.append(datetime.strptime(item[23:], "%Y_%m_%d_%H_%M_%S"))
+
+        print(output_dirs)
+        most_recent_output_dir = max(output_dirs)
+        print(most_recent_output_dir)
+        most_recent_output_dir = "GWSBaselineConformance_" + datetime.strftime(most_recent_output_dir, "%Y_%m_%d_%H_%M_%S")
+        
+        print('../' + most_recent_output_dir + '/TestResults.json')
+
+        self.assertEqual(os.path.isfile('../' + most_recent_output_dir + '/TestResults.json'), True)
 
 #     def test_pluralize(self): TODO: unit test probably not needed for this funciton
 #         print("test")
