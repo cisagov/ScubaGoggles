@@ -77,11 +77,6 @@ GetGroupSettingDescription(SettingDescription, NonCompGroups) := concat("", [
     "</ul>"
 ])
 
-# ReportDetailsDetailedOU(SettingDescription, NonCompOUs) := Description if {
-#     count(NonCompOUs) > 0
-#     Description := GetOUSettingDescription(SettingDescription, NonCompOUs)
-# }
-
 ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) > 0
     count(NonCompGroups) > 0
