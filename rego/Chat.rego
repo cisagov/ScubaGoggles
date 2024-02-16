@@ -55,7 +55,8 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.1.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsDetailedOU("Default conversation history", NonCompliantOUs1_1),
+    # Empty list in next line for non compliant groups, as this setting can't be changed at the group level
+    "ReportDetails": utils.ReportDetails("Default conversation history", NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -103,7 +104,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.1.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsDetailedOU("Allow users to change their history setting", NonCompliantOUs1_2),
+    "ReportDetails": utils.ReportDetails("Allow users to change their history setting", NonCompliantOUs1_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -164,7 +165,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsDetailedOU("External filesharing", NonCompliantOUs2_1),
+    "ReportDetails": utils.ReportDetails("External filesharing", NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -221,7 +222,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.3.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsDetailedOU("Conversation history settings for spaces", NonCompliantOUs3_1),
+    "ReportDetails": utils.ReportDetails("Conversation history settings for spaces", NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -278,8 +279,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsDetailedOU("Allow users to send messages outside organization",
-        NonCompliantOUs4_1),
+    "ReportDetails": utils.ReportDetails("Allow users to send messages outside organization", NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -294,7 +294,6 @@ if {
 #
 # Baseline GWS.CHAT.4.2v0.1
 #--
-
 GetFriendlyValue4_2(Value) := "false" if {
     Value == "NO_RESTRICTION"
 } else := Value
@@ -331,7 +330,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.4.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsDetailedOU("Only allow this for allowlisted domains", NonCompliantOUs4_2),
+    "ReportDetails": utils.ReportDetails("Only allow this for allowlisted domains", NonCompliantOUs4_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -382,7 +381,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.5.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsDetailedOU("Allow users to install Chat apps", NonCompliantOUs5_1),
+    "ReportDetails": utils.ReportDetails("Allow users to install Chat apps", NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
