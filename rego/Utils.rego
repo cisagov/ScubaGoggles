@@ -107,7 +107,7 @@ ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
     Description := GetGroupSettingDescription(SettingDescription, NonCompGroups)
 }
 
-ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
+ReportDetails(_, NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) == 0
     count(NonCompGroups) == 0
     Description := "Requirement met in all OUs and groups."
