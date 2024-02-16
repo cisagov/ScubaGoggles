@@ -47,39 +47,35 @@ ReportDetailsDetailedOU(_, NonCompOUs) := "Requirement met in all OUs." if {
     count(NonCompOUs) == 0
 }
 
-GetOUSettingDescription(SettingDescription, NonCompOUs) := Description if {
-    Description := concat("", [
-        "The following OUs are non-compliant:",
-        "<ul>",
-        concat("", [concat("", [
-            "<li>",
-            OU.Name,
-            ": ",
-            SettingDescription,
-            " is set to ",
-            OU.Value,
-            "</li>"
-        ]) | some OU in NonCompOUs]),
-        "</ul>"
-    ])
-}
+GetOUSettingDescription(SettingDescription, NonCompOUs) := concat("", [
+    "The following OUs are non-compliant:",
+    "<ul>",
+    concat("", [concat("", [
+        "<li>",
+        OU.Name,
+        ": ",
+        SettingDescription,
+        " is set to ",
+        OU.Value,
+        "</li>"
+    ]) | some OU in NonCompOUs]),
+    "</ul>"
+])
 
-GetGroupSettingDescription(SettingDescription, NonCompGroups) := Description if {
-    Description := concat("", [
-        "The following groups are non-compliant:",
-        "<ul>",
-        concat("", [concat("", [
-            "<li>",
-            Group.Name,
-            ": ",
-            SettingDescription,
-            " is set to ",
-            Group.Value,
-            "</li>"
-        ]) | some Group in NonCompGroups]),
-        "</ul>"
-    ])
-}
+GetGroupSettingDescription(SettingDescription, NonCompGroups) := concat("", [
+    "The following groups are non-compliant:",
+    "<ul>",
+    concat("", [concat("", [
+        "<li>",
+        Group.Name,
+        ": ",
+        SettingDescription,
+        " is set to ",
+        Group.Value,
+        "</li>"
+    ]) | some Group in NonCompGroups]),
+    "</ul>"
+])
 
 # ReportDetailsDetailedOU(SettingDescription, NonCompOUs) := Description if {
 #     count(NonCompOUs) > 0
@@ -313,13 +309,10 @@ if {
     Group := GetEventGroup(Event)
 }
 
-FilterEventsGroup(Events, SettingName, Group) := FilteredEvents if {
-    # Filter the events by both SettingName and Group
-    FilteredEvents := {
-        Event | some Event in Events;
-        Event.Group == Group;
-        Event.Setting == SettingName
-    }
+FilterEventsGroup(Events, SettingName, Group) := {
+    Event | some Event in Events;
+    Event.Group == Group;
+    Event.Setting == SettingName
 }
 
 # The FilterEvents(...) function is only here to maintain backwards compatability.
