@@ -73,7 +73,7 @@ Warnings SHALL be enabled when a user is attempting to share something outside t
 
 - Rationale
   - In the case that a user is going to share something outside the domain, a warning should be given. The warning ensures that the user is aware that they are sharing something externally, and doing so purposefully.
-- Last Modified: July 10, 2023
+- Last Modified: February 8, 2024
 - Note:
   - This policy only applies if external sharing was allowed in Policy 1.1
 
