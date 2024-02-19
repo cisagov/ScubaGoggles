@@ -104,7 +104,7 @@ NonCompliantOUs1_3 contains OU if {
 
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.1.3v0.1",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -118,7 +118,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.1.3v0.1",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_3),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_3},
     "RequirementMet": Status,
