@@ -308,7 +308,7 @@ This section covers the content reporting functionality, a feature that allows u
 ### Policies
 
 #### GWS.CHAT.7.1v0.1
-Chat Content Reporting SHALL be Enabled.
+Chat content reporting SHALL be enabled.
 
 - Rationale
   - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
