@@ -334,7 +334,7 @@ Spam, confidential information, and sensitive information SHALL be selected.
   - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
 - Last Modified: February 13, 2024
 - Notes
-  - The other reporting categories can be implemented depending on agency needs.
+  - The other reporting categories MAY be included depending on agency needs.
 
 - MITRE ATT&CK TTP Mapping
   - None
