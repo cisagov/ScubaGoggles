@@ -318,7 +318,7 @@ Chat content reporting SHALL be enabled.
   - None
 
 #### GWS.CHAT.7.2v0.1
-All Conversation Types SHALL be Selected.
+All conversation types SHALL be selected.
 
 - Rationale
   - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
