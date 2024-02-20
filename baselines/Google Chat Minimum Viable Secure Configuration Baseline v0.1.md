@@ -303,7 +303,7 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 
 ## 7. Content Reporting
 
-This section covers the content reporting functionality.
+This section covers the content reporting functionality, a feature that allows users to report messages that violate organizational guidelines to workspace admins.
 
 ### Policies
 
