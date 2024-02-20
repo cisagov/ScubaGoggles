@@ -344,8 +344,7 @@ Spam, confidential information, and sensitive information SHALL be selected.
 - [Set-up content moderation for Chat](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13471510%3Fhl%3Den&assistant_id=generic-unu&product_context=13471510&product_name=UnuFlow&trigger_context=a)
 
 ### Prerequisites
-
--   None
+-   Chat history must be turned on
 
 ### Implementation
 
