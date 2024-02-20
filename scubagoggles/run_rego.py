@@ -21,6 +21,8 @@ def opa_eval(
     :param debug: to print debug statements or not
     """
 
+    #print(opa_path)
+    #print(type(opa_path))
     opa_exe = ""
     rego_file = product_name.capitalize()
     command = []
@@ -35,6 +37,8 @@ def opa_eval(
         opa_exe = (opa_path / "./opa_linux_amd64_static").resolve()
     else:
         opa_exe = (opa_path / "./opa").resolve()
+    #print(opa_exe)
+    #print(type(opa_exe))
 
     if windows_os or omit_sudo:
         command.extend([f"{opa_exe}"])

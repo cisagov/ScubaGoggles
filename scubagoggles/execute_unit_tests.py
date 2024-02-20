@@ -12,8 +12,8 @@ from googleapiclient.discovery import build
 import argparse
 from datetime import datetime
 
-#creds = gws_auth((Path.cwd() / "../credentials.json").resolve(), "amart24@scubagws.org")
-creds = gws_auth("../credentials.json")
+creds = gws_auth((Path.cwd() / "../credentials.json").resolve(), "amart24@scubagws.org")
+#creds = gws_auth("../credentials.json")
 
 services = {}
 services['directory'] = build('admin', 'directory_v1', credentials=creds)
@@ -31,7 +31,7 @@ class TestArgs:
         self.credentials='../credentials.json'
         self.subjectemail=None
         self.customerid='my_customer'
-        self.opapath='../' #this exe is windows-specific. Future unit tests need to be os-agnostic.
+        self.opapath= os.getcwd() #this exe is windows-specific. Future unit tests need to be os-agnostic.
         self.regopath='../rego'
         self.documentpath='../baselines'
         self.runcached=False
@@ -165,9 +165,6 @@ class OrchestratorTests(unittest.TestCase):
         print('../' + most_recent_output_dir + '/TestResults.json')
 
         self.assertEqual(os.path.isfile('../' + most_recent_output_dir + '/TestResults.json'), True)
-
-#     def test_pluralize(self): TODO: unit test probably not needed for this funciton
-#         print("test")
 
 #     def test_run_reporter(self):
 #         print("test")

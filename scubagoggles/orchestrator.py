@@ -237,6 +237,7 @@ def run_reporter(args):
             successful_calls,
             unsuccessful_calls
         )
+        print(report_stats[product])
 
     # Make the report front page
     report_path = out_folder + "/" + f'{args.outputreportfilename}.html'
