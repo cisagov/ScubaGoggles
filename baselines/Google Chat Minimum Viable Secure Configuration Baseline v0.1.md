@@ -328,7 +328,7 @@ All conversation types SHALL be selected.
   - None
 
   #### GWS.CHAT.7.3v0.1
-Spam, Confidential Information, and Sensitive Information SHALL be Selected.
+Spam, confidential information, and sensitive information SHALL be selected.
 
 - Rationale
   - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
