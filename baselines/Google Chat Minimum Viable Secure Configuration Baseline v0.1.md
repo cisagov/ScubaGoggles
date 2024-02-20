@@ -311,7 +311,7 @@ This section covers the content reporting functionality, a feature that allows u
 Chat content reporting SHALL be enabled.
 
 - Rationale
-  - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
+  - Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation.
 - Last Modified: February 13, 2024
 
 - MITRE ATT&CK TTP Mapping
