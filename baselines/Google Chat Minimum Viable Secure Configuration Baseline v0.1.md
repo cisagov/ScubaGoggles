@@ -331,7 +331,7 @@ All conversation types SHALL be selected.
 Spam, confidential information, and sensitive information SHALL be selected.
 
 - Rationale
-  - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
+  - Users may be uncertain what kind of messages should be reported. Selecting these message types may help users infer that these types of messages should be reported.
 - Last Modified: February 13, 2024
 - Notes
   - The other reporting categories MAY be included depending on agency needs.
