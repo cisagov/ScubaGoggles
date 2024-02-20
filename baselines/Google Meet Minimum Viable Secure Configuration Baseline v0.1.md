@@ -37,7 +37,7 @@ This control limits safe meeting access to users with a Google Account or Dialin
 ### Policies
 
 #### GWS.MEET.1.1v0.1
-Meeting access SHALL be restricted to users signed in with a Google Account or Dialing in using a phone.
+Meeting access SHOULD be restricted to users signed in with a Google Account or Dialing in using a phone.
 
 - Rationale
   - This protects against unauthorized access to a Google meeting and helps ensures the user has been authenticated prior to joining.
