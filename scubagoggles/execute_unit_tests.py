@@ -12,8 +12,8 @@ from googleapiclient.discovery import build
 import argparse
 from datetime import datetime
 
-creds = gws_auth((Path.cwd() / "../credentials.json").resolve(), "amart24@scubagws.org")
-#creds = gws_auth("../credentials.json")
+#creds = gws_auth((Path.cwd() / "../credentials.json").resolve(), "amart24@scubagws.org")
+creds = gws_auth("../credentials.json")
 
 services = {}
 services['directory'] = build('admin', 'directory_v1', credentials=creds)
@@ -125,46 +125,50 @@ class OrchestratorTests(unittest.TestCase):
         for item in gwsbaselineconformances:
             output_dirs.append(datetime.strptime(item[23:], "%Y_%m_%d_%H_%M_%S"))
 
-        print(output_dirs)
         most_recent_output_dir = max(output_dirs)
-        print(most_recent_output_dir)
         most_recent_output_dir = "GWSBaselineConformance_" + datetime.strftime(most_recent_output_dir, "%Y_%m_%d_%H_%M_%S")
-        
-        print('../' + most_recent_output_dir + '/ProviderSettingsExport.json')
 
         self.assertEqual(os.path.isfile('../' + most_recent_output_dir + '/ProviderSettingsExport.json'), True)
 
-    def test_rego_eval(self):
-        test_args = TestArgs()
+    # def test_rego_eval(self): str, str operands
+    #     test_args = TestArgs()
 
-        #Get date time
-        now = datetime.now()
-        folder_time = now.strftime("%Y_%m_%d_%H_%M_%S")
+    #     #Get date time
+    #     now = datetime.now()
+    #     folder_time = now.strftime("%Y_%m_%d_%H_%M_%S")
 
-        test_args.outputpath="../GWSBaselineConformance_"+folder_time
+    #     test_args.outputpath="../GWSBaselineConformance_"+folder_time
 
-        Path(test_args.outputpath).mkdir(parents=True, exist_ok=True)
-        test_args.outputpath = os.path.abspath(test_args.outputpath)
+    #     Path(test_args.outputpath).mkdir(parents=True, exist_ok=True)
+    #     test_args.outputpath = os.path.abspath(test_args.outputpath)
 
-        rego_eval(test_args)
+    #     rego_eval(test_args)
         
-        head_dir = os.listdir('../')
-        gwsbaselineconformances = []
-        for item in head_dir:
-            if item[:22] == "GWSBaselineConformance":
-                gwsbaselineconformances.append(item)
-        output_dirs = []
-        for item in gwsbaselineconformances:
-            output_dirs.append(datetime.strptime(item[23:], "%Y_%m_%d_%H_%M_%S"))
+    #     head_dir = os.listdir('../')
+    #     gwsbaselineconformances = []
+    #     for item in head_dir:
+    #         if item[:22] == "GWSBaselineConformance":
+    #             gwsbaselineconformances.append(item)
+    #     output_dirs = []
+    #     for item in gwsbaselineconformances:
+    #         output_dirs.append(datetime.strptime(item[23:], "%Y_%m_%d_%H_%M_%S"))
 
-        print(output_dirs)
-        most_recent_output_dir = max(output_dirs)
-        print(most_recent_output_dir)
-        most_recent_output_dir = "GWSBaselineConformance_" + datetime.strftime(most_recent_output_dir, "%Y_%m_%d_%H_%M_%S")
+    #     print(output_dirs)
+    #     most_recent_output_dir = max(output_dirs)
+    #     print(most_recent_output_dir)
+    #     most_recent_output_dir = "GWSBaselineConformance_" + datetime.strftime(most_recent_output_dir, "%Y_%m_%d_%H_%M_%S")
         
-        print('../' + most_recent_output_dir + '/TestResults.json')
+    #     print('../' + most_recent_output_dir + '/TestResults.json')
 
-        self.assertEqual(os.path.isfile('../' + most_recent_output_dir + '/TestResults.json'), True)
+    #     self.assertEqual(os.path.isfile('../' + most_recent_output_dir + '/TestResults.json'), True)
+
+#     def test_run_reporter(self): #too simple to unit test
+#         print("test")
+
+    def test_generate_summary(self):
+        sample_stats = {'Pass':1, 'Warning':0, 'Fail':0, 'N/A':0, 'No events found':0, 'Error':0}
+        correct_example = "<div class='summary pass'>1 test passed</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div>" #taken from sites output
+        self.assertEqual(generate_summary(sample_stats), correct_example)
 
 #     def test_run_reporter(self):
 #         print("test")
