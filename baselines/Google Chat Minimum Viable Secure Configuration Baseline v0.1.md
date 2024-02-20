@@ -321,7 +321,7 @@ Chat content reporting SHALL be enabled.
 All conversation types SHALL be selected.
 
 - Rationale
-  - This ensures that users are able to report content for different categories such as sensitive or confidential information. This provides additional monitoring capabilities.
+  - Risky messages could potentially come through any of the different Chat conversation types. By selecting all conversation types, agencies ensure that their users are able to report risky messages regardless of the conversation type.
 - Last Modified: February 13, 2024
 
 - MITRE ATT&CK TTP Mapping
