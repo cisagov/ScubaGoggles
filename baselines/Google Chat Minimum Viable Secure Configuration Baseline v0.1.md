@@ -317,14 +317,12 @@ Chat content reporting SHALL be enabled for all conversation types.
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-  #### GWS.CHAT.7.3v0.1
-Spam, confidential information, and sensitive information SHALL be selected.
+#### GWS.CHAT.7.2v0.1
+All reporting message categories SHOULD be selected.
 
 - Rationale
-  - Users may be uncertain what kind of messages should be reported. Selecting these message types may help users infer that these types of messages should be reported.
+  - Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
 - Last Modified: February 13, 2024
-- Notes
-  - The other reporting categories MAY be included depending on agency needs.
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -334,7 +332,7 @@ Spam, confidential information, and sensitive information SHALL be selected.
 - [Set-up content moderation for Chat](https://support.google.com/a/answer/13471510?hl=en)
 
 ### Prerequisites
--   Chat history must be turned on
+-   Chat history must be enabled to configure settings in this group.
 
 ### Implementation
 
@@ -343,18 +341,12 @@ Spam, confidential information, and sensitive information SHALL be selected.
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.
 4.  Ensure **Allow users to report content in Chat** is enabled.
-5.  Click **Save**
+5.  Ensure all conversation type checkboxes are selected. 
+6.  Click **Save**
 
 #### GWS.CHAT.7.2v0.1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.
-4.  Ensure **1:1 direct messages**, **Group direct messages**, and **Spaces** with **All spaces** is enabled.
-5.  Click **Save**
-
-#### GWS.CHAT.7.3v0.1 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
-3.  Click **Content Reporting**.
-4.  Ensure **Spam**, **Confidential Information**, and **Sensitive Information** is enabled.
+4.  Ensure all checkboxes under **Reporting Categories** are selected.
 5.  Click **Save**
