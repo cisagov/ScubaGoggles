@@ -15,9 +15,6 @@ LogEvents := utils.GetEvents("chat_logs")
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ChatArchivingProto chatsDefaultToOffTheRecord", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
@@ -58,9 +55,6 @@ if {
 NonCompliantOUs1_2 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "ChatArchivingProto allow_chat_archiving_setting_modification", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
@@ -108,9 +102,6 @@ if {
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "NO_FILES"
@@ -158,9 +149,6 @@ if {
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "RoomOtrSettingsProto otr_state", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     not contains("DEFAULT_ON_THE_RECORD ALWAYS_ON_THE_RECORD", LastEvent.NewValue)
@@ -226,10 +214,8 @@ NonCompliantOUs4_1 contains OU if {
     LastEvent_B := utils.GetLastEvent(Events_B)
     LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
 
-    true in {
-        LastEvent_A.NewValue != "true",
-        LastEvent_B.NewValue != "true"
-    }
+    LastEvent_A.NewValue != "true"
+    LastEvent_B.NewValue != "TRUSTED_DOMAINS"
 }
 
 tests contains {
@@ -257,49 +243,6 @@ if {
     not NoSuchEvent4_1(utils.TopLevelOU)
     Status := count(NonCompliantOUs4_1) == 0
 }
-#--
-
-# #
-# # Baseline GWS.CHAT.4.2v0.1
-# #--
-# NonCompliantOUs4_2 contains OU if {
-#     some OU in utils.OUsWithEvents
-#     Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", OU)
-#     # Ignore OUs without any events. We're already asserting that the
-#     # top-level OU has at least one event; for all other OUs we assume
-#     # they inherit from a parent OU if they have no events.
-#     count(Events) > 0
-#     LastEvent := utils.GetLastEvent(Events)
-#     LastEvent.NewValue == "NO_RESTRICTION"
-# }
-
-# tests contains {
-#     "PolicyId": "GWS.CHAT.4.2v0.1",
-#     "Criticality": "Shall",
-#     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-#     "ActualValue": "No relevant event for the top-level OU in the current logs",
-#     "RequirementMet": DefaultSafe,
-#     "NoSuchEvent": true
-# }
-# if {
-#     DefaultSafe := false
-#     Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
-#     count(Events) == 0
-# }
-
-# tests contains {
-#     "PolicyId": "GWS.CHAT.4.2v0.1",
-#     "Criticality": "Shall",
-#     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_2),
-#     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_2},
-#     "RequirementMet": Status,
-#     "NoSuchEvent": false
-# }
-# if {
-#     Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
-#     count(Events) > 0
-#     Status := count(NonCompliantOUs4_2) == 0
-# }
 #--
 
 ##############
