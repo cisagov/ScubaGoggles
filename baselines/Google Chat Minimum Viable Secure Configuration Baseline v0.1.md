@@ -315,7 +315,7 @@ Chat content reporting SHALL be enabled.
 - Last Modified: February 13, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - None
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
 #### GWS.CHAT.7.2v0.1
 All conversation types SHALL be selected.
@@ -325,7 +325,7 @@ All conversation types SHALL be selected.
 - Last Modified: February 13, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - None
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
   #### GWS.CHAT.7.3v0.1
 Spam, confidential information, and sensitive information SHALL be selected.
@@ -337,7 +337,7 @@ Spam, confidential information, and sensitive information SHALL be selected.
   - The other reporting categories MAY be included depending on agency needs.
 
 - MITRE ATT&CK TTP Mapping
-  - None
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
 ### Resources
 
