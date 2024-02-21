@@ -30,6 +30,15 @@ ReportDetailsOUs(OUs) := Message if {
     Message := concat("", ["Requirement failed in ", concat(", ", OUs), "."])
 }
 
+ReportDetailsGroups(Groups) := "Requirement met in all groups." if {
+    count(Groups) == 0
+}
+
+ReportDetailsGroups(Groups) := Message if {
+    count(Groups) > 0
+    Message := concat("", ["Requirement failed in ", concat(", ", Groups), "."])
+}
+
 ReportDetailsBoolean(true) := "Requirement met."
 
 ReportDetailsBoolean(false) := "Requirement not met."
@@ -38,22 +47,61 @@ ReportDetailsDetailedOU(_, NonCompOUs) := "Requirement met in all OUs." if {
     count(NonCompOUs) == 0
 }
 
-ReportDetailsDetailedOU(SettingDescription, NonCompOUs) := Description if {
+GetOUSettingDescription(SettingDescription, NonCompOUs) := concat("", [
+    "The following OUs are non-compliant:",
+    "<ul>",
+    concat("", [concat("", [
+        "<li>",
+        OU.Name,
+        ": ",
+        SettingDescription,
+        " is set to ",
+        OU.Value,
+        "</li>"
+    ]) | some OU in NonCompOUs]),
+    "</ul>"
+])
+
+GetGroupSettingDescription(SettingDescription, NonCompGroups) := concat("", [
+    "The following groups are non-compliant:",
+    "<ul>",
+    concat("", [concat("", [
+        "<li>",
+        Group.Name,
+        ": ",
+        SettingDescription,
+        " is set to ",
+        Group.Value,
+        "</li>"
+    ]) | some Group in NonCompGroups]),
+    "</ul>"
+])
+
+ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) > 0
-    Description := concat("", [
-        "The following OUs are non-compliant:",
-        "<ul>",
-        concat("", [concat("", [
-            "<li>",
-            OU.Name,
-            ": ",
-            SettingDescription,
-            " is set to ",
-            OU.Value,
-            "</li>"
-        ]) | some OU in NonCompOUs]),
-        "</ul>"
+    count(NonCompGroups) > 0
+    Description := concat("<br>", [
+        GetOUSettingDescription(SettingDescription, NonCompOUs),
+        GetGroupSettingDescription(SettingDescription, NonCompGroups),
     ])
+}
+
+ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
+    count(NonCompOUs) > 0
+    count(NonCompGroups) == 0
+    Description := GetOUSettingDescription(SettingDescription, NonCompOUs)
+}
+
+ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
+    count(NonCompOUs) == 0
+    count(NonCompGroups) > 0
+    Description := GetGroupSettingDescription(SettingDescription, NonCompGroups)
+}
+
+ReportDetails(_, NonCompOUs, NonCompGroups) := Description if {
+    count(NonCompOUs) == 0
+    count(NonCompGroups) == 0
+    Description := "Requirement met in all OUs and groups."
 }
 
 OUsWithEvents contains OrgUnit if {
@@ -63,6 +111,15 @@ OUsWithEvents contains OrgUnit if {
     some Parameter in Event.parameters
     Parameter.name == "ORG_UNIT_NAME"
     OrgUnit := Parameter.value
+}
+
+GroupsWithEvents contains Group if {
+    some Log in input
+    some Item in Log.items
+    some Event in Item.events
+    some Parameter in Event.parameters
+    Parameter.name == "GROUP_EMAIL"
+    Group := Parameter.value
 }
 
 # Simplest case: if input.tenant_info.topLevelOU is
@@ -146,6 +203,17 @@ GetEventOu(Event) := "None" if {
     not "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
 }
 
+# Helper function so that the regular SettingChangeEvents
+# rule will work even for events that don't include the
+# Group name
+GetEventGroup(Event) := Group if {
+    "GROUP_EMAIL" in {Parameter.name | some Parameter in Event.parameters}
+    Group := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "GROUP_EMAIL"][0]
+}
+
+GetEventGroup(Event) := "" if {
+    not "GROUP_EMAIL" in {Parameter.name | some Parameter in Event.parameters}
+}
 
 SettingChangeEvents contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
@@ -153,6 +221,7 @@ SettingChangeEvents contains {
     "NewValue": NewValue,
     "Setting": Setting,
     "OrgUnit": OrgUnit,
+    "Group": Group,
     "DomainName": DomainName,
     "AppName": AppName
 }
@@ -172,6 +241,7 @@ if {
     DomainName := GetEventDomain(Event)
     AppName := GetEventApp(Event)
     OrgUnit := GetEventOu(Event)
+    Group := GetEventGroup(Event)
 }
 
 # Secondary case that looks for the DELETE_APPLICATION_SETTING events.
@@ -185,6 +255,7 @@ SettingChangeEvents contains {
     "NewValue": NewValue,
     "Setting": Setting,
     "OrgUnit": OrgUnit,
+    "Group": Group,
     "DomainName": DomainName,
     "AppName": AppName
 }
@@ -205,6 +276,7 @@ if {
     DomainName := GetEventDomain(Event)
     AppName := GetEventApp(Event)
     OrgUnit := GetEventOu(Event)
+    Group := GetEventGroup(Event)
 }
 
 # Special case needed for Common Controls, Russian localization setting
@@ -213,6 +285,7 @@ SettingChangeEvents contains {
     "TimestampStr": Item.id.time,
     "NewValue": NewValue,
     "OrgUnit": OrgUnit,
+    "Group": Group,
     "Setting": "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA",
     "AppName": "NA"
 }
@@ -228,8 +301,18 @@ if {
     # Extract the values
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
     OrgUnit := GetEventOu(Event)
+    Group := GetEventGroup(Event)
 }
 
+FilterEventsGroup(Events, SettingName, Group) := {
+    Event | some Event in Events;
+    Event.Group == Group;
+    Event.Setting == SettingName
+}
+
+# The FilterEvents(...) function is only here to maintain backwards compatability.
+# After https://github.com/cisagov/ScubaGoggles/issues/190 is complete, delete
+# this function.
 FilterEvents(Events, SettingName, OrgUnit) := FilteredEvents if {
     # If there exists at least the root OU and 1 more OU
     # filter out organizational units that don't exist
@@ -265,6 +348,53 @@ FilterEvents(Events, SettingName, OrgUnit) := FilteredEvents if {
     # Filter the events by both SettingName and OrgUnit
     FilteredEvents := {
         Event | some Event in Events;
+        Event.OrgUnit == OrgUnit;
+        Event.Setting == SettingName
+    }
+}
+
+
+FilterEventsOU(Events, SettingName, OrgUnit) := FilteredEvents if {
+    # If there exists at least the root OU and 1 more OU
+    # filter out organizational units that don't exist
+    input.organizational_unit_names
+    count(input.organizational_unit_names) >= 2
+
+    # Filter the events by both SettingName and OrgUnit
+    FilteredEvents := {
+        Event | some Event in Events;
+        # Ignore the events that apply to groups
+        Event.Group == "";
+        Event.OrgUnit == OrgUnit;
+        Event.Setting == SettingName;
+        Event.OrgUnit in input.organizational_unit_names
+    }
+}
+
+FilterEventsOU(Events, SettingName, OrgUnit) := FilteredEvents if {
+    # If only the root OU exists run like normal
+    input.organizational_unit_names
+    count(input.organizational_unit_names) < 2
+
+    # Filter the events by both SettingName and OrgUnit
+    FilteredEvents := {
+        Event | some Event in Events;
+        # Ignore the events that apply to groups
+        Event.Group == "";
+        Event.OrgUnit == OrgUnit;
+        Event.Setting == SettingName
+    }
+}
+
+FilterEventsOU(Events, SettingName, OrgUnit) := FilteredEvents if {
+    # If OUs variable does not exist run like normal
+    not input.organizational_unit_names
+
+    # Filter the events by both SettingName and OrgUnit
+    FilteredEvents := {
+        Event | some Event in Events;
+        # Ignore the events that apply to groups
+        Event.Group == "";
         Event.OrgUnit == OrgUnit;
         Event.Setting == SettingName
     }
