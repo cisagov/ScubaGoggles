@@ -99,7 +99,7 @@ NonCompliantOUs1_3 contains OU if {
     Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("SHARING_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == true
+    contains("SHARING_ALLOWED_WITH_WARNING INHERIT_FROM_PARENT SHARING_NOT_ALLOWED", LastEvent.NewValue) == false
 }
 
 tests contains {
@@ -139,7 +139,7 @@ NonCompliantOUs1_4 contains OU if {
     Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("NOT_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == false
+    contains("NOT_ALLOWED INHERIT_FROM_PARENT SHARING_NOT_ALLOWED SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES", LastEvent.NewValue) == false
 }
 
 tests contains {
