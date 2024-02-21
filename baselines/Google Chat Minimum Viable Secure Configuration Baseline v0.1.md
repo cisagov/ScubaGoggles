@@ -172,16 +172,6 @@ External Chat messaging SHALL be restricted to allowlisted domains only.
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.CHAT.4.2v0.1
-Only allow this for allowlisted domains SHALL be enabled.
-
-- Rationale
-  - This limits the security vulnerabilities present with allowing chatting outside of organization.
-- Last Modified: August 1, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
 ### Resources
 
 -   [Google Workspace Admin Help: Set external chat options](https://support.google.com/a/answer/9269229?product_name=UnuFlow&visit_id=637841711304802210-4105703050&rd=1&src=supportwidget0)
@@ -196,19 +186,15 @@ Only allow this for allowlisted domains SHALL be enabled.
 
 To configure the settings for External Chat:
 
-#### Policy Group 4 Common Instructions
+#### GWS.CHAT.4.1v0.1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **External Chat Settings** -\> **Chat externally**.
-
-#### GWS.CHAT.4.1v0.1 Instructions
-1.  Select **ON**.
-2.  Select **Save**.
-
-#### GWS.CHAT.4.2v0.1 Instructions
-1.  Select **Only allow this for allowlisted domains**
-2.  To add allowlisted domains select **Manage allowlisted domains**
-3.  Select **Save**.
+4.  Select **OFF** OR.
+5.  Select **ON** AND.
+6.  Select **Only allow this for allowlisted domains**.
+7.  To add allowlisted domains select **Manage allowlisted domains**.
+8.  Select **Save**.
 
 ## 5. Installation of Chat Apps
 
