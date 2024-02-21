@@ -99,7 +99,7 @@ NonCompliantOUs1_3 contains OU if {
     Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("SHARING_ALLOWED_WITH_WARNING INHERIT_FROM_PARENT SHARING_NOT_ALLOWED", LastEvent.NewValue) == false
+    contains("SHARING_ALLOWED_WITH_WARNING INHERIT_FROM_PARENT SHARING_NOT_ALLOWED SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES", LastEvent.NewValue) == false
 }
 
 tests contains {
@@ -134,12 +134,34 @@ if {
 #
 # Baseline GWS.DRIVEDOCS.1.4v0.1
 #--
+NoSuchEvent1_4(TopLevelOU) := true if {
+    # No such event...
+    SettingName := "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS"
+    Events_A := utils.FilterEvents(LogEvents, SettingName, TopLevelOU)
+    count(Events_A) == 0
+}
+
+NoSuchEvent1_4(TopLevelOU) := true if {
+    # No such event...
+    SettingName := "SHARING_OUTSIDE_DOMAIN"
+    Events_B := utils.FilterEvents(LogEvents, SettingName, TopLevelOU)
+    count(Events_B) == 0
+}
+
+default NoSuchEvent1_4(_) := false
+
 NonCompliantOUs1_4 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    contains("NOT_ALLOWED INHERIT_FROM_PARENT SHARING_NOT_ALLOWED SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES", LastEvent.NewValue) == false
+    Events_A := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
+    count(Events_A) > 0
+    LastEvent_A := utils.GetLastEvent(Events_A)
+
+    Events_B := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
+    count(Events_B) > 0
+    LastEvent_B := utils.GetLastEvent(Events_B)
+
+    contains("NOT_ALLOWED INHERIT_FROM_PARENT", LastEvent_A.NewValue) == false
+    contains("SHARING_NOT_ALLOWED SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES INHERIT_FROM_PARENT", LastEvent_B.NewValue) == false
 }
 
 tests contains {
@@ -152,8 +174,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", utils.TopLevelOU)
-    count(Events) == 0
+    NoSuchEvent1_4(utils.TopLevelOU)
 }
 
 tests contains {
@@ -165,8 +186,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", utils.TopLevelOU)
-    count(Events) > 0
+    not NoSuchEvent1_4(utils.TopLevelOU)
     Status := count(NonCompliantOUs1_4) == 0
 }
 #--
