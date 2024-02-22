@@ -26,7 +26,7 @@ GetFriendlyValue1_1(Value) := "History is OFF" if {
 NonCompliantOUs1_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Chat History setting is set to",
+        "Default conversation history is set to",
         GetFriendlyValue1_1(LastEvent.NewValue)
     ])
 }
@@ -73,7 +73,10 @@ if {
 #--
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": LastEvent.NewValue
+    "Value": concat(" ", [
+        "Allow users to change their history setting is set to",
+        LastEvent.NewValue
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
@@ -131,7 +134,7 @@ GetFriendlyValue2_1(Value) := "Allow all files" if {
 NonCompliantOUs2_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "External file sharing for Chat is set to",
+        "External filesharing is set to",
         GetFriendlyValue2_1(LastEvent.NewValue)
     ])
 }
@@ -191,12 +194,12 @@ GetFriendlyValue3_1(Value) := "History is OFF by default" if {
 NonCompliantOUs3_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Space History setting for Chat is set to",
+        "Conversation history settings for spaces is set to",
         GetFriendlyValue3_1(LastEvent.NewValue)
     ])
 } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents,  "RoomOtrSettingsProto otr_state", OU)
+    Events := utils.FilterEvents(LogEvents, "RoomOtrSettingsProto otr_state", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     not contains("DEFAULT_ON_THE_RECORD ALWAYS_ON_THE_RECORD", LastEvent.NewValue)
@@ -317,11 +320,14 @@ if {
 #--
 NonCompliantOUs5_1 contains {
     "Name": OU,
-    "Value": LastEvent.NewValue
+    "Value": concat(" ", [
+        "Allow users to install Chat apps is set to",
+        LastEvent.NewValue
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents,  "Chat app Settings - Chat apps enabled", OU)
+    Events := utils.FilterEvents(LogEvents, "Chat app Settings - Chat apps enabled", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
