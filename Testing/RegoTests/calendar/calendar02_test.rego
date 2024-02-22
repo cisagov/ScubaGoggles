@@ -30,7 +30,7 @@ test_ExtInvitationsWarning_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs. Requirement met in all groups."
 }
 
 test_ExtInvitationsWarning_Correct_V2 if {
@@ -70,7 +70,7 @@ test_ExtInvitationsWarning_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs. Requirement met in all groups."
 }
 
 test_ExtInvitationsWarning_Correct_V3 if {
@@ -110,7 +110,7 @@ test_ExtInvitationsWarning_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs. Requirement met in all groups."
 }
 
 test_ExtInvitationsWarning_Correct_V4 if {
@@ -161,7 +161,7 @@ test_ExtInvitationsWarning_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs. Requirement met in all groups."
 }
 
 test_ExtInvitationsWarning_Incorrect_V1 if {
@@ -223,7 +223,7 @@ test_ExtInvitationsWarning_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU. Requirement met in all groups."
 }
 
 test_ExtInvitationsWarning_Incorrect_V3 if {
@@ -263,7 +263,7 @@ test_ExtInvitationsWarning_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU. Requirement met in all groups."
 }
 
 test_ExtInvitationsWarning_Incorrect_V4 if {
@@ -336,6 +336,47 @@ test_ExtInvitationsWarning_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU. Requirement met in all groups."
+}
+
+test_ExtInvitationsWarning_Incorrect_V6 if {
+    # Test ou and group
+    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    Output := tests with input as {
+        "calendar_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "SETTING_NAME", "value": "ENABLE_EXTERNAL_GUEST_PROMPT"},
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2021-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "SETTING_NAME", "value": "ENABLE_EXTERNAL_GUEST_PROMPT"},
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "GROUP_EMAIL", "value": "group1@example.com"},
+                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": ""
+        },
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU. Requirement failed in group1@example.com."
 }
 #--

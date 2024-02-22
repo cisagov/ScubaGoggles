@@ -696,23 +696,6 @@ tests contains {
 #--
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.6.2v0.1",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-########################
-# GWS.COMMONCONTROLS.7 #
-########################
-
-#
-# Baseline GWS.COMMONCONTROLS.7.1v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.7.1v0.1",
     "Prerequisites": ["directory/v1/users/list"],
     "Criticality": "Shall",
     "ReportDetails": concat("", [
@@ -732,19 +715,68 @@ if {
 #--
 
 ########################
+# GWS.COMMONCONTROLS.7 #
+########################
+
+#
+# Baseline GWS.COMMONCONTROLS.7.1v0.1
+#--
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.7.1v0.1",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+########################
 # GWS.COMMONCONTROLS.8 #
 ########################
 
 #
 # Baseline GWS.COMMONCONTROLS.8.1v0.1
 #--
+NonCompliantOUs8_1 contains OU if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents(LogEvents, "AdminAccountRecoverySettingsProto Enable admin account recovery", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "false"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.8.1v0.1",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.8.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs8_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+} if {
+    SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) > 0
+    Status := count(NonCompliantOUs8_1) == 0
 }
 #--
 
@@ -768,66 +800,8 @@ tests contains {
 #
 # Baseline GWS.COMMONCONTROLS.9.2v0.1
 #--
-NonCompliantOUs9_2 contains OU if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "AdminAccountRecoverySettingsProto Enable admin account recovery", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
-
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.9.2v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.9.2v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs9_2),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_2},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-} if {
-    SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) > 0
-    Status := count(NonCompliantOUs9_2) == 0
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.9.3v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.9.3v0.1",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.9.4v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.9.4v0.1",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -855,37 +829,6 @@ tests contains {
 
 #
 # Baseline GWS.COMMONCONTROLS.10.2v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.2v0.1",
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-
-#########################
-# GWS.COMMONCONTROLS.11 #
-#########################
-
-#
-# Baseline GWS.COMMONCONTROLS.11.1v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.1v0.1",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.11.2v0.1
 #--
 # Step 1: Get the set of services that have either an API access allow or API access block event
 APIAccessEvents contains {
@@ -933,7 +876,7 @@ HighRiskBlocked contains Service if {
 
 # Step 3: Identify services whose most recent event is an allow event and where
 # the high-risk context isn't blocked
-UnrestrictedServices11_2 contains Service if {
+UnrestrictedServices10_2 contains Service if {
     # Iterate through all services
     some Service in {Event.ServiceName | some Event in APIAccessEvents}
     # Ignore services that end risk _HIGH_RISK. Those are handled later
@@ -948,15 +891,15 @@ UnrestrictedServices11_2 contains Service if {
     not concat("", [Service, "_HIGH_RISK"]) in HighRiskBlocked
 }
 
-ReportDetails11_2(true) := "Requirement met."
+ReportDetails10_2(true) := "Requirement met."
 
-ReportDetails11_2(false) := concat("", [
+ReportDetails10_2(false) := concat("", [
     "The following services allow access: ",
-    concat(", ", UnrestrictedServices11_2), "."
+    concat(", ", UnrestrictedServices10_2), "."
 ])
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.2v0.1",
     "Criticality": "Shall",
     "ReportDetails": concat("", [
         "No API Access Allowed/Blocked events in the current logs. ",
@@ -974,16 +917,16 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetails11_2(Status),
+    "ReportDetails": ReportDetails10_2(Status),
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := APIAccessEvents
     count(Events) > 0
-    Status := count(UnrestrictedServices11_2) == 0
+    Status := count(UnrestrictedServices10_2) == 0
 }
 
 # Note that the above logic doesn't filter for OU. As the logic for this setting
@@ -992,10 +935,10 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.11.3v0.1
+# Baseline GWS.COMMONCONTROLS.10.3v0.1
 #--
 # Identify services whose most recent event is an allow event
-UnrestrictedServices11_3 contains Service if {
+UnrestrictedServices10_3 contains Service if {
     # Iterate through all services
     some Service in {Event.ServiceName | some Event in APIAccessEvents}
     # Ignore services that end risk _HIGH_RISK. Those are handled later
@@ -1011,15 +954,15 @@ UnrestrictedServices11_3 contains Service if {
     Event.EventName == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS"
 }
 
-ReportDetails11_3(true) := "Requirement met."
+ReportDetails10_3(true) := "Requirement met."
 
-ReportDetails11_3(false) := concat("", [
+ReportDetails10_3(false) := concat("", [
     "The following services allow access: ",
-    concat(", ", UnrestrictedServices11_3), "."
+    concat(", ", UnrestrictedServices10_3), "."
 ])
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.3v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.1",
     "Criticality": "SHALL",
     "ReportDetails": concat("", [
         "No API Access Allowed/Blocked events in the current logs. ",
@@ -1037,21 +980,21 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.3v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetails11_3(Status),
+    "ReportDetails": ReportDetails10_3(Status),
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := APIAccessEvents
     count(Events) > 0
-    Status := count(UnrestrictedServices11_3) == 0
+    Status := count(UnrestrictedServices10_3) == 0
 }
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.11.4v0.1
+# Baseline GWS.COMMONCONTROLS.10.4v0.1
 #--
 DomainOwnedAppAccessEvents contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
@@ -1070,7 +1013,7 @@ if {
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
-NonCompliantOUs11_4 contains OU if {
+NonCompliantOUs10_4 contains OU if {
     some OU in utils.OUsWithEvents
     Events := {Event | some Event in DomainOwnedAppAccessEvents; Event.OrgUnit == OU}
     # Ignore OUs without any events. We're already asserting that the
@@ -1082,7 +1025,7 @@ NonCompliantOUs11_4 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.4v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.1",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1096,22 +1039,22 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.4v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.1",
         "Criticality": "Shall",
-        "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs11_4),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_4},
+        "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs10_4),
+        "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_4},
         "RequirementMet": Status,
         "NoSuchEvent": false
 }
 if {
     Events := {Event | some Event in DomainOwnedAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
     count(Events) > 0
-    Status := count(NonCompliantOUs11_4) == 0
+    Status := count(NonCompliantOUs10_4) == 0
 }
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.11.5v0.1
+# Baseline GWS.COMMONCONTROLS.10.5v0.1
 #--
 UnconfiguredAppAccessEvents contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
@@ -1131,7 +1074,7 @@ if {
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
-NonCompliantOUs11_5 contains OU if {
+NonCompliantOUs10_5 contains OU if {
     some OU in utils.OUsWithEvents
     Events := [Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == OU]
     # Ignore OUs without any events. We're already asserting that the
@@ -1143,7 +1086,7 @@ NonCompliantOUs11_5 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.5v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.5v0.1",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1157,60 +1100,47 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.5v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.5v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs11_5),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_5},
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs10_5),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_5},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := {Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
     count(Events) > 0
-    Status := count(NonCompliantOUs11_5) == 0
+    Status := count(NonCompliantOUs10_5) == 0
 }
 #--
 
 #########################
-# GWS.COMMONCONTROLS.12 #
+# GWS.COMMONCONTROLS.11 #
 #########################
 
 #
-# Baseline GWS.COMMONCONTROLS.12.1v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.1",
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
+# Baseline GWS.COMMONCONTROLS.11.1v0.1
 #--
 
-#
-# Baseline GWS.COMMONCONTROLS.12.2v0.1
-#--
-
-# For 12.2, we need to assert two different things:
+# For 11.1, we need to assert two different things:
 # - Users can only allow whitelisted apps
 # - Exceptions aren't allowed for internal apps
 
 # Custom NoSuchEvent function needed as we're checking
 # two different settings simultaneously.
-NoSuchEvent12_2 := true if {
+NoSuchEvent11_1 := true if {
     Events := utils.FilterEvents(LogEvents, "Apps Access Setting Allowlist access", utils.TopLevelOU)
     count(Events) == 0
 }
 
-NoSuchEvent12_2 := true if {
+NoSuchEvent11_1 := true if {
     Events := utils.FilterEvents(LogEvents, "Apps Access Setting allow_all_internal_apps", utils.TopLevelOU)
     count(Events) == 0
 }
 
-default NoSuchEvent12_2 := false
+default NoSuchEvent11_1 := false
 
-NonCompliantOUs12_2 contains OU if {
+NonCompliantOUs11_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "Apps Access Setting Allowlist access", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -1222,7 +1152,7 @@ NonCompliantOUs12_2 contains OU if {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
-NonCompliantOUs12_2 contains OU if {
+NonCompliantOUs11_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "Apps Access Setting allow_all_internal_apps", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -1235,7 +1165,7 @@ NonCompliantOUs12_2 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.12.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.11.1v0.1",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1244,32 +1174,27 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    NoSuchEvent12_2 == true
+    NoSuchEvent11_1 == true
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.12.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.11.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs12_2),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_2},
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs11_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    NoSuchEvent12_2 == false
-    Status := count(NonCompliantOUs12_2) == 0
+    NoSuchEvent11_1 == false
+    Status := count(NonCompliantOUs11_1) == 0
 }
 #--
 
-
-#########################
-# GWS.COMMONCONTROLS.13 #
-#########################
-
 #
-# Baseline GWS.COMMONCONTROLS.13.1v0.1
+# Baseline GWS.COMMONCONTROLS.11.2v0.1
 #--
-NonCompliantOUs13_1 contains OU if {
+NonCompliantOUs11_2 contains OU if {
     some OU in utils.OUsWithEvents
     Events := FilterEventsAltOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -1288,7 +1213,7 @@ NonCompliantOUs13_1 contains OU if {
 # able to detect setting inheritance, as least for now.
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.1",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1302,22 +1227,22 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs13_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs13_1},
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs11_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := FilterEventsAltOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs13_1) == 0
+    Status := count(NonCompliantOUs11_2) == 0
 }
 #--
 
 #########################
-# GWS.COMMONCONTROLS.14 #
+# GWS.COMMONCONTROLS.12 #
 #########################
 
 Apps := {"Blogger", "Google Books", "Google Pay", "Google Photos", "Google Play",
@@ -1335,7 +1260,7 @@ AppsAllowingTakoutOU contains App if {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
-NonCompliantOUs14_1 contains OU if {
+NonCompliantOUs12_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "UserTakeoutSettingsProto User Takeout ", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -1347,10 +1272,10 @@ NonCompliantOUs14_1 contains OU if {
 }
 
 #
-# Baseline GWS.COMMONCONTROLS.14.1v0.1
+# Baseline GWS.COMMONCONTROLS.12.1v0.1
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.14.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.1",
     "Criticality": "Shall",
     "ReportDetails": concat("", [
         "For apps with individual admin control: ",
@@ -1367,30 +1292,113 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.14.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.1",
     "Criticality": "Shall",
     "ReportDetails": concat("", [
         "For apps with individual admin control: ",
-        utils.ReportDetailsOUs(NonCompliantOUs14_1)
+        utils.ReportDetailsOUs(NonCompliantOUs12_1)
     ]),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs14_1},
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEvents(LogEvents, "UserTakeoutSettingsProto User Takeout ", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs14_1) == 0
+    Status := count(NonCompliantOUs12_1) == 0
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.14.2v0.1",
-    "Criticality": "Should/Not-Implemented",
+    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.1",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": concat("", [
         "Currently unable to check that Google takeout is disabled for ",
         "services without an individual admin control; manual check recommended."
     ]),
     "ActualValue": [],
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#########################
+# GWS.COMMONCONTROLS.13 #
+#########################
+
+#
+# Baseline GWS.COMMONCONTROLS.13.1v0.1
+#--
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.1",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": concat("", [
+        "Results for GWS.COMMONCONTROLS.13 are listed in the ",
+        "<a href='../IndividualReports/RulesReport.html'>Rules Report</a>."
+    ]),
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#########################
+# GWS.COMMONCONTROLS.14 #
+#########################
+
+#
+# Baseline GWS.COMMONCONTROLS.14.1v0.1
+#--
+NonCompliantOUs14_1 contains OU if {
+    some OU in utils.OUsWithEvents
+    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
+    Events := utils.FilterEvents(LogEvents, SettingName, OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "ENABLED"
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.14.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.14.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs14_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs14_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
+    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) > 0
+    Status := count(NonCompliantOUs14_1) == 0
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.14.2v0.1
+#--
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.14.2v0.1",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
     "RequirementMet": false,
     "NoSuchEvent": true
 }
@@ -1406,72 +1414,6 @@ tests contains {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.15.1v0.1",
     "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": concat("", [
-        "Results for GWS.COMMONCONTROLS.15 are listed in the ",
-        "<a href='../IndividualReports/RulesReport.html'>Rules Report</a>."
-    ]),
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-#########################
-# GWS.COMMONCONTROLS.16 #
-#########################
-
-#
-# Baseline GWS.COMMONCONTROLS.16.1v0.1
-#--
-NonCompliantOUs16_1 contains OU if {
-    some OU in utils.OUsWithEvents
-    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
-    Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "ENABLED"
-}
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.16.1v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.16.1v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs16_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) > 0
-    Status := count(NonCompliantOUs16_1) == 0
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.16.2v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.16.2v0.1",
-    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
@@ -1479,31 +1421,10 @@ tests contains {
 }
 #--
 
-#########################
-# GWS.COMMONCONTROLS.17 #
-#########################
-
 #
-# Baseline GWS.COMMONCONTROLS.17.1v0.1
+# Baseline GWS.COMMONCONTROLS.15.2v0.1
 #--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.17.1v0.1",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-#########################
-# GWS.COMMONCONTROLS.18 #
-#########################
-
-#
-# Baseline GWS.COMMONCONTROLS.18.1v0.1
-#--
-NonCompliantOUs18_1 contains OU if {
+NonCompliantOUs15_2 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -1515,7 +1436,7 @@ NonCompliantOUs18_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.18.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.1",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1529,16 +1450,16 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.18.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs18_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs18_1},
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs15_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEvents(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs18_1) == 0
+    Status := count(NonCompliantOUs15_2) == 0
 }
 #--

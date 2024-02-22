@@ -36,6 +36,7 @@ For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://git
 - [Design](#project-license)
 - [Troubleshooting](#troubleshooting)
   - [Not Authorized to Access this Resource](#not-authorized-to-access-this-resource)
+  - [ScubaGoggles not Found](#scubagoggles-not-found)
   - [Unable to view HTML report due to environment limitations](#Unable-to-view-HTML-report-due-to-environment-limitations)
 - [Project License](#project-license)
 
@@ -110,8 +111,8 @@ Download executable the OPA executable file required to run this SCuBA tool.
 
 options:
   -h, --help            show this help message and exit
-  -v {0.42.2,0.43.1,0.44.0,0.45.0,0.46.3,0.47.4,0.48.0,0.49.2,0.50.2,0.51.0,0.52.0,0.53.1,0.54.0,0.55.0,0.56.0,0.57.1,0.58.0}
-                        What version of OPA to download: Default version: 0.57.1
+  -v {0.42.2,0.43.1,0.44.0,0.45.0,0.46.3,0.47.4,0.48.0,0.49.2,0.50.2,0.51.0,0.52.0,0.53.1,0.54.0,0.55.0,0.56.0,0.57.1,0.58.0,0.59.0}
+                        What version of OPA to download: Default version: 0.59.0
   -os {windows,macos,linux}
                         Operating system version of OPA to download. Default os: windows
   --disablessl          If there are proxy errors, try adding this switch to disable ssl verification
@@ -209,14 +210,15 @@ If you've limited application access to Google's APIs in your organization, the 
 > [!Important]
 > ScubaGoggles requires the service account to have [domain-wide delegation of authority](https://support.google.com/a/answer/162106?hl=en) to function. 
 
-1. Login to https://console.cloud.google.com and navigate to your GCP project. 
+1. Login to https://console.cloud.google.com and navigate to your GCP project.
 1. From the hamburger menu, select **IAM & Admin** -> **Service Accounts**
-1. Double click on the newly created service account then click **KEYS** -> **ADD KEY** -> **Create new key** -> **JSON** -> **CREATE**
+1. Select **CREATE SERVICE ACCOUNT**. Fill out the id field and then select **DONE**
+1. Click on the newly created service account then click **KEYS** -> **ADD KEY** -> **Create new key** -> **JSON** -> **CREATE**
 1. Move the downloaded file (begins with `<service account>*.json`) to the root directory folder of this repo, rename to `credentials.json`
 1. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and data control** -> **API controls**
 1. Select **MANAGE DOMAIN WIDE DELEGATION**
 1. Select **Add new**
-1. Enter the `client_id` from the downloaded credentials (also visible after double clicking on the created Service account under Details -> Unique ID)
+1. Enter the `client_id` from the downloaded credentials (also visible after clicking on the created Service account under Details -> Unique ID)
 1. Enter each OAuth scope as listed in [OAuth API Scopes](#oauth-api-scopes)
 1. Select **AUTHORIZE**
 1. Finally, run ScubaGoggles with the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
@@ -332,6 +334,16 @@ If an authorization error similar to the one below appears:
 <HttpError 403 when requesting https://admin.googleapis.com/admin/directory/v1/customers/my_customer?alt=json returned "Not Authorized to access this resource/api">
 ```
 Ensure that you consented to the following API scopes as a user with the proper [permissions to consent](#permissions) and have enabled the required [APIs and Services](#create-an-oauth-credential).
+
+### Scubagoggles Not Found 
+If an error similar to the one below appears: 
+```
+command not found: scubagoggles
+```
+
+Ensure that you have properly [configured the virtual environment](#installing-in-a-virtual-environment) and have activated the virtual environment using the OS appropriate commands. 
+
+Alternatively, to run scubagoggles without installing it as a package, you can replace the `scubagoggles` command with `python scuba.py`. 
 
 ### Unable to view HTML report due to environment limitations 
 

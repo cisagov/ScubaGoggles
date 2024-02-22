@@ -12,12 +12,36 @@ LogEvents := utils.GetEvents("calendar_logs")
 #
 # Baseline GWS.CALENDAR.1.1v0.1
 #--
-NonCompliantOUs1_1 contains OU if {
+GetFriendlyValue1_1(Value) := "Share all information, but outsiders cannot change calendars" if {
+    Value == "READ_ONLY_ACCESS"
+} else := "Share all information, and outsiders can change calendars" if {
+    Value == "READ_WRITE_ACCESS"
+} else := "Share all information, and allow managing of calendars" if {
+    Value == "MANAGE_ACCESS"
+} else := Value
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
+} if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
+    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "SHOW_ONLY_FREE_BUSY_INFORMATION"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
+NonCompliantGroups1_1 contains {
+    "Name": Group,
+    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
+    # Ignore Group without any events
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "SHOW_ONLY_FREE_BUSY_INFORMATION"
@@ -34,22 +58,24 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
+    "ReportDetails": utils.ReportDetails("External sharing options for primary calendars",
+        NonCompliantOUs1_1, NonCompliantGroups1_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs1_1) == 0
+    Conditions := {count(NonCompliantOUs1_1) == 0, count(NonCompliantGroups1_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -131,10 +157,19 @@ if {
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", OU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+}
+
+NonCompliantGroups2_1 contains Group if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", Group)
+    # Ignore groups without any events
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -150,22 +185,26 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CALENDAR.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
+    "ReportDetails": concat(" ", [
+        utils.ReportDetailsOUs(NonCompliantOUs2_1),
+        utils.ReportDetailsGroups(NonCompliantGroups2_1)
+    ]),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1, "NonCompliantGroups": NonCompliantGroups2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs2_1) == 0
+    Conditions := {count(NonCompliantOUs2_1) == 0, count(NonCompliantGroups2_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -244,7 +283,7 @@ tests contains {
 
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
+    Events := utils.FilterEventsOU(LogEvents, "CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -267,7 +306,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "CalendarAppointmentSlotAdminSettingsProto payments_enabled"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -281,7 +320,7 @@ tests contains {
 }
 if {
     SettingName := "CalendarAppointmentSlotAdminSettingsProto payments_enabled"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
