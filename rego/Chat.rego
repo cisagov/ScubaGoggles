@@ -243,15 +243,15 @@ if {
 #--
 default NoSuchEvent4_1(_) := true
 
-NoSuchEvent4_1(TopLevelOU) := false if {
+NoSuchEvent4_1(TopLevelOU) := true if {
     Events := utils.FilterEvents(LogEvents, "RestrictChatProto restrictChatToOrganization", TopLevelOU)
-    count(Events) != 0
+    count(Events) == 0
 }
 
-NoSuchEvent4_1(TopLevelOU) := false if {
+NoSuchEvent4_1(TopLevelOU) := true if {
     # No such event...
     Events := utils.FilterEvents(LogEvents, "RestrictChatProto externalChatRestriction", TopLevelOU)
-    count(Events) != 0
+    count(Events) == 0
 }
 
 NonCompliantOUs4_1 contains {
