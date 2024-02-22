@@ -328,7 +328,6 @@ All reporting message categories SHOULD be selected.
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
 ### Resources
-
 - [Set-up content moderation for Chat](https://support.google.com/a/answer/13471510?hl=en)
 
 ### Prerequisites
