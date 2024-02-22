@@ -254,18 +254,9 @@ NoSuchEvent4_1(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-GetFriendlyValue4_1(Value) := "OFF" if {
-    Value == "true"
-} else := "ON" if {
-    Value == "false"
-} else := Value
-
 NonCompliantOUs4_1 contains {
     "Name": OU,
-   "Value": concat(" ", [
-        "External chat is enabled for all domains",
-        GetFriendlyValue4_1(LastEvent_B.NewValue)
-    ])
+    "Value": "External chat is enabled for all domains"
 }
 
  if {
