@@ -309,43 +309,30 @@ This section covers the content reporting functionality, a feature that allows u
 ### Policies
 
 #### GWS.CHAT.7.1v0.1
-Chat content reporting SHALL be enabled.
+Chat content reporting SHALL be enabled for all conversation types.
 
 - Rationale
-  - Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation.
+  - Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies ensure that their users are able to report risky messages regardless of the conversation type.
 - Last Modified: February 13, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
 #### GWS.CHAT.7.2v0.1
-All conversation types SHALL be selected.
+All reporting message categories SHOULD be selected.
 
 - Rationale
-  - Risky messages could potentially come through any of the different Chat conversation types. By selecting all conversation types, agencies ensure that their users are able to report risky messages regardless of the conversation type.
+  - Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
 - Last Modified: February 13, 2024
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-  #### GWS.CHAT.7.3v0.1
-Spam, confidential information, and sensitive information SHALL be selected.
-
-- Rationale
-  - Users may be uncertain what kind of messages should be reported. Selecting these message types may help users infer that these types of messages should be reported.
-- Last Modified: February 13, 2024
-- Notes
-  - The other reporting categories MAY be included depending on agency needs.
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
 ### Resources
-
-- [Set-up content moderation for Chat](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13471510%3Fhl%3Den&assistant_id=generic-unu&product_context=13471510&product_name=UnuFlow&trigger_context=a)
+- [Set-up content moderation for Chat](https://support.google.com/a/answer/13471510?hl=en)
 
 ### Prerequisites
--   Chat history must be turned on
+-   Chat history must be enabled to configure settings in this group.
 
 ### Implementation
 
@@ -354,18 +341,12 @@ Spam, confidential information, and sensitive information SHALL be selected.
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.
 4.  Ensure **Allow users to report content in Chat** is enabled.
-5.  Click **Save**
+5.  Ensure all conversation type checkboxes are selected. 
+6.  Click **Save**
 
 #### GWS.CHAT.7.2v0.1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.
-4.  Ensure **1:1 direct messages**, **Group direct messages**, and **Spaces** with **All spaces** is enabled.
-5.  Click **Save**
-
-#### GWS.CHAT.7.3v0.1 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
-3.  Click **Content Reporting**.
-4.  Ensure **Spam**, **Confidential Information**, and **Sensitive Information** is enabled.
+4.  Ensure all checkboxes under **Reporting Categories** are selected.
 5.  Click **Save**
