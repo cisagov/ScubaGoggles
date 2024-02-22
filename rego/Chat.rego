@@ -25,7 +25,10 @@ GetFriendlyValue1_1(Value) := "History is OFF" if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
+    "Value": concat(" ", [
+        "Chat History setting is set to",
+        GetFriendlyValue1_1(LastEvent.NewValue)
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
@@ -127,7 +130,10 @@ GetFriendlyValue2_1(Value) := "Allow all files" if {
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue2_1(LastEvent.NewValue)
+    "Value": concat(" ", [
+        "External file sharing for Chat is set to",
+        GetFriendlyValue2_1(LastEvent.NewValue)
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
@@ -184,7 +190,10 @@ GetFriendlyValue3_1(Value) := "History is OFF by default" if {
 
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue3_1(LastEvent.NewValue)
+    "Value": concat(" ", [
+        "Space History setting for Chat is set to",
+        GetFriendlyValue3_1(LastEvent.NewValue)
+    ])
 } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "RoomOtrSettingsProto otr_state", OU)
@@ -249,9 +258,11 @@ GetFriendlyValue4_1(Value) := "OFF" if {
 } else := Value
 
 NonCompliantOUs4_1 contains {
-    eventValue = ""
     "Name": OU,
-    "Value": GetFriendlyValue4_1(LastEvent.NewValue)
+   "Value": concat(" ", [
+        "External chat is enabled for all domains",
+        GetFriendlyValue4_1(LastEvent_B.NewValue)
+    ])
 }
 
  if {
