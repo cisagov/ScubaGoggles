@@ -16,6 +16,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [External Chat Messaging](#4-external-chat-messaging)
 -   [Installation of Chat Apps](#5-installation-of-chat-apps)
 -   [DLP Rules](#6-dlp-rules)
+-   [Content Moderation](#7-content-reporting)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
