@@ -23,17 +23,24 @@ def get_test_result(requirement_met : bool, criticality : str, no_such_events : 
         values: should, may, 3rd Party, Not-Implemented
     :param no_such_events: boolean whether there are no such events
     '''
+
+    # If there were no log events for the test, the state of "requirement_met"
+    # doesn't matter - it's a test requiring a manual check (i.e., "no events
+    # found").
+
     criticality = criticality.lower()
-    if requirement_met:
-        result = "Pass"
-    elif "3rd party" in criticality or 'not-implemented' in criticality:
-        result = "N/A"
+
+    if '3rd party' in criticality or 'not-implemented' in criticality:
+        result = 'N/A'
     elif no_such_events:
-        result = "No events found"
+        result = 'No events found'
+    elif requirement_met:
+        result = 'Pass'
     elif criticality in ('should', 'may'):
-        result = "Warning"
+        result = 'Warning'
     else:
-        result = "Fail"
+        result = 'Fail'
+
     return result
 
 def create_html_table(table_data : list) -> str:
