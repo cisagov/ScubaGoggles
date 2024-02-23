@@ -16,7 +16,6 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [External Chat Messaging](#4-external-chat-messaging)
 -   [Installation of Chat Apps](#5-installation-of-chat-apps)
 -   [DLP Rules](#6-dlp-rules)
--   [Content Moderation](#7-content-reporting)
 -   [Content Reporting](#7-content-reporting)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
@@ -333,7 +332,7 @@ All reporting message categories SHOULD be selected.
 - [Set-up content moderation for Chat](https://support.google.com/a/answer/13471510?hl=en)
 
 ### Prerequisites
--   Chat history must be enabled to configure settings in this group.
+-   Chat history must be enabled for users to be able to report messages.
 
 ### Implementation
 
@@ -343,11 +342,11 @@ All reporting message categories SHOULD be selected.
 3.  Click **Content Reporting**.
 4.  Ensure **Allow users to report content in Chat** is enabled.
 5.  Ensure all conversation type checkboxes are selected. 
-6.  Click **Save**
+6.  Click **Save**.
 
 #### GWS.CHAT.7.2v0.1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.
 4.  Ensure all checkboxes under **Reporting Categories** are selected.
-5.  Click **Save**
+5.  Click **Save**.
