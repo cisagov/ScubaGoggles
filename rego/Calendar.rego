@@ -71,8 +71,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails("External sharing options for primary calendars",
-        NonCompliantOUs1_1, NonCompliantGroups1_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false

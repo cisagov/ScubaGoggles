@@ -77,7 +77,7 @@ EnumGroupSettings(NonCompGroups) := concat("", [
     "</ul>"
 ])
 
-ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
+ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) > 0
     count(NonCompGroups) > 0
     Description := concat("<br>", [
@@ -86,19 +86,19 @@ ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
     ])
 }
 
-ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
+ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) > 0
     count(NonCompGroups) == 0
     Description := EnumOUSettings(NonCompOUs)
 }
 
-ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
+ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) == 0
     count(NonCompGroups) > 0
     Description := EnumGroupSettings(NonCompGroups)
 }
 
-ReportDetails(_, NonCompOUs, NonCompGroups) := Description if {
+ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) == 0
     count(NonCompGroups) == 0
     Description := "Requirement met in all OUs and groups."
