@@ -25,7 +25,7 @@ NonCompliantOUs1_1 contains OU if {
 
 tests contains {
     "PolicyId": "GWS.CHAT.1.1v0.1",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
@@ -39,7 +39,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.CHAT.1.1v0.1",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
