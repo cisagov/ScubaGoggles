@@ -441,6 +441,7 @@ NonCompliantOUs7_1 contains OU if {
     }
 }
 
+default NoSuchEvent7_1 := false
 NoSuchEvent7_1 := true if {
     OU := utils.TopLevelOU
     OneOnOneEvents := utils.FilterEvents(LogEvents, "ContentReportingProto one_on_one_reporting", OU)
@@ -454,7 +455,7 @@ NoSuchEvent7_1 := true if {
         count(SpacesEvents) == 0,
         count(SpacesRestrictionEvents) == 0
     }
-} else := false
+}
 
 tests contains {
     "PolicyId": "GWS.CHAT.7.1v0.1",
