@@ -111,8 +111,8 @@ Download executable the OPA executable file required to run this SCuBA tool.
 
 options:
   -h, --help            show this help message and exit
-  -v {0.42.2,0.43.1,0.44.0,0.45.0,0.46.3,0.47.4,0.48.0,0.49.2,0.50.2,0.51.0,0.52.0,0.53.1,0.54.0,0.55.0,0.56.0,0.57.1,0.58.0}
-                        What version of OPA to download: Default version: 0.57.1
+  -v {0.42.2,0.43.1,0.44.0,0.45.0,0.46.3,0.47.4,0.48.0,0.49.2,0.50.2,0.51.0,0.52.0,0.53.1,0.54.0,0.55.0,0.56.0,0.57.1,0.58.0,0.59.0}
+                        What version of OPA to download: Default version: 0.59.0
   -os {windows,macos,linux}
                         Operating system version of OPA to download. Default os: windows
   --disablessl          If there are proxy errors, try adding this switch to disable ssl verification

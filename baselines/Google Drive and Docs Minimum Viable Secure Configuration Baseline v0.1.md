@@ -69,11 +69,11 @@ Agencies SHOULD disable users' receiving files from outside of the organization'
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.3v0.1
-Warnings SHOULD be enabled when a user is attempting to share something outside the domain.
+Warnings SHALL be enabled when a user is attempting to share something outside the domain.
 
 - Rationale
   - In the case that a user is going to share something outside the domain, a warning should be given. The warning ensures that the user is aware that they are sharing something externally, and doing so purposefully.
-- Last Modified: July 10, 2023
+- Last Modified: February 8, 2024
 - Note:
   - This policy only applies if external sharing was allowed in Policy 1.1
 
@@ -410,16 +410,15 @@ To Disable Google Drive for Desktop:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs-\>Google Drive for Desktop**.
-3.  Uncheck the **Allow Google Drive for desktop in your organization box** checkbox or
-4.  Ensure **Allow Google Drive for desktop in your organization box** and **Only allow Google Drive for desktop on authorized devices** is checked.
+3.  Uncheck the **Allow Google Drive for desktop in your organization box** checkbox
 4.  Select **Save.**
 
 To limit Google Drive for Desktop to authorized devices:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select Menu-\>Apps-\>Google Workspace-\>Drive and Docs-\>Features and Applications.
-3.  Uncheck the Allow Google Drive for desktop in your organization checkbox.
-4.  Check the Only allow Google Drive for desktop on authorized devices checkbox.
+3.  Check the **Allow Google Drive for desktop in your organization box** checkbox
+4.  Check the **Only allow Google Drive for desktop on authorized devices checkbox**.
 5.  Ensure authorized devices are added to [company-owned inventory](https://support.google.com/a/answer/7129612?hl=en).
 6.  Select Save.
 
