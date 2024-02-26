@@ -332,6 +332,13 @@ if {
 }
 #--
 
+##############
+# GWS.CHAT.6 #
+##############
+
+#
+# GWS.CHAT.6.1v0.1
+#--
 tests contains {
     "PolicyId": "GWS.CHAT.6.1v0.1",
     "Criticality": "Should/Not-Implemented",
@@ -339,5 +346,207 @@ tests contains {
     "ActualValue": "",
     "RequirementMet": false,
     "NoSuchEvent": true
+}
+#--
+
+##############
+# GWS.CHAT.7 #
+##############
+
+#
+# GWS.CHAT.7.1v0.1
+#--
+NonCompliantOUs7_1 contains OU if {
+    # NOTE: The top-level OU needs to be handled separately in this case, as the log event for
+    # disabling a conversation type does not follow the typical pattern of most admin log events.
+    # - Setting a child OU to inherit results in a DELETE_APPLICATION_SETTING event, as expected.
+    # - Disabling a conversation type in the top-level OU also results in a
+    #   DELETE_APPLICATION_SETTING event -- a deviation from the normal pattern.
+    # Typically, we assume inheritance whenever we see a DELETE_APPLICATION_SETTING event, but due
+    # to the above quirk we need more fine-tuned logic.
+    #
+    # Also worth noting is that disabling a conversation type in a child OU *does not* result in a
+    # DELETE_APPLICATION_SETTING event as it does in the top-level OU. Instead it results in either
+    # a CREATE_APPLICATION_SETTING or CHANGE_APPLICATION_SETTING event (depending on if the OU had
+    # already overwridden the top-level OU settings), with the new value set to
+    # CONTENT_REPORTING_STATE_DISABLED.
+    some OU in utils.OUsWithEvents
+    OU != utils.TopLevelOU
+
+    # There is no one setting that corresponds to the "Allow users to report content in Chat" button.
+    # That button in the UI acts more like a "Deselect all" button for the conversation types.
+    OneOnOneEvents := utils.FilterEvents(LogEvents, "ContentReportingProto one_on_one_reporting", OU)
+    GroupEvents := utils.FilterEvents(LogEvents, "ContentReportingProto group_chat_reporting", OU)
+    SpacesEvents := utils.FilterEvents(LogEvents, "ContentReportingProto room_reporting", OU)
+
+    # This setting corresponds to the "All spaces" or "Discoverable spaces only" toggle under the Spaces box
+    SpacesRestrictionEvents := utils.FilterEvents(LogEvents, "ContentReportingProto room_restrictions", OU)
+
+    # Ignore OUs without all event types. We're already asserting that the
+    # top-level OU has at least one event for all types; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(OneOnOneEvents) > 0
+    count(GroupEvents) > 0
+    count(SpacesEvents) > 0
+    count(SpacesRestrictionEvents) > 0
+
+    # Get the last event for each setting
+    LastEventOneOnOne := utils.GetLastEvent(OneOnOneEvents)
+    LastEventGroup := utils.GetLastEvent(GroupEvents)
+    LastEventSpaces := utils.GetLastEvent(SpacesEvents)
+    LastEventSpaceRestriction := utils.GetLastEvent(SpacesRestrictionEvents)
+
+    # A child-OU is non-compliant if any of the following are true
+    true in {
+        LastEventOneOnOne.NewValue == "CONTENT_REPORTING_STATE_DISABLED",
+        LastEventGroup.NewValue == "CONTENT_REPORTING_STATE_DISABLED",
+        LastEventSpaces.NewValue == "CONTENT_REPORTING_STATE_DISABLED",
+        LastEventSpaceRestriction.NewValue == "SPACE_RESTRICTIONS_DISCOVERABLE_SPACES_ONLY"
+    }
+}
+
+NonCompliantOUs7_1 contains OU if {
+    # NOTE: the top-level OU is a special case, see comments above.
+    OU := utils.TopLevelOU
+
+    # There is no one setting that corresponds to the "Allow users to report content in Chat" button.
+    # That button in the UI acts more like a "Deselect all" button for the conversation types.
+    OneOnOneEvents := utils.FilterEvents(LogEvents, "ContentReportingProto one_on_one_reporting", OU)
+    GroupEvents := utils.FilterEvents(LogEvents, "ContentReportingProto group_chat_reporting", OU)
+    SpacesEvents := utils.FilterEvents(LogEvents, "ContentReportingProto room_reporting", OU)
+
+    # This setting corresponds to the "All spaces" or "Discoverable spaces only" toggle under the Spaces box
+    SpacesRestrictionEvents := utils.FilterEvents(LogEvents, "ContentReportingProto room_restrictions", OU)
+
+    # Ignore OUs without all event types. We're already asserting that the
+    # top-level OU has at least one event for all types; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(OneOnOneEvents) > 0
+    count(GroupEvents) > 0
+    count(SpacesEvents) > 0
+    count(SpacesRestrictionEvents) > 0
+
+    # Get the last event for each setting
+    LastEventOneOnOne := utils.GetLastEvent(OneOnOneEvents)
+    LastEventGroup := utils.GetLastEvent(GroupEvents)
+    LastEventSpaces := utils.GetLastEvent(SpacesEvents)
+    LastEventSpaceRestriction := utils.GetLastEvent(SpacesRestrictionEvents)
+
+    # The top-level OU is non-compliant if any of the following are true
+    true in {
+        LastEventOneOnOne.NewValue != "CONTENT_REPORTING_STATE_ENABLED",
+        LastEventGroup.NewValue != "CONTENT_REPORTING_STATE_ENABLED",
+        LastEventSpaces.NewValue != "CONTENT_REPORTING_STATE_ENABLED",
+        LastEventSpaceRestriction.NewValue != "SPACE_RESTRICTIONS_NO_RESTRICTIONS"
+    }
+}
+
+NoSuchEvent7_1 := true if {
+    OU := utils.TopLevelOU
+    OneOnOneEvents := utils.FilterEvents(LogEvents, "ContentReportingProto one_on_one_reporting", OU)
+    GroupEvents := utils.FilterEvents(LogEvents, "ContentReportingProto group_chat_reporting", OU)
+    SpacesEvents := utils.FilterEvents(LogEvents, "ContentReportingProto room_reporting", OU)
+    SpacesRestrictionEvents := utils.FilterEvents(LogEvents, "ContentReportingProto room_restrictions", OU)
+
+    true in {
+        count(OneOnOneEvents) == 0,
+        count(GroupEvents) == 0,
+        count(SpacesEvents) == 0,
+        count(SpacesRestrictionEvents) == 0
+    }
+} else := false
+
+tests contains {
+    "PolicyId": "GWS.CHAT.7.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    NoSuchEvent7_1 == true
+}
+
+tests contains {
+    "PolicyId": "GWS.CHAT.7.1v0.1",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    NoSuchEvent7_1 == false
+    Status := count(NonCompliantOUs7_1) == 0
+}
+#--
+
+#
+# GWS.CHAT.7.2v0.1
+#--
+AllReportingCategories := {
+    "system_violation: HARASSMENT",
+    "system_violation: DISCRIMINATION",
+    "system_violation: EXPLICIT_CONTENT",
+    "system_violation: SPAM",
+    "system_violation: CONFIDENTIAL_INFORMATION",
+    "system_violation: SENSITIVE_INFORMATION",
+    "system_violation: OTHER"
+}
+
+NonCompliantOUs7_2 contains OU if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents(LogEvents, "ContentReportingProto report_types", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+    EnabledCats := {trim(cat, " []\n") | some cat in split(LastEvent.NewValue, ",")}
+    MissingCats := AllReportingCategories - EnabledCats
+    count(MissingCats) > 0
+}
+
+NonCompliantOUs7_2 contains OU if {
+    OU := utils.TopLevelOU
+    Events := utils.FilterEvents(LogEvents, "ContentReportingProto report_types", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    # As with GWS.CHAT.7.1, the top-level OU is a special case.
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "DELETE_APPLICATION_SETTING"
+}
+
+tests contains {
+    "PolicyId": "GWS.CHAT.7.2v0.1",
+    "Criticality": "Should",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    Events := utils.FilterEvents(LogEvents, "ContentReportingProto report_types", utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.CHAT.7.2v0.1",
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Events := utils.FilterEvents(LogEvents, "ContentReportingProto report_types", utils.TopLevelOU)
+    count(Events) > 0
+    Status := count(NonCompliantOUs7_2) == 0
 }
 #--
