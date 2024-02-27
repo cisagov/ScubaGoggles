@@ -249,7 +249,6 @@ NoSuchEvent4_1(TopLevelOU) := true if {
 }
 
 NoSuchEvent4_1(TopLevelOU) := true if {
-    # No such event...
     Events := utils.FilterEvents(LogEvents, "RestrictChatProto externalChatRestriction", TopLevelOU)
     count(Events) == 0
 }
@@ -258,7 +257,6 @@ NonCompliantOUs4_1 contains {
     "Name": OU,
     "Value": "External chat is enabled for all domains"
 }
-
  if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEvents(LogEvents, "RestrictChatProto restrictChatToOrganization", OU)
@@ -277,7 +275,7 @@ NonCompliantOUs4_1 contains {
 
 tests contains {
     "PolicyId": "GWS.CHAT.4.1v0.1",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
