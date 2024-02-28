@@ -11,21 +11,6 @@ import argparse
 import ssl
 
 OPA_VERSION_SHA256_HASHES = {
-    '0.42.2': {
-        'windows': '2200de1f85e21a6566c9d2bd341af1d4dfc410baae0c2ec692a35135eef12bbb',
-        'macos': '03a14125ef038c8e8c71925316044f5d144c5cf6daa82724a1dae07258972459',
-        'linux': '2b59001ef6657281863e1719783f6204c16f0d8ec53de5854d2549451bdf1dc0'
-    },
-    '0.43.1': {
-        'windows': 'a9a859e24e79ff942792c7ae6aa71ac89d86159393dd486df9bfd954c27004ff',
-        'macos': '2c68fb04ae4908b1dd315c24ab282a1e46ca16cc83c52e7b6862bc06aa01b8b5',
-        'linux': 'daf578c643654c17e97da8a33d9b9c3cad56804d6eca5dc65a011fbefc7f7b67'
-    },
-    '0.44.0': {
-        'windows': 'e8179cf589e5dceb684fafcc3444506f776b8ba61e01da495c2a70410e3cdf3f',
-        'macos': 'b51b26865c0a99d021f173ca34172440485024d77d0fa69f0110365474d5841c',
-        'linux': '5ddb21d3fcfca130a47a42e730c05f055c68af6c1b37465879f6c59b10527eae'
-    },
     '0.45.0': {
         'windows': '31b12b954900584e8aa9103235adf192dd4c92e0039416eaec7d84e2f66fcf3e',
         'macos': '1d76713a65c11771bd86fe44d8ace17d79f1660e5bb00219d4f3c9b0f966f6e5',
@@ -100,6 +85,11 @@ OPA_VERSION_SHA256_HASHES = {
         'windows': '0167f2bd69b72993ccdca222d0bc5d9278ffb194f9c87fddc1b55ecc9edf17df',
         'macos': '3edddc7dded91a7b2fe7fbe3d862778dccc28eff6ee515c41b38d65474d5e9f4',
         'linux': '5f615343a1cae1deb2f2f514b2f4b46456495fe1c828b17e779eb583aced0cc3'
+    },
+    '0.60.0': {
+        'windows': '8e20b4fcd6b8094be186d8c9ec5596477fb7cb689b340d285865cb716c3c8ea7',
+        'macos': '1b96cb23a63700b75f670e6bca1e3f8e9e7930c29b095753a9f978ce88828fa0',
+        'linux': '7d7cb45d9e6390646e603456503ca1232180604accc646de823e4d2c363dbeb0'
     }
 }
 
