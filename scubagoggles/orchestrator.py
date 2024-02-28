@@ -200,17 +200,27 @@ def run_reporter(args):
     }
 
     baseline_policies = md_parser.read_baseline_docs(args.documentpath,subset_prod_to_fullname)
-    if "rules" in args.baselines:
-        # There's no baseline specific to rules, so this case
-        # needs to be handled separately
-        baseline_policies["rules"] = []
-        for group in baseline_policies['commoncontrols']:
-            if group['GroupName'] == 'System-defined Rules':
-                baseline_policies["rules"].append(group)
-                break
-        else:
-            raise RuntimeError("Unable to process 'rules' as no policy group named \
-'System-defined Rules' found in the Common Controls baseline.")
+
+    if 'rules' in args.baselines:
+        # System-defined rules, which are part of the common controls baseline,
+        # are separated into their own category for reporting purposes.  Here
+        # we move any system-defined rules group(s) from the common controls
+        # list to the rules list.  In practice, there may only be one group,
+        # but multiple groups will be handled correctly.
+
+        commoncontrols = baseline_policies['commoncontrols']
+        rules = baseline_policies['rules'] = []
+        rules_indices = [i for i, group in enumerate(commoncontrols)
+                         if group['GroupName'] == 'System-defined Rules']
+
+        for index in reversed(rules_indices):
+            rule_group = commoncontrols.pop(index)
+            rules.insert(0, rule_group)
+
+        if not rules:
+            raise RuntimeError("Unable to process 'rules' as no policy group "
+                               "named 'System-defined Rules' found in the "
+                               'Common Controls baseline.')
 
     # Load Org metadata from provider
     with open(f'{out_folder}/{args.outputproviderfilename}.json',
