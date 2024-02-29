@@ -16,6 +16,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [External Chat Messaging](#4-external-chat-messaging)
 -   [Installation of Chat Apps](#5-installation-of-chat-apps)
 -   [DLP Rules](#6-dlp-rules)
+-   [Content Reporting](#7-content-reporting)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
@@ -38,7 +39,7 @@ This section covers chat history retention for users within the organization and
 ### Policies
 
 #### GWS.CHAT.1.1v0.1
-Chat history SHOULD be enabled for information traceability.
+Chat history SHALL be enabled for information traceability.
 
 - Rationale
   - Helps ensure there is a record of chats sent to receive in the case that it needs to be reviewed in the future for legal or compliance issues.
@@ -286,3 +287,52 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 9.  Select the appropriate action to warn or block sharing, based upon the agency's individual requirements.
 10. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 11. Review the rule details, mark the rule as **Active**, and click **Create.**
+
+## 7. Content Reporting
+
+This section covers the content reporting functionality, a feature that allows users to report messages that violate organizational guidelines to workspace admins.
+
+### Policies
+
+#### GWS.CHAT.7.1v0.1
+Chat content reporting SHALL be enabled for all conversation types.
+
+- Rationale
+  - Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies ensure that their users are able to report risky messages regardless of the conversation type.
+- Last Modified: February 13, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
+#### GWS.CHAT.7.2v0.1
+All reporting message categories SHOULD be selected.
+
+- Rationale
+  - Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
+- Last Modified: February 13, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
+### Resources
+- [Set-up content moderation for Chat](https://support.google.com/a/answer/13471510?hl=en)
+
+### Prerequisites
+-   Chat history must be enabled for users to be able to report messages.
+
+### Implementation
+
+#### GWS.CHAT.7.1v0.1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
+3.  Click **Content Reporting**.
+4.  Ensure **Allow users to report content in Chat** is enabled.
+5.  Ensure all conversation type checkboxes are selected. 
+6.  Click **Save**.
+
+#### GWS.CHAT.7.2v0.1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
+3.  Click **Content Reporting**.
+4.  Ensure all checkboxes under **Reporting Categories** are selected.
+5.  Click **Save**.
