@@ -249,7 +249,6 @@ NoSuchEvent4_1(TopLevelOU) := true if {
 }
 
 NoSuchEvent4_1(TopLevelOU) := true if {
-    # No such event...
     Events := utils.FilterEvents(LogEvents, "RestrictChatProto externalChatRestriction", TopLevelOU)
     count(Events) == 0
 }
@@ -258,8 +257,7 @@ NonCompliantOUs4_1 contains {
     "Name": OU,
     "Value": "External chat is enabled for all domains"
 }
-
- if {
+if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEvents(LogEvents, "RestrictChatProto restrictChatToOrganization", OU)
     count(Events_A) > 0
@@ -271,7 +269,7 @@ NonCompliantOUs4_1 contains {
     LastEvent_B := utils.GetLastEvent(Events_B)
     LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
 
-    LastEvent_A.NewValue != "true"
+    LastEvent_A.NewValue == "true"
     LastEvent_B.NewValue != "TRUSTED_DOMAINS"
 }
 
@@ -290,7 +288,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.CHAT.4.1v0.1",
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails("Allow users to send messages outside organization", NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
