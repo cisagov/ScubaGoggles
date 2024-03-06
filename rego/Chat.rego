@@ -241,7 +241,7 @@ if {
 #
 # Baseline GWS.CHAT.4.1v0.1
 #--
-default NoSuchEvent4_1(_) := true
+default NoSuchEvent4_1(_) := false
 
 NoSuchEvent4_1(TopLevelOU) := true if {
     Events := utils.FilterEvents(LogEvents, "RestrictChatProto restrictChatToOrganization", TopLevelOU)
@@ -269,13 +269,13 @@ NonCompliantOUs4_1 contains {
     LastEvent_B := utils.GetLastEvent(Events_B)
     LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
 
-    LastEvent_A.NewValue == "true"
+    LastEvent_A.NewValue == "false"
     LastEvent_B.NewValue != "TRUSTED_DOMAINS"
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.4.1v0.1",
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -288,7 +288,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.CHAT.4.1v0.1",
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
