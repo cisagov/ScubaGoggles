@@ -214,7 +214,7 @@ test_Access_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"
 }
 
 test_Access_Incorrect_V3 if {
