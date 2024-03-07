@@ -47,58 +47,58 @@ ReportDetailsDetailedOU(_, NonCompOUs) := "Requirement met in all OUs." if {
     count(NonCompOUs) == 0
 }
 
-GetOUSettingDescription(SettingDescription, NonCompOUs) := concat("", [
+# Create a html formatted list detailing the settings for each OU
+# - NonCompOUs: a set of dicts, each with a "Name" and "Value" fields
+EnumOUSettings(NonCompOUs) := concat("", [
     "The following OUs are non-compliant:",
     "<ul>",
     concat("", [concat("", [
         "<li>",
         OU.Name,
         ": ",
-        SettingDescription,
-        " is set to ",
         OU.Value,
         "</li>"
     ]) | some OU in NonCompOUs]),
     "</ul>"
 ])
 
-GetGroupSettingDescription(SettingDescription, NonCompGroups) := concat("", [
+# Create a html formatted list detailing the settings for each group
+# - NonCompGroups: a set of dicts, each with a "Name" and "Value" fields
+EnumGroupSettings(NonCompGroups) := concat("", [
     "The following groups are non-compliant:",
     "<ul>",
     concat("", [concat("", [
         "<li>",
         Group.Name,
         ": ",
-        SettingDescription,
-        " is set to ",
         Group.Value,
         "</li>"
     ]) | some Group in NonCompGroups]),
     "</ul>"
 ])
 
-ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
+ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) > 0
     count(NonCompGroups) > 0
     Description := concat("<br>", [
-        GetOUSettingDescription(SettingDescription, NonCompOUs),
-        GetGroupSettingDescription(SettingDescription, NonCompGroups),
+        EnumOUSettings(NonCompOUs),
+        EnumGroupSettings(NonCompGroups),
     ])
 }
 
-ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
+ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) > 0
     count(NonCompGroups) == 0
-    Description := GetOUSettingDescription(SettingDescription, NonCompOUs)
+    Description := EnumOUSettings(NonCompOUs)
 }
 
-ReportDetails(SettingDescription, NonCompOUs, NonCompGroups) := Description if {
+ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) == 0
     count(NonCompGroups) > 0
-    Description := GetGroupSettingDescription(SettingDescription, NonCompGroups)
+    Description := EnumGroupSettings(NonCompGroups)
 }
 
-ReportDetails(_, NonCompOUs, NonCompGroups) := Description if {
+ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) == 0
     count(NonCompGroups) == 0
     Description := "Requirement met in all OUs and groups."

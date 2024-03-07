@@ -22,7 +22,10 @@ GetFriendlyValue1_1(Value) := "Share all information, but outsiders cannot chang
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
+    "Value": concat(" ", [
+        "External sharing options for primary calendars is set to",
+        GetFriendlyValue1_1(LastEvent.NewValue)
+    ])
 } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
@@ -37,7 +40,10 @@ NonCompliantOUs1_1 contains {
 
 NonCompliantGroups1_1 contains {
     "Name": Group,
-    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
+    "Value": concat(" ", [
+        "External sharing options for primary calendars is set to",
+        GetFriendlyValue1_1(LastEvent.NewValue)
+    ])
 } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
@@ -65,8 +71,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails("External sharing options for primary calendars",
-        NonCompliantOUs1_1, NonCompliantGroups1_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false

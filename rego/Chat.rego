@@ -25,14 +25,14 @@ GetFriendlyValue1_1(Value) := "History is OFF" if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
+    "Value": concat(" ", [
+        "Default conversation history is set to",
+        GetFriendlyValue1_1(LastEvent.NewValue)
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ChatArchivingProto chatsDefaultToOffTheRecord", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
@@ -56,7 +56,7 @@ tests contains {
     "PolicyId": "GWS.CHAT.1.1v0.1",
     "Criticality": "Shall",
     # Empty list in next line for non compliant groups, as this setting can't be changed at the group level
-    "ReportDetails": utils.ReportDetails("Default conversation history", NonCompliantOUs1_1, []),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -73,14 +73,14 @@ if {
 #--
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": LastEvent.NewValue
+    "Value": concat(" ", [
+        "Allow users to change their history setting is set to",
+        LastEvent.NewValue
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "ChatArchivingProto allow_chat_archiving_setting_modification", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
@@ -104,7 +104,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.1.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails("Allow users to change their history setting", NonCompliantOUs1_2, []),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -133,14 +133,14 @@ GetFriendlyValue2_1(Value) := "Allow all files" if {
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue2_1(LastEvent.NewValue)
+    "Value": concat(" ", [
+        "External filesharing is set to",
+        GetFriendlyValue2_1(LastEvent.NewValue)
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents,  "DynamiteFileSharingSettingsProto external_file_sharing_setting", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "NO_FILES"
@@ -165,7 +165,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails("External filesharing", NonCompliantOUs2_1, []),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -193,13 +193,13 @@ GetFriendlyValue3_1(Value) := "History is OFF by default" if {
 
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue3_1(LastEvent.NewValue)
+    "Value": concat(" ", [
+        "Conversation history settings for spaces is set to",
+        GetFriendlyValue3_1(LastEvent.NewValue)
+    ])
 } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "RoomOtrSettingsProto otr_state", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     not contains("DEFAULT_ON_THE_RECORD ALWAYS_ON_THE_RECORD", LastEvent.NewValue)
@@ -222,7 +222,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.3.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetails("Conversation history settings for spaces", NonCompliantOUs3_1, []),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -241,25 +241,36 @@ if {
 #
 # Baseline GWS.CHAT.4.1v0.1
 #--
-GetFriendlyValue4_1(Value) := "OFF" if {
-    Value == "true"
-} else := "ON" if {
-    Value == "false"
-} else := Value
+default NoSuchEvent4_1(_) := false
+
+NoSuchEvent4_1(TopLevelOU) := true if {
+    Events := utils.FilterEvents(LogEvents, "RestrictChatProto restrictChatToOrganization", TopLevelOU)
+    count(Events) == 0
+}
+
+NoSuchEvent4_1(TopLevelOU) := true if {
+    Events := utils.FilterEvents(LogEvents, "RestrictChatProto externalChatRestriction", TopLevelOU)
+    count(Events) == 0
+}
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue4_1(LastEvent.NewValue)
+    "Value": "External chat is enabled for all domains"
 }
  if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto restrictChatToOrganization", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
+    Events_A := utils.FilterEvents(LogEvents, "RestrictChatProto restrictChatToOrganization", OU)
+    count(Events_A) > 0
+    LastEvent_A := utils.GetLastEvent(Events_A)
+    LastEvent_A.NewValue != "DELETE_APPLICATION_SETTING"
+
+    Events_B := utils.FilterEvents(LogEvents, "RestrictChatProto externalChatRestriction", OU)
+    count(Events_B) > 0
+    LastEvent_B := utils.GetLastEvent(Events_B)
+    LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
+
+    LastEvent_A.NewValue == "false"
+    LastEvent_B.NewValue != "TRUSTED_DOMAINS"
 }
 
 tests contains {
@@ -272,73 +283,20 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto restrictChatToOrganization", utils.TopLevelOU)
-    count(Events) == 0
+    NoSuchEvent4_1(utils.TopLevelOU)
 }
 
 tests contains {
     "PolicyId": "GWS.CHAT.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails("Allow users to send messages outside organization", NonCompliantOUs4_1, []),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto restrictChatToOrganization", utils.TopLevelOU)
-    count(Events) > 0
+    not NoSuchEvent4_1(utils.TopLevelOU)
     Status := count(NonCompliantOUs4_1) == 0
-}
-#--
-
-#
-# Baseline GWS.CHAT.4.2v0.1
-#--
-GetFriendlyValue4_2(Value) := "false" if {
-    Value == "NO_RESTRICTION"
-} else := Value
-
-NonCompliantOUs4_2 contains {
-    "Name": OU,
-    "Value": GetFriendlyValue4_2(LastEvent.NewValue)
-}
-if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "NO_RESTRICTION"
-}
-
-tests contains {
-    "PolicyId": "GWS.CHAT.4.2v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.CHAT.4.2v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails("Only allow this for allowlisted domains", NonCompliantOUs4_2, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_2},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Events := utils.FilterEvents(LogEvents,  "RestrictChatProto externalChatRestriction", utils.TopLevelOU)
-    count(Events) > 0
-    Status := count(NonCompliantOUs4_2) == 0
 }
 #--
 
@@ -351,11 +309,14 @@ if {
 #--
 NonCompliantOUs5_1 contains {
     "Name": OU,
-    "Value": LastEvent.NewValue
+    "Value": concat(" ", [
+        "Allow users to install Chat apps is set to",
+        LastEvent.NewValue
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents,  "Chat app Settings - Chat apps enabled", OU)
+    Events := utils.FilterEvents(LogEvents, "Chat app Settings - Chat apps enabled", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -381,7 +342,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.5.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails("Allow users to install Chat apps", NonCompliantOUs5_1, []),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
