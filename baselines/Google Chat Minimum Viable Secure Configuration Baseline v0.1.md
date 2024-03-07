@@ -188,14 +188,21 @@ External Chat messaging SHALL be restricted to allowlisted domains only.
 To configure the settings for External Chat:
 
 #### GWS.CHAT.4.1v0.1 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
-3.  Select **External Chat Settings** -\> **Chat externally**.
-4.  Select **OFF** OR.
-5.  Select **ON** AND.
-6.  Select **Only allow this for allowlisted domains**.
-7.  To add allowlisted domains select **Manage allowlisted domains**.
-8.  Select **Save**.
+To enable external chat for allowlisted domains only:
+1. Sign in to the [Google Admin Console](https://admin.google.com).
+2. Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
+3. Select **External Chat Settings** -\> **Chat externally**.
+4. Select **ON**
+5. Select **Only allow this for allowlisted domains**.
+6. To add allowlisted domains select **Manage allowlisted domains**.
+7. Select **Save**.
+
+Alternatively, to disable external chat entirely:
+1. Sign in to the [Google Admin Console](https://admin.google.com).
+2. Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
+3. Select **External Chat Settings** -\> **Chat externally**.
+4. Select **OFF**
+5. Select **Save**.
 
 ## 5. Installation of Chat Apps
 
