@@ -125,16 +125,11 @@ This section covers policies related to importing rosters from Clever.
 #### GWS.CLASSROOM.3.1v0.1
 Roster import with Clever SHOULD be turned off.
 
-- Rationale
-  - If your organization does not use Clever, allowing roster import could create a way to for data to be inputted into the organization's environment which allows from unauthorized data in the system. In addition, it could allow for unauthorized data leak as well.
-- Last Modified: September 28, 2023
-- Note:
-  - Only to be set to on if your organization uses Clever
+- *Rationale:* If your organization does not use Clever, allowing roster import could create a way to for data to be inputted into the organization's environment which allows from unauthorized data in the system. If your organization does use Clever, then roster import may be enabled.
+- *Last Modified:* September 28, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
-  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
 
 ### Resources
 
@@ -163,8 +158,7 @@ This section covers policies related to unenrolling a student from a class.
 #### GWS.CLASSROOM.4.1v0.1
 Only teachers SHALL be allowed to unenroll students from classes.
 
-- Rationale
-  - Only allowing teachers to unenroll students helps ensure that there is no potential for unintentional data loss or inconsistency between Google and Clever, if applicable.
+- *Rationale:* Allowing students to unenroll themselves creates the opportunity for data loss or other inconsistencies, especially for K-12 classrooms. Restricting this ability to teachers mitigates this risk.
 - Last Modified: September 28, 2023
 
 - MITRE ATT&CK TTP Mapping
