@@ -213,7 +213,7 @@ test_HostMan_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Host management when video calls start is set to off</li></ul>"
 }
 
 test_HostMan_Incorrect_V3 if {
@@ -251,7 +251,7 @@ test_HostMan_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Host management when video calls start is set to off</li></ul>"
 }
 
 test_HostMan_Incorrect_V4 if {
@@ -289,7 +289,7 @@ test_HostMan_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
+    RuleOutput[0].ReportDetails == "The following OUs are non-compliant:<ul><li>Test Secondary OU: Host management when video calls start is set to off</li></ul>"
 }
 #--
 
