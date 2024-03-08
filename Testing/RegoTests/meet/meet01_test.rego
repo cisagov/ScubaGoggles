@@ -214,7 +214,8 @@ test_Access_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ", "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
 }
 
 test_Access_Incorrect_V3 if {
@@ -252,7 +253,8 @@ test_Access_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ", "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
 }
 
 test_Access_Incorrect_V4 if {
@@ -290,7 +292,8 @@ test_Access_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ", "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ",
+    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
 }
 #--
 
@@ -350,7 +353,8 @@ test_Access_Incorrect_V6 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ", "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
 }
 
 test_Access_Incorrect_V7 if {
@@ -388,7 +392,8 @@ test_Access_Incorrect_V7 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ", "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
 }
 
 test_Access_Incorrect_V8 if {
@@ -426,7 +431,8 @@ test_Access_Incorrect_V8 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ", "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ",
+    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
 }
 #--
 

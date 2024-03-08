@@ -367,7 +367,8 @@ test_JoinExternalPers_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].Criticality == "Shall"
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ", "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
 }
 
 test_JoinExternalPers_Incorrect_V3 if {
@@ -405,7 +406,8 @@ test_JoinExternalPers_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ", "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
 }
 
 test_JoinExternalPers_Incorrect_V4 if {
@@ -443,7 +445,8 @@ test_JoinExternalPers_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ", "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ",
+    "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
 }
 #--
 
@@ -505,7 +508,8 @@ test_JoinExternalPers_Incorrect_V6 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].Criticality == "Shall"
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ", "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+    "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
 }
 
 test_JoinExternalPers_Incorrect_V7 if {
@@ -543,5 +547,6 @@ test_JoinExternalPers_Incorrect_V7 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ", "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+    "What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>"])
 }
