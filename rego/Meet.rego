@@ -12,7 +12,18 @@ LogEvents := utils.GetEvents("meet_logs")
 #
 # Baseline GWS.MEET.1.1v0.1
 #--
-NonCompliantOUs1_1 contains OU if {
+GetFriendlyValue1_1(Value) := "all users (including users not signed in with a Google account)" if {
+    Value == "ALL"
+} else := Value
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Who can join meetings is set to",
+        GetFriendlyValue1_1(LastEvent.NewValue)
+    ])
+} 
+if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "SafetyDomainLockProto users_allowed_to_join", OU)
     count(Events) > 0
@@ -38,7 +49,8 @@ if {
 tests contains {
     "PolicyId": "GWS.MEET.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
+    # Empty list in next line for non-compliant groups, as Meet settings can't be changed at the group level
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -59,7 +71,18 @@ if {
 #
 # Baseline GWS.MEET.2.1v0.1
 #--
-NonCompliantOUs2_1 contains OU if {
+GetFriendlyValue2_1(Value) := "any meetings, including meetings created with personal accounts" if {
+    Value == "ALL"
+} else := Value
+
+NonCompliantOUs2_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "What meetings can org users join is set to",
+        GetFriendlyValue2_1(LastEvent.NewValue)
+    ])
+}
+if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "SafetyAccessLockProto meetings_allowed_to_join", OU)
     count(Events) > 0
@@ -85,7 +108,7 @@ if {
 tests contains {
     "PolicyId": "GWS.MEET.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -105,7 +128,18 @@ if {
 #
 # Baseline GWS.MEET.3.1v0.1
 #--
-NonCompliantOUs3_1 contains OU if {
+GetFriendlyValue3_1(Value) := "off" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs3_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Host management when video calls start is set to",
+        GetFriendlyValue3_1(LastEvent.NewValue)
+    ])
+}
+if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "SafetyModerationLockProto host_management_enabled", OU)
     count(Events) > 0
@@ -131,7 +165,7 @@ if {
 tests contains {
     "PolicyId": "GWS.MEET.3.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs3_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -150,7 +184,18 @@ if {
 #
 # Baseline GWS.MEET.4.1v0.1
 #--
-NonCompliantOUs4_1 contains OU if {
+GetFriendlyValue4_1(Value) := "no warning label" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Warning label for external or unidentified meeting participants is set to",
+        GetFriendlyValue4_1(LastEvent.NewValue)
+    ])  
+} 
+if {
     some OU in utils.OUsWithEvents
     SettingName := "Warn for external participants External or unidentified participants in a meeting are given a label"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
@@ -178,7 +223,7 @@ if {
 tests contains {
     "PolicyId": "GWS.MEET.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false

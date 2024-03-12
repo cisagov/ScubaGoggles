@@ -33,7 +33,7 @@ test_HostMan_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_HostMan_Correct_V2 if {
@@ -79,7 +79,7 @@ test_HostMan_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_HostMan_Correct_V3 if {
@@ -125,7 +125,7 @@ test_HostMan_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Access_Correct_V4 if {
@@ -185,7 +185,7 @@ test_Access_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_HostMan_Incorrect_V1 if {
@@ -249,7 +249,8 @@ test_HostMan_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    "Warning label for external or unidentified meeting participants is set to no warning label</li></ul>"])
 }
 
 test_HostMan_Incorrect_V3 if {
@@ -295,7 +296,8 @@ test_HostMan_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    "Warning label for external or unidentified meeting participants is set to no warning label</li></ul>"])
 }
 
 test_HostMan_Incorrect_V4 if {
@@ -341,7 +343,8 @@ test_HostMan_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ",
+    "Warning label for external or unidentified meeting participants is set to no warning label</li></ul>"])
 }
 #--
 
