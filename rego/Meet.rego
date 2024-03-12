@@ -12,10 +12,6 @@ LogEvents := utils.GetEvents("meet_logs")
 #
 # Baseline GWS.MEET.1.1v0.1
 #--
-UserFriendlyValues1_1 := {
-    "ALL": "all users (including users not signed in with a Google account)"
-}
-
 GetFriendlyValue1_1(Value) := "all users (including users not signed in with a Google account)" if {
     Value == "ALL"
 } else := Value
@@ -161,7 +157,7 @@ if {
 
 tests contains {
         "PolicyId": "GWS.MEET.3.1v0.1",
-        "Criticality": "Shall", 
+        "Criticality": "Shall",
         "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
         "ActualValue": "No relevant event in the current logs",
         "RequirementMet": DefaultSafe,
