@@ -12,14 +12,14 @@ LogEvents := utils.GetEvents("drive_logs")
 #
 # Baseline GWS.DRIVEDOCS.1.1v0.1
 #--
-# TODO: OU inheritence implementation pending after SCB updates, refer to #328
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    SettingValue := "SHARING_NOT_ALLOWED SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES INHERIT_FROM_PARENT"
-    contains(SettingValue, LastEvent.NewValue) == false
+    AcceptableValues := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT",
+     "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES"}
+    not LastEvent.NewValue in AcceptableValues
 }
 
 tests contains {
@@ -51,6 +51,7 @@ if {
 }
 #--
 
+# Can be combined with 1.1, since this is a single setting with the same value that will pass for both conditions
 #
 # Baseline GWS.DRIVEDOCS.1.2v0.1
 #--
@@ -91,6 +92,7 @@ if {
 }
 #--
 
+# Can be combined with 1.4 since a single policy can be used to check both conditions
 #
 # Baseline GWS.DRIVEDOCS.1.3v0.1
 #--
@@ -99,7 +101,9 @@ NonCompliantOUs1_3 contains OU if {
     Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("SHARING_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == true
+    AcceptableValues := {"SHARING_ALLOWED_WITH_WARNING", "SHARING_NOT_ALLOWED",
+     "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES"}
+    not LastEvent.NewValue in AcceptableValues
 }
 
 tests contains {
@@ -134,12 +138,34 @@ if {
 #
 # Baseline GWS.DRIVEDOCS.1.4v0.1
 #--
+NoSuchEvent1_4(TopLevelOU) := true if {
+    SettingName := "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS"
+    Events_A := utils.FilterEvents(LogEvents, SettingName, TopLevelOU)
+    count(Events_A) == 0
+}
+
+NoSuchEvent1_4(TopLevelOU) := true if {
+    SettingName := "SHARING_OUTSIDE_DOMAIN"
+    Events_B := utils.FilterEvents(LogEvents, SettingName, TopLevelOU)
+    count(Events_B) == 0
+}
+
+default NoSuchEvent1_4(_) := false
+
 NonCompliantOUs1_4 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    contains("NOT_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == false
+    Events_A := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
+    count(Events_A) > 0
+    LastEvent_A := utils.GetLastEvent(Events_A)
+
+    Events_B := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
+    count(Events_B) > 0
+    LastEvent_B := utils.GetLastEvent(Events_B)
+
+    AcceptableValues_A := {"NOT_ALLOWED", "INHERIT_FROM_PARENT"}
+    not LastEvent_A.NewValue in AcceptableValues_A
+    AcceptableValues_B := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT"}
+    not LastEvent_B.NewValue in AcceptableValues_B
 }
 
 tests contains {
@@ -152,8 +178,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", utils.TopLevelOU)
-    count(Events) == 0
+    NoSuchEvent1_4(utils.TopLevelOU)
 }
 
 tests contains {
@@ -165,8 +190,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", utils.TopLevelOU)
-    count(Events) > 0
+    not NoSuchEvent1_4(utils.TopLevelOU)
     Status := count(NonCompliantOUs1_4) == 0
 }
 #--
