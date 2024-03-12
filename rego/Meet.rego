@@ -49,6 +49,7 @@ if {
 tests contains {
     "PolicyId": "GWS.MEET.1.1v0.1",
     "Criticality": "Shall",
+    # Empty list in next line for non-compliant groups, as Meet settings can't be changed at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
