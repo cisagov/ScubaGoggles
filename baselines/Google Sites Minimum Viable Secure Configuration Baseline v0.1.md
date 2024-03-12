@@ -37,8 +37,8 @@ This section covers whether users are able to access Google Sites.
 #### GWS.SITES.1.1v0.1
 Sites Service SHOULD be disabled for all users.
 
-- *Rationale:* Google Sites can increase the attack surface of Google Workspace. Disabling this feature unless it is needed conforms to the principle of least functionality.
-- *Last Modified:* July 10, 2023
+- _Rationale:_ Google Sites can increase the attack surface of Google Workspace. Disabling this feature unless it is needed conforms to the principle of least functionality.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1526: Cloud Service Discovery](https://attack.mitre.org/techniques/T1526/)

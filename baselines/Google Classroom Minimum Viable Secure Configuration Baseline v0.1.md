@@ -40,8 +40,8 @@ This section covers who has the ability to join classes and what classes the use
 #### GWS.CLASSROOM.1.1v0.1
 Who can join classes in your domain SHALL be set to Users in your domain only.
 
-- *Rationale:* Classes can contain private or otherwise sensitive information. Restricting classes to users in your domain helps prevent data leakage resulting from unauthorized classroom access.
-- *Last Modified:* September 27, 2023
+- _Rationale:_ Classes can contain private or otherwise sensitive information. Restricting classes to users in your domain helps prevent data leakage resulting from unauthorized classroom access.
+- _Last modified:_ September 27, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -50,8 +50,8 @@ Who can join classes in your domain SHALL be set to Users in your domain only.
 #### GWS.CLASSROOM.1.2v0.1
 Which classes users in your domain can join SHALL be set to Classes in your domain only.
 
-- *Rationale:* Joining a class from outside your domain could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
-- *Last Modified:* September 27, 2023
+- _Rationale:_ Joining a class from outside your domain could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
+- _Last modified:_ September 27, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -90,8 +90,8 @@ This section covers policies related to the Google Classroom API.
 #### GWS.CLASSROOM.2.1v0.1
 Users SHALL NOT be able to authorize apps to access their Google Classroom data.
 
-- *Rationale:* Allowing ordinary users to authorize apps to access to classroom data opens a possibility for data loss. Only allowing admins to authorize apps reduces this risk.
-- *Last Modified:* September 28, 2023
+- _Rationale:_ Allowing ordinary users to authorize apps to access to classroom data opens a possibility for data loss. Only allowing admins to authorize apps reduces this risk.
+- _Last modified:_ September 28, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
@@ -125,8 +125,8 @@ This section covers policies related to importing rosters from Clever.
 #### GWS.CLASSROOM.3.1v0.1
 Roster import with Clever SHOULD be turned off.
 
-- *Rationale:* If your organization does not use Clever, allowing roster import could create a way to for data to be inputted into the organization's environment which allows from unauthorized data in the system. If your organization does use Clever, then roster import may be enabled.
-- *Last Modified:* September 28, 2023
+- _Rationale:_ If your organization does not use Clever, allowing roster import could create a way to for data to be inputted into the organization's environment which allows from unauthorized data in the system. If your organization does use Clever, then roster import may be enabled.
+- _Last modified:_ September 28, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
@@ -158,7 +158,7 @@ This section covers policies related to unenrolling a student from a class.
 #### GWS.CLASSROOM.4.1v0.1
 Only teachers SHALL be allowed to unenroll students from classes.
 
-- *Rationale:* Allowing students to unenroll themselves creates the opportunity for data loss or other inconsistencies, especially for K-12 classrooms. Restricting this ability to teachers mitigates this risk.
+- _Rationale:_ Allowing students to unenroll themselves creates the opportunity for data loss or other inconsistencies, especially for K-12 classrooms. Restricting this ability to teachers mitigates this risk.
 - Last Modified: September 28, 2023
 
 - MITRE ATT&CK TTP Mapping
