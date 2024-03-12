@@ -159,7 +159,7 @@ This section covers policies related to unenrolling a student from a class.
 Only teachers SHALL be allowed to unenroll students from classes.
 
 - _Rationale:_ Allowing students to unenroll themselves creates the opportunity for data loss or other inconsistencies, especially for K-12 classrooms. Restricting this ability to teachers mitigates this risk.
-- Last Modified: September 28, 2023
+- _Last Modified:_ September 28, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
