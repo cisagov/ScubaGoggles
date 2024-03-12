@@ -70,10 +70,6 @@ if {
 #
 # Baseline GWS.MEET.2.1v0.1
 #--
-UserFriendlyValues2_1 := {
-    "ALL": "any meetings, including meetings created with personal accounts"
-}
-
 GetFriendlyValue2_1(Value) := "any meetings, including meetings created with personal accounts" if {
     Value == "ALL"
 } else := Value
@@ -131,10 +127,6 @@ if {
 #
 # Baseline GWS.MEET.3.1v0.1
 #--
-UserFriendlyValues3_1 := {
-    "false": "off"
-}
-
 GetFriendlyValue3_1(Value) := "off" if {
     Value == "false"
 } else := Value
@@ -191,10 +183,6 @@ if {
 #
 # Baseline GWS.MEET.4.1v0.1
 #--
-UserFriendlyValues4_1 := {
-    "false": "no warning label"
-}
-
 GetFriendlyValue4_1(Value) := "no warning label" if {
     Value == "false"
 } else := Value
