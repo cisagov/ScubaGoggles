@@ -17,7 +17,8 @@ NonCompliantOUs1_1 contains OU if {
     Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    AcceptableValues := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES"}
+    AcceptableValues := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT",
+     "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES"}
     not LastEvent.NewValue in AcceptableValues
 }
 
@@ -100,7 +101,8 @@ NonCompliantOUs1_3 contains OU if {
     Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    AcceptableValues := {"SHARING_ALLOWED_WITH_WARNING", "SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES"}
+    AcceptableValues := {"SHARING_ALLOWED_WITH_WARNING", "SHARING_NOT_ALLOWED",
+     "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES"}
     not LastEvent.NewValue in AcceptableValues
 }
 
