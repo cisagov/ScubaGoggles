@@ -50,7 +50,7 @@ Who can join classes in your domain SHALL be set to Users in your domain only.
 #### GWS.CLASSROOM.1.2v0.1
 Which classes users in your domain can join SHALL be set to Classes in your domain only.
 
-- _Rationale:_ Joining a class from outside your domain could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
+- _Rationale:_ Allowing users to join a class from outside your domain could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
 - _Last modified:_ September 27, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -90,7 +90,7 @@ This section covers policies related to the Google Classroom API.
 #### GWS.CLASSROOM.2.1v0.1
 Users SHALL NOT be able to authorize apps to access their Google Classroom data.
 
-- _Rationale:_ Allowing ordinary users to authorize apps to access to classroom data opens a possibility for data loss. Only allowing admins to authorize apps reduces this risk.
+- _Rationale:_ Allowing ordinary users to authorize apps to have access to classroom data opens a possibility for data loss. Allowing only admins to authorize apps reduces this risk.
 - _Last modified:_ September 28, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -159,7 +159,7 @@ This section covers policies related to unenrolling a student from a class.
 Only teachers SHALL be allowed to unenroll students from classes.
 
 - _Rationale:_ Allowing students to unenroll themselves creates the opportunity for data loss or other inconsistencies, especially for K-12 classrooms. Restricting this ability to teachers mitigates this risk.
-- _Last Modified:_ September 28, 2023
+- _Last modified:_ September 28, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

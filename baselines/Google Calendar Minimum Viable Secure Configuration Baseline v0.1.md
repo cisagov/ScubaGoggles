@@ -92,8 +92,8 @@ This section determines whether users are warned when inviting one or more guest
 #### GWS.CALENDAR.2.1v0.1
 External invitations warnings SHALL be enabled to prompt users before sending invitations.
 
-- *Rationale:* Users may inadvertently include external guests in calendar event invitations, potentially resulting in data leakage. Warning users when external participants are included can help mitigate this risk.
-- _Last Modified:_ July 10, 2023
+- _Rationale:_ Users may inadvertently include external guests in calendar event invitations, potentially resulting in data leakage. Warning users when external participants are included can help mitigate this risk.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -135,7 +135,7 @@ Due to the added complexity and attack surface associated with configuring Calen
 Calendar Interop SHOULD be disabled.
 
 - _Rationale:_ Enabling Calendar interop adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature unless required by the organization conforms to the principle of least functionality.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 - Notes
   - This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar
 
