@@ -75,7 +75,7 @@ Phishing-Resistant MFA SHALL be required for all users.
             - Google Passkeys
 
 - _Rationale:_ Required by Office of Management and Budget Memo M-22-09. Add an extra layer of security to user accounts by asking users to verify their identity when they enter a username and password. MFA (including methods using 2-Step Verification) requires an individual to present a minimum of two separate forms of authentication before access is granted. MFA provides additional assurance that the individual attempting to gain access is who they claim to be. With MFA, an attacker would need to compromise at least two different authentication mechanisms, increasing the difficulty of compromise and thus reducing the risk.
-- Last Modified:_ August 17, 2023
+- _Last Modified:_ August 17, 2023
 - Notes
   - Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.4 applies.
 
@@ -94,7 +94,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 Google 2SV new user enrollment period SHALL be set to 1 week.
 
 - _Rationale:_ This allows enough time for new personnel to log into their account and configure MFA prior to getting locked out of their account. However, does not give an         excessive amount of time in order to limit security risks.
-- Last Modified:_ August 17, 2023
+- _Last Modified:_ August 17, 2023
 - Notes
   - This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
@@ -114,7 +114,7 @@ Google 2SV new user enrollment period SHALL be set to 1 week.
 Allow users to trust the device SHALL be disabled.
 
 - _Rationale:_ This ensures that Google 2SV must be used each time to prevent unauthorized access to accounts.
-- Last Modified:_ August 17, 2023
+- _Last Modified:_ August 17, 2023
 - Notes
   - This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
@@ -145,7 +145,7 @@ If phishing-resistant MFA is not yet tenable, an MFA method from the following l
 
 - _Rationale:_ Some agencies do not have capability for phishing-resistant MFA at this time, therefore an
 		alternative is provided.
-- Last Modified:_ August 17, 2023
+- _Last Modified:_ August 17, 2023
 - Notes
   - ONLY to be enforced if Policy 1.1 is not possible for the agency.
   - SMS or Voice as the MFA method SHALL NOT be used.
@@ -244,7 +244,7 @@ To enforce a device policy that requires company-owned devices, Google needs a l
 Policies restricting access to GWS based on signals about enterprise devices SHOULD be implemented.
 
 - _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on the user's context.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
@@ -254,7 +254,7 @@ Policies restricting access to GWS based on signals about enterprise devices SHO
 Use of context-aware access for more granular controls, including using Advanced Mode (CEL), MAY be maximized and tailored if necessary.
 
 - _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on the user and/or device context. Advanced Mode's Common Expressions Language (CEL) gives administrators the ability to tailor access policies for devices, time-based use cases, authentication, and to combine multiple conditions into tailored controls.
-- Last Modified:_ July 11, 2023
+- _Last Modified:_ July 11, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
@@ -325,7 +325,7 @@ Login Challenges SHALL be enabled when third party SAML SSO is in use.
 - _Rationale:_ Many organizations use third-party identity providers (IdPs) to authenticate users who use single sign on (SSO) through SAML. The third-party IdP authenticates users and no additional risk-based challenges are presented to them. Any Google 2-Step Verification (2SV) configuration is ignored. This is the default behavior. You can set a policy to allow additional risk-based authentication challenges and 2SV if it's configured. If Google receives a valid SAML assertion (authentication information about the user) from the IdP during user sign-in, Google can present additional challenges to the user.
   - Login challenges requires users have a recovery phone number or email account associated with their organizational account. If not previously configured, users will be prompted to enter this information periodically until provided.
   - One login challenge option prompts users to enter their employee ID. This method is susceptible to information gathering attacks, should a list of employee IDs ever be leaked.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -366,7 +366,7 @@ Note: If using a third-party IdP, and agency-set web session lengths for its use
 Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.
 
 - _Rationale:_ This is to ensure that a session is not active without needing to reauthenticate for a longer period of time as this creates a higher potential for unauthorized access.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Material](https://attack.mitre.org/techniques/T1550/)
@@ -403,7 +403,7 @@ Per NIST 800-63 and OMB M-22-09, ensure that user passwords do not expire and th
 User password strength SHALL be enforced.
 
 - _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -415,7 +415,7 @@ User password strength SHALL be enforced.
 User password length SHALL be at least 12 characters.
 
 - _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -427,7 +427,7 @@ User password length SHALL be at least 12 characters.
 Password policy SHALL be enforced at next sign-in.
 
 - _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -439,7 +439,7 @@ Password policy SHALL be enforced at next sign-in.
 User passwords SHALL NOT be reused.
 
 - _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -451,7 +451,7 @@ User passwords SHALL NOT be reused.
 User passwords SHALL NOT expire.
 
 - _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -512,7 +512,7 @@ Pre-Built GWS Admin Roles considered highly privileged:
 All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Provides a stronger and more centralized form of authentication which provides stronger protections against compromises.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -526,7 +526,7 @@ All highly privileged accounts SHALL leverage Google Account authentication with
 A minimum of **two** and maximum of **four** separate and distinct Super Admin users SHALL be configured.
 
 - _Rationale:_ Having only a single Super Admin Account can be problematic if this user were unavailable for an extended period of time. Also, Super Admin accounts should not be shared amongst multiple users. In addition, having too many super admins could be problematic as then there are many users with those privileges which creates a larger security risk
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 - Note: Admin count does not include "break-glass" Super Admin accounts.
 
 
@@ -592,7 +592,7 @@ Account conflict management SHALL be configured to replace conflicting unmanaged
  	 - You can't restrict which Google services can be accessed by an unmanaged user account.
   - Reconciling conflicting accounts creates churn for admins and adds to the workload of onboarding users to Google Workspace & Google Cloud.
   - Note that if unmanaged accounts are used for official federal government business, they may be subject to record-keeping requirements under the Federal Records Act, 44 U.S.C. Chapter 31 et seq.
-- Last Modified:_ September 14, 2023
+- _Last Modified:_ September 14, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1136: Create Account](https://attack.mitre.org/techniques/T1136/)
@@ -633,7 +633,7 @@ This section covers the admin self-recovery setting that is in Google Admin cons
 Account self-recovery for Super Admins SHALL be disabled
 
 - _Rationale:_ This forces Super Admin users who have lost their login credentials to contact another Super Admin to recover their account. This makes it more difficult for a potential adversary from being able to attempt to gain access to a super admin account through the method of account recovery.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
@@ -680,7 +680,7 @@ Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Prog
 
 - _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password.
   - The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -695,7 +695,7 @@ All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection 
 
 - _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password.
   - The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 - Notes:
   - This control enforces more secure protection of sensitive user accounts from targeted attacks. Sensitive user accounts include political appointees, Senior Executive Service (SES) officials, or other senior officials whose account compromise would pose a level of risk prohibitive to agency mission fulfillment
 
@@ -739,7 +739,7 @@ Agencies need to have a process in place to manage and control application acces
 Agencies SHALL develop and implement a process to explicitly allow-list (trust) third-party app access to GWS services.
 
 - _Rationale:_ Prevents unauthorized access to GWS through the GWS API which provides additional protection against cyber attacks.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
@@ -753,7 +753,7 @@ Agencies SHALL develop and implement a process to explicitly allow-list (trust) 
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
 
 - _Rationale:_ You can restrict (or leave unrestricted) access to most Workspace services, including Google Cloud Platform services such as Machine Learning. For Gmail and Google Drive, you can specifically restrict access to high-risk scopes (for example, sending Gmail or deleting files in Drive). While users are prompted to consent to apps, if an app uses restricted scopes and you haven't specifically trusted it, users can't add it.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
@@ -767,7 +767,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
 Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 
 - _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with 11.1.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
@@ -781,7 +781,7 @@ Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 Agencies SHALL NOT trust unconfigured internal apps.
 
 - _Rationale:_ By not trusting unconfigured apps it is ensuring the platform remains secure as unconfigured apps could be unsecure and create vulnerabilities within the whole system.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
@@ -795,7 +795,7 @@ Agencies SHALL NOT trust unconfigured internal apps.
 Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 - _Rationale:_ Not allowing access to unconfigured apps helps ensure the platform remains secure as unconfigured apps could be unsecure and create vulnerabilities within the whole system.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
@@ -868,7 +868,7 @@ Some older versions of common software may break when this control is implemente
 Only approved Google Workspace Marketplace applications SHOULD be allowed for installation.
 
 - _Rationale:_ Users should only be allowed to install approved and vetted apps. This includes internally developed applications which being allowed without proper vetting poses a significant insider risk. This will help limit the overall attack surface for the organization.
-- Last Modified:_ October 24, 2023
+- _Last Modified:_ October 24, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
@@ -878,7 +878,7 @@ Only approved Google Workspace Marketplace applications SHOULD be allowed for in
 Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
 - _Rationale:_ You can block sign-in attempts from some apps or devices that are less secure. Apps that are less secure don't use modern security standards, such as OAuth. Using apps and devices that don't use modern security standards increases the risk of accounts being compromised. Blocking these apps and devices helps keep your users and data safe.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -932,7 +932,7 @@ This section prevents users from downloading a copy of the Google Takeout servic
 Google Takeout services SHALL be disabled.
 
 - _Rationale:_ Google Takeout is a service that allows you to download a copy of your data stored within 40+ Google products and services. This includes data from Gmail, Drive, Photos, Calendar, and many others. You can download your data in a variety of formats, including ZIP, TAR, and XML. While there may be a valid use case for individuals to backup their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1002,7 +1002,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
 - _Rationale:_ System-defined rules can allow an administrator to be notified of specific activity within a domain—such as a suspicious sign-in attempt, a compromised mobile device, or when another administrator changes settings.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 - Notes
   - Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 
@@ -1060,7 +1060,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
         > Context Aware Access logs
 
 - _Rationale:_ OMB M-21-31, Improving the Federal Government's Investigative and Remediation Capabilities Related to Cybersecurity Incidents, provides guidance on log retention for federal agencies. The memorandum defines the types of logs that must be retained at each maturity level for log retention.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -1070,7 +1070,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31.
 
 - _Rationale:_ OMB M-21-31, Improving the Federal Government's Investigative and Remediation Capabilities Related to Cybersecurity Incidents, provides guidance on log retention for federal agencies. The memorandum defines three maturity levels for log retention, with each level requiring different minimum retention periods.
-- Last Modified:_ January 30, 2024
+- _Last Modified:_ January 30, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -1117,7 +1117,7 @@ The data storage region SHALL be set to be the United States for all users in th
 - Rationale
 	- This policy is aligned with the concept of data sovereignty. Ensuring that data is stored in a specific region (in this case, the U.S. for FCEB agencies) affords the administrator of the GWS environment a degree of control and governance over their cloud data.
 	- FCEB agencies may need to meet specific regulations for various data classifications including data governance, security controls, privacy, and data residency. Being able to establish data sovereignty and identify residency regions can aid in these efforts.
-- Last Modified:_ October 30, 2023
+- _Last Modified:_ October 30, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
@@ -1130,7 +1130,7 @@ The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 
 - Rationale
 	- This policy is aligned with the concept of data sovereignty. Ensuring that data is not stored in a specific region affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
-- Last Modified:_ November 30, 2023
+- _Last Modified:_ November 30, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)

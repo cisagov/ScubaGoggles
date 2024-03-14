@@ -40,7 +40,7 @@ This control limits safe meeting access to users with a Google Account or Dialin
 Meeting access SHALL be restricted to users signed in with a Google Account or Dialing in using a phone.
 
 - _Rationale:_ This protects against unauthorized access to a Google meeting and helps ensures the user has been authenticated prior to joining.
-- Last Modified:_ June 29, 2023
+- _Last Modified:_ June 29, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -79,7 +79,7 @@ This control determines which meetings users within the agency's organization ca
 Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace tenant or organization.
 
 - _Rationale:_ This helps ensure that organization members are not able to join meetings created externally to avoid potential data leakage or other security risks.
-- Last Modified:_ September 26, 2023
+- _Last Modified:_ September 26, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
@@ -119,7 +119,7 @@ Note: When this feature is not enabled, any attendee that is a member of the hos
 Host Management meeting features SHALL be enabled.
 
 - _Rationale:_ Enabling these features does not pose any security risk and provides better collaboration features to users. If this setting was disabled then any participant could take control of the meeting. When enabled, they are available by default when a host starts their meeting.
-- Last Modified:_ January 10, 2024
+- _Last Modified:_ January 10, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1562:001: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -159,7 +159,7 @@ This control provides a warning label for any participating a meeting who is not
 Warn for external participants SHALL be enabled.
 
 - _Rationale:_ When enabled, external or unidentified participants in a meeting are given a label. This increases situational awareness amongst meeting participants and can help prevent inadvertent data leakage.
-- Last Modified:_ September 26, 2023
+- _Last Modified:_ September 26, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

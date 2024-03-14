@@ -45,7 +45,7 @@ Note: Even with this setting configured, group owners can still explicitly add e
 Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.
 
 - _Rationale:_ Who can externally view groups internal to the organization should be carefully controlled and their access vetted as needed.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -80,7 +80,7 @@ This section covers whether or not the owner of the group has the ability to add
 Group owners' ability to add external members to groups SHOULD be disabled unless necessary for agency mission fulfillment.
 
 - _Rationale:_ The ability to add external members should be left to the organization/agency to protect the agency from potential data leakage.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -117,7 +117,7 @@ This section covers whether or not an owner of a group has the ability to allow 
 Group owners' ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.
 
 - _Rationale:_ External member posting would create unnecessary security risks.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -154,7 +154,7 @@ This section covers who has the ability to create a new group within the organiz
 Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.
 
 - _Rationale:_ The organization should have some control over the organizational groups created and the purpose they are for.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -191,7 +191,7 @@ This section covers the default permissions assigned to the viewing of conversat
 The default permission to view conversations SHOULD be set to All Group Members.
 
 - _Rationale:_ Conversation viewing by default should be restricted as a security best practice but can  be expanded by exception for certain groups on a need-to-know basis.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 - Note: This setting can be changed by group owners and group managers.
 
 - MITRE ATT&CK TTP Mapping
@@ -230,7 +230,7 @@ This section covers whether or not the owner of a group can hide the group from 
 The Ability for Groups to be Hidden from the Directory SHALL be disabled.
 
 - _Rationale:_ Provide group visibility at the directory level to help reduce the potential for undetected data exfiltration.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -268,7 +268,7 @@ This section covers the access type setting for new groups that are created.
 New Groups SHOULD be created with an Access type of Restricted unless necessary for agency mission fulfillment.
 
 - _Rationale:_ This helps protect against unauthorized access to groups
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

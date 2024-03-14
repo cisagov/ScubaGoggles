@@ -42,7 +42,7 @@ This section covers chat history retention for users within the organization and
 Chat history SHALL be enabled for information traceability.
 
 - _Rationale:_ Helps ensure there is a record of chats sent to receive in the case that it needs to be reviewed in the future for legal or compliance issues.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -52,7 +52,7 @@ Chat history SHALL be enabled for information traceability.
 Users SHALL NOT be allowed to change their history setting.
 
 - _Rationale:_ This setting helps prevent changes by the user.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -93,7 +93,7 @@ This section covers what types of files users are allowed to share external to t
 External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.
 
 - _Rationale:_ Protects against unintentional or intentional data leakage from the agency or organization.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfilitration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -128,7 +128,7 @@ This section covers whether chat history is retained by default for users within
 Space history SHOULD be enabled for traceability of information.
 
 - _Rationale:_ This provides the ability to trace history when needed from an organizational level.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -163,7 +163,7 @@ This section permits users to send Chat messages outside of their organization, 
 External Chat messaging SHALL be restricted to allowlisted domains only.
 
 - _Rationale:_ Protects the organization from external risks and helps prevent data leakage outside the organization.
-- Last Modified:_ November 14, 2023
+- _Last Modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -209,7 +209,7 @@ This section covers preventing ordinary users from being able to install Chat ap
 User-level ability to install Chat apps SHALL be disabled.
 
 - _Rationale:_ Protects against security risks associated with installing chat apps such as phishing, spyware, etc.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1195:002: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
@@ -253,7 +253,7 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
 
 - _Rationale:_ Data Loss Prevention (DLP) rules trigger scans of files to look for sensitive content and restrict sharing of documents that may contain sensitive content. Configuring DLP rules helps agencies protect their information, by determining what data and/or phrasing might be sensitive, and restricting the dissemination of the documents containing that data. Examples include PII, PHI, portion markings, etc.
-- Last Modified:_ July 10, 2023
+- _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -298,7 +298,7 @@ This section covers the content reporting functionality, a feature that allows u
 Chat content reporting SHALL be enabled for all conversation types.
 
 - _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies ensure that their users are able to report risky messages regardless of the conversation type.
-- Last Modified:_ February 13, 2024
+- _Last Modified:_ February 13, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -307,7 +307,7 @@ Chat content reporting SHALL be enabled for all conversation types.
 All reporting message categories SHOULD be selected.
 
 - _Rationale:_ Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
-- Last Modified:_ February 13, 2024
+- _Last Modified:_ February 13, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
