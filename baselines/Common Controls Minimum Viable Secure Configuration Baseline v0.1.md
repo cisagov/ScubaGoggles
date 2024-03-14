@@ -317,9 +317,7 @@ Login challenges are additional security measures used to verify a user's identi
 #### GWS.COMMONCONTROLS.3.1v0.1
 Login Challenges SHALL be enabled when third party SAML SSO is in use.
 
-- _Rationale:_ Many organizations use third-party identity providers (IdPs) to authenticate users who use single sign on (SSO) through SAML. The third-party IdP authenticates users and no additional risk-based challenges are presented to them. Any Google 2-Step Verification (2SV) configuration is ignored. This is the default behavior. You can set a policy to allow additional risk-based authentication challenges and 2SV if it's configured. If Google receives a valid SAML assertion (authentication information about the user) from the IdP during user sign-in, Google can present additional challenges to the user.
-  - Login challenges requires users have a recovery phone number or email account associated with their organizational account. If not previously configured, users will be prompted to enter this information periodically until provided.
-  - One login challenge option prompts users to enter their employee ID. This method is susceptible to information gathering attacks, should a list of employee IDs ever be leaked.
+- _Rationale:_ Many organizations use third-party identity providers (IdPs) to authenticate users who use single sign on (SSO) through SAML. The third-party IdP authenticates users and no additional risk-based challenges are presented to them. Any Google 2-Step Verification (2SV) configuration is ignored. This is the default behavior. You can set a policy to allow additional risk-based authentication challenges and 2SV if it's configured. If Google receives a valid SAML assertion (authentication information about the user) from the IdP during user sign-in, Google can present additional challenges to the user. Login challenges requires users have a recovery phone number or email account associated with their organizational account. If not previously configured, users will be prompted to enter this information periodically until provided. One login challenge option prompts users to enter their employee ID. This method is susceptible to information gathering attacks, should a list of employee IDs ever be leaked.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -673,8 +671,7 @@ This control enforces more secure protection of highly privileged, senior execut
 #### GWS.COMMONCONTROLS.9.1v0.1
 Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Program.
 
-- _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password.
-  - The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
+- _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -688,8 +685,7 @@ Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Prog
 #### GWS.COMMONCONTROLS.9.2v0.1
 All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program.
 
-- _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password.
-  - The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
+- _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - _Last Modified:_ July 10, 2023
 - _Note:_ This control enforces more secure protection of sensitive user accounts from targeted attacks. Sensitive user accounts include political appointees, Senior Executive Service (SES) officials, or other senior officials whose account compromise would pose a level of risk prohibitive to agency mission fulfillment
 
@@ -1107,8 +1103,7 @@ At the time of writing, data region policies cannot be applied to data types not
 #### GWS.COMMONCONTROLS.15.1v0.1
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
-- Rationale
-	- This policy is aligned with the concept of data sovereignty. Ensuring that data is stored in a specific region (in this case, the U.S. for FCEB agencies) affords the administrator of the GWS environment a degree of control and governance over their cloud data.
+- _Rationale_: This policy is aligned with the concept of data sovereignty. Ensuring that data is stored in a specific region (in this case, the U.S. for FCEB agencies) affords the administrator of the GWS environment a degree of control and governance over their cloud data.
 	- FCEB agencies may need to meet specific regulations for various data classifications including data governance, security controls, privacy, and data residency. Being able to establish data sovereignty and identify residency regions can aid in these efforts.
 - _Last Modified:_ October 30, 2023
 
@@ -1121,8 +1116,7 @@ The data storage region SHALL be set to be the United States for all users in th
 #### GWS.COMMONCONTROLS.15.2v0.1
 The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 
-- Rationale
-	- This policy is aligned with the concept of data sovereignty. Ensuring that data is not stored in a specific region affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
+- _Rationale:_ This policy is aligned with the concept of data sovereignty. Ensuring that data is not stored in a specific region affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
 - _Last Modified:_ November 30, 2023
 
 - MITRE ATT&CK TTP Mapping
