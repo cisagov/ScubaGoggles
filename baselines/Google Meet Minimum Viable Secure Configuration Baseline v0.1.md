@@ -43,7 +43,7 @@ Meeting access SHOULD be restricted to users signed in with a Google Account or 
   - This protects against unauthorized access to a Google meeting and helps ensures the user has been authenticated prior to joining.
 - Last Modified: February 20, 2024
 - Notes
-  - There is a another similar configuration within the google meet meeting itself. The options are Open, Trusted, Restricted. Open allows everyone in the meeting without asking, Trusted allows anyone in org into the meeting where anyone else has to ask, and Restricted means everyone not on the invite must ask to join.
+  - There is a related configuration option shown to the meeting organizer within Google Meet itself, called "Meeting access type." The setting in the admin center restricts at the org-level the types of users able to join meetings. The setting shown to the meeting organizer allows the organizer to specify who, of those permitted to join meetings by the org-wide setting, must ask to join their meeting. This baseline only provides guidance on the org-wide setting; the per-meeting setting MAY be set as each agency sees fit.
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
