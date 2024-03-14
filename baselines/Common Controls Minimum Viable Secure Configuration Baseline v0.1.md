@@ -1103,8 +1103,7 @@ At the time of writing, data region policies cannot be applied to data types not
 #### GWS.COMMONCONTROLS.15.1v0.1
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
-- _Rationale_: This policy is aligned with the concept of data sovereignty. Ensuring that data is stored in a specific region (in this case, the U.S. for FCEB agencies) affords the administrator of the GWS environment a degree of control and governance over their cloud data.
-	- FCEB agencies may need to meet specific regulations for various data classifications including data governance, security controls, privacy, and data residency. Being able to establish data sovereignty and identify residency regions can aid in these efforts.
+- _Rationale_: This policy is aligned with the concept of data sovereignty. Ensuring that data is stored in a specific region (in this case, the U.S. for FCEB agencies) affords the administrator of the GWS environment a degree of control and governance over their cloud data. FCEB agencies may need to meet specific regulations for various data classifications including data governance, security controls, privacy, and data residency. Being able to establish data sovereignty and identify residency regions can aid in these efforts.
 - _Last Modified:_ October 30, 2023
 
 - MITRE ATT&CK TTP Mapping
