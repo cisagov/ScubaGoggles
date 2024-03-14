@@ -44,7 +44,7 @@ Note: Even with this setting configured, group owners can still explicitly add e
 #### GWS.GROUPS.1.1v0.1
 Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.
 
-- _Rationale:_ Who can externally view groups internal to the organization should be carefully controlled and their access vetted as needed.
+- _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -79,7 +79,7 @@ This section covers whether or not the owner of the group has the ability to add
 #### GWS.GROUPS.2.1v0.1
 Group owners' ability to add external members to groups SHOULD be disabled unless necessary for agency mission fulfillment.
 
-- _Rationale:_ The ability to add external members should be left to the organization/agency to protect the agency from potential data leakage.
+- _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -116,7 +116,7 @@ This section covers whether or not an owner of a group has the ability to allow 
 #### GWS.GROUPS.3.1v0.1
 Group owners' ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.
 
-- _Rationale:_ External member posting would create unnecessary security risks.
+- _Rationale:_ Allowing external users to post opens the door for phishing or other malicious activity to be shared via Groups. Restricting posting by non-group members reduces this risk.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -124,6 +124,9 @@ Group owners' ability to allow posting to a group by an external, non-group memb
   - [T1048: Exfilitration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
     - [T1048:001: Exfilitration Over Alternative Protocol: Exfiltration Over Symmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/001/)
     - [T1048:002: Exfilitration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:001: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
+    - [T1566:002: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 ### Resources
 
@@ -153,7 +156,7 @@ This section covers who has the ability to create a new group within the organiz
 #### GWS.GROUPS.4.1v0.1
 Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.
 
-- _Rationale:_ The organization should have some control over the organizational groups created and the purpose they are for.
+- _Rationale:_ Many settings for Google Workspace products can be set at the Group level. Allowing unrestricted group creation complicates setting management and opens channels of unmanaged communication.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -190,7 +193,7 @@ This section covers the default permissions assigned to the viewing of conversat
 #### GWS.GROUPS.5.1v0.1
 The default permission to view conversations SHOULD be set to All Group Members.
 
-- _Rationale:_ Conversation viewing by default should be restricted as a security best practice but can  be expanded by exception for certain groups on a need-to-know basis.
+- _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
 - _Last Modified:_ July 10, 2023
 - _Note:_ This setting can be changed by group owners and group managers.
 
@@ -229,7 +232,7 @@ This section covers whether or not the owner of a group can hide the group from 
 #### GWS.GROUPS.6.1v0.1
 The Ability for Groups to be Hidden from the Directory SHALL be disabled.
 
-- _Rationale:_ Provide group visibility at the directory level to help reduce the potential for undetected data exfiltration.
+- _Rationale:_ Hidden groups are not visible, even to admins, in the list of groups found at groups.google.com, though they are still visible on the directory page on admin.google.com. As such, allowing for hidden groups increases the risk of groups being created without admin oversight.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -267,7 +270,7 @@ This section covers the access type setting for new groups that are created.
 #### GWS.GROUPS.7.1v0.1
 New Groups SHOULD be created with an Access type of Restricted unless necessary for agency mission fulfillment.
 
-- _Rationale:_ This helps protect against unauthorized access to groups
+- _Rationale:_ Allowing external users to post opens the door for phishing or other malicious activity to be shared via Groups.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
