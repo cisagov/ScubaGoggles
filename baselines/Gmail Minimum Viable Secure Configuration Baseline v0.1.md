@@ -55,8 +55,7 @@ Mail Delegation SHOULD be disabled.
 
 - _Rationale:_ Mail delegation can be a useful tool for delegating email management tasks to trusted individuals. However, it does pose the potential for risks such as unintentional disclosure of sensitive information, impersonation of delegated accounts, and malicious deletion or modification of emails.
 - _Last Modified:_ October 4, 2023
-- Notes
-  - Exceptions should be limited to individuals authorized by existing Agency policy, such as SES or Politically Appointed staff. Other considerations include ensuring that delegated accounts require Phishing-Resistant Multi-Factor Authentication (MFA), limiting delegated account permissions (ex. allowing view/reply but not delete), monitoring delegated accounts regularly, and disabling them if no longer required.
+- _Note:_ Exceptions should be limited to individuals authorized by existing Agency policy, such as SES or Politically Appointed staff. Other considerations include ensuring that delegated accounts require Phishing-Resistant Multi-Factor Authentication (MFA), limiting delegated account permissions (ex. allowing view/reply but not delete), monitoring delegated accounts regularly, and disabling them if no longer required.
 
 - MITRE ATT&CK TTP Mapping
   - [T098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
@@ -139,8 +138,7 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
 
 - _Rationale:_ An adversary may modify the `FROM` field of an email such that it appears to be a legitimate email sent by an agency, facilitating phishing attacks. Publishing an SPF policy for each agency domain mitigates forged `FROM` fields by providing a means for recipients to detect emails spoofed in this way. SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - _Last Modified:_ February 14, 2024
-- Notes
-  - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes refered to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`). 
+- _Note:_ SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes refered to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`). 
 
 - MITRE ATT&CK TTP Mapping
   - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
@@ -328,9 +326,7 @@ Emails flagged by the above attachment protection controls SHALL NOT be kept in 
 
 - _Rationale:_ Helps warn users about the risks of opening a suspicious attachment.
 - _Last Modified:_ September 8, 2023
-- Notes
-  - Agencies and Organizations can choose whether to send email to spam or quarantine
-  - Applies to Policies 5.1 - 5.3
+- _Note:_ Agencies and Organizations can choose whether to send email to spam or quarantine. Applies to Policies 5.1 - 5.3.
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -570,9 +566,7 @@ Emails flagged by the above spoofing and authentication controls SHALL NOT be ke
 
 - _Rationale:_ Emails that fail Gmail's spoofing and authentication checks may pose a significant risk to users. By moving these emails to either spam or quarantine, the risk of a user inadvertently interacting with these emails is reduced.
 - _Last Modified:_ September 8, 2023
-- Notes
-  - Agencies and organizations can choose whether to send to spam or quarantine
-  - This policy applies to Policy 7.1 - Policy 7.5
+- _Note:_ Agencies and organizations can choose whether to send to spam or quarantine. This policy applies to Policy 7.1 - Policy 7.5
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)

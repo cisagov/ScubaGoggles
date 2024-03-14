@@ -140,8 +140,7 @@ Calendar Interop SHOULD be disabled.
 - Rationale
   - Minimize attack surface by not enabling this feature which relies on Exchange Web Services for information exchange between Microsoft and Google calendars, unless required by the organization.
 - Last Modified: July 10, 2023
-- Notes
-  - This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar
+- _Note:_ This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar.
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

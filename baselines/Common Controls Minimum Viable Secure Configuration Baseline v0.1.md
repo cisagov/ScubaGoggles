@@ -76,8 +76,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 
 - _Rationale:_ Required by Office of Management and Budget Memo M-22-09. Add an extra layer of security to user accounts by asking users to verify their identity when they enter a username and password. MFA (including methods using 2-Step Verification) requires an individual to present a minimum of two separate forms of authentication before access is granted. MFA provides additional assurance that the individual attempting to gain access is who they claim to be. With MFA, an attacker would need to compromise at least two different authentication mechanisms, increasing the difficulty of compromise and thus reducing the risk.
 - _Last Modified:_ August 17, 2023
-- Notes
-  - Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.4 applies.
+- _Note:_ Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.4 applies.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -95,8 +94,7 @@ Google 2SV new user enrollment period SHALL be set to 1 week.
 
 - _Rationale:_ This allows enough time for new personnel to log into their account and configure MFA prior to getting locked out of their account. However, does not give an         excessive amount of time in order to limit security risks.
 - _Last Modified:_ August 17, 2023
-- Notes
-  - This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
+- _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
 
 - MITRE ATT&CK TTP Mapping
@@ -115,8 +113,7 @@ Allow users to trust the device SHALL be disabled.
 
 - _Rationale:_ This ensures that Google 2SV must be used each time to prevent unauthorized access to accounts.
 - _Last Modified:_ August 17, 2023
-- Notes
-  - This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
+- _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
 
 - MITRE ATT&CK TTP Mapping
@@ -146,9 +143,7 @@ If phishing-resistant MFA is not yet tenable, an MFA method from the following l
 - _Rationale:_ Some agencies do not have capability for phishing-resistant MFA at this time, therefore an
 		alternative is provided.
 - _Last Modified:_ August 17, 2023
-- Notes
-  - ONLY to be enforced if Policy 1.1 is not possible for the agency.
-  - SMS or Voice as the MFA method SHALL NOT be used.
+- _Note:_ ONLY to be enforced if Policy 1.1 is not possible for the agency. SMS or Voice as the MFA method SHALL NOT be used.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -696,8 +691,7 @@ All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection 
 - _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password.
   - The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - _Last Modified:_ July 10, 2023
-- Notes:
-  - This control enforces more secure protection of sensitive user accounts from targeted attacks. Sensitive user accounts include political appointees, Senior Executive Service (SES) officials, or other senior officials whose account compromise would pose a level of risk prohibitive to agency mission fulfillment
+- _Note:_ This control enforces more secure protection of sensitive user accounts from targeted attacks. Sensitive user accounts include political appointees, Senior Executive Service (SES) officials, or other senior officials whose account compromise would pose a level of risk prohibitive to agency mission fulfillment
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -1003,8 +997,7 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
 
 - _Rationale:_ System-defined rules can allow an administrator to be notified of specific activity within a domain—such as a suspicious sign-in attempt, a compromised mobile device, or when another administrator changes settings.
 - _Last Modified:_ July 10, 2023
-- Notes
-  - Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
+- _Note:_  - Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
