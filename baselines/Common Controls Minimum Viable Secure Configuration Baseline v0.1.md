@@ -527,7 +527,7 @@ A minimum of **two** and maximum of **four** separate and distinct Super Admin u
 
 - _Rationale:_ Having only a single Super Admin Account can be problematic if this user were unavailable for an extended period of time. Also, Super Admin accounts should not be shared amongst multiple users. In addition, having too many super admins could be problematic as then there are many users with those privileges which creates a larger security risk
 - _Last Modified:_ July 10, 2023
-- Note: Admin count does not include "break-glass" Super Admin accounts.
+- _Note:_ Admin count does not include "break-glass" Super Admin accounts.
 
 
 - MITRE ATT&CK TTP Mapping

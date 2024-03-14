@@ -43,7 +43,7 @@ Agencies SHOULD disable sharing outside of the organization's domain.
 
 - _Rationale:_ To have the tightest control over access to documents created within the organization, agencies should disable sharing from outside the organization. Disabling external sharing will block any collaboration from outside the organization and will prevent disseminating documents outside the organization.
 - _Last Modified:_ July 10, 2023
-- Note:
+- _Note:_
   - This policy restricts information sharing
   - This policy prevents data leakage outside of the organization
   - If this policy is enforced, then follow Policy 1.2
@@ -59,8 +59,7 @@ Agencies SHOULD disable users' receiving files from outside of the organization'
 
 - _Rationale:_ If the agency decides that external sharing should be disabled, users should not be able to receive files from outside the organization as well. Disabling external sharing ensures that all communication stays within the organization, which helps mitigate risk from malicious files from an external source.
 - _Last Modified:_ January 3, 2024
-- Note:
-  - This policy only applies if sharing outside was disabled in Policy 1.1
+- _Note:_ This policy only applies if sharing outside was disabled in Policy 1.1
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -71,8 +70,7 @@ Warnings SHALL be enabled when a user is attempting to share something outside t
 
 - _Rationale:_ In the case that a user is going to share something outside the domain, a warning should be given. The warning ensures that the user is aware that they are sharing something externally, and doing so purposefully.
 - _Last Modified:_ February 8, 2024
-- Note:
-  - This policy only applies if external sharing was allowed in Policy 1.1
+- _Note:_ This policy only applies if external sharing was allowed in Policy 1.1
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -83,8 +81,7 @@ If sharing outside of the organization, then agencies SHALL disable sharing of f
 
 - _Rationale:_ To ensure that all shared documents are secured, and that agencies are able to control dissemination of the files, agencies shall only share files with individuals using a google account.
 - _Last Modified:_ July 10, 2023
-- Note:
-  - This policy only applies if external sharing is allowed in Policy 1.1
+- _Note:_ This policy only applies if external sharing is allowed in Policy 1.1
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

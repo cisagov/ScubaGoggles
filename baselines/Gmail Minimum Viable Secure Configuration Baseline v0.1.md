@@ -209,7 +209,7 @@ The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cy
 
 - _Rationale:_ Email spoofing attempts are not inherently visible to domain owners. DMARC provides a mechanism to receive reports of spoofing attempts. Including reports@dmarc.cyber.dhs.gov as a point of contact for these reports gives CISA insight into spoofing attempts and is required by Binding Operational Directive 18-01, "Enhance Email and Web Security" for federal, executive branch, departments and agencies.
 - _Last Modified:_ November 13, 2023
-- Note: Only federal, executive branch, departments and agencies should include this email address in their DMARC record.
+- _Note:_ Only federal, executive branch, departments and agencies should include this email address in their DMARC record.
 
 - MITRE ATT&CK TTP Mapping
   - None

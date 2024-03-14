@@ -192,7 +192,7 @@ The default permission to view conversations SHOULD be set to All Group Members.
 
 - _Rationale:_ Conversation viewing by default should be restricted as a security best practice but can  be expanded by exception for certain groups on a need-to-know basis.
 - _Last Modified:_ July 10, 2023
-- Note: This setting can be changed by group owners and group managers.
+- _Note:_ This setting can be changed by group owners and group managers.
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
