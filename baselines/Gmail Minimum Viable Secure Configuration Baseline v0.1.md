@@ -53,9 +53,8 @@ This section determines whether users can delegate access to their mailbox to ot
 #### GWS.GMAIL.1.1v0.1
 Mail Delegation SHOULD be disabled.
 
-- Rationale
-  - Mail delegation can be a useful tool for delegating email management tasks to trusted individuals. However, it does pose the potential for risks such as unintentional disclosure of sensitive information, impersonation of delegated accounts, and malicious deletion or modification of emails.
-- Last Modified: October 4, 2023
+- _Rationale:_ Mail delegation can be a useful tool for delegating email management tasks to trusted individuals. However, it does pose the potential for risks such as unintentional disclosure of sensitive information, impersonation of delegated accounts, and malicious deletion or modification of emails.
+- Last Modified:_ October 4, 2023
 - Notes
   - Exceptions should be limited to individuals authorized by existing Agency policy, such as SES or Politically Appointed staff. Other considerations include ensuring that delegated accounts require Phishing-Resistant Multi-Factor Authentication (MFA), limiting delegated account permissions (ex. allowing view/reply but not delete), monitoring delegated accounts regularly, and disabling them if no longer required.
 
@@ -93,9 +92,8 @@ This section enables DomainKeys Identified Mail (DKIM) to help prevent spoofing 
 #### GWS.GMAIL.2.1v0.1
 DKIM SHOULD be enabled for all domains.
 
-- Rationale
-  - An adversary may modify the `FROM` field of an email such that it appears to be a legitimate email sent by an agency, facilitating phishing attacks. Enabling DKIM is a means for recipients to detect spoofed emails and verify the integrity of email content.
-- Last Modified: November 13, 2023
+- _Rationale:_ An adversary may modify the `FROM` field of an email such that it appears to be a legitimate email sent by an agency, facilitating phishing attacks. Enabling DKIM is a means for recipients to detect spoofed emails and verify the integrity of email content.
+- Last Modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -139,9 +137,8 @@ The Sender Policy Framework (SPF) is a mechanism that allows administrators to s
 #### GWS.GMAIL.3.1v0.1
 An SPF policy SHALL be published for each domain that fails all non-approved senders.
 
-- Rationale
-  -  An adversary may modify the `FROM` field of an email such that it appears to be a legitimate email sent by an agency, facilitating phishing attacks. Publishing an SPF policy for each agency domain mitigates forged `FROM` fields by providing a means for recipients to detect emails spoofed in this way. SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
-- Last Modified: February 14, 2024
+- _Rationale:_ An adversary may modify the `FROM` field of an email such that it appears to be a legitimate email sent by an agency, facilitating phishing attacks. Publishing an SPF policy for each agency domain mitigates forged `FROM` fields by providing a means for recipients to detect emails spoofed in this way. SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
+- Last Modified:_ February 14, 2024
 - Notes
   - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes refered to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`). 
 
@@ -187,9 +184,8 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 #### GWS.GMAIL.4.1v0.1
 A DMARC policy SHALL be published for every second-level domain.
 
-- Rationale
-  - Without a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling spoofed emails to reach end users' mailboxes. By publishing DMARC records at the second-level domain, the second-level domains and all subdomains will be protected.
-- Last Modified: November 13, 2023
+- _Rationale:_ Without a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling spoofed emails to reach end users' mailboxes. By publishing DMARC records at the second-level domain, the second-level domains and all subdomains will be protected.
+- Last Modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -197,9 +193,8 @@ A DMARC policy SHALL be published for every second-level domain.
 #### GWS.GMAIL.4.2v0.1
 The DMARC message rejection option SHALL be p=reject.
 
-- Rationale
-  - Of the three policy options (i.e., none, quarantine, and reject), reject provides the strongest protection. Reject is the level of protection required by BOD 18-01 for federal, executive branch, departments and agencies.
-- Last Modified: November 13, 2023
+- _Rationale:_ Of the three policy options (i.e., none, quarantine, and reject), reject provides the strongest protection. Reject is the level of protection required by BOD 18-01 for federal, executive branch, departments and agencies.
+- Last Modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -212,9 +207,8 @@ The DMARC message rejection option SHALL be p=reject.
 #### GWS.GMAIL.4.3v0.1
 The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.
 
-- Rationale
-  -  Email spoofing attempts are not inherently visible to domain owners. DMARC provides a mechanism to receive reports of spoofing attempts. Including reports@dmarc.cyber.dhs.gov as a point of contact for these reports gives CISA insight into spoofing attempts and is required by Binding Operational Directive 18-01, "Enhance Email and Web Security" for federal, executive branch, departments and agencies.
-- Last Modified: November 13, 2023
+- _Rationale:_ Email spoofing attempts are not inherently visible to domain owners. DMARC provides a mechanism to receive reports of spoofing attempts. Including reports@dmarc.cyber.dhs.gov as a point of contact for these reports gives CISA insight into spoofing attempts and is required by Binding Operational Directive 18-01, "Enhance Email and Web Security" for federal, executive branch, departments and agencies.
+- Last Modified:_ November 13, 2023
 - Note: Only federal, executive branch, departments and agencies should include this email address in their DMARC record.
 
 - MITRE ATT&CK TTP Mapping
@@ -223,9 +217,8 @@ The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cy
 #### GWS.GMAIL.4.4v0.1
 An agency point of contact SHOULD be included for aggregate and failure reports.
 
-- Rationale
-  - Email spoofing attempts are not inherently visible to domain owners. DMARC provides a mechanism to receive reports of spoofing attempts. Including an agency point of contact gives the agency insight into attempts to spoof their domains.
-- Last Modified: November 13, 2023
+- _Rationale:_ Email spoofing attempts are not inherently visible to domain owners. DMARC provides a mechanism to receive reports of spoofing attempts. Including an agency point of contact gives the agency insight into attempts to spoof their domains.
+- Last Modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -276,9 +269,8 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.5.1v0.1
 Protect against encrypted attachments from untrusted senders SHALL be enabled.
 
-- Rationale
-  - Protect users from potentially malicious attachments that are employing obfuscation tactics for payload delivery.
-- Last Modified: July 10, 2023
+- _Rationale:_ Protect users from potentially malicious attachments that are employing obfuscation tactics for payload delivery.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -293,9 +285,8 @@ Protect against encrypted attachments from untrusted senders SHALL be enabled.
 #### GWS.GMAIL.5.2v0.1
 Protect against attachments with scripts from untrusted senders SHALL be enabled.
 
-- Rationale
-  - Protect users from downloading and executing potentially malicious attached scripts.
-- Last Modified: July 10, 2023
+- _Rationale:_ Protect users from downloading and executing potentially malicious attached scripts.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -310,9 +301,8 @@ Protect against attachments with scripts from untrusted senders SHALL be enabled
 #### GWS.GMAIL.5.3v0.1
 Protect against anomalous attachment types in emails SHALL be enabled.
 
-- Rationale
-  - Protect users from attachments identified as anomalous by this control.
-- Last Modified: July 10, 2023
+- _Rationale:_ Protect users from attachments identified as anomalous by this control.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -327,9 +317,8 @@ Protect against anomalous attachment types in emails SHALL be enabled.
 #### GWS.GMAIL.5.4v0.1
 Google SHOULD be allowed to automatically apply future recommended settings.
 
-- Rationale
-  - Apply the latest recommended attachment protection settings from Google to limit the need for manual configuration.
-- Last Modified: July 10, 2023
+- _Rationale:_ Apply the latest recommended attachment protection settings from Google to limit the need for manual configuration.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -337,9 +326,8 @@ Google SHOULD be allowed to automatically apply future recommended settings.
 #### GWS.GMAIL.5.5v0.1
 Emails flagged by the above attachment protection controls SHALL NOT be kept in inbox.
 
-- Rationale
-  - Helps warn users about the risks of opening a suspicious attachment.
-- Last Modified: September 8, 2023
+- _Rationale:_ Helps warn users about the risks of opening a suspicious attachment.
+- Last Modified:_ September 8, 2023
 - Notes
   - Agencies and Organizations can choose whether to send email to spam or quarantine
   - Applies to Policies 5.1 - 5.3
@@ -358,9 +346,8 @@ Emails flagged by the above attachment protection controls SHALL NOT be kept in 
 #### GWS.GMAIL.5.6v0.1
 Any third-party or outside application selected for attachment protection SHOULD offer services comparable to those offered by Google Workspace.
 
-- Rationale
-  - A third-party system should provide the same minimum attachment protection functionality provided by Google to maintain a baseline security posture.
-- Last Modified: July 10, 2023
+- _Rationale:_ A third-party system should provide the same minimum attachment protection functionality provided by Google to maintain a baseline security posture.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -417,9 +404,8 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.6.1v0.1
 Identify links behind shortened URLs SHALL be enabled.
 
-- Rationale
-  - Phishing links are often obfuscated with URL shorteners. By allowing the identification of links that are behind shortened URLs, this control helps users identify malicious links.
-- Last Modified: July 10, 2023
+- _Rationale:_ Phishing links are often obfuscated with URL shorteners. By allowing the identification of links that are behind shortened URLs, this control helps users identify malicious links.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -431,9 +417,8 @@ Identify links behind shortened URLs SHALL be enabled.
 #### GWS.GMAIL.6.2v0.1
 Scan linked images SHALL be enabled.
 
-- Rationale
-  - Scanning linked images provides additional protections for potential malware that may be sent via email through an image.
-- Last Modified: July 10, 2023
+- _Rationale:_ Scanning linked images provides additional protections for potential malware that may be sent via email through an image.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -445,9 +430,8 @@ Scan linked images SHALL be enabled.
 #### GWS.GMAIL.6.3v0.1
 Show warning prompt for any click on links to untrusted domains SHALL be enabled.
 
-- Rationale
-  - This will provide awareness to users about the risks associated with clicking an unknown link
-- Last Modified: July 10, 2023
+- _Rationale:_ This will provide awareness to users about the risks associated with clicking an unknown link
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -459,9 +443,8 @@ Show warning prompt for any click on links to untrusted domains SHALL be enabled
 #### GWS.GMAIL.6.4v0.1
 Google SHALL be allowed to automatically apply future recommended settings.
 
-- Rationale
-  - Apply the latest recommended link and image protection settings from Google to limit the need for manual configuration.
-- Last Modified: July 10, 2023
+- _Rationale:_ Apply the latest recommended link and image protection settings from Google to limit the need for manual configuration.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -469,9 +452,8 @@ Google SHALL be allowed to automatically apply future recommended settings.
 #### GWS.GMAIL.6.5v0.1
 Any third-party or outside application selected for links and external images protection SHOULD offer services comparable to those offered by Google Workspace.
 
-- Rationale
-  - A third-party system should provide the same minimum functionality provided by Google to maintain a baseline security posture.
-- Last Modified: July 10, 2023
+- _Rationale:_ A third-party system should provide the same minimum functionality provided by Google to maintain a baseline security posture.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -526,9 +508,8 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.7.1v0.1
 Protect against domain spoofing based on similar domain names SHALL be enabled.
 
-- Rationale
-  - Attackers commonly try to trick users into going to a malicious site by using similar domain names. This policy helps protect the organization and users from this type of attempted compromise.
-- Last Modified: July 10, 2023
+- _Rationale:_ Attackers commonly try to trick users into going to a malicious site by using similar domain names. This policy helps protect the organization and users from this type of attempted compromise.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -539,9 +520,8 @@ Protect against domain spoofing based on similar domain names SHALL be enabled.
 #### GWS.GMAIL.7.2v0.1
 Protect against spoofing of employee names SHALL be enabled.
 
-- Rationale
-  - Attackers will try to phish individuals by spoofing the email/identity of another employee (e.g., CEO and IT staff). Therefore, this provides additional protection against this type of attempted compromise.
-- Last Modified: July 10, 2023
+- _Rationale:_ Attackers will try to phish individuals by spoofing the email/identity of another employee (e.g., CEO and IT staff). Therefore, this provides additional protection against this type of attempted compromise.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -552,9 +532,8 @@ Protect against spoofing of employee names SHALL be enabled.
 #### GWS.GMAIL.7.3v0.1
 Protect against inbound emails spoofing your domain SHALL be enabled.
 
-- Rationale
-  - Attackers will try to phish individuals by spoofing the domain name of your organization. This policy provides additional protection against this type of attempted compromise.
-- Last Modified: July 10, 2023
+- _Rationale:_ Attackers will try to phish individuals by spoofing the domain name of your organization. This policy provides additional protection against this type of attempted compromise.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -565,9 +544,8 @@ Protect against inbound emails spoofing your domain SHALL be enabled.
 #### GWS.GMAIL.7.4v0.1
 Protect against any unauthenticated emails SHALL be enabled.
 
-- Rationale
-  - This policy provides extra protection from potentially malicious emails, helping safeguard the organization from data leakage and other malware.
-- Last Modified: July 10, 2023
+- _Rationale:_ This policy provides extra protection from potentially malicious emails, helping safeguard the organization from data leakage and other malware.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -578,9 +556,8 @@ Protect against any unauthenticated emails SHALL be enabled.
 #### GWS.GMAIL.7.5v0.1
 Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
 
-- Rationale
-  - This provides protections against phishing attacks using an email address within your domain.
-- Last Modified: July 10, 2023
+- _Rationale:_ This provides protections against phishing attacks using an email address within your domain.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -591,9 +568,8 @@ Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
 #### GWS.GMAIL.7.6v0.1
 Emails flagged by the above spoofing and authentication controls SHALL NOT be kept in inbox.
 
-- Rationale
-  - Emails that fail Gmail's spoofing and authentication checks may pose a significant risk to users. By moving these emails to either spam or quarantine, the risk of a user inadvertently interacting with these emails is reduced.
-- Last Modified: September 8, 2023
+- _Rationale:_ Emails that fail Gmail's spoofing and authentication checks may pose a significant risk to users. By moving these emails to either spam or quarantine, the risk of a user inadvertently interacting with these emails is reduced.
+- Last Modified:_ September 8, 2023
 - Notes
   - Agencies and organizations can choose whether to send to spam or quarantine
   - This policy applies to Policy 7.1 - Policy 7.5
@@ -608,9 +584,8 @@ Emails flagged by the above spoofing and authentication controls SHALL NOT be ke
 #### GWS.GMAIL.7.7v0.1
 Google SHALL be allowed to automatically apply future recommended settings.
 
-- Rationale
-  - This allows automatic application of recommended settings from Google.
-- Last Modified: July 10, 2023
+- _Rationale:_ This allows automatic application of recommended settings from Google.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -621,9 +596,8 @@ Google SHALL be allowed to automatically apply future recommended settings.
 #### GWS.GMAIL.7.8v0.1
 Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace.
 
-- Rationale
-  - A third-party system should provide the same minimum functionality provided by Google.
-- Last Modified: July 10, 2023
+- _Rationale:_ A third-party system should provide the same minimum functionality provided by Google.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -685,9 +659,8 @@ This section addresses a feature that enables users to import their email and co
 #### GWS.GMAIL.8.1v0.1
 User email uploads SHALL be disabled to protect against unauthorized files being introduced into the secured environment.
 
-- Rationale
-  - This helps ensure that unauthorized files from other webmail providers are not introduced into the secure Gmail environment.
-- Last Modified: July 10, 2023
+- _Rationale:_ This helps ensure that unauthorized files from other webmail providers are not introduced into the secure Gmail environment.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
@@ -726,9 +699,8 @@ This section determines whether users have POP3 and IMAP access. Doing so allows
 #### GWS.GMAIL.9.1v0.1
 POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
 
-- Rationale
-  - Disabling POP and IMAP helps prevent use of legacy and unapproved email clients with weaker authentication mechanisms that would increase the risk of email account credential compromise.
-- Last Modified: July 10, 2023
+- _Rationale:_ Disabling POP and IMAP helps prevent use of legacy and unapproved email clients with weaker authentication mechanisms that would increase the risk of email account credential compromise.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfilitration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -737,9 +709,8 @@ POP and IMAP access SHALL be disabled to protect sensitive agency or organizatio
 #### GWS.GMAIL.9.2v0.1
 POP and IMAP access MAY be enabled on a per-user and per-application basis as needed.
 
-- Rationale
-  - Depending on organizational needs, there are instances where users and applications may need to use these protocols.
-- Last Modified: July 10, 2023
+- _Rationale:_ Depending on organizational needs, there are instances where users and applications may need to use these protocols.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfilitration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -781,9 +752,8 @@ This section determines whether Google Workspace Sync allows data synchronizatio
 #### GWS.GMAIL.10.1v0.1
 Google Workspace Sync SHOULD be disabled.
 
-- Rationale
-  - Google Workspace Sync could be used as a data exfiltration mechanism if enabled.
-- Last Modified: July 10, 2023
+- _Rationale:_ Google Workspace Sync could be used as a data exfiltration mechanism if enabled.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfilitration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -796,9 +766,8 @@ Google Workspace Sync SHOULD be disabled.
 #### GWS.GMAIL.10.2v0.1
 Google Workspace Sync MAY be enabled on a per-user basis as needed.
 
-- Rationale
-  - Users may need access to this feature for organizational needs/tasks.
-- Last Modified: July 10, 2023
+- _Rationale:_ Users may need access to this feature for organizational needs/tasks.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfilitration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -843,9 +812,8 @@ This section determines whether emails can be automatically forwarded from a use
 #### GWS.GMAIL.11.1v0.1
 Automatic forwarding SHOULD be disabled, especially to external domains.
 
-- Rationale
-  - In the event that an attacker gains control of an end-user account, they could create automatic forwarding rules to exfiltrate data from your environment.
-- Last Modified: July 10, 2023
+- _Rationale:_ In the event that an attacker gains control of an end-user account, they could create automatic forwarding rules to exfiltrate data from your environment.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1114: Email Collection](https://attack.mitre.org/techniques/T1114/)
@@ -878,9 +846,8 @@ This section determines whether outgoing mail is delivered only through the Goog
 #### GWS.GMAIL.12.1v0.1
 Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers SHALL be disabled.
 
-- Rationale
-  - Mail sent via external SMTP will circumvent your outbound gateway.
-- Last Modified: July 10, 2023
+- _Rationale:_ Mail sent via external SMTP will circumvent your outbound gateway.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1114: Email Collection](https://attack.mitre.org/techniques/T1114/)
@@ -918,9 +885,8 @@ This section determines whether users are prompted with a warning for messages t
 #### GWS.GMAIL.13.1v0.1
 Unintended external reply warnings SHALL be enabled to avoid unintentional replies and remind users to treat external messages with caution.
 
-- Rationale
-  - As an admin for your organization, you can turn alerts on or off for messages that include external recipients (people with email addresses outside of your organization). These alerts help people avoid unintentional replies, and remind them to treat external messages with caution.
-- Last Modified: July, 10, 2023
+- _Rationale:_ As an admin for your organization, you can turn alerts on or off for messages that include external recipients (people with email addresses outside of your organization). These alerts help people avoid unintentional replies, and remind them to treat external messages with caution.
+- Last Modified:_ July, 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -959,9 +925,8 @@ This section determines whether an email allowlist allows for messages from cert
 #### GWS.GMAIL.14.1v0.1
 An email allowlist SHOULD not be implemented.
 
-- Rationale
-  - Messages sent from IP addresses on an allowlist bypass important security mechanisms, including spam filtering and sender authentication checks. Avoiding use of email allowlists helps prevent potential threats from circumventing security mechanisms.
-- Last Modified: July 10, 2023
+- _Rationale:_ Messages sent from IP addresses on an allowlist bypass important security mechanisms, including spam filtering and sender authentication checks. Avoiding use of email allowlists helps prevent potential threats from circumventing security mechanisms.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -1005,9 +970,8 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.15.1v0.1
 Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.
 
-- Rationale
-  - As an administrator, you can increase Gmail's ability to identify suspicious content with enhanced pre-delivery message scanning. Typically, when Gmail identifies a possible phishing message, a warning is displayed and the message might be moved to spam.
-- Last Modified: July 10, 2023
+- _Rationale:_ As an administrator, you can increase Gmail's ability to identify suspicious content with enhanced pre-delivery message scanning. Typically, when Gmail identifies a possible phishing message, a warning is displayed and the message might be moved to spam.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -1018,9 +982,8 @@ Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.
 #### GWS.GMAIL.15.2v0.1
 Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.
 
-- Rationale
-  - A third-party system should provide the same minimum functionality provided by Google.
-- Last Modified: July 10, 2023
+- _Rationale:_ A third-party system should provide the same minimum functionality provided by Google.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -1059,9 +1022,8 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.16.1v0.1
 Security sandbox SHOULD be enabled to provide additional protections for their email messages.
 
-- Rationale
-  - This allows potentially malicious messages to be quarantined to be analyzed to see if it malicious.
-- Last Modified: July 10, 2023
+- _Rationale:_ This allows potentially malicious messages to be quarantined to be analyzed to see if it malicious.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -1070,9 +1032,8 @@ Security sandbox SHOULD be enabled to provide additional protections for their e
 #### GWS.GMAIL.16.2v0.1
 Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.
 
-- Rationale
-  - A third-party system should provide the same minimum functionality provided by Google.
-- Last Modified: July 10, 2023
+- _Rationale:_ A third-party system should provide the same minimum functionality provided by Google.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -1114,9 +1075,8 @@ This section allows for email messages sent through other Google Workspace appli
 #### GWS.GMAIL.17.1v0.1
 Comprehensive mail storage SHOULD be enabled to allow tracking of information across applications.
 
-- Rationale
-  - This allows for tracking shared information from emails between GWS applications for traceability and security purposes.
-- Last Modified: November 14, 2023
+- _Rationale:_ This allows for tracking shared information from emails between GWS applications for traceability and security purposes.
+- Last Modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -1152,9 +1112,8 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.18.1v0.1
 Content filtering SHOULD be enabled within Gmail messages.
 
-- Rationale
-  - Protects the agency against malicious content from entering the agencies systems.
-- Last Modified: July 10, 2023
+- _Rationale:_ Protects the agency against malicious content from entering the agencies systems.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1114: Email Collection](https://attack.mitre.org/techniques/T1114/)
@@ -1163,9 +1122,8 @@ Content filtering SHOULD be enabled within Gmail messages.
 #### GWS.GMAIL.18.2v0.1
 Any third-party or outside application selected for advanced email content filtering SHOULD offer services comparable to those offered by Google Workspace.
 
-- Rationale
-  - A third-party system should provide the same minimum functionality provided by Google.
-- Last Modified: July 10, 2023
+- _Rationale:_ A third-party system should provide the same minimum functionality provided by Google.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -1173,9 +1131,8 @@ Any third-party or outside application selected for advanced email content filte
 #### GWS.GMAIL.18.3v0.1
 Gmail or third-party applications SHALL be configured to protect PII and sensitive information as defined by the agency. At a minimum, credit card numbers, taxpayer Identification Numbers (TIN), and Social Security Numbers (SSN) SHALL be blocked.
 
-- Rationale
-  - This helps protect against PII data leakage.
-- Last Modified: July 10, 2023
+- _Rationale:_ This helps protect against PII data leakage.
+- Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1114: Email Collection](https://attack.mitre.org/techniques/T1114/)
