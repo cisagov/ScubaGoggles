@@ -925,7 +925,7 @@ Access to Google Workspace applications by less secure apps that do not meet sec
 
 ### Prerequisites
 
--   None
+-   In order for admins or users to be able to install apps for Google Chat, the "Allow users to install chat apps" under Google Chat settings needs to be set to "On".
 
 ### Implementation
 
