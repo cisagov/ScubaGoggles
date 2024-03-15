@@ -41,7 +41,7 @@ This section covers whether users can share files outside of the organization, w
 #### GWS.DRIVEDOCS.1.1v0.1
 Agencies SHOULD disable sharing outside of the organization's domain.
 
-- _Rationale:_ To have the tightest control over access to documents created within the organization, agencies should disable sharing from outside the organization. Disabling external sharing will block any collaboration from outside the organization and will prevent disseminating documents outside the organization.
+- _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk inadvertent of data leakage.
 - _Last Modified:_ July 10, 2023
 - _Note:_
   - This policy restricts information sharing
@@ -57,7 +57,7 @@ Agencies SHOULD disable sharing outside of the organization's domain.
 #### GWS.DRIVEDOCS.1.2v0.1
 Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
-- _Rationale:_ If the agency decides that external sharing should be disabled, users should not be able to receive files from outside the organization as well. Disabling external sharing ensures that all communication stays within the organization, which helps mitigate risk from malicious files from an external source.
+- _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce this risk.
 - _Last Modified:_ January 3, 2024
 - _Note:_ This policy only applies if sharing outside was disabled in Policy 1.1
 
@@ -68,7 +68,7 @@ Agencies SHOULD disable users' receiving files from outside of the organization'
 #### GWS.DRIVEDOCS.1.3v0.1
 Warnings SHALL be enabled when a user is attempting to share something outside the domain.
 
-- _Rationale:_ In the case that a user is going to share something outside the domain, a warning should be given. The warning ensures that the user is aware that they are sharing something externally, and doing so purposefully.
+- _Rationale:_ Users may not always be aware that a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
 - _Last Modified:_ February 8, 2024
 - _Note:_ This policy only applies if external sharing was allowed in Policy 1.1
 
