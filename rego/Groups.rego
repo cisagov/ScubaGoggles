@@ -379,6 +379,23 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
+    print(NonCompliantGroups7_1)
+    Groups := {Group.email | some Group in input.group_settings}
+    count(Groups) > 0
+    Status := count(NonCompliantGroups7_1) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.GROUPS.7.1v0.1",
+    "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list", "groups-settings/v1/groups/get"],
+    "Criticality": "Should",
+    "ReportDetails": ReportDetailsGroups(NonCompliantGroups7_1),
+    "ActualValue": {"NonCompliantGroups": NonCompliantGroups7_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    print(NonCompliantGroups7_1)
     Groups := {Group.email | some Group in input.group_settings}
     count(Groups) > 0
     Status := count(NonCompliantGroups7_1) == 0
