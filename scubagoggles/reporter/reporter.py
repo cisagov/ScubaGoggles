@@ -4,11 +4,12 @@ reporter.py creates the report html page
 Currently utilizes pandas to generate the HTML table fragments
 """
 import os
+import json
 import time
 import warnings
 from datetime import datetime
 import pandas as pd
-from scubagoggles.utils import rel_abs_path
+from scubagoggles.utils import rel_abs_path, merge_dicts
 from scubagoggles.types import API_LINKS
 
 SCUBA_GITHUB_URL = "https://github.com/cisagov/scubagoggles"
@@ -313,3 +314,107 @@ successful_calls : set, unsuccessful_calls : set) -> None:
     mode='w', encoding='UTF-8') as file:
         file.write(html)
     return report_stats
+
+def rego_json_to_json(test_results_data : str, product : list, out_path : str, product_policies,
+successful_calls : set, unsuccessful_calls : set) -> None:
+    '''
+    Transforms the Rego JSON output into indiviual JSON report files
+
+    :param test_results_data: json object with results of Rego test
+    :param product: list of products being tested
+    :param out_path: output path where JSON should be saved
+    :param tenant_domain: The primary domain of the GWS org
+    :param main_report_name: report_name: Name of the main report JSON file.
+    :param prod_to_fullname: dict containing mapping of the product full names
+    :param product_policies: dict containing policies read from the baseline markdown
+    :param successful_calls: set with the set of successful calls
+    :param unsuccessful_calls: set with the set of unsuccessful calls
+    '''
+
+    product_capitalized = product.capitalize()
+    ind_report_name =  product_capitalized + "Report.json"
+    total_output = {}
+    json_data = []
+
+    report_stats = {
+        "Pass": 0,
+        "Warning": 0,
+        "Fail": 0,
+        "N/A": 0,
+        "No events found": 0,
+        "Error": 0
+    }
+
+    for baseline_group in product_policies:
+        for control in baseline_group['Controls']:
+            tests = [test for test in test_results_data if test['PolicyId'] == control['Id']]
+            if len(tests) == 0:
+                # Handle the case where Rego doesn't output anything for a given control
+                report_stats['Error'] += 1
+                issues_link = f'<a href="{SCUBA_GITHUB_URL}/issues" target="_blank">GitHub</a>'
+                json_data.append({
+                    'Control ID': control['Id'],
+                    'Requirement': control['Value'],
+                    'Result': "Error - Test results missing",
+                    'Criticality': "-",
+                    'Details': f'Report issue on {issues_link}'
+                })
+                warnings.warn(f"No test results found for Control Id {control['Id']}",
+                    RuntimeWarning)
+            else:
+                for test in tests:
+                    failed_prereqs = get_failed_prereqs(test, successful_calls, unsuccessful_calls)
+                    if len(failed_prereqs) > 0:
+                        result = "Error"
+                        report_stats["Error"] += 1
+                        failed_details = get_failed_details(failed_prereqs)
+                        json_data.append({
+                            'Control ID': control['Id'],
+                            'Requirement': control['Value'],
+                            'Result': "Error",
+                            'Criticality': test['Criticality'],
+                            'Details': failed_details
+                        })
+                    else:
+                        result = get_test_result(test['RequirementMet'], test['Criticality'],
+                        test['NoSuchEvent'])
+
+                        report_stats[result] = report_stats[result] + 1
+                        details = test['ReportDetails']
+
+                        # As rules doesn't have its own baseline, Rules and Common Controls
+                        # need to be handled specially
+                        if product_capitalized == "Rules":
+                            if 'Not-Implemented' in test['Criticality']:
+                                # The easiest way to identify the GWS.COMMONCONTROLS.13.1v1
+                                # results that belong to the Common Controls report is they're
+                                # marked as Not-Implemented. This if excludes them from the
+                                # rules report.
+                                continue
+                            json_data.append({
+                                'Control ID': control['Id'],
+                                'Rule Name': test['Requirement'],
+                                'Result': result,
+                                'Criticality': test['Criticality'],
+                                'Rule Description': test['ReportDetails']})
+                        elif product_capitalized == "Commoncontrols" \
+                            and baseline_group['GroupName'] == 'System-defined Rules' \
+                            and 'Not-Implemented' not in test['Criticality']:
+                            # The easiest way to identify the System-defined Rules
+                            # results that belong to the Common Controls report is they're
+                            # marked as Not-Implemented. This if excludes the full results
+                            # from the Common Controls report.
+                            continue
+                        else:
+                            json_data.append({
+                                'Control ID': control['Id'],
+                                'Requirement': control['Value'],
+                                'Result': result,
+                                'Criticality': test['Criticality'],
+                                'Details': details
+                            })
+    json_data.insert(0, report_stats)
+    results_json = json.dumps(json_data, indent = 4)
+    with open(f"{out_path}/IndividualReports/{ind_report_name}",
+    mode='w', encoding='UTF-8') as file:
+        file.write(results_json)
