@@ -9,7 +9,7 @@ import time
 import warnings
 from datetime import datetime
 import pandas as pd
-from scubagoggles.utils import rel_abs_path, merge_dicts
+from scubagoggles.utils import rel_abs_path
 from scubagoggles.types import API_LINKS
 
 SCUBA_GITHUB_URL = "https://github.com/cisagov/scubagoggles"
@@ -338,7 +338,6 @@ tenant_domain : str, product_policies, successful_calls : set, unsuccessful_call
     metadata_final = {}
 
     now = datetime.now()
-    
     report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
 
     report_metadata = {
