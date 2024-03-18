@@ -315,8 +315,8 @@ successful_calls : set, unsuccessful_calls : set) -> None:
         file.write(html)
     return report_stats
 
-def rego_json_to_json(test_results_data : str, product : list, out_path : str, product_policies,
-successful_calls : set, unsuccessful_calls : set) -> None:
+def rego_json_to_ind_json(test_results_data : str, product : list, out_path : str,
+tenant_domain : str, product_policies, successful_calls : set, unsuccessful_calls : set) -> None:
     '''
     Transforms the Rego JSON output into indiviual JSON report files
 
@@ -324,8 +324,6 @@ successful_calls : set, unsuccessful_calls : set) -> None:
     :param product: list of products being tested
     :param out_path: output path where JSON should be saved
     :param tenant_domain: The primary domain of the GWS org
-    :param main_report_name: report_name: Name of the main report JSON file.
-    :param prod_to_fullname: dict containing mapping of the product full names
     :param product_policies: dict containing policies read from the baseline markdown
     :param successful_calls: set with the set of successful calls
     :param unsuccessful_calls: set with the set of unsuccessful calls
@@ -333,8 +331,22 @@ successful_calls : set, unsuccessful_calls : set) -> None:
 
     product_capitalized = product.capitalize()
     ind_report_name =  product_capitalized + "Report.json"
-    total_output = {}
+    total_output = []
     json_data = []
+    report_stats_final = {}
+    json_data_final = {}
+    metadata_final = {}
+
+    now = datetime.now()
+    
+    report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
+
+    report_metadata = {
+        "Tenant Display Name":  tenant_domain,
+        "Report Date":  report_date,
+        "Baseline Version":  "0.1",
+        "Tool Version":  "0.1.0"
+    }
 
     report_stats = {
         "Pass": 0,
@@ -413,8 +425,13 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                                 'Criticality': test['Criticality'],
                                 'Details': details
                             })
-    json_data.insert(0, report_stats)
-    results_json = json.dumps(json_data, indent = 4)
+    report_stats_final['Report Summary'] = report_stats
+    json_data_final['Results'] = json_data
+    metadata_final['MetaData'] = report_metadata
+    total_output.append(report_stats_final)
+    total_output.append(json_data_final)
+    total_output.append(metadata_final)
+    results_json = json.dumps(total_output, indent = 4)
     with open(f"{out_path}/IndividualReports/{ind_report_name}",
     mode='w', encoding='UTF-8') as file:
         file.write(results_json)
