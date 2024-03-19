@@ -125,7 +125,7 @@ This section covers policies related to importing rosters from Clever.
 #### GWS.CLASSROOM.3.1v0.1
 Roster import with Clever SHOULD be turned off.
 
-- _Rationale:_ If your organization does not use Clever, allowing roster import could create a way to for data to be inputted into the organization's environment which allows from unauthorized data in the system. If your organization does use Clever, then roster import may be enabled.
+- _Rationale:_ If your organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into your organization's environment. If your organization does use Clever, then roster imports may be enabled.
 - _Last modified:_ September 28, 2023
 
 - MITRE ATT&CK TTP Mapping
