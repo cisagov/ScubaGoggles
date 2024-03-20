@@ -226,7 +226,7 @@ def run_reporter(args):
     products_bar = tqdm(products, leave=False, disable=args.quiet)
 
     for product in products_bar:
-        products_bar.set_description(f"Creating the HTML Report for {product}...")
+        products_bar.set_description(f"Creating the HTML and JSON Report for {product}...")
         report_stats[product] = reporter.rego_json_to_ind_reports(
             test_results_data,
             product,

@@ -271,13 +271,12 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                 # Handle the case where Rego doesn't output anything for a given control
                 report_stats['Error'] += 1
                 issues_link = f'<a href="{SCUBA_GITHUB_URL}/issues" target="_blank">GitHub</a>'
-                for cur_list in [json_data, table_data]:
-                    cur_list.append({
-                        'Control ID': control['Id'],
-                        'Requirement': control['Value'],
-                        'Result': "Error - Test results missing",
-                        'Criticality': "-",
-                        'Details': f'Report issue on {issues_link}'})
+                table_data.append({
+                    'Control ID': control['Id'],
+                    'Requirement': control['Value'],
+                    'Result': "Error - Test results missing",
+                    'Criticality': "-",
+                    'Details': f'Report issue on {issues_link}'})
                 warnings.warn(f"No test results found for Control Id {control['Id']}",
                     RuntimeWarning)
             else:
@@ -287,13 +286,12 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                         result = "Error"
                         report_stats["Error"] += 1
                         failed_details = get_failed_details(failed_prereqs)
-                        for cur_list in [json_data, table_data]:
-                            cur_list.append({
-                                'Control ID': control['Id'],
-                                'Requirement': control['Value'],
-                                'Result': "Error",
-                                'Criticality': test['Criticality'],
-                                'Details': failed_details})
+                        table_data.append({
+                            'Control ID': control['Id'],
+                            'Requirement': control['Value'],
+                            'Result': "Error",
+                            'Criticality': test['Criticality'],
+                            'Details': failed_details})
                     else:
                         result = get_test_result(test['RequirementMet'], test['Criticality'],
                         test['NoSuchEvent'])
@@ -306,7 +304,6 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                                 height='15'>\
                                 </object>"
                             details = warning_icon + " " + test['ReportDetails']
-
                         # As rules doesn't have its own baseline, Rules and Common Controls
                         # need to be handled specially
                         if product_capitalized == "Rules":
@@ -357,10 +354,12 @@ successful_calls : set, unsuccessful_calls : set) -> None:
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
+        json_data.append(table_data)
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
     results_json = build_report_json(tenant_domain,report_stats, json_data)
     with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
-    mode='w', encoding='UTF-8') as file1, open(f"{out_path}/IndividualReports/{ind_report_name}.json",
+    mode='w', encoding='UTF-8') as file1, \
+    open(f"{out_path}/IndividualReports/{ind_report_name}.json",
     mode='w', encoding='UTF-8') as file2:
         file1.write(html)
         file2.write(results_json)
