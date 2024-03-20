@@ -236,24 +236,13 @@ def run_reporter(args):
 
     for product in products_bar:
         products_bar.set_description(f"Creating the HTML Report for {product}...")
-        report_stats[product] = reporter.rego_json_to_html(
+        report_stats[product] = reporter.rego_json_to_ind_reports(
             test_results_data,
             product,
             out_folder,
             tenant_domain,
             main_report_name,
             prod_to_fullname,
-            baseline_policies[product],
-            successful_calls,
-            unsuccessful_calls
-        )
-
-        products_bar.set_description(f"Creating the JSON Report for {product}...")
-        reporter.rego_json_to_ind_json(
-            test_results_data,
-            product,
-            out_folder,
-            tenant_domain,
             baseline_policies[product],
             successful_calls,
             unsuccessful_calls

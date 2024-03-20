@@ -145,6 +145,39 @@ tenant_domain : str, main_report_name: str) -> str:
     html = html.replace('{{TABLES}}', collected)
     return html
 
+def build_report_json(tenant_domain : str, report_stats: dict, json_data: list) -> str:
+    '''
+    Adds data into JSON Template and formats the report accordingly
+
+    :param tenant_domain: the primary domain of the tenant.
+    :param main_report_name: dict containing the overall summary of the report tests.
+    :param json_data: list of json rego result output for specific baseline
+    '''
+    total_output = []
+    report_stats_final = {}
+    json_data_final = {}
+    metadata_final = {}
+
+    now = datetime.now()
+    report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
+
+    report_metadata = {
+        "Tenant Display Name":  tenant_domain,
+        "Report Date":  report_date,
+        "Baseline Version":  "0.1",
+        "Tool Version":  "0.1.0"
+    }
+
+    report_stats_final['Report Summary'] = report_stats
+    json_data_final['Results'] = json_data
+    metadata_final['MetaData'] = report_metadata
+    total_output.append(report_stats_final)
+    total_output.append(json_data_final)
+    total_output.append(metadata_final)
+    results_json = json.dumps(total_output, indent = 4)
+
+    return results_json
+
 def get_failed_prereqs(test : dict, successful_calls : set, unsuccessful_calls : set) -> set:
     '''
     Given the output of a specific Rego test and the set of successful and unsuccessful
@@ -191,11 +224,11 @@ def get_failed_details(failed_prereqs : set) -> str:
     failed_details += "See terminal output for more details."
     return failed_details
 
-def rego_json_to_html(test_results_data : str, product : list, out_path : str,
+def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
 successful_calls : set, unsuccessful_calls : set) -> None:
     '''
-    Transforms the Rego JSON output into HTML
+    Transforms the Rego JSON output into individual HTML and JSON reports
 
     :param test_results_data: json object with results of Rego test
     :param product: list of products being tested
@@ -210,9 +243,10 @@ successful_calls : set, unsuccessful_calls : set) -> None:
 
     product_capitalized = product.capitalize()
     product_upper = 'DRIVEDOCS' if product == 'drive' else product.upper()
-    ind_report_name =  product_capitalized + "Report.html"
+    ind_report_name =  product_capitalized + "Report"
     fragments = []
-
+    json_data = []
+    
     report_stats = {
         "Pass": 0,
         "Warning": 0,
@@ -230,13 +264,13 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                 # Handle the case where Rego doesn't output anything for a given control
                 report_stats['Error'] += 1
                 issues_link = f'<a href="{SCUBA_GITHUB_URL}/issues" target="_blank">GitHub</a>'
-                table_data.append({
-                    'Control ID': control['Id'],
-                    'Requirement': control['Value'],
-                    'Result': "Error - Test results missing",
-                    'Criticality': "-",
-                    'Details': f'Report issue on {issues_link}'
-                })
+                for cur_list in [json_data, table_data]:
+                    cur_list.append({
+                        'Control ID': control['Id'],
+                        'Requirement': control['Value'],
+                        'Result': "Error - Test results missing",
+                        'Criticality': "-",
+                        'Details': f'Report issue on {issues_link}'})
                 warnings.warn(f"No test results found for Control Id {control['Id']}",
                     RuntimeWarning)
             else:
@@ -246,13 +280,13 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                         result = "Error"
                         report_stats["Error"] += 1
                         failed_details = get_failed_details(failed_prereqs)
-                        table_data.append({
-                            'Control ID': control['Id'],
-                            'Requirement': control['Value'],
-                            'Result': "Error",
-                            'Criticality': test['Criticality'],
-                            'Details': failed_details
-                        })
+                        for cur_list in [json_data, table_data]:
+                            cur_list.append({
+                                'Control ID': control['Id'],
+                                'Requirement': control['Value'],
+                                'Result': "Error",
+                                'Criticality': test['Criticality'],
+                                'Details': failed_details})
                     else:
                         result = get_test_result(test['RequirementMet'], test['Criticality'],
                         test['NoSuchEvent'])
@@ -276,12 +310,13 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                                 # marked as Not-Implemented. This if excludes them from the
                                 # rules report.
                                 continue
-                            table_data.append({
-                                'Control ID': control['Id'],
-                                'Rule Name': test['Requirement'],
-                                'Result': result,
-                                'Criticality': test['Criticality'],
-                                'Rule Description': test['ReportDetails']})
+                            for cur_list in [json_data, table_data]:
+                                cur_list.append({
+                                    'Control ID': control['Id'],
+                                    'Rule Name': test['Requirement'],
+                                    'Result': result,
+                                    'Criticality': test['Criticality'],
+                                    'Rule Description': test['ReportDetails']})
                         elif product_capitalized == "Commoncontrols" \
                             and baseline_group['GroupName'] == 'System-defined Rules' \
                             and 'Not-Implemented' not in test['Criticality']:
@@ -291,138 +326,21 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                             # from the Common Controls report.
                             continue
                         else:
-                            table_data.append({
-                                'Control ID': control['Id'],
-                                'Requirement': control['Value'],
-                                'Result': result,
-                                'Criticality': test['Criticality'],
-                                'Details': details
-                            })
+                            for cur_list in [json_data, table_data]:
+                                cur_list.append({
+                                    'Control ID': control['Id'],
+                                    'Requirement': control['Value'],
+                                    'Result': result,
+                                    'Criticality': test['Criticality'],
+                                    'Details': details})
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
-    with open(f"{out_path}/IndividualReports/{ind_report_name}",
-    mode='w', encoding='UTF-8') as file:
-        file.write(html)
+    results_json = build_report_json(tenant_domain,report_stats, json_data)
+    with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
+    mode='w', encoding='UTF-8') as file1, open(f"{out_path}/IndividualReports/{ind_report_name}.json",
+    mode='w', encoding='UTF-8') as file2:
+        file1.write(html)
+        file2.write(results_json)
     return report_stats
-
-def rego_json_to_ind_json(test_results_data : str, product : list, out_path : str,
-tenant_domain : str, product_policies, successful_calls : set, unsuccessful_calls : set) -> None:
-    '''
-    Transforms the Rego JSON output into indiviual JSON report files
-
-    :param test_results_data: json object with results of Rego test
-    :param product: list of products being tested
-    :param out_path: output path where JSON should be saved
-    :param tenant_domain: The primary domain of the GWS org
-    :param product_policies: dict containing policies read from the baseline markdown
-    :param successful_calls: set with the set of successful calls
-    :param unsuccessful_calls: set with the set of unsuccessful calls
-    '''
-
-    product_capitalized = product.capitalize()
-    ind_report_name =  product_capitalized + "Report.json"
-    total_output = []
-    json_data = []
-    report_stats_final = {}
-    json_data_final = {}
-    metadata_final = {}
-
-    now = datetime.now()
-    report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
-
-    report_metadata = {
-        "Tenant Display Name":  tenant_domain,
-        "Report Date":  report_date,
-        "Baseline Version":  "0.1",
-        "Tool Version":  "0.1.0"
-    }
-
-    report_stats = {
-        "Pass": 0,
-        "Warning": 0,
-        "Fail": 0,
-        "N/A": 0,
-        "No events found": 0,
-        "Error": 0
-    }
-
-    for baseline_group in product_policies:
-        for control in baseline_group['Controls']:
-            tests = [test for test in test_results_data if test['PolicyId'] == control['Id']]
-            if len(tests) == 0:
-                # Handle the case where Rego doesn't output anything for a given control
-                report_stats['Error'] += 1
-                issues_link = f'<a href="{SCUBA_GITHUB_URL}/issues" target="_blank">GitHub</a>'
-                json_data.append({
-                    'Control ID': control['Id'],
-                    'Requirement': control['Value'],
-                    'Result': "Error - Test results missing",
-                    'Criticality': "-",
-                    'Details': f'Report issue on {issues_link}'
-                })
-                warnings.warn(f"No test results found for Control Id {control['Id']}",
-                    RuntimeWarning)
-            else:
-                for test in tests:
-                    failed_prereqs = get_failed_prereqs(test, successful_calls, unsuccessful_calls)
-                    if len(failed_prereqs) > 0:
-                        result = "Error"
-                        report_stats["Error"] += 1
-                        failed_details = get_failed_details(failed_prereqs)
-                        json_data.append({
-                            'Control ID': control['Id'],
-                            'Requirement': control['Value'],
-                            'Result': "Error",
-                            'Criticality': test['Criticality'],
-                            'Details': failed_details
-                        })
-                    else:
-                        result = get_test_result(test['RequirementMet'], test['Criticality'],
-                        test['NoSuchEvent'])
-
-                        report_stats[result] = report_stats[result] + 1
-                        details = test['ReportDetails']
-
-                        # As rules doesn't have its own baseline, Rules and Common Controls
-                        # need to be handled specially
-                        if product_capitalized == "Rules":
-                            if 'Not-Implemented' in test['Criticality']:
-                                # The easiest way to identify the GWS.COMMONCONTROLS.13.1v1
-                                # results that belong to the Common Controls report is they're
-                                # marked as Not-Implemented. This if excludes them from the
-                                # rules report.
-                                continue
-                            json_data.append({
-                                'Control ID': control['Id'],
-                                'Rule Name': test['Requirement'],
-                                'Result': result,
-                                'Criticality': test['Criticality'],
-                                'Rule Description': test['ReportDetails']})
-                        elif product_capitalized == "Commoncontrols" \
-                            and baseline_group['GroupName'] == 'System-defined Rules' \
-                            and 'Not-Implemented' not in test['Criticality']:
-                            # The easiest way to identify the System-defined Rules
-                            # results that belong to the Common Controls report is they're
-                            # marked as Not-Implemented. This if excludes the full results
-                            # from the Common Controls report.
-                            continue
-                        else:
-                            json_data.append({
-                                'Control ID': control['Id'],
-                                'Requirement': control['Value'],
-                                'Result': result,
-                                'Criticality': test['Criticality'],
-                                'Details': details
-                            })
-    report_stats_final['Report Summary'] = report_stats
-    json_data_final['Results'] = json_data
-    metadata_final['MetaData'] = report_metadata
-    total_output.append(report_stats_final)
-    total_output.append(json_data_final)
-    total_output.append(metadata_final)
-    results_json = json.dumps(total_output, indent = 4)
-    with open(f"{out_path}/IndividualReports/{ind_report_name}",
-    mode='w', encoding='UTF-8') as file:
-        file.write(results_json)
