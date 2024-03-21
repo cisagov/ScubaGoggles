@@ -34,7 +34,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.MEET.1.1v0.1",
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -48,7 +48,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.MEET.1.1v0.1",
-    "Criticality": "Shall",
+    "Criticality": "Should",
     # Empty list in next line for non-compliant groups, as Meet settings can't be changed at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
