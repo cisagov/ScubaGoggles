@@ -79,7 +79,7 @@ Warnings SHALL be enabled when a user is attempting to share something outside t
 #### GWS.DRIVEDOCS.1.4v0.1
 If sharing outside of the organization, then agencies SHALL disable sharing of files with individuals who are not using a Google account.
 
-- _Rationale:_ To ensure that all shared documents are secured, and that agencies are able to control dissemination of the files, agencies shall only share files with individuals using a google account.
+- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and invites potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last Modified:_ July 10, 2023
 - _Note:_ This policy only applies if external sharing is allowed in Policy 1.1
 
@@ -90,7 +90,7 @@ If sharing outside of the organization, then agencies SHALL disable sharing of f
 #### GWS.DRIVEDOCS.1.5v0.1
 Agencies SHALL disable making files and published web content visible to anyone with the link.
 
-- _Rationale:_ We want to ensure that only approved individuals are able to access and view the document. If content was visible to anyone with a link, that link could be forwarded to anyone, and agencies would no longer have control over who can view the specific document. By disabling file access to anyone with a link, agencies and individuals will have tighter control over who can view files and published web content.
+- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and invites potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -100,7 +100,7 @@ Agencies SHALL disable making files and published web content visible to anyone 
 #### GWS.DRIVEDOCS.1.6v0.1
 Agencies SHALL enable access checking for file sharing outside of Docs or Drive.
 
-- _Rationale:_ Enabling access checking for sharing files outside of Drive/Docs helps ensure that the documents are shared with approved individuals, organizations, or external domains only.
+- _Rationale:_ The Access Checker feature can be configured to allows users to grant access to the public if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients or the suggested target audience.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -108,9 +108,9 @@ Agencies SHALL enable access checking for file sharing outside of Docs or Drive.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.7v0.1
-Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organizations.
+Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organization.
 
-- _Rationale:_ To control access to content owned by the organization, users should not be able to distribute content to a shared drive owned by another organization. Once a document is moved outside the organization's drives, it no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
+- _Rationale:_ Once a document is moved outside the organization's drives, it no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -120,7 +120,7 @@ Agencies SHALL NOT allow any users to distribute content from an organization-ow
 #### GWS.DRIVEDOCS.1.8v0.1
 Agencies SHALL set newly created items to have Private to the Owner as the default level of access.
 
-- _Rationale:_ All newly created items should default to private. Any sharing of the document needs to be explicitly applied by the owner of the document.
+- _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent accidental sharing of information too broadly.
 - _Last Modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -188,7 +188,7 @@ This section covers whether users can create new shared drives to share with oth
 #### GWS.DRIVEDOCS.2.1v0.1
 Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.
 
-- _Rationale:_ The settings outlined in the SCBs should not be able to be overwritten by anyone, even those with manager access. Not allowing anyone to change shared drive creation settings ensures that security best practices are being followed.
+- _Rationale:_ Allowing users who are not the drive owner to override settings violates the principle of least privilege. This policy reduces the risk of drive settings being modified by unauthorized individuals.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
