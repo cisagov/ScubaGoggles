@@ -233,7 +233,7 @@ def get_failed_details(failed_prereqs : set) -> str:
 
 def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
-successful_calls : set, unsuccessful_calls : set) -> None:
+successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
     '''
     Transforms the Rego JSON output into individual HTML and JSON reports
 
@@ -246,6 +246,7 @@ successful_calls : set, unsuccessful_calls : set) -> None:
     :param product_policies: dict containing policies read from the baseline markdown
     :param successful_calls: set with the set of successful calls
     :param unsuccessful_calls: set with the set of unsuccessful calls
+    :param create_single_jsonfile: boolean for whether to create isingle json report or individual ones per baseline
     '''
 
     product_capitalized = product.capitalize()
@@ -356,11 +357,16 @@ successful_calls : set, unsuccessful_calls : set) -> None:
         fragments.append(create_html_table(table_data))
         json_data.append(table_data)
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
-    results_json = build_report_json(tenant_domain,report_stats, json_data)
     with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
-    mode='w', encoding='UTF-8') as file1, \
-    open(f"{out_path}/IndividualReports/{ind_report_name}.json",
-    mode='w', encoding='UTF-8') as file2:
+    mode='w', encoding='UTF-8') as file1:
         file1.write(html)
-        file2.write(results_json)
-    return report_stats
+        
+    #if create_single_jsonfile is TRUE only create single "ScubaResults.json" name stored in var out_jsonfile
+    #if create_single_jsonfile is FALSE create indivudal json files
+    if not create_single_jsonfile:
+        results_json = build_report_json(tenant_domain,report_stats, json_data)
+        with open(f"{out_path}/IndividualReports/{ind_report_name}.json",
+        mode='w', encoding='UTF-8') as file2:
+            file2.write(results_json)
+    
+    return [report_stats, json_data]
