@@ -241,7 +241,6 @@ def run_reporter(args):
 
     main_report_name = args.outputreportfilename
     products_bar = tqdm(products, leave=False, disable=args.quiet)
-    
     for product in products_bar:
         products_bar.set_description(f"Creating the HTML and JSON Report for {product}...")
         stats_and_data[product] = reporter.rego_json_to_ind_reports(
@@ -265,7 +264,7 @@ def run_reporter(args):
             results.update(baseline_product_results_json)
             summary_and_results.update({"Summary": summary})
             summary_and_results.update({"Results": results})
-            total_output.append(summary_and_results)    
+            total_output.append(summary_and_results)
     if create_single_jsonfile:
         report = json.dumps(total_output, indent = 4)
         with open(f"{out_folder}/{out_jsonfile}.json",
