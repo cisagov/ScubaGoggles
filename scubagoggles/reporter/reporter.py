@@ -145,7 +145,7 @@ tenant_domain : str, main_report_name: str) -> str:
     html = html.replace('{{TABLES}}', collected)
     return html
 
-def build_report_json(tenant_domain : str, report_stats: dict, 
+def build_report_json(tenant_domain : str, report_stats: dict,
 json_data: list, log_data: dict) -> str:
     '''
     Adds data into JSON Template and formats the report accordingly
@@ -230,7 +230,7 @@ def get_failed_details(failed_prereqs : set) -> str:
 
 def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
-successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool, 
+successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool,
 out_providerfile: str) -> list:
     '''
     Transforms the Rego JSON output into individual HTML and JSON reports
