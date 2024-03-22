@@ -223,6 +223,7 @@ def run_reporter(args):
     # Create the the individual report files
     out_jsonfile = args.outjsonfilename
     create_single_jsonfile = args.mergejson
+    out_providerfile = args.outputproviderfilename
     summary = {}
     results = {}
     summary_and_results = {}
@@ -244,7 +245,8 @@ def run_reporter(args):
             baseline_policies[product],
             successful_calls,
             unsuccessful_calls,
-            create_single_jsonfile
+            create_single_jsonfile,
+            out_providerfile
         )
         #Create single jsonfile if mergejson = True
         if create_single_jsonfile:
@@ -252,16 +254,15 @@ def run_reporter(args):
             baseline_product_results_json = {prod_to_fullname[product]:stats_and_data[product][1]}
             summary.update(baseline_product_summary)
             results.update(baseline_product_results_json)
-            #file needs to have dict "summary" with dicts of report_stats
-            #file needs to have dict "results" with dicts for each baseline
             summary_and_results.update({"Summary": summary})
             summary_and_results.update({"Results": results})
-            total_output.append(summary_and_results)
-    report = json.dumps(total_output, indent = 4)
-    with open(f"{out_folder}/{out_jsonfile}.json",
-    mode='w', encoding='UTF-8') as results_file:
-        results_file.write(report)
-    os.remove(out_folder + "/" + f'/{args.outputregofilename}.json')
+            total_output.append(summary_and_results)    
+    if create_single_jsonfile:
+        report = json.dumps(total_output, indent = 4)
+        with open(f"{out_folder}/{out_jsonfile}.json",
+        mode='w', encoding='UTF-8') as results_file:
+            results_file.write(report)
+        os.remove(out_folder + "/" + f'/{args.outputregofilename}.json')
 
     # Make the report front page
     report_path = out_folder + "/" + f'{args.outputreportfilename}.html'

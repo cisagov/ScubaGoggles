@@ -152,7 +152,7 @@ tenant_domain : str, main_report_name: str) -> str:
     html = html.replace('{{TABLES}}', collected)
     return html
 
-def build_report_json(tenant_domain : str, report_stats: dict, json_data: list) -> str:
+def build_report_json(tenant_domain : str, report_stats: dict, json_data: list, log_data: dict) -> str:
     '''
     Adds data into JSON Template and formats the report accordingly
 
@@ -163,6 +163,7 @@ def build_report_json(tenant_domain : str, report_stats: dict, json_data: list) 
     total_output = []
     report_stats_final = {}
     json_data_final = {}
+    log_data_final = {}
     metadata_final = {}
 
     now = datetime.now()
@@ -177,9 +178,11 @@ def build_report_json(tenant_domain : str, report_stats: dict, json_data: list) 
 
     report_stats_final['Report Summary'] = report_stats
     json_data_final['Results'] = json_data
+    log_data_final['Raw'] = log_data
     metadata_final['MetaData'] = report_metadata
     total_output.append(report_stats_final)
     total_output.append(json_data_final)
+    total_output.append(log_data_final)
     total_output.append(metadata_final)
     results_json = json.dumps(total_output, indent = 4)
 
@@ -233,7 +236,7 @@ def get_failed_details(failed_prereqs : set) -> str:
 
 def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
-successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
+successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool, out_providerfile: str) -> list:
     '''
     Transforms the Rego JSON output into individual HTML and JSON reports
 
@@ -247,6 +250,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
     :param successful_calls: set with the set of successful calls
     :param unsuccessful_calls: set with the set of unsuccessful calls
     :param create_single_jsonfile: boolean for whether to create isingle json report or individual ones per baseline
+    :param out_providerfile: name of provider output file from GWS output
     '''
 
     product_capitalized = product.capitalize()
@@ -360,11 +364,11 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
     with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
     mode='w', encoding='UTF-8') as file1:
         file1.write(html)
-        
-    #if create_single_jsonfile is TRUE only create single "ScubaResults.json" name stored in var out_jsonfile
-    #if create_single_jsonfile is FALSE create indivudal json files
     if not create_single_jsonfile:
-        results_json = build_report_json(tenant_domain,report_stats, json_data)
+        settings_name = f'{out_path}/{out_providerfile}.json'
+        with open(settings_name, mode='r', encoding='UTF-8') as file:
+            log_data = json.load(file)[f"{product}_logs"]
+        results_json = build_report_json(tenant_domain,report_stats, json_data, log_data)
         with open(f"{out_path}/IndividualReports/{ind_report_name}.json",
         mode='w', encoding='UTF-8') as file2:
             file2.write(results_json)
