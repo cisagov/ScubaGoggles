@@ -44,7 +44,8 @@ def get_gws_args(parser):
     'instead of one single json results report file encapsulating all assessment output' +
     'Defaults to False.')
 
-    parser.add_argument('--outjsonfilename', type=str, default=default_file_output_names['json_output_name'], metavar='',
+    parser.add_argument('--outjsonfilename', type=str, 
+    default=default_file_output_names['json_output_name'], metavar='',
     help='The name of the file that encapsulates all assessment output.' +
     f" Defaults to {default_file_output_names['json_output_name']}.")
 
