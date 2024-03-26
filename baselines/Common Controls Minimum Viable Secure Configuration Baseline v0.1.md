@@ -74,7 +74,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 
             - Google Passkeys
 
-- _Rationale:_ Required by Office of Management and Budget Memo M-22-09. Add an extra layer of security to user accounts by asking users to verify their identity when they enter a username and password. MFA (including methods using 2-Step Verification) requires an individual to present a minimum of two separate forms of authentication before access is granted. MFA provides additional assurance that the individual attempting to gain access is who they claim to be. With MFA, an attacker would need to compromise at least two different authentication mechanisms, increasing the difficulty of compromise and thus reducing the risk.
+- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. By enforcing methods resistant to phishing, those risks are minimized. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
 - _Last Modified:_ August 17, 2023
 - _Note:_ Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.4 applies.
 
@@ -92,7 +92,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 #### GWS.COMMONCONTROLS.1.2v0.1
 Google 2SV new user enrollment period SHALL be set to 1 week.
 
-- _Rationale:_ This allows enough time for new personnel to log into their account and configure MFA prior to getting locked out of their account. However, does not give an         excessive amount of time in order to limit security risks.
+- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and minimizing the risks inherent to not enforcing MFA.
 - _Last Modified:_ August 17, 2023
 - _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
@@ -111,7 +111,7 @@ Google 2SV new user enrollment period SHALL be set to 1 week.
 #### GWS.COMMONCONTROLS.1.3v0.1
 Allow users to trust the device SHALL be disabled.
 
-- _Rationale:_ This ensures that Google 2SV must be used each time to prevent unauthorized access to accounts.
+- _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible to ensure all logins are protected with MFA.
 - _Last Modified:_ August 17, 2023
 - _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
@@ -140,8 +140,7 @@ If phishing-resistant MFA is not yet tenable, an MFA method from the following l
 
 > Hardware Tokens OTP
 
-- _Rationale:_ Some agencies do not have capability for phishing-resistant MFA at this time, therefore an
-		alternative is provided.
+- _Rationale:_ This is a stopgap security policy to help protect the organization if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk. Additionally, this list excludes SMS and voice call, the weakest authentication methods, forcing users to use stronger MFA methods.
 - _Last Modified:_ August 17, 2023
 - _Note:_ ONLY to be enforced if Policy 1.1 is not possible for the agency. SMS or Voice as the MFA method SHALL NOT be used.
 
@@ -238,7 +237,7 @@ To enforce a device policy that requires company-owned devices, Google needs a l
 #### GWS.COMMONCONTROLS.2.1v0.1
 Policies restricting access to GWS based on signals about enterprise devices SHOULD be implemented.
 
-- _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on the user's context.
+- _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on user/device attributes.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -248,7 +247,7 @@ Policies restricting access to GWS based on signals about enterprise devices SHO
 #### GWS.COMMONCONTROLS.2.2v0.1
 Use of context-aware access for more granular controls, including using Advanced Mode (CEL), MAY be maximized and tailored if necessary.
 
-- _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on the user and/or device context. Advanced Mode's Common Expressions Language (CEL) gives administrators the ability to tailor access policies for devices, time-based use cases, authentication, and to combine multiple conditions into tailored controls.
+- _Rationale:_ Unless you create and assign access levels, enabling context-aware access does not provide any additional protection. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on the user and/or device context. Advanced Mode's Common Expressions Language (CEL) gives administrators the ability to tailor access policies for devices, time-based use cases, authentication, and to combine multiple conditions into tailored controls.
 - _Last Modified:_ July 11, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -317,7 +316,7 @@ Login challenges are additional security measures used to verify a user's identi
 #### GWS.COMMONCONTROLS.3.1v0.1
 Login Challenges SHALL be enabled when third party SAML SSO is in use.
 
-- _Rationale:_ Many organizations use third-party identity providers (IdPs) to authenticate users who use single sign on (SSO) through SAML. The third-party IdP authenticates users and no additional risk-based challenges are presented to them. Any Google 2-Step Verification (2SV) configuration is ignored. This is the default behavior. You can set a policy to allow additional risk-based authentication challenges and 2SV if it's configured. If Google receives a valid SAML assertion (authentication information about the user) from the IdP during user sign-in, Google can present additional challenges to the user. Login challenges requires users have a recovery phone number or email account associated with their organizational account. If not previously configured, users will be prompted to enter this information periodically until provided. One login challenge option prompts users to enter their employee ID. This method is susceptible to information gathering attacks, should a list of employee IDs ever be leaked.
+- _Rationale:_ Without enabling Post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. By enabling Post-SSO verification, 2SV verification policies will applied.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -358,7 +357,7 @@ Note: If using a third-party IdP, and agency-set web session lengths for its use
 #### GWS.COMMONCONTROLS.4.1v0.1
 Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.
 
-- _Rationale:_ This is to ensure that a session is not active without needing to reauthenticate for a longer period of time as this creates a higher potential for unauthorized access.
+- _Rationale:_ Allowing sessions to persist indefinitely allows users to bypass 2-Step Verification for future activity on that device. Limiting sessions to 12 hours may reduce risk of unauthorized access and prevent users from inadvertently remaining logged in on unattended devices.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -407,7 +406,7 @@ User password strength SHALL be enforced.
 #### GWS.COMMONCONTROLS.5.2v0.1
 User password length SHALL be at least 12 characters.
 
-- _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
+- _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-65B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -419,7 +418,7 @@ User password length SHALL be at least 12 characters.
 #### GWS.COMMONCONTROLS.5.3v0.1
 Password policy SHALL be enforced at next sign-in.
 
-- _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
+- _Rationale:_ Unless the password policy is enforced at next login, a user could potentially operate indefinitely using a weak password. Enforcing the policy at next login ensures that all active user passwords meet current requirements.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -431,7 +430,7 @@ Password policy SHALL be enforced at next sign-in.
 #### GWS.COMMONCONTROLS.5.4v0.1
 User passwords SHALL NOT be reused.
 
-- _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
+- _Rationale:_ Password reuse represents a significant security risk. Preventing password reuse when possible limits the scope of a compromised password.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -443,7 +442,7 @@ User passwords SHALL NOT be reused.
 #### GWS.COMMONCONTROLS.5.5v0.1
 User passwords SHALL NOT expire.
 
-- _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
+- _Rationale:_ The National Institute of Standards and Technology (NIST), OMB, and Microsoft have published guidance indicating mandated periodic password changes make user accounts less secure. For example, OMB M-22-09 states, "Password policies must not require use of special characters or regular rotation."
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -504,7 +503,7 @@ Pre-Built GWS Admin Roles considered highly privileged:
 #### GWS.COMMONCONTROLS.6.1v0.1
 All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
-- _Rationale:_ Provides a stronger and more centralized form of authentication which provides stronger protections against compromises.
+- _Rationale:_ By provisioning cloud-only accounts to privileged users, the risks associated with a compromise of on-premises federation infrastructure are reduced. This makes it is more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -516,11 +515,11 @@ All highly privileged accounts SHALL leverage Google Account authentication with
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 #### GWS.COMMONCONTROLS.6.2v0.1
-A minimum of **two** and maximum of **four** separate and distinct Super Admin users SHALL be configured.
+A minimum of **two** and maximum of **four** separate and distinct super admin users SHALL be configured.
 
-- _Rationale:_ Having only a single Super Admin Account can be problematic if this user were unavailable for an extended period of time. Also, Super Admin accounts should not be shared amongst multiple users. In addition, having too many super admins could be problematic as then there are many users with those privileges which creates a larger security risk
+- _Rationale:_ The super admin role provides unfettered access to the workspace. Properly managing the number of users with this level of access makes workspace compromise more challenging. However, having too few accounts can be problematic as it increases the risk of loosing admin access entirely (e.g., if a super admin forgets their password); having between 2 and 4 balances these two concerns.
 - _Last Modified:_ July 10, 2023
-- _Note:_ Admin count does not include "break-glass" Super Admin accounts.
+- _Note:_ Admin count does not include "break-glass" super admin accounts.
 
 
 - MITRE ATT&CK TTP Mapping
@@ -538,7 +537,7 @@ A minimum of **two** and maximum of **four** separate and distinct Super Admin u
 
 ### Prerequisites
 
--   Super admin users cannot log in to admin.google.com with a 3rd party IdP when using Super Admin level accounts—they must use Google Login as the authentication mechanism. This policy extends this rule to other Admin types.
+-   Super admin users cannot log in to admin.google.com with a 3rd party IdP when using super admin level accounts—they must use Google Login as the authentication mechanism. This policy extends this rule to other admin types.
 -   Delegated accounts, including the ones defined as highly privileged above, can by default, use a third-party IdP to access admin.google.com: however, this policy prohibits that practice. All highly privileged accounts must use phishing resistant Google Authentication.
 
 ### Implementation
@@ -576,15 +575,7 @@ By changing the email address, the user resolves the conflict by ensuring that t
 #### GWS.COMMONCONTROLS.7.1v0.1
 Account conflict management SHALL be configured to replace conflicting unmanaged accounts with managed ones.
 
-- _Rationale:_ As per Google, if employees of an organization use unmanaged accounts, then the premise of having a single place to manage user identities is compromised. Unmanaged accounts aren't managed by Google Workspace or Cloud Identity. Therefore, the ideal security course of action for government agencies is to replace conflicting unmanaged accounts with managed ones, rather than allowing a grace period or doing nothing with such accounts. Per Google, unmanaged personal accounts that use a business email address carry multiple risks, including the following:
-  	- You can't control the lifecycle of an unmanaged user account. An employee who leaves the company might continue to use the unmanaged account to access corporate resources or to generate corporate expenses.
- 	 - Even if you revoke access to all resources, the unmanaged account might still pose a social engineering risk. Because the user account uses a seemingly trustworthy identity with your company's domain name, the former employee might be able to convince current employees or business partners to grant access to resources again—for example, a sensitive Drive file.
- 	 - A former employee with an unmanaged account might use the user account to perform activities that aren't in line with your organization's policies, which could put your company's reputation at risk.
- 	 - You can't enforce security policies like 2-step verification or password complexity rules.
-	  - You can't restrict which geographic location Docs and Drive data is stored in, which might be a compliance risk.
- 	 - You can't restrict which Google services can be accessed by an unmanaged user account.
-  - Reconciling conflicting accounts creates churn for admins and adds to the workload of onboarding users to Google Workspace & Google Cloud.
-  - Note that if unmanaged accounts are used for official federal government business, they may be subject to record-keeping requirements under the Federal Records Act, 44 U.S.C. Chapter 31 et seq.
+- _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by workspace admins. By resolving conflicting accounts, you ensure all users in your workspace are using managed accounts.
 - _Last Modified:_ September 14, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -625,7 +616,7 @@ This section covers the admin self-recovery setting that is in Google Admin cons
 #### GWS.COMMONCONTROLS.8.1v0.1
 Account self-recovery for Super Admins SHALL be disabled
 
-- _Rationale:_ This forces Super Admin users who have lost their login credentials to contact another Super Admin to recover their account. This makes it more difficult for a potential adversary from being able to attempt to gain access to a super admin account through the method of account recovery.
+- _Rationale:_ If enabled, an adversary could attempt to gain access to a super admin account through the account recovery method. By disabling this feature, super admins are forced to contact another super admin to recover their account, making it more difficult for a potential adversary to compromise their account.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -728,7 +719,7 @@ Agencies need to have a process in place to manage and control application acces
 #### GWS.COMMONCONTROLS.10.1v0.1
 Agencies SHALL develop and implement a process to explicitly allow-list (trust) third-party app access to GWS services.
 
-- _Rationale:_ Prevents unauthorized access to GWS through the GWS API which provides additional protection against cyber attacks.
+- _Rationale:_ Third-party apps may include malicious content. Developing a process to review and approve apps reduces the risk of allowing malicious apps to connect to the workspace.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -742,7 +733,7 @@ Agencies SHALL develop and implement a process to explicitly allow-list (trust) 
 #### GWS.COMMONCONTROLS.10.2v0.1
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
 
-- _Rationale:_ You can restrict (or leave unrestricted) access to most Workspace services, including Google Cloud Platform services such as Machine Learning. For Gmail and Google Drive, you can specifically restrict access to high-risk scopes (for example, sending Gmail or deleting files in Drive). While users are prompted to consent to apps, if an app uses restricted scopes and you haven't specifically trusted it, users can't add it.
+- _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -756,7 +747,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
 #### GWS.COMMONCONTROLS.10.3v0.1
 Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 
-- _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with 11.1.
+- _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with 10.1.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -770,7 +761,7 @@ Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 #### GWS.COMMONCONTROLS.10.4v0.1
 Agencies SHALL NOT trust unconfigured internal apps.
 
-- _Rationale:_ By not trusting unconfigured apps it is ensuring the platform remains secure as unconfigured apps could be unsecure and create vulnerabilities within the whole system.
+- _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -784,7 +775,7 @@ Agencies SHALL NOT trust unconfigured internal apps.
 #### GWS.COMMONCONTROLS.10.5v0.1
 Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
-- _Rationale:_ Not allowing access to unconfigured apps helps ensure the platform remains secure as unconfigured apps could be unsecure and create vulnerabilities within the whole system.
+- _Rationale:_ External apps may contain vulnerabilities and malicious content. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -857,7 +848,7 @@ Some older versions of common software may break when this control is implemente
 #### GWS.COMMONCONTROLS.11.1v0.1
 Only approved Google Workspace Marketplace applications SHOULD be allowed for installation.
 
-- _Rationale:_ Users should only be allowed to install approved and vetted apps. This includes internally developed applications which being allowed without proper vetting poses a significant insider risk. This will help limit the overall attack surface for the organization.
+- _Rationale:_ Marketplace apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
 - _Last Modified:_ October 24, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -867,7 +858,7 @@ Only approved Google Workspace Marketplace applications SHOULD be allowed for in
 #### GWS.COMMONCONTROLS.11.2v0.1
 Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
-- _Rationale:_ You can block sign-in attempts from some apps or devices that are less secure. Apps that are less secure don't use modern security standards, such as OAuth. Using apps and devices that don't use modern security standards increases the risk of accounts being compromised. Blocking these apps and devices helps keep your users and data safe.
+- _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern standards helps reduce the risk of credential compromise.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -991,9 +982,9 @@ GWS includes system-defined alerting rules that provide situational awareness in
 #### GWS.COMMONCONTROLS.13.1v0.1
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
-- _Rationale:_ System-defined rules can allow an administrator to be notified of specific activity within a domain—such as a suspicious sign-in attempt, a compromised mobile device, or when another administrator changes settings.
+- _Rationale:_ Potentially malicious or service-impacting events may go undetected without a means of detecting these events. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
 - _Last Modified:_ July 10, 2023
-- _Note:_  - Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
+- _Note:_ Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)

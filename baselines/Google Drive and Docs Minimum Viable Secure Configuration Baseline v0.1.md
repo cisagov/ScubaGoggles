@@ -197,7 +197,7 @@ Agencies SHOULD NOT allow members with manager access to override shared drive c
 #### GWS.DRIVEDOCS.2.2v0.1
 Agencies SHOULD NOT allow users outside of their organization to access files in shared drives.
 
-- _Rationale:_ To control access to documents within the organization, agencies should not allow users outside the organization to access files in shared drives. Blocking external access to shared drives helps prevent documents shared within the organization from being shared outside the organization without explicit knowledge and approvals.
+- _Rationale:_ To regulate document access within the organization, it is recommended that agencies restrict external users from accessing files on shared drives. This policy is aimed at safeguarding internal documents from being distributed outside the organization without explicit consent and approval.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -206,7 +206,7 @@ Agencies SHOULD NOT allow users outside of their organization to access files in
 #### GWS.DRIVEDOCS.2.3v0.1
 Agencies SHALL allow users who are not shared drive members to be added to files.
 
-- _Rationale:_ When users who are not shared drive members are not allowed to be added to file, administrators would need to add them as drive members in order to facilitate access which would provide access to all files within the drive, not just the file intended to be shared.
+- _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as drive members, potentially exposing all drive files and increasing the risk of sensitive content exposure. By disallowing the sharing of these individual files, the risk of internal documents from being distributed outside the organization without explicit consent and approval.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -215,7 +215,7 @@ Agencies SHALL allow users who are not shared drive members to be added to files
 #### GWS.DRIVEDOCS.2.4v0.1
 Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.
 
-- _Rationale:_ All existing access control settings are circumvented once a file is downloaded and taken out of the GWS tenant which creates the possibility for data leakage.
+- _Rationale:_ Downloading and removing a file from the GWS tenant bypasses all access control settings, increasing the risk of data leakage. By preventing the sharing of these externally downloaded files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -262,7 +262,7 @@ This section covers whether a security update issued by Google will be applied t
 #### GWS.DRIVEDOCS.3.1v0.1
 Agencies SHALL enable security updates for Drive files.
 
-- _Rationale:_ Allowing security updates to be applied to all affected files will help keep the GWS tenant secure from potential security risks.
+- _Rationale:_ Google may add new security features over time. Allowing security updates ensures that your files are protected with the latest features Google makes available.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -297,7 +297,7 @@ This section covers whether users have access to Google Drive with the Drive SDK
 #### GWS.DRIVEDOCS.4.1v0.1
 Agencies SHOULD disable Drive SDK access.
 
-- _Rationale:_ The Drive SDK allows third-party external applications to access data and files from within Drive. Disabling the Drive SDK prevents third party applications from accessing the files and data from within the organization, which protects against data leakage and unintentional information sharing.
+- _Rationale:_ The Drive SDK allows third-party applications to access Drive data, potentially leading to unintentional information sharing and data leakage. By disabling the Drive SDK you can decrease the risk of internal documents from being distributed outside the organization without explicit consent and approval.
 - _Last Modified:_ January 3, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -333,7 +333,8 @@ This section covers whether users can use add-ons in file editors within Google 
 #### GWS.DRIVEDOCS.5.1v0.1
 Agencies SHALL disable Add-Ons.
 
-- _Rationale:_ Google Docs Add-Ons can pose a great security risk based on the permissions the add-on is given. Add-ons can be given full access to the google drive, permission to add or edit existing documents, share documents, connect to external services, and more. Any add-on needs to be fully vetted before given access to the google workspace. Therefore, unapproved add-ons need to be disabled.
+- _Rationale:_ Google Docs Add-Ons, depending on their permissions, can present a security risk, including potential exposure of sensitive content. By disabling unapproved add-ons and preventing their sharing, the risk of data leakage can be significantly reduced.
+
 - _Last Modified:_ January 3, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -369,7 +370,7 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 #### GWS.DRIVEDOCS.6.1v0.1
 Agencies SHOULD either disable Google Drive for Desktop or only allow Google Drive for Desktop on authorized devices.
 
-- _Rationale:_ Saving directly to the cloud reduces the risk of potentially losing data, which is beneficial when dealing with sensitive information and when trying to retain certain files.
+- _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -418,7 +419,7 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 #### GWS.DRIVEDOCS.7.1v0.1
 Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
 
-- _Rationale:_ Data Loss Prevention (DLP) rules trigger scans of files to look for sensitive content and restrict sharing of documents that may contain sensitive content. Configuring DLP rules helps agencies protect their information, by determining what data and/or phrasing might be sensitive, and restricting the dissemination of the documents containing that data. Examples include PII, PHI, portion markings, etc.
+- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. By blocking and/or having warnings on these DLP-scanned files from being shared with users, the risk of unintentional introduction of sensitive content is significantly reduced.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
