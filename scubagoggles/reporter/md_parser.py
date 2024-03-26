@@ -68,7 +68,9 @@ def read_baseline_docs(baseline_path:str, prod_to_fullname:dict):
                 line_advance = 1
                 value = md_lines[line_number + line_advance].strip()
 
-                while not value.endswith("."):
+                # We're done getting the policy text as soon as we encounter
+                # a blank line.
+                while md_lines[line_number + line_advance + 1].strip():
                     line_advance += 1
                     value += " " + md_lines[line_number + line_advance].strip()
 
