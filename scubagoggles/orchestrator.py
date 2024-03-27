@@ -230,13 +230,31 @@ def run_reporter(args):
 
 
     # Create the the individual report files
-    report_stats = {}
+    out_jsonfile = args.outjsonfilename
+    create_single_jsonfile = args.mergejson
+    summary = {}
+    results = {}
+    total_output = {}
+    stats_and_data = {}
+
+    now = datetime.now()
+    report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    report_metadata = {
+        "Tenant Domain":  tenant_domain,
+        "Product":  "GWS",
+        "Tool":  "ScubaGoggles",
+        "Tool Version":  "0.1.0",
+        "TimeStampZulu": report_date
+    }
+
+    total_output.update({"MetaData": report_metadata})
+
     main_report_name = args.outputreportfilename
     products_bar = tqdm(products, leave=False, disable=args.quiet)
-
     for product in products_bar:
-        products_bar.set_description(f"Creating the Report for {product}...")
-        report_stats[product] = reporter.rego_json_to_html(
+        products_bar.set_description(f"Creating the HTML and JSON Report for {product}...")
+        stats_and_data[product] = reporter.rego_json_to_ind_reports(
             test_results_data,
             product,
             out_folder,
@@ -245,8 +263,26 @@ def run_reporter(args):
             prod_to_fullname,
             baseline_policies[product],
             successful_calls,
-            unsuccessful_calls
+            unsuccessful_calls,
+            create_single_jsonfile,
         )
+        #Create single jsonfile if mergejson = True
+        if create_single_jsonfile:
+            baseline_product_summary = {prod_to_fullname[product]:stats_and_data[product][0]}
+            baseline_product_results_json = {prod_to_fullname[product]:stats_and_data[product][1]}
+            summary.update(baseline_product_summary)
+            results.update(baseline_product_results_json)
+            total_output.update({"Summary": summary})
+            total_output.update({"Results": results})
+    if create_single_jsonfile:
+        with open(f'{out_folder}/{args.outputproviderfilename}.json',
+        encoding='UTF-8') as file:
+            raw_data = json.load(file)
+        total_output.update({"Raw": raw_data})
+        report = json.dumps(total_output, indent = 4)
+        with open(f"{out_folder}/{out_jsonfile}.json",
+        mode='w', encoding='UTF-8') as results_file:
+            results_file.write(report)
 
     # Make the report front page
     report_path = out_folder + "/" + f'{args.outputreportfilename}.html'
@@ -254,7 +290,8 @@ def run_reporter(args):
 
     fragments = []
     table_data = []
-    for product, stats in report_stats.items():
+    #for product, stats in report_stats.items():
+    for product, stats in stats_and_data.items():
         ## Build the "Baseline Conformance Reports" column
         product_capitalize = product.capitalize()
         full_name = prod_to_fullname[product]
@@ -262,7 +299,7 @@ def run_reporter(args):
         link = f"<a class=\"individual_reports\" href={link_path}>{full_name}</a>"
         table_data.append({
             "Baseline Conformance Reports": link,
-            "Details": generate_summary(stats)
+            "Details": generate_summary(stats[0])
         })
 
     fragments.append(reporter.create_html_table(table_data))

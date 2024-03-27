@@ -4,6 +4,7 @@ reporter.py creates the report html page
 Currently utilizes pandas to generate the HTML table fragments
 """
 import os
+import json
 import time
 import warnings
 from datetime import datetime
@@ -151,6 +152,35 @@ tenant_domain : str, main_report_name: str) -> str:
     html = html.replace('{{TABLES}}', collected)
     return html
 
+def build_report_json(tenant_domain : str, report_stats: dict,
+json_data: list) -> str:
+    '''
+    Adds data into JSON Template and formats the report accordingly
+
+    :param tenant_domain: the primary domain of the tenant.
+    :param main_report_name: dict containing the overall summary of the report tests.
+    :param json_data: list of json rego result output for specific baseline
+    '''
+    total_output = []
+    report_final = {}
+    now = datetime.now()
+    report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
+
+    report_metadata = {
+        "Tenant Domain":  tenant_domain,
+        "Report Date":  report_date,
+        "Baseline Version":  "0.1",
+        "Tool Version":  "0.1.0"
+    }
+
+    report_final['ReportSummary'] = report_stats
+    report_final['Results'] = json_data
+    report_final['MetaData'] = report_metadata
+    total_output.append(report_final)
+    results_json = json.dumps(total_output, indent = 4)
+
+    return results_json
+
 def get_failed_prereqs(test : dict, successful_calls : set, unsuccessful_calls : set) -> set:
     '''
     Given the output of a specific Rego test and the set of successful and unsuccessful
@@ -197,11 +227,12 @@ def get_failed_details(failed_prereqs : set) -> str:
     failed_details += "See terminal output for more details."
     return failed_details
 
-def rego_json_to_html(test_results_data : str, product : list, out_path : str,
+# pylint: disable=too-many-branches
+def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
-successful_calls : set, unsuccessful_calls : set) -> None:
+successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
     '''
-    Transforms the Rego JSON output into HTML
+    Transforms the Rego JSON output into individual HTML and JSON reports
 
     :param test_results_data: json object with results of Rego test
     :param product: list of products being tested
@@ -212,13 +243,15 @@ successful_calls : set, unsuccessful_calls : set) -> None:
     :param product_policies: dict containing policies read from the baseline markdown
     :param successful_calls: set with the set of successful calls
     :param unsuccessful_calls: set with the set of unsuccessful calls
+    :param create_single_jsonfile: boolean for whether to create single 
+    json report or individual ones per baseline
     '''
 
     product_capitalized = product.capitalize()
     product_upper = 'DRIVEDOCS' if product == 'drive' else product.upper()
-    ind_report_name =  product_capitalized + "Report.html"
+    ind_report_name =  product_capitalized + "Report"
     fragments = []
-
+    json_data = []
     report_stats = {
         "Pass": 0,
         "Warning": 0,
@@ -241,8 +274,7 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                     'Requirement': control['Value'],
                     'Result': "Error - Test results missing",
                     'Criticality': "-",
-                    'Details': f'Report issue on {issues_link}'
-                })
+                    'Details': f'Report issue on {issues_link}'})
                 warnings.warn(f"No test results found for Control Id {control['Id']}",
                     RuntimeWarning)
             else:
@@ -257,8 +289,7 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                             'Requirement': control['Value'],
                             'Result': "Error",
                             'Criticality': test['Criticality'],
-                            'Details': failed_details
-                        })
+                            'Details': failed_details})
                     else:
                         result = get_test_result(test['RequirementMet'], test['Criticality'],
                         test['NoSuchEvent'])
@@ -272,7 +303,6 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                                 height='15'>\
                                 </object>"
                             details = warning_icon + " " + test['ReportDetails']
-
                         # As rules doesn't have its own baseline, Rules and Common Controls
                         # need to be handled specially
                         if product_capitalized == "Rules":
@@ -302,13 +332,18 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                                 'Requirement': control['Value'],
                                 'Result': result,
                                 'Criticality': test['Criticality'],
-                                'Details': details
-                            })
+                                'Details': details})
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
+        json_data = json_data + table_data
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
-    with open(f"{out_path}/IndividualReports/{ind_report_name}",
-    mode='w', encoding='UTF-8') as file:
-        file.write(html)
-    return report_stats
+    with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
+    mode='w', encoding='UTF-8') as file1:
+        file1.write(html)
+    if not create_single_jsonfile:
+        results_json = build_report_json(tenant_domain,report_stats, json_data)
+        with open(f"{out_path}/IndividualReports/{ind_report_name}.json",
+        mode='w', encoding='UTF-8') as file2:
+            file2.write(results_json)
+    return [report_stats, json_data]
