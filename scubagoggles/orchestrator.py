@@ -8,6 +8,7 @@ import json
 import webbrowser
 from pathlib import Path
 from datetime import datetime
+import time
 from tqdm import tqdm
 from googleapiclient.discovery import build
 
@@ -235,9 +236,21 @@ def run_reporter(args):
     out_providerfile = args.outputproviderfilename
     summary = {}
     results = {}
-    summary_and_results = {}
-    total_output = []
+    total_output = {}
     stats_and_data = {}
+
+    now = datetime.now()
+    report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    report_metadata = {
+        "Tenant Domain":  tenant_domain,
+        "Product":  "GWS",
+        "Tool":  "ScubaGoggles",
+        "Tool Version":  "0.1.0",
+        "TimeStampZulu": report_date
+    }
+
+    total_output.update({"MetaData": report_metadata})
 
     main_report_name = args.outputreportfilename
     products_bar = tqdm(products, leave=False, disable=args.quiet)
@@ -262,15 +275,17 @@ def run_reporter(args):
             baseline_product_results_json = {prod_to_fullname[product]:stats_and_data[product][1]}
             summary.update(baseline_product_summary)
             results.update(baseline_product_results_json)
-            summary_and_results.update({"Summary": summary})
-            summary_and_results.update({"Results": results})
-            total_output.append(summary_and_results)
+            total_output.update({"Summary": summary})
+            total_output.update({"Results": results})
     if create_single_jsonfile:
+        with open(f'{out_folder}/{args.outputproviderfilename}.json',
+        encoding='UTF-8') as file:
+            raw_data = json.load(file)
+        total_output.update({"Raw": raw_data})
         report = json.dumps(total_output, indent = 4)
         with open(f"{out_folder}/{out_jsonfile}.json",
         mode='w', encoding='UTF-8') as results_file:
             results_file.write(report)
-        os.remove(out_folder + "/" + f'/{args.outputregofilename}.json')
 
     # Make the report front page
     report_path = out_folder + "/" + f'{args.outputreportfilename}.html'

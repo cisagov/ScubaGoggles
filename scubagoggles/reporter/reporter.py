@@ -146,7 +146,7 @@ tenant_domain : str, main_report_name: str) -> str:
     return html
 
 def build_report_json(tenant_domain : str, report_stats: dict,
-json_data: list, log_data: dict) -> str:
+json_data: list) -> str:
     '''
     Adds data into JSON Template and formats the report accordingly
 
@@ -155,29 +155,22 @@ json_data: list, log_data: dict) -> str:
     :param json_data: list of json rego result output for specific baseline
     '''
     total_output = []
-    report_stats_final = {}
-    json_data_final = {}
-    log_data_final = {}
-    metadata_final = {}
-
+    report_final = {}
+  
     now = datetime.now()
     report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
 
     report_metadata = {
-        "Tenant Display Name":  tenant_domain,
+        "Tenant Domain":  tenant_domain,
         "Report Date":  report_date,
         "Baseline Version":  "0.1",
         "Tool Version":  "0.1.0"
     }
 
-    report_stats_final['Report Summary'] = report_stats
-    json_data_final['Results'] = json_data
-    log_data_final['Raw'] = log_data
-    metadata_final['MetaData'] = report_metadata
-    total_output.append(report_stats_final)
-    total_output.append(json_data_final)
-    total_output.append(log_data_final)
-    total_output.append(metadata_final)
+    report_final['ReportSummary'] = report_stats
+    report_final['Results'] = json_data
+    report_final['MetaData'] = report_metadata
+    total_output.append(report_final)
     results_json = json.dumps(total_output, indent = 4)
 
     return results_json
@@ -339,16 +332,13 @@ out_providerfile: str) -> list:
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
-        json_data.append(table_data)
+        json_data = json_data + table_data
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
     with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
     mode='w', encoding='UTF-8') as file1:
         file1.write(html)
     if not create_single_jsonfile:
-        settings_name = f'{out_path}/{out_providerfile}.json'
-        with open(settings_name, mode='r', encoding='UTF-8') as file:
-            log_data = json.load(file)[f"{product}_logs"]
-        results_json = build_report_json(tenant_domain,report_stats, json_data, log_data)
+        results_json = build_report_json(tenant_domain,report_stats, json_data)
         with open(f"{out_path}/IndividualReports/{ind_report_name}.json",
         mode='w', encoding='UTF-8') as file2:
             file2.write(results_json)
