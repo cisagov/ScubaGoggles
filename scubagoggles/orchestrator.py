@@ -8,7 +8,6 @@ import json
 import webbrowser
 from pathlib import Path
 from datetime import datetime
-import time
 from tqdm import tqdm
 from googleapiclient.discovery import build
 
@@ -224,7 +223,6 @@ def run_reporter(args):
     # Create the the individual report files
     out_jsonfile = args.outjsonfilename
     create_single_jsonfile = args.mergejson
-    out_providerfile = args.outputproviderfilename
     summary = {}
     results = {}
     total_output = {}
@@ -258,7 +256,6 @@ def run_reporter(args):
             successful_calls,
             unsuccessful_calls,
             create_single_jsonfile,
-            out_providerfile
         )
         #Create single jsonfile if mergejson = True
         if create_single_jsonfile:
