@@ -156,7 +156,6 @@ json_data: list) -> str:
     '''
     total_output = []
     report_final = {}
-  
     now = datetime.now()
     report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
 
@@ -224,8 +223,7 @@ def get_failed_details(failed_prereqs : set) -> str:
 # pylint: disable=too-many-branches
 def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
-successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool,
-out_providerfile: str) -> list:
+successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
     '''
     Transforms the Rego JSON output into individual HTML and JSON reports
 
@@ -240,7 +238,6 @@ out_providerfile: str) -> list:
     :param unsuccessful_calls: set with the set of unsuccessful calls
     :param create_single_jsonfile: boolean for whether to create single 
     json report or individual ones per baseline
-    :param out_providerfile: name of provider output file from GWS output
     '''
 
     product_capitalized = product.capitalize()
