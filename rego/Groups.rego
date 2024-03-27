@@ -268,6 +268,12 @@ if {
 # GWS.GROUPS.6 #
 ################
 
+GWSGroups6_1Compliant(GroupsEvents, OUs) := Flag if {
+    Events := utils.FilterEvents(GroupsEvents, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
+    Conditions = [count(Events) > 0, count(NonCompliantOUs6_1) == 0]
+    Flag := count(FilterArray(Conditions, false)) == 0
+}
+
 #
 # Baseline GWS.GROUPS.6.1v0.1
 #--
@@ -315,6 +321,8 @@ if {
 # GWS.GROUPS.7 #
 ################
 
+FilterArray(Conditions, Boolean) := [Condition | some Condition in Conditions; Condition == Boolean]
+
 #
 # Baseline GWS.GROUPS.7.1v0.1
 #--
@@ -324,31 +332,37 @@ NonCompliantGroups7_1 contains Group.name if {
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    # count(NonCompliantOUs6_1) != 0
     some Group in input.group_settings
     Group.whoCanViewMembership != "ALL_MEMBERS_CAN_VIEW"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    # count(NonCompliantOUs6_1) != 0
     some Group in input.group_settings
     Group.whoCanViewGroup != "ALL_MEMBERS_CAN_VIEW"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    # count(NonCompliantOUs6_1) != 0
     some Group in input.group_settings
     Group.whoCanModerateMembers != "OWNERS_AND_MANAGERS"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    # count(NonCompliantOUs6_1) != 0
     some Group in input.group_settings
     Group.allowExternalMembers != "false"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    # count(NonCompliantOUs6_1) != 0
     some Group in input.group_settings
     Group.whoCanPostMessage != "ALL_MEMBERS_CAN_POST"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    # count(NonCompliantOUs6_1) != 0
     some Group in input.group_settings
     Group.whoCanContactOwner != "ANYONE_CAN_CONTACT"
 }
@@ -379,25 +393,13 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    print(NonCompliantGroups7_1)
     Groups := {Group.email | some Group in input.group_settings}
     count(Groups) > 0
-    Status := count(NonCompliantGroups7_1) == 0
-}
+    
+    # If 6.1 is compliant, then 7.1 will automatically be compliant 
+    Conditions := [count(NonCompliantGroups7_1) == 0, GWSGroups6_1Compliant(LogEvents, NonCompliantOUs6_1)]
+    Status := count(FilterArray(Conditions, false)) == 0
 
-tests contains {
-    "PolicyId": "GWS.GROUPS.7.1v0.1",
-    "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list", "groups-settings/v1/groups/get"],
-    "Criticality": "Should",
-    "ReportDetails": ReportDetailsGroups(NonCompliantGroups7_1),
-    "ActualValue": {"NonCompliantGroups": NonCompliantGroups7_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    print(NonCompliantGroups7_1)
-    Groups := {Group.email | some Group in input.group_settings}
-    count(Groups) > 0
-    Status := count(NonCompliantGroups7_1) == 0
+    # Status := count(NonCompliantGroups7_1) == 0
 }
 #--
