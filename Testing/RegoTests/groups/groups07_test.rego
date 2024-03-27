@@ -115,8 +115,8 @@ test_Group_Correct_V3 if {
 }
 
 test_Group_Correct_V4 if {
-    # In cases where Groups 6.1 is compliant, Groups 7.1 should be automatically compliant
-    # Even if "allowerExternalMembers" is set to true
+    # In cases where Groups 6.1 is compliant, Groups 7.1 should be automatically compliant,
+    # granted the provided groups have an access type of restricted. 
     PolicyId := "GWS.GROUPS.7.1v0.1"
     Output := tests with input as {
         "groups_logs": {"items": [
@@ -142,7 +142,7 @@ test_Group_Correct_V4 if {
                 "whoCanViewMembership": "ALL_MEMBERS_CAN_VIEW",
                 "whoCanViewGroup": "ALL_MEMBERS_CAN_VIEW",
                 "whoCanModerateMembers": "OWNERS_AND_MANAGERS",
-                "allowExternalMembers": "true",
+                "allowExternalMembers": "false",
                 "whoCanPostMessage": "ALL_MEMBERS_CAN_POST",
                 "whoCanContactOwner": "ANYONE_CAN_CONTACT"
             },

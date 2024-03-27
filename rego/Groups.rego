@@ -399,7 +399,5 @@ if {
     # If 6.1 is compliant, then 7.1 will automatically be compliant 
     Conditions := [count(NonCompliantGroups7_1) == 0, GWSGroups6_1Compliant(LogEvents, NonCompliantOUs6_1)]
     Status := count(FilterArray(Conditions, false)) == 0
-
-    # Status := count(NonCompliantGroups7_1) == 0
 }
 #--
