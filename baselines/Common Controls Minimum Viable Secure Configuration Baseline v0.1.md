@@ -1039,7 +1039,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 
         > Context Aware Access logs
 
-- _Rationale:_ OMB M-21-31, Improving the Federal Government's Investigative and Remediation Capabilities Related to Cybersecurity Incidents, provides guidance on log retention for federal agencies. The memorandum defines the types of logs that must be retained at each maturity level for log retention.
+- _Rationale:_ This policy ensures enhanced security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids in regulatory compliance, maintaining the confidentiality, integrity, and availability of the agency's information systems.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -1049,7 +1049,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 #### GWS.COMMONCONTROLS.14.2v0.1
 Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31.
 
-- _Rationale:_ OMB M-21-31, Improving the Federal Government's Investigative and Remediation Capabilities Related to Cybersecurity Incidents, provides guidance on log retention for federal agencies. The memorandum defines three maturity levels for log retention, with each level requiring different minimum retention periods.
+- _Rationale:_ Audit logs may no longer be available when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
 - _Last Modified:_ January 30, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -1094,7 +1094,7 @@ At the time of writing, data region policies cannot be applied to data types not
 #### GWS.COMMONCONTROLS.15.1v0.1
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
-- _Rationale_: This policy is aligned with the concept of data sovereignty. Ensuring that data is stored in a specific region (in this case, the U.S. for FCEB agencies) affords the administrator of the GWS environment a degree of control and governance over their cloud data. FCEB agencies may need to meet specific regulations for various data classifications including data governance, security controls, privacy, and data residency. Being able to establish data sovereignty and identify residency regions can aid in these efforts.
+- _Rationale_: If not properly regulated, data could be stored in various regions, potentially exposing it to unauthorized entities. By implementing this policy, data is mandated to be stored in the U.S. by making it harder for potential adversaries to compromise the data and conforming to specific regulations related to data governance, security controls, privacy, and data residency.
 - _Last Modified:_ October 30, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -1106,7 +1106,7 @@ The data storage region SHALL be set to be the United States for all users in th
 #### GWS.COMMONCONTROLS.15.2v0.1
 The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 
-- _Rationale:_ This policy is aligned with the concept of data sovereignty. Ensuring that data is not stored in a specific region affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
+- _Rationale:_ This policy is aligned with the concept of data sovereignty. Ensuring that data is remains in the United States affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
 - _Last Modified:_ November 30, 2023
 
 - MITRE ATT&CK TTP Mapping
