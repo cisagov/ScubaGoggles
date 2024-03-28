@@ -5,19 +5,6 @@ import future.keywords
 
 LogEvents := utils.GetEvents("groups_logs")
 
-NoGroupsDetails(Groups) := "No Groups found in Organization." if {
-    count(Groups) == 0
-}
-
-ReportDetailsGroups(Groups) := "Requirement met in all Groups." if {
-    count(Groups) == 0
-}
-
-ReportDetailsGroups(Groups) := Message if {
-    count(Groups) > 0
-    Message := concat("", ["Requirement failed in ", concat(", ", Groups), "."])
-}
-
 ################
 # GWS.GROUPS.1 #
 ################
@@ -268,10 +255,10 @@ if {
 # GWS.GROUPS.6 #
 ################
 
-GWSGroups6_1Compliant(GroupsEvents, OUs) := Flag if {
-    Events := utils.FilterEvents(GroupsEvents, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
-    Conditions = [count(Events) > 0, count(NonCompliantOUs6_1) == 0]
-    Flag := count(FilterArray(Conditions, false)) == 0
+CheckGroups6_1Compliance(Events, OUs) := Flag if {
+    Groups := utils.FilterEvents(Events, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
+    Conditions = [count(Groups) > 0, count(OUs) == 0]
+    Flag := count(utils.FilterArray(Conditions, false)) == 0
 }
 
 #
@@ -320,8 +307,6 @@ if {
 ################
 # GWS.GROUPS.7 #
 ################
-
-FilterArray(Conditions, Boolean) := [Condition | some Condition in Conditions; Condition == Boolean]
 
 #
 # Baseline GWS.GROUPS.7.1v0.1
@@ -372,8 +357,8 @@ tests contains {
     "PolicyId": "GWS.GROUPS.7.1v0.1",
     "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list", "groups-settings/v1/groups/get"],
     "Criticality": "Should",
-    "ReportDetails": NoGroupsDetails(Groups),
-    "ActualValue": NoGroupsDetails(Groups),
+    "ReportDetails": utils.NoGroupsDetails(Groups),
+    "ActualValue": utils.NoGroupsDetails(Groups),
     "RequirementMet": true,
     "NoSuchEvent": false
 }
@@ -387,7 +372,7 @@ tests contains {
     "PolicyId": "GWS.GROUPS.7.1v0.1",
     "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list", "groups-settings/v1/groups/get"],
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsGroups(NonCompliantGroups7_1),
+    "ReportDetails": utils.ReportDetailsGroups(NonCompliantGroups7_1),
     "ActualValue": {"NonCompliantGroups": NonCompliantGroups7_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -397,7 +382,7 @@ if {
     count(Groups) > 0
     
     # If 6.1 is compliant, then 7.1 will automatically be compliant 
-    Conditions := [count(NonCompliantGroups7_1) == 0, GWSGroups6_1Compliant(LogEvents, NonCompliantOUs6_1)]
-    Status := count(FilterArray(Conditions, false)) == 0
+    Conditions := [count(NonCompliantGroups7_1) == 0, CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1)]
+    Status := count(utils.FilterArray(Conditions, false)) == 0
 }
 #--
