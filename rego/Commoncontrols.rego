@@ -3,53 +3,58 @@ package commoncontrols
 import data.utils
 import future.keywords
 
-FilterEventsAlt(EventName) := Events if {
+# Note that we need to implement custom FilterEvents and SettingChangeEvents
+# rules here, instead of importing the standard ones from utils.
+
+FilterEvents(EventName) := Events if {
     # Many of the events for common controls are structured differently.
     # Instead of having SETTING_NAME as one of the parameters, the event
     # name is set to what would normally be the setting name.
-    Events := SettingChangeEventsAlt with data.EventName as EventName
+    Events := SettingChangeEvents with data.EventName as EventName
 }
 
-FilterEventsAltOU(EventName, OrgUnit) := FilteredEvents if {
+FilterEventsOU(EventName, OrgUnit) := FilteredEvents if {
     # Filter the events by both EventName and OrgUnit
-    Events := FilterEventsAlt(EventName)
-    FilteredEvents := {Event | some Event in Events; Event.OrgUnit == OrgUnit}
+    Events := FilterEvents(EventName)
+    FilteredEvents := {
+        Event | some Event in Events;
+        Event.OrgUnit == OrgUnit;
+        Event.Group == ""
+    }
 }
 
-GetEventOu(Event) := OrgUnit if {
-    # Helper function that helps the SettingChange rules always work,
-    # even if the org unit isn't actually listed with the event
-    "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
+FilterEventsGroup(EventName, Group) := FilteredEvents if {
+    # Filter the events by both EventName and Group
+    Events := FilterEvents(EventName)
+    FilteredEvents := {Event | some Event in Events; Event.Group == Group}
 }
 
-GetEventOu(Event) := "None" if {
-    not "ORG_UNIT_NAME" in {Parameter.name | some Parameter in Event.parameters}
-}
-
-SettingChangeEventsAlt contains {
+SettingChangeEvents contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
     "NewValue": NewValue,
-    "OrgUnit": OrgUnit
+    "OrgUnit": OrgUnit,
+    "Group": Group
 }
 if {
     some Item in input.commoncontrols_logs.items # For each item...
     some Event in Item.events
     Event.name == data.EventName # Note the data.EventName. This means this
     # rule will only work if called like this:
-    # SettingChangeEventsAlt with data.EventName as ExampleEventName
+    # SettingChangeEvents with data.EventName as ExampleEventName
 
     "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
-    OrgUnit := GetEventOu(Event)
+    OrgUnit := utils.GetEventOu(Event)
+    Group := utils.GetEventGroup(Event)
 }
 
-SettingChangeEventsAlt contains {
+SettingChangeEvents contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
     "NewValue": NewValue,
-    "OrgUnit": OrgUnit
+    "OrgUnit": OrgUnit,
+    "Group": Group
 }
 if {
     some Item in input.commoncontrols_logs.items # For each item...
@@ -62,7 +67,8 @@ if {
     # CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS -> ALLOWED_TWO_STEP_VERIFICATION_METHOD
     EventName := trim_suffix(trim_prefix(data.EventName, "CHANGE_"), "S")
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == EventName][0]
-    OrgUnit := GetEventOu(Event)
+    OrgUnit := utils.GetEventOu(Event)
+    Group := utils.GetEventGroup(Event)
 }
 
 LogEvents := utils.GetEvents("commoncontrols_logs")
@@ -75,29 +81,47 @@ LogEvents := utils.GetEvents("commoncontrols_logs")
 # Baseline GWS.COMMONCONTROLS.1.1v0.1
 #--
 
-# For 1.1, we need to assert two different things:
+# For 1.1, we need to assert three different things:
+# - MFA is allowed
 # - MFA is enforced
 # - Allowed methods is set to only security key
 
 # Custom NoSuchEvent function needed as we're checking
-# two different settings simultaneously.
+# three different settings simultaneously. No such event
+# if any are missing
 NoSuchEvent1_1 := true if {
-    # No such event...
-    Events := FilterEventsAltOU("ENFORCE_STRONG_AUTHENTICATION", utils.TopLevelOU)
+    Events := FilterEventsOU("ALLOW_STRONG_AUTHENTICATION", utils.TopLevelOU)
     count(Events) == 0
 }
 
 NoSuchEvent1_1 := true if {
-    # No such event...
-    Events := FilterEventsAltOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", utils.TopLevelOU)
+    Events := FilterEventsOU("ENFORCE_STRONG_AUTHENTICATION", utils.TopLevelOU)
+    count(Events) == 0
+}
+
+NoSuchEvent1_1 := true if {
+    Events := FilterEventsOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", utils.TopLevelOU)
     count(Events) == 0
 }
 
 default NoSuchEvent1_1 := false
 
-NonCompliantOUs1_1 contains OU if {
+GetFriendlyMethods(Value) := "Any" if {
+    Value == "ANY"
+} else := "Any except verification codes via text, phone call" if {
+    Value == "NO_TELEPHONY"
+} else := "Only security key and allow security codes without remote access" if {
+    Value == "SECURITY_KEY_AND_IP_BOUND_SECURITY_CODE"
+} else := "Only security key and allow security codes with remote access" if {
+    Value == "SECURITY_KEY_AND_SECURITY_CODE"
+} else := Value
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": "Allow users to turn on 2-Step Verification is Off"
+} if {
     some OU in utils.OUsWithEvents
-    Events := FilterEventsAltOU("ENFORCE_STRONG_AUTHENTICATION", OU)
+    Events := FilterEventsOU("ALLOW_STRONG_AUTHENTICATION", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -106,12 +130,66 @@ NonCompliantOUs1_1 contains OU if {
     LastEvent.NewValue == "false"
 }
 
-NonCompliantOUs1_1 contains OU if {
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": "2-Step Verification Enforcement is Off"
+} if {
     some OU in utils.OUsWithEvents
-    Events := FilterEventsAltOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", OU)
+    Events := FilterEventsOU("ENFORCE_STRONG_AUTHENTICATION", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+}
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": concat("", ["Allowed methods is set to ", GetFriendlyMethods(LastEvent.NewValue)])
+} if {
+    some OU in utils.OUsWithEvents
+    Events := FilterEventsOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "ONLY_SECURITY_KEY"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
+NonCompliantGroups1_1 contains {
+    "Name": Group,
+    "Value": "Allow users to turn on 2-Step Verification is Off"
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := FilterEventsGroup("ALLOW_STRONG_AUTHENTICATION", Group)
+    # Ignore Groups without any events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+}
+
+NonCompliantGroups1_1 contains {
+    "Name": Group,
+    "Value": "2-Step Verification Enforcement is Off"
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := FilterEventsGroup("ENFORCE_STRONG_AUTHENTICATION", Group)
+    # Ignore Groups without any events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+}
+
+NonCompliantGroups1_1 contains {
+    "Name": Group,
+    "Value": concat("", ["Allowed methods is set to ", GetFriendlyMethods(LastEvent.NewValue)])
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := FilterEventsGroup("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", Group)
+    # Ignore Groups without any events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "ONLY_SECURITY_KEY"
@@ -134,14 +212,15 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     NoSuchEvent1_1 == false
-    Status := count(NonCompliantOUs1_1) == 0
+    Conditions := {count(NonCompliantOUs1_1) == 0, count(NonCompliantGroups1_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -149,12 +228,28 @@ if {
 # Baseline GWS.COMMONCONTROLS.1.2v0.1
 #--
 
-NonCompliantOUs1_2 contains OU if {
+NonCompliantOUs1_2 contains {
+    "Name": OU,
+    "Value": concat("", ["New user enrollment period is set to ", LastEvent.NewValue])
+} if {
     some OU in utils.OUsWithEvents
-    Events := FilterEventsAltOU("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", OU)
+    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "1 week"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
+NonCompliantGroups1_2 contains {
+    "Name": Group,
+    "Value": concat("", ["New user enrollment period is set to ", LastEvent.NewValue])
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := FilterEventsGroup("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", Group)
+    # Ignore groups without any events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "1 week"
@@ -171,22 +266,23 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsAltOU("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", utils.TopLevelOU)
+    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.1.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_2),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, NonCompliantGroups1_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2, "NonCompliantGroups": NonCompliantGroups1_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsAltOU("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", utils.TopLevelOU)
+    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs1_2) == 0
+    Conditions := {count(NonCompliantOUs1_2) == 0, count(NonCompliantGroups1_2) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -194,12 +290,32 @@ if {
 # Baseline GWS.COMMONCONTROLS.1.3v0.1
 #--
 
-NonCompliantOUs1_3 contains OU if {
+GetFriendlyValue1_3(Value) := "true" if {
+    Value == "ENABLE_USERS_TO_TRUST_DEVICE"
+} else := Value
+
+NonCompliantOUs1_3 contains {
+    "Name": OU,
+    "Value": concat("", ["Allow user to trust the device is set to true", GetFriendlyValue1_3(LastEvent.NewValue)])
+} if {
     some OU in utils.OUsWithEvents
-    Events := FilterEventsAltOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", OU)
+    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "DISABLE_USERS_TO_TRUST_DEVICE"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
+NonCompliantGroups1_3 contains {
+    "Name": Group,
+    "Value": concat("", ["Allow user to trust the device is set to ", GetFriendlyValue1_3(LastEvent.NewValue)])
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := FilterEventsGroup("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", Group)
+    # Ignore groups without any events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "DISABLE_USERS_TO_TRUST_DEVICE"
@@ -216,22 +332,23 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsAltOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", utils.TopLevelOU)
+    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.1.3v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_3),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_3},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_3, NonCompliantGroups1_3),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_3, "NonCompliantGroups": NonCompliantGroups1_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsAltOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", utils.TopLevelOU)
+    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs1_3) == 0
+    Conditions := {count(NonCompliantOUs1_3) == 0, count(NonCompliantGroups1_3) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -239,12 +356,27 @@ if {
 # Baseline GWS.COMMONCONTROLS.1.4v0.1
 #--
 
-NonCompliantOUs1_4 contains OU if {
+NonCompliantOUs1_4 contains {
+    "Name": OU,
+    "Value": "Allowed methods is set to Any"
+} if {
     some OU in utils.OUsWithEvents
-    Events := FilterEventsAltOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", OU)
+    Events := FilterEventsOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "ANY"
+}
+
+NonCompliantGroups1_4 contains {
+    "Name": Group,
+    "Value": "Allowed methods is set to Any"
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := FilterEventsGroup("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", Group)
+    # Ignore groups without any events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "ANY"
@@ -260,23 +392,23 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsAltOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", utils.TopLevelOU)
+    Events := FilterEventsOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.1.4v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_4),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_4, NonCompliantGroups1_4),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4, "NonCompliantGroups": NonCompliantGroups1_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsAltOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", utils.TopLevelOU)
+    Events := FilterEventsOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs1_4) == 0
-}
+    Conditions := {count(NonCompliantOUs1_4) == 0, count(NonCompliantGroups1_4) == 0}
+    Status := (false in Conditions) == false}
 
 ########################
 # GWS.COMMONCONTROLS.2 #
@@ -305,7 +437,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsAlt("TOGGLE_CAA_ENABLEMENT")
+    Events := FilterEvents("TOGGLE_CAA_ENABLEMENT")
     count(Events) == 0
 }
 
@@ -318,7 +450,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsAlt("TOGGLE_CAA_ENABLEMENT")
+    Events := FilterEvents("TOGGLE_CAA_ENABLEMENT")
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     Status := LastEvent.NewValue == "ENABLED"
@@ -346,9 +478,11 @@ tests contains {
 # Baseline GWS.COMMONCONTROLS.3.1v0.1
 #--
 
+# NOTE: this setting cannot be controlled at the group-level,
+# so only a check at the OU-level is implemented here.
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "SsoPolicyProto challenge_selection_behavior", OU)
+    Events := utils.FilterEventsOU(LogEvents, "SsoPolicyProto challenge_selection_behavior", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -368,7 +502,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "SsoPolicyProto challenge_selection_behavior", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "SsoPolicyProto challenge_selection_behavior", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -381,7 +515,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "SsoPolicyProto challenge_selection_behavior", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "SsoPolicyProto challenge_selection_behavior", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -395,6 +529,9 @@ if {
 # Baseline GWS.COMMONCONTROLS.4.1v0.1
 #--
 
+# NOTE: this setting cannot be controlled at the group-level,
+# so only a check at the OU-level is implemented here.
+
 GoodLimits := {"3600", "14400", "28800", "43200"}
 
 IsGoodLimit(ActualLim) := true if {
@@ -407,7 +544,7 @@ IsGoodLimit(ActualLim) := false if {
 
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Session management settings - Session length in seconds", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Session management settings - Session length in seconds", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -427,7 +564,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Session management settings - Session length in seconds", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Session management settings - Session length in seconds", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -440,7 +577,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "Session management settings - Session length in seconds", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Session management settings - Session length in seconds", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
@@ -450,13 +587,17 @@ if {
 # GWS.COMMONCONTROLS.5 #
 ########################
 
+# NOTE: these settings cannot be controlled at the group-level,
+# so only checks at the OU-level are implemented here.
+
 #
 # Baseline GWS.COMMONCONTROLS.5.1v0.1
 #--
 
+
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Password Management - Enforce strong password", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Enforce strong password", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -476,7 +617,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Password Management - Enforce strong password", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Enforce strong password", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -488,7 +629,7 @@ tests contains {
     "RequirementMet": Status,
     "NoSuchEvent": false
 } if {
-    Events := utils.FilterEvents(LogEvents, "Password Management - Enforce strong password", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Enforce strong password", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
@@ -500,7 +641,7 @@ tests contains {
 
 NonCompliantOUs5_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Password Management - Minimum password length", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Minimum password length", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -521,7 +662,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Password Management - Minimum password length", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Minimum password length", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -534,7 +675,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "Password Management - Minimum password length", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Minimum password length", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_2) == 0
 }
@@ -545,7 +686,7 @@ if {
 #--
 NonCompliantOUs5_3 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Password Management - Enforce password policy at next login", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Enforce password policy at next login", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -566,7 +707,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Password Management - Enforce password policy at next login"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -580,7 +721,7 @@ tests contains {
 }
 if {
     SettingName := "Password Management - Enforce password policy at next login"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_3) == 0
 }
@@ -591,7 +732,7 @@ if {
 #--
 NonCompliantOUs5_4 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Password Management - Enable password reuse", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Enable password reuse", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -611,7 +752,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Password Management - Enable password reuse", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Enable password reuse", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -624,7 +765,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "Password Management - Enable password reuse", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Enable password reuse", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_4) == 0
 }
@@ -635,7 +776,7 @@ if {
 #--
 NonCompliantOUs5_5 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Password Management - Password reset frequency", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Password reset frequency", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -655,7 +796,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Password Management - Password reset frequency", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Password reset frequency", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -668,7 +809,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "Password Management - Password reset frequency", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Password reset frequency", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_5) == 0
 }
@@ -738,12 +879,30 @@ tests contains {
 #
 # Baseline GWS.COMMONCONTROLS.8.1v0.1
 #--
-NonCompliantOUs8_1 contains OU if {
+NonCompliantOUs8_1 contains {
+    "Name": OU,
+    "Value": "Allow super admins to recover their account is ON"
+} if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "AdminAccountRecoverySettingsProto Enable admin account recovery", OU)
+    SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "false"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+NonCompliantGroups8_1 contains {
+    "Name": Group,
+    "Value": "Allow super admins to recover their account is ON"
+} if {
+    some Group in utils.GroupsWithEvents
+    SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
+    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
+    # Ignore groups without any events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
@@ -761,22 +920,23 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.8.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs8_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs8_1, NonCompliantGroups8_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_1, "NonCompliantGroups": NonCompliantGroups8_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 } if {
     SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs8_1) == 0
+    Conditions := {count(NonCompliantOUs1_1) == 0, count(NonCompliantGroups1_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -830,6 +990,9 @@ tests contains {
 #
 # Baseline GWS.COMMONCONTROLS.10.2v0.1
 #--
+
+# NOTE: App access cannot be controlled at the group/OU level
+
 # Step 1: Get the set of services that have either an API access allow or API access block event
 APIAccessEvents contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
@@ -996,6 +1159,9 @@ if {
 #
 # Baseline GWS.COMMONCONTROLS.10.4v0.1
 #--
+
+# NOTE: this setting cannot be set at the group level.
+
 DomainOwnedAppAccessEvents contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
@@ -1056,6 +1222,9 @@ if {
 #
 # Baseline GWS.COMMONCONTROLS.10.5v0.1
 #--
+
+# NOTE: this setting cannot be set at the group level.
+
 UnconfiguredAppAccessEvents contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
@@ -1129,35 +1298,68 @@ if {
 # Custom NoSuchEvent function needed as we're checking
 # two different settings simultaneously.
 NoSuchEvent11_1 := true if {
-    Events := utils.FilterEvents(LogEvents, "Apps Access Setting Allowlist access", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Apps Access Setting Allowlist access", utils.TopLevelOU)
     count(Events) == 0
 }
 
 NoSuchEvent11_1 := true if {
-    Events := utils.FilterEvents(LogEvents, "Apps Access Setting allow_all_internal_apps", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Apps Access Setting allow_all_internal_apps", utils.TopLevelOU)
     count(Events) == 0
 }
 
 default NoSuchEvent11_1 := false
 
-NonCompliantOUs11_1 contains OU if {
+NonCompliantOUs11_1 contains {
+    "Name": OU,
+    "Value": "Users can install and run any app from the Marketplace"
+} if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Apps Access Setting Allowlist access", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Apps Access Setting Allowlist access", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "ALLOW_SPECIFIED"
+    LastEvent.NewValue != "ALLOW_NONE"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
-NonCompliantOUs11_1 contains OU if {
+NonCompliantGroups11_1 contains {
+    "Name": Group,
+    "Value": "Users can install and run any app from the Marketplace"
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "Apps Access Setting Allowlist access", Group)
+    # Ignore groups without any events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "ALLOW_SPECIFIED"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+NonCompliantOUs11_1 contains {
+    "Name": OU,
+    "Value": "Users can install and run any internal app, even if it's not allowlisted"
+} if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Apps Access Setting allow_all_internal_apps", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Apps Access Setting allow_all_internal_apps", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "false"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+NonCompliantGroups11_1 contains {
+    "Name": Group,
+    "Value": "Users can install and run any internal app, even if it's not allowlisted"
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "Apps Access Setting allow_all_internal_apps", Group)
+    # Ignore groups without any events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
@@ -1180,23 +1382,27 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.11.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs11_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs11_1, NonCompliantGroups11_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1, "NonCompliantGroups": NonCompliantGroups11_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     NoSuchEvent11_1 == false
-    Status := count(NonCompliantOUs11_1) == 0
+    Conditions := {count(NonCompliantOUs11_1) == 0, count(NonCompliantGroups11_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
 #
 # Baseline GWS.COMMONCONTROLS.11.2v0.1
 #--
-NonCompliantOUs11_2 contains OU if {
+NonCompliantOUs11_2 contains {
+    "Name": OU,
+    "Value": "Allow users to manage their access to less secure apps is ON"
+} if {
     some OU in utils.OUsWithEvents
-    Events := FilterEventsAltOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", OU)
+    Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -1212,6 +1418,19 @@ NonCompliantOUs11_2 contains OU if {
 # for completeness, but this appears to be a case where we won't be
 # able to detect setting inheritance, as least for now.
 
+NonCompliantGroups11_2 contains {
+    "Name": Group,
+    "Value": "Allow users to manage their access to less secure apps is ON"
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := FilterEventsGroup("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", Group)
+    # Ignore groups without any events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "DENIED"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.11.2v0.1",
     "Criticality": "Should",
@@ -1222,22 +1441,23 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := FilterEventsAltOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
+    Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.11.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs11_2),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_2},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs11_2, NonCompliantGroups11_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_2, "NonCompliantGroups": NonCompliantGroups11_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsAltOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
+    Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs11_2) == 0
+    Conditions := {count(NonCompliantOUs11_2) == 0, count(NonCompliantGroups11_2) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -1245,8 +1465,66 @@ if {
 # GWS.COMMONCONTROLS.12 #
 #########################
 
-Apps := {"Blogger", "Google Books", "Google Pay", "Google Photos", "Google Play",
-    "Google Play Console", "Location History", "YouTube"}
+#### Part 1: detecting service toggle events for OUs/groups *without* an individual admin control
+TakeoutServiceEnableEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
+    "TimestampStr": Item.id.time,
+    "NewValue": NewValue,
+    "OrgUnit": OrgUnit,
+    "Group": Group
+}
+if {
+    some Item in input.commoncontrols_logs.items
+    some Event in Item.events
+    Event.name == "TOGGLE_SERVICE_ENABLED"
+
+    "SERVICE_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
+
+    ServiceName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SERVICE_NAME"][0]
+    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
+    OrgUnit := utils.GetEventOu(Event)
+    Group := utils.GetEventGroup(Event)
+
+    ServiceName == "Google Takeout"
+}
+
+NonCompliantOUs12_1 contains {
+    "Name": OU,
+    "Value": "Takeout is enabled for services without an individual admin control"
+} if {
+    some OU in utils.OUsWithEvents
+    Events := {
+        Event | some Event in TakeoutServiceEnableEvents;
+        Event.OrgUnit == OU;
+        Event.Group == ""
+    }
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent = utils.GetLastEvent(Events)
+    LastEvent.NewValue == "true"
+}
+
+NonCompliantGroups12_1 contains {
+    "Name": Group,
+    "Value": "Takeout is enabled for services without an individual admin control"
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := {
+        Event | some Event in TakeoutServiceEnableEvents;
+        Event.Group == Group
+    }
+    # Ignore groups without any events.
+    count(Events) > 0
+    LastEvent = utils.GetLastEvent(Events)
+    LastEvent.NewValue == "true"
+}
+
+#### Part 2: detecting services *with* an individual admin control
+Apps := {"Blogger", "Google Books", "Google Maps", "Google Pay", "Google Photos", "Google Play",
+    "Google Play Console", "Timeline - Location History", "YouTube"}
 
 AppsAllowingTakoutOU contains App if {
     Events := utils.FilterEventsNoOU(LogEvents, "UserTakeoutSettingsProto User Takeout ")
@@ -1260,9 +1538,27 @@ AppsAllowingTakoutOU contains App if {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
-NonCompliantOUs12_1 contains OU if {
+AppsAllowingTakoutGroup contains App if {
+    Events := utils.FilterEventsNoOU(LogEvents, "UserTakeoutSettingsProto User Takeout ")
+    some App in Apps
+    Filtered := {Event | some Event in Events; Event.AppName == App; Event.Group == data.Group}
+    # Note the data.Group. This means this
+    # rule will only work if called like this:
+    # AppsAllowingTakoutGroup with data.Group as ExampleGroup
+    LastEvent := utils.GetLastEvent(Filtered)
+    LastEvent.NewValue != "Disabled"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+NonCompliantOUs12_1 contains {
+    "Name": OU,
+    "Value": concat("", [
+        "The following apps with individual admin control have Takeout enabled: ",
+        concat(", ", EnabledApps)
+    ])
+} if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "UserTakeoutSettingsProto User Takeout ", OU)
+    Events := utils.FilterEventsOU(LogEvents, "UserTakeoutSettingsProto User Takeout ", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -1271,53 +1567,62 @@ NonCompliantOUs12_1 contains OU if {
     count(EnabledApps) > 0
 }
 
+NonCompliantGroups12_1 contains {
+    "Name": Group,
+    "Value": concat("", [
+        "The following apps with individual admin control have Takeout enabled: ",
+        concat(", ", EnabledApps)
+    ])
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "UserTakeoutSettingsProto User Takeout ", Group)
+    # Ignore groups without any events.
+    count(Events) > 0
+    EnabledApps := AppsAllowingTakoutGroup with data.Group as Group
+    count(EnabledApps) > 0
+}
+
 #
 # Baseline GWS.COMMONCONTROLS.12.1v0.1
 #--
+
+NoSuchEvent12_1 := true if {
+    Events := utils.FilterEventsOU(LogEvents, "UserTakeoutSettingsProto User Takeout ", utils.TopLevelOU)
+    count(Events) == 0
+}
+
+NoSuchEvent12_1 := true if {
+    Events := {Event | some Event in TakeoutServiceEnableEvents; Event.OrgUnit == utils.TopLevelOU}
+    count(Events) == 0
+}
+
+default NoSuchEvent12_1 := false
+
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.12.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": concat("", [
-        "For apps with individual admin control: ",
-        utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU)
-    ]),
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
 if {
     DefaultSafe := true
-    Events := utils.FilterEvents(LogEvents, "UserTakeoutSettingsProto User Takeout ", utils.TopLevelOU)
-    count(Events) == 0
+    NoSuchEvent12_1 == true
 }
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.12.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": concat("", [
-        "For apps with individual admin control: ",
-        utils.ReportDetailsOUs(NonCompliantOUs12_1)
-    ]),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs12_1, NonCompliantGroups12_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_1, "NonCompliantGroups": NonCompliantGroups12_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "UserTakeoutSettingsProto User Takeout ", utils.TopLevelOU)
-    count(Events) > 0
-    Status := count(NonCompliantOUs12_1) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.1",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": concat("", [
-        "Currently unable to check that Google takeout is disabled for ",
-        "services without an individual admin control; manual check recommended."
-    ]),
-    "ActualValue": [],
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    NoSuchEvent12_1 == false
+    Conditions := {count(NonCompliantOUs12_1) == 0, count(NonCompliantGroups12_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -1348,46 +1653,13 @@ tests contains {
 #
 # Baseline GWS.COMMONCONTROLS.14.1v0.1
 #--
-NonCompliantOUs14_1 contains OU if {
-    some OU in utils.OUsWithEvents
-    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
-    Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "ENABLED"
-}
-
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.14.1v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
     "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.14.1v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs14_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs14_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    SettingName := "Data Sharing Settings between GCP and Google Workspace \"Sharing Options\""
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) > 0
-    Status := count(NonCompliantOUs14_1) == 0
 }
 #--
 
@@ -1424,9 +1696,12 @@ tests contains {
 #
 # Baseline GWS.COMMONCONTROLS.15.2v0.1
 #--
+
+# NOTE: This setting cannot be controlled at the group level
+
 NonCompliantOUs15_2 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", OU)
+    Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -1445,7 +1720,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -1458,7 +1733,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs15_2) == 0
 }
