@@ -255,15 +255,16 @@ if {
 # GWS.GROUPS.6 #
 ################
 
-CheckGroups6_1Compliance(Events, OUs) := Flag if {
-    Groups := utils.FilterEvents(Events, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
-    Conditions = [count(Groups) > 0, count(OUs) == 0]
-    Flag := count(utils.FilterArray(Conditions, false)) == 0
-}
-
 #
 # Baseline GWS.GROUPS.6.1v0.1
 #--
+CheckGroups6_1Compliance(Events, OUs) := true if {
+    Groups := utils.FilterEvents(Events, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
+    count(Groups) > 0
+    count(OUs) == 0
+}
+else := false
+
 NonCompliantOUs6_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto allow_unlisted_groups", OU)
@@ -312,42 +313,43 @@ if {
 # Baseline GWS.GROUPS.7.1v0.1
 #--
 NonCompliantGroups7_1 contains Group.name if {
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanJoin != "CAN_REQUEST_TO_JOIN"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
-    # count(NonCompliantOUs6_1) != 0
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanViewMembership != "ALL_MEMBERS_CAN_VIEW"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
-    # count(NonCompliantOUs6_1) != 0
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanViewGroup != "ALL_MEMBERS_CAN_VIEW"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
-    # count(NonCompliantOUs6_1) != 0
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanModerateMembers != "OWNERS_AND_MANAGERS"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
-    # count(NonCompliantOUs6_1) != 0
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.allowExternalMembers != "false"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
-    # count(NonCompliantOUs6_1) != 0
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanPostMessage != "ALL_MEMBERS_CAN_POST"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
-    # count(NonCompliantOUs6_1) != 0
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanContactOwner != "ANYONE_CAN_CONTACT"
 }
@@ -380,9 +382,6 @@ tests contains {
 if {
     Groups := {Group.email | some Group in input.group_settings}
     count(Groups) > 0
-    
-    # If 6.1 is compliant, then 7.1 will automatically be compliant 
-    Conditions := [count(NonCompliantGroups7_1) == 0, CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1)]
-    Status := count(utils.FilterArray(Conditions, false)) == 0
+    Status := count(NonCompliantGroups7_1) == 0
 }
 #--
