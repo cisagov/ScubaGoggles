@@ -296,7 +296,7 @@ GetFriendlyValue1_3(Value) := "true" if {
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": concat("", ["Allow user to trust the device is set to true", GetFriendlyValue1_3(LastEvent.NewValue)])
+    "Value": concat("", ["Allow user to trust the device is set to ", GetFriendlyValue1_3(LastEvent.NewValue)])
 } if {
     some OU in utils.OUsWithEvents
     Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", OU)
@@ -480,7 +480,10 @@ tests contains {
 
 # NOTE: this setting cannot be controlled at the group-level,
 # so only a check at the OU-level is implemented here.
-NonCompliantOUs3_1 contains OU if {
+NonCompliantOUs3_1 contains {
+    "Name": OU,
+    "Value": "Post-SSO verification is disabled"
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SsoPolicyProto challenge_selection_behavior", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -509,7 +512,8 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.3.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs3_1),
+    # Empty list on the next line as this setting can't be set at the group level
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -542,7 +546,24 @@ IsGoodLimit(ActualLim) := false if {
     count({GoodLim | some GoodLim in GoodLimits; GoodLim == ActualLim}) == 0
 }
 
-NonCompliantOUs4_1 contains OU if {
+GetFriendlyValue4_1(Value) := "Session never expires" if {
+    Value == "63072000"
+} else := "30 days" if {
+    Value == "2592000"
+} else := "14 days" if {
+    Value == "1209600"
+} else := "7 days" if {
+    Value == "604800"
+} else := "24 hours" if {
+    Value == "86400"
+} else := "20 hours" if {
+    Value == "72000"
+} else := concat(" ", [Value, "seconds"])
+
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value": concat("", ["Web session duration is set to ", GetFriendlyValue4_1(LastEvent.NewValue)])
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "Session management settings - Session length in seconds", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -564,20 +585,22 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "Session management settings - Session length in seconds", utils.TopLevelOU)
+    SettingName := "Session management settings - Session length in seconds"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "Session management settings - Session length in seconds", utils.TopLevelOU)
+    SettingName := "Session management settings - Session length in seconds"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
@@ -594,8 +617,10 @@ if {
 # Baseline GWS.COMMONCONTROLS.5.1v0.1
 #--
 
-
-NonCompliantOUs5_1 contains OU if {
+NonCompliantOUs5_1 contains {
+    "Name": OU,
+    "Value": "Enforce strong password is OFF"
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Enforce strong password", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -624,7 +649,7 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.5.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -639,7 +664,10 @@ tests contains {
 # Baseline GWS.COMMONCONTROLS.5.2v0.1
 #--
 
-NonCompliantOUs5_2 contains OU if {
+NonCompliantOUs5_2 contains {
+    "Name": OU,
+    "Value": concat("", ["Minimum password length is set to ", LastEvent.NewValue])
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Minimum password length", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -669,7 +697,7 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.5.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_2),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -684,7 +712,10 @@ if {
 #
 # Baseline GWS.COMMONCONTROLS.5.3v0.1
 #--
-NonCompliantOUs5_3 contains OU if {
+NonCompliantOUs5_3 contains {
+    "Name": OU,
+    "Value": "Enforce password policy at next sign-in is OFF"
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Enforce password policy at next login", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -714,7 +745,7 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.5.3v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_3),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -730,7 +761,10 @@ if {
 #
 # Baseline GWS.COMMONCONTROLS.5.4v0.1
 #--
-NonCompliantOUs5_4 contains OU if {
+NonCompliantOUs5_4 contains {
+    "Name": OU,
+    "Value": "Allow password reuse is ON"
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Enable password reuse", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -759,7 +793,7 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.5.4v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_4),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -774,7 +808,10 @@ if {
 #
 # Baseline GWS.COMMONCONTROLS.5.5v0.1
 #--
-NonCompliantOUs5_5 contains OU if {
+NonCompliantOUs5_5 contains {
+    "Name": OU,
+    "Value": concat(" ", ["Password reset frequency is", LastEvent.NewValue, "days"])
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Password reset frequency", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -803,7 +840,7 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.5.5v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_5),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1179,7 +1216,10 @@ if {
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
-NonCompliantOUs10_4 contains OU if {
+NonCompliantOUs10_4 contains {
+    "Name": OU,
+    "Value": "Trust internal apps is ON"
+} if {
     some OU in utils.OUsWithEvents
     Events := {Event | some Event in DomainOwnedAppAccessEvents; Event.OrgUnit == OU}
     # Ignore OUs without any events. We're already asserting that the
@@ -1207,7 +1247,7 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.10.4v0.1",
         "Criticality": "Shall",
-        "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs10_4),
+        "ReportDetails": utils.ReportDetails(NonCompliantOUs10_4, []),
         "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_4},
         "RequirementMet": Status,
         "NoSuchEvent": false
@@ -1243,9 +1283,18 @@ if {
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
-NonCompliantOUs10_5 contains OU if {
+GetFriendlyValue10_5(Value) := "Allow users to access any third-party apps" if {
+    Value == "UNBLOCK_ALL_THIRD_PARTY_API_ACCESS"
+} else := "Allow users to access third-party apps that only request basic info needed for Sign in with Google." if {
+    Value == "SIGN_IN_ONLY_THIRD_PARTY_API_ACCESS"
+} else := concat(" ", [Value, "seconds"])
+
+NonCompliantOUs10_5 contains {
+    "Name": OU,
+    "Value": concat("", ["Unconfigured third-party app access is set to ", GetFriendlyValue10_5(LastEvent.EventName)])
+} if {
     some OU in utils.OUsWithEvents
-    Events := [Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == OU]
+    Events := {Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == OU}
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -1271,7 +1320,7 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.10.5v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs10_5),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_5},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1699,7 +1748,10 @@ tests contains {
 
 # NOTE: This setting cannot be controlled at the group level
 
-NonCompliantOUs15_2 contains OU if {
+NonCompliantOUs15_2 contains {
+    "Name": OU,
+    "Value": "Supplemental data storage is set to Russian Federation"
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -1727,7 +1779,7 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.15.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs15_2),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs15_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
