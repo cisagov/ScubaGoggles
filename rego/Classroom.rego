@@ -12,9 +12,22 @@ LogEvents := utils.GetEvents("classroom_logs")
 #
 # Baseline GWS.CLASSROOM.1.1v0.1
 #--
-NonCompliantOUs1_1 contains OU if {
+GetFriendlyValue1_1(Value) := "Users in your domain only can join classes" if {
+    Value == "1"
+} else := "Users in allowlisted domains can join classes" if {
+    Value := "2"
+} else := "Any Google Workspace user can join classes" if {
+    Value == "3"
+} else := "Any user can join classes" if {
+    Value == "4"
+} else := Value
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
+} if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", OU)
+    Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
