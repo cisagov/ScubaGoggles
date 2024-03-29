@@ -118,7 +118,7 @@ GetFriendlyMethods(Value) := "Any" if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": "Allow users to turn on 2-Step Verification is Off"
+    "Value": "Allow users to turn on 2-Step Verification is OFF"
 } if {
     some OU in utils.OUsWithEvents
     Events := FilterEventsOU("ALLOW_STRONG_AUTHENTICATION", OU)
@@ -132,7 +132,7 @@ NonCompliantOUs1_1 contains {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": "2-Step Verification Enforcement is Off"
+    "Value": "2-Step Verification Enforcement is OFF"
 } if {
     some OU in utils.OUsWithEvents
     Events := FilterEventsOU("ENFORCE_STRONG_AUTHENTICATION", OU)
@@ -290,13 +290,13 @@ if {
 # Baseline GWS.COMMONCONTROLS.1.3v0.1
 #--
 
-GetFriendlyValue1_3(Value) := "true" if {
+GetFriendlyValue1_3(Value) := "ON" if {
     Value == "ENABLE_USERS_TO_TRUST_DEVICE"
 } else := Value
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": concat("", ["Allow user to trust the device is set to ", GetFriendlyValue1_3(LastEvent.NewValue)])
+    "Value": concat("", ["Allow user to trust the device is ", GetFriendlyValue1_3(LastEvent.NewValue)])
 } if {
     some OU in utils.OUsWithEvents
     Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", OU)
@@ -311,7 +311,7 @@ NonCompliantOUs1_3 contains {
 
 NonCompliantGroups1_3 contains {
     "Name": Group,
-    "Value": concat("", ["Allow user to trust the device is set to ", GetFriendlyValue1_3(LastEvent.NewValue)])
+    "Value": concat("", ["Allow user to trust the device is ", GetFriendlyValue1_3(LastEvent.NewValue)])
 } if {
     some Group in utils.GroupsWithEvents
     Events := FilterEventsGroup("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", Group)

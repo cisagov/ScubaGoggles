@@ -12,6 +12,16 @@ test_EnforceMFA_Correct_V1 if {
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
+                    "name": "ALLOW_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
                     "name": "ENFORCE_STRONG_AUTHENTICATION",
                     "parameters": [
                         {"name": "NEW_VALUE", "value": "true"},
@@ -39,7 +49,7 @@ test_EnforceMFA_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_EnforceMFA_Correct_V2 if {
@@ -52,6 +62,16 @@ test_EnforceMFA_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "name": "ENFORCE_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "ALLOW_STRONG_AUTHENTICATION",
                     "parameters": [
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -88,7 +108,7 @@ test_EnforceMFA_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_EnforceMFA_Incorrect_V1 if {
@@ -102,6 +122,16 @@ test_EnforceMFA_Incorrect_V1 if {
                     "name": "ENFORCE_STRONG_AUTHENTICATION",
                     "parameters": [
                         {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "ALLOW_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -126,7 +156,11 @@ test_EnforceMFA_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: 2-Step Verification Enforcement is OFF</li>",
+        "</ul>"
+    ])
 }
 
 test_EnforceMFA_Incorrect_V2 if {
@@ -158,6 +192,16 @@ test_EnforceMFA_Incorrect_V2 if {
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
+                    "name": "ALLOW_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
                     "name": "CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS",
                     "parameters": [
                         {"name": "ALLOWED_TWO_STEP_VERIFICATION_METHOD", "value": "ONLY_SECURITY_KEY"},
@@ -175,7 +219,11 @@ test_EnforceMFA_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: 2-Step Verification Enforcement is OFF</li>",
+        "</ul>"
+    ])
 }
 
 
@@ -243,6 +291,186 @@ test_EnforceMFA_Incorrect_V4 if {
         "is non-compliant; manual check recommended."
     ])
 }
+
+test_EnforceMFA_Incorrect_V5 if {
+    # Test, mfa not allowed
+    PolicyId := "GWS.COMMONCONTROLS.1.1v0.1"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "ENFORCE_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "ALLOW_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS",
+                    "parameters": [
+                        {"name": "ALLOWED_TWO_STEP_VERIFICATION_METHOD", "value": "ONLY_SECURITY_KEY"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allow users to turn on 2-Step Verification is OFF</li>",
+        "</ul>"
+    ])
+}
+
+test_EnforceMFA_Incorrect_V6 if {
+    # Test, mfa not phishing resistant
+    PolicyId := "GWS.COMMONCONTROLS.1.1v0.1"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "ENFORCE_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "ALLOW_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS",
+                    "parameters": [
+                        {
+                            "name": "ALLOWED_TWO_STEP_VERIFICATION_METHOD",
+                            "value": "NO_TELEPHONY"
+                        },
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allowed methods is set to Any except verification codes via text, phone call</li>",
+        "</ul>"
+    ])
+}
+
+test_EnforceMFA_Incorrect_V6 if {
+    # Test, mfa not phishing resistant
+    PolicyId := "GWS.COMMONCONTROLS.1.1v0.1"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "ENFORCE_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "ALLOW_STRONG_AUTHENTICATION",
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS",
+                    "parameters": [
+                        {
+                            "name": "ALLOWED_TWO_STEP_VERIFICATION_METHOD",
+                            "value": "NO_TELEPHONY"
+                        },
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "name": "CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS",
+                    "parameters": [
+                        {
+                            "name": "ALLOWED_TWO_STEP_VERIFICATION_METHOD",
+                            "value": "NO_TELEPHONY"
+                        },
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "GROUP_EMAIL", "value": "test@test.com"}
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allowed methods is set to Any except verification codes via text, phone call</li>",
+        "</ul>",
+        "<br>",
+        "The following groups are non-compliant:<ul>",
+        "<li>test@test.com: Allowed methods is set to Any except verification codes via text, phone call</li>",
+        "</ul>",     
+    ])
+}
 #--
 
 #
@@ -273,7 +501,7 @@ test_Enforcement_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Enforcement_Correct_V2 if {
@@ -312,7 +540,7 @@ test_Enforcement_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Enforcement_Correct_V3 if {
@@ -360,7 +588,7 @@ test_Enforcement_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Enforcement_Incorrect_V1 if {
@@ -388,7 +616,11 @@ test_Enforcement_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: New user enrollment period is set to 2 weeks</li>",
+        "</ul>"
+    ])
 }
 
 test_Enforcement_Incorrect_V2 if {
@@ -427,7 +659,11 @@ test_Enforcement_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: New user enrollment period is set to 2 weeks</li>",
+        "</ul>"
+    ])
 }
 
 
@@ -492,7 +728,7 @@ test_Disable_Trusted_Device_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Disable_Trusted_Device_Correct_V2 if {
@@ -531,7 +767,7 @@ test_Disable_Trusted_Device_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Disable_Trusted_Device_Incorrect_V1 if {
@@ -559,7 +795,11 @@ test_Disable_Trusted_Device_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allow user to trust the device is ON</li>",
+        "</ul>"
+    ])
 }
 
 test_Disable_Trusted_Device_Incorrect_V2 if {
@@ -598,7 +838,11 @@ test_Disable_Trusted_Device_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allow user to trust the device is ON</li>",
+        "</ul>"
+    ])
 }
 
 
@@ -665,7 +909,7 @@ test_NotPhone_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_NotPhone_Correct_V2 if {
@@ -693,7 +937,7 @@ test_NotPhone_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_NotPhone_Correct_V3 if {
@@ -731,7 +975,7 @@ test_NotPhone_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_NotPhone_Incorrect_V1 if {
@@ -759,7 +1003,11 @@ test_NotPhone_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allowed methods is set to Any</li>",
+        "</ul>"
+    ])
 }
 
 test_NotPhone_Incorrect_V2 if {
@@ -797,7 +1045,11 @@ test_NotPhone_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allowed methods is set to Any</li>",
+        "</ul>"
+    ])
 }
 
 test_NotPhone_Incorrect_V3 if {
@@ -890,6 +1142,10 @@ test_NotPhone_Correct_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allowed methods is set to Any</li>",
+        "</ul>"
+    ])
 }
 #--
