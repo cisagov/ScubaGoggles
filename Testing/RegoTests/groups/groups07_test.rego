@@ -178,6 +178,47 @@ test_Group_Correct_V5 if {
     RuleOutput[0].ReportDetails == "Requirement met in all Groups."
 }
 
+test_Group_Correct_V6 if {
+    # If Groups 6.1 is noncompliant, Groups 7.1 must have restricted access type to be compliant
+    PolicyId := "GWS.GROUPS.7.1v0.1"
+    Output := tests with input as {
+        "groups_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "SETTING_NAME", "value": "Some other value"},
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": ""
+        },
+        "group_settings": [
+            {
+                "email": "admin1@example.org",
+                "name": "Group 1",
+                "whoCanJoin": "CAN_REQUEST_TO_JOIN",
+                "whoCanViewMembership": "ALL_MEMBERS_CAN_VIEW",
+                "whoCanViewGroup": "ALL_MEMBERS_CAN_VIEW",
+                "whoCanModerateMembers": "OWNERS_AND_MANAGERS",
+                "allowExternalMembers": "false",
+                "whoCanPostMessage": "ALL_MEMBERS_CAN_POST",
+                "whoCanContactOwner": "ANYONE_CAN_CONTACT"
+            },
+        ]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement met in all Groups."
+}
+
 test_Group_Incorrect_V1 if {
     # Test one group that is incorrect
     PolicyId := "GWS.GROUPS.7.1v0.1"
