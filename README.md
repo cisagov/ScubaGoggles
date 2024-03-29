@@ -247,6 +247,10 @@ optional arguments:
   -c , --credentials    The relative path and name of the OAuth / service account credentials json file. Defaults to
                         "./credentials.json" which means the tool will look for the file named credentials.json in the
                         current directory.
+  --mergejson           Creates individual json report files per baseline instead of one single json results report 
+                        file encapsulating all assessment output. Defaults to False.
+  --outjsonfilename     The name of the file that encapsulates all assessment output. Defaults to ScubaResults.
+                        should act on behalf of. This user must have the necessary privileges to run scubagoggles.
   --subjectemail        Only applicable when using a service account. The email address of a user the service account
                         should act on behalf of. This user must have the necessary privileges to run scubagoggles.
   --customerid          The customer ID the tool should run on. Defaults to "my_customer" which will be the domain of 
@@ -286,12 +290,17 @@ scubagoggles gws
 scubagoggles gws -b gmail calendar
 ```
 
-### Example 3: Run an assessment and store the results under a folder called output
+### Example 3: Run an assessment againsta all GWS products with single json results output
+```
+scubagoggles gws --mergejson
+```
+
+### Example 4: Run an assessment and store the results under a folder called output
 ```
 scubagoggles gws -b calendar gmail groups chat meet sites -o ./output
 ```
 
-### Example 4: Do a run cached assessment
+### Example 5: Do a run cached assessment
 ```
 # skip authentication and provider export stage
 # used for running against a cached provider json
@@ -299,7 +308,7 @@ scubagoggles gws -b calendar gmail groups chat meet sites -o ./output
 scubagoggles gws --runcached --skipexport
 ```
 
-### Example 5: Run with a service account on a different tenant
+### Example 6: Run with a service account on a different tenant
 ```
 scubagoggles gws --customerid <customer_id> --subjectemail admin@example.com
 ```
@@ -360,17 +369,23 @@ To view the JSON, open the `TestResults.json` file.
 Each baseline will appear in the following format: 
 
 ```
-    {
-        "ActualValue": {
-            "NonCompliantOUs": []
+{
+        "Summary": {
+            "Manual": 30,
+            "Passes": 8,
+            "Errors": 0,
+            "Failures": 4,
+            "Warnings": 1
+                 
         },
-        "Criticality": "Shall",
-        "NoSuchEvent": false,
-        "PolicyId": "GWS.CHAT.5.1v0.1",
-        "ReportDetails": "Requirement met in all OUs.",
-        "RequirementMet": true
-    },
-
+        "Results": [
+            {
+                "Control ID": "GWS.GMAIL.1.1v0.1",
+                "Requirement": "Mail Delegation SHOULD be disabled.",
+                "Result": "Pass",
+                "Criticality": "Should",
+                "Details": "Requirement met in all OUs."
+            },
 ```
 The `RequirementMet` field indicates whether the baseline associated with the given PolicyId is compliant or not. 
 
