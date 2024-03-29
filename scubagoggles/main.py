@@ -41,8 +41,8 @@ def get_gws_args(parser):
 
     parser.add_argument('--mergejson', action = 'store_true',
     help='Creates individual json report files per baseline' +
-    'instead of one single json results report file encapsulating all assessment output' +
-    'Defaults to False.')
+    'instead of one single json results report file encapsulating all assessment output.' +
+    ' Defaults to False.')
 
     parser.add_argument('--outjsonfilename', type=str,
     default=default_file_output_names['json_output_name'], metavar='',
