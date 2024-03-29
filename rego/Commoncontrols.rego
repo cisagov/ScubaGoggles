@@ -972,7 +972,7 @@ tests contains {
     SettingName := "AdminAccountRecoverySettingsProto Enable admin account recovery"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
-    Conditions := {count(NonCompliantOUs1_1) == 0, count(NonCompliantGroups1_1) == 0}
+    Conditions := {count(NonCompliantOUs8_1) == 0, count(NonCompliantGroups8_1) == 0}
     Status := (false in Conditions) == false
 }
 #--
