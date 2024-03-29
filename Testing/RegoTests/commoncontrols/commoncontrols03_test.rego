@@ -151,7 +151,11 @@ test_SSO_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Post-SSO verification is disabled</li>",
+        "</ul>"
+    ])
 }
 
 test_SSO_Incorrect_V2 if {
@@ -191,7 +195,11 @@ test_SSO_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Post-SSO verification is disabled</li>",
+        "</ul>"
+    ])
 }
 
 test_SSO_Incorrect_V3 if {
@@ -287,6 +295,11 @@ test_SSO_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Second-Level OU, Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Second-Level OU: Post-SSO verification is disabled</li>",
+        "<li>Test Top-Level OU: Post-SSO verification is disabled</li>",
+        "</ul>"
+    ])
 }
 #--
