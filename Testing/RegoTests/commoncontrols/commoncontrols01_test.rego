@@ -399,7 +399,7 @@ test_EnforceMFA_Incorrect_V6 if {
     ])
 }
 
-test_EnforceMFA_Incorrect_V6 if {
+test_EnforceMFA_Incorrect_V7 if {
     # Test, mfa not phishing resistant
     PolicyId := "GWS.COMMONCONTROLS.1.1v0.1"
     Output := tests with input as {

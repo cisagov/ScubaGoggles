@@ -338,7 +338,7 @@ test_SelfRecovery_Incorrect_V5 if {
     ])
 }
 
-test_SelfRecovery_Incorrect_V5 if {
+test_SelfRecovery_Incorrect_V6 if {
     # Test group
     PolicyId := "GWS.COMMONCONTROLS.8.1v0.1"
     Output := tests with input as {
