@@ -46,7 +46,7 @@ test_Installation_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Installation_Correct_V2 if {
@@ -99,7 +99,7 @@ test_Installation_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Installation_Correct_V3 if {
@@ -163,7 +163,7 @@ test_Installation_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Installation_Incorrect_V1 if {
@@ -205,7 +205,11 @@ test_Installation_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Users can install and run any app from the Marketplace</li>",
+        "</ul>"
+    ])
 }
 
 test_Installation_Incorrect_V2 if {
@@ -258,7 +262,11 @@ test_Installation_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Users can install and run any app from the Marketplace</li>",
+        "</ul>"
+    ])
 }
 
 test_Installation_Incorrect_V3 if {
@@ -382,7 +390,11 @@ test_Installation_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Second-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Second-Level OU: Users can install and run any app from the Marketplace</li>",
+        "</ul>"
+    ])
 }
 
 test_Installation_Incorrect_V6 if {
@@ -424,7 +436,71 @@ test_Installation_Incorrect_V6 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Users can install and run any internal app, even if it's not allowlisted</li>",
+        "</ul>"
+    ])
+}
+
+test_Installation_Incorrect_V7 if {
+    # Test group
+    PolicyId := "GWS.COMMONCONTROLS.11.1v0.1"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2022-11-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "ALLOW_SPECIFIED"},
+                        {"name": "SETTING_NAME", "value": "Apps Access Setting Allowlist access"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-11-20T00:02:28.672Z"},
+                "events": [
+                    {
+                        "parameters": [
+                            {"name": "NEW_VALUE", "value": "false"},
+                            {"name": "SETTING_NAME", "value": "Apps Access Setting allow_all_internal_apps"},
+                            {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                            {"name": "APPLICATION_NAME", "value": "Security"}
+                        ]
+                    },
+                ]
+            },
+            {
+                "id": {"time": "2022-11-20T00:02:28.672Z"},
+                "events": [
+                    {
+                        "parameters": [
+                            {"name": "NEW_VALUE", "value": "true"},
+                            {"name": "SETTING_NAME", "value": "Apps Access Setting allow_all_internal_apps"},
+                            {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                            {"name": "GROUP_EMAIL", "value": "test@test"},
+                            {"name": "APPLICATION_NAME", "value": "Security"}
+                        ]
+                    },
+                ]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following groups are non-compliant:<ul>",
+        "<li>test@test: Users can install and run any internal app, even if it's not allowlisted</li>",
+        "</ul>"
+    ])
 }
 #--
 
@@ -457,7 +533,7 @@ test_Access_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Access_Correct_V2 if {
@@ -495,7 +571,7 @@ test_Access_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Access_Incorrect_V1 if {
@@ -523,7 +599,11 @@ test_Access_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allow users to manage their access to less secure apps is ON</li>",
+        "</ul>"
+    ])
 }
 
 test_Access_Incorrect_V2 if {
@@ -561,7 +641,11 @@ test_Access_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Allow users to manage their access to less secure apps is ON</li>",
+        "</ul>"
+    ])
 }
 
 test_Access_Incorrect_V3 if {
@@ -654,6 +738,10 @@ test_Access_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Second-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Second-Level OU: Allow users to manage their access to less secure apps is ON</li>",
+        "</ul>"
+    ])
 }
 #--

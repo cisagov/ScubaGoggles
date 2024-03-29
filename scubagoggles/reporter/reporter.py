@@ -263,7 +263,6 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                         result = get_test_result(test['RequirementMet'], test['Criticality'],
                         test['NoSuchEvent'])
 
-                        report_stats[result] = report_stats[result] + 1
                         details = test['ReportDetails']
 
                         if result == "No events found":
@@ -282,6 +281,7 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                                 # marked as Not-Implemented. This if excludes them from the
                                 # rules report.
                                 continue
+                            report_stats[result] = report_stats[result] + 1
                             table_data.append({
                                 'Control ID': control['Id'],
                                 'Rule Name': test['Requirement'],
@@ -297,6 +297,7 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                             # from the Common Controls report.
                             continue
                         else:
+                            report_stats[result] = report_stats[result] + 1
                             table_data.append({
                                 'Control ID': control['Id'],
                                 'Requirement': control['Value'],
