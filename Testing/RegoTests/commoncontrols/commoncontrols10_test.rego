@@ -654,7 +654,11 @@ test_Internal_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Trust internal apps is ON</li>",
+        "</ul>"
+    ])
 }
 
 test_Internal_Incorrect_V2 if {
@@ -690,7 +694,11 @@ test_Internal_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Trust internal apps is ON</li>",
+        "</ul>"
+    ])
 }
 
 test_Internal_Incorrect_V3 if {
@@ -807,7 +815,12 @@ test_Unconfigured_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Unconfigured third-party app access is set to ",
+        "Allow users to access any third-party apps</li>",
+        "</ul>"
+    ])
 }
 
 test_Unconfigured_Incorrect_V2 if {
@@ -834,7 +847,12 @@ test_Unconfigured_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Unconfigured third-party app access is set to ",
+        "Allow users to access third-party apps that only request basic info needed for Sign in with Google.</li>",
+        "</ul>"
+    ])
 }
 
 test_Unconfigured_Incorrect_V3 if {
