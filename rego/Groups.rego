@@ -259,7 +259,7 @@ if {
 # Baseline GWS.GROUPS.6.1v0.1
 #--
 CheckGroups6_1Compliance(Events, OUs) := true if {
-    Groups := utils.FilterEvents(Events, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
+    Groups := utils.FilterEventsOU(Events, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
     count(Groups) > 0
     count(OUs) == 0
 }
