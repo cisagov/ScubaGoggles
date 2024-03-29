@@ -214,7 +214,11 @@ test_Limit_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Web session duration is set to 24 hours</li>",
+        "</ul>"
+    ])
 }
 
 test_Limit_Incorrect_V2 if {
@@ -253,7 +257,11 @@ test_Limit_Incorrect_V2 if {
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Web session duration is set to 24 hours</li>",
+        "</ul>"
+    ])
 }
 
 test_Limit_Incorrect_V3 if {
@@ -293,7 +301,11 @@ test_Limit_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Web session duration is set to 24 hours</li>",
+        "</ul>"
+    ])
 }
 
 test_Limit_Incorrect_V4 if {
