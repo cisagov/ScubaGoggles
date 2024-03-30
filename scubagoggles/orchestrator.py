@@ -239,7 +239,6 @@ def run_reporter(args):
         "Tool":  "ScubaGoggles",
         "ToolVersion":  "0.1.0",
         "TimeStampZulu": report_date
-        
     }
 
     total_output.update({"MetaData": report_metadata})

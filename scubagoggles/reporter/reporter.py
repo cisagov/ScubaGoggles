@@ -297,7 +297,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                         test['NoSuchEvent'])
 
                         details = test['ReportDetails']
-                        if result == "No events found" or result == "N/A":
+                        if result in {"No events found", "N/A"}:
                             report_stats["Manual"] += 1
                             details = test['ReportDetails']
                         elif result == "Warning":
