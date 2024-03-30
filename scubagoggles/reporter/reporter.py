@@ -288,7 +288,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                     else:
                         result = get_test_result(test['RequirementMet'], test['Criticality'],
                         test['NoSuchEvent'])
-                        if result == "No events found" or result == "N/A":
+                        if result in {"No events found","N/A"}:
                             report_stats["Manual"] += 1
                             details = test['ReportDetails']
                         elif result == "Warning":
