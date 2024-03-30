@@ -290,7 +290,7 @@ scubagoggles gws
 scubagoggles gws -b gmail calendar
 ```
 
-### Example 3: Run an assessment againsta all GWS products with single json results output
+### Example 3: Run an assessment against all GWS products with single json results output
 ```
 scubagoggles gws --mergejson
 ```
