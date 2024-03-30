@@ -12,19 +12,22 @@ LogEvents := utils.GetEvents("classroom_logs")
 #
 # Baseline GWS.CLASSROOM.1.1v0.1
 #--
-GetFriendlyValue1_1(Value) := "Users in your domain only can join classes" if {
+GetFriendlyValue1_1(Value) := "Users in your domain only" if {
     Value == "1"
-} else := "Users in allowlisted domains can join classes" if {
-    Value := "2"
-} else := "Any Google Workspace user can join classes" if {
+} else := "Users in allowlisted domains" if {
+    Value == "2"
+} else := "Any Google Workspace user" if {
     Value == "3"
-} else := "Any user can join classes" if {
+} else := "Any user" if {
     Value == "4"
 } else := Value
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
+    "Value": concat(" ", [
+        "Who can join classes in your domain is set to".
+        GetFriendlyValue1_1(LastEvent.NewValue)
+    ]) 
 } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", OU)
@@ -46,20 +49,20 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.CLASSROOM.1.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
+    # Empty list is for noncompliant groups as classroom settings can't be modified at the group level
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-
     Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
@@ -69,7 +72,21 @@ if {
 #
 # Baseline GWS.CLASSROOM.1.2v0.1
 #--
-NonCompliantOUs1_2 contains OU if {
+GetFriendlyValue1_2(Value) := "Classes in your domain only" if {
+    Value == "1"
+} else := "Classes in allowlisted domains" if {
+    Value == "2"
+} else := "Any Google Workspace class" if {
+    Value == "3"
+} else := Value
+
+NonCompliantOUs1_2 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Which classes can users in your domain join is set to",
+        GetFriendlyValue1_2(LastEvent.NewValue)
+    ])
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup which_classes_can_users_join", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -98,7 +115,8 @@ if {
 tests contains {
     "PolicyId": "GWS.CLASSROOM.1.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_2),
+    # Empty list is for noncompliant groups as classroom settings can't be modified at the group level
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
