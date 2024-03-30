@@ -157,13 +157,16 @@ json_data: list) -> str:
     total_output = []
     report_final = {}
     now = datetime.now()
-    report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
+    report_date = report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
     report_metadata = {
-        "Tenant Domain":  tenant_domain,
-        "Report Date":  report_date,
-        "Baseline Version":  "0.1",
-        "Tool Version":  "0.1.0"
+        "TenantId":  None,
+        "DisplayName":  None,
+        "DomainName":  tenant_domain,
+        "Product":  "GWS",
+        "Tool":  "ScubaGoggles",
+        "ToolVersion":  "0.1.0",
+        "TimeStampZulu": report_date
     }
 
     report_final['ReportSummary'] = report_stats
@@ -246,12 +249,11 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
     fragments = []
     json_data = []
     report_stats = {
-        "Pass": 0,
-        "Warning": 0,
-        "Fail": 0,
-        "N/A": 0,
-        "No events found": 0,
-        "Error": 0
+        "Manual": 0,
+        "Passes": 0,
+        "Errors": 0,
+        "Failures": 0,
+        "Warnings": 0
     }
 
     for baseline_group in product_policies:
@@ -260,7 +262,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
             tests = [test for test in test_results_data if test['PolicyId'] == control['Id']]
             if len(tests) == 0:
                 # Handle the case where Rego doesn't output anything for a given control
-                report_stats['Error'] += 1
+                report_stats['Errors'] += 1
                 issues_link = f'<a href="{SCUBA_GITHUB_URL}/issues" target="_blank">GitHub</a>'
                 table_data.append({
                     'Control ID': control['Id'],
@@ -275,7 +277,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                     failed_prereqs = get_failed_prereqs(test, successful_calls, unsuccessful_calls)
                     if len(failed_prereqs) > 0:
                         result = "Error"
-                        report_stats["Error"] += 1
+                        report_stats["Errors"] += 1
                         failed_details = get_failed_details(failed_prereqs)
                         table_data.append({
                             'Control ID': control['Id'],
@@ -286,9 +288,18 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                     else:
                         result = get_test_result(test['RequirementMet'], test['Criticality'],
                         test['NoSuchEvent'])
-
-                        report_stats[result] = report_stats[result] + 1
-                        details = test['ReportDetails']
+                        if result == "No events found" or result == "N/A":
+                            report_stats["Manual"] += 1
+                            details = test['ReportDetails']
+                        elif result == "Warning":
+                            report_stats["Warnings"] += 1
+                            details = test['ReportDetails']
+                        elif result == "Fail":
+                            report_stats["Failures"] += 1
+                            details = test['ReportDetails']
+                        elif result == "Pass":
+                            report_stats["Passes"] += 1
+                            details = test['ReportDetails']
 
                         if result == "No events found":
                             warning_icon = "<object data='./images/triangle-exclamation-solid.svg'\

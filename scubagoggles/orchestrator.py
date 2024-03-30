@@ -126,11 +126,11 @@ def generate_summary(stats : dict) -> str:
     """
     Craft the html-formatted summary from the stats dictionary.
     """
-    n_success = stats["Pass"]
-    n_warn = stats["Warning"]
-    n_fail = stats["Fail"]
-    n_manual = stats["N/A"] + stats["No events found"]
-    n_error = stats["Error"]
+    n_success = stats["Passes"]
+    n_warn = stats["Warnings"]
+    n_fail = stats["Failures"]
+    n_manual = stats["Manual"]
+    n_error = stats["Errors"]
 
     pass_summary = (f"<div class='summary pass'>{n_success}"
     f" {pluralize('test', 'tests', n_success)} passed</div>")
@@ -241,11 +241,14 @@ def run_reporter(args):
     report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
     report_metadata = {
-        "Tenant Domain":  tenant_domain,
+        "TenantId":  None,
+        "DisplayName":  None,
+        "DomainName":  tenant_domain,
         "Product":  "GWS",
         "Tool":  "ScubaGoggles",
-        "Tool Version":  "0.1.0",
+        "ToolVersion":  "0.1.0",
         "TimeStampZulu": report_date
+        
     }
 
     total_output.update({"MetaData": report_metadata})
