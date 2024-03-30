@@ -25,7 +25,7 @@ GetFriendlyValue1_1(Value) := "Users in your domain only" if {
 NonCompliantOUs1_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Who can join classes in your domain is set to".
+        "Who can join classes in your domain is set to",
         GetFriendlyValue1_1(LastEvent.NewValue)
     ]) 
 } if {
@@ -136,7 +136,19 @@ if {
 #
 # Baseline GWS.CLASSROOM.2.1v0.1
 #--
-NonCompliantOUs2_1 contains OU if {
+GetFriendlyValue2_1(Value) := "OFF" if {
+    Value == "false"
+} else := "ON" if {
+    Value == "true"
+} else := Value
+
+NonCompliantOUs2_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Data access is set to",
+        GetFriendlyValue2_1(LastEvent.NewValue)
+    ])
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ApiDataAccessSettingProto api_access_enabled", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -165,7 +177,8 @@ if {
 tests contains {
     "PolicyId": "GWS.CLASSROOM.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
+    # Empty list is for noncompliant groups as classroom settings can't be modified at the group level
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
