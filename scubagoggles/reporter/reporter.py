@@ -238,15 +238,15 @@ def get_summary_category(result : str) -> str:
 
     if result in {"No events found", "N/A"}:
         return "Manual"
-    elif result == "Warning":
+    if result == "Warning":
         return "Warnings"
-    elif result == "Fail":
+    if result == "Fail":
         return "Failures"
-    elif result == "Pass":
+    if result == "Pass":
         return "Passes"
-    else:
-        raise ValueError(f"Unexpected result, {result}", RuntimeWarning)
+    raise ValueError(f"Unexpected result, {result}", RuntimeWarning)
 
+# pylint: disable=too-many-branches
 def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
 successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
