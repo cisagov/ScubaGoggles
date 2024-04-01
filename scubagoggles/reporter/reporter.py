@@ -230,7 +230,23 @@ def get_failed_details(failed_prereqs : set) -> str:
     failed_details += "See terminal output for more details."
     return failed_details
 
-# pylint: disable=too-many-branches
+def get_summary_category(result : str) -> str:
+    '''Map the string result returned from get_test_result to the appropriate summary category.
+    
+    :param result: The result, e.g., "Warning"
+    '''
+
+    if result in {"No events found", "N/A"}:
+        return "Manual"
+    elif result == "Warning":
+        return "Warnings"
+    elif result == "Fail":
+        return "Failures"
+    elif result == "Pass":
+        return "Passes"
+    else:
+        raise ValueError(f"Unexpected result, {result}", RuntimeWarning)
+
 def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
 successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
@@ -297,18 +313,6 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                         test['NoSuchEvent'])
 
                         details = test['ReportDetails']
-                        if result in {"No events found", "N/A"}:
-                            report_stats["Manual"] += 1
-                            details = test['ReportDetails']
-                        elif result == "Warning":
-                            report_stats["Warnings"] += 1
-                            details = test['ReportDetails']
-                        elif result == "Fail":
-                            report_stats["Failures"] += 1
-                            details = test['ReportDetails']
-                        elif result == "Pass":
-                            report_stats["Passes"] += 1
-                            details = test['ReportDetails']
 
                         if result == "No events found":
                             warning_icon = "<object data='./images/triangle-exclamation-solid.svg'\
@@ -325,20 +329,13 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                                 # marked as Not-Implemented. This if excludes them from the
                                 # rules report.
                                 continue
-                            report_stats[result] = report_stats[result] + 1
+                            report_stats[get_summary_category(result)] += 1
                             table_data.append({
                                 'Control ID': control['Id'],
                                 'Rule Name': test['Requirement'],
                                 'Result': result,
                                 'Criticality': test['Criticality'],
                                 'Rule Description': test['ReportDetails']})
-                            for cur_list in [json_data, table_data]:
-                                cur_list.append({
-                                    'Control ID': control['Id'],
-                                    'Rule Name': test['Requirement'],
-                                    'Result': result,
-                                    'Criticality': test['Criticality'],
-                                    'Rule Description': test['ReportDetails']})
                         elif product_capitalized == "Commoncontrols" \
                             and baseline_group['GroupName'] == 'System-defined Rules' \
                             and 'Not-Implemented' not in test['Criticality']:
@@ -348,7 +345,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                             # from the Common Controls report.
                             continue
                         else:
-                            report_stats[result] = report_stats[result] + 1
+                            report_stats[get_summary_category(result)] += 1
                             table_data.append({
                                 'Control ID': control['Id'],
                                 'Requirement': control['Value'],
@@ -356,13 +353,6 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                                 'Criticality': test['Criticality'],
                                 'Details': details
                             })
-                            for cur_list in [json_data, table_data]:
-                                cur_list.append({
-                                    'Control ID': control['Id'],
-                                    'Requirement': control['Value'],
-                                    'Result': result,
-                                    'Criticality': test['Criticality'],
-                                    'Details': details})
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
