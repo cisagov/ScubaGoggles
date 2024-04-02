@@ -38,9 +38,8 @@ This section determines what information is shared from calendars with external 
 #### GWS.CALENDAR.1.1v0.1
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."
 
-- Rationale
-  - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
-- Last Modified: July 10, 2023
+- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -48,9 +47,8 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
 #### GWS.CALENDAR.1.2v0.1
 External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)."
 
-- Rationale
-  - Prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
-- Last Modified: July 10, 2023
+- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -94,9 +92,8 @@ This section determines whether users are warned when inviting one or more guest
 #### GWS.CALENDAR.2.1v0.1
 External invitations warnings SHALL be enabled to prompt users before sending invitations.
 
-- Rationale
-  - When your users create a Google Calendar event that includes one or more guests from outside of your domain, they are prompted to confirm whether it's OK to include external guests in the event invitation, assisting in the prevention of unintentional data leakage.
-- Last Modified: July 10, 2023
+- _Rationale:_ Users may inadvertently include external guests in calendar event invitations, potentially resulting in data leakage. Warning users when external participants are included can help mitigate this risk.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -137,10 +134,10 @@ Due to the added complexity and attack surface associated with configuring Calen
 #### GWS.CALENDAR.3.1v0.1
 Calendar Interop SHOULD be disabled.
 
-- Rationale
-  - Minimize attack surface by not enabling this feature which relies on Exchange Web Services for information exchange between Microsoft and Google calendars, unless required by the organization.
-- Last Modified: July 10, 2023
-- _Note:_ This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar.
+- _Rationale:_ Enabling Calendar interop adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature unless required by the organization conforms to the principle of least functionality.
+- _Last modified:_ July 10, 2023
+- Notes
+  - This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -149,9 +146,8 @@ Calendar Interop SHOULD be disabled.
 #### GWS.CALENDAR.3.2v0.1
 OAuth 2.0 SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.
 
-- Rationale
-  - When required by organizational requirements, for user's to exchange information between Google and Microsoft calendars, users will be authenticated using OAuth 2.0 to prevent unauthorized access.
-- Last Modified: July 10, 2023
+- _Rationale:_ Basic authentication is a deprecated and risk-prone authentication method. Using OAuth 2.0 helps reduce the risk of credential compromise.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1555: Credentials from Password Stores](https://attack.mitre.org/techniques/T1555/)
@@ -159,6 +155,7 @@ OAuth 2.0 SHALL be used in lieu of basic authentication to establish connectivit
 ### Resources
 
 -   [Google Workspace Admin Help: About Calendar Interop](https://support.google.com/a/answer/7444958?hl=en)
+-   [Deprecation of Basic Authentication in Exchange Online](https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/deprecation-of-basic-authentication-exchange-online)
 
 ### Prerequisites
 
@@ -195,10 +192,8 @@ This section covers whether or not the paid appointment booking feature is enabl
 #### GWS.CALENDAR.4.1v0.1
 Appointment Schedule with Payments SHALL be disabled.
 
-- Rationale
-  - This helps avoid unnecessary interconnectivity with third-party services that can create a greater chance of additional vulnerabilities in the platform.
-  - There is no obvious need for agencies to have this feature enabled.
-- Last Modified: July 10, 2023
+- _Rationale:_ Enabling paid appointments adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature conforms to the principle of least functionality.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
