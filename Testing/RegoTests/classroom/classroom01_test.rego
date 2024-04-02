@@ -15,7 +15,7 @@ test_JoinClassroom_Correct_V1 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup who_can_join_classes"},
+                        "value": "ClassMembershipSettingProto who_can_join_classes"},
                         {"name": "NEW_VALUE", "value": "1"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -45,7 +45,7 @@ test_JoinClassroom_Correct_V2 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup who_can_join_classes"},
+                        "value": "ClassMembershipSettingProto who_can_join_classes"},
                         {"name": "NEW_VALUE", "value": "1"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -56,7 +56,7 @@ test_JoinClassroom_Correct_V2 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup who_can_join_classes"},
+                        "value": "ClassMembershipSettingProto who_can_join_classes"},
                         {"name": "NEW_VALUE", "value": "2"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -85,7 +85,7 @@ test_JoinClassroom_Incorrect_V1 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup who_can_join_classes"},
+                        "value": "ClassMembershipSettingProto who_can_join_classes"},
                         {"name": "NEW_VALUE", "value": "2"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -118,7 +118,7 @@ test_JoinClassroom_Incorrect_V2 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup who_can_join_classes"},
+                        "value": "ClassMembershipSettingProto who_can_join_classes"},
                         {"name": "NEW_VALUE", "value": "2"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -129,7 +129,7 @@ test_JoinClassroom_Incorrect_V2 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup who_can_join_classes"},
+                        "value": "ClassMembershipSettingProto who_can_join_classes"},
                         {"name": "NEW_VALUE", "value": "1"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -200,7 +200,7 @@ test_WhichClasses_Correct_V1 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup which_classes_can_users_join"},
+                        "value": "ClassMembershipSettingProto which_classes_can_users_join"},
                         {"name": "NEW_VALUE", "value": "1"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -230,7 +230,7 @@ test_WhichClasses_Correct_V2 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup which_classes_can_users_join"},
+                        "value": "ClassMembershipSettingProto which_classes_can_users_join"},
                         {"name": "NEW_VALUE", "value": "1"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -241,7 +241,7 @@ test_WhichClasses_Correct_V2 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup which_classes_can_users_join"},
+                        "value": "ClassMembershipSettingProto which_classes_can_users_join"},
                         {"name": "NEW_VALUE", "value": "2"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -270,7 +270,7 @@ test_WhichClasses_Incorrect_V1 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup which_classes_can_users_join"},
+                        "value": "ClassMembershipSettingProto which_classes_can_users_join"},
                         {"name": "NEW_VALUE", "value": "2"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -303,7 +303,7 @@ test_WhichClasses_Incorrect_V2 if {
                 "events": [{
                     "parameters": [
                         {"name":"SETTING_NAME",
-                        "value": "ClassMembershipSettingsGroup which_classes_can_users_join"},
+                        "value": "ClassMembershipSettingProto which_classes_can_users_join"},
                         {"name": "NEW_VALUE", "value": "2"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -312,7 +312,7 @@ test_WhichClasses_Incorrect_V2 if {
             {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
-                    "name": "ClassMembershipSettingsGroup who_can_join_classes",
+                    "name": "ClassMembershipSettingProto who_can_join_classes",
                     "parameters": [
                         {"name": "NEW_VALUE", "value": "1"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},

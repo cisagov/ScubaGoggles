@@ -30,7 +30,7 @@ NonCompliantOUs1_1 contains {
     ]) 
 } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", OU)
+    Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingProto who_can_join_classes", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -49,7 +49,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingProto who_can_join_classes", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -63,7 +63,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup who_can_join_classes", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingProto who_can_join_classes", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -88,7 +88,7 @@ NonCompliantOUs1_2 contains {
     ])
 } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "ClassMembershipSettingsGroup which_classes_can_users_join", OU)
+    Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingProto which_classes_can_users_join", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -107,8 +107,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    SettingName := "ClassMembershipSettingsGroup which_classes_can_users_join"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    SettingName := "ClassMembershipSettingProto which_classes_can_users_join"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -122,8 +122,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    SettingName := "ClassMembershipSettingsGroup which_classes_can_users_join"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    SettingName := "ClassMembershipSettingProto which_classes_can_users_join"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_2) == 0
 }
