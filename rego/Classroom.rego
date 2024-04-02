@@ -197,7 +197,19 @@ if {
 #
 # Baseline GWS.CLASSROOM.3.1v0.1
 #--
-NonCompliantOUs3_1 contains OU if {
+GetFriendlyValue3_1(Value) := "OFF" if {
+    Value == "SIS_INTEGRATOR_NONE"
+} else := "ON - CLEVER" if {
+    Value == "SIS_INTEGRATOR_CLEVER"
+} else := Value
+
+NonCompliantOUs3_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Roster import is set to",
+        GetFriendlyValue3_1(LastEvent.NewValue)
+    ])
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "RosterImportSettingsProto sis_integrator", OU)
     # Ignore OUs without any events. We're already asserting that the
