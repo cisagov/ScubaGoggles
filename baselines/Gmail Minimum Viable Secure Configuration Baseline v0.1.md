@@ -215,7 +215,7 @@ The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cy
 #### GWS.GMAIL.4.4v0.1
 An agency point of contact SHOULD be included for aggregate and failure reports.
 
-- _Rationale:_ Without a designated agency point of contact for DMARC aggregate and failure reports, potential email security issues may not be promptly addressed, increasing the risk of phishing attacks. By including an agency point of contact, this risk can be reduced as it facilities a timely response to email authentication issues, enhancing overall email security.
+- _Rationale:_ Without a designated agency point of contact for DMARC aggregate and failure reports, potential email security issues may not be promptly addressed, increasing the risk of phishing attacks. By including an agency point of contact, this risk can be reduced as it facilitates a timely response to email authentication issues, enhancing overall email security.
 - _Last Modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
