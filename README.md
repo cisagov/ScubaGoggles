@@ -250,6 +250,10 @@ optional arguments:
   --mergejson           Creates individual json report files per baseline instead of one single json results report 
                         file encapsulating all assessment output. Defaults to False.
   --outjsonfilename     The name of the file that encapsulates all assessment output. Defaults to ScubaResults.
+<<<<<<< HEAD
+=======
+                        should act on behalf of. This user must have the necessary privileges to run scubagoggles.
+>>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
   --subjectemail        Only applicable when using a service account. The email address of a user the service account
                         should act on behalf of. This user must have the necessary privileges to run scubagoggles.
   --customerid          The customer ID the tool should run on. Defaults to "my_customer" which will be the domain of 

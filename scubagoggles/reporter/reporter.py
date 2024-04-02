@@ -24,17 +24,24 @@ def get_test_result(requirement_met : bool, criticality : str, no_such_events : 
         values: should, may, 3rd Party, Not-Implemented
     :param no_such_events: boolean whether there are no such events
     '''
+
+    # If there were no log events for the test, the state of "requirement_met"
+    # doesn't matter - it's a test requiring a manual check (i.e., "no events
+    # found").
+
     criticality = criticality.lower()
-    if requirement_met:
-        result = "Pass"
-    elif "3rd party" in criticality or 'not-implemented' in criticality:
-        result = "N/A"
+
+    if '3rd party' in criticality or 'not-implemented' in criticality:
+        result = 'N/A'
     elif no_such_events:
-        result = "No events found"
+        result = 'No events found'
+    elif requirement_met:
+        result = 'Pass'
     elif criticality in ('should', 'may'):
-        result = "Warning"
+        result = 'Warning'
     else:
-        result = "Fail"
+        result = 'Fail'
+
     return result
 
 def create_html_table(table_data : list) -> str:
@@ -146,15 +153,22 @@ tenant_domain : str, main_report_name: str) -> str:
     return html
 
 def build_report_json(tenant_domain : str, report_stats: dict,
+<<<<<<< HEAD
 json_data: list, product: list, prod_to_fullname: dict) -> str:
+=======
+json_data: list) -> str:
+>>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
     '''
     Adds data into JSON Template and formats the report accordingly
 
     :param tenant_domain: the primary domain of the tenant.
     :param main_report_name: dict containing the overall summary of the report tests.
     :param json_data: list of json rego result output for specific baseline
+<<<<<<< HEAD
     :param product: list of products being tested
     :param prod_to_fullname: dict containing mapping of the product full names
+=======
+>>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
     '''
     total_output = []
     report_final = {}
@@ -165,9 +179,13 @@ json_data: list, product: list, prod_to_fullname: dict) -> str:
         "TenantId":  None,
         "DisplayName":  None,
         "DomainName":  tenant_domain,
+<<<<<<< HEAD
         "ProductSuite":  "GWS",
         "ProductsAssessed": product,
         "ProductAbbreviationMapping": prod_to_fullname,
+=======
+        "Product":  "GWS",
+>>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
         "Tool":  "ScubaGoggles",
         "ToolVersion":  "0.1.0",
         "TimeStampZulu": report_date
@@ -227,11 +245,35 @@ def get_failed_details(failed_prereqs : set) -> str:
     failed_details += "See terminal output for more details."
     return failed_details
 
+<<<<<<< HEAD
 # pylint: disable=too-many-branches
 def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
 successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
     '''
+=======
+def get_summary_category(result : str) -> str:
+    '''Map the string result returned from get_test_result to the appropriate summary category.
+    
+    :param result: The result, e.g., "Warning"
+    '''
+
+    if result in {"No events found", "N/A"}:
+        return "Manual"
+    if result == "Warning":
+        return "Warnings"
+    if result == "Fail":
+        return "Failures"
+    if result == "Pass":
+        return "Passes"
+    raise ValueError(f"Unexpected result, {result}", RuntimeWarning)
+
+# pylint: disable=too-many-branches
+def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
+tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
+successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
+    '''
+>>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
     Transforms the Rego JSON output into individual HTML and JSON reports
 
     :param test_results_data: json object with results of Rego test
@@ -292,6 +334,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                     else:
                         result = get_test_result(test['RequirementMet'], test['Criticality'],
                         test['NoSuchEvent'])
+<<<<<<< HEAD
                         if result in {"No events found","N/A"}:
                             report_stats["Manual"] += 1
                             details = test['ReportDetails']
@@ -304,6 +347,10 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                         elif result == "Pass":
                             report_stats["Passes"] += 1
                             details = test['ReportDetails']
+=======
+
+                        details = test['ReportDetails']
+>>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
 
                         if result == "No events found":
                             warning_icon = "<object data='./images/triangle-exclamation-solid.svg'\
@@ -320,6 +367,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                                 # marked as Not-Implemented. This if excludes them from the
                                 # rules report.
                                 continue
+                            report_stats[get_summary_category(result)] += 1
                             table_data.append({
                                 'Control ID': control['Id'],
                                 'Rule Name': test['Requirement'],
@@ -335,6 +383,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                             # from the Common Controls report.
                             continue
                         else:
+                            report_stats[get_summary_category(result)] += 1
                             table_data.append({
                                 'Control ID': control['Id'],
                                 'Requirement': control['Value'],
@@ -350,7 +399,11 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
     mode='w', encoding='UTF-8') as file1:
         file1.write(html)
     if not create_single_jsonfile:
+<<<<<<< HEAD
         results_json = build_report_json(tenant_domain,report_stats, json_data, product, prod_to_fullname)
+=======
+        results_json = build_report_json(tenant_domain,report_stats, json_data)
+>>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
         with open(f"{out_path}/IndividualReports/{ind_report_name}.json",
         mode='w', encoding='UTF-8') as file2:
             file2.write(results_json)

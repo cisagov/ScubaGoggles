@@ -173,13 +173,20 @@ class RobustDNSClient:
                     response = requests.get(uri, headers=headers, timeout=5).json()
                     if response['Status'] == 0:
                         # 0 indicates there was no error
-                        nanswers = len(response['Answer'])
-                        log_entries.append({
-                            "query_name": qname,
-                            "query_method": "DoH",
-                            "query_result": f"Query returned {nanswers} txt records"})
-                        for answer in response['Answer']:
-                            answers.append(answer['data'].replace('"', ''))
+                        if 'Answer' in response:
+                            nanswers = len(response['Answer'])
+                            log_entries.append({
+                                "query_name": qname,
+                                "query_method": "DoH",
+                                "query_result": f"Query returned {nanswers} txt records"})
+                            for answer in response['Answer']:
+                                answers.append(answer['data'].replace('"', ''))
+                        else:
+                            # Edge case where the domain exists but there are no txt records
+                            log_entries.append({
+                                "query_name": qname,
+                                "query_method": "DoH",
+                                "query_result": "Query returned 0 txt records"})                  
                         success = True
                         break
                     if response['Status'] == 3:
