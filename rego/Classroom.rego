@@ -257,7 +257,19 @@ if {
 #
 # Baseline GWS.CLASSROOM.4.1v0.1
 #--
-NonCompliantOUs4_1 contains OU if {
+GetFriendlyValue4_1(Value) := "Students and teachers" if {
+    Value == "STUDENTS_AND_TEACHERS_CAN_UNENROLL_STUDENTS"
+} else := "Only teachers" if {
+    Value == "ONLY_TEACHERS_CAN_UNENROLL_STUDENTS"
+} else := Value
+
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value":  concat(" ", [
+        "Who can unenroll students from classes is set to",
+        GetFriendlyValue4_1(LastEvent.NewValue)
+    ])
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -287,7 +299,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CLASSROOM.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
