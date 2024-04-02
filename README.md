@@ -390,7 +390,6 @@ Each baseline will appear in the following format:
                 "Details": "Requirement met in all OUs."
             },
 ```
-The `RequirementMet` field indicates whether the baseline associated with the given PolicyId is compliant or not. 
 
 
 ## Project License
