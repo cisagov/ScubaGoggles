@@ -12,10 +12,6 @@ LogEvents := utils.GetEvents("chat_logs")
 #
 # Baseline GWS.CHAT.1v1
 #--
-UserFriendlyValues1_1 := {
-    "true": "History is OFF",
-    "false": "History is ON"
-}
 
 GetFriendlyValue1_1(Value) := "History is OFF" if {
     Value == "true"
