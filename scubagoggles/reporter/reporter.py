@@ -146,13 +146,15 @@ tenant_domain : str, main_report_name: str) -> str:
     return html
 
 def build_report_json(tenant_domain : str, report_stats: dict,
-json_data: list) -> str:
+json_data: list, product: list, prod_to_fullname: dict) -> str:
     '''
     Adds data into JSON Template and formats the report accordingly
 
     :param tenant_domain: the primary domain of the tenant.
     :param main_report_name: dict containing the overall summary of the report tests.
     :param json_data: list of json rego result output for specific baseline
+    :param product: list of products being tested
+    :param prod_to_fullname: dict containing mapping of the product full names
     '''
     total_output = []
     report_final = {}
@@ -163,7 +165,9 @@ json_data: list) -> str:
         "TenantId":  None,
         "DisplayName":  None,
         "DomainName":  tenant_domain,
-        "Product":  "GWS",
+        "ProductSuite":  "GWS",
+        "ProductsAssessed": product,
+        "ProductAbbreviationMapping": prod_to_fullname,
         "Tool":  "ScubaGoggles",
         "ToolVersion":  "0.1.0",
         "TimeStampZulu": report_date
@@ -346,7 +350,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
     mode='w', encoding='UTF-8') as file1:
         file1.write(html)
     if not create_single_jsonfile:
-        results_json = build_report_json(tenant_domain,report_stats, json_data)
+        results_json = build_report_json(tenant_domain,report_stats, json_data, product, prod_to_fullname)
         with open(f"{out_path}/IndividualReports/{ind_report_name}.json",
         mode='w', encoding='UTF-8') as file2:
             file2.write(results_json)

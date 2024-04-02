@@ -244,7 +244,9 @@ def run_reporter(args):
         "TenantId":  None,
         "DisplayName":  None,
         "DomainName":  tenant_domain,
-        "Product":  "GWS",
+        "ProductSuite":  "GWS",
+        "ProductsAssessed": products,
+        "ProductAbbreviationMapping": prod_to_fullname,
         "Tool":  "ScubaGoggles",
         "ToolVersion":  "0.1.0",
         "TimeStampZulu": report_date
@@ -268,7 +270,7 @@ def run_reporter(args):
             unsuccessful_calls,
             create_single_jsonfile,
         )
-        #Create single jsonfile if mergejson = True
+        # Create single jsonfile if mergejson = True
         if create_single_jsonfile:
             baseline_product_summary = {prod_to_fullname[product]:stats_and_data[product][0]}
             baseline_product_results_json = {prod_to_fullname[product]:stats_and_data[product][1]}
@@ -292,7 +294,6 @@ def run_reporter(args):
 
     fragments = []
     table_data = []
-    #for product, stats in report_stats.items():
     for product, stats in stats_and_data.items():
         ## Build the "Baseline Conformance Reports" column
         product_capitalize = product.capitalize()
