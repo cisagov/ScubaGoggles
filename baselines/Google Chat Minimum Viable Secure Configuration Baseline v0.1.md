@@ -41,7 +41,7 @@ This section covers chat history retention for users within the organization and
 #### GWS.CHAT.1.1v0.1
 Chat history SHALL be enabled for information traceability.
 
-- _Rationale:_ Helps ensure there is a record of chats sent to receive in the case that it needs to be reviewed in the future for legal or compliance issues.
+- _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations and details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -51,7 +51,7 @@ Chat history SHALL be enabled for information traceability.
 #### GWS.CHAT.1.2v0.1
 Users SHALL NOT be allowed to change their history setting.
 
-- _Rationale:_ This setting helps prevent changes by the user.
+- _Rationale:_ Altering the history settings in Google Chat can potentially allow users to obfuscate the sharing of sensitive information via Chat. This policy ensures that all chat histories are preserved, enhancing data security and promoting accountability among users.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -92,7 +92,7 @@ This section covers what types of files users are allowed to share external to t
 #### GWS.CHAT.2.1v0.1
 External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.
 
-- _Rationale:_ Protects against unintentional or intentional data leakage from the agency or organization.
+- _Rationale:_ Enabling external file sharing in Google Chat opens an additional avenue for data loss, one that may not be as rigorously monitored or protected as traditional collaboration channels, such as email. This policy limits the potential for unauthorized or accidental sharing.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -127,7 +127,7 @@ This section covers whether chat history is retained by default for users within
 #### GWS.CHAT.3.1v0.1
 Space history SHOULD be enabled for traceability of information.
 
-- _Rationale:_ This provides the ability to trace history when needed from an organizational level.
+- _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations and details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -162,7 +162,7 @@ This section permits users to send Chat messages outside of their organization, 
 #### GWS.CHAT.4.1v0.1
 External Chat messaging SHALL be restricted to allowlisted domains only.
 
-- _Rationale:_ Protects the organization from external risks and helps prevent data leakage outside the organization.
+- _Rationale:_ Allowing external chat messaging in Google Chat to unrestricted domains opens additional avenues for data exfiltration, increasing the risk of data leakage. By restricting external chat messaging to allowlisted domains only, the risk of sensitive information being distributed outside the organization without explicit consent and approval is minimized.
 - _Last Modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -208,7 +208,7 @@ This section covers preventing ordinary users from being able to install Chat ap
 #### GWS.CHAT.5.1v0.1
 User-level ability to install Chat apps SHALL be disabled.
 
-- _Rationale:_ Protects against security risks associated with installing chat apps such as phishing, spyware, etc.
+- _Rationale:_ Unrestricted access to Chat apps can expose the agency to potential vulnerabilities present in those apps or apps developed with malicious intent. This policy prevents unauthorized app installations and promotes the protection of sensitive information.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -252,7 +252,7 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 #### GWS.CHAT.6.1v0.1
 Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
 
-- _Rationale:_ Data Loss Prevention (DLP) rules trigger scans of files to look for sensitive content and restrict sharing of documents that may contain sensitive content. Configuring DLP rules helps agencies protect their information, by determining what data and/or phrasing might be sensitive, and restricting the dissemination of the documents containing that data. Examples include PII, PHI, portion markings, etc.
+- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. By blocking and/or having warnings on these DLP-scanned files from being shared with users, the risk of unintentional introduction of sensitive content is reduced.
 - _Last Modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
