@@ -152,23 +152,16 @@ tenant_domain : str, main_report_name: str) -> str:
     html = html.replace('{{TABLES}}', collected)
     return html
 
-def build_report_json(tenant_domain : str, report_stats: dict,
-<<<<<<< HEAD
-json_data: list, product: list, prod_to_fullname: dict) -> str:
-=======
-json_data: list) -> str:
->>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
+def build_report_json(tenant_domain : str, report_stats : dict,
+json_data : list, product : list, prod_to_fullname:  dict) -> str:
     '''
     Adds data into JSON Template and formats the report accordingly
 
     :param tenant_domain: the primary domain of the tenant.
     :param main_report_name: dict containing the overall summary of the report tests.
     :param json_data: list of json rego result output for specific baseline
-<<<<<<< HEAD
     :param product: list of products being tested
     :param prod_to_fullname: dict containing mapping of the product full names
-=======
->>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
     '''
     total_output = []
     report_final = {}
@@ -179,13 +172,9 @@ json_data: list) -> str:
         "TenantId":  None,
         "DisplayName":  None,
         "DomainName":  tenant_domain,
-<<<<<<< HEAD
         "ProductSuite":  "GWS",
         "ProductsAssessed": product,
         "ProductAbbreviationMapping": prod_to_fullname,
-=======
-        "Product":  "GWS",
->>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
         "Tool":  "ScubaGoggles",
         "ToolVersion":  "0.1.0",
         "TimeStampZulu": report_date
@@ -245,13 +234,6 @@ def get_failed_details(failed_prereqs : set) -> str:
     failed_details += "See terminal output for more details."
     return failed_details
 
-<<<<<<< HEAD
-# pylint: disable=too-many-branches
-def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
-tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
-successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
-    '''
-=======
 def get_summary_category(result : str) -> str:
     '''Map the string result returned from get_test_result to the appropriate summary category.
     
@@ -273,7 +255,6 @@ def rego_json_to_ind_reports(test_results_data : str, product : list, out_path :
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
 successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
     '''
->>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
     Transforms the Rego JSON output into individual HTML and JSON reports
 
     :param test_results_data: json object with results of Rego test
@@ -334,23 +315,8 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
                     else:
                         result = get_test_result(test['RequirementMet'], test['Criticality'],
                         test['NoSuchEvent'])
-<<<<<<< HEAD
-                        if result in {"No events found","N/A"}:
-                            report_stats["Manual"] += 1
-                            details = test['ReportDetails']
-                        elif result == "Warning":
-                            report_stats["Warnings"] += 1
-                            details = test['ReportDetails']
-                        elif result == "Fail":
-                            report_stats["Failures"] += 1
-                            details = test['ReportDetails']
-                        elif result == "Pass":
-                            report_stats["Passes"] += 1
-                            details = test['ReportDetails']
-=======
 
                         details = test['ReportDetails']
->>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
 
                         if result == "No events found":
                             warning_icon = "<object data='./images/triangle-exclamation-solid.svg'\
@@ -399,11 +365,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
     mode='w', encoding='UTF-8') as file1:
         file1.write(html)
     if not create_single_jsonfile:
-<<<<<<< HEAD
         results_json = build_report_json(tenant_domain,report_stats, json_data, product, prod_to_fullname)
-=======
-        results_json = build_report_json(tenant_domain,report_stats, json_data)
->>>>>>> 03a2ac052bf6790d1c05bae0fcd32935deb90493
         with open(f"{out_path}/IndividualReports/{ind_report_name}.json",
         mode='w', encoding='UTF-8') as file2:
             file2.write(results_json)
