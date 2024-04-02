@@ -366,7 +366,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
         file1.write(html)
     if not create_single_jsonfile:
         results_json = build_report_json(tenant_domain,report_stats, json_data, 
-                                         product, prod_to_fullname)
+        product, prod_to_fullname)
         with open(f"{out_path}/IndividualReports/{ind_report_name}.json",
         mode='w', encoding='UTF-8') as file2:
             file2.write(results_json)
