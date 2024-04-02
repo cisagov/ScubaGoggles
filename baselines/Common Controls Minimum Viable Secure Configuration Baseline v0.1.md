@@ -517,7 +517,7 @@ All highly privileged accounts SHALL leverage Google Account authentication with
 #### GWS.COMMONCONTROLS.6.2v0.1
 A minimum of **two** and maximum of **four** separate and distinct super admin users SHALL be configured.
 
-- _Rationale:_ The super admin role provides unfettered access to the workspace. Properly managing the number of users with this level of access makes workspace compromise more challenging. However, having too few accounts can be problematic as it increases the risk of loosing admin access entirely (e.g., if a super admin forgets their password); having between 2 and 4 balances these two concerns.
+- _Rationale:_ The super admin role provides unfettered access to the workspace. Properly managing the number of users with this level of access makes workspace compromise more challenging. However, having too few accounts can be problematic as it increases the risk of losing admin access entirely (e.g., if a super admin forgets their password); having between 2 and 4 balances these two concerns.
 - _Last Modified:_ July 10, 2023
 - _Note:_ Admin count does not include "break-glass" super admin accounts.
 
