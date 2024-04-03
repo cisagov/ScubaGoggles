@@ -871,13 +871,28 @@ tests contains {
 #
 # Baseline GWS.GMAIL.7.1v0.1
 #--
-NonCompliantOUs7_1 contains OU if {
+
+# No group level control
+
+GetFriendlyValue7_1(Value) := "disabled" if {
+    Value == "true"
+} else := "enabled" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs7_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Protect against domain spoofing using similar domain names is set to",
+        GetFriendlyValue7_1(LastEvent.NewValue)
+    ])
+}
+if {
     some OU in utils.OUsWithEvents
-    SettingName := concat("", [
+    Events := utils.FilterEvents(LogEvents, concat("", [
         "Spoofing and authentication safety Enable: protect against domain spoofing using ",
         "similar domain names"
-    ])
-    Events := utils.FilterEvents(LogEvents, SettingName, OU)
+    ]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -905,7 +920,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.7.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -924,13 +939,23 @@ if {
 #
 # Baseline GWS.GMAIL.7.2v0.1
 #--
-NonCompliantOUs7_2 contains OU if {
+
+GetFriendlyValue7_2(Value) := "disabled" if {
+    Value == "true"
+} else := "enabled" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs7_2 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Protect against spoofing of employee names is set to",
+        GetFriendlyValue7_2(LastEvent.NewValue)
+    ])
+}
+if {
     some OU in utils.OUsWithEvents
-    SettingName := "Spoofing and authentication safety Enable: protect against spoofing of employee names"
-    Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
+    Events := utils.FilterEvents(LogEvents, "Spoofing and authentication safety Enable: protect against spoofing of employee names", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -955,7 +980,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.7.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_2),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -971,6 +996,29 @@ if {
 #
 # Baseline GWS.GMAIL.7.3v0.1
 #--
+
+GetFriendlyValue7_3(Value) := "disabled" if {
+    Value == "true"
+} else := "enabled" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs7_3 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Protect against inbound emails spoofing your domain is set to",
+        GetFriendlyValue7_3(LastEvent.NewValue)
+    ])
+}
+if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents(LogEvents, "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain", OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
 NonCompliantOUs7_3 contains OU if {
     some OU in utils.OUsWithEvents
     SettingName := "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"
@@ -1002,7 +1050,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.7.3v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_3),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1018,13 +1066,23 @@ if {
 #
 # Baseline GWS.GMAIL.7.4v0.1
 #--
-NonCompliantOUs7_4 contains OU if {
+
+GetFriendlyValue7_4(Value) := "disabled" if {
+    Value == "true"
+} else := "enabled" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs7_4 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Protect against any unauthenticated emails is set to",
+        GetFriendlyValue7_4(LastEvent.NewValue)
+    ])
+}
+if {
     some OU in utils.OUsWithEvents
-    SettingName := "Spoofing and authentication safety Enable: protect against any unauthenticated emails"
-    Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
+    Events := utils.FilterEvents(LogEvents, "Spoofing and authentication safety Enable: protect against any unauthenticated emails", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -1049,7 +1107,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.7.4v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_4),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1066,16 +1124,25 @@ if {
 # Baseline GWS.GMAIL.7.5v0.1
 #--
 
-NonCompliantOUs7_5 contains OU if {
+GetFriendlyValue7_5(Value) := "disabled" if {
+    Value == "true"
+} else := "enabled" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs7_5 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Protect your Groups from inbound emails spoofing your domain is set to",
+        GetFriendlyValue7_5(LastEvent.NewValue)
+    ])
+}
+if {
     some OU in utils.OUsWithEvents
-    SettingName := concat("", [
+    Events := utils.FilterEvents(LogEvents, concat("", [
         "Spoofing and authentication safety Enable: protect your Groups from inbound emails ",
         "spoofing your domain"
-    ])
-    Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
+    ]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -1103,7 +1170,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.7.5v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_5),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_5},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1169,6 +1236,64 @@ NoSuchEvent7_6(TopLevelOU) := false if {
     count(Events) != 0
 }
 
+GetFriendlyValue7_6(Value) := "disabled" if {
+    Value == "true"
+} else := "enabled" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs7_6 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Protect against domain spoofing based on similar domain names action is set to",
+        GetFriendlyValue7_6(authenticationSetting)
+    ])
+}
+if {
+    some OU in utils.OUsWithEvents
+
+    SettingA := concat("", [
+        "Spoofing and authentication safety Protect against domain spoofing based on ",
+        "similar domain names action"
+    ])
+    EventsA := utils.FilterEvents(LogEvents, SettingA, OU)
+    count(EventsA) > 0
+    LastEventA := utils.GetLastEvent(EventsA)
+
+    SettingB := "Spoofing and authentication safety Protect against spoofing of employee names action"
+    EventsB := utils.FilterEvents(LogEvents, SettingB, OU)
+    count(EventsB) > 0
+    LastEventB := utils.GetLastEvent(EventsB)
+
+    SettingC := "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
+    EventsC := utils.FilterEvents(LogEvents, SettingC, OU)
+    count(EventsC) > 0
+    LastEventC := utils.GetLastEvent(EventsC)
+
+    SettingD := "Spoofing and authentication safety Protect against any unauthenticated emails action"
+    EventsD := utils.FilterEvents(LogEvents, SettingD, OU)
+    count(EventsD) > 0
+    LastEventD := utils.GetLastEvent(EventsD)
+
+    SettingE := concat("", [
+        "Spoofing and authentication safety Protect your Groups from inbound emails spoofing ",
+        "your domain action"
+    ])
+    EventsE := utils.FilterEvents(LogEvents, SettingE, OU)
+    count(EventsE) > 0
+    LastEventE := utils.GetLastEvent(EventsE)
+
+    # OU is non-compliant if any of the following are true
+    authenticationSetting:= true in [
+        LastEventA.NewValue == "Show warning",
+        LastEventB.NewValue == "Show warning",
+        LastEventC.NewValue == "Show warning",
+        LastEventD.NewValue == "Show warning",
+        LastEventD.NewValue == "No action",
+        LastEventE.NewValue == "Show warning"
+    ]
+}
+
 NonCompliantOUs7_6 contains OU if {
     some OU in utils.OUsWithEvents
 
@@ -1230,7 +1355,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.7.6v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_6),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_6, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_6},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1245,13 +1370,22 @@ if {
 # Baseline GWS.GMAIL.7.7v0.1
 #--
 
-NonCompliantOUs7_7 contains OU if {
+GetFriendlyValue7_7(Value) := "disabled" if {
+    Value == "true"
+} else := "enabled" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs7_7 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Automatically enable all future added settings is set to",
+        GetFriendlyValue7_7(LastEvent.NewValue)
+    ])
+}
+if {
     some OU in utils.OUsWithEvents
-    SettingName := "Spoofing and authentication safety Enable: automatically enables all future added settings"
-    Events := utils.FilterEvents(LogEvents, SettingName, OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
+    Events := utils.FilterEvents(LogEvents, "Spoofing and authentication safety Enable: automatically enables all future added settings", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -1276,7 +1410,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.7.7v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_7),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_7, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_7},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1311,12 +1445,22 @@ tests contains {
 #
 # Baseline GWS.GMAIL.8.1v0.1
 #--
-NonCompliantOUs8_1 contains OU if {
+GetFriendlyValue8_1(Value) := "enabled" if {
+    Value == "true"
+} else := "disabled" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs8_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Email user import is set to",
+        GetFriendlyValue8_1(LastEvent.NewValue)
+    ])
+}
+if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "ENABLE_EMAIL_USER_IMPORT", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
@@ -1339,7 +1483,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.8.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs8_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs8_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1358,6 +1502,28 @@ if {
 #
 # Baseline GWS.GMAIL.9.1v0.1
 #--
+GetFriendlyValue9_1(Value) := "enabled" if {
+    Value != "DISABLED"
+    Value != "INHERIT_FROM_PARENT"
+} else := "disabled" if {
+    Value == "DISABLED"
+} else := Value
+
+NonCompliantOUs9_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Email user import is set to",
+        GetFriendlyValue9_1(LastEvent.NewValue)
+    ])
+}
+if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEvents(LogEvents, "IMAP_ACCESS", OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "true"
+}
+
 NonCompliantOUs9_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "IMAP_ACCESS", OU)
@@ -1384,7 +1550,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.9.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs9_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
