@@ -406,7 +406,7 @@ User password strength SHALL be enforced.
 #### GWS.COMMONCONTROLS.5.2v0.1
 User password length SHALL be at least 12 characters.
 
-- _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-65B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
+- _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
