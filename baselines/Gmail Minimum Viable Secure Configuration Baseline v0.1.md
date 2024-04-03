@@ -578,7 +578,7 @@ Emails flagged by the above spoofing and authentication controls SHALL NOT be ke
 #### GWS.GMAIL.7.7v0.1
 Google SHALL be allowed to automatically apply future recommended settings.
 
-- _Rationale:_ Not allowing Google to automatically apply future recommended settings could potentially leave the system vulnerable to new threats. By enabling this feature, the system can stay updated with the latest security measures, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
+- _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
