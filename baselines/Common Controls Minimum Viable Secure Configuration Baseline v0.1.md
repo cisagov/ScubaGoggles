@@ -394,7 +394,8 @@ Per NIST 800-63 and OMB M-22-09, ensure that user passwords do not expire and th
 #### GWS.COMMONCONTROLS.5.1v0.1
 User password strength SHALL be enforced.
 
-- _Rationale:_ Strong password policies protect an organization by prohibiting the use of weak passwords.
+- _Rationale:_ Weak passwords increase the risk of account compromise. Enforcing password strength adds an additional layer of defense, reducing the risk of account compromise.
+ Strong password policies protect an organization by prohibiting the use of weak passwords.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
