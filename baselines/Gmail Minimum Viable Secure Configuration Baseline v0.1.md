@@ -315,7 +315,7 @@ Protect against anomalous attachment types in emails SHALL be enabled.
 #### GWS.GMAIL.5.4v0.1
 Google SHOULD be allowed to automatically apply future recommended settings.
 
-- _Rationale: By enabling this feature, the system can automatically stay updated with the latest security measures recommended by Google, reducing the risk of security breaches.
+- _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest security measures recommended by Google, reducing the risk of security breaches.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
