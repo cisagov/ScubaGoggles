@@ -193,7 +193,7 @@ This section covers the default permissions assigned to the viewing of conversat
 #### GWS.GROUPS.5.1v0.1
 The default permission to view conversations SHOULD be set to All Group Members.
 
-- _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
+- _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace organization. Restricting access to group members reduces the risk of data loss.
 - _Last modified:_ July 10, 2023
 - _Note:_ This setting can be changed by group owners and group managers.
 
