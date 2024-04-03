@@ -285,6 +285,7 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
 
     for baseline_group in product_policies:
         table_data = []
+        results_data ={}
         for control in baseline_group['Controls']:
             tests = [test for test in test_results_data if test['PolicyId'] == control['Id']]
             if len(tests) == 0:
@@ -359,7 +360,10 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
-        json_data = json_data + table_data
+        results_data.update({"GroupName": baseline_group['GroupName']})
+        results_data.update({"GroupNumber": baseline_group['GroupNumber']})
+        results_data.update({"Controls": table_data})
+        json_data.append(results_data)
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
     with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
     mode='w', encoding='UTF-8') as file1:
