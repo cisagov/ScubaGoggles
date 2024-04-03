@@ -357,7 +357,7 @@ Note: If using a third-party IdP, and agency-set web session lengths for its use
 #### GWS.COMMONCONTROLS.4.1v0.1
 Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.
 
-- _Rationale:_ Allowing sessions to persist indefinitely allows users to bypass 2-Step Verification for future activity on that device. Limiting sessions to 12 hours may reduce risk of unauthorized access and prevent users from inadvertently remaining logged in on unattended devices.
+- _Rationale:_ Allowing sessions to persist indefinitely allows users to bypass 2-Step Verification for future activity on that device. Limiting sessions to 12 hours may reduce the impact of session hijacking attacks and prevent users from inadvertently remaining logged in on unattended devices.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
