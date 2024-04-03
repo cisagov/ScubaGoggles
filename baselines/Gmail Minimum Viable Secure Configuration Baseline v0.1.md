@@ -315,7 +315,7 @@ Protect against anomalous attachment types in emails SHALL be enabled.
 #### GWS.GMAIL.5.4v0.1
 Google SHOULD be allowed to automatically apply future recommended settings for attachments.
 
-- _Rationale: By enabling this feature, the system can automatically stay updated with the latest security measures recommended by Google, reducing the risk of security breaches.
+- _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest security measures recommended by Google, reducing the risk of security breaches.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -439,7 +439,7 @@ Show warning prompt for any click on links to untrusted domains SHALL be enabled
 #### GWS.GMAIL.6.4v0.1
 Google SHALL be allowed to automatically apply future recommended settings for links and external images.
 
-- _Rationale: By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
+- _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -578,7 +578,7 @@ Emails flagged by the above spoofing and authentication controls SHALL NOT be ke
 #### GWS.GMAIL.7.7v0.1
 Google SHALL be allowed to automatically apply future recommended settings for spoofing and authentication.
 
-- _Rationale:_ Not allowing Google to automatically apply future recommended settings could potentially leave the system vulnerable to new spoofing-based threats. By enabling this feature, the system can stay updated with the latest security measures, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
+- _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
