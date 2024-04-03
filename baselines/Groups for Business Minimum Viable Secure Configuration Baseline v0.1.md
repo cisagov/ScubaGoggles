@@ -270,7 +270,7 @@ This section covers the access type setting for new groups that are created.
 #### GWS.GROUPS.7.1v0.1
 New Groups SHOULD be created with an Access type of Restricted unless necessary for agency mission fulfillment.
 
-- _Rationale:_ Allowing external users to post opens the door for phishing or other malicious activity to be shared via Groups.
+- _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace organization. Restricting access to group members reduces the risk of data loss.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -280,7 +280,7 @@ New Groups SHOULD be created with an Access type of Restricted unless necessary 
 
 ### Resources
 
-- [Google Workspace Admin Help: Create a group in your organization](https://github.com/mitre/CISA-SCuBA-GWS-SCB)
+- [Google Workspace Admin Help: Create a group in your organization](https://support.google.com/a/answer/9400082?hl=en&fl=1&sjid=14580240338213574276-NC)
 
 ### Prerequisites
 
