@@ -42,7 +42,7 @@ This section covers chat history retention for users within the organization and
 Chat history SHALL be enabled for information traceability.
 
 - _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations and details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -52,7 +52,7 @@ Chat history SHALL be enabled for information traceability.
 Users SHALL NOT be allowed to change their history setting.
 
 - _Rationale:_ Altering the history settings in Google Chat can potentially allow users to obfuscate the sharing of sensitive information via Chat. This policy ensures that all chat histories are preserved, enhancing data security and promoting accountability among users.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -93,7 +93,7 @@ This section covers what types of files users are allowed to share external to t
 External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.
 
 - _Rationale:_ Enabling external file sharing in Google Chat opens an additional avenue for data loss, one that may not be as rigorously monitored or protected as traditional collaboration channels, such as email. This policy limits the potential for unauthorized or accidental sharing.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfilitration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -128,7 +128,7 @@ This section covers whether chat history is retained by default for users within
 Space history SHOULD be enabled for traceability of information.
 
 - _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations and details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -163,7 +163,7 @@ This section permits users to send Chat messages outside of their organization, 
 External Chat messaging SHALL be restricted to allowlisted domains only.
 
 - _Rationale:_ Allowing external chat messaging in Google Chat to unrestricted domains opens additional avenues for data exfiltration, increasing the risk of data leakage. By restricting external chat messaging to allowlisted domains only, the risk of sensitive information being distributed outside the organization without explicit consent and approval is minimized.
-- _Last Modified:_ November 14, 2023
+- _Last modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -209,7 +209,7 @@ This section covers preventing ordinary users from being able to install Chat ap
 User-level ability to install Chat apps SHALL be disabled.
 
 - _Rationale:_ Unrestricted access to Chat apps can expose the agency to potential vulnerabilities present in those apps or apps developed with malicious intent. This policy prevents unauthorized app installations and promotes the protection of sensitive information.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1195:002: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
@@ -253,7 +253,7 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
 
 - _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. By blocking and/or having warnings on these DLP-scanned files from being shared with users, the risk of unintentional introduction of sensitive content is reduced.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -298,7 +298,7 @@ This section covers the content reporting functionality, a feature that allows u
 Chat content reporting SHALL be enabled for all conversation types.
 
 - _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies ensure that their users are able to report risky messages regardless of the conversation type.
-- _Last Modified:_ February 13, 2024
+- _Last modified:_ February 13, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -307,7 +307,7 @@ Chat content reporting SHALL be enabled for all conversation types.
 All reporting message categories SHOULD be selected.
 
 - _Rationale:_ Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
-- _Last Modified:_ February 13, 2024
+- _Last modified:_ February 13, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

@@ -45,7 +45,7 @@ Note: Even with this setting configured, group owners can still explicitly add e
 Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.
 
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -80,7 +80,7 @@ This section covers whether or not the owner of the group has the ability to add
 Group owners' ability to add external members to groups SHOULD be disabled unless necessary for agency mission fulfillment.
 
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -117,7 +117,7 @@ This section covers whether or not an owner of a group has the ability to allow 
 Group owners' ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.
 
 - _Rationale:_ Allowing external users to post opens the door for phishing or other malicious activity to be shared via Groups. Restricting posting by non-group members reduces this risk.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -157,7 +157,7 @@ This section covers who has the ability to create a new group within the organiz
 Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.
 
 - _Rationale:_ Many settings for Google Workspace products can be set at the Group level. Allowing unrestricted group creation complicates setting management and opens channels of unmanaged communication.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -194,7 +194,7 @@ This section covers the default permissions assigned to the viewing of conversat
 The default permission to view conversations SHOULD be set to All Group Members.
 
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 - _Note:_ This setting can be changed by group owners and group managers.
 
 - MITRE ATT&CK TTP Mapping
@@ -233,7 +233,7 @@ This section covers whether or not the owner of a group can hide the group from 
 The Ability for Groups to be Hidden from the Directory SHALL be disabled.
 
 - _Rationale:_ Hidden groups are not visible, even to admins, in the list of groups found at groups.google.com, though they are still visible on the directory page on admin.google.com. As such, allowing for hidden groups increases the risk of groups being created without admin oversight.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -271,7 +271,7 @@ This section covers the access type setting for new groups that are created.
 New Groups SHOULD be created with an Access type of Restricted unless necessary for agency mission fulfillment.
 
 - _Rationale:_ Allowing external users to post opens the door for phishing or other malicious activity to be shared via Groups.
-- _Last Modified:_ July 10, 2023
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
