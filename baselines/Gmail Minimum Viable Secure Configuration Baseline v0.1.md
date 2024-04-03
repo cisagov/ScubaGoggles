@@ -91,7 +91,7 @@ This section enables DomainKeys Identified Mail (DKIM) to help prevent spoofing 
 #### GWS.GMAIL.2.1v0.1
 DKIM SHOULD be enabled for all domains.
 
-- _Rationale:_ Enabling DKIM for all domains can help prevent email spoofing and phishing attacks. Without DKIM, adversaries could manipulate email headers to appear as if they're from a legitimate source, potentially leading to the disclosure of sensitive information. By enabling DKIM, the authenticity of emails can be verified,  reducing this risk.
+- _Rationale:_ Enabling DKIM for all domains can help prevent email spoofing and phishing attacks. Without DKIM, adversaries could manipulate email headers to appear as if they're from a legitimate source, potentially leading to the disclosure of sensitive information. By enabling DKIM, the authenticity of emails can be verified, reducing this risk.
 - _Last modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -283,7 +283,7 @@ Protect against encrypted attachments from untrusted senders SHALL be enabled.
 #### GWS.GMAIL.5.2v0.1
 Protect against attachments with scripts from untrusted senders SHALL be enabled.
 
-- _Rationale:_ Attachments with scripts from untrusted senders may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be  reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Attachments with scripts from untrusted senders may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -315,7 +315,7 @@ Protect against anomalous attachment types in emails SHALL be enabled.
 #### GWS.GMAIL.5.4v0.1
 Google SHOULD be allowed to automatically apply future recommended settings.
 
-- _Rationale:_ Not allowing Google to automatically apply future recommended settings could potentially leave the system vulnerable to new threats. By enabling this feature, the system can stay updated with the latest security measures, reducing the risk of security breaches.
+- _Rationale: By enabling this feature, the system can automatically stay updated with the latest security measures recommended by Google, reducing the risk of security breaches.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -439,7 +439,7 @@ Show warning prompt for any click on links to untrusted domains SHALL be enabled
 #### GWS.GMAIL.6.4v0.1
 Google SHALL be allowed to automatically apply future recommended settings.
 
-- _Rationale:_ Not allowing Google to automatically apply future recommended settings could potentially leave the system vulnerable to new threats. By enabling this feature, the system can stay updated with the latest security measures, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
+- _Rationale: By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -806,7 +806,7 @@ This section determines whether emails can be automatically forwarded from a use
 #### GWS.GMAIL.11.1v0.1
 Automatic forwarding SHOULD be disabled, especially to external domains.
 
-- _Rationale:_ By enabling automatic forwarding, especially to external domains, adversaries could gain persistent access to a victim’s email, potentially exposing sensitive agency or organization emails to unauthorized access or loss. By disabling automatic forwarding, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ By enabling automatic forwarding, especially to external domains, adversaries could gain persistent access to a victim's email, potentially exposing sensitive agency or organization emails to unauthorized access or loss. By disabling automatic forwarding, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -1125,7 +1125,7 @@ Any third-party or outside application selected for advanced email content filte
 #### GWS.GMAIL.18.3v0.1
 Gmail or third-party applications SHALL be configured to protect PII and sensitive information as defined by the agency. At a minimum, credit card numbers, taxpayer Identification Numbers (TIN), and Social Security Numbers (SSN) SHALL be blocked.
 
-- _Rationale:_ Without proper configuration, Gmail or third-party applications could potentially expose PII and sensitive information, posing a security risk. By configuring these applications to block at least credit card numbers, taxpayer Identification Numbers (TIN), and Social Security Numbers (SSN), this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Without proper configuration, Gmail or third-party applications could potentially expose PII and sensitive information, posing a security risk. By configuring these applications to block at least credit card numbers, Taxpayer Identification Numbers (TIN), and Social Security Numbers (SSN), this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping

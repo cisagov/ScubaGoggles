@@ -127,7 +127,7 @@ This section covers whether chat history is retained by default for users within
 #### GWS.CHAT.3.1v0.1
 Space history SHOULD be enabled for traceability of information.
 
-- _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations and details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
+- _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations. Details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping

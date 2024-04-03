@@ -39,7 +39,7 @@ This control limits safe meeting access to users with a Google Account or Dialin
 #### GWS.MEET.1.1v0.1
 Meeting access SHOULD be restricted to users signed in with a Google Account or Dialing in using a phone.
 
-- _Rationale:_ Allowing users not signed-in to join meetings diminishes control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring all users to sign-in.
+- _Rationale:_ Allowing users not signed-in to join meetings diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring all users to sign-in.
 - _Last modified:_ June 29, 2023
 - _Note:_ There is a related configuration option shown to the meeting organizer within Google Meet itself, called "Meeting access type." The setting in the admin center restricts at the org-level the types of users able to join meetings. The setting shown to the meeting organizer allows the organizer to specify who, of those permitted to join meetings by the org-wide setting, must ask to join their meeting. This baseline only provides guidance on the org-wide setting; the per-meeting setting MAY be set as each agency sees fit.
 

@@ -41,7 +41,7 @@ This section covers whether users can share files outside of the organization, w
 #### GWS.DRIVEDOCS.1.1v0.1
 Agencies SHOULD disable sharing outside of the organization's domain.
 
-- _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk inadvertent of data leakage.
+- _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk of inadvertent of data leakage.
 - _Last modified:_ July 10, 2023
 - _Note:_
   - This policy restricts information sharing
@@ -57,7 +57,7 @@ Agencies SHOULD disable sharing outside of the organization's domain.
 #### GWS.DRIVEDOCS.1.2v0.1
 Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
-- _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce this risk.
+- _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce the risk of data loss or falling victim to external threats.
 - _Last modified:_ January 3, 2024
 - _Note:_ This policy only applies if sharing outside was disabled in Policy 1.1
 
@@ -68,7 +68,7 @@ Agencies SHOULD disable users' receiving files from outside of the organization'
 #### GWS.DRIVEDOCS.1.3v0.1
 Warnings SHALL be enabled when a user is attempting to share something outside the domain.
 
-- _Rationale:_ Users may not always be aware that a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
+- _Rationale:_ Users may not always be aware a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
 - _Last modified:_ February 8, 2024
 - _Note:_ This policy only applies if external sharing was allowed in Policy 1.1
 
@@ -110,7 +110,7 @@ Agencies SHALL enable access checking for file sharing outside of Docs or Drive.
 #### GWS.DRIVEDOCS.1.7v0.1
 Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organization.
 
-- _Rationale:_ Once a document is moved outside the organization's drives, it no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
+- _Rationale:_ Once a document is moved outside the organization's drives, the organization no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -206,7 +206,7 @@ Agencies SHOULD NOT allow users outside of their organization to access files in
 #### GWS.DRIVEDOCS.2.3v0.1
 Agencies SHALL allow users who are not shared drive members to be added to files.
 
-- _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as drive members, potentially exposing all drive files and increasing the risk of sensitive content exposure. By disallowing the sharing of these individual files, the risk of internal documents from being distributed outside the organization without explicit consent and approval.
+- _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as drive members, potentially exposing all drive files and increasing the risk of sensitive content exposure. By disallowing the sharing of these individual files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -215,7 +215,7 @@ Agencies SHALL allow users who are not shared drive members to be added to files
 #### GWS.DRIVEDOCS.2.4v0.1
 Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.
 
-- _Rationale:_ Downloading and removing a file from the GWS tenant bypasses all access control settings, increasing the risk of data leakage. By preventing the sharing of these externally downloaded files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased
+- _Rationale:_ Downloading and removing a file from the GWS tenant bypasses all access control settings, increasing the risk of data leakage. By preventing the sharing of these externally downloaded files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping

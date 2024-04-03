@@ -92,7 +92,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 #### GWS.COMMONCONTROLS.1.2v0.1
 Google 2SV new user enrollment period SHALL be set to 1 week.
 
-- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and minimizing the risks inherent to not enforcing MFA.
+- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and minimizing the risks inherent to not enforcing MFA immediately.
 - _Last modified:_ August 17, 2023
 - _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
@@ -111,7 +111,7 @@ Google 2SV new user enrollment period SHALL be set to 1 week.
 #### GWS.COMMONCONTROLS.1.3v0.1
 Allow users to trust the device SHALL be disabled.
 
-- _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible to ensure all logins are protected with MFA.
+- _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
 - _Last modified:_ August 17, 2023
 - _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
@@ -747,7 +747,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
 #### GWS.COMMONCONTROLS.10.3v0.1
 Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 
-- _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with 10.1.
+- _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with policy 10.1.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -858,7 +858,7 @@ Only approved Google Workspace Marketplace applications SHOULD be allowed for in
 #### GWS.COMMONCONTROLS.11.2v0.1
 Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
-- _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern standards helps reduce the risk of credential compromise.
+- _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
