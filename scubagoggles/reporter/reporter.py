@@ -152,41 +152,41 @@ tenant_domain : str, main_report_name: str) -> str:
     html = html.replace('{{TABLES}}', collected)
     return html
 
-def build_report_json(tenant_domain : str, report_stats : dict,
-json_data : list, product : list, prod_to_fullname:  dict) -> str:
-    '''
-    Adds data into JSON Template and formats the report accordingly
+# def build_report_json(tenant_domain : str, report_stats : dict,
+# json_data : list, product : list, prod_to_fullname:  dict) -> str:
+#     '''
+#     Adds data into JSON Template and formats the report accordingly
 
-    :param tenant_domain: the primary domain of the tenant.
-    :param main_report_name: dict containing the overall summary of the report tests.
-    :param json_data: list of json rego result output for specific baseline
-    :param product: list of products being tested
-    :param prod_to_fullname: dict containing mapping of the product full names
-    '''
-    total_output = []
-    report_final = {}
-    now = datetime.now()
-    report_date = report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+#     :param tenant_domain: the primary domain of the tenant.
+#     :param main_report_name: dict containing the overall summary of the report tests.
+#     :param json_data: list of json rego result output for specific baseline
+#     :param product: list of products being tested
+#     :param prod_to_fullname: dict containing mapping of the product full names
+#     '''
+#     total_output = []
+#     report_final = {}
+#     now = datetime.now()
+#     report_date = report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    report_metadata = {
-        "TenantId":  None,
-        "DisplayName":  None,
-        "DomainName":  tenant_domain,
-        "ProductSuite":  "GWS",
-        "ProductsAssessed": product,
-        "ProductAbbreviationMapping": prod_to_fullname,
-        "Tool":  "ScubaGoggles",
-        "ToolVersion":  "0.1.0",
-        "TimeStampZulu": report_date
-    }
+#     report_metadata = {
+#         "TenantId":  None,
+#         "DisplayName":  None,
+#         "DomainName":  tenant_domain,
+#         "ProductSuite":  "GWS",
+#         "ProductsAssessed": product,
+#         "ProductAbbreviationMapping": prod_to_fullname,
+#         "Tool":  "ScubaGoggles",
+#         "ToolVersion":  "0.1.0",
+#         "TimeStampZulu": report_date
+#     }
 
-    report_final['ReportSummary'] = report_stats
-    report_final['Results'] = json_data
-    report_final['MetaData'] = report_metadata
-    total_output.append(report_final)
-    results_json = json.dumps(total_output, indent = 4)
+#     report_final['ReportSummary'] = report_stats
+#     report_final['Results'] = json_data
+#     report_final['MetaData'] = report_metadata
+#     total_output.append(report_final)
+#     results_json = json.dumps(total_output, indent = 4)
 
-    return results_json
+#     return results_json
 
 def get_failed_prereqs(test : dict, successful_calls : set, unsuccessful_calls : set) -> set:
     '''
@@ -250,10 +250,9 @@ def get_summary_category(result : str) -> str:
         return "Passes"
     raise ValueError(f"Unexpected result, {result}", RuntimeWarning)
 
-# pylint: disable=too-many-branches
 def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
 tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
-successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) -> list:
+successful_calls : set, unsuccessful_calls : set) -> list:
     '''
     Transforms the Rego JSON output into individual HTML and JSON reports
 
@@ -266,8 +265,6 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
     :param product_policies: dict containing policies read from the baseline markdown
     :param successful_calls: set with the set of successful calls
     :param unsuccessful_calls: set with the set of unsuccessful calls
-    :param create_single_jsonfile: boolean for whether to create single 
-    json report or individual ones per baseline
     '''
 
     product_capitalized = product.capitalize()
@@ -368,10 +365,4 @@ successful_calls : set, unsuccessful_calls : set, create_single_jsonfile: bool) 
     with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
     mode='w', encoding='UTF-8') as file1:
         file1.write(html)
-    if not create_single_jsonfile:
-        results_json = build_report_json(tenant_domain,report_stats, json_data,
-                                         product, prod_to_fullname)
-        with open(f"{out_path}/IndividualReports/{ind_report_name}.json",
-        mode='w', encoding='UTF-8') as file2:
-            file2.write(results_json)
     return [report_stats, json_data]

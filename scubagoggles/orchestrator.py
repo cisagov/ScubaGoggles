@@ -222,7 +222,6 @@ def run_reporter(args):
 
     # Create the the individual report files
     out_jsonfile = args.outjsonfilename
-    create_single_jsonfile = args.mergejson
     summary = {}
     results = {}
     total_output = {}
@@ -258,26 +257,25 @@ def run_reporter(args):
             prod_to_fullname,
             baseline_policies[product],
             successful_calls,
-            unsuccessful_calls,
-            create_single_jsonfile,
+            unsuccessful_calls
         )
-        # Create single jsonfile if mergejson = True
-        if create_single_jsonfile:
-            baseline_product_summary = {prod_to_fullname[product]:stats_and_data[product][0]}
-            baseline_product_results_json = {prod_to_fullname[product]:stats_and_data[product][1]}
-            summary.update(baseline_product_summary)
-            results.update(baseline_product_results_json)
-            total_output.update({"Summary": summary})
-            total_output.update({"Results": results})
-    if create_single_jsonfile:
-        with open(f'{out_folder}/{args.outputproviderfilename}.json',
-        encoding='UTF-8') as file:
-            raw_data = json.load(file)
-        total_output.update({"Raw": raw_data})
-        report = json.dumps(total_output, indent = 4)
-        with open(f"{out_folder}/{out_jsonfile}.json",
-        mode='w', encoding='UTF-8') as results_file:
-            results_file.write(report)
+        baseline_product_summary = {prod_to_fullname[product]:stats_and_data[product][0]}
+        baseline_product_results_json = {prod_to_fullname[product]:stats_and_data[product][1]}
+        summary.update(baseline_product_summary)
+        results.update(baseline_product_results_json)
+        total_output.update({"Summary": summary})
+        total_output.update({"Results": results})
+
+    # Create the ScubaResults files
+    with open(f'{out_folder}/{args.outputproviderfilename}.json', encoding='UTF-8') as file:
+        raw_data = json.load(file)
+    total_output.update({"Raw": raw_data})
+    report = json.dumps(total_output, indent = 4)
+    with open(f"{out_folder}/{out_jsonfile}.json", mode='w', encoding='UTF-8') as results_file:
+        results_file.write(report)
+
+    # Delete the ProviderOutput file as it's now encapsulated in the ScubaResults file
+    os.remove(f"{out_folder}/{args.outputproviderfilename}.json")
 
     # Make the report front page
     report_path = out_folder + "/" + f'{args.outputreportfilename}.html'
@@ -329,6 +327,16 @@ def run_cached(args):
         services['directory'] = build('admin', 'directory_v1', credentials=creds)
         services['groups'] = build('groupssettings', 'v1', credentials=creds)
         run_gws_providers(args, services)
+    
+    if not os.path.exists(f'{args.outputpath}/{args.outputproviderfilename}.json'):
+        # When running run_cached, the provider output might not exist as a stand-alone
+        # file depending what version of ScubaGoggles created the output. If the provider
+        # ouptut doesn't exist as a standa-lone file, create it from the scuba results
+        # file so the other functions can execute as normal.
+        with open(f'{args.outputpath}/{args.outjsonfilename}.json', 'r') as scuba_results:
+            provider_output = json.load(scuba_results)['Raw']
+        with open(f'{args.outputpath}/{args.outputproviderfilename}.json', 'w') as provider_file:
+            json.dump(provider_output, provider_file)
     rego_eval(args)
     run_reporter(args)
 
