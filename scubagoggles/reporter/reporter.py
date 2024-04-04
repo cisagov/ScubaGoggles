@@ -4,7 +4,6 @@ reporter.py creates the report html page
 Currently utilizes pandas to generate the HTML table fragments
 """
 import os
-import json
 import time
 import warnings
 from datetime import datetime
@@ -151,42 +150,6 @@ tenant_domain : str, main_report_name: str) -> str:
 
     html = html.replace('{{TABLES}}', collected)
     return html
-
-# def build_report_json(tenant_domain : str, report_stats : dict,
-# json_data : list, product : list, prod_to_fullname:  dict) -> str:
-#     '''
-#     Adds data into JSON Template and formats the report accordingly
-
-#     :param tenant_domain: the primary domain of the tenant.
-#     :param main_report_name: dict containing the overall summary of the report tests.
-#     :param json_data: list of json rego result output for specific baseline
-#     :param product: list of products being tested
-#     :param prod_to_fullname: dict containing mapping of the product full names
-#     '''
-#     total_output = []
-#     report_final = {}
-#     now = datetime.now()
-#     report_date = report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
-
-#     report_metadata = {
-#         "TenantId":  None,
-#         "DisplayName":  None,
-#         "DomainName":  tenant_domain,
-#         "ProductSuite":  "GWS",
-#         "ProductsAssessed": product,
-#         "ProductAbbreviationMapping": prod_to_fullname,
-#         "Tool":  "ScubaGoggles",
-#         "ToolVersion":  "0.1.0",
-#         "TimeStampZulu": report_date
-#     }
-
-#     report_final['ReportSummary'] = report_stats
-#     report_final['Results'] = json_data
-#     report_final['MetaData'] = report_metadata
-#     total_output.append(report_final)
-#     results_json = json.dumps(total_output, indent = 4)
-
-#     return results_json
 
 def get_failed_prereqs(test : dict, successful_calls : set, unsuccessful_calls : set) -> set:
     '''

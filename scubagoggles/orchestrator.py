@@ -327,15 +327,17 @@ def run_cached(args):
         services['directory'] = build('admin', 'directory_v1', credentials=creds)
         services['groups'] = build('groupssettings', 'v1', credentials=creds)
         run_gws_providers(args, services)
-    
+
     if not os.path.exists(f'{args.outputpath}/{args.outputproviderfilename}.json'):
         # When running run_cached, the provider output might not exist as a stand-alone
         # file depending what version of ScubaGoggles created the output. If the provider
         # ouptut doesn't exist as a standa-lone file, create it from the scuba results
         # file so the other functions can execute as normal.
-        with open(f'{args.outputpath}/{args.outjsonfilename}.json', 'r') as scuba_results:
+        with open(f'{args.outputpath}/{args.outjsonfilename}.json', 'r',
+                encoding='UTF-8') as scuba_results:
             provider_output = json.load(scuba_results)['Raw']
-        with open(f'{args.outputpath}/{args.outputproviderfilename}.json', 'w') as provider_file:
+        with open(f'{args.outputpath}/{args.outputproviderfilename}.json', 'w',
+                encoding='UTF-8') as provider_file:
             json.dump(provider_output, provider_file)
     rego_eval(args)
     run_reporter(args)
