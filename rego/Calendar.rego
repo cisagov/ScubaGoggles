@@ -160,7 +160,26 @@ if {
 #
 # Baseline GWS.CALENDAR.2.1v0.1
 #--
-NonCompliantOUs2_1 contains OU if {
+
+ExtSharingPromptSettingDetailsStr(LastEvent) := Description if {
+    LastEvent.NewValue == "true"
+    Description := concat("", [
+        "<span class=setting>External invitation warning is enabled </span> when sharing outside ",
+        LastEvent.DomainName
+    ])
+}
+ExtSharingPromptSettingDetailsStr(LastEvent) := Description if {
+    LastEvent.NewValue == "false"
+    Description := concat("", [
+        "<span class=setting>External invitation warning is not enabled </span> when sharing outside ",
+        LastEvent.DomainName
+    ])
+}
+
+NonCompliantOUs2_1 contains {
+    "Name": OU, 
+    "Value": "External Sharing Guest Prompt is disabled."
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -171,7 +190,10 @@ NonCompliantOUs2_1 contains OU if {
     LastEvent.NewValue == "false"
 }
 
-NonCompliantGroups2_1 contains Group if {
+NonCompliantGroups2_1 contains {
+    "Name": Group, 
+    "Value": "External Sharing Guest Prompt is disabled."
+} if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", Group)
     # Ignore groups without any events
@@ -197,10 +219,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [
-        utils.ReportDetailsOUs(NonCompliantOUs2_1),
-        utils.ReportDetailsGroups(NonCompliantGroups2_1)
-    ]),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, NonCompliantGroups2_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1, "NonCompliantGroups": NonCompliantGroups2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -208,6 +227,7 @@ tests contains {
 if {
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
     count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
     Conditions := {count(NonCompliantOUs2_1) == 0, count(NonCompliantGroups2_1) == 0}
     Status := (false in Conditions) == false
 }
@@ -286,7 +306,12 @@ tests contains {
 # GWS.CALENDAR.4 #
 ##################
 
-NonCompliantOUs4_1 contains OU if {
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value": concat(" ", [
+        "Paid calendar appointments are enabled for "
+    ])
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
     # Ignore OUs without any events. We're already asserting that the
