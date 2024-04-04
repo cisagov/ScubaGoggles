@@ -161,21 +161,6 @@ if {
 # Baseline GWS.CALENDAR.2.1v0.1
 #--
 
-ExtSharingPromptSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "true"
-    Description := concat("", [
-        "<span class=setting>External invitation warning is enabled </span> when sharing outside ",
-        LastEvent.DomainName
-    ])
-}
-ExtSharingPromptSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "false"
-    Description := concat("", [
-        "<span class=setting>External invitation warning is not enabled </span> when sharing outside ",
-        LastEvent.DomainName
-    ])
-}
-
 NonCompliantOUs2_1 contains {
     "Name": OU, 
     "Value": "External Sharing Guest Prompt is disabled."
