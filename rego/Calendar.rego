@@ -87,40 +87,14 @@ if {
 #
 # Baseline GWS.CALENDAR.1.2v0.1
 #--
-ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "SHOW_ONLY_FREE_BUSY_INFORMATION"
-    Description := concat("", [
-        "<span class=setting>Only free busy/information for secondary calendars </span> is shared outside ",
-        LastEvent.DomainName
-    ])
-}
 
-ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "READ_ONLY_ACCESS"
-    Description := concat("", [
-        "<span class=setting>All information for secondary calendars </span> is shared outside ",
-        LastEvent.DomainName,
-        " but outsiders cannot change calendars."
-    ])
-}
-
-ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "READ_WRITE_ACCESS"
-    Description := concat("", [
-        "<span class=setting>All information for secondary calendars </span> is shared outside ",
-        LastEvent.DomainName,
-        " and outsiders can change calendars."
-    ])
-}
-
-ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "MANAGE_ACCESS"
-    Description := concat("", [
-        "<span class=setting>All information for secondary calendars </span> is shared outside ",
-        LastEvent.DomainName,
-        " and outsiders can manage calendars"
-    ])
-}
+GetFriendlyValue1_2(Value) := "Secondary Calendars Share all information, but outsiders cannot change calendars." if {
+    Value == "READ_ONLY_ACCESS"
+} else := "Share all information, and outsiders can change calendars." if {
+    Value == "READ_WRITE_ACCESS"
+} else := "Share all information, and allow managing of calendars." if {
+    Value == "MANAGE_ACCESS"
+} else := "Only free/busy information (hide event details)."
 
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.2v0.1",
@@ -139,7 +113,8 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ExtSharingSecondaryCalSettingDetailsStr(LastEvent),
+    "ReportDetails": concat("",[utils.ReportDetailsBoolean(Status), "<br>Highest Level of Sharing: ",
+    GetFriendlyValue1_2(LastEvent.NewValue)]),
     "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -222,22 +197,6 @@ if {
 # GWS.CALENDAR.3 #
 ##################
 
-CalInteropManSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "true"
-    Description := concat("", [
-        "<span class=setting>Calendar interop is enabled </span> for ",
-        LastEvent.DomainName
-    ])
-}
-
-CalInteropManSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "false"
-    Description := concat("", [
-        "<span class=setting>Calendar interop is not enabled </span> for ",
-        LastEvent.DomainName
-    ])
-}
-
 #
 # Baseline GWS.CALENDAR.3.1v0.1
 #--
@@ -258,7 +217,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.3.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": CalInteropManSettingDetailsStr(LastEvent),
+    "ReportDetails": utils.ReportDetailsBoolean(Status),
     "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
     "RequirementMet": Status,
     "NoSuchEvent": false
