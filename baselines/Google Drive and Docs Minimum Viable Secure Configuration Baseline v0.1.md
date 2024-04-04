@@ -334,7 +334,6 @@ This section covers whether users can use add-ons in file editors within Google 
 Agencies SHALL disable Add-Ons.
 
 - _Rationale:_ Google Docs Add-Ons, depending on their permissions, can present a security risk, including potential exposure of sensitive content. By disabling unapproved add-ons and preventing their sharing, the risk of data leakage can be significantly reduced.
-
 - _Last modified:_ January 3, 2024
 
 - MITRE ATT&CK TTP Mapping
