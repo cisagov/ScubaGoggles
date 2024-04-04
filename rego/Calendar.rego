@@ -212,7 +212,6 @@ tests contains {
 if {
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", utils.TopLevelOU)
     count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
     Conditions := {count(NonCompliantOUs2_1) == 0, count(NonCompliantGroups2_1) == 0}
     Status := (false in Conditions) == false
 }
@@ -293,9 +292,7 @@ tests contains {
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": concat(" ", [
-        "Paid calendar appointments are enabled for "
-    ])
+    "Value": concat("", ["Paid calendar appointments are enabled."])
 } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
@@ -328,7 +325,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -338,5 +335,6 @@ if {
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
+
 }
 #--
