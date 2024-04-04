@@ -99,8 +99,8 @@ External file sharing SHALL be disabled to protect sensitive information from un
 - Last Modified: July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
-  - [T1048: Exfilitration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:002: Exfilitration Over Alternative Protocol: Exfilitration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
 
 ### Resources
 
@@ -264,8 +264,8 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1048: Exfilitration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:002: Exfilitration Over Alternative Protocol: Exfilitration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
   - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
     - [T1213:001: Data from Information Repositories:Confluence](https://attack.mitre.org/techniques/T1213/001/)
     - [T1213:002: Data from Information Repositories:Sharepoint](https://attack.mitre.org/techniques/T1213/002/)
