@@ -207,7 +207,14 @@ Users receive calls only from contacts and other users in the organization SHALL
 - Last Modified: March 15, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - None
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:004: Phishing: Spearphishing Voice](https://attack.mitre.org/techniques/T1566/004/)
+  - [T1598: Phishing for Information](https://attack.mitre.org/techniques/T1598/)
+    - [T1598:004: Phishing for Information: Spearphishing Voice](https://attack.mitre.org/techniques/T1598/004/)
+  - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
+  - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)
+  - [T1125: Video Capture](https://attack.mitre.org/techniques/T1125/)
 
 ### Resources
 - [Restrict who can call my organization's users with Google Meet](https://apps.google.com/supportwidget/articlehome?article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F14277985&assistant_id=generic-unu&product_context=14277985&product_name=UnuFlow&trigger_context=a)
