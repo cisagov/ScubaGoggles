@@ -41,10 +41,9 @@ This section covers whether users can share files outside of the organization, w
 #### GWS.DRIVEDOCS.1.1v0.1
 Agencies SHOULD disable sharing outside of the organization's domain.
 
-- Rationale
-  - To have the tightest control over access to documents created within the organization, agencies should disable sharing from outside the organization. Disabling external sharing will block any collaboration from outside the organization and will prevent disseminating documents outside the organization.
-- Last Modified: July 10, 2023
-- Note:
+- _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk of inadvertent of data leakage.
+- _Last modified:_ July 10, 2023
+- _Note:_
   - This policy restricts information sharing
   - This policy prevents data leakage outside of the organization
   - If this policy is enforced, then follow Policy 1.2
@@ -58,11 +57,9 @@ Agencies SHOULD disable sharing outside of the organization's domain.
 #### GWS.DRIVEDOCS.1.2v0.1
 Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
-- Rationale
-  - If the agency decides that external sharing should be disabled, users should not be able to receive files from outside the organization as well. Disabling external sharing ensures that all communication stays within the organization, which helps mitigate risk from malicious files from an external source.
-- Last Modified: January 3, 2024
-- Note:
-  - This policy only applies if sharing outside was disabled in Policy 1.1
+- _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce the risk of data loss or falling victim to external threats.
+- _Last modified:_ January 3, 2024
+- _Note:_ This policy only applies if sharing outside was disabled in Policy 1.1
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -71,11 +68,9 @@ Agencies SHOULD disable users' receiving files from outside of the organization'
 #### GWS.DRIVEDOCS.1.3v0.1
 Warnings SHALL be enabled when a user is attempting to share something outside the domain.
 
-- Rationale
-  - In the case that a user is going to share something outside the domain, a warning should be given. The warning ensures that the user is aware that they are sharing something externally, and doing so purposefully.
-- Last Modified: February 8, 2024
-- Note:
-  - This policy only applies if external sharing was allowed in Policy 1.1
+- _Rationale:_ Users may not always be aware a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
+- _Last modified:_ February 8, 2024
+- _Note:_ This policy only applies if external sharing was allowed in Policy 1.1
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -84,11 +79,9 @@ Warnings SHALL be enabled when a user is attempting to share something outside t
 #### GWS.DRIVEDOCS.1.4v0.1
 If sharing outside of the organization, then agencies SHALL disable sharing of files with individuals who are not using a Google account.
 
-- Rationale
-  - To ensure that all shared documents are secured, and that agencies are able to control dissemination of the files, agencies shall only share files with individuals using a google account.
-- Last Modified: July 10, 2023
-- Note:
-  - This policy only applies if external sharing is allowed in Policy 1.1
+- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and invites potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
+- _Last modified:_ July 10, 2023
+- _Note:_ This policy only applies if external sharing is allowed in Policy 1.1
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -97,9 +90,8 @@ If sharing outside of the organization, then agencies SHALL disable sharing of f
 #### GWS.DRIVEDOCS.1.5v0.1
 Agencies SHALL disable making files and published web content visible to anyone with the link.
 
-- Rationale
-  - We want to ensure that only approved individuals are able to access and view the document. If content was visible to anyone with a link, that link could be forwarded to anyone, and agencies would no longer have control over who can view the specific document. By disabling file access to anyone with a link, agencies and individuals will have tighter control over who can view files and published web content.
-- Last Modified: July 10, 2023
+- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and invites potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -108,20 +100,18 @@ Agencies SHALL disable making files and published web content visible to anyone 
 #### GWS.DRIVEDOCS.1.6v0.1
 Agencies SHALL enable access checking for file sharing outside of Docs or Drive.
 
-- Rationale
-  - Enabling access checking for sharing files outside of Drive/Docs helps ensure that the documents are shared with approved individuals, organizations, or external domains only.
-- Last Modified: July 10, 2023
+- _Rationale:_ The Access Checker feature can be configured to allows users to grant access to the public if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients or the suggested target audience.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.7v0.1
-Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organizations.
+Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organization.
 
-- Rationale
-  - To control access to content owned by the organization, users should not be able to distribute content to a shared drive owned by another organization. Once a document is moved outside the organization's drives, it no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
-- Last Modified: July 10, 2023
+- _Rationale:_ Once a document is moved outside the organization's drives, the organization no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -130,9 +120,8 @@ Agencies SHALL NOT allow any users to distribute content from an organization-ow
 #### GWS.DRIVEDOCS.1.8v0.1
 Agencies SHALL set newly created items to have Private to the Owner as the default level of access.
 
-- Rationale
-  - All newly created items should default to private. Any sharing of the document needs to be explicitly applied by the owner of the document.
-- Last Modified: November 14, 2023
+- _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent accidental sharing of information too broadly.
+- _Last modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -199,9 +188,8 @@ This section covers whether users can create new shared drives to share with oth
 #### GWS.DRIVEDOCS.2.1v0.1
 Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.
 
-- Rationale
-  - The settings outlined in the SCBs should not be able to be overwritten by anyone, even those with manager access. Not allowing anyone to change shared drive creation settings ensures that security best practices are being followed.
-- Last Modified: July 10, 2023
+- _Rationale:_ Allowing users who are not the drive owner to override settings violates the principle of least privilege. This policy reduces the risk of drive settings being modified by unauthorized individuals.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -209,9 +197,8 @@ Agencies SHOULD NOT allow members with manager access to override shared drive c
 #### GWS.DRIVEDOCS.2.2v0.1
 Agencies SHOULD NOT allow users outside of their organization to access files in shared drives.
 
-- Rationale
-  - To control access to documents within the organization, agencies should not allow users outside the organization to access files in shared drives. Blocking external access to shared drives helps prevent documents shared within the organization from being shared outside the organization without explicit knowledge and approvals.
-- Last Modified: July 10, 2023
+- _Rationale:_ To regulate document access within the organization, it is recommended that agencies restrict external users from accessing files on shared drives. This policy is aimed at safeguarding internal documents from being distributed outside the organization without explicit consent and approval.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -219,9 +206,8 @@ Agencies SHOULD NOT allow users outside of their organization to access files in
 #### GWS.DRIVEDOCS.2.3v0.1
 Agencies SHALL allow users who are not shared drive members to be added to files.
 
-- Rationale
-  - When users who are not shared drive members are not allowed to be added to file, administrators would need to add them as drive members in order to facilitate access which would provide access to all files within the drive, not just the file intended to be shared.
-- Last Modified: July 10, 2023
+- _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as drive members, potentially exposing all drive files and increasing the risk of sensitive content exposure. By disallowing the sharing of these individual files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -229,9 +215,8 @@ Agencies SHALL allow users who are not shared drive members to be added to files
 #### GWS.DRIVEDOCS.2.4v0.1
 Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.
 
-- Rationale
-  - All existing access control settings are circumvented once a file is downloaded and taken out of the GWS tenant which creates the possibility for data leakage.
-- Last Modified: July 10, 2023
+- _Rationale:_ Downloading and removing a file from the GWS tenant bypasses all access control settings, increasing the risk of data leakage. By preventing the sharing of these externally downloaded files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -277,9 +262,8 @@ This section covers whether a security update issued by Google will be applied t
 #### GWS.DRIVEDOCS.3.1v0.1
 Agencies SHALL enable security updates for Drive files.
 
-- Rationale
-  - Allowing security updates to be applied to all affected files will help keep the GWS tenant secure from potential security risks.
-- Last Modified: July 10, 2023
+- _Rationale:_ Google may add new security features over time. Allowing security updates ensures that your files are protected with the latest features Google makes available.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -313,9 +297,8 @@ This section covers whether users have access to Google Drive with the Drive SDK
 #### GWS.DRIVEDOCS.4.1v0.1
 Agencies SHOULD disable Drive SDK access.
 
-- Rationale
-  - The Drive SDK allows third-party external applications to access data and files from within Drive. Disabling the Drive SDK prevents third party applications from accessing the files and data from within the organization, which protects against data leakage and unintentional information sharing.
-- Last Modified: January 3, 2024
+- _Rationale:_ The Drive SDK allows third-party applications to access Drive data, potentially leading to unintentional information sharing and data leakage. By disabling the Drive SDK you can decrease the risk of internal documents from being distributed outside the organization without explicit consent and approval.
+- _Last modified:_ January 3, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
@@ -350,9 +333,8 @@ This section covers whether users can use add-ons in file editors within Google 
 #### GWS.DRIVEDOCS.5.1v0.1
 Agencies SHALL disable Add-Ons.
 
-- Rationale
-  - Google Docs Add-Ons can pose a great security risk based on the permissions the add-on is given. Add-ons can be given full access to the google drive, permission to add or edit existing documents, share documents, connect to external services, and more. Any add-on needs to be fully vetted before given access to the google workspace. Therefore, unapproved add-ons need to be disabled.
-- Last Modified: January 3, 2024
+- _Rationale:_ Google Docs Add-Ons, depending on their permissions, can present a security risk, including potential exposure of sensitive content. By disabling unapproved add-ons and preventing their sharing, the risk of data leakage can be significantly reduced.
+- _Last modified:_ January 3, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
@@ -387,9 +369,8 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 #### GWS.DRIVEDOCS.6.1v0.1
 Agencies SHOULD either disable Google Drive for Desktop or only allow Google Drive for Desktop on authorized devices.
 
-- Rationale
-  - Saving directly to the cloud reduces the risk of potentially losing data, which is beneficial when dealing with sensitive information and when trying to retain certain files.
-- Last Modified: July 10, 2023
+- _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -437,9 +418,8 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 #### GWS.DRIVEDOCS.7.1v0.1
 Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
 
-- Rationale
-  - Data Loss Prevention (DLP) rules trigger scans of files to look for sensitive content and restrict sharing of documents that may contain sensitive content. Configuring DLP rules helps agencies protect their information, by determining what data and/or phrasing might be sensitive, and restricting the dissemination of the documents containing that data. Examples include PII, PHI, portion markings, etc.
-- Last Modified: July 10, 2023
+- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. By blocking and/or having warnings on these DLP-scanned files from being shared with users, the risk of unintentional introduction of sensitive content is significantly reduced.
+- _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
