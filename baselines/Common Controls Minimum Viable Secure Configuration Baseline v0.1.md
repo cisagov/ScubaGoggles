@@ -516,7 +516,7 @@ All highly privileged accounts SHALL leverage Google Account authentication with
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 #### GWS.COMMONCONTROLS.6.2v0.1
-A minimum of **two** and maximum of **four** separate and distinct Super Admin users SHALL be configured.
+A minimum of **two** and maximum of **eight** separate and distinct Super Admin users SHALL be configured.
 
 - _Rationale:_ Having only a single Super Admin Account can be problematic if this user were unavailable for an extended period of time. Also, Super Admin accounts should not be shared amongst multiple users. In addition, having too many super admins could be problematic as then there are many users with those privileges which creates a larger security risk
 - _Last Modified:_ July 10, 2023
