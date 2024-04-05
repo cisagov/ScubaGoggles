@@ -227,8 +227,10 @@ def run_reporter(args):
     total_output = {}
     stats_and_data = {}
 
-    productsAssessed = [prod_to_fullname[product] for product in products if product in prod_to_fullname]
-    productAbbreviationMapping = {fullname: shortname for shortname, fullname in prod_to_fullname.items()}
+    products_assessed = [prod_to_fullname[product] for product in products 
+                         if product in prod_to_fullname]
+    product_abbreviation_mapping = {fullname: shortname for shortname, 
+                                    fullname in prod_to_fullname.items()}
 
     now = datetime.now()
     report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -238,8 +240,8 @@ def run_reporter(args):
         "DisplayName":  None,
         "DomainName":  tenant_domain,
         "ProductSuite":  "GWS",
-        "ProductsAssessed": productsAssessed,
-        "ProductAbbreviationMapping": productAbbreviationMapping,
+        "ProductsAssessed": products_assessed,
+        "ProductAbbreviationMapping": product_abbreviation_mapping,
         "Tool":  "ScubaGoggles",
         "ToolVersion":  "0.1.0",
         "TimeStampZulu": report_date
