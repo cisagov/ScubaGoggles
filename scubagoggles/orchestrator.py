@@ -227,6 +227,9 @@ def run_reporter(args):
     total_output = {}
     stats_and_data = {}
 
+    productsAssessed = [prod_to_fullname[product] for product in products if product in prod_to_fullname]
+    productAbbreviationMapping = {fullname: shortname for shortname, fullname in prod_to_fullname.items()}
+
     now = datetime.now()
     report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
@@ -235,8 +238,8 @@ def run_reporter(args):
         "DisplayName":  None,
         "DomainName":  tenant_domain,
         "ProductSuite":  "GWS",
-        "ProductsAssessed": products,
-        "ProductAbbreviationMapping": prod_to_fullname,
+        "ProductsAssessed": productsAssessed,
+        "ProductAbbreviationMapping": productAbbreviationMapping,
         "Tool":  "ScubaGoggles",
         "ToolVersion":  "0.1.0",
         "TimeStampZulu": report_date
@@ -259,8 +262,8 @@ def run_reporter(args):
             successful_calls,
             unsuccessful_calls
         )
-        baseline_product_summary = {prod_to_fullname[product]:stats_and_data[product][0]}
-        baseline_product_results_json = {prod_to_fullname[product]:stats_and_data[product][1]}
+        baseline_product_summary = {product:stats_and_data[product][0]}
+        baseline_product_results_json = {product:stats_and_data[product][1]}
         summary.update(baseline_product_summary)
         results.update(baseline_product_results_json)
         total_output.update({"Summary": summary})
