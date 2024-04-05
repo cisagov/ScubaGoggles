@@ -227,9 +227,9 @@ def run_reporter(args):
     total_output = {}
     stats_and_data = {}
 
-    products_assessed = [prod_to_fullname[product] for product in products 
+    products_assessed = [prod_to_fullname[product] for product in products
                          if product in prod_to_fullname]
-    product_abbreviation_mapping = {fullname: shortname for shortname, 
+    product_abbreviation_mapping = {fullname: shortname for shortname,
                                     fullname in prod_to_fullname.items()}
 
     now = datetime.now()
