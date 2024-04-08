@@ -39,11 +39,6 @@ def get_gws_args(parser):
     'Defaults to "./credentials.json" which means the tool will look ' +
     'for the file named credentials.json in the current directory.')
 
-    parser.add_argument('--mergejson', action = 'store_true',
-    help='Creates individual json report files per baseline' +
-    'instead of one single json results report file encapsulating all assessment output.' +
-    ' Defaults to False.')
-
     parser.add_argument('--outjsonfilename', type=str,
     default=default_file_output_names['json_output_name'], metavar='',
     help='The name of the file that encapsulates all assessment output.' +
