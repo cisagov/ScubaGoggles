@@ -165,7 +165,6 @@ test_CalendarAppointmentSlot_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    print(RuleOutput[0].ReportDetails)
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ", 
     "Paid calendar appointments are enabled.</li></ul>"])
 }
