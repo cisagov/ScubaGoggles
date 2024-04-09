@@ -326,6 +326,6 @@ successful_calls : set, unsuccessful_calls : set) -> list:
         json_data.append(results_data)
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
     with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
-    mode='w', encoding='UTF-8') as file1:
-        file1.write(html)
+            mode='w', encoding='UTF-8') as html_file:
+        html_file.write(html)
     return [report_stats, json_data]
