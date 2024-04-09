@@ -356,7 +356,7 @@ We recommend running the conformance report in quiet mode to stop the web browse
 
 Once the scan is complete, navigate to the output folder. Within the output folder, we can access the generated HTML reports, or view the results in JSON format. 
 
-To view the JSON, open the `TestResults.json` file. 
+To view the JSON, open the `ScubaResults.json` file. 
 
 Each baseline will appear in the following format: 
 
