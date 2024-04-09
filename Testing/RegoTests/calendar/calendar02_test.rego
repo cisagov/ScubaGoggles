@@ -223,7 +223,8 @@ test_ExtInvitationsWarning_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "The following OUs are non-compliant:<ul><li>Test Top-Level OU: External Sharing Guest Prompt is disabled.</li></ul>"
+    RuleOutput[0].ReportDetails == "The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: External Sharing Guest Prompt is disabled.</li></ul>"
 }
 
 test_ExtInvitationsWarning_Incorrect_V3 if {
@@ -336,7 +337,8 @@ test_ExtInvitationsWarning_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Secondary OU: ",
     "External Sharing Guest Prompt is disabled.</li></ul>"])
 }
 
@@ -380,6 +382,8 @@ test_ExtInvitationsWarning_Incorrect_V6 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("",["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ", 
     "External Sharing Guest Prompt is disabled.</li></ul><br>",
-    "The following groups are non-compliant:<ul><li>group1@example.com: ", "External Sharing Guest Prompt is disabled.</li></ul>"])
+    "The following groups are non-compliant:",
+    "<ul><li>group1@example.com: ",
+    "External Sharing Guest Prompt is disabled.</li></ul>"])
 }
 #--
