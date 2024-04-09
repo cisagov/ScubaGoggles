@@ -232,8 +232,8 @@ def run_reporter(args):
     product_abbreviation_mapping = {fullname: shortname for shortname,
                                     fullname in prod_to_fullname.items()}
 
-    now = datetime.now()
-    report_date = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+    timestamp_utc = datetime.utcnow()
+    timestamp_zulu = timestamp_utc.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
 
     report_metadata = {
         "TenantId":  None,
@@ -244,7 +244,7 @@ def run_reporter(args):
         "ProductAbbreviationMapping": product_abbreviation_mapping,
         "Tool":  "ScubaGoggles",
         "ToolVersion":  "0.1.0",
-        "TimeStampZulu": report_date
+        "TimeStampZulu": timestamp_zulu
     }
 
     total_output.update({"MetaData": report_metadata})
