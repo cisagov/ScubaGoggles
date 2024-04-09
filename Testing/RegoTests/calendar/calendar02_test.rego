@@ -265,7 +265,10 @@ test_ExtInvitationsWarning_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "The following OUs are non-compliant:<ul><li>Test Top-Level OU: External Sharing Guest Prompt is disabled.</li></ul>"
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul><li>",
+        "Test Top-Level OU: External Sharing Guest Prompt is disabled.</li></ul>"
+    ])
 }
 
 test_ExtInvitationsWarning_Incorrect_V4 if {
