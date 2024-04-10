@@ -28,6 +28,7 @@ This baseline is based on Google documentation available at the [Gmail Google Wo
 - [Security Sandbox](#16-security-sandbox)
 - [Comprehensive Mail Storage](#17-comprehensive-mail-storage)
 - [Content Compliance Filtering](#18-content-compliance-filtering)
+- [Spam Filtering](#19-spam-filtering)
 
 
 Within Google Workspace, settings can be assigned to users through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
