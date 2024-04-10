@@ -94,7 +94,10 @@ GetFriendlyValue1_2(Value) := "Secondary Calendars Share all information, but ou
     Value == "READ_WRITE_ACCESS"
 } else := "Share all information, and allow managing of calendars." if {
     Value == "MANAGE_ACCESS"
-} else := "Only free/busy information (hide event details)."
+} else := "Only free/busy information (hide event details)." if {
+    Value == "SHOW_ONLY_FREE_BUSY_INFORMATION"
+} else := Value
+
 
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.2v0.1",
