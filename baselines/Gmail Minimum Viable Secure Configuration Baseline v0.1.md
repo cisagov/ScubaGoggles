@@ -1166,3 +1166,66 @@ To configure the settings for Objectionable content:
 
 #### GWS.GMAIL.18.3v0.1 Instructions
 1.  There is no implementation steps for this policy.
+
+## 19. Spam Filtering
+
+This section covers the settings relating to bypassing spam filters.
+
+### Policies
+
+#### GWS.GMAIL.19.1v0.1
+"Domains SHALL NOT be added to lists that bypass spam filters.
+
+- _Rationale:_ Allowing an entire domain to bypass the spam filters allows for the potential for a spoofed email within the domain to bypass the filter. Only allowing specific users to bypass helps mitigate the risk.
+- _Last modified:_ April 10, 2024
+- _Note:_ Allowed senders MAY be added.
+
+- MITRE ATT&CK TTP Mapping
+  - { Needs TTP Mappings }
+
+#### GWS.GMAIL.19.2v0.1
+Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
+
+- _Rationale:_ Allowing an entire domain to bypass the spam filters and hide warnings allows for the potential for a spoofed email within the domain to bypass the filter and prevents the user from knowing. Not adding domains and users helps mitigate the risk.
+- _Last modified:_ April 10, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - { Needs TTP Mappings }
+
+#### GWS.GMAIL.19.3v0.1
+Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.
+
+- _Rationale:_ Bypassing spam filters and hiding warning for all messages from internal and external senders creates a security risk because of the potential for a malicious message being able to bypass filters. Disabling this feature mitigates the risk.
+- _Last modified:_ April 10, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - { Needs TTP Mappings }
+
+### Resources
+
+-   [How to bypass the spam filter for incoming emails using the spam settings ](https://knowledge.workspace.google.com/kb/how-to-bypass-the-spam-filter-for-incoming-emails-using-the-spam-settings-000006661)
+
+### Prerequisites
+
+-   N/A
+
+### Implementation
+
+To configure the settings for spam filtering:
+
+#### Policy Group 19 Common Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Apps -\> Google Workspace -\> Gmail**.
+3.  Select **Spam, Phishing, and Malware**.
+
+#### GWS.GMAIL.19.1v0.1 Instructions
+1.  Un-select **Bypass spam filters for messages from senders or domains in selected lists.**
+2.  Select **Save**.
+
+#### GWS.GMAIL.19.2v0.1 Instructions
+1.  Un-select **Bypass spam filters and hide warnings for messages from senders or domains in selected lists.**
+2.  Select **Save**.
+
+#### GWS.GMAIL.19.3v0.1 Instructions
+1.  Un-select **Bypass spam filters and hide warnings for all messages from internal and external senders**
+2.  Select **Save**.
