@@ -87,40 +87,17 @@ if {
 #
 # Baseline GWS.CALENDAR.1.2v0.1
 #--
-ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "SHOW_ONLY_FREE_BUSY_INFORMATION"
-    Description := concat("", [
-        "<span class=setting>Only free busy/information for secondary calendars </span> is shared outside ",
-        LastEvent.DomainName
-    ])
-}
 
-ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "READ_ONLY_ACCESS"
-    Description := concat("", [
-        "<span class=setting>All information for secondary calendars </span> is shared outside ",
-        LastEvent.DomainName,
-        " but outsiders cannot change calendars."
-    ])
-}
+GetFriendlyValue1_2(Value) := "Secondary Calendars Share all information, but outsiders cannot change calendars." if {
+    Value == "READ_ONLY_ACCESS"
+} else := "Share all information, and outsiders can change calendars." if {
+    Value == "READ_WRITE_ACCESS"
+} else := "Share all information, and allow managing of calendars." if {
+    Value == "MANAGE_ACCESS"
+} else := "Only free/busy information (hide event details)." if {
+    Value == "SHOW_ONLY_FREE_BUSY_INFORMATION"
+} else := Value
 
-ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "READ_WRITE_ACCESS"
-    Description := concat("", [
-        "<span class=setting>All information for secondary calendars </span> is shared outside ",
-        LastEvent.DomainName,
-        " and outsiders can change calendars."
-    ])
-}
-
-ExtSharingSecondaryCalSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "MANAGE_ACCESS"
-    Description := concat("", [
-        "<span class=setting>All information for secondary calendars </span> is shared outside ",
-        LastEvent.DomainName,
-        " and outsiders can manage calendars"
-    ])
-}
 
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.2v0.1",
@@ -139,7 +116,8 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.1.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": ExtSharingSecondaryCalSettingDetailsStr(LastEvent),
+    "ReportDetails": concat("",[utils.ReportDetailsBoolean(Status), "<br>Highest Level of Sharing: ",
+    GetFriendlyValue1_2(LastEvent.NewValue)]),
     "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -160,7 +138,11 @@ if {
 #
 # Baseline GWS.CALENDAR.2.1v0.1
 #--
-NonCompliantOUs2_1 contains OU if {
+
+NonCompliantOUs2_1 contains {
+    "Name": OU, 
+    "Value": "External Sharing Guest Prompt is disabled."
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -171,7 +153,10 @@ NonCompliantOUs2_1 contains OU if {
     LastEvent.NewValue == "false"
 }
 
-NonCompliantGroups2_1 contains Group if {
+NonCompliantGroups2_1 contains {
+    "Name": Group, 
+    "Value": "External Sharing Guest Prompt is disabled."
+} if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "ENABLE_EXTERNAL_GUEST_PROMPT", Group)
     # Ignore groups without any events
@@ -197,10 +182,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.2.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [
-        utils.ReportDetailsOUs(NonCompliantOUs2_1),
-        utils.ReportDetailsGroups(NonCompliantGroups2_1)
-    ]),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, NonCompliantGroups2_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1, "NonCompliantGroups": NonCompliantGroups2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -217,22 +199,6 @@ if {
 ##################
 # GWS.CALENDAR.3 #
 ##################
-
-CalInteropManSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "true"
-    Description := concat("", [
-        "<span class=setting>Calendar interop is enabled </span> for ",
-        LastEvent.DomainName
-    ])
-}
-
-CalInteropManSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "false"
-    Description := concat("", [
-        "<span class=setting>Calendar interop is not enabled </span> for ",
-        LastEvent.DomainName
-    ])
-}
 
 #
 # Baseline GWS.CALENDAR.3.1v0.1
@@ -254,7 +220,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.3.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": CalInteropManSettingDetailsStr(LastEvent),
+    "ReportDetails": utils.ReportDetailsBoolean(Status),
     "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -286,7 +252,10 @@ tests contains {
 # GWS.CALENDAR.4 #
 ##################
 
-NonCompliantOUs4_1 contains OU if {
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value": "Paid calendar appointments are enabled."
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -318,7 +287,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CALENDAR.4.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -328,5 +297,6 @@ if {
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
+
 }
 #--
