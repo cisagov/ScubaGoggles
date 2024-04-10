@@ -251,7 +251,7 @@ tests contains {
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": concat("", ["Paid calendar appointments are enabled."])
+    "Value": "Paid calendar appointments are enabled."
 } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "CalendarAppointmentSlotAdminSettingsProto payments_enabled", OU)
