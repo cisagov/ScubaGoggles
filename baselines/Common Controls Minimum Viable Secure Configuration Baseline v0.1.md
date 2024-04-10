@@ -1075,11 +1075,9 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 ### Implementation
 
 #### GWS.COMMONCONTROLS.14.1v0.1 Instructions
-1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.  Go to Menu [Account \> Account settings \> Legal and compliance](https://admin.google.com/ac/companyprofile/legal).
-3.  Click **Sharing options.**
-4.  Select **Enabled.**
-5.  Click **Save**.
+Follow the configuration instructions unique to the products and integration patterns at your organization to send the security logs to the security operations center for monitoring.
+
+Note: Agencies can benefit from security detection capabilities offered by the CISA Cloud Log Aggregation Warehouse (CLAW) system. Agencies are urged to send the logs to CLAW. Contact CISA at [cyberliason@cisa.dhs.gov](mailto:cyberliason@cisa.dhs.gov) to request integration instructions.
 
 #### GWS.COMMONCONTROLS.14.2v0.1 Instructions
 1.  There is no implementation for this policy.
