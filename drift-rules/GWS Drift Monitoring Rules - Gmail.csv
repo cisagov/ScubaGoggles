@@ -51,3 +51,6 @@ GWS.GMAIL.17.1v0.1,Comprehensive mail storage SHOULD be enabled to ensure inform
 GWS.GMAIL.18.1v0.1,Content filtering SHOULD be enabled within Gmail messages.,N/A,N/A,N/A,N/A,N/A,Not Alertable
 GWS.GMAIL.18.2v0.1,Any third-party or outside application selected for advanced email content filtering SHOULD offer services comparable to those offered by Google Workspace.,N/A,N/A,N/A,N/A,N/A,Not Alertable
 GWS.GMAIL.18.3v0.1,"Gmail or third-party applications SHALL be configured to protect PII and sensitive information as defined by the agency. At a minimum, credit card numbers, taxpayer Identification Numbers (TIN), and Social Security Numbers (SSN) SHALL be blocked.",N/A,N/A,N/A,N/A,N/A,Not Alertable
+GWS.GMAIL.19.1v0.1,"Domains SHALL NOT be added to lists that bypass spam filters.",Admin Log Event,Change Gmail Setting,SPAM_CONTROL,N/A,rules/00gjdgxs12jr6zt,JGK 04-11-24 @ 09:45
+GWS.GMAIL.19.2v0.1,"Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.",Admin Log Event,Change Gmail Setting,SPAM_CONTROL,N/A,rules/00gjdgxs12jr6zt,JGK 04-11-24 @ 09:45
+GWS.GMAIL.19.3v0.1,"Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.",Admin Log Event,Change Gmail Setting,SPAM_CONTROL,N/A,rules/00gjdgxs12jr6zt,JGK 04-11-24 @ 09:45

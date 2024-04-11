@@ -1175,7 +1175,7 @@ This section covers the settings relating to bypassing spam filters.
 ### Policies
 
 #### GWS.GMAIL.19.1v0.1
-"Domains SHALL NOT be added to lists that bypass spam filters.
+Domains SHALL NOT be added to lists that bypass spam filters.
 
 - _Rationale:_ Allowing an entire domain to bypass the spam filters allows for the potential for a spoofed email within the domain to bypass the filter. Only allowing specific users to bypass helps mitigate the risk.
 - _Last modified:_ April 10, 2024
