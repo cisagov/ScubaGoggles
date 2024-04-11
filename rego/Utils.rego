@@ -30,11 +30,11 @@ ReportDetailsOUs(OUs) := Message if {
     Message := concat("", ["Requirement failed in ", concat(", ", OUs), "."])
 }
 
-NoGroupsDetails(Groups) := "No Groups found in Organization." if {
+NoGroupsDetails(Groups) := "No groups found in Organization." if {
     count(Groups) == 0
 }
 
-ReportDetailsGroups(Groups) := "Requirement met in all Groups." if {
+ReportDetailsGroups(Groups) := "Requirement met in all groups." if {
     count(Groups) == 0
 }
 

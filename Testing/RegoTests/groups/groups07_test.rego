@@ -28,7 +28,7 @@ test_Group_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all Groups."
+    RuleOutput[0].ReportDetails == "Requirement met in all groups."
 }
 
 test_Group_Correct_V2 if {
@@ -65,7 +65,7 @@ test_Group_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all Groups."
+    RuleOutput[0].ReportDetails == "Requirement met in all groups."
 }
 
 test_Group_Correct_V3 if {
@@ -81,7 +81,7 @@ test_Group_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "No Groups found in Organization."
+    RuleOutput[0].ReportDetails == "No groups found in Organization."
 }
 
 test_Group_Correct_V4 if {
@@ -123,7 +123,7 @@ test_Group_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all Groups."
+    RuleOutput[0].ReportDetails == "Requirement met in all groups."
 }
 
 test_Group_Correct_V5 if {
@@ -175,7 +175,7 @@ test_Group_Correct_V5 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all Groups."
+    RuleOutput[0].ReportDetails == "Requirement met in all groups."
 }
 
 test_Group_Correct_V6 if {
@@ -216,7 +216,7 @@ test_Group_Correct_V6 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all Groups."
+    RuleOutput[0].ReportDetails == "Requirement met in all groups."
 }
 
 test_Group_Incorrect_V1 if {
