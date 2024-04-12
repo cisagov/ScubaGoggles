@@ -150,7 +150,7 @@ NonCompliantOUs2_1 contains {
     ])
 } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "ApiDataAccessSettingProto api_access_enabled", OU)
+    Events := utils.FilterEventsOU(LogEvents, "ApiDataAccessSettingProto api_access_enabled", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -170,7 +170,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "ApiDataAccessSettingProto api_access_enabled", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ApiDataAccessSettingProto api_access_enabled", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -184,7 +184,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "ApiDataAccessSettingProto api_access_enabled", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ApiDataAccessSettingProto api_access_enabled", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs2_1) == 0
 }
@@ -211,7 +211,7 @@ NonCompliantOUs3_1 contains {
     ])
 } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "RosterImportSettingsProto sis_integrator", OU)
+    Events := utils.FilterEventsOU(LogEvents, "RosterImportSettingsProto sis_integrator", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -231,7 +231,7 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := utils.FilterEvents(LogEvents, "RosterImportSettingsProto sis_integrator", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "RosterImportSettingsProto sis_integrator", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -244,7 +244,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "RosterImportSettingsProto sis_integrator", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "RosterImportSettingsProto sis_integrator", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs3_1) == 0
 }
@@ -271,7 +271,7 @@ NonCompliantOUs4_1 contains {
     ])
 } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
+    Events := utils.FilterEventsOU(LogEvents, "StudentUnenrollmentSettingsProto who_can_unenroll_students", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -292,7 +292,7 @@ tests contains {
 if {
     DefaultSafe := true
     SettingName := "StudentUnenrollmentSettingsProto who_can_unenroll_students"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -306,7 +306,7 @@ tests contains {
 }
 if {
     SettingName := "StudentUnenrollmentSettingsProto who_can_unenroll_students"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
