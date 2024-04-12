@@ -47,7 +47,7 @@ NonCompliantOUs1_1 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", OU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
@@ -63,20 +63,20 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := utils.FilterEvents(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.GMAIL.1.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs1_1) == 0
 }
@@ -2029,7 +2029,7 @@ NonCompliantOUs16_1 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "AttachmentDeepScanningSettingsProto deep_scanning_enabled", OU)
+    Events := utils.FilterEventsOU(LogEvents, "AttachmentDeepScanningSettingsProto deep_scanning_enabled", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -2047,7 +2047,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "AttachmentDeepScanningSettingsProto deep_scanning_enabled"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -2061,7 +2061,7 @@ tests contains {
 }
 if {
     SettingName := "AttachmentDeepScanningSettingsProto deep_scanning_enabled"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs16_1) == 0
 }

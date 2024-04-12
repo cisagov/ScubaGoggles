@@ -36,7 +36,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V2 if {
@@ -86,7 +86,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V3 if {
@@ -136,7 +136,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V4 if {
@@ -186,7 +186,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V1 if {
@@ -424,7 +424,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V2 if {
@@ -470,7 +470,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V3 if {
@@ -516,7 +516,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V4 if {
@@ -562,7 +562,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V1 if {
@@ -788,7 +788,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V2 if {
@@ -838,7 +838,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V3 if {
@@ -888,7 +888,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V4 if {
@@ -938,7 +938,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V1 if {
@@ -1175,7 +1175,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V2 if {
@@ -1221,7 +1221,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V3 if {
@@ -1267,7 +1267,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V4 if {
@@ -1313,7 +1313,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 
@@ -1540,7 +1540,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V1
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V2 if {
@@ -1590,7 +1590,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V2
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V3 if {
@@ -1640,7 +1640,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V3
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V4 if {
@@ -1690,7 +1690,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V4
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V1 if {
@@ -1987,7 +1987,7 @@ test_SpoofingAuthenticationProtection_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtection_InCorrect_V1 if {
@@ -2213,7 +2213,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V2 if {
@@ -2263,7 +2263,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V3 if {
@@ -2313,7 +2313,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V4 if {
@@ -2363,7 +2363,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V1 if {
