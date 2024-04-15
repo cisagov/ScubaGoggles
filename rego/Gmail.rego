@@ -1236,16 +1236,16 @@ NoSuchEvent7_6(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-GetFriendlyValue7_6(Value) := "disabled" if {
+GetFriendlyValue7_6(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
 NonCompliantOUs7_6 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Protect against domain spoofing based on similar domain names action is set to",
+        "Emails flagged by spoofing and authentication controls shall not be kept in the inbox is set to",
         GetFriendlyValue7_6(authenticationSetting)
     ])
 }
@@ -1294,51 +1294,6 @@ if {
     ]
 }
 
-NonCompliantOUs7_6 contains OU if {
-    some OU in utils.OUsWithEvents
-
-    SettingA := concat("", [
-        "Spoofing and authentication safety Protect against domain spoofing based on ",
-        "similar domain names action"
-    ])
-    EventsA := utils.FilterEvents(LogEvents, SettingA, OU)
-    count(EventsA) > 0
-    LastEventA := utils.GetLastEvent(EventsA)
-
-    SettingB := "Spoofing and authentication safety Protect against spoofing of employee names action"
-    EventsB := utils.FilterEvents(LogEvents, SettingB, OU)
-    count(EventsB) > 0
-    LastEventB := utils.GetLastEvent(EventsB)
-
-    SettingC := "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
-    EventsC := utils.FilterEvents(LogEvents, SettingC, OU)
-    count(EventsC) > 0
-    LastEventC := utils.GetLastEvent(EventsC)
-
-    SettingD := "Spoofing and authentication safety Protect against any unauthenticated emails action"
-    EventsD := utils.FilterEvents(LogEvents, SettingD, OU)
-    count(EventsD) > 0
-    LastEventD := utils.GetLastEvent(EventsD)
-
-    SettingE := concat("", [
-        "Spoofing and authentication safety Protect your Groups from inbound emails spoofing ",
-        "your domain action"
-    ])
-    EventsE := utils.FilterEvents(LogEvents, SettingE, OU)
-    count(EventsE) > 0
-    LastEventE := utils.GetLastEvent(EventsE)
-
-    # OU is non-compliant if any of the following are true
-    true in [
-        LastEventA.NewValue == "Show warning",
-        LastEventB.NewValue == "Show warning",
-        LastEventC.NewValue == "Show warning",
-        LastEventD.NewValue == "Show warning",
-        LastEventD.NewValue == "No action",
-        LastEventE.NewValue == "Show warning"
-    ]
-}
-
 tests contains {
     "PolicyId": "GWS.GMAIL.7.6v0.1",
     "Criticality": "Shall",
@@ -1370,9 +1325,9 @@ if {
 # Baseline GWS.GMAIL.7.7v0.1
 #--
 
-GetFriendlyValue7_7(Value) := "disabled" if {
+GetFriendlyValue7_7(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
