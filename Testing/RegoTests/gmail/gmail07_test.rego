@@ -252,7 +252,8 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against domain spoofing using similar domain names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V3 if {
@@ -302,7 +303,8 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against domain spoofing using similar domain names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V4 if {
@@ -336,7 +338,8 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against domain spoofing using similar domain names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V5 if {
@@ -386,7 +389,8 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against domain spoofing using similar domain names is set to disabled</li></ul>"])
 }
 #--
 
@@ -626,7 +630,8 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against spoofing of employee names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V3 if {
@@ -672,7 +677,8 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against spoofing of employee names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V4 if {
@@ -704,7 +710,8 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against spoofing of employee names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V5 if {
@@ -750,7 +757,8 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against spoofing of employee names is set to disabled</li></ul>"])
 }
 
 
@@ -1004,7 +1012,8 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V2 if 
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V3 if {
@@ -1054,7 +1063,8 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V3 if 
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V4 if {
@@ -1088,7 +1098,8 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V4 if 
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V5 if {
@@ -1138,7 +1149,8 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V5 if 
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 
@@ -1378,7 +1390,8 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against any unauthenticated emails is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V3 if {
@@ -1424,7 +1437,8 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against any unauthenticated emails is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V4 if {
@@ -1456,7 +1470,8 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against any unauthenticated emails is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V5 if {
@@ -1502,7 +1517,8 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against any unauthenticated emails is set to disabled</li></ul>"])
 }
 
 
@@ -1756,7 +1772,8 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect your Groups from inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V3 if {
@@ -1806,7 +1823,8 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect your Groups from inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V4 if {
@@ -1840,7 +1858,8 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect your Groups from inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V5 if {
@@ -1890,7 +1909,8 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect your Groups from inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 #

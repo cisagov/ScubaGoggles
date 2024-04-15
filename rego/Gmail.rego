@@ -874,9 +874,9 @@ tests contains {
 
 # No group level control
 
-GetFriendlyValue7_1(Value) := "disabled" if {
+GetFriendlyValue7_1(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -940,9 +940,9 @@ if {
 # Baseline GWS.GMAIL.7.2v0.1
 #--
 
-GetFriendlyValue7_2(Value) := "disabled" if {
+GetFriendlyValue7_2(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -997,9 +997,9 @@ if {
 # Baseline GWS.GMAIL.7.3v0.1
 #--
 
-GetFriendlyValue7_3(Value) := "disabled" if {
+GetFriendlyValue7_3(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -1067,9 +1067,9 @@ if {
 # Baseline GWS.GMAIL.7.4v0.1
 #--
 
-GetFriendlyValue7_4(Value) := "disabled" if {
+GetFriendlyValue7_4(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -1124,9 +1124,9 @@ if {
 # Baseline GWS.GMAIL.7.5v0.1
 #--
 
-GetFriendlyValue7_5(Value) := "disabled" if {
+GetFriendlyValue7_5(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
