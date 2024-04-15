@@ -204,7 +204,8 @@ test_GoogleWorkspaceSync_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Automatically enable outlook sync is set to enabled</li></ul>"])
 }
 
 test_GoogleWorkspaceSync_Incorrect_V3 if {
@@ -242,7 +243,8 @@ test_GoogleWorkspaceSync_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Automatically enable outlook sync is set to enabled</li></ul>"])
 }
 
 test_GoogleWorkspaceSync_Incorrect_V4 if {
@@ -270,7 +272,8 @@ test_GoogleWorkspaceSync_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Automatically enable outlook sync is set to enabled</li></ul>"])
 }
 
 test_GoogleWorkspaceSync_Incorrect_V5 if {
@@ -308,7 +311,8 @@ test_GoogleWorkspaceSync_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Automatically enable outlook sync is set to enabled</li></ul>"])
 }
 #--
 

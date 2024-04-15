@@ -1521,14 +1521,6 @@ if {
     Events := utils.FilterEvents(LogEvents, "IMAP_ACCESS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
-
-NonCompliantOUs9_1 contains OU if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "IMAP_ACCESS", OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "DISABLED"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
@@ -1833,7 +1825,7 @@ NonCompliantOUs13_1 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "OutOfDomainWarningProto disable_untrusted_recipient_warning", OU)
+    Events := utils.FilterEventsOU(LogEvents, "OutOfDomainWarningProto disable_untrusted_recipient_warning", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
@@ -1851,7 +1843,7 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "OutOfDomainWarningProto disable_untrusted_recipient_warning"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -1865,7 +1857,7 @@ tests contains {
 }
 if {
     SettingName := "OutOfDomainWarningProto disable_untrusted_recipient_warning"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs13_1) == 0
 }

@@ -205,7 +205,8 @@ test_ImapAccess_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Email user import is set to enabled</li></ul>"])
 }
 
 test_ImapAccess_Incorrect_V3 if {
@@ -243,7 +244,8 @@ test_ImapAccess_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Email user import is set to enabled</li></ul>"])
 }
 test_ImapAccess_Incorrect_V4 if {
     # Test IMAP Access when there's only one event and it's wrong
@@ -270,7 +272,8 @@ test_ImapAccess_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Email user import is set to enabled</li></ul>"])
 }
 
 test_ImapAccess_Incorrect_V5 if {
@@ -308,7 +311,8 @@ test_ImapAccess_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Email user import is set to enabled</li></ul>"])
 }
 #--
 
@@ -514,7 +518,8 @@ test_PopAccess_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Automatically enable pop access is set to enabled</li></ul>"])
 }
 
 test_PopAccess_Incorrect_V3 if {
@@ -552,7 +557,8 @@ test_PopAccess_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Automatically enable pop access is set to enabled</li></ul>"])
 }
 
 test_PopAccess_Incorrect_V4 if {
@@ -580,7 +586,8 @@ test_PopAccess_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Automatically enable pop access is set to enabled</li></ul>"])
 }
 
 test_PopAccess_Incorrect_V5 if {
@@ -618,5 +625,6 @@ test_PopAccess_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Automatically enable pop access is set to enabled</li></ul>"])
 }
