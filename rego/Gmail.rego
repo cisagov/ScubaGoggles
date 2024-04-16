@@ -268,9 +268,9 @@ if {
 
 # Cannot be controlled at group level
 
-GetFriendlyValue5_1(Value) := "disabled" if {
+GetFriendlyValue5_1(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -323,9 +323,9 @@ if {
 # Baseline GWS.GMAIL.5.2v0.1
 #--
 
-GetFriendlyValue5_2(Value) := "disabled" if {
+GetFriendlyValue5_2(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -398,9 +398,9 @@ EncryptedAttachmentSettingDetailsStr(LastEvent) := Description if {
 # Baseline GWS.GMAIL.5.3v0.1
 #--
 
-GetFriendlyValue5_3(Value) := "disabled" if {
+GetFriendlyValue5_3(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -455,9 +455,9 @@ if {
 # Baseline GWS.GMAIL.5.4v0.1
 #--
 
-GetFriendlyValue5_4(Value) := "disabled" if {
+GetFriendlyValue5_4(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -543,7 +543,7 @@ GetFriendlyValue5_5(Value) := "disabled" if {
 NonCompliantOUs5_5 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Move email to spam or Quarantine is",
+        "Move email to spam or Quarantine is set to",
         GetFriendlyValue5_5(eventValue)
     ])
 }
@@ -619,9 +619,9 @@ tests contains {
 # Baseline GWS.GMAIL.6.1v0.1
 #--
 
-GetFriendlyValue6_1(Value) := "disabled" if {
+GetFriendlyValue6_1(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -676,9 +676,9 @@ if {
 # Baseline GWS.GMAIL.6.2v0.1
 #--
 
-GetFriendlyValue6_2(Value) := "disabled" if {
+GetFriendlyValue6_2(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
@@ -733,17 +733,16 @@ if {
 # Baseline GWS.GMAIL.6.3v0.1
 #--
 
-GetFriendlyValue6_3(Value) := "disabled" if {
+GetFriendlyValue6_3(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
 NonCompliantOUs6_3 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Links and external images safety Enable: ",
-        "show warning prompt for click on links to unstrusted domains is set to",
+        "Links and external images safety show warning prompt for click on links to unstrusted domains is set to",
         GetFriendlyValue6_3(LastEvent.NewValue)
     ])
 }
@@ -798,9 +797,9 @@ if {
 # Baseline GWS.GMAIL.6.4v0.1
 #--
 
-GetFriendlyValue6_4(Value) := "disabled" if {
+GetFriendlyValue6_4(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
