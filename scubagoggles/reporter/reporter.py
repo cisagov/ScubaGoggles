@@ -197,11 +197,27 @@ def get_failed_details(failed_prereqs : set) -> str:
     failed_details += "See terminal output for more details."
     return failed_details
 
-def rego_json_to_html(test_results_data : str, product : list, out_path : str,
-tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
-successful_calls : set, unsuccessful_calls : set) -> None:
+def get_summary_category(result : str) -> str:
+    '''Map the string result returned from get_test_result to the appropriate summary category.
+    
+    :param result: The result, e.g., "Warning"
     '''
-    Transforms the Rego JSON output into HTML
+
+    if result in {"No events found", "N/A"}:
+        return "Manual"
+    if result == "Warning":
+        return "Warnings"
+    if result == "Fail":
+        return "Failures"
+    if result == "Pass":
+        return "Passes"
+    raise ValueError(f"Unexpected result, {result}", RuntimeWarning)
+
+def rego_json_to_ind_reports(test_results_data : str, product : list, out_path : str,
+tenant_domain : str, main_report_name : str, prod_to_fullname: dict, product_policies,
+successful_calls : set, unsuccessful_calls : set) -> list:
+    '''
+    Transforms the Rego JSON output into individual HTML and JSON reports
 
     :param test_results_data: json object with results of Rego test
     :param product: list of products being tested
@@ -216,33 +232,32 @@ successful_calls : set, unsuccessful_calls : set) -> None:
 
     product_capitalized = product.capitalize()
     product_upper = 'DRIVEDOCS' if product == 'drive' else product.upper()
-    ind_report_name =  product_capitalized + "Report.html"
+    ind_report_name =  product_capitalized + "Report"
     fragments = []
-
+    json_data = []
     report_stats = {
-        "Pass": 0,
-        "Warning": 0,
-        "Fail": 0,
-        "N/A": 0,
-        "No events found": 0,
-        "Error": 0
+        "Manual": 0,
+        "Passes": 0,
+        "Errors": 0,
+        "Failures": 0,
+        "Warnings": 0
     }
 
     for baseline_group in product_policies:
         table_data = []
+        results_data ={}
         for control in baseline_group['Controls']:
             tests = [test for test in test_results_data if test['PolicyId'] == control['Id']]
             if len(tests) == 0:
                 # Handle the case where Rego doesn't output anything for a given control
-                report_stats['Error'] += 1
+                report_stats['Errors'] += 1
                 issues_link = f'<a href="{SCUBA_GITHUB_URL}/issues" target="_blank">GitHub</a>'
                 table_data.append({
                     'Control ID': control['Id'],
                     'Requirement': control['Value'],
                     'Result': "Error - Test results missing",
                     'Criticality': "-",
-                    'Details': f'Report issue on {issues_link}'
-                })
+                    'Details': f'Report issue on {issues_link}'})
                 warnings.warn(f"No test results found for Control Id {control['Id']}",
                     RuntimeWarning)
             else:
@@ -250,15 +265,14 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                     failed_prereqs = get_failed_prereqs(test, successful_calls, unsuccessful_calls)
                     if len(failed_prereqs) > 0:
                         result = "Error"
-                        report_stats["Error"] += 1
+                        report_stats["Errors"] += 1
                         failed_details = get_failed_details(failed_prereqs)
                         table_data.append({
                             'Control ID': control['Id'],
                             'Requirement': control['Value'],
                             'Result': "Error",
                             'Criticality': test['Criticality'],
-                            'Details': failed_details
-                        })
+                            'Details': failed_details})
                     else:
                         result = get_test_result(test['RequirementMet'], test['Criticality'],
                         test['NoSuchEvent'])
@@ -271,7 +285,6 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                                 height='15'>\
                                 </object>"
                             details = warning_icon + " " + test['ReportDetails']
-
                         # As rules doesn't have its own baseline, Rules and Common Controls
                         # need to be handled specially
                         if product_capitalized == "Rules":
@@ -281,7 +294,7 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                                 # marked as Not-Implemented. This if excludes them from the
                                 # rules report.
                                 continue
-                            report_stats[result] = report_stats[result] + 1
+                            report_stats[get_summary_category(result)] += 1
                             table_data.append({
                                 'Control ID': control['Id'],
                                 'Rule Name': test['Requirement'],
@@ -297,19 +310,22 @@ successful_calls : set, unsuccessful_calls : set) -> None:
                             # from the Common Controls report.
                             continue
                         else:
-                            report_stats[result] = report_stats[result] + 1
+                            report_stats[get_summary_category(result)] += 1
                             table_data.append({
                                 'Control ID': control['Id'],
                                 'Requirement': control['Value'],
                                 'Result': result,
                                 'Criticality': test['Criticality'],
-                                'Details': details
-                            })
+                                'Details': details})
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {baseline_group['GroupName']}</h2>")
         fragments.append(create_html_table(table_data))
+        results_data.update({"GroupName": baseline_group['GroupName']})
+        results_data.update({"GroupNumber": baseline_group['GroupNumber']})
+        results_data.update({"Controls": table_data})
+        json_data.append(results_data)
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
-    with open(f"{out_path}/IndividualReports/{ind_report_name}",
-    mode='w', encoding='UTF-8') as file:
-        file.write(html)
-    return report_stats
+    with open(f"{out_path}/IndividualReports/{ind_report_name}.html",
+            mode='w', encoding='UTF-8') as html_file:
+        html_file.write(html)
+    return [report_stats, json_data]

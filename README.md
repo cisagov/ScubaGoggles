@@ -247,6 +247,7 @@ optional arguments:
   -c , --credentials    The relative path and name of the OAuth / service account credentials json file. Defaults to
                         "./credentials.json" which means the tool will look for the file named credentials.json in the
                         current directory.
+  --outjsonfilename     The name of the file that encapsulates all assessment output. Defaults to ScubaResults.
   --subjectemail        Only applicable when using a service account. The email address of a user the service account
                         should act on behalf of. This user must have the necessary privileges to run scubagoggles.
   --customerid          The customer ID the tool should run on. Defaults to "my_customer" which will be the domain of 
@@ -355,24 +356,43 @@ We recommend running the conformance report in quiet mode to stop the web browse
 
 Once the scan is complete, navigate to the output folder. Within the output folder, we can access the generated HTML reports, or view the results in JSON format. 
 
-To view the JSON, open the `TestResults.json` file. 
+To view the JSON, open the `ScubaResults.json` file. 
 
 Each baseline will appear in the following format: 
 
 ```
-    {
-        "ActualValue": {
-            "NonCompliantOUs": []
-        },
-        "Criticality": "Shall",
-        "NoSuchEvent": false,
-        "PolicyId": "GWS.CHAT.5.1v0.1",
-        "ReportDetails": "Requirement met in all OUs.",
-        "RequirementMet": true
+{
+    "Summary": {
+      "Gmail": {
+          "Manual": 26,
+          "Passes": 9,
+          "Errors": 0,
+          "Failures": 6,
+          "Warnings": 2
+      },
+      "Groups for Business": {
+          "Manual": 0,
+          "Passes": 6,
+          "Errors": 0,
+          "Failures": 0,
+          "Warnings": 1
+      }     
     },
-
+    "Results": {
+      "Gmail": [
+        {
+            "GroupName": "Mail Delegation",
+            "GroupNumber": "1",
+            "Controls": [
+                {
+                  "Control ID": "GWS.GMAIL.1.1v0.1",
+                  "Requirement": "Mail Delegation SHOULD be disabled.",
+                  "Result": "Pass",
+                  "Criticality": "Should",
+                  "Details": "Requirement met in all OUs and groups."
+                }
+                ...
 ```
-The `RequirementMet` field indicates whether the baseline associated with the given PolicyId is compliant or not. 
 
 
 ## Project License

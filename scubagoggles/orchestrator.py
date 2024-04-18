@@ -126,11 +126,11 @@ def generate_summary(stats : dict) -> str:
     """
     Craft the html-formatted summary from the stats dictionary.
     """
-    n_success = stats["Pass"]
-    n_warn = stats["Warning"]
-    n_fail = stats["Fail"]
-    n_manual = stats["N/A"] + stats["No events found"]
-    n_error = stats["Error"]
+    n_success = stats["Passes"]
+    n_warn = stats["Warnings"]
+    n_fail = stats["Failures"]
+    n_manual = stats["Manual"]
+    n_error = stats["Errors"]
 
     pass_summary = (f"<div class='summary pass'>{n_success}"
     f" {pluralize('test', 'tests', n_success)} passed</div>")
@@ -221,13 +221,39 @@ def run_reporter(args):
 
 
     # Create the the individual report files
-    report_stats = {}
+    out_jsonfile = args.outjsonfilename
+    summary = {}
+    results = {}
+    total_output = {}
+    stats_and_data = {}
+
+    products_assessed = [prod_to_fullname[product] for product in products
+                         if product in prod_to_fullname]
+    product_abbreviation_mapping = {fullname: shortname for shortname,
+                                    fullname in prod_to_fullname.items()}
+
+    timestamp_utc = datetime.utcnow()
+    timestamp_zulu = timestamp_utc.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+
+    report_metadata = {
+        "TenantId":  None,
+        "DisplayName":  None,
+        "DomainName":  tenant_domain,
+        "ProductSuite":  "GWS",
+        "ProductsAssessed": products_assessed,
+        "ProductAbbreviationMapping": product_abbreviation_mapping,
+        "Tool":  "ScubaGoggles",
+        "ToolVersion":  "0.1.0",
+        "TimeStampZulu": timestamp_zulu
+    }
+
+    total_output.update({"MetaData": report_metadata})
+
     main_report_name = args.outputreportfilename
     products_bar = tqdm(products, leave=False, disable=args.quiet)
-
     for product in products_bar:
-        products_bar.set_description(f"Creating the Report for {product}...")
-        report_stats[product] = reporter.rego_json_to_html(
+        products_bar.set_description(f"Creating the HTML and JSON Report for {product}...")
+        stats_and_data[product] = reporter.rego_json_to_ind_reports(
             test_results_data,
             product,
             out_folder,
@@ -238,6 +264,23 @@ def run_reporter(args):
             successful_calls,
             unsuccessful_calls
         )
+        baseline_product_summary = {product:stats_and_data[product][0]}
+        baseline_product_results_json = {product:stats_and_data[product][1]}
+        summary.update(baseline_product_summary)
+        results.update(baseline_product_results_json)
+        total_output.update({"Summary": summary})
+        total_output.update({"Results": results})
+
+    # Create the ScubaResults files
+    with open(f'{out_folder}/{args.outputproviderfilename}.json', encoding='UTF-8') as file:
+        raw_data = json.load(file)
+    total_output.update({"Raw": raw_data})
+    report = json.dumps(total_output, indent = 4)
+    with open(f"{out_folder}/{out_jsonfile}.json", mode='w', encoding='UTF-8') as results_file:
+        results_file.write(report)
+
+    # Delete the ProviderOutput file as it's now encapsulated in the ScubaResults file
+    os.remove(f"{out_folder}/{args.outputproviderfilename}.json")
 
     # Make the report front page
     report_path = out_folder + "/" + f'{args.outputreportfilename}.html'
@@ -245,7 +288,7 @@ def run_reporter(args):
 
     fragments = []
     table_data = []
-    for product, stats in report_stats.items():
+    for product, stats in stats_and_data.items():
         ## Build the "Baseline Conformance Reports" column
         product_capitalize = product.capitalize()
         full_name = prod_to_fullname[product]
@@ -253,7 +296,7 @@ def run_reporter(args):
         link = f"<a class=\"individual_reports\" href={link_path}>{full_name}</a>"
         table_data.append({
             "Baseline Conformance Reports": link,
-            "Details": generate_summary(stats)
+            "Details": generate_summary(stats[0])
         })
 
     fragments.append(reporter.create_html_table(table_data))
@@ -289,6 +332,18 @@ def run_cached(args):
         services['directory'] = build('admin', 'directory_v1', credentials=creds)
         services['groups'] = build('groupssettings', 'v1', credentials=creds)
         run_gws_providers(args, services)
+
+    if not os.path.exists(f'{args.outputpath}/{args.outputproviderfilename}.json'):
+        # When running run_cached, the provider output might not exist as a stand-alone
+        # file depending what version of ScubaGoggles created the output. If the provider
+        # ouptut doesn't exist as a standa-lone file, create it from the scuba results
+        # file so the other functions can execute as normal.
+        with open(f'{args.outputpath}/{args.outjsonfilename}.json', 'r',
+                encoding='UTF-8') as scuba_results:
+            provider_output = json.load(scuba_results)['Raw']
+        with open(f'{args.outputpath}/{args.outputproviderfilename}.json', 'w',
+                encoding='UTF-8') as provider_file:
+            json.dump(provider_output, provider_file)
     rego_eval(args)
     run_reporter(args)
 
