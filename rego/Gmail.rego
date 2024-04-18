@@ -534,9 +534,9 @@ NoSuchEvent5_5(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-GetFriendlyValue5_5(Value) := "disabled" if {
+GetFriendlyValue5_5(Value) := "enabled" if {
     Value == "true"
-} else := "enabled" if {
+} else := "disabled" if {
     Value == "false"
 } else := Value
 
