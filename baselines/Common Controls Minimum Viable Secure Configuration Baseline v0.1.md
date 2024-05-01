@@ -1142,3 +1142,35 @@ To configure Supplemental Data Storage per the policy:
 3.	Click the **Supplemental Data Storage** card.
 4.	Ensure the checkbox for "**Russian Federation**" is unchecked.
 6.	Click **Save**.
+
+## 16. Multi-Party Approval
+
+This section covers whether multi-party approval by multiple super admins is required for changes to specific settings.
+
+### Policy
+
+#### GWS.COMMONCONTROLS.15.1v0.1
+Require multi party approval for sensitive admin actions SHOULD be enabled.
+
+- _Rationale_: An adversary could potentially try to change settings in the admin console if they compromised a super admin. By requiring approval by multiple super admins reduces the risk of a comprised super admin from changing settings for the organization.
+- _Last modified:_ May 1, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - Waiting for Mappings
+
+### Resources
+-	[Multi-party approvals for sensitive actions](https://apps.google.com/supportwidget/articlehome?article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13790448%3Fvisit_id%3D638501713188474186-198138640&assistant_id=generic-unu&product_context=13790448&product_name=UnuFlow&trigger_context=a)
+
+### Prerequisites
+
+- Super Admin role
+
+### Implementation
+
+#### GWS.COMMONCONTROLS.15.1v0.1 Instructions
+To configure Multi-party approval per the policy:
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.	Navigate to **Security** --> **Authentication**.
+3.  Select **Multi-party approval settings**.
+3.	Enable **Require multi party approval for sensitive admin action**.
+6.	Click **Save**.
