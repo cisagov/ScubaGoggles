@@ -1149,7 +1149,7 @@ This section covers whether multi-party approval by multiple super admins is req
 
 ### Policy
 
-#### GWS.COMMONCONTROLS.15.1v0.1
+#### GWS.COMMONCONTROLS.16.1v0.1
 Require multi party approval for sensitive admin actions SHOULD be enabled.
 
 - _Rationale_: An adversary could potentially try to change settings in the admin console if they compromised a super admin. By requiring approval by multiple super admins reduces the risk of a comprised super admin from changing settings for the organization.
@@ -1167,10 +1167,42 @@ Require multi party approval for sensitive admin actions SHOULD be enabled.
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.15.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.16.1v0.1 Instructions
 To configure Multi-party approval per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Security** --> **Authentication**.
 3.  Select **Multi-party approval settings**.
 3.	Enable **Require multi party approval for sensitive admin action**.
+6.	Click **Save**.
+
+## 17. Additional Services
+
+This section covers whether the additional services without individual controls can be accessed by users.
+
+### Policy
+
+#### GWS.COMMONCONTROLS.17.1v0.1
+Access to additional services without individual control SHOULD be set to OFF for everyone.
+
+- _Rationale_: Allowing access to all services creates a potential security risk due to unneeded services bein left open. By tunring off services not needed reduces the risk.
+- _Last modified:_ May 2, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - Waiting for Mappings
+
+### Resources
+-	[Manage access to services that aren't controlled individually](https://apps.google.com/supportwidget/articlehome?article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F7646040&assistant_id=generic-unu&product_context=7646040&product_name=UnuFlow&trigger_context=a)
+
+### Prerequisites
+
+- Super Admin role
+
+### Implementation
+
+#### GWS.COMMONCONTROLS.15.1v0.1 Instructions
+To configure Multi-party approval per the policy:
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.	Navigate to **Apps** --> **Additional Google Services**.
+3.  Select **Change** next to Access to additional services without individual control for all organizational units is turned On.
+3.	Select **Off for everyone**.
 6.	Click **Save**.
