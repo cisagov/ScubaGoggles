@@ -35,3 +35,4 @@ GWS.COMMONCONTROLS.14.1v0.1,The following critical logs SHALL be sent at a minim
 GWS.COMMONCONTROLS.15.1v0.1,"The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.",Admin Log Event,Change Application Setting,Location Policy,US,rules/00gjdgxs2k8ieyq,JK 12-05-23 @ 15:57
 GWS.COMMONCONTROLS.15.2v0.1,"The supplemental data storage region SHALL NOT be set to 'Russian Federation'.",Admin Log Event,Change Data Localization for Russia,N/A,false,rules/00gjdgxs3rufh17,Not Tested
 GWS.COMMONCONTROLS.16.1v0.1,"Require multi party approval for sensitive admin actions SHOULD be enabled.",Admin Log Event,Change Application Setting,Multi Party Approval (MPA) Control Multi Party Approval Control,enabled,rules/00gjdgxs23vo9cw,JK 05-01-24 @ 12:03
+GWS.COMMONCONTROLS.17.1v0.1,N/A,N/A,N/A,N/A,N/A,N/A,Not Alertable
