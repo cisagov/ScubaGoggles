@@ -5,19 +5,6 @@ import future.keywords
 
 LogEvents := utils.GetEvents("groups_logs")
 
-NoGroupsDetails(Groups) := "No Groups found in Organization." if {
-    count(Groups) == 0
-}
-
-ReportDetailsGroups(Groups) := "Requirement met in all Groups." if {
-    count(Groups) == 0
-}
-
-ReportDetailsGroups(Groups) := Message if {
-    count(Groups) > 0
-    Message := concat("", ["Requirement failed in ", concat(", ", Groups), "."])
-}
-
 ################
 # GWS.GROUPS.1 #
 ################
@@ -271,6 +258,13 @@ if {
 #
 # Baseline GWS.GROUPS.6.1v0.1
 #--
+CheckGroups6_1Compliance(Events, OUs) := true if {
+    Groups := utils.FilterEventsOU(Events, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
+    count(Groups) > 0
+    count(OUs) == 0
+}
+else := false
+
 NonCompliantOUs6_1 contains OU if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto allow_unlisted_groups", OU)
@@ -319,36 +313,43 @@ if {
 # Baseline GWS.GROUPS.7.1v0.1
 #--
 NonCompliantGroups7_1 contains Group.name if {
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanJoin != "CAN_REQUEST_TO_JOIN"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanViewMembership != "ALL_MEMBERS_CAN_VIEW"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanViewGroup != "ALL_MEMBERS_CAN_VIEW"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanModerateMembers != "OWNERS_AND_MANAGERS"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.allowExternalMembers != "false"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanPostMessage != "ALL_MEMBERS_CAN_POST"
 }
 
 NonCompliantGroups7_1 contains Group.name if {
+    CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
     some Group in input.group_settings
     Group.whoCanContactOwner != "ANYONE_CAN_CONTACT"
 }
@@ -358,8 +359,8 @@ tests contains {
     "PolicyId": "GWS.GROUPS.7.1v0.1",
     "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list", "groups-settings/v1/groups/get"],
     "Criticality": "Should",
-    "ReportDetails": NoGroupsDetails(Groups),
-    "ActualValue": NoGroupsDetails(Groups),
+    "ReportDetails": utils.NoGroupsDetails(Groups),
+    "ActualValue": utils.NoGroupsDetails(Groups),
     "RequirementMet": true,
     "NoSuchEvent": false
 }
@@ -373,7 +374,7 @@ tests contains {
     "PolicyId": "GWS.GROUPS.7.1v0.1",
     "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list", "groups-settings/v1/groups/get"],
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsGroups(NonCompliantGroups7_1),
+    "ReportDetails": utils.ReportDetailsGroups(NonCompliantGroups7_1),
     "ActualValue": {"NonCompliantGroups": NonCompliantGroups7_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
