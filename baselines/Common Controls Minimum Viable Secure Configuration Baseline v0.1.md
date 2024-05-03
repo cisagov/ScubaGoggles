@@ -1199,7 +1199,7 @@ Access to additional services without individual control SHOULD be set to OFF fo
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.15.1v0.1 Instructions
+#### GWS.COMMONCONTROLS.17.1v0.1 Instructions
 To configure Multi-party approval per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Apps** --> **Additional Google Services**.
