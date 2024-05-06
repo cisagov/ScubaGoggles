@@ -1156,7 +1156,9 @@ Require multi party approval for sensitive admin actions SHOULD be enabled.
 - _Last modified:_ May 1, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - Waiting for Mappings
+  - [T1530: Data From Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
+    - [T1078:004: Valid Accounts: Cloud Accounts](https://attack.mitre.org/techniques/T1078/004/)
 
 ### Resources
 -	[Multi-party approvals for sensitive actions](https://apps.google.com/supportwidget/articlehome?article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13790448%3Fvisit_id%3D638501713188474186-198138640&assistant_id=generic-unu&product_context=13790448&product_name=UnuFlow&trigger_context=a)
