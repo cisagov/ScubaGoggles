@@ -350,7 +350,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Delay Delivery for suspicious email is set to disabled</li></ul>"])
+                                        "Delay Delivery for suspicious email is set to disabled</li></ul>"])
 }
 #--
 
