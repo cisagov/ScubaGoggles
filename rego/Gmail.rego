@@ -283,7 +283,8 @@ NonCompliantOUs5_1 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Attachment safety Enable: protect against encrypted attachments from untrusted senders", OU)
+    Events := utils.FilterEventsOU(LogEvents, 
+                concat("", ["Attachment safety Enable: protect against encrypted attachments from untrusted senders"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -338,7 +339,8 @@ NonCompliantOUs5_2 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Attachment safety Enable: protect against attachments with scripts from untrusted senders", OU)
+    Events := utils.FilterEventsOU(LogEvents, 
+                concat("", ["Attachment safety Enable: protect against attachments with scripts from untrusted senders"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -413,7 +415,8 @@ NonCompliantOUs5_3 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Attachment safety Enable: Protect against anomalous attachment types in emails", OU)
+    Events := utils.FilterEventsOU(LogEvents,
+                concat("", ["Attachment safety Enable: Protect against anomalous attachment types in emails"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -463,14 +466,15 @@ GetFriendlyValue5_4(Value) := "enabled" if {
 
 NonCompliantOUs5_4 contains {
     "Name": OU,
-    "Value": concat(" ", [
+    "Value": concat("", [
         "Automatically enables all future added settings is set to",
         GetFriendlyValue5_4(LastEvent.NewValue)
     ])
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Attachment safety Enable: automatically enables all future added settings", OU)
+    Events := utils.FilterEventsOU(LogEvents, concat("", ["Attachment safety Enable: ", 
+                                                "automatically enables all future added settings"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -622,7 +626,8 @@ NonCompliantOUs6_1 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Links and external images safety Enable: identify links behind shortened URLs", OU)
+    Events := utils.FilterEventsOU(LogEvents, 
+                concat("", ["Links and external images safety Enable: identify links behind shortened URLs"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -736,8 +741,8 @@ NonCompliantOUs6_3 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, concat("", ["Links and external images safety Enable: ", 
-     "show warning prompt for click on links to unstrusted domains"]), OU)
+    Events := utils.FilterEventsOU(LogEvents, concat("", ["Links and external images safety Enable: ",
+                "show warning prompt for click on links to unstrusted domains"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -800,7 +805,8 @@ NonCompliantOUs6_4 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Links and external images safety Enable: automatically enables all future added settings", OU)
+    Events := utils.FilterEventsOU(LogEvents, 
+                concat("", ["Links and external images safety Enable: automatically enables all future added settings"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -935,14 +941,15 @@ GetFriendlyValue7_2(Value) := "enabled" if {
 
 NonCompliantOUs7_2 contains {
     "Name": OU,
-    "Value": concat(" ", [
+    "Value": concat("", [
         "Protect against spoofing of employee names is set to",
         GetFriendlyValue7_2(LastEvent.NewValue)
     ])
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Spoofing and authentication safety Enable: protect against spoofing of employee names", OU)
+    Events := utils.FilterEventsOU(LogEvents, 
+                concat("", ["Spoofing and authentication safety Enable: protect against spoofing of employee names"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -999,7 +1006,8 @@ NonCompliantOUs7_3 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain", OU)
+    Events := utils.FilterEventsOU(LogEvents, 
+                concat("", ["Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -1069,7 +1077,8 @@ NonCompliantOUs7_4 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Spoofing and authentication safety Enable: protect against any unauthenticated emails", OU)
+    Events := utils.FilterEventsOU(LogEvents, 
+                concat("", ["Spoofing and authentication safety Enable: protect against any unauthenticated emails"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -1315,7 +1324,8 @@ NonCompliantOUs7_7 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Spoofing and authentication safety Enable: automatically enables all future added settings", OU)
+    Events := utils.FilterEventsOU(LogEvents, 
+                concat("", ["Spoofing and authentication safety Enable: automatically enables all future added settings"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -1869,14 +1879,15 @@ GetFriendlyValue15_1(Value) := "enabled" if {
 
 NonCompliantOUs15_1 contains {
     "Name": OU,
-    "Value": concat(" ", [
+    "Value": concat("", [
         "Delay Delivery for suspicious email is set to",
         GetFriendlyValue15_1(LastEvent.NewValue)
     ])
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email", OU)
+    Events := utils.FilterEventsOU(LogEvents, concat("",
+                ["DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
