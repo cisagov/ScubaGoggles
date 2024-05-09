@@ -1165,7 +1165,7 @@ test_AttachmentSafety_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
 }
 
 test_AttachmentSafety_InCorrect_V1 if {
@@ -1222,8 +1222,7 @@ test_AttachmentSafety_InCorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Move email to spam or Quarantine is set to disabled</li></ul>"])
+    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
 }
 
 test_AttachmentSafety_InCorrect_V2 if {
@@ -1280,7 +1279,6 @@ test_AttachmentSafety_InCorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Move email to spam or Quarantine is set to disabled</li></ul>"])
+    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
 }
 

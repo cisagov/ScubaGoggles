@@ -804,6 +804,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V4 if {
                                 "unstrusted domains"
                             ])
                         },
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -881,6 +882,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V2 if {
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    print(RuleOutput)
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -899,10 +901,8 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
                     "parameters": [
                         {
                             "name": "SETTING_NAME",
-                            "value": concat("", [
-                                "Links and external images safety Enable: show warning prompt for click on links to ",
-                                "unstrusted domains"
-                            ])
+                            "value": concat(" ", ["Links and external images safety Enable: ",
+                                        "show warning prompt for click on links to unstrusted domains"])
                         },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
@@ -936,8 +936,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Links and external images safety Enable: ",
-        "show warning prompt for click on links to unstrusted domains is set to disabled</li></ul>"])
+        "Links and external images safety show warning prompt for click on links to unstrusted domains is set to disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
@@ -951,10 +950,8 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
                     "parameters": [
                         {
                             "name": "SETTING_NAME",
-                            "value": concat("", [
-                                "Links and external images safety Enable: show warning prompt for click on links to ",
-                                "unstrusted domains"
-                            ])
+                            "value": concat(" ", ["Links and external images safety Enable: ",
+                                        "show warning prompt for click on links to unstrusted domains"])
                         },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
@@ -972,8 +969,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Links and external images safety Enable: ",
-        "show warning prompt for click on links to unstrusted domains is set to disabled</li></ul>"])
+        "Links and external images safety show warning prompt for click on links to unstrusted domains is set to disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
@@ -987,10 +983,8 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
                     "parameters": [
                         {
                             "name": "SETTING_NAME",
-                            "value": concat("", [
-                                "Links and external images safety Enable: show warning prompt for click on links to ",
-                                "unstrusted domains"
-                            ])
+                            "value": concat(" ", ["Links and external images safety Enable: ",
+                                        "show warning prompt for click on links to unstrusted domains"])
                         },
                         {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},

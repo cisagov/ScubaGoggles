@@ -511,6 +511,7 @@ if {
 #
 # Baseline GWS.GMAIL.5.5v0.1
 #--
+# Detailed report message not implemented, this policy is depenedant on multiple settings
 default NoSuchEvent5_5(_) := true
 
 NoSuchEvent5_5(TopLevelOU) := false if {
@@ -534,20 +535,7 @@ NoSuchEvent5_5(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-GetFriendlyValue5_5(Value) := "enabled" if {
-    Value == "true"
-} else := "disabled" if {
-    Value == "false"
-} else := Value
-
-NonCompliantOUs5_5 contains {
-    "Name": OU,
-    "Value": concat(" ", [
-        "Move email to spam or Quarantine is set to",
-        GetFriendlyValue5_5(eventValue)
-    ])
-}
-if {
+NonCompliantOUs5_5 contains OU if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEvents(LogEvents, "Attachment safety Encrypted attachment protection setting action", OU)
     count(Events_A) > 0
@@ -561,7 +549,7 @@ if {
     count(Events_C) > 0
     LastEvent_C := utils.GetLastEvent(Events_C)
 
-    eventValue:= true in [
+    true in [
         LastEvent_A.NewValue == "Show warning",
         LastEvent_B.NewValue == "Show warning",
         LastEvent_C.NewValue == "Show warning"
@@ -584,7 +572,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.5.5v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_5),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1189,6 +1177,7 @@ if {
 # Baseline GWS.GMAIL.7.6v0.1
 #--
 
+# Detailed report message not implemented, this is a multiple settings policy
 default NoSuchEvent7_6(_) := true
 
 NoSuchEvent7_6(TopLevelOU) := false if {
@@ -1235,20 +1224,7 @@ NoSuchEvent7_6(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-GetFriendlyValue7_6(Value) := "enabled" if {
-    Value == "true"
-} else := "disabled" if {
-    Value == "false"
-} else := Value
-
-NonCompliantOUs7_6 contains {
-    "Name": OU,
-    "Value": concat(" ", [
-        "Emails flagged by spoofing and authentication controls shall not be kept in the inbox is set to",
-        GetFriendlyValue7_6(authenticationSetting)
-    ])
-}
-if {
+NonCompliantOUs7_6 contains OU if {
     some OU in utils.OUsWithEvents
 
     SettingA := concat("", [
@@ -1283,7 +1259,7 @@ if {
     LastEventE := utils.GetLastEvent(EventsE)
 
     # OU is non-compliant if any of the following are true
-    authenticationSetting:= true in [
+    true in [
         LastEventA.NewValue == "Show warning",
         LastEventB.NewValue == "Show warning",
         LastEventC.NewValue == "Show warning",
@@ -1309,7 +1285,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.7.6v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_6, []),
+    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_6),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_6},
     "RequirementMet": Status,
     "NoSuchEvent": false
