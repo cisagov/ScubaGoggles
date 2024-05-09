@@ -284,7 +284,8 @@ NonCompliantOUs5_1 contains {
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, 
-                concat("", ["Attachment safety Enable: protect against encrypted attachments from untrusted senders"]), OU)
+                concat("", ["Attachment safety Enable: ",
+                    "protect against encrypted attachments from untrusted senders"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -340,7 +341,8 @@ NonCompliantOUs5_2 contains {
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, 
-                concat("", ["Attachment safety Enable: protect against attachments with scripts from untrusted senders"]), OU)
+                concat("", ["Attachment safety Enable: ",
+                    "protect against attachments with scripts from untrusted senders"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -789,7 +791,8 @@ NonCompliantOUs6_4 contains {
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents,
-                concat("", ["Links and external images safety Enable: automatically enables all future added settings"]), OU)
+                concat("", ["Links and external images safety Enable: ",
+                    "automatically enables all future added settings"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -932,7 +935,8 @@ NonCompliantOUs7_2 contains {
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents,
-                concat("", ["Spoofing and authentication safety Enable: protect against spoofing of employee names"]), OU)
+                concat("", ["Spoofing and authentication safety Enable: ",
+                    "protect against spoofing of employee names"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -949,7 +953,8 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    SettingName := "Spoofing and authentication safety Enable: protect against spoofing of employee names"
+    SettingName := concat("", ["Spoofing and authentication safety Enable: ",
+                    "protect against spoofing of employee names"])
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
@@ -1061,7 +1066,8 @@ NonCompliantOUs7_4 contains {
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents,
-                concat("", ["Spoofing and authentication safety Enable: protect against any unauthenticated emails"]), OU)
+                concat("", ["Spoofing and authentication safety Enable: ",
+                    "protect against any unauthenticated emails"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
@@ -1308,7 +1314,8 @@ NonCompliantOUs7_7 contains {
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents,
-                concat("", ["Spoofing and authentication safety Enable: automatically enables all future added settings"]), OU)
+                concat("", ["Spoofing and authentication safety Enable: ",
+                    "automatically enables all future added settings"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
