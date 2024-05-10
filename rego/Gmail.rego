@@ -968,7 +968,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    SettingName := "Spoofing and authentication safety Enable: protect against spoofing of employee names"
+    SettingName := concat("", ["Spoofing and authentication safety Enable: ",
+                    "protect against spoofing of employee names"])
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs7_2) == 0
