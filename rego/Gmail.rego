@@ -996,7 +996,8 @@ NonCompliantOUs7_3 contains {
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents,
-                concat("", ["Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"]), OU)
+                concat("", ["Spoofing and authentication safety Enable: ",
+                "protect against inbound emails spoofing your domain"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "false"
