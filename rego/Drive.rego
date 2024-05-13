@@ -552,13 +552,23 @@ NoSuchEvent3_1(TopLevelOU) := true if {
 
 default NoSuchEvent3_1(_) := false
 
-NonCompliantOUs3_1 contains OU if {
+GetFriendlyValue3_1(Value_B, Value_A) :=
+"Remove security update from all impacted files" if {
+    Value_B == "REQUIRE_LESS_SECURE_LINKS"
+}
+else := "Allow users to remove/apply the security update for files they own or manage" if {
+    Value_A == "true"
+}
+NonCompliantOUs3_1 contains {
+    "Name": OU, 
+    "Value": concat("", [ GetFriendlyValue3_1(LastEvent_B.NewValue, LastEvent_A.NewValue)])
+    } if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEvents(LogEvents, "Link Security Update Settings allow_less_secure_link_user_restore", OU)
     count(Events_A) > 0
     LastEvent_A := utils.GetLastEvent(Events_A)
 
-    Events_B := utils.FilterEvents(LogEvents, "Link Security Update Settings less_secure_link_option", OU)
+    Events_B := utils.FilterEventsOU(LogEvents, "Link Security Update Settings less_secure_link_option", OU)
     count(Events_B) > 0
     LastEvent_B := utils.GetLastEvent(Events_B)
 
@@ -584,7 +594,7 @@ if {
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.3.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs3_1),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue" : {"NonComplaintOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -604,7 +614,7 @@ if {
 #--
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "ENABLE_DRIVE_APPS", OU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DRIVE_APPS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
@@ -621,7 +631,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "ENABLE_DRIVE_APPS", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DRIVE_APPS", utils.TopLevelOU)
     count(Events) == 0
 
 }
@@ -635,7 +645,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "ENABLE_DRIVE_APPS", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DRIVE_APPS", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs4_1) == 0
 }
@@ -651,7 +661,7 @@ if {
 #--
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "ENABLE_DOCS_ADD_ONS", OU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DOCS_ADD_ONS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
@@ -668,7 +678,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
     count(Events) == 0
 
 }
@@ -682,7 +692,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs5_1) == 0
 }
