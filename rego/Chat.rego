@@ -406,9 +406,7 @@ GetFriendlyValue7_1(NonCompBooleans) := Description if {
     ]
     # Note that this logic assumes the order of the booleans corresponds to the order listed above in the
     # StatusMessages array
-    Description := concat(" ", [
-        StatusMessages[i] | some i in numbers.range(0, count(StatusMessages)-1); NonCompBooleans[i] == true
-    ])
+    Description := concat(" ", [StatusMessages[i] | some i, Status in NonCompBooleans; Status == true])
 }
 
 NonCompliantOUs7_1 contains {
@@ -548,8 +546,23 @@ AllReportingCategories := {
     "system_violation: OTHER"
 }
 
-NonCompliantOUs7_2 contains OU if {
+GetFriendlyCategory(Category) := FriendlyCategory {
+    SplitStr := split(Category, " ")
+    LastIndex = count(SplitStr)-1
+    LastWord := SplitStr[LastIndex]
+    FriendlyCategory := replace(lower(LastWord), "_", " ")
+}
+
+NonCompliantOUs7_2 contains {
+    "Name": OU,
+    "Value": concat("", [
+        "The following reporting types are disabled: ",
+        concat(", ", [GetFriendlyCategory(Cat) | some Cat in MissingCats])
+    ])
+} if {
     some OU in utils.OUsWithEvents
+    # As with GWS.CHAT.7.1, the top-level OU is a special case.
+    OU != utils.TopLevelOU
     Events := utils.FilterEventsOU(LogEvents, "ContentReportingProto report_types", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
@@ -562,16 +575,44 @@ NonCompliantOUs7_2 contains OU if {
     count(MissingCats) > 0
 }
 
-NonCompliantOUs7_2 contains OU if {
+NonCompliantOUs7_2 contains {
+    "Name": OU,
+    "Value": concat("", [
+        "The following reporting types are disabled: ",
+        concat(", ", [GetFriendlyCategory(Cat) | some Cat in AllReportingCategories])
+    ])
+} if {
+    # As with GWS.CHAT.7.1, the top-level OU is a special case.
     OU := utils.TopLevelOU
     Events := utils.FilterEventsOU(LogEvents, "ContentReportingProto report_types", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
     count(Events) > 0
-    # As with GWS.CHAT.7.1, the top-level OU is a special case.
     LastEvent := utils.GetLastEvent(Events)
+    # If we see DELETE_APPLICATION_SETTING in the top-level OU, we know it is non-compliant
     LastEvent.NewValue == "DELETE_APPLICATION_SETTING"
+}
+
+NonCompliantOUs7_2 contains {
+    "Name": OU,
+    "Value": concat("", [
+        "The following reporting types are disabled: ",
+        concat(", ", [GetFriendlyCategory(Cat) | some Cat in MissingCats])
+    ])
+} if {
+    # As with GWS.CHAT.7.1, the top-level OU is a special case.
+    OU := utils.TopLevelOU
+    Events := utils.FilterEventsOU(LogEvents, "ContentReportingProto report_types", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+    EnabledCats := {trim(cat, " []\n") | some cat in split(LastEvent.NewValue, ",")}
+    MissingCats := AllReportingCategories - EnabledCats
+    count(MissingCats) > 0
 }
 
 tests contains {
@@ -591,7 +632,7 @@ if {
 tests contains {
     "PolicyId": "GWS.CHAT.7.2v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_2),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
