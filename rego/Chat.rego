@@ -546,10 +546,9 @@ AllReportingCategories := {
     "system_violation: OTHER"
 }
 
-GetFriendlyCategory(Category) := FriendlyCategory {
+GetFriendlyCategory(Category) := FriendlyCategory if {
     SplitStr := split(Category, " ")
-    LastIndex = count(SplitStr)-1
-    LastWord := SplitStr[LastIndex]
+    LastWord := SplitStr[1]
     FriendlyCategory := replace(lower(LastWord), "_", " ")
 }
 
