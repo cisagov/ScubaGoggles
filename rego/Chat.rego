@@ -406,6 +406,7 @@ GetFriendlyValue7_1(NonCompBooleans) := Description if {
     ]
     # Note that this logic assumes the order of the booleans corresponds to the order listed above in the
     # StatusMessages array
+    # regal ignore:prefer-some-in-iteration ignore:use-some-for-output-vars
     Description := concat(" ", [StatusMessages[i] | some i, Status in NonCompBooleans; Status == true])
 }
 
