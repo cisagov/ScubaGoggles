@@ -59,7 +59,7 @@ test_Enable_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met in all OUs and groups.", Chat7Warning])
 }
 
 test_Enable_Correct_V2 if {
@@ -157,7 +157,7 @@ test_Enable_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met in all OUs and groups.", Chat7Warning])
 }
 
 test_Enable_Correct_V3 if {
@@ -255,7 +255,7 @@ test_Enable_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met in all OUs and groups.", Chat7Warning])
 }
 
 test_Enable_Incorrect_V1 if {
@@ -313,7 +313,12 @@ test_Enable_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Content reporting for 1:1 direct messages is disabled.</li></ul>",
+        "<br>",
+        Chat7Warning
+    ])
 }
 
 test_Enable_Incorrect_V2 if {
@@ -371,7 +376,12 @@ test_Enable_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Content reporting for spaces is restricted to discoverable spaces only.</li></ul>",
+        "<br>",
+        Chat7Warning
+    ])
 }
 
 test_Enable_Incorrect_V3 if {
@@ -469,7 +479,12 @@ test_Enable_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Other OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Other OU: Content reporting for spaces is disabled.</li></ul>",
+        "<br>",
+        Chat7Warning
+    ])
 }
 
 test_Enable_Incorrect_V4 if {
