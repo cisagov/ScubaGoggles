@@ -390,7 +390,7 @@ Chat7Warning := concat("", [
     "WARNING: from the log events alone, it is not possible to distinguish between ",
     "an OU inheriting settings from its parent and content reporting being disabled entirely. ",
     "It's possible this tool classified some child OUs as compliant due to this limitation; manual check ",
-    "recommended to for child OUs due to this edge case."
+    "recommended for child OUs due to this edge case."
 ])
 
 #
