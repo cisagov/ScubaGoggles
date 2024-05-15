@@ -305,7 +305,7 @@ tests contains {
     "PolicyId": "GWS.DRIVEDOCS.1.7v0.1",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_7),
-    "ActualValue": {"NonComplaintOUs": NonCompliantOUs1_7},
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_7},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -364,9 +364,24 @@ if {
 #
 # Baseline GWS.DRIVEDOCS.2.1v0.1
 #--
-NonCompliantOUs2_1 contains OU if {
+NonCompliantOUs2_1 contains {
+    "Name": OU, 
+    "Value": "Members with manager access can override shared drive settings."
+    } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_admin_only", OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    contains("true", LastEvent.NewValue) == false
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+NonCompliantGroups2_1 contains {
+    "Name": Group,
+    "Value": "Members with manager access can override shared drive settings."
+    } if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "Shared Drive Creation new_team_drive_admin_only", Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -383,31 +398,47 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.2.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
-    "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, NonCompliantGroups2_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1, "NonCompliantGroups": NonCompliantGroups2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs2_1) == 0
+    Conditions := {count(NonCompliantOUs2_1) == 0, count(NonCompliantGroups2_1) == 0 }
+    Status := (false in Conditions) == false
 }
 #--
 
 #
 # Baseline GWS.DRIVEDOCS.2.2v0.1
 #--
-NonCompliantOUs2_2 contains OU if {
+NonCompliantOUs2_2 contains {
+    "Name": OU,
+    "Value": "" 
+    } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_cross_domain_access", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_restricts_cross_domain_access", OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    contains("true", LastEvent.NewValue) == false
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+NonCompliantGroups2_2 contains {
+    "Name": Group,
+    "Value": "" 
+    } if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "Shared Drive Creation new_team_drive_restricts_cross_domain_access", Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -425,15 +456,15 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.2.2v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_2),
-    "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_2},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_2, NonCompliantGroups2_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_2, "NonCompliantGroups": NonCompliantGroups2_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -441,22 +472,38 @@ if {
     SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
     Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs2_2) == 0
+    Conditions := {count(NonCompliantOUs2_2) == 0, count(NonCompliantGroups2_2) == 0 }
+    Status := (false in Conditions) == false
 }
 #--
 
 #
 # Baseline GWS.DRIVEDOCS.2.3v0.1
 #--
-NonCompliantOUs2_3 contains OU if {
+NonCompliantOUs2_3 contains {
+    "Name": OU,
+    "Value": ""
+    } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_direct_access", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_restricts_direct_access", OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    contains("true", LastEvent.NewValue) == false
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+NonCompliantGroups2_3 contains {
+    "Name": Group,
+    "Value": ""
+    } if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "Shared Drive Creation new_team_drive_restricts_direct_access", Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
+
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
     "Criticality": "Shall",
@@ -468,35 +515,51 @@ tests contains {
 if {
     DefaultSafe := false
     SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_3),
-    "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_3},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_3, NonCompliantGroups2_3),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_3, "NonCompliantGroups": NonCompliantGroups2_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
-    Events := utils.FilterEvents(LogEvents, SettingName, utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs2_3) == 0
+     Conditions := {count(NonCompliantOUs2_3) == 0, count(NonCompliantGroups2_3) == 0 }
+    Status := (false in Conditions) == false
 }
 #--
 
 #
 # Baseline GWS.DRIVEDOCS.2.4v0.1
 #--
-NonCompliantOUs2_4 contains OU if {
+NonCompliantOUs2_4 contains {
+    "Name": OU, 
+    "Value": ""
+    } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", OU)
+    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("false", LastEvent.NewValue) == false
+    contains("false", LastEvent.NewValue) == true
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+NonCompliantGroups2_4 contains {
+    "Name": Group, 
+    "Value": ""
+    } if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    contains("false", LastEvent.NewValue) == true
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
@@ -510,22 +573,23 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
     count(Events) == 0
 }
 
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.2.4v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_4),
-    "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_4},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_4, NonCompliantGroups2_4),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_4, "NonCompliantGroups": NonCompliantGroups2_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs2_4) == 0
+     Conditions := {count(NonCompliantOUs2_4) == 0, count(NonCompliantGroups2_4) == 0 }
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -540,13 +604,13 @@ if {
 NoSuchEvent3_1(TopLevelOU) := true if {
     # No such event...
     SettingName := "Link Security Update Settings allow_less_secure_link_user_restore"
-    Events_A := utils.FilterEvents(LogEvents, SettingName, TopLevelOU)
+    Events_A := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
     count(Events_A) == 0
 }
 
 NoSuchEvent3_1(TopLevelOU) := true if {
     # No such event...
-    Events := utils.FilterEvents(LogEvents, "Link Security Update Settings less_secure_link_option", TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "Link Security Update Settings less_secure_link_option", TopLevelOU)
     count(Events) == 0
 }
 
@@ -564,7 +628,7 @@ NonCompliantOUs3_1 contains {
     "Value": concat("", [ GetFriendlyValue3_1(LastEvent_B.NewValue, LastEvent_A.NewValue)])
     } if {
     some OU in utils.OUsWithEvents
-    Events_A := utils.FilterEvents(LogEvents, "Link Security Update Settings allow_less_secure_link_user_restore", OU)
+    Events_A := utils.FilterEventsOU(LogEvents, "Link Security Update Settings allow_less_secure_link_user_restore", OU)
     count(Events_A) > 0
     LastEvent_A := utils.GetLastEvent(Events_A)
 
@@ -595,7 +659,7 @@ tests contains {
     "PolicyId": "GWS.DRIVEDOCS.3.1v0.1",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
-    "ActualValue" : {"NonComplaintOUs": NonCompliantOUs3_1},
+    "ActualValue" : {"NonCompliantOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -612,7 +676,11 @@ if {
 #
 # Baseline GWS.DRIVEDOCS.4.1v0.1
 #--
-NonCompliantOUs4_1 contains OU if {
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value": "Drive SDK is Enabled"
+}
+     if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_DRIVE_APPS", OU)
     count(Events) > 0
@@ -620,7 +688,17 @@ NonCompliantOUs4_1 contains OU if {
     LastEvent.NewValue != "false"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
-
+NonCompliantGroups4_1 contains {
+    "Name": Group,
+    "Value": "Drive SDK is Enabled"
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "ENABLE_DRIVE_APPS", Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "false"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.4.1v0.1",
     "Criticality": "Should",
@@ -639,16 +717,18 @@ if {
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.4.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
-    "ActualValue": {"NonComplaintOUs": NonCompliantOUs4_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, NonCompliantGroups4_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1, "NonCompliantGroups": NonCompliantGroups4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_DRIVE_APPS", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs4_1) == 0
+    Conditions := {count(NonCompliantOUs4_1) == 0, count(NonCompliantGroups4_1) == 0}
+    Status := (false in Conditions) == false
 }
+
 #--
 
 
@@ -659,7 +739,10 @@ if {
 #
 # Baseline GWS.DRIVEDOCS.5.1v0.1
 #--
-NonCompliantOUs5_1 contains OU if {
+NonCompliantOUs5_1 contains {
+    "Name": OU, 
+    "Value": "Users can install Google Docs add-ons from add-ons store."
+    } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_DOCS_ADD_ONS", OU)
     count(Events) > 0
@@ -668,6 +751,17 @@ NonCompliantOUs5_1 contains OU if {
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
 
+NonCompliantGroups5_1 contains {
+    "Name": Group, 
+    "Value": "Users can install Google Docs add-ons from add-ons store."
+    } if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "ENABLE_DOCS_ADD_ONS", Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "false"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.5.1v0.1",
     "Criticality": "Shall",
@@ -686,15 +780,16 @@ if {
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.5.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_1),
-    "ActualValue": {"NonComplaintOUs": NonCompliantOUs5_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1, "NonCompliantGroups": NonCompliantGroups5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs5_1) == 0
+    Conditions := {count(NonCompliantOUs5_1) == 0, count(NonCompliantGroups5_1) == 0 }
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -708,24 +803,48 @@ if {
 default NoSuchEvent6_1(_) := true
 
 NoSuchEvent6_1(TopLevelOU) := false if {
-    Events := utils.FilterEvents(LogEvents, "DriveFsSettingsProto drive_fs_enabled", TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "DriveFsSettingsProto drive_fs_enabled", TopLevelOU)
     count(Events) != 0
 }
 
 NoSuchEvent6_1(TopLevelOU) := false if {
     # No such event...
-    Events := utils.FilterEvents(LogEvents, "DriveFsSettingsProto company_owned_only_enabled", TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "DriveFsSettingsProto company_owned_only_enabled", TopLevelOU)
     count(Events) != 0
 }
 
-NonCompliantOUs6_1 contains OU if {
+NonCompliantOUs6_1 contains {
+    "Name": OU, 
+    "Value": "Fail"
+    } if {
     some OU in utils.OUsWithEvents
-    Events_A := utils.FilterEvents(LogEvents, "DriveFsSettingsProto drive_fs_enabled", OU)
+    Events_A := utils.FilterEventsOU(LogEvents, "DriveFsSettingsProto drive_fs_enabled", OU)
     count(Events_A) > 0
     LastEvent_A := utils.GetLastEvent(Events_A)
     LastEvent_A.NewValue != "DELETE_APPLICATION_SETTING"
 
-    Events_B := utils.FilterEvents(LogEvents, "DriveFsSettingsProto company_owned_only_enabled", OU)
+    Events_B := utils.FilterEventsOU(LogEvents, "DriveFsSettingsProto company_owned_only_enabled", OU)
+    count(Events_B) > 0
+    LastEvent_B := utils.GetLastEvent(Events_B)
+    LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
+
+    true in {
+        LastEvent_A.NewValue != "true",
+        LastEvent_B.NewValue != "true"
+    }
+}
+
+NonCompliantGroups6_1 contains {
+    "Name": Group, 
+    "Value": ""
+    } if {
+    some Group in utils.GroupsWithEvents
+    Events_A := utils.FilterEventsGroup(LogEvents, "DriveFsSettingsProto drive_fs_enabled", Group)
+    count(Events_A) > 0
+    LastEvent_A := utils.GetLastEvent(Events_A)
+    LastEvent_A.NewValue != "DELETE_APPLICATION_SETTING"
+
+    Events_B := utils.FilterEventsGroup(LogEvents, "DriveFsSettingsProto company_owned_only_enabled", Group)
     count(Events_B) > 0
     LastEvent_B := utils.GetLastEvent(Events_B)
     LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
@@ -752,14 +871,15 @@ if {
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.6.1v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs6_1),
-    "ActualValue" : {"NonComplaintOUs": NonCompliantOUs6_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, NonCompliantGroups6_1),
+    "ActualValue" : {"NonCompliantOUs": NonCompliantOUs6_1, "NonCompliantGroups": NonCompliantGroups6_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     not NoSuchEvent6_1(utils.TopLevelOU)
-    Status := count(NonCompliantOUs6_1) == 0
+    Conditions := {count(NonCompliantOUs6_1) == 0, count(NonCompliantGroups6_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
