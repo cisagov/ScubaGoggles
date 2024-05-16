@@ -175,7 +175,7 @@ def main():
         url = base_url + 'opa_linux_amd64_static'
         filename = filename_base + '_linux_amd64_static'
     else:
-        print('Invalid operating system. Please provide a valid OS (windows, macos, or linux)')
+        raise ValueError('Invalid operating system. Please provide a valid OS (windows, macos, or linux)')
 
     try:
         expected_hash = OPA_VERSION_SHA256_HASHES[args.v][args.os]
