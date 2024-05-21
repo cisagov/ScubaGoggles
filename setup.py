@@ -21,7 +21,7 @@ setup(name='scubagoggles',
         'dnspython==2.6.1',
         'pandas==1.5.0',
         'tqdm==4.66.3',
-        'requests==2.31.0'
+        'requests==2.32.0'
       ],
       entry_points={
           'console_scripts': ['scubagoggles=scubagoggles.main:dive']
