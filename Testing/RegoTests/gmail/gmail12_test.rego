@@ -167,7 +167,7 @@ test_PerUserOutboundGateway_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Automatically enable outbound relay is set to enabled</li></ul>"])
+        "Allow per-user outbound gateways is set to enabled</li></ul>"])
 }
 
 test_PerUserOutboundGateway_Incorrect_V3 if {
@@ -206,7 +206,7 @@ test_PerUserOutboundGateway_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Automatically enable outbound relay is set to enabled</li></ul>"])
+        "Allow per-user outbound gateways is set to enabled</li></ul>"])
 }
 
 test_PerUserOutboundGateway_Incorrect_V4 if {
@@ -235,7 +235,7 @@ test_PerUserOutboundGateway_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Automatically enable outbound relay is set to enabled</li></ul>"])
+        "Allow per-user outbound gateways is set to enabled</li></ul>"])
 }
 
 test_PerUserOutboundGateway_Incorrect_V5 if {
@@ -274,6 +274,6 @@ test_PerUserOutboundGateway_Incorrect_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Automatically enable outbound relay is set to enabled</li></ul>"])
+        "Allow per-user outbound gateways is set to enabled</li></ul>"])
 }
 #--

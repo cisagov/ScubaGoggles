@@ -228,7 +228,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Delay Delivery for suspicious email is set to disabled</li></ul>"])
+        "Enhanced pre-delivery message scanning is set to disabled</li></ul>"])
 }
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
@@ -273,7 +273,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Delay Delivery for suspicious email is set to disabled</li></ul>"])
+        "Enhanced pre-delivery message scanning is set to disabled</li></ul>"])
 }
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V4 if {
@@ -305,7 +305,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Delay Delivery for suspicious email is set to disabled</li></ul>"])
+        "Enhanced pre-delivery message scanning is set to disabled</li></ul>"])
 }
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
@@ -350,7 +350,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-                                        "Delay Delivery for suspicious email is set to disabled</li></ul>"])
+                                        "Enhanced pre-delivery message scanning is set to disabled</li></ul>"])
 }
 #--
 

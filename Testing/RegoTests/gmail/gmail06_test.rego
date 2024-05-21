@@ -835,7 +835,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V2 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
         "Links and external images safety",
-        " show warning prompt for click on links to unstrusted domains is set to disabled</li></ul>"])
+        " show warning prompt for click on links to untrusted domains is set to disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
@@ -885,7 +885,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
         "Links and external images safety",
-        " show warning prompt for click on links to unstrusted domains is set to disabled</li></ul>"])
+        " show warning prompt for click on links to untrusted domains is set to disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
@@ -919,7 +919,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
         "Links and external images safety",
-        " show warning prompt for click on links to unstrusted domains is set to disabled</li></ul>"])
+        " show warning prompt for click on links to untrusted domains is set to disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
@@ -969,7 +969,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
         "Links and external images safety show warning prompt ", 
-        "for click on links to unstrusted domains is set to disabled</li></ul>"])
+        "for click on links to untrusted domains is set to disabled</li></ul>"])
 }
 
 #

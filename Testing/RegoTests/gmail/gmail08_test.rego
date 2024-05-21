@@ -167,7 +167,7 @@ test_UserEmailUploads_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Email user import is set to enabled</li></ul>"])
+        "User email uploads is set to enabled</li></ul>"])
 }
 
 test_UserEmailUploads_Incorrect_V3 if {
@@ -206,7 +206,7 @@ test_UserEmailUploads_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Email user import is set to enabled</li></ul>"])
+        "User email uploads is set to enabled</li></ul>"])
 }
 
 test_UserEmailUploads_Incorrect_V4 if {
@@ -235,7 +235,7 @@ test_UserEmailUploads_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Email user import is set to enabled</li></ul>"])
+        "User email uploads is set to enabled</li></ul>"])
 }
 
 test_UserEmailUploads_Incorrect_V5 if {
@@ -274,6 +274,6 @@ test_UserEmailUploads_Incorrect_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Email user import is set to enabled</li></ul>"])
+        "User email uploads is set to enabled</li></ul>"])
 }
 #--

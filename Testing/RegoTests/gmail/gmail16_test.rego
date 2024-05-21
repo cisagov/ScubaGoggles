@@ -205,7 +205,7 @@ test_SecuritySandbox_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Deep Scaning for email attachments is set to disabled</li></ul>"])
+        "Security sandbox is disabled</li></ul>"])
 }
 
 test_SecuritySandbox_Incorrect_V3 if {
@@ -244,7 +244,7 @@ test_SecuritySandbox_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Deep Scaning for email attachments is set to disabled</li></ul>"])
+        "Security sandbox is disabled</li></ul>"])
 }
 
 test_SecuritySandbox_Incorrect_V4 if {
@@ -273,7 +273,7 @@ test_SecuritySandbox_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Deep Scaning for email attachments is set to disabled</li></ul>"])
+        "Security sandbox is disabled</li></ul>"])
 }
 
 test_SecuritySandbox_Incorrect_V5 if {
@@ -312,7 +312,7 @@ test_SecuritySandbox_Incorrect_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Deep Scaning for email attachments is set to disabled</li></ul>"])
+        "Security sandbox is disabled</li></ul>"])
 }
 #--
 
