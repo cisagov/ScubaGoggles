@@ -720,7 +720,7 @@ GetFriendlyValue6_3(Value) := "enabled" if {
 NonCompliantOUs6_3 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Links and external images safety show warning prompt for click on links to unstrusted domains is set to",
+        "Links and external images safety show warning prompt for click on links to untrusted domains is set to",
         GetFriendlyValue6_3(LastEvent.NewValue)
     ])
 }
@@ -1386,7 +1386,7 @@ GetFriendlyValue8_1(Value) := "enabled" if {
 NonCompliantOUs8_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Email user import is set to",
+        "User email uploads is set to",
         GetFriendlyValue8_1(LastEvent.NewValue)
     ])
 }
@@ -1444,7 +1444,7 @@ GetFriendlyValue9_1(Value) := "enabled" if {
 NonCompliantOUs9_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Email user import is set to",
+        "IMAP access is set to",
         GetFriendlyValue9_1(LastEvent.NewValue)
     ])
 }
@@ -1499,7 +1499,7 @@ GetFriendlyValue9_2(Value) := "enabled" if {
 NonCompliantOUs9_2 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Automatically enable pop access is set to",
+        "POP access is",
         GetFriendlyValue9_2(LastEvent.NewValue)
     ])
 }
@@ -1692,7 +1692,7 @@ GetFriendlyValue12_1(Value) := "enabled" if {
 NonCompliantOUs12_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Automatically enable outbound relay is set to",
+        "Allow per-user outbound gateways is set to",
         GetFriendlyValue12_1(LastEvent.NewValue)
     ])
 }
@@ -1751,7 +1751,7 @@ GetFriendlyValue13_1(Value) := "enabled" if {
 NonCompliantOUs13_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Warning from untrusted recipient is set to",
+        "Warn for external participants is set to",
         GetFriendlyValue13_1(LastEvent.NewValue)
     ])
 }
@@ -1872,7 +1872,7 @@ GetFriendlyValue15_1(Value) := "enabled" if {
 NonCompliantOUs15_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Delay Delivery for suspicious email is set to",
+        "Enhanced pre-delivery message scanning is set to",
         GetFriendlyValue15_1(LastEvent.NewValue)
     ])
 }
@@ -1948,7 +1948,7 @@ GetFriendlyValue16_1(Value) := "enabled" if {
 NonCompliantOUs16_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Deep Scaning for email attachments is set to",
+        "Security sandbox is",
         GetFriendlyValue16_1(LastEvent.NewValue)
     ])
 }
