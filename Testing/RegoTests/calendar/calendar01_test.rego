@@ -559,8 +559,8 @@ test_ExtSharingSecondaryCal_Correct_V1 if {
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>Only free busy/information for secondary calendars </span>",
-        " is shared outside Test Top-Level Domain"
+        "Requirement met.<br>",
+        "Highest Level of Sharing: Only free/busy information (hide event details)."
     ])
 }
 
@@ -602,8 +602,8 @@ test_ExtSharingSecondaryCal_Correct_V2 if {
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>Only free busy/information for secondary calendars </span> ",
-        "is shared outside Test Top-Level Domain"
+        "Requirement met.<br>",
+        "Highest Level of Sharing: Only free/busy information (hide event details)."
     ])
 }
 
@@ -667,8 +667,9 @@ test_ExtSharingSecondaryCal_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>All information for secondary calendars </span>",
-        " is shared outside Test Top-Level Domain but outsiders cannot change calendars."
+        "Requirement not met.<br>",
+        "Highest Level of Sharing: Secondary Calendars Share all information,",
+        " but outsiders cannot change calendars."
     ])
 }
 
@@ -710,8 +711,10 @@ test_ExtSharingSecondaryCal_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>All information for secondary calendars </span>",
-        " is shared outside Test Top-Level Domain but outsiders cannot change calendars."
+        "Requirement not met.<br>",
+        "Highest Level of Sharing: Secondary Calendars Share all information,",
+        " but outsiders cannot change calendars."
     ])
+
 }
 #--

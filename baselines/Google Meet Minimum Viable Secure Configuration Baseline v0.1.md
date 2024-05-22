@@ -39,11 +39,9 @@ This control limits safe meeting access to users with a Google Account or Dialin
 #### GWS.MEET.1.1v0.1
 Meeting access SHOULD be restricted to users signed in with a Google Account or Dialing in using a phone.
 
-- Rationale
-  - This protects against unauthorized access to a Google meeting and helps ensures the user has been authenticated prior to joining.
-- Last Modified: February 20, 2024
-- Notes
-  - There is a related configuration option shown to the meeting organizer within Google Meet itself, called "Meeting access type." The setting in the admin center restricts at the org-level the types of users able to join meetings. The setting shown to the meeting organizer allows the organizer to specify who, of those permitted to join meetings by the org-wide setting, must ask to join their meeting. This baseline only provides guidance on the org-wide setting; the per-meeting setting MAY be set as each agency sees fit.
+- _Rationale:_ Allowing users not signed-in to join meetings diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring all users to sign-in.
+- _Last modified:_ June 29, 2023
+- _Note:_ There is a related configuration option shown to the meeting organizer within Google Meet itself, called "Meeting access type." The setting in the admin center restricts at the org-level the types of users able to join meetings. The setting shown to the meeting organizer allows the organizer to specify who, of those permitted to join meetings by the org-wide setting, must ask to join their meeting. This baseline only provides guidance on the org-wide setting; the per-meeting setting MAY be set as each agency sees fit.
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -81,9 +79,8 @@ This control determines which meetings users within the agency's organization ca
 #### GWS.MEET.2.1v0.1
 Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace tenant or organization.
 
-- Rationale
-  - This helps ensure that organization members are not able to join meetings created externally to avoid potential data leakage or other security risks.
-- Last Modified: September 26, 2023
+- _Rationale:_ Contact with unmanaged users can pose the risk of data leakage and other security threats. This policy reduces such contact by not allowing agency users to join meetings created by users' personal accounts.
+- _Last modified:_ September 26, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
@@ -122,9 +119,8 @@ Note: When this feature is not enabled, any attendee that is a member of the hos
 #### GWS.MEET.3.1v0.1
 Host Management meeting features SHALL be enabled.
 
-- Rationale
-  - Enabling these features does not pose any security risk and provides better collaboration features to users. If this setting was disabled then any participant could take control of the meeting. When enabled, they are available by default when a host starts their meeting.
-- Last Modified: January 10, 2024
+- _Rationale:_ With host management disabled, any internal participant is able to take control of meetings, performing actions such as recording the meeting, disabling or enabling the chat, and ending the meeting. When enabled, these options are only available to meeting hosts.
+- _Last modified:_ January 10, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1562:001: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -163,9 +159,8 @@ This control provides a warning label for any participating a meeting who is not
 #### GWS.MEET.4.1v0.1
 Warn for external participants SHALL be enabled.
 
-- Rationale
-  - When enabled, external or unidentified participants in a meeting are given a label. This increases situational awareness amongst meeting participants and can help prevent inadvertent data leakage.
-- Last Modified: September 26, 2023
+- _Rationale:_ Users may inadvertently include external users or not be aware that external users are present. When enabled, external or unidentified participants in a meeting are given a label. This increases situational awareness amongst meeting participants and can help prevent inadvertent data leakage.
+- _Last modified:_ September 26, 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

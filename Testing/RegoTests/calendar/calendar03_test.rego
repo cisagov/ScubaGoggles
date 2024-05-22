@@ -32,7 +32,7 @@ test_CalInteropMan_Correct_V1 if {
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails ==
-                                "<span class=setting>Calendar interop is not enabled </span> for Test Top-Level Domain"
+                                "Requirement met."
 }
 
 test_CalInteropMan_Correct_V2 if {
@@ -73,7 +73,7 @@ test_CalInteropMan_Correct_V2 if {
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails ==
-                                "<span class=setting>Calendar interop is not enabled </span> for Test Top-Level Domain"
+                                "Requirement met."
 }
 
 test_CalInteropMan_Incorrect_V1 if {
@@ -135,7 +135,7 @@ test_CalInteropMan_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "<span class=setting>Calendar interop is enabled </span> for Test Top-Level Domain"
+    RuleOutput[0].ReportDetails == "Requirement not met."
 }
 
 test_CalInteropMan_Incorrect_V3 if {
@@ -175,7 +175,7 @@ test_CalInteropMan_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "<span class=setting>Calendar interop is enabled </span> for Test Top-Level Domain"
+    RuleOutput[0].ReportDetails == "Requirement not met."
 }
 #--
 

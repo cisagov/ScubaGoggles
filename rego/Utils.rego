@@ -30,6 +30,10 @@ ReportDetailsOUs(OUs) := Message if {
     Message := concat("", ["Requirement failed in ", concat(", ", OUs), "."])
 }
 
+NoGroupsDetails(Groups) := "No groups found in Organization." if {
+    count(Groups) == 0
+}
+
 ReportDetailsGroups(Groups) := "Requirement met in all groups." if {
     count(Groups) == 0
 }
@@ -409,3 +413,7 @@ FilterEventsNoOU(Events, SettingName) := {
 GetEvents(LogName) := Events if {
     Events := SettingChangeEvents with data.LogName as LogName
 }
+
+# Returns all conditions that match passed value (true/false)
+# Commonly used for OR/Any conditions
+FilterArray(Conditions, Boolean) := [Condition | some Condition in Conditions; Condition == Boolean]

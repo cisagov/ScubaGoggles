@@ -21,7 +21,8 @@ def get_gws_args(parser):
         "provider_output_name": "ProviderSettingsExport",
         "rego_output_name": "TestResults",
         "report_output_name": "BaselineReports",
-        "output_folder_name": "GWSBaselineConformance"
+        "output_folder_name": "GWSBaselineConformance",
+        "json_output_name": "ScubaResults"
     }
 
     parser.add_argument('-b', '--baselines',
@@ -37,6 +38,11 @@ def get_gws_args(parser):
     help='The relative path and name of the OAuth / service account credentials json file. ' +
     'Defaults to "./credentials.json" which means the tool will look ' +
     'for the file named credentials.json in the current directory.')
+
+    parser.add_argument('--outjsonfilename', type=str,
+    default=default_file_output_names['json_output_name'], metavar='',
+    help='The name of the file that encapsulates all assessment output.' +
+    f" Defaults to {default_file_output_names['json_output_name']}.")
 
     parser.add_argument('--subjectemail', type=str, default=None, metavar='',
     help='Only applicable when using a service account. ' +
