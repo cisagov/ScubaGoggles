@@ -18,7 +18,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V1 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -49,7 +49,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V2 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -93,7 +93,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -106,7 +106,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -137,7 +137,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V4 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -212,7 +212,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -244,7 +244,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -257,7 +257,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -289,7 +289,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V4 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -321,7 +321,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -334,7 +334,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]

@@ -1457,6 +1457,22 @@ if {
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
 
+NonCompliantGroups9_1 contains {
+    "Name": Group,
+    "Value": concat(" ", [
+        "IMAP access is set to",
+        GetFriendlyValue9_1(LastEvent.NewValue)
+    ])
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "IMAP_ACCESS", Group)
+    # Ignore Group without any events
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "DISABLED"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
 tests contains {
     "PolicyId": "GWS.GMAIL.9.1v0.1",
     "Criticality": "Shall",
@@ -1474,15 +1490,16 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.9.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, NonCompliantGroups9_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1, "NonCompliantGroups": NonCompliantGroups9_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "IMAP_ACCESS", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs9_1) == 0
+    Conditions := {count(NonCompliantOUs9_1) == 0, count(NonCompliantGroups9_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -1512,6 +1529,22 @@ if {
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
 
+NonCompliantGroups9_2 contains {
+    "Name": Group,
+    "Value": concat(" ", [
+        "IMAP access is set to",
+        GetFriendlyValue9_2(LastEvent.NewValue)
+    ])
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "ENABLE_POP_ACCESS", Group)
+    # Ignore Group without any events
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "true"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
 tests contains {
     "PolicyId": "GWS.GMAIL.9.2v0.1",
     "Criticality": "Shall",
@@ -1529,15 +1562,16 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.9.2v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_2, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_2},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_2, NonCompliantGroups9_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_2, "NonCompliantGroups": NonCompliantGroups9_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_POP_ACCESS", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs9_2) == 0
+    Conditions := {count(NonCompliantOUs9_2) == 0, count(NonCompliantGroups9_2) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -1864,9 +1898,9 @@ if {
 #--
 
 GetFriendlyValue15_1(Value) := "enabled" if {
-    Value == "true"
-} else := "disabled" if {
     Value == "false"
+} else := "disabled" if {
+    Value == "true"
 } else := Value
 
 NonCompliantOUs15_1 contains {
@@ -1882,7 +1916,7 @@ if {
                 ["DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"]), OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
+    LastEvent.NewValue == "true"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
