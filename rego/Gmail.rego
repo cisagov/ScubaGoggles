@@ -500,7 +500,6 @@ if {
 #
 # Baseline GWS.GMAIL.5.5v0.1
 #--
-# Detailed report message not implemented, this policy is depenedant on multiple settings
 default NoSuchEvent5_5(_) := true
 
 NoSuchEvent5_5(TopLevelOU) := false if {
@@ -524,7 +523,20 @@ NoSuchEvent5_5(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-NonCompliantOUs5_5 contains OU if {
+GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) := "Emails with encrypted attachments from untrusted senders are kept in the inbox"
+    if {
+        NewValueA == "Show Warning"
+    } else := "Emails with attachments, with scripts from untrusted senders are kept in the inbox"
+    if { NewValueB == "Show warning" }
+    else := "Emails with anamolous attachements are kept in the inbox"
+    if { NewValueC == "Show warning" }
+    else := "Emails flagged by the attachment protection controls are not kept in the inbox"
+
+NonCompliantOUs5_5 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue5_5(LastEventA.NewValue, LastEventB.NewValue, LastEventC.NewValue)
+}
+if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEventsOU(LogEvents, "Attachment safety Encrypted attachment protection setting action", OU)
     count(Events_A) > 0
@@ -537,12 +549,6 @@ NonCompliantOUs5_5 contains OU if {
     Events_C := utils.FilterEventsOU(LogEvents, "Attachment safety Anomalous attachment protection setting action", OU)
     count(Events_C) > 0
     LastEvent_C := utils.GetLastEvent(Events_C)
-
-    true in [
-        LastEvent_A.NewValue == "Show warning",
-        LastEvent_B.NewValue == "Show warning",
-        LastEvent_C.NewValue == "Show warning"
-    ]
 }
 
 tests contains {
