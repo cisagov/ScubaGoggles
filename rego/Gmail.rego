@@ -1177,7 +1177,6 @@ if {
 # Baseline GWS.GMAIL.7.6v0.1
 #--
 
-# Detailed report message not implemented, this is a multiple settings policy
 default NoSuchEvent7_6(_) := true
 
 NoSuchEvent7_6(TopLevelOU) := false if {
@@ -1224,7 +1223,27 @@ NoSuchEvent7_6(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-NonCompliantOUs7_6 contains OU if {
+GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC,
+    NewValueD, NewValueE) := "Inbound emails spoofing domain names are kept in the inbox"
+    if {
+        NewValueA == "Show Warning"
+    } else := "Inbound emails spoofing employee names are kept in the inbox"
+    if { NewValueB == "Show warning" }
+    else := "Inbound spoofing emails are kept in the inbox"
+    if { NewValueC == "Show warning" }
+    else := "Unauthenticated emails are kept in the inbox"
+    if { NewValueD == "Show warning" }
+    else := "Unauthenticated emails are kept in the inbox"
+    if { NewValueD == "No action" }
+    else := "Inbound spoofing emails addresed to groups are kept in the inbox"
+    if { NewValueE == "Show warning" }
+    else := "Emails flagged by the spoofing and authentication controls are not kept in the inbox"
+
+NonCompliantOUs7_6 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue7_6(LastEventA.NewValue, LastEventB.NewValue, LastEventC.NewValue,
+            LastEventD.NewValue, LastEventE.NewValue)
+} if {
     some OU in utils.OUsWithEvents
 
     SettingA := concat("", [
@@ -1257,16 +1276,6 @@ NonCompliantOUs7_6 contains OU if {
     EventsE := utils.FilterEventsOU(LogEvents, SettingE, OU)
     count(EventsE) > 0
     LastEventE := utils.GetLastEvent(EventsE)
-
-    # OU is non-compliant if any of the following are true
-    true in [
-        LastEventA.NewValue == "Show warning",
-        LastEventB.NewValue == "Show warning",
-        LastEventC.NewValue == "Show warning",
-        LastEventD.NewValue == "Show warning",
-        LastEventD.NewValue == "No action",
-        LastEventE.NewValue == "Show warning"
-    ]
 }
 
 tests contains {
@@ -1285,7 +1294,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.7.6v0.1",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs7_6),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_6, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_6},
     "RequirementMet": Status,
     "NoSuchEvent": false
