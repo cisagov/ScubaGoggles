@@ -534,7 +534,7 @@ GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) := "Emails with encrypted a
 
 NonCompliantOUs5_5 contains {
     "Name": OU,
-    "Value": GetFriendlyValue5_5(LastEventA.NewValue, LastEventB.NewValue, LastEventC.NewValue)
+    "Value": GetFriendlyValue5_5(LastEvent_A.NewValue, LastEvent_B.NewValue, LastEvent_C.NewValue)
 }
 if {
     some OU in utils.OUsWithEvents
