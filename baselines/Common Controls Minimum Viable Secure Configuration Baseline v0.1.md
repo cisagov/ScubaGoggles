@@ -538,7 +538,7 @@ A minimum of **two** and maximum of **four** separate and distinct super admin u
 
 ### Prerequisites
 
--   Super admin users cannot log in to admin.google.com with a 3rd party IdP when using super admin level accounts—they must use Google Login as the authentication mechanism. This policy extends this rule to other admin types.
+-   Super admin users cannot log in to admin.google.com with a third-party IdP when using super admin level accounts—they must use Google Login as the authentication mechanism. This policy extends this rule to other admin types.
 -   Delegated accounts, including the ones defined as highly privileged above, can by default, use a third-party IdP to access admin.google.com: however, this policy prohibits that practice. All highly privileged accounts must use phishing resistant Google Authentication.
 
 ### Implementation
