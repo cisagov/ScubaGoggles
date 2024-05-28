@@ -205,7 +205,7 @@ The DMARC message rejection option SHALL be p=reject.
 #### GWS.GMAIL.4.3v0.1
 The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.
 
-- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. By including reports@dmarc.cyber.dhs.gov as the DMARC point of contact, this risk can be reduced by ensuring a streamlined process for CISA to monitor and address email authentication issues, enhancing overall email security as required by BOD 18-01 for federal, executive branch, departments and agencies.
+- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for federal, executive branch, departments and agencies, set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows CISA to monitor and address email authentication issues.
 - _Last modified:_ November 13, 2023
 - _Note:_ Only federal, executive branch, departments and agencies should include this email address in their DMARC record.
 
