@@ -1040,7 +1040,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 
         > Context Aware Access logs
 
-- _Rationale:_ This policy ensures enhanced security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids in regulatory compliance, maintaining the confidentiality, integrity, and availability of the agency's information systems.
+- _Rationale:_ This policy enhances security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids agency compliance with applicable law and binding policy and helps maintain the confidentiality, integrity, and availability of the agency's information systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
