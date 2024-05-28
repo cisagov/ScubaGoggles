@@ -1124,7 +1124,7 @@ test_AttachmentSafety_Correct_V1 if {
                             "name": "SETTING_NAME",
                             "value": "Attachment safety Encrypted attachment protection setting action"
                         },
-                        {"name": "NEW_VALUE", "value": "Quarantine"},
+                        {"name": "NEW_VALUE", "value": "Move to spam"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1281,6 +1281,6 @@ test_AttachmentSafety_InCorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Emails with attachments, with scripts from untrusted senders are kept in the inbox</li></ul>"])
+        "Emails with encrypted attachments from untrusted senders are kept in the inbox</li></ul>"])
 }
 

@@ -525,7 +525,7 @@ NoSuchEvent5_5(TopLevelOU) := false if {
 
 GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) := "Emails with encrypted attachments from untrusted senders are kept in the inbox"
     if {
-        NewValueA == "Show Warning"
+        NewValueA == "Show warning"
     } else := "Emails with attachments, with scripts from untrusted senders are kept in the inbox"
     if { NewValueB == "Show warning" }
     else := "Emails with anamolous attachements are kept in the inbox"
@@ -535,8 +535,7 @@ GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) := "Emails with encrypted a
 NonCompliantOUs5_5 contains {
     "Name": OU,
     "Value": GetFriendlyValue5_5(LastEvent_A.NewValue, LastEvent_B.NewValue, LastEvent_C.NewValue)
-}
-if {
+} if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEventsOU(LogEvents, "Attachment safety Encrypted attachment protection setting action", OU)
     count(Events_A) > 0
@@ -549,6 +548,13 @@ if {
     Events_C := utils.FilterEventsOU(LogEvents, "Attachment safety Anomalous attachment protection setting action", OU)
     count(Events_C) > 0
     LastEvent_C := utils.GetLastEvent(Events_C)
+
+    # OU is non-compliant if any of the following are true
+    true in [
+        LastEvent_A.NewValue == "Show warning",
+        LastEvent_B.NewValue == "Show warning",
+        LastEvent_C.NewValue == "Show warning"
+    ]
 }
 
 tests contains {
@@ -1229,10 +1235,9 @@ NoSuchEvent7_6(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC,
-    NewValueD, NewValueE) := "Inbound emails spoofing domain names are kept in the inbox"
+GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) := "Inbound emails spoofing domain names are kept in the inbox"
     if {
-        NewValueA == "Show Warning"
+        NewValueA == "Show warning"
     } else := "Inbound emails spoofing employee names are kept in the inbox"
     if { NewValueB == "Show warning" }
     else := "Inbound spoofing emails are kept in the inbox"
@@ -1247,8 +1252,7 @@ GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC,
 
 NonCompliantOUs7_6 contains {
     "Name": OU,
-    "Value": GetFriendlyValue7_6(LastEventA.NewValue, LastEventB.NewValue, LastEventC.NewValue,
-            LastEventD.NewValue, LastEventE.NewValue)
+    "Value": GetFriendlyValue7_6(LastEventA.NewValue, LastEventB.NewValue, LastEventC.NewValue, LastEventD.NewValue, LastEventE.NewValue)
 } if {
     some OU in utils.OUsWithEvents
 
@@ -1282,6 +1286,16 @@ NonCompliantOUs7_6 contains {
     EventsE := utils.FilterEventsOU(LogEvents, SettingE, OU)
     count(EventsE) > 0
     LastEventE := utils.GetLastEvent(EventsE)
+
+    # OU is non-compliant if any of the following are true
+    true in [
+        LastEventA.NewValue == "Show warning",
+        LastEventB.NewValue == "Show warning",
+        LastEventC.NewValue == "Show warning",
+        LastEventD.NewValue == "Show warning",
+        LastEventD.NewValue == "No action",
+        LastEventE.NewValue == "Show warning"
+    ]
 }
 
 tests contains {
