@@ -617,7 +617,7 @@ This section covers the admin self-recovery setting that is in Google Admin cons
 #### GWS.COMMONCONTROLS.8.1v0.1
 Account self-recovery for Super Admins SHALL be disabled
 
-- _Rationale:_ If enabled, an adversary could attempt to gain access to a super admin account through the account recovery method. By disabling this feature, super admins are forced to contact another super admin to recover their account, making it more difficult for a potential adversary to compromise their account.
+- _Rationale:_ If enabled, an adversary could attempt to gain access to a super admin account through the account recovery method. Disabling this feature forces super admins to contact another super admin to recover their account, making it more difficult for a potential adversary to compromise their account.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
