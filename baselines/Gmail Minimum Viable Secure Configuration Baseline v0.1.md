@@ -53,7 +53,7 @@ This section determines whether users can delegate access to their mailbox to ot
 #### GWS.GMAIL.1.1v0.1
 Mail Delegation SHOULD be disabled.
 
-- _Rationale:_ Granting mail delegation can inadvertently lead to disclosure of sensitive information, impersonation of delegated accounts, or malicious alteration or deletion of emails. By controlling mail delegation, these risks can be significantly reduced, ensuring the security and integrity of email communications.
+- _Rationale:_ Granting mail delegation can inadvertently lead to disclosure of sensitive information, impersonation of delegated accounts, or malicious alteration or deletion of emails. By controlling mail delegation, these risks can be significantly reduced, improving the security and integrity of email communications.
 - _Last modified:_ October 4, 2023
 - _Note:_ Exceptions should be limited to individuals authorized by existing Agency policy, such as SES or Politically Appointed staff. Other considerations include ensuring that delegated accounts require Phishing-Resistant Multi-Factor Authentication (MFA), limiting delegated account permissions (ex. allowing view/reply but not delete), monitoring delegated accounts regularly, and disabling them if no longer required.
 
