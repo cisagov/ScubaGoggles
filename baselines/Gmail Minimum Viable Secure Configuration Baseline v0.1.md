@@ -342,7 +342,7 @@ Emails flagged by the above attachment protection controls SHALL NOT be kept in 
 #### GWS.GMAIL.5.6v0.1
 Any third-party or outside application selected for attachment protection SHOULD offer services comparable to those offered by Google Workspace.
 
-- _Rationale:_ Using third-party or outside applications for attachment protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. By ensuring that selected applications offer comparable services, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for attachment protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
