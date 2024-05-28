@@ -324,7 +324,7 @@ Google SHOULD be allowed to automatically apply future recommended settings for 
 #### GWS.GMAIL.5.5v0.1
 Emails flagged by the above attachment protection controls SHALL NOT be kept in inbox.
 
-- _Rationale:_ Keeping emails flagged by attachment protection controls in the inbox could potentially expose users to malicious content. By ensuring such emails are not kept in the inbox, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Keeping emails flagged by attachment protection controls in the inbox could potentially expose users to malicious content. Removing these emails from the inbox enhances the safety and integrity of user data and systems.
 - _Last modified:_ September 8, 2023
 - _Note:_ Agencies and Organizations can choose whether to send email to spam or quarantine. Applies to Policies 5.1 - 5.3.
 
