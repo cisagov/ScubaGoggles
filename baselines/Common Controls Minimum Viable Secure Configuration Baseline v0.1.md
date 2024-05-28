@@ -504,7 +504,7 @@ Pre-Built GWS Admin Roles considered highly privileged:
 #### GWS.COMMONCONTROLS.6.1v0.1
 All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
-- _Rationale:_ Leveraging Google Account authentication for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
+- _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
