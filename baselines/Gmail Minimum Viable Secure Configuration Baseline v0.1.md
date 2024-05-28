@@ -879,7 +879,7 @@ This section determines whether users are prompted with a warning for messages t
 #### GWS.GMAIL.13.1v0.1
 Unintended external reply warnings SHALL be enabled to avoid unintentional replies and remind users to treat external messages with caution.
 
-- _Rationale:_ Without unintended external reply warnings, users may inadvertently reply to external messages, potentially exposing sensitive information. By enabling these warnings, users are reminded to treat external messages with caution, reducing this risk and enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Unintended external reply warnings can help reduce the risk of exposing sensitive information in replies to external messages. Enabling these warnings reminds users to treat external messages with caution, reducing this risk and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July, 10, 2023
 
 - MITRE ATT&CK TTP Mapping
