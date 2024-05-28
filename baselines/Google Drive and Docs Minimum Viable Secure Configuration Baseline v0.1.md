@@ -262,7 +262,7 @@ This section covers whether a security update issued by Google will be applied t
 #### GWS.DRIVEDOCS.3.1v0.1
 Agencies SHALL enable security updates for Drive files.
 
-- _Rationale:_ Google may add new security features over time. Allowing security updates ensures that your files are protected with the latest features Google makes available.
+- _Rationale:_ Google may add new security features over time. Allowing security updates helps ensure that your files are protected with the latest features Google makes available.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
