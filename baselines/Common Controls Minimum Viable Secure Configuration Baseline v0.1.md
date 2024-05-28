@@ -1111,10 +1111,7 @@ The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 - _Last modified:_ November 30, 2023
 
 - MITRE ATT&CK TTP Mapping
-  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
-    - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 ### Resources
 -	[GWS Admin Help \| Data regions: Choose a geographic location for your data](https://support.google.com/a/answer/7630496)
