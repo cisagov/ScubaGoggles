@@ -1016,7 +1016,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.16.1v0.1
 Security sandbox SHOULD be enabled to provide additional protections for their email messages.
 
-- _Rationale:_ Without a security sandbox, any emails with malicious content could potentially interact directly with the users' systems, posing a risk. By enabling the security sandbox, additional protections are provided for email messages, reducing this risk and enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Without a security sandbox, emails with malicious content could potentially interact directly with the users' systems, posing a risk. By enabling the security sandbox, additional protections are provided for email messages, reducing this risk and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
