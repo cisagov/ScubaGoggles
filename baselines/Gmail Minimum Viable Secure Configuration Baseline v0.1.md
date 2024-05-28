@@ -564,7 +564,7 @@ Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
 #### GWS.GMAIL.7.6v0.1
 Emails flagged by the above spoofing and authentication controls SHALL NOT be kept in inbox.
 
-- _Rationale:_ Keeping emails flagged by spoofing and authentication controls in the inbox could potentially expose users to malicious content. By ensuring such emails are not kept in the inbox, this risk can be reduced, enhancing the safety and integrity of the user's data and systems.
+- _Rationale:_ Keeping emails flagged by spoofing and authentication controls in the inbox could potentially expose users to malicious content. Moving emails out of the inbox can reduce this risk, enhancing the safety and integrity of the user's data and systems.
 - _Last modified:_ September 8, 2023
 - _Note:_ Agencies and organizations can choose whether to send to spam or quarantine. This policy applies to Policy 7.1 - Policy 7.5
 
