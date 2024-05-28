@@ -90,7 +90,7 @@ If sharing outside of the organization, then agencies SHALL disable sharing of f
 #### GWS.DRIVEDOCS.1.5v0.1
 Agencies SHALL disable making files and published web content visible to anyone with the link.
 
-- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and invites potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
+- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of a potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
