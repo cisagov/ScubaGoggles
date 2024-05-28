@@ -1095,7 +1095,7 @@ At the time of writing, data region policies cannot be applied to data types not
 #### GWS.COMMONCONTROLS.15.1v0.1
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
-- _Rationale_: If not properly regulated, data could be stored in various regions, potentially exposing it to unauthorized entities. By implementing this policy, data is mandated to be stored in the U.S. by making it harder for potential adversaries to compromise the data and conforming to specific regulations related to data governance, security controls, privacy, and data residency.
+- _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential foreign adversaries to compromise the data.
 - _Last modified:_ October 30, 2023
 
 - MITRE ATT&CK TTP Mapping
