@@ -703,7 +703,7 @@ POP and IMAP access SHALL be disabled to protect sensitive agency or organizatio
 #### GWS.GMAIL.9.2v0.1
 POP and IMAP access MAY be enabled on a per-user and per-application basis as needed.
 
-- _Rationale:_ Enabling POP and IMAP access indiscriminately could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. By only allowing POP and IMAP access on a per-user and per-application basis as needed, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Enabling POP and IMAP access indiscriminately could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. Allowing POP and IMAP access only on a per-user and per-application basis as needed can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
