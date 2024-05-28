@@ -1107,7 +1107,7 @@ The data storage region SHALL be set to be the United States for all users in th
 #### GWS.COMMONCONTROLS.15.2v0.1
 The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 
-- _Rationale:_ This policy is aligned with the concept of data sovereignty. Ensuring organizational data is not stored in this specific region affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
+- _Rationale:_ This policy is aligned with the concept of sovereignty, taking into account geopolitical and USG national security concerns. Keeping data out of Russia helps prevent official data from being subject to Russian law.
 - _Last modified:_ November 30, 2023
 
 - MITRE ATT&CK TTP Mapping
