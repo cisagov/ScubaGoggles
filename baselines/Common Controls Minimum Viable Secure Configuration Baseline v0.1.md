@@ -74,7 +74,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 
             - Google Passkeys
 
-- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. By enforcing methods resistant to phishing, those risks are minimized. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
+- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
 - _Last modified:_ August 17, 2023
 - _Note:_ Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.4 applies.
 
