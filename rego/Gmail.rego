@@ -523,7 +523,8 @@ NoSuchEvent5_5(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) := "Emails with encrypted attachments from untrusted senders are kept in the inbox"
+GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) :=
+    "Emails with encrypted attachments from untrusted senders are kept in the inbox"
     if {
         NewValueA == "Show warning"
     } else := "Emails with attachments, with scripts from untrusted senders are kept in the inbox"
@@ -1235,7 +1236,8 @@ NoSuchEvent7_6(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) := "Inbound emails spoofing domain names are kept in the inbox"
+GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) :=
+    "Inbound emails spoofing domain names are kept in the inbox"
     if {
         NewValueA == "Show warning"
     } else := "Inbound emails spoofing employee names are kept in the inbox"
@@ -1252,7 +1254,8 @@ GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) := "I
 
 NonCompliantOUs7_6 contains {
     "Name": OU,
-    "Value": GetFriendlyValue7_6(LastEventA.NewValue, LastEventB.NewValue, LastEventC.NewValue, LastEventD.NewValue, LastEventE.NewValue)
+    "Value": GetFriendlyValue7_6(LastEventA.NewValue, LastEventB.NewValue, LastEventC.NewValue,
+        LastEventD.NewValue, LastEventE.NewValue)
 } if {
     some OU in utils.OUsWithEvents
 
