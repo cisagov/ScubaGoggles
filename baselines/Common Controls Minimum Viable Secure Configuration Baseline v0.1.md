@@ -419,7 +419,7 @@ User password length SHALL be at least 12 characters.
 #### GWS.COMMONCONTROLS.5.3v0.1
 Password policy SHALL be enforced at next sign-in.
 
-- _Rationale:_ Unless the password policy is enforced at next login, a user could potentially operate indefinitely using a weak password. Enforcing the policy at next login ensures that all active user passwords meet current requirements.
+- _Rationale:_ Unless the password policy is enforced at next login, a user could potentially operate indefinitely using a weak password. Enforcing the policy at next login helps ensure that all active user passwords meet current requirements.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
