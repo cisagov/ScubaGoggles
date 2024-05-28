@@ -92,7 +92,7 @@ This section determines whether users are warned when inviting one or more guest
 #### GWS.CALENDAR.2.1v0.1
 External invitations warnings SHALL be enabled to prompt users before sending invitations.
 
-- _Rationale:_ Users may inadvertently include external guests in calendar event invitations, potentially resulting in data leakage. Warning users when external participants are included can help mitigate this risk.
+- _Rationale:_ Users may inadvertently include external guests in calendar event invitations, potentially resulting in data leakage. Warning users when external participants are included can help reduce this risk.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
