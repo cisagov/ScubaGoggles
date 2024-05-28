@@ -504,7 +504,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.7.1v0.1
 Protect against domain spoofing based on similar domain names SHALL be enabled.
 
-- _Rationale:_ Emails sent from domains that look similar to your domain can potentially deceive users into interacting with malicious content, posing a security risk. By enabling protection against such spoofing, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Emails sent from domains that look similar to your domain can potentially deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
