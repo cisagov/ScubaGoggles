@@ -120,7 +120,7 @@ Agencies SHALL NOT allow any users to distribute content from an organization-ow
 #### GWS.DRIVEDOCS.1.8v0.1
 Agencies SHALL set newly created items to have Private to the Owner as the default level of access.
 
-- _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent accidental sharing of information too broadly.
+- _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent overly broad accidental sharing of information.
 - _Last modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
