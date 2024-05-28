@@ -983,7 +983,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 #### GWS.COMMONCONTROLS.13.1v0.1
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
-- _Rationale:_ Potentially malicious or service-impacting events may go undetected without a means of detecting these events. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
+- _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
 - _Last modified:_ July 10, 2023
 - _Note:_ Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 
