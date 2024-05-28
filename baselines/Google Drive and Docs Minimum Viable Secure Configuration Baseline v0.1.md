@@ -418,7 +418,7 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 #### GWS.DRIVEDOCS.7.1v0.1
 Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
 
-- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. By blocking and/or having warnings on these DLP-scanned files from being shared with users, the risk of unintentional introduction of sensitive content is significantly reduced.
+- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
