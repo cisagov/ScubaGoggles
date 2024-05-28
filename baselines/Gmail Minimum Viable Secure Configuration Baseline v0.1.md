@@ -182,7 +182,7 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 #### GWS.GMAIL.4.1v0.1
 A DMARC policy SHALL be published for every second-level domain.
 
-- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. By publishing a DMARC policy for every second-level domain, this risk can be reduced by publishing how authentication failures should be handled. 
+- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every second-level domain further reduces the risk posed by authentication failures. 
 - _Last modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
