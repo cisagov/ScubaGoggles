@@ -1050,7 +1050,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 #### GWS.COMMONCONTROLS.14.2v0.1
 Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31.
 
-- _Rationale:_ Audit logs may no longer be available when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
+- _Rationale:_ Audit logs may be unavailable when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
 - _Last modified:_ January 30, 2024
 
 - MITRE ATT&CK TTP Mapping
