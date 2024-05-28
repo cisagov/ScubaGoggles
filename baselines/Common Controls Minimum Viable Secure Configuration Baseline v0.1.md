@@ -92,7 +92,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 #### GWS.COMMONCONTROLS.1.2v0.1
 Google 2SV new user enrollment period SHALL be set to 1 week.
 
-- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and minimizing the risks inherent to not enforcing MFA immediately.
+- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
 - _Last modified:_ August 17, 2023
 - _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
