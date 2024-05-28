@@ -79,7 +79,7 @@ Warnings SHALL be enabled when a user is attempting to share something outside t
 #### GWS.DRIVEDOCS.1.4v0.1
 If sharing outside of the organization, then agencies SHALL disable sharing of files with individuals who are not using a Google account.
 
-- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and invites potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
+- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ July 10, 2023
 - _Note:_ This policy only applies if external sharing is allowed in Policy 1.1
 
