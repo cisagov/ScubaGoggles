@@ -191,7 +191,7 @@ A DMARC policy SHALL be published for every second-level domain.
 #### GWS.GMAIL.4.2v0.1
 The DMARC message rejection option SHALL be p=reject.
 
-- _Rationale:_ Without stringent email authentication, adversaries could potentially send deceptive emails that appear to be from your domain, increasing the risk of phishing attacks. This policy reduces risk as it ensures that emails failing SPF or DKIM checks are automatically rejected, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for federal, executive branch, departments and agencies.
+- _Rationale:_ Without stringent email authentication, adversaries could potentially send deceptive emails that appear to be from your domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for federal, executive branch, departments and agencies.
 - _Last modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
