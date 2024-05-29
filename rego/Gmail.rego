@@ -733,7 +733,7 @@ GetFriendlyValue6_3(Value) := "enabled" if {
 NonCompliantOUs6_3 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Links and external images safety show warning prompt for click on links to untrusted domains is set to",
+        "Show warning prompt for click on links to untrusted domains is",
         GetFriendlyValue6_3(LastEvent.NewValue)
     ])
 }
