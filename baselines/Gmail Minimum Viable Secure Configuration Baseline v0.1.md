@@ -1069,7 +1069,7 @@ This section allows for email messages sent through other Google Workspace appli
 #### GWS.GMAIL.17.1v0.1
 Comprehensive mail storage SHOULD be enabled to allow tracking of information across applications.
 
-- _Rationale:_ Without comprehensive mail storage, tracking of information across applications could be compromised, posing a potential security risk. By enabling comprehensive mail storage, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Without comprehensive mail storage, tracking of information across applications could be compromised, posing a potential security risk. Enabling comprehensive mail storage can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
