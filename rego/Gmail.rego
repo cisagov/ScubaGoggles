@@ -618,7 +618,7 @@ GetFriendlyValue6_1(Value) := "enabled" if {
 NonCompliantOUs6_1 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Links and external images safety to identify links behind shortened URLs is set to",
+        "Identify links behind shortened URLs is",
         GetFriendlyValue6_1(LastEvent.NewValue)
     ])
 }
