@@ -797,7 +797,7 @@ GetFriendlyValue6_4(Value) := "enabled" if {
 NonCompliantOUs6_4 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Links and external images safety, automatically enables all future added settings is set to",
+        "Apply future recommended settings automatically is",
         GetFriendlyValue6_4(LastEvent.NewValue)
     ])
 }
