@@ -676,7 +676,7 @@ GetFriendlyValue6_2(Value) := "enabled" if {
 NonCompliantOUs6_2 contains {
     "Name": OU,
     "Value": concat(" ", [
-        "Links and external images safety to scan linked images is set to",
+        "Scan linked images is",
         GetFriendlyValue6_2(LastEvent.NewValue)
     ])
 }
