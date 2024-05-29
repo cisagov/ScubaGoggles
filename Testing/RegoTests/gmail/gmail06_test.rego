@@ -229,7 +229,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Links and external images safety to identify links behind shortened URLs is set to disabled</li></ul>"])
+        "Identify links behind shortened URLs is disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V3 if {
@@ -274,7 +274,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Links and external images safety to identify links behind shortened URLs is set to disabled</li></ul>"])
+        "Identify links behind shortened URLs is disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V4 if {
@@ -306,7 +306,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Links and external images safety to identify links behind shortened URLs is set to disabled</li></ul>"])
+        "Identify links behind shortened URLs is disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V5 if {
@@ -351,7 +351,7 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Links and external images safety to identify links behind shortened URLs is set to disabled</li></ul>"])
+        "Identify links behind shortened URLs is disabled</li></ul>"])
 }
 #--
 
@@ -583,7 +583,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Links and external images safety to scan linked images is set to disabled</li></ul>"])
+        "Scan linked images is disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V3 if {
@@ -629,7 +629,7 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Links and external images safety to scan linked images is set to disabled</li></ul>"])
+        "Scan linked images is disabled</li></ul>"])
 }
 
 #
@@ -834,8 +834,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Links and external images safety",
-        " show warning prompt for click on links to untrusted domains is set to disabled</li></ul>"])
+        "Show warning prompt for click on links to untrusted domains is disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
@@ -884,8 +883,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Links and external images safety",
-        " show warning prompt for click on links to untrusted domains is set to disabled</li></ul>"])
+        "Show warning prompt for click on links to untrusted domains is disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
@@ -918,8 +916,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Links and external images safety",
-        " show warning prompt for click on links to untrusted domains is set to disabled</li></ul>"])
+        "Show warning prompt for click on links to untrusted domains is disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
@@ -968,8 +965,7 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Links and external images safety show warning prompt ", 
-        "for click on links to untrusted domains is set to disabled</li></ul>"])
+        "Show warning prompt for click on links to untrusted domains is disabled</li></ul>"])
 }
 
 #
@@ -1224,8 +1220,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Links and external images safety,",
-        " automatically enables all future added settings is set to disabled</li></ul>"])
+        "Apply future recommended settings automatically is disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V3 if {
@@ -1260,8 +1255,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Links and external images safety,",
-        " automatically enables all future added settings is set to disabled</li></ul>"])
+        "Apply future recommended settings automatically is disabled</li></ul>"])
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V4 if {
@@ -1312,6 +1306,5 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Links and external images safety,", 
-        " automatically enables all future added settings is set to disabled</li></ul>"])
+        "Apply future recommended settings automatically is disabled</li></ul>"])
 }
