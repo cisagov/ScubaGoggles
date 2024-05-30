@@ -297,7 +297,7 @@ This section covers the content reporting functionality, a feature that allows u
 #### GWS.CHAT.7.1v0.1
 Chat content reporting SHALL be enabled for all conversation types.
 
-- _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies ensure that their users are able to report risky messages regardless of the conversation type.
+- _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies help ensure that their users are able to report risky messages regardless of the conversation type.
 - _Last modified:_ February 13, 2024
 
 - MITRE ATT&CK TTP Mapping

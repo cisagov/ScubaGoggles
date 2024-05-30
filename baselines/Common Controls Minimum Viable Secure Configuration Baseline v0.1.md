@@ -74,7 +74,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 
             - Google Passkeys
 
-- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. By enforcing methods resistant to phishing, those risks are minimized. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
+- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
 - _Last modified:_ August 17, 2023
 - _Note:_ Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.4 applies.
 
@@ -92,7 +92,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 #### GWS.COMMONCONTROLS.1.2v0.1
 Google 2SV new user enrollment period SHALL be set to 1 week.
 
-- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and minimizing the risks inherent to not enforcing MFA immediately.
+- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
 - _Last modified:_ August 17, 2023
 - _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
@@ -316,7 +316,7 @@ Login challenges are additional security measures used to verify a user's identi
 #### GWS.COMMONCONTROLS.3.1v0.1
 Login Challenges SHALL be enabled when third party SAML SSO is in use.
 
-- _Rationale:_ Without enabling Post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. By enabling Post-SSO verification, 2SV verification policies will applied.
+- _Rationale:_ Without enabling Post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling Post-SSO verification will apply 2SV verification policies.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -419,7 +419,7 @@ User password length SHALL be at least 12 characters.
 #### GWS.COMMONCONTROLS.5.3v0.1
 Password policy SHALL be enforced at next sign-in.
 
-- _Rationale:_ Unless the password policy is enforced at next login, a user could potentially operate indefinitely using a weak password. Enforcing the policy at next login ensures that all active user passwords meet current requirements.
+- _Rationale:_ Unless the password policy is enforced at next login, a user could potentially operate indefinitely using a weak password. Enforcing the policy at next login helps ensure that all active user passwords meet current requirements.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -504,7 +504,7 @@ Pre-Built GWS Admin Roles considered highly privileged:
 #### GWS.COMMONCONTROLS.6.1v0.1
 All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
-- _Rationale:_ By provisioning cloud-only accounts to privileged users, the risks associated with a compromise of on-premises federation infrastructure are reduced. This makes it is more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
+- _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -538,7 +538,7 @@ A minimum of **two** and maximum of **four** separate and distinct super admin u
 
 ### Prerequisites
 
--   Super admin users cannot log in to admin.google.com with a 3rd party IdP when using super admin level accounts—they must use Google Login as the authentication mechanism. This policy extends this rule to other admin types.
+-   Super admin users cannot log in to admin.google.com with a third-party IdP when using super admin level accounts—they must use Google Login as the authentication mechanism. This policy extends this rule to other admin types.
 -   Delegated accounts, including the ones defined as highly privileged above, can by default, use a third-party IdP to access admin.google.com: however, this policy prohibits that practice. All highly privileged accounts must use phishing resistant Google Authentication.
 
 ### Implementation
@@ -617,7 +617,7 @@ This section covers the admin self-recovery setting that is in Google Admin cons
 #### GWS.COMMONCONTROLS.8.1v0.1
 Account self-recovery for Super Admins SHALL be disabled
 
-- _Rationale:_ If enabled, an adversary could attempt to gain access to a super admin account through the account recovery method. By disabling this feature, super admins are forced to contact another super admin to recover their account, making it more difficult for a potential adversary to compromise their account.
+- _Rationale:_ If enabled, an adversary could attempt to gain access to a super admin account through the account recovery method. Disabling this feature forces super admins to contact another super admin to recover their account, making it more difficult for a potential adversary to compromise their account.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -983,7 +983,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 #### GWS.COMMONCONTROLS.13.1v0.1
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
-- _Rationale:_ Potentially malicious or service-impacting events may go undetected without a means of detecting these events. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
+- _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
 - _Last modified:_ July 10, 2023
 - _Note:_ Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 
@@ -1040,7 +1040,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 
         > Context Aware Access logs
 
-- _Rationale:_ This policy ensures enhanced security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids in regulatory compliance, maintaining the confidentiality, integrity, and availability of the agency's information systems.
+- _Rationale:_ This policy enhances security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids agency compliance with applicable law and binding policy and helps maintain the confidentiality, integrity, and availability of the agency's information systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -1050,7 +1050,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 #### GWS.COMMONCONTROLS.14.2v0.1
 Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31.
 
-- _Rationale:_ Audit logs may no longer be available when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
+- _Rationale:_ Audit logs may be unavailable when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
 - _Last modified:_ January 30, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -1095,7 +1095,7 @@ At the time of writing, data region policies cannot be applied to data types not
 #### GWS.COMMONCONTROLS.15.1v0.1
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
-- _Rationale_: If not properly regulated, data could be stored in various regions, potentially exposing it to unauthorized entities. By implementing this policy, data is mandated to be stored in the U.S. by making it harder for potential adversaries to compromise the data and conforming to specific regulations related to data governance, security controls, privacy, and data residency.
+- _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential foreign adversaries to compromise the data.
 - _Last modified:_ October 30, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -1107,14 +1107,11 @@ The data storage region SHALL be set to be the United States for all users in th
 #### GWS.COMMONCONTROLS.15.2v0.1
 The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 
-- _Rationale:_ This policy is aligned with the concept of data sovereignty. Ensuring organizational data is not stored in this specific region affords the administrator of the GWS environment a degree of control and governance over their cloud data. This policy takes into account geopolitical and USG national security concerns.
+- _Rationale:_ This policy is aligned with the concept of sovereignty, taking into account geopolitical and USG national security concerns. Keeping data out of Russia helps prevent official data from being subject to Russian law.
 - _Last modified:_ November 30, 2023
 
 - MITRE ATT&CK TTP Mapping
-  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
-    - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 ### Resources
 -	[GWS Admin Help \| Data regions: Choose a geographic location for your data](https://support.google.com/a/answer/7630496)

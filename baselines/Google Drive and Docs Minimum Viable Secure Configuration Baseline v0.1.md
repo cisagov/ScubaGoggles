@@ -79,7 +79,7 @@ Warnings SHALL be enabled when a user is attempting to share something outside t
 #### GWS.DRIVEDOCS.1.4v0.1
 If sharing outside of the organization, then agencies SHALL disable sharing of files with individuals who are not using a Google account.
 
-- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and invites potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
+- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ July 10, 2023
 - _Note:_ This policy only applies if external sharing is allowed in Policy 1.1
 
@@ -90,7 +90,7 @@ If sharing outside of the organization, then agencies SHALL disable sharing of f
 #### GWS.DRIVEDOCS.1.5v0.1
 Agencies SHALL disable making files and published web content visible to anyone with the link.
 
-- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and invites potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
+- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of a potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -120,7 +120,7 @@ Agencies SHALL NOT allow any users to distribute content from an organization-ow
 #### GWS.DRIVEDOCS.1.8v0.1
 Agencies SHALL set newly created items to have Private to the Owner as the default level of access.
 
-- _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent accidental sharing of information too broadly.
+- _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent overly broad accidental sharing of information.
 - _Last modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -262,7 +262,7 @@ This section covers whether a security update issued by Google will be applied t
 #### GWS.DRIVEDOCS.3.1v0.1
 Agencies SHALL enable security updates for Drive files.
 
-- _Rationale:_ Google may add new security features over time. Allowing security updates ensures that your files are protected with the latest features Google makes available.
+- _Rationale:_ Google may add new security features over time. Allowing security updates helps ensure that your files are protected with the latest features Google makes available.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -418,7 +418,7 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 #### GWS.DRIVEDOCS.7.1v0.1
 Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
 
-- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. By blocking and/or having warnings on these DLP-scanned files from being shared with users, the risk of unintentional introduction of sensitive content is significantly reduced.
+- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping

@@ -53,7 +53,7 @@ This section determines whether users can delegate access to their mailbox to ot
 #### GWS.GMAIL.1.1v0.1
 Mail Delegation SHOULD be disabled.
 
-- _Rationale:_ Granting mail delegation can inadvertently lead to disclosure of sensitive information, impersonation of delegated accounts, or malicious alteration or deletion of emails. By controlling mail delegation, these risks can be significantly reduced, ensuring the security and integrity of email communications.
+- _Rationale:_ Granting mail delegation can inadvertently lead to disclosure of sensitive information, impersonation of delegated accounts, or malicious alteration or deletion of emails. By controlling mail delegation, these risks can be significantly reduced, improving the security and integrity of email communications.
 - _Last modified:_ October 4, 2023
 - _Note:_ Exceptions should be limited to individuals authorized by existing Agency policy, such as SES or Politically Appointed staff. Other considerations include ensuring that delegated accounts require Phishing-Resistant Multi-Factor Authentication (MFA), limiting delegated account permissions (ex. allowing view/reply but not delete), monitoring delegated accounts regularly, and disabling them if no longer required.
 
@@ -182,7 +182,7 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 #### GWS.GMAIL.4.1v0.1
 A DMARC policy SHALL be published for every second-level domain.
 
-- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. By publishing a DMARC policy for every second-level domain, this risk can be reduced by publishing how authentication failures should be handled. 
+- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every second-level domain further reduces the risk posed by authentication failures. 
 - _Last modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -191,7 +191,7 @@ A DMARC policy SHALL be published for every second-level domain.
 #### GWS.GMAIL.4.2v0.1
 The DMARC message rejection option SHALL be p=reject.
 
-- _Rationale:_ Without stringent email authentication, adversaries could potentially send deceptive emails that appear to be from your domain, increasing the risk of phishing attacks. This policy reduces risk as it ensures that emails failing SPF or DKIM checks are automatically rejected, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for federal, executive branch, departments and agencies.
+- _Rationale:_ Without stringent email authentication, adversaries could potentially send deceptive emails that appear to be from your domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for federal, executive branch, departments and agencies.
 - _Last modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -205,7 +205,7 @@ The DMARC message rejection option SHALL be p=reject.
 #### GWS.GMAIL.4.3v0.1
 The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.
 
-- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. By including reports@dmarc.cyber.dhs.gov as the DMARC point of contact, this risk can be reduced by ensuring a streamlined process for CISA to monitor and address email authentication issues, enhancing overall email security as required by BOD 18-01 for federal, executive branch, departments and agencies.
+- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for federal, executive branch, departments and agencies, set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows CISA to monitor and address email authentication issues.
 - _Last modified:_ November 13, 2023
 - _Note:_ Only federal, executive branch, departments and agencies should include this email address in their DMARC record.
 
@@ -324,7 +324,7 @@ Google SHOULD be allowed to automatically apply future recommended settings for 
 #### GWS.GMAIL.5.5v0.1
 Emails flagged by the above attachment protection controls SHALL NOT be kept in inbox.
 
-- _Rationale:_ Keeping emails flagged by attachment protection controls in the inbox could potentially expose users to malicious content. By ensuring such emails are not kept in the inbox, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Keeping emails flagged by attachment protection controls in the inbox could potentially expose users to malicious content. Removing these emails from the inbox enhances the safety and integrity of user data and systems.
 - _Last modified:_ September 8, 2023
 - _Note:_ Agencies and Organizations can choose whether to send email to spam or quarantine. Applies to Policies 5.1 - 5.3.
 
@@ -342,7 +342,7 @@ Emails flagged by the above attachment protection controls SHALL NOT be kept in 
 #### GWS.GMAIL.5.6v0.1
 Any third-party or outside application selected for attachment protection SHOULD offer services comparable to those offered by Google Workspace.
 
-- _Rationale:_ Using third-party or outside applications for attachment protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. By ensuring that selected applications offer comparable services, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for attachment protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -448,7 +448,7 @@ Google SHALL be allowed to automatically apply future recommended settings for l
 #### GWS.GMAIL.6.5v0.1
 Any third-party or outside application selected for links and external images protection SHOULD offer services comparable to those offered by Google Workspace.
 
-- _Rationale:_ Using third-party or outside applications for links and external images protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. By ensuring that selected applications offer comparable services, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for links and external images protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services enhances the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -504,7 +504,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.7.1v0.1
 Protect against domain spoofing based on similar domain names SHALL be enabled.
 
-- _Rationale:_ Emails sent from domains that look similar to your domain can potentially deceive users into interacting with malicious content, posing a security risk. By enabling protection against such spoofing, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Emails sent from domains that look similar to your domain can potentially deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -516,7 +516,7 @@ Protect against domain spoofing based on similar domain names SHALL be enabled.
 #### GWS.GMAIL.7.2v0.1
 Protect against spoofing of employee names SHALL be enabled.
 
-- _Rationale:_ Spoofing of employee identities (e.g., CEO and IT staff) can potentially deceive users into interacting with malicious content, posing a security risk. By enabling protection against such spoofing, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Spoofing of employee identities (e.g., CEO and IT staff) can potentially deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -564,7 +564,7 @@ Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
 #### GWS.GMAIL.7.6v0.1
 Emails flagged by the above spoofing and authentication controls SHALL NOT be kept in inbox.
 
-- _Rationale:_ Keeping emails flagged by spoofing and authentication controls in the inbox could potentially expose users to malicious content. By ensuring such emails are not kept in the inbox, this risk can be reduced, enhancing the safety and integrity of the user's data and systems.
+- _Rationale:_ Keeping emails flagged by spoofing and authentication controls in the inbox could potentially expose users to malicious content. Moving emails out of the inbox can reduce this risk, enhancing the safety and integrity of the user's data and systems.
 - _Last modified:_ September 8, 2023
 - _Note:_ Agencies and organizations can choose whether to send to spam or quarantine. This policy applies to Policy 7.1 - Policy 7.5
 
@@ -590,7 +590,7 @@ Google SHALL be allowed to automatically apply future recommended settings for s
 #### GWS.GMAIL.7.8v0.1
 Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace.
 
-- _Rationale:_ Using third-party or outside applications for spoofing and authentication protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. By ensuring that selected applications offer comparable services, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for spoofing and authentication protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -703,7 +703,7 @@ POP and IMAP access SHALL be disabled to protect sensitive agency or organizatio
 #### GWS.GMAIL.9.2v0.1
 POP and IMAP access MAY be enabled on a per-user and per-application basis as needed.
 
-- _Rationale:_ Enabling POP and IMAP access indiscriminately could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. By only allowing POP and IMAP access on a per-user and per-application basis as needed, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Enabling POP and IMAP access indiscriminately could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. Allowing POP and IMAP access only on a per-user and per-application basis as needed can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -879,7 +879,7 @@ This section determines whether users are prompted with a warning for messages t
 #### GWS.GMAIL.13.1v0.1
 Unintended external reply warnings SHALL be enabled to avoid unintentional replies and remind users to treat external messages with caution.
 
-- _Rationale:_ Without unintended external reply warnings, users may inadvertently reply to external messages, potentially exposing sensitive information. By enabling these warnings, users are reminded to treat external messages with caution, reducing this risk and enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Unintended external reply warnings can help reduce the risk of exposing sensitive information in replies to external messages. Enabling these warnings reminds users to treat external messages with caution, reducing this risk and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July, 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -976,7 +976,7 @@ Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.
 #### GWS.GMAIL.15.2v0.1
 Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.
 
-- _Rationale:_ Using third-party or outside applications for enhanced pre-delivery message scanning that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. By ensuring that selected applications offer comparable services, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for enhanced pre-delivery message scanning that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -1016,7 +1016,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.16.1v0.1
 Security sandbox SHOULD be enabled to provide additional protections for their email messages.
 
-- _Rationale:_ Without a security sandbox, any emails with malicious content could potentially interact directly with the users' systems, posing a risk. By enabling the security sandbox, additional protections are provided for email messages, reducing this risk and enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Without a security sandbox, emails with malicious content could potentially interact directly with the users' systems, posing a risk. By enabling the security sandbox, additional protections are provided for email messages, reducing this risk and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -1026,7 +1026,7 @@ Security sandbox SHOULD be enabled to provide additional protections for their e
 #### GWS.GMAIL.16.2v0.1
 Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.
 
-- _Rationale:_ Using third-party or outside applications for security sandbox that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. By ensuring that selected applications offer comparable services, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for security sandbox that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -1069,7 +1069,7 @@ This section allows for email messages sent through other Google Workspace appli
 #### GWS.GMAIL.17.1v0.1
 Comprehensive mail storage SHOULD be enabled to allow tracking of information across applications.
 
-- _Rationale:_ Without comprehensive mail storage, tracking of information across applications could be compromised, posing a potential security risk. By enabling comprehensive mail storage, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Without comprehensive mail storage, tracking of information across applications could be compromised, posing a potential security risk. Enabling comprehensive mail storage can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ November 14, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -1116,7 +1116,7 @@ Content filtering SHOULD be enabled within Gmail messages.
 #### GWS.GMAIL.18.2v0.1
 Any third-party or outside application selected for advanced email content filtering SHOULD offer services comparable to those offered by Google Workspace.
 
-- _Rationale:_ Using third-party or outside applications for advanced email content filtering that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. By ensuring that selected applications offer comparable services, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for advanced email content filtering that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
