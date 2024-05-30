@@ -1466,9 +1466,7 @@ if {
 #
 # Baseline GWS.GMAIL.9.1v0.1
 #--
-
-default NoSuchEvent9_1(_) := false
-
+NoSuchEvent9_1 := false
 NoSuchEvent9_1 := true if {
     SettingName := "IMAP_ACCESS"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
