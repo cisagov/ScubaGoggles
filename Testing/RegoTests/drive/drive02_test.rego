@@ -29,7 +29,7 @@ test_Managers_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Managers_Correct_V2 if {
@@ -67,7 +67,7 @@ test_Managers_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Managers_Correct_V3 if {
@@ -105,7 +105,7 @@ test_Managers_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Managers_Incorrect_V1 if {
@@ -165,7 +165,8 @@ test_Managers_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Members with manager access can override shared drive settings.</li></ul>"])
 }
 
 test_Managers_Incorrect_V3 if {
@@ -203,7 +204,8 @@ test_Managers_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Members with manager access can override shared drive settings.</li></ul>"])
 }
 
 test_Managers_Incorrect_V4 if {
@@ -241,7 +243,8 @@ test_Managers_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Secondary OU: Members with manager access can override shared drive settings.</li></ul>"])
 }
 
 test_Managers_Incorrect_V5 if {
@@ -307,7 +310,7 @@ test_Outside_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Outside_Correct_V2 if {
@@ -351,7 +354,7 @@ test_Outside_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Outside_Correct_V3 if {
@@ -395,7 +398,7 @@ test_Outside_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Outside_Incorrect_V1 if {
@@ -458,7 +461,8 @@ test_Outside_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Users outside the organization can access files in shared drives</li></ul>"])
 }
 
 test_Outside_Incorrect_V3 if {
@@ -502,7 +506,8 @@ test_Outside_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Users outside the organization can access files in shared drives</li></ul>"])
 }
 
 test_Outside_Incorrect_V4 if {
@@ -546,7 +551,8 @@ test_Outside_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Secondary OU: Users outside the organization can access files in shared drives</li></ul>"])
 }
 
 test_Outside_Incorrect_V5 if {
@@ -615,7 +621,7 @@ test_SharedDrive_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SharedDrive_Correct_V2 if {
@@ -659,7 +665,7 @@ test_SharedDrive_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SharedDrive_Correct_V3 if {
@@ -703,7 +709,7 @@ test_SharedDrive_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SharedDrive_Incorrect_V1 if {
@@ -766,7 +772,8 @@ test_SharedDrive_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: People who aren't shared drive members cannot be added to files</li></ul>"])
 }
 
 test_SharedDrive_Incorrect_V3 if {
@@ -810,8 +817,10 @@ test_SharedDrive_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: People who aren't shared drive members cannot be added to files</li></ul>"])
 }
+
 
 test_SharedDrive_Incorrect_V4 if {
     # Test sharing setting when top OU is correct but secondary isn't
@@ -854,7 +863,8 @@ test_SharedDrive_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Secondary OU: People who aren't shared drive members cannot be added to files</li></ul>"])
 }
 
 test_SharedDrive_Incorrect_V5 if {
@@ -905,44 +915,6 @@ test_Viewers_Correct_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
-                        {"name": "NEW_VALUE", "value": "false"},
-                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
-                    ]
-                }]
-            }
-        ]},
-        "tenant_info": {
-            "topLevelOU": ""
-        }
-    }
-
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
-}
-
-test_Viewers_Correct_V2 if {
-    # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
-    Output := tests with input as {
-        "drive_logs": {"items": [
-            {
-                "id": {"time": "2022-12-20T00:02:28.672Z"},
-                "events": [{
-                    "parameters": [
-                        {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
-                        {"name": "NEW_VALUE", "value": "false"},
-                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
-                    ]
-                }]
-            },
-            {
-                "id": {"time": "2021-12-20T00:02:28.672Z"},
-                "events": [{
-                    "parameters": [
-                        {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
                         {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
@@ -958,7 +930,47 @@ test_Viewers_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+}
+
+test_Viewers_Correct_V2 if {
+    # Test sharing setting when there's multiple events and the most most recent is correct
+    PolicyId := "GWS.DRIVEDOCS.2.4v0.1"
+    Output := tests with input as {
+        "drive_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2021-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": ""
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    print(RuleOutput)
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    print(RuleOutput[0].RequirementMet)
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Viewers_Correct_V3 if {
@@ -971,7 +983,7 @@ test_Viewers_Correct_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -981,7 +993,7 @@ test_Viewers_Correct_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -996,7 +1008,7 @@ test_Viewers_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Viewers_Incorrect_V1 if {
@@ -1041,7 +1053,7 @@ test_Viewers_Incorrect_V2 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1056,7 +1068,8 @@ test_Viewers_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Viewers and commenters are allowed to download, print, and copy files</li></ul>"])
 }
 
 test_Viewers_Incorrect_V3 if {
@@ -1069,7 +1082,7 @@ test_Viewers_Incorrect_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1079,7 +1092,7 @@ test_Viewers_Incorrect_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1094,7 +1107,9 @@ test_Viewers_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    print()
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Viewers and commenters are allowed to download, print, and copy files</li></ul>"])
 }
 
 test_Viewers_Incorrect_V4 if {
@@ -1107,7 +1122,7 @@ test_Viewers_Incorrect_V4 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1117,7 +1132,7 @@ test_Viewers_Incorrect_V4 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Shared Drive Creation new_team_drive_restricts_download"},
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Secondary OU"},
                     ]
                 }]
@@ -1132,7 +1147,8 @@ test_Viewers_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Secondary OU: Viewers and commenters are allowed to download, print, and copy files</li></ul>"])
 }
 
 test_Viewers_Incorrect_V5 if {

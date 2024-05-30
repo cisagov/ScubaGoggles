@@ -732,7 +732,7 @@ if {
 #--
 NonCompliantOUs2_4 contains {
     "Name": OU, 
-    "Value": "Viewers and commenters are not allowed to download, print, and copy files"
+    "Value": "Viewers and commenters are allowed to download, print, and copy files"
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", OU)
@@ -744,7 +744,7 @@ NonCompliantOUs2_4 contains {
 
 NonCompliantGroups2_4 contains {
     "Name": Group, 
-    "Value": "Viewers and commenters are not allowed to download, print, and copy files"
+    "Value": "Viewers and commenters are allowed to download, print, and copy files"
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "Shared Drive Creation new_team_drive_restricts_download", Group)
