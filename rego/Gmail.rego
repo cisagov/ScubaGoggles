@@ -1466,43 +1466,79 @@ if {
 #
 # Baseline GWS.GMAIL.9.1v0.1
 #--
-GetFriendlyValue9_1(Value) := "enabled" if {
-    Value != "DISABLED"
-    Value != "INHERIT_FROM_PARENT"
-} else := "disabled" if {
-    Value == "DISABLED"
-} else := Value
+
+default NoSuchEvent9_1(_) := true
+
+NoSuchEvent9_1(TopLevelOU) := false if {
+    # No such event...
+    SettingName := "IMAP_ACCESS"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
+    count(Events) != 0
+}
+
+NoSuchEvent9_1(TopLevelOU) := false if {
+    # No such event...
+    SettingName := "ENABLE_POP_ACCESS"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
+    count(Events) != 0
+}
+
+GetFriendlyValue9_1(ImapEnabled, PopEnabled) := Description if {
+    ImapEnabled == "ENABLED_FOR_ALL_MAIL_CLIENTS" 
+    PopEnabled == true
+    Description := "POP and IMAP access are enabled"
+} else := Description if {
+    ImapEnabled == "ENABLED_FOR_ALL_MAIL_CLIENTS"
+    PopEnabled == false
+    Description := "IMAP access is enabled"
+} else := Description if {
+    ImapEnabled == "DISABLED"
+    PopEnabled == true
+    Description := "POP access is enabled"
+} else := "Both POP and IMAP access are disabled"
 
 NonCompliantOUs9_1 contains {
     "Name": OU,
-    "Value": concat(" ", [
-        "IMAP access is set to",
-        GetFriendlyValue9_1(LastEvent.NewValue)
-    ])
+    "Value": GetFriendlyValue9_1(LastEventA.NewValue, LastEventB.NewValue)
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "IMAP_ACCESS", OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "DISABLED"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+
+    EventsA := utils.FilterEventsOU(LogEvents, "IMAP_ACCESS", OU)
+    count(EventsA) > 0
+    LastEventA := utils.GetLastEvent(EventsA)
+
+    EventsB := utils.FilterEventsOU(LogEvents, "ENABLE_POP_ACCESS", OU)
+    count(EventsB) > 0
+    LastEventB := utils.GetLastEvent(EventsB)
+
+    LastEventA.NewValue != "DISABLED"
+    LastEventA.NewValue != "INHERIT_FROM_PARENT"
+    LastEventB.NewValue != false
+    LastEventB.NewValue != "INHERIT_FROM_PARENT"
+
 }
 
 NonCompliantGroups9_1 contains {
     "Name": Group,
-    "Value": concat(" ", [
-        "IMAP access is set to",
-        GetFriendlyValue9_1(LastEvent.NewValue)
-    ])
-} if {
+    "Value": GetFriendlyValue9_1(LastEventA.NewValue, LastEventB.NewValue)
+}
+if {
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "IMAP_ACCESS", Group)
-    # Ignore Group without any events
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "DISABLED"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+
+    EventsA := utils.FilterEventsGroup(LogEvents, "IMAP_ACCESS", Group)
+    count(EventsA) > 0
+    LastEventA := utils.GetLastEvent(EventsA)
+
+    EventsB := utils.FilterEventsGroup(LogEvents, "ENABLE_POP_ACCESS", Group)
+    count(EventsB) > 0
+    LastEventB := utils.GetLastEvent(EventsB)
+
+    LastEventA.NewValue != "DISABLED"
+    LastEventA.NewValue != "INHERIT_FROM_PARENT"
+    LastEventB.NewValue != false
+    LastEventB.NewValue != "INHERIT_FROM_PARENT"
+
 }
 
 tests contains {
@@ -1515,8 +1551,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "IMAP_ACCESS", utils.TopLevelOU)
-    count(Events) == 0
+    NoSuchEvent9_1(utils.TopLevelOU)
 }
 
 tests contains {
@@ -1528,8 +1563,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "IMAP_ACCESS", utils.TopLevelOU)
-    count(Events) > 0
+    NoSuchEvent9_1(utils.TopLevelOU)
     Conditions := {count(NonCompliantOUs9_1) == 0, count(NonCompliantGroups9_1) == 0}
     Status := (false in Conditions) == false
 }
@@ -1539,71 +1573,14 @@ if {
 # Baseline GWS.GMAIL.9.2v0.1
 #--
 
-GetFriendlyValue9_2(Value) := "enabled" if {
-    Value == "true"
-} else := "disabled" if {
-    Value == "false"
-} else := Value
-
-NonCompliantOUs9_2 contains {
-    "Name": OU,
-    "Value": concat(" ", [
-        "POP access is",
-        GetFriendlyValue9_2(LastEvent.NewValue)
-    ])
-}
-if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_POP_ACCESS", OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
-}
-
-NonCompliantGroups9_2 contains {
-    "Name": Group,
-    "Value": concat(" ", [
-        "IMAP access is set to",
-        GetFriendlyValue9_2(LastEvent.NewValue)
-    ])
-} if {
-    some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "ENABLE_POP_ACCESS", Group)
-    # Ignore Group without any events
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
-}
-
+# This policy will be removed once the SCB is updated
 tests contains {
     "PolicyId": "GWS.GMAIL.9.2v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_POP_ACCESS", utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.GMAIL.9.2v0.1",
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_2, NonCompliantGroups9_2),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_2, "NonCompliantGroups": NonCompliantGroups9_2},
-    "RequirementMet": Status,
+    "Criticality": "May",
+    "ReportDetails": "Assign IMAP and POP access on a per user level basis.",
+    "ActualValue": "",
+    "RequirementMet": true,
     "NoSuchEvent": false
-}
-if {
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_POP_ACCESS", utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs9_2) == 0, count(NonCompliantGroups9_2) == 0}
-    Status := (false in Conditions) == false
 }
 #--
 
