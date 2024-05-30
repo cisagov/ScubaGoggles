@@ -1575,7 +1575,7 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.9.2v0.1",
     "Criticality": "May",
-    "ReportDetails": "Assign IMAP and POP access on a per user level basis.",
+    "ReportDetails": "Requirement met in all OUs and groups.",
     "ActualValue": "",
     "RequirementMet": true,
     "NoSuchEvent": false
