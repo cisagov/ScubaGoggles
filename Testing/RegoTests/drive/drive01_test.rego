@@ -204,7 +204,6 @@ test_Sharing_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    print(RuleOutput[0].ReportDetails)
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Top-Level OU: Sharing Outside Domain is not properly configured.</li></ul>"])
 }
@@ -1370,7 +1369,6 @@ test_Link_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    print(RuleOutput[0].ReportDetails)
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Top-Level OU: Published web content is visible to anyone with a link. </li></ul>"])
 }
@@ -1927,7 +1925,6 @@ test_CrossDomain_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    print(RuleOutput[0].ReportDetails)
     RuleOutput[0].ReportDetails == concat("", [  "The following OUs are non-compliant:",
     "<ul><li>Test Top-Level OU: Anyone can distribute content in the organization to outside the organization</li></ul>"])
 }
@@ -2247,7 +2244,6 @@ test_Default_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    print(RuleOutput[0].ReportDetails)
     RuleOutput[0].ReportDetails == concat("", [
         "The following OUs are non-compliant:","<ul><li>Test Top-Level OU: When users create items, the default access is set to: The primary target audience can search and find the item.</li></ul>"
 
