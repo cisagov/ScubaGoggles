@@ -262,7 +262,7 @@ test_ImapAccess_Incorrect_V4 if {
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
-            }
+            },
             {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
