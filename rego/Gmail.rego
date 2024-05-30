@@ -1515,27 +1515,28 @@ if {
     }
 }
 
-# NonCompliantGroups9_1 contains {
-#     "Name": Group,
-#     "Value": GetFriendlyValue9_1(LastEventA.NewValue, LastEventB.NewValue)
-# }
-# if {
-#     some Group in utils.GroupsWithEvents
+NonCompliantGroups9_1 contains {
+    "Name": Group,
+    "Value": GetFriendlyValue9_1(ImapEnabled, PopEnabled)
+}
+if {
+    some Group in utils.GroupsWithEvents
 
-#     EventsA := utils.FilterEventsGroup(LogEvents, "IMAP_ACCESS", Group)
-#     count(EventsA) > 0
-#     LastEventA := utils.GetLastEvent(EventsA)
+    ImapEvents := utils.FilterEventsGroup(LogEvents, "IMAP_ACCESS", Group)
+    count(ImapEvents) > 0
+    LastImapEvent := utils.GetLastEvent(ImapEvents)
 
-#     EventsB := utils.FilterEventsGroup(LogEvents, "ENABLE_POP_ACCESS", Group)
-#     count(EventsB) > 0
-#     LastEventB := utils.GetLastEvent(EventsB)
+    PopEvents := utils.FilterEventsGroup(LogEvents, "ENABLE_POP_ACCESS", Group)
+    count(PopEvents) > 0
+    LastPopEvent := utils.GetLastEvent(PopEvents)
 
-#     LastEventA.NewValue != "DISABLED"
-#     LastEventA.NewValue != "INHERIT_FROM_PARENT"
-#     LastEventB.NewValue != false
-#     LastEventB.NewValue != "INHERIT_FROM_PARENT"
-
-# }
+    ImapEnabled := (LastImapEvent.NewValue in ["DISABLED", "INHERIT_FROM_PARENT"]) == false
+    PopEnabled := (LastPopEvent.NewValue in ["false", "INHERIT_FROM_PARENT"]) == false
+    true in {
+        ImapEnabled,
+        PopEnabled
+    }
+}
 
 tests contains {
     "PolicyId": "GWS.GMAIL.9.1v0.1",
@@ -1553,17 +1554,16 @@ if {
 tests contains {
     "PolicyId": "GWS.GMAIL.9.1v0.1",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1, "NonCompliantGroups": []},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, NonCompliantGroups9_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1, "NonCompliantGroups": NonCompliantGroups9_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     not NoSuchEvent9_1
-    Status := count(NonCompliantOUs9_1) == 0
 
-    # Conditions := {count(NonCompliantOUs9_1) == 0, count(NonCompliantGroups9_1) == 0}
-    # Status := (false in Conditions) == false
+    Conditions := {count(NonCompliantOUs9_1) == 0, count(NonCompliantGroups9_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
