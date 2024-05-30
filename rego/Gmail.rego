@@ -1466,15 +1466,16 @@ if {
 #
 # Baseline GWS.GMAIL.9.1v0.1
 #--
-NoSuchEvent9_1 := false
-NoSuchEvent9_1 := true if {
+default NoSuchEvent9_1(_) := false
+
+NoSuchEvent9_1(TopLevelOU) := true if {
     SettingName := "IMAP_ACCESS"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
+    EventsIMAPAccess := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
+    count(EventsIMAPAccess) == 0
 } else := true if {
     SettingName := "ENABLE_POP_ACCESS"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
+    EventsPOPAccess := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
+    count(EventsPOPAccess) == 0
 }
 
 GetFriendlyValue9_1(ImapEnabled, PopEnabled) := Description if {
@@ -1548,7 +1549,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    NoSuchEvent9_1
+    NoSuchEvent9_1(utils.TopLevelOU)
 }
 
 tests contains {
@@ -1560,7 +1561,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent9_1
+    not NoSuchEvent9_1(utils.TopLevelOU)
 
     Conditions := {count(NonCompliantOUs9_1) == 0, count(NonCompliantGroups9_1) == 0}
     Status := (false in Conditions) == false
