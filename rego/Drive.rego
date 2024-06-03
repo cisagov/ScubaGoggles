@@ -229,15 +229,15 @@ default NoSuchEvent1_4(_) := false
 GetFriendlyValue1_4(Value_A, Value_B, AcceptableValues_A, AcceptableValues_B) :=
 "External Sharing is Disabled" if {
     Value_B in AcceptableValues_B
-} else := "External Sharing is Enabled, 
-    but Sharing invites to non-google accounts is disabled" if {
+} else := concat("", ["External Sharing is Enabled, ","
+    but Sharing invites to non-google accounts is disabled"]) if {
     Value_A in AcceptableValues_A
 } else := "External Sharing is Enabled, and invites can be shared to non-google accounts"
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": concat("", [GetFriendlyValue1_4(LastEvent_A.NewValue, 
-        LastEvent_B.NewValue, AcceptableValues_A, AcceptableValues_B)]) 
+    "Value": concat("", [GetFriendlyValue1_4(LastEvent_A.NewValue,
+        LastEvent_B.NewValue, AcceptableValues_A, AcceptableValues_B)])
     } if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEventsOU(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)

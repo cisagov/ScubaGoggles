@@ -2414,8 +2414,8 @@ test_Default_Incorrect_V6 if {
     RuleOutput[0].ReportDetails == concat("", [
         "The following OUs are non-compliant:",
         "<ul><li>Test Secondary OU: When users create items,",
-        " the default access is set to: ","
-        The primary target audience can access the item if they have the link</li></ul>"
+        " the default access is set to: ",
+        "The primary target audience can access the item if they have the link</li></ul>"
 
     ])
 }
