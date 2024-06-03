@@ -1934,7 +1934,8 @@ test_CrossDomain_Incorrect_V2 if {
 }
 
 test_CrossDomain_Incorrect_V3 if {
-    # Test sharing setting when there are multiple events and the most recent is wrong, set to anyone can distribute content. 
+    # Test sharing setting when there are multiple events and
+    # the most recent is wrong, set to anyone can distribute content. 
     PolicyId := "GWS.DRIVEDOCS.1.7v0.1"
     Output := tests with input as {
         "drive_logs": {"items": [
@@ -1974,7 +1975,8 @@ test_CrossDomain_Incorrect_V3 if {
 }
 
 test_CrossDomain_Incorrect_V4 if {
-    # Test sharing setting when Top OU is correct but not secondary OU, which is set to Anyone in the Organization
+    # Test sharing setting when Top OU is correct but not secondary OU,
+    # which is set to Anyone in the Organization
     PolicyId := "GWS.DRIVEDOCS.1.7v0.1"
     Output := tests with input as {
         "drive_logs": {"items": [
@@ -2047,7 +2049,8 @@ test_CrossDomain_Incorrect_V5 if {
 }
 
 test_CrossDomain_Incorrect_V6 if {
-    # Test sharing setting when there are multiple events and the most recent event is wrong, set to only users in the organization
+    # Test sharing setting when there are multiple events and
+    # the most recent event is wrong, set to only users in the organization
     PolicyId := "GWS.DRIVEDOCS.1.7v0.1"
     Output := tests with input as {
         "drive_logs": {"items": [

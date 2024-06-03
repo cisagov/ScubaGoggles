@@ -1109,7 +1109,8 @@ test_Viewers_Incorrect_V3 if {
     not RuleOutput[0].NoSuchEvent
     print()
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Viewers and commenters are allowed to download, print, and copy files</li></ul>"])
+    "<ul><li>Test Top-Level OU: ",
+    "Viewers and commenters are allowed to download, print, and copy files</li></ul>"])
 }
 
 test_Viewers_Incorrect_V4 if {
@@ -1148,7 +1149,8 @@ test_Viewers_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: Viewers and commenters are allowed to download, print, and copy files</li></ul>"])
+    "<ul><li>Test Secondary OU: ",
+    "Viewers and commenters are allowed to download, print, and copy files</li></ul>"])
 }
 
 test_Viewers_Incorrect_V5 if {
