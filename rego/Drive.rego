@@ -229,8 +229,8 @@ default NoSuchEvent1_4(_) := false
 GetFriendlyValue1_4(Value_A, Value_B, AcceptableValues_A, AcceptableValues_B) :=
 "External Sharing is Disabled" if {
     Value_B in AcceptableValues_B
-} else := concat("", ["External Sharing is Enabled, ","
-    but Sharing invites to non-google accounts is disabled"]) if {
+} else := concat("", ["External Sharing is Enabled, ",
+    "but Sharing invites to non-google accounts is disabled"]) if {
     Value_A in AcceptableValues_A
 } else := "External Sharing is Enabled, and invites can be shared to non-google accounts"
 
