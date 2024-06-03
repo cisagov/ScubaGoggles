@@ -42,7 +42,7 @@ test_Sharing_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Sharing_Correct_V2 if {
@@ -96,7 +96,7 @@ test_Sharing_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Sharing_Correct_V3 if {
@@ -160,7 +160,7 @@ test_Sharing_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Sharing_Incorrect_V1 if {
@@ -234,7 +234,8 @@ test_Sharing_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Allow users to remove/apply the security update for files they own or manage</li></ul>"])
 }
 
 test_Sharing_Incorrect_V3 if {
@@ -288,7 +289,8 @@ test_Sharing_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Allow users to remove/apply the security update for files they own or manage</li></ul>"])
 }
 
 test_Sharing_Incorrect_V4 if {
@@ -352,7 +354,8 @@ test_Sharing_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Secondary OU: Allow users to remove/apply the security update for files they own or manage</li></ul>"])
 }
 
 test_Sharing_Incorrect_V5 if {
