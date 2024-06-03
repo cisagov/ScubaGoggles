@@ -62,7 +62,7 @@ test_Encrypted_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 
@@ -95,7 +95,8 @@ test_Encrypted_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protection against encrypted attachments from untrusted senders is set to disabled</li></ul>"])
 }
 
 test_Encrypted_Incorrect_V2 if {
@@ -141,7 +142,8 @@ test_Encrypted_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protection against encrypted attachments from untrusted senders is set to disabled</li></ul>"])
 }
 #--
 
@@ -179,7 +181,7 @@ test_Scripts_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Scripts_Correct_V2 if {
@@ -229,7 +231,7 @@ test_Scripts_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Scripts_Correct_V3 if {
@@ -279,7 +281,7 @@ test_Scripts_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Scripts_Incorrect_V1 if {
@@ -345,7 +347,8 @@ test_Scripts_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protection against encrypted attachments with scripts from untrusted senders is set to disabled</li></ul>"])
 }
 
 test_Scripts_Incorrect_V3 if {
@@ -395,7 +398,8 @@ test_Scripts_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protection against encrypted attachments with scripts from untrusted senders is set to disabled</li></ul>"])
 }
 #--
 
@@ -430,7 +434,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_AttachmentProtectionAnomalousAttachment_Correct_V2 if {
@@ -474,7 +478,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_AttachmentProtectionAnomalousAttachment_Correct_V3 if {
@@ -518,7 +522,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_AttachmentProtectionAnomalousAttachment_Correct_V4 if {
@@ -562,7 +566,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V1 if {
@@ -625,7 +629,8 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protection against anomalous attachment types in emails is set to disabled</li></ul>"])
 }
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V3 if {
@@ -669,7 +674,8 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protection against anomalous attachment types in emails is set to disabled</li></ul>"])
 }
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V4 if {
@@ -700,7 +706,8 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protection against anomalous attachment types in emails is set to disabled</li></ul>"])
 }
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V5 if {
@@ -744,7 +751,8 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protection against anomalous attachment types in emails is set to disabled</li></ul>"])
 }
 
 
@@ -779,7 +787,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V2 if {
@@ -823,7 +831,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V3 if {
@@ -867,7 +875,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V4 if {
@@ -911,7 +919,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V1 if {
@@ -974,7 +982,8 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Automatically enables all future added settings is set to disabled</li></ul>"])
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V3 if {
@@ -1018,7 +1027,8 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Automatically enables all future added settings is set to disabled</li></ul>"])
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V4 if {
@@ -1049,7 +1059,8 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Automatically enables all future added settings is set to disabled</li></ul>"])
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V5 if {
@@ -1093,7 +1104,8 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Automatically enables all future added settings is set to disabled</li></ul>"])
 }
 
 #
@@ -1112,7 +1124,7 @@ test_AttachmentSafety_Correct_V1 if {
                             "name": "SETTING_NAME",
                             "value": "Attachment safety Encrypted attachment protection setting action"
                         },
-                        {"name": "NEW_VALUE", "value": "Quarantine"},
+                        {"name": "NEW_VALUE", "value": "Move to spam"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1153,7 +1165,7 @@ test_AttachmentSafety_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_AttachmentSafety_InCorrect_V1 if {
@@ -1210,7 +1222,8 @@ test_AttachmentSafety_InCorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Emails with attachments, with scripts from untrusted senders are kept in the inbox</li></ul>"])
 }
 
 test_AttachmentSafety_InCorrect_V2 if {
@@ -1267,6 +1280,7 @@ test_AttachmentSafety_InCorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Emails with encrypted attachments from untrusted senders are kept in the inbox</li></ul>"])
 }
 
