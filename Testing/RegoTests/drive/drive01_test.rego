@@ -1052,7 +1052,8 @@ test_NonGoogle_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: External Sharing is Enabled, and invites can be shared to non-google accounts</li></ul>"])
+    "<ul><li>Test Top-Level OU: External Sharing is Enabled, ",
+    "and invites can be shared to non-google accounts</li></ul>"])
 }
 
 test_NonGoogle_Incorrect_V3 if {
@@ -1111,7 +1112,8 @@ test_NonGoogle_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: External Sharing is Enabled, and invites can be shared to non-google accounts</li></ul>"])
+    "<ul><li>Test Top-Level OU: External Sharing is Enabled, ",
+    "and invites can be shared to non-google accounts</li></ul>"])
 }
 
 test_NonGoogle_Incorrect_V4 if {
@@ -1170,7 +1172,8 @@ test_NonGoogle_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: External Sharing is Enabled, and invites can be shared to non-google accounts</li></ul>"])
+    "<ul><li>Test Secondary OU: ",
+    "External Sharing is Enabled, and invites can be shared to non-google accounts</li></ul>"])
 }
 
 test_NonGoogle_Incorrect_V5 if {
@@ -1407,7 +1410,7 @@ test_Link_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:", 
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Top-Level OU: Published web content is visible to anyone with a link. </li></ul>"])
 }
 
@@ -1926,7 +1929,8 @@ test_CrossDomain_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [  "The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Anyone can distribute content in the organization to outside the organization</li></ul>"])
+    "<ul><li>Test Top-Level OU: ",
+    "Anyone can distribute content in the organization to outside the organization</li></ul>"])
 }
 
 test_CrossDomain_Incorrect_V3 if {
@@ -1965,7 +1969,8 @@ test_CrossDomain_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [  "The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Anyone can distribute content in the organization to outside the organization</li></ul>"])
+    "<ul><li>Test Top-Level OU: ",
+    "Anyone can distribute content in the organization to outside the organization</li></ul>"])
 }
 
 test_CrossDomain_Incorrect_V4 if {
@@ -2004,7 +2009,8 @@ test_CrossDomain_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: Anyone can distribute content in the organization to outside the organization</li></ul>"])
+    "<ul><li>Test Secondary OU: ",
+    "Anyone can distribute content in the organization to outside the organization</li></ul>"])
 }
 
 
@@ -2076,7 +2082,8 @@ test_CrossDomain_Incorrect_V6 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Only users inside the organization can distribute content outside of the organization</li></ul>"])
+    "<ul><li>Test Top-Level OU: ",
+    "Only users inside the organization can distribute content outside of the organization</li></ul>"])
 }
 #--
 
@@ -2245,7 +2252,9 @@ test_Default_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:","<ul><li>Test Top-Level OU: When users create items, the default access is set to: The primary target audience can search and find the item.</li></ul>"
+        "The following OUs are non-compliant:",
+        "<ul><li>Test Top-Level OU: When users create items, the default access is set to: ",
+        "The primary target audience can search and find the item.</li></ul>"
 
     ])
 }
@@ -2286,7 +2295,9 @@ test_Default_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:","<ul><li>Test Top-Level OU: When users create items, the default access is set to: The primary target audience can search and find the item.</li></ul>"
+        "The following OUs are non-compliant:",
+        "<ul><li>Test Top-Level OU: When users create items, the default access is set to: ",
+        "The primary target audience can search and find the item.</li></ul>"
     ])
 }
 
@@ -2326,7 +2337,9 @@ test_Default_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:","<ul><li>Test Secondary OU: When users create items, the default access is set to: The primary target audience can search and find the item.</li></ul>"
+        "The following OUs are non-compliant:",
+        "<ul><li>Test Secondary OU: When users create items, the default access is set to: ",
+        "The primary target audience can search and find the item.</li></ul>"
 
     ])
 }
@@ -2399,7 +2412,10 @@ test_Default_Incorrect_V6 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:","<ul><li>Test Secondary OU: When users create items, the default access is set to: The primary target audience can access the item if they have the link</li></ul>"
+        "The following OUs are non-compliant:",
+        "<ul><li>Test Secondary OU: When users create items,",
+        " the default access is set to: ","
+        The primary target audience can access the item if they have the link</li></ul>"
 
     ])
 }
