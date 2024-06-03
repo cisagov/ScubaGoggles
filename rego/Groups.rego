@@ -12,7 +12,19 @@ LogEvents := utils.GetEvents("groups_logs")
 #
 # Baseline GWS.GROUPS.1.1v0.1
 #--
-NonCompliantOUs1_1 contains OU if {
+
+GetFriendlyValue1_1(Value) :=
+"disabled" if {
+    Value != "CLOSED"
+} else := "enabled" if {
+    Value == "OPEN"
+} else := Value
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": concat(["Group access from outside the organization is ",
+        GetFriendlyValue1_1(LastEvent.NewValue)])
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto collaboration_policy", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -60,7 +72,19 @@ if {
 #
 # Baseline GWS.GROUPS.2.1v0.1
 #--
-NonCompliantOUs2_1 contains OU if {
+
+GetFriendlyValue2_1(Value) :=
+"Group owner has the ability to add external members to the group" if {
+    Value != "false"
+} else := "Group owner does not have the ability to
+    add external members to the group" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs2_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue2_1(LastEvent.NewValue)
+} if {
     some OU in utils.OUsWithEvents
     SettingName := "GroupsSharingSettingsProto owners_can_allow_external_members"
     Events := utils.FilterEvents(LogEvents, SettingName, OU)
@@ -110,7 +134,20 @@ if {
 #
 # Baseline GWS.GROUPS.3.1v0.1
 #--
-NonCompliantOUs3_1 contains OU if {
+
+GetFriendlyValue3_1(Value) :=
+"Group owner has the ability to allow an
+    external non-member to post to the group" if {
+    Value != "false"
+} else := "Group owner does not have the ability to allow an
+    external non-member to post to the group" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs3_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue3_1(LastEvent.NewValue)
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -160,7 +197,16 @@ if {
 #
 # Baseline GWS.GROUPS.4.1v0.1
 #--
-NonCompliantOUs4_1 contains OU if {
+
+GetFriendlyValue4_1(Value) :=
+"Group creation ability is not restricted to admins within the organization" if {
+    Value != "ADMIN_ONLY"
+}
+
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue4_1(LastEvent.NewValue)
+} if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto who_can_create_groups", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -208,7 +254,16 @@ if {
 #
 # Baseline GWS.GROUPS.5.1v0.1
 #--
-NonCompliantOUs5_1 contains OU if {
+
+GetFriendlyValue5_1(Value) := 
+"Permission to view conversations is not set to all group members" if {
+    Value != "MEMBERS"
+}
+
+NonCompliantOUs5_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue5_1(LastEvent.NewValue)
+    } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto default_view_topics_access_level", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -265,7 +320,16 @@ CheckGroups6_1Compliance(Events, OUs) := true if {
 }
 else := false
 
-NonCompliantOUs6_1 contains OU if {
+GetFriendlyValue6_1(Value) := "Groups can be hidden from the directory" if {
+    Value == "true"
+} else := "Groups cannot be hidden from the directory" if {
+    Value == "false"
+} else := Value
+
+NonCompliantOUs6_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue6_1(LastEvent.NewValue)
+    } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto allow_unlisted_groups", OU)
     # Ignore OUs without any events. We're already asserting that the
