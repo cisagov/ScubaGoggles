@@ -965,10 +965,8 @@ test_Viewers_Correct_V2 if {
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    print(RuleOutput)
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
-    print(RuleOutput[0].RequirementMet)
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
@@ -1107,7 +1105,6 @@ test_Viewers_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    print()
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Top-Level OU: ",
     "Viewers and commenters are allowed to download, print, and copy files</li></ul>"])
