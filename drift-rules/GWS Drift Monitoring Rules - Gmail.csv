@@ -36,7 +36,6 @@ GWS.GMAIL.7.8v0.1,Any third-party or outside application selected for spoofing a
 GWS.GMAIL.8.1v0.1,User email uploads SHALL be disabled to protect against unauthorized files being introduced into the secured environment.,Admin Log Event,Change Email Setting,ENABLE_EMAIL_USER_IMPORT,false,rules/00gjdgxs1vu7fnv,JK 07-31-23 @ 10:52
 GWS.GMAIL.9.1v0.1(a),POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.,Admin Log Event,Change Email Setting,IMAP_ACCESS,DISABLED,rules/00gjdgxs3ynriy0,JK 07-31-23 @ 11:07
 GWS.GMAIL.9.1v0.1(b),POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.,Admin Log Event,Change Email Setting,ENABLE_POP_ACCESS,false,rules/00gjdgxs16dhzcn,JK 07-31-23 @ 11:07
-GWS.GMAIL.9.2v0.1,POP and IMAP access MAY be enabled on a per-user and per-application basis as needed.,N/A,N/A,N/A,N/A,N/A,Not Alertable
 GWS.GMAIL.10.1v0.1,Google Workspace Sync SHOULD be disabled.,Admin Log Event,Change Email Setting,ENABLE_OUTLOOK_SYNC,false,rules/00gjdgxs2caikn5,JK 07-31-23 @ 11:39
 GWS.GMAIL.10.2v0.1,Google Workspace Sync MAY be enabled on a per-user basis as needed.,N/A,N/A,N/A,N/A,N/A,Not Alertable
 GWS.GMAIL.11.1v0.1,"Automatic forwarding SHOULD be disabled, especially to external domains.",Admin Log Event,Change Email Setting,ENABLE_EMAIL_AUTOFORWARDING,false,rules/00gjdgxs3bfgdir,JK 07-31-23 @ 11:50
