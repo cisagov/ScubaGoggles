@@ -161,7 +161,8 @@ OAuth requires regular user consent while using a service account allows for mor
 Follow the instructions below for the authentication method of your choice.
 
 
-#### Create an OAuth credential
+#### Using OAuth
+##### Create an OAuth credential
 1. Be signed into http://console.cloud.google.com/.
 1. From the hamburger menu on the left, select **APIs & Services** -> **OAuth consent screen**
 1. Select **Internal** for **User Type**
@@ -208,7 +209,7 @@ If you've limited application access to Google's APIs in your organization, the 
 #### Using a Service Account
 
 > [!Important]
-> ScubaGoggles requires the service account to have [domain-wide delegation of authority](https://support.google.com/a/answer/162106?hl=en) to function. 
+> ScubaGoggles requires the service account to have [domain-wide delegation of authority](https://support.google.com/a/answer/162106?hl=en) to function. Only complete this section if not authenticating via OAuth credential (see [Using OAuth](#using-oauth)).
 
 1. Login to https://console.cloud.google.com and navigate to your GCP project.
 1. From the hamburger menu, select **IAM & Admin** -> **Service Accounts**
