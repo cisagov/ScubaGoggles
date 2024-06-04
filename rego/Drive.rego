@@ -448,7 +448,7 @@ GetFriendlyValue1_7(Value):= "Setting is compliant." if {
 
 NonCompliantOUs1_7 contains {
     "Name": OU,
-    "Value": GetFrendlyValue1_7(LastEvent.NewValue)
+    "Value": GetFriendlyValue1_7(LastEvent.NewValue)
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", OU)
