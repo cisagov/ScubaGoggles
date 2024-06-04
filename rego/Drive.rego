@@ -12,16 +12,13 @@ LogEvents := utils.GetEvents("drive_logs")
 #
 # Baseline GWS.DRIVEDOCS.1.1v0.1
 #--
+
 GetFriendlyValue1_1(Value) := concat("", ["Files owned by users or shared drives ",
     "can be shared with Google accounts in compatible allowlisted domains"]) if {
-    Value == "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING_MAY_RECEIVE_FILES_FROM_ANYONE"
+    startswith(Value, "TRUSTED_DOMAINS")
 }
-else := concat("", ["Files owned by users or shared drives ",
-    "can be shared outside of the organization"]) if {
-    Value == "SHARING_ALLOWED"
-} else := concat("", ["Files owned by users or shared drives ",
-    "can be shared outside of the organization with a warning"]) if {
-    Value == "SHARING_ALLOWED_WITH_WARNING"
+else := "Files owned by users or shared drives can be shared outside of the organization" if {
+    startswith(Value, "SHARING_ALLOWED")
 } else := Value
 
 NonCompliantOUs1_1 contains {
@@ -242,10 +239,10 @@ default NoSuchEvent1_4(_) := false
 GetFriendlyValue1_4(Value_A, Value_B, AcceptableValues_A, AcceptableValues_B) :=
 "External Sharing is Disabled" if {
     Value_B in AcceptableValues_B
-} else := concat("", ["External Sharing is Enabled, ",
-    "but Sharing invites to non-google accounts is disabled"]) if {
+} else := concat("", ["External sharing is enabled, ",
+    "but sharing items to non-google accounts is disabled"]) if {
     Value_A in AcceptableValues_A
-} else := "External Sharing is Enabled, and invites can be shared to non-google accounts"
+} else := "External sharing is enabled, and items can be shared to non-google accounts"
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
