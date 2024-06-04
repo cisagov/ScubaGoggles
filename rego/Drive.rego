@@ -19,7 +19,7 @@ GetFriendlyValue1_1(Value) := concat("",
     "compatible allowlisted domains"]) if {
     startswith(Value, "TRUSTED_DOMAINS")
 }
-else := concat(["Files owned by users or shared drives can ",
+else := concat("", ["Files owned by users or shared drives can ",
     "be shared outside of the organization"]) if {
     startswith(Value, "SHARING_ALLOWED")
 } else := Value
