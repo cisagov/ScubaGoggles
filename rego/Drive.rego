@@ -81,7 +81,6 @@ if {
 }
 #--
 
-# Can be combined with 1.1, since this is a single setting with the same value that will pass for both conditions
 #
 # Baseline GWS.DRIVEDOCS.1.2v0.1
 #--
@@ -94,26 +93,30 @@ else := "Users can recieve files outside the domain"
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": concat("", [GetFriendlyValue1_2(LastEvent.NewValue)])
+    "Value": GetFriendlyValue1_2(LastEvent.NewValue)
     }
     if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("SHARING_NOT_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == false
+    AcceptableValues = {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT", 
+        "TRUSTED_DOMAINS_ALLOWED", "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING"}
+    not LastEvent.NewValue in AcceptableValues
 }
 
 NonCompliantGroups1_2 contains {
     "Name": Group,
-    "Value": concat("", [GetFriendlyValue1_2(LastEvent.NewValue)])
+    "Value": GetFriendlyValue1_2(LastEvent.NewValue)
     }
     if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("SHARING_NOT_ALLOWED INHERIT_FROM_PARENT", LastEvent.NewValue) == false
+    AcceptableValues = {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT", 
+        "TRUSTED_DOMAINS_ALLOWED", "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING"}
+    not LastEvent.NewValue in AcceptableValues
     }
 
 tests contains {
@@ -147,7 +150,6 @@ if {
 }
 #--
 
-# Can be combined with 1.4 since a single policy can be used to check both conditions
 #
 # Baseline GWS.DRIVEDOCS.1.3v0.1
 #--
@@ -160,27 +162,31 @@ else := "External Sharing Warning is Disabled"
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": concat("", [GetFriendlyValue1_3(LastEvent.NewValue, AcceptableValues)])
+    "Value": GetFriendlyValue1_3(LastEvent.NewValue, AcceptableValues)
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     AcceptableValues := {"SHARING_ALLOWED_WITH_WARNING", "SHARING_NOT_ALLOWED",
-    "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES"}
+    "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES",
+    "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING", 
+    "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING_MAY_RECEIVE_FILES_FROM_ANYONE"}
     not LastEvent.NewValue in AcceptableValues
 }
 
 NonCompliantGroups1_3 contains {
     "Name": Group,
-    "Value": concat("", [GetFriendlyValue1_3(LastEvent.NewValue, AcceptableValues)])
+    "Value": GetFriendlyValue1_3(LastEvent.NewValue, AcceptableValues)
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     AcceptableValues := {"SHARING_ALLOWED_WITH_WARNING", "SHARING_NOT_ALLOWED",
-    "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES"}
+    "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES",
+    "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING", 
+    "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING_MAY_RECEIVE_FILES_FROM_ANYONE"}
     not LastEvent.NewValue in AcceptableValues
 }
 
@@ -243,8 +249,8 @@ GetFriendlyValue1_4(Value_A, Value_B, AcceptableValues_A, AcceptableValues_B) :=
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": concat("", [GetFriendlyValue1_4(LastEvent_A.NewValue,
-        LastEvent_B.NewValue, AcceptableValues_A, AcceptableValues_B)])
+    "Value": GetFriendlyValue1_4(LastEvent_A.NewValue,
+        LastEvent_B.NewValue, AcceptableValues_A, AcceptableValues_B)
     } if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEventsOU(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
@@ -263,8 +269,8 @@ NonCompliantOUs1_4 contains {
 
 NonCompliantGroups1_4 contains {
     "Name": Group,
-    "Value": concat("", [GetFriendlyValue1_4(LastEvent_A.NewValue, LastEvent_B.NewValue,
-        AcceptableValues_A, AcceptableValues_B)]) 
+    "Value": GetFriendlyValue1_4(LastEvent_A.NewValue, LastEvent_B.NewValue,
+        AcceptableValues_A, AcceptableValues_B)
     } if {
     some Group in utils.GroupsWithEvents
     Events_A := utils.FilterEventsGroup(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", Group)
