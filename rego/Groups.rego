@@ -148,7 +148,8 @@ NonCompliantOUs3_1 contains {
     "Value": GetFriendlyValue3_1(LastEvent.NewValue)
 } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", OU)
+    Events := utils.FilterEventsOU(LogEvents,
+        "GroupsSharingSettingsProto owners_can_allow_incoming_mail_from_public", OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
