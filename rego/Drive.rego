@@ -12,14 +12,21 @@ LogEvents := utils.GetEvents("drive_logs")
 #
 # Baseline GWS.DRIVEDOCS.1.1v0.1
 #--
-GetFriendlyValue1_1(Value, AcceptableValues) := "Sharing is Properly Configured" if {
-    Value in AcceptableValues == true
+GetFriendlyValue1_1(Value) := concat("", ["Files owned by users or shared drives ",
+    "can be shared with Google accounts in compatible allowlisted domains"]) if {
+    Value == "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING_MAY_RECEIVE_FILES_FROM_ANYONE"
 }
-else := "Sharing Outside Domain is not properly configured."
+else := concat("", ["Files owned by users or shared drives ",
+    "can be shared outside of the organization"]) if {
+    Value == "SHARING_ALLOWED"
+} else := concat("", ["Files owned by users or shared drives ",
+    "can be shared outside of the organization with a warning"]) if {
+    Value == "SHARING_ALLOWED_WITH_WARNING"
+} else := Value
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": concat("", [GetFriendlyValue1_1(LastEvent.NewValue, AcceptableValues)])
+    "Value": concat("", [GetFriendlyValue1_1(LastEvent.NewValue)])
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
@@ -33,7 +40,7 @@ NonCompliantOUs1_1 contains {
 
 NonCompliantGroups1_1 contains {
     "Name": Group,
-    "Value": concat("", [GetFriendlyValue1_1(LastEvent.NewValue, AcceptableValues)])
+    "Value": concat("", [GetFriendlyValue1_1(LastEvent.NewValue)])
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
