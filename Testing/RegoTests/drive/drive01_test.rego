@@ -166,8 +166,9 @@ test_Sharing_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Files owned by users or shared drives ",
-    "can be shared outside of the organization</li></ul>"])
+    "<ul><li>Test Top-Level OU: ",
+    "Files owned by users or shared drives can ",
+    "be shared outside of the organization</li></ul>"])
 }
 
 test_Sharing_Incorrect_V3 if {
@@ -206,8 +207,9 @@ test_Sharing_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Files owned by users or shared drives ",
-    "can be shared outside of the organization</li></ul>"])
+    "<ul><li>Test Top-Level OU: ",
+    "Files owned by users or shared drives can ",
+    "be shared outside of the organization</li></ul>"])
 }
 
 test_Sharing_Incorrect_V4 if {
@@ -246,8 +248,9 @@ test_Sharing_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: Files owned by users or shared drives ",
-    "can be shared outside of the organization</li></ul>"])
+    "<ul><li>Test Secondary OU: ",
+    "Files owned by users or shared drives can ",
+    "be shared outside of the organization</li></ul>"])
 }
 
 test_Sharing_Incorrect_V5 if {
@@ -1055,8 +1058,9 @@ test_NonGoogle_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: External Sharing is Enabled, ",
-    "and invites can be shared to non-google accounts</li></ul>"])
+    "<ul><li>Test Top-Level OU: ",
+    "External sharing is enabled and ",
+    "items can be shared to non-google accounts</li></ul>"])
 }
 
 test_NonGoogle_Incorrect_V3 if {
@@ -1115,8 +1119,9 @@ test_NonGoogle_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: External Sharing is Enabled, ",
-    "and invites can be shared to non-google accounts</li></ul>"])
+    "<ul><li>Test Top-Level OU: ",
+    "External sharing is enabled and ",
+    "items can be shared to non-google accounts</li></ul>"])
 }
 
 test_NonGoogle_Incorrect_V4 if {
@@ -1176,7 +1181,8 @@ test_NonGoogle_Incorrect_V4 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Secondary OU: ",
-    "External Sharing is Enabled, and invites can be shared to non-google accounts</li></ul>"])
+    "External sharing is enabled and ",
+    "items can be shared to non-google accounts</li></ul>"])
 }
 
 test_NonGoogle_Incorrect_V5 if {
