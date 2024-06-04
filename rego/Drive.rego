@@ -26,7 +26,7 @@ else := concat("", ["Files owned by users or shared drives ",
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": concat("", [GetFriendlyValue1_1(LastEvent.NewValue)])
+    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
@@ -40,7 +40,7 @@ NonCompliantOUs1_1 contains {
 
 NonCompliantGroups1_1 contains {
     "Name": Group,
-    "Value": concat("", [GetFriendlyValue1_1(LastEvent.NewValue)])
+    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
@@ -385,7 +385,7 @@ if { contains("NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES INHERIT_FROM_PARENT", 
 
 NonCompliantOUs1_6 contains {
     "Name":OU,
-    "Value": concat("",[GetFriendlyValue1_6(LastEvent.NewValue)])
+    "Value": GetFriendlyValue1_6(LastEvent.NewValue)
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", OU)
@@ -397,7 +397,7 @@ NonCompliantOUs1_6 contains {
 
 NonCompliantGroups1_6 contains {
     "Name":Group,
-    "Value": concat("",[GetFriendlyValue1_6(LastEvent.NewValue)])
+    "Value": GetFriendlyValue1_6(LastEvent.NewValue)
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", Group)
@@ -451,7 +451,7 @@ GetFriendlyValue1_7(Value):= "Setting is compliant." if {
 
 NonCompliantOUs1_7 contains {
     "Name": OU,
-    "Value": concat("", [GetFriendlyValue1_7(LastEvent.NewValue)])
+    "Value": GetFrendlyValue1_7(LastEvent.NewValue)
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", OU)
@@ -463,7 +463,7 @@ NonCompliantOUs1_7 contains {
 
 NonCompliantGroups1_7 contains {
     "Name": Group,
-    "Value": concat("", [GetFriendlyValue1_7(LastEvent.NewValue)])
+    "Value": GetFriendlyValue1_7(LastEvent.NewValue)
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", Group)
@@ -852,7 +852,7 @@ else := "Allow users to remove/apply the security update for files they own or m
 }
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": concat("", [ GetFriendlyValue3_1(LastEvent_B.NewValue, LastEvent_A.NewValue)])
+    "Value": GetFriendlyValue3_1(LastEvent_B.NewValue, LastEvent_A.NewValue)
     } if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEventsOU(LogEvents,
@@ -1057,7 +1057,7 @@ NoSuchEvent6_1(TopLevelOU) := false if {
 
 NonCompliantOUs6_1 contains {
     "Name": OU,
-    "Value": concat("", [GetFriendlyValue6_1(LastEvent_B.NewValue, LastEvent_A.NewValue)])
+    "Value": GetFriendlyValue6_1(LastEvent_B.NewValue, LastEvent_A.NewValue)
     } if {
     some OU in utils.OUsWithEvents
     Events_A := utils.FilterEventsOU(LogEvents,
@@ -1080,7 +1080,7 @@ NonCompliantOUs6_1 contains {
 
 NonCompliantGroups6_1 contains {
     "Name": Group,
-    "Value": concat("", [GetFriendlyValue6_1(LastEvent_B.NewValue, LastEvent_A.NewValue)])
+    "Value": GetFriendlyValue6_1(LastEvent_B.NewValue, LastEvent_A.NewValue)
     } if {
     some Group in utils.GroupsWithEvents
     Events_A := utils.FilterEventsGroup(LogEvents,
