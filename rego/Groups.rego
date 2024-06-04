@@ -22,7 +22,7 @@ GetFriendlyValue1_1(Value) :=
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": concat(["Group access from outside the organization is ",
+    "Value": concat("", ["Group access from outside the organization is ",
         GetFriendlyValue1_1(LastEvent.NewValue)])
 } if {
     some OU in utils.OUsWithEvents
@@ -76,8 +76,8 @@ if {
 GetFriendlyValue2_1(Value) :=
 "Group owner has the ability to add external members to the group" if {
     Value != "false"
-} else := "Group owner does not have the ability to
-    add external members to the group" if {
+} else := concat("", ["Group owner does not have the ability to ",
+    "add external members to the group"]) if {
     Value == "false"
 } else := Value
 
@@ -135,12 +135,11 @@ if {
 # Baseline GWS.GROUPS.3.1v0.1
 #--
 
-GetFriendlyValue3_1(Value) :=
-"Group owner has the ability to allow an
-    external non-member to post to the group" if {
+GetFriendlyValue3_1(Value) := concat("", ["Group owner has the ability to allow an ",
+    "external non-member to post to the group"]) if {
     Value != "false"
-} else := "Group owner does not have the ability to allow an
-    external non-member to post to the group" if {
+} else := concat("", ["Group owner does not have the ability to allow an ",
+    "external non-member to post to the group"]) if {
     Value == "false"
 } else := Value
 
