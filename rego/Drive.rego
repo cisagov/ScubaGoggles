@@ -13,11 +13,14 @@ LogEvents := utils.GetEvents("drive_logs")
 # Baseline GWS.DRIVEDOCS.1.1v0.1
 #--
 
-GetFriendlyValue1_1(Value) := concat("", ["Files owned by users or shared drives ",
-    "can be shared with Google accounts in compatible allowlisted domains"]) if {
+GetFriendlyValue1_1(Value) := concat("",
+    ["Files owned by users or shared drives ",
+    "can be shared with Google accounts in ",
+    "compatible allowlisted domains"]) if {
     startswith(Value, "TRUSTED_DOMAINS")
 }
-else := "Files owned by users or shared drives can be shared outside of the organization" if {
+else := concat(["Files owned by users or shared drives can ",
+    "be shared outside of the organization"]) if {
     startswith(Value, "SHARING_ALLOWED")
 } else := Value
 
