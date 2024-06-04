@@ -323,7 +323,7 @@ if {
 
 NonCompliantOUs1_5 contains {
     "Name": OU,
-    "Value": "Published web content is visible to anyone with a link. "
+    "Value": "Published web content can be made visible to anyone with a link"
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "PUBLISHING_TO_WEB", OU)
@@ -334,7 +334,7 @@ NonCompliantOUs1_5 contains {
 
 NonCompliantGroups1_5 contains {
     "Name": Group,
-    "Value": "Published web content is visible to anyone with a link. "
+    "Value": "Published web content can be made visible to anyone with a link"
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "PUBLISHING_TO_WEB", Group)

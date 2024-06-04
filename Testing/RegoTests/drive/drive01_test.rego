@@ -1382,7 +1382,7 @@ test_Link_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Published web content is visible to anyone with a link. </li></ul>"])
+    "<ul><li>Test Top-Level OU: Published web content can be made visible to anyone with a link</li></ul>"])
 }
 test_Link_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
@@ -1420,7 +1420,7 @@ test_Link_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Published web content is visible to anyone with a link. </li></ul>"])
+    "<ul><li>Test Top-Level OU: Published web content can be made visible to anyone with a link</li></ul>"])
 }
 
 test_Link_Incorrect_V4 if {
@@ -1458,8 +1458,8 @@ test_Link_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:", 
-    "<ul><li>Test Secondary OU: Published web content is visible to anyone with a link. </li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Secondary OU: Published web content can be made visible to anyone with a link</li></ul>"])
 }
 
 test_Link_Incorrect_V5 if {
