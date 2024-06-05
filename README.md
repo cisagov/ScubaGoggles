@@ -206,19 +206,20 @@ Follow the instructions below for the authentication method of your choice.
 with an account with the necessary privileges and click allow.
 
 ##### Add the Oauth App to the allowlist
-If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](https://github.com/cisagov/ScubaGoggles/blob/main/baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#11-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
+If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](./baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#10-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
+
 
 1. Login to https://console.cloud.google.com
-1. Navigate to the appropriate project
-1. Select **API's & Services** from the top left hamburger icon
-1. Select **Credentials**
-1. Copy your client ID under **OAuth 2.0 Client IDs**
-1. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
-1. Select **Add App** -> **Oauth App Name** or **Client ID**
-1. Search by your **OAuth client ID**
-1. Select the App
-1. Select your root organization as the domain
-1. Select **Trusted**
+2. Navigate to the appropriate project
+3. Select **API's & Services** from the top left hamburger icon
+4. Select **Credentials**
+5. Copy your client ID under **OAuth 2.0 Client IDs**
+6. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
+7. Select **Add App** -> **Oauth App Name** or **Client ID**
+8. Search by your **OAuth client ID**
+9. Select the App
+10. Select your root organization as the domain
+11. Select **Trusted**
 
 #### Using a Service Account
 
