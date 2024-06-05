@@ -378,10 +378,8 @@ if {
 #
 # Baseline GWS.DRIVEDOCS.1.6v0.1
 #--
-GetFriendlyValue1_6(Value):= "Access Checking is disabled outside of docs and drive"
-if { contains("NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES INHERIT_FROM_PARENT", Value) == false
-} else := "Access Checking is enabled outside of docs and drive."
-
+GetFriendlyValue1_6(Value):= concat("", ["Access Checker allows users to share ",
+    "files to the public (no Google account required)"])
 
 NonCompliantOUs1_6 contains {
     "Name":OU,

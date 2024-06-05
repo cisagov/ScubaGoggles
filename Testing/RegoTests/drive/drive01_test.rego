@@ -1659,8 +1659,10 @@ test_SharingChecker_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [  "The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Access Checking is disabled outside of docs and drive</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: ",
+    "Access Checker allows users to share ",
+    "files to the public (no Google account required)</li></ul>"])
 }
 
 test_SharingChecker_Incorrect_V3 if {
@@ -1698,8 +1700,10 @@ test_SharingChecker_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [  "The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Access Checking is disabled outside of docs and drive</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: ",
+    "Access Checker allows users to share ",
+    "files to the public (no Google account required)</li></ul>"])
 }
 
 test_SharingChecker_Incorrect_V4 if {
@@ -1737,8 +1741,10 @@ test_SharingChecker_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [  "The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: Access Checking is disabled outside of docs and drive</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Secondary OU: ",
+    "Access Checker allows users to share ",
+    "files to the public (no Google account required)</li></ul>"])
 }
 
 test_SharingChecker_Incorrect_V5 if {
