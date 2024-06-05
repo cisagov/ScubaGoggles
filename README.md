@@ -27,25 +27,15 @@ For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://git
   - [Downloading the Latest Release](#downloading-the-latest-release)
   - [Install Python dependencies](#install-python-dependencies)
   - [Installing in a Virtual Environment](#installing-in-a-virtual-environment)
-    - [Windows](#windows)
-    - [macOS](#macos)
-    - [Installing dependencies for running scubagoggles directly](#installing-dependencies-for-running-scubagoggles-directly)
-    - [Installing dependencies for running via scuba.py script](#installing-dependencies-for-running-via-scubapy-script)
   - [Download the OPA executable](#download-the-opa-executable)
   - [Permissions](#permissions)
     - [OAuth API Scopes](#oauth-api-scopes)
   - [Create a project](#create-a-project)
   - [Authentication](#authentication)
     - [Using OAuth](#using-oauth)
-      - [Create an OAuth credential](#create-an-oauth-credential)
-      - [Add the Oauth App to the allowlist](#add-the-oauth-app-to-the-allowlist)
     - [Using a Service Account](#using-a-service-account)
 - [Usage](#usage)
-  - [Example 1: Run an assessment against all GWS products](#example-1-run-an-assessment-against-all-gws-products)
-  - [Example 2: Run an assessment against just Gmail and Google Calendar](#example-2-run-an-assessment-against-just-gmail-and-google-calendar)
-  - [Example 3: Run an assessment and store the results under a folder called output](#example-3-run-an-assessment-and-store-the-results-under-a-folder-called-output)
-  - [Example 4: Do a run cached assessment](#example-4-do-a-run-cached-assessment)
-  - [Example 5: Run with a service account on a different tenant](#example-5-run-with-a-service-account-on-a-different-tenant)
+  - [Examples](#examples)
 - [Organization](#organization)
 - [Design](#design)
 - [Troubleshooting](#troubleshooting)
@@ -80,14 +70,14 @@ Minimum required Python version to run the tool is `3.7.16`.
 The following commands are used to set up a python virtual environment (venv) to install the needed python dependencies.
 Inside the release or repo folder, open up a terminal and run the following commands based on your OS.
 
-#### Windows
+#### Windows <!-- omit from toc --> 
 ```
 pip3 install virtualenv
 python -m venv .venv
 .venv\Scripts\activate
 ```
 
-#### macOS
+#### macOS <!-- omit from toc --> 
 ```
 pip3 install virtualenv
 virtualenv -p python3 .venv
@@ -97,13 +87,13 @@ source .venv/bin/activate
 Users can run the tool via the `scuba.py` script as a developer or by installing the `scubagoggles` package in a python venv.
 Choose either of these next steps to install the needed python dependencies in the `venv`.
 
-#### Installing dependencies for running scubagoggles directly
+#### Installing dependencies for running scubagoggles directly <!-- omit from toc --> 
 In the root directory of the release/repo, install the `scubagoggles` package and dependencies with the following command.
 ```
 python3 -m pip install .
 ```
 
-#### Installing dependencies for running via scuba.py script
+#### Installing dependencies for running via scuba.py script <!-- omit from toc --> 
 In the root directory of the release/repo, install the the required dependencies with the following command.
 ```
 pip3 install -r requirements.txt
@@ -176,7 +166,7 @@ Follow the instructions below for the authentication method of your choice.
 
 
 #### Using OAuth
-##### Create an OAuth credential
+##### Create an OAuth credential <!-- omit from toc --> 
 1. Be signed into http://console.cloud.google.com/.
 1. From the hamburger menu on the left, select **APIs & Services** -> **OAuth consent screen**
 1. Select **Internal** for **User Type**
@@ -205,7 +195,7 @@ Follow the instructions below for the authentication method of your choice.
 1. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
 with an account with the necessary privileges and click allow.
 
-##### Add the Oauth App to the allowlist
+##### Add the Oauth App to the allowlist <!-- omit from toc --> 
 If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](./baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#10-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
 
 
@@ -293,22 +283,23 @@ optional arguments:
   --debug               This switch is used to print debugging information for OPA.
 ```
 
-### Example 1: Run an assessment against all GWS products
+### Examples
+#### Example 1: Run an assessment against all GWS products <!-- omit from toc --> 
 ```
 scubagoggles gws
 ```
 
-### Example 2: Run an assessment against just Gmail and Google Calendar
+#### Example 2: Run an assessment against just Gmail and Google Calendar <!-- omit from toc --> 
 ```
 scubagoggles gws -b gmail calendar
 ```
 
-### Example 3: Run an assessment and store the results under a folder called output
+#### Example 3: Run an assessment and store the results under a folder called output <!-- omit from toc --> 
 ```
 scubagoggles gws -b calendar gmail groups chat meet sites -o ./output
 ```
 
-### Example 4: Do a run cached assessment
+#### Example 4: Do a run cached assessment <!-- omit from toc --> 
 ```
 # skip authentication and provider export stage
 # used for running against a cached provider json
@@ -316,7 +307,7 @@ scubagoggles gws -b calendar gmail groups chat meet sites -o ./output
 scubagoggles gws --runcached --skipexport
 ```
 
-### Example 5: Run with a service account on a different tenant
+#### Example 5: Run with a service account on a different tenant <!-- omit from toc --> 
 ```
 scubagoggles gws --customerid <customer_id> --subjectemail admin@example.com
 ```
