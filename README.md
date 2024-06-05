@@ -4,9 +4,9 @@
   </ul>
   <ul>
         <a href="https://github.com/cisagov/ScubaGoggles/releases" alt="ScubaGoggles version #">
-        <img src="https://img.shields.io/badge/ScubaGoggles-v0.1.0-%2385B065?labelColor=%23005288" /></a>
+        <img src="https://img.shields.io/badge/ScubaGoggles-v0.2.0-%2385B065?labelColor=%23005288" /></a>
         <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" alt="GWS SCB version #">
-        <img src="https://img.shields.io/badge/GWS_SCB-v0.1-%2385B065?labelColor=%23005288" /></a>
+        <img src="https://img.shields.io/badge/GWS_SCB-v0.2-%2385B065?labelColor=%23005288" /></a>
         <a href="" alt="Downloads">
         <img src="https://img.shields.io/github/downloads/cisagov/ScubaGoggles/total.svg" /></a>
   </ul>
@@ -21,23 +21,37 @@ For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://git
 > This tool is in an alpha state and in active development. At this time, outputs could be incorrect and should be reviewed carefully.
 
 ## Table of Contents
+- [Table of Contents](#table-of-contents)
 - [Limitations of the tool](#limitations-of-the-tool)
-- [Getting Started](#getting-started)
+- [Getting started](#getting-started)
   - [Downloading the Latest Release](#downloading-the-latest-release)
-  - [Python Dependencies](#install-python-dependencies)
+  - [Install Python dependencies](#install-python-dependencies)
   - [Installing in a Virtual Environment](#installing-in-a-virtual-environment)
-  - [Downloading the OPA executable](#download-the-opa-executable)
+    - [Windows](#windows)
+    - [macOS](#macos)
+    - [Installing dependencies for running scubagoggles directly](#installing-dependencies-for-running-scubagoggles-directly)
+    - [Installing dependencies for running via scuba.py script](#installing-dependencies-for-running-via-scubapy-script)
+  - [Download the OPA executable](#download-the-opa-executable)
   - [Permissions](#permissions)
-  - [Create a Project](#create-a-project)
+    - [OAuth API Scopes](#oauth-api-scopes)
+  - [Create a project](#create-a-project)
   - [Authentication](#authentication)
+    - [Using OAuth](#using-oauth)
+      - [Create an OAuth credential](#create-an-oauth-credential)
+      - [Add the Oauth App to the allowlist](#add-the-oauth-app-to-the-allowlist)
+    - [Using a Service Account](#using-a-service-account)
 - [Usage](#usage)
-  - [Examples](#example-1-run-an-assessment-against-all-gws-products)
+  - [Example 1: Run an assessment against all GWS products](#example-1-run-an-assessment-against-all-gws-products)
+  - [Example 2: Run an assessment against just Gmail and Google Calendar](#example-2-run-an-assessment-against-just-gmail-and-google-calendar)
+  - [Example 3: Run an assessment and store the results under a folder called output](#example-3-run-an-assessment-and-store-the-results-under-a-folder-called-output)
+  - [Example 4: Do a run cached assessment](#example-4-do-a-run-cached-assessment)
+  - [Example 5: Run with a service account on a different tenant](#example-5-run-with-a-service-account-on-a-different-tenant)
 - [Organization](#organization)
-- [Design](#project-license)
+- [Design](#design)
 - [Troubleshooting](#troubleshooting)
-  - [Not Authorized to Access this Resource](#not-authorized-to-access-this-resource)
-  - [ScubaGoggles not Found](#scubagoggles-not-found)
-  - [Unable to view HTML report due to environment limitations](#Unable-to-view-HTML-report-due-to-environment-limitations)
+  - [Not Authorized to Access This Resource](#not-authorized-to-access-this-resource)
+  - [Scubagoggles Not Found](#scubagoggles-not-found)
+  - [Unable to view HTML report due to environment limitations](#unable-to-view-html-report-due-to-environment-limitations)
 - [Project License](#project-license)
 
 ## Limitations of the tool
@@ -192,7 +206,7 @@ Follow the instructions below for the authentication method of your choice.
 with an account with the necessary privileges and click allow.
 
 ##### Add the Oauth App to the allowlist
-If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](https://github.com/cisagov/ScubaGoggles/blob/main/baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.1.md#11-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
+If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](https://github.com/cisagov/ScubaGoggles/blob/main/baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#11-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
 
 1. Login to https://console.cloud.google.com
 1. Navigate to the appropriate project
@@ -386,7 +400,7 @@ Each baseline will appear in the following format:
             "GroupNumber": "1",
             "Controls": [
                 {
-                  "Control ID": "GWS.GMAIL.1.1v0.1",
+                  "Control ID": "GWS.GMAIL.1.1v0.2",
                   "Requirement": "Mail Delegation SHOULD be disabled.",
                   "Result": "Pass",
                   "Criticality": "Should",

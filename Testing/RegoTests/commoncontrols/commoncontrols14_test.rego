@@ -2,11 +2,11 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.14.1v0.1
+# GWS.COMMONCONTROLS.14.1v0.2
 #--
 test_SEIM_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.COMMONCONTROLS.14.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.14.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -25,11 +25,11 @@ test_SEIM_Correct_V1 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.14.2v0.1
+# GWS.COMMONCONTROLS.14.2v0.2
 #--
 test_AccessControl_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.COMMONCONTROLS.14.2v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.14.2v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 

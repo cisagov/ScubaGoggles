@@ -7,7 +7,7 @@ import future.keywords
 #--
 test_Group_Correct_V1 if {
     # Test one group that is correct
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "group_settings": [
             {
@@ -33,7 +33,7 @@ test_Group_Correct_V1 if {
 
 test_Group_Correct_V2 if {
     # Test multiple groups that are correct
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "group_settings": [
             {
@@ -70,7 +70,7 @@ test_Group_Correct_V2 if {
 
 test_Group_Correct_V3 if {
     # Test no groups
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "group_settings": [
 
@@ -87,7 +87,7 @@ test_Group_Correct_V3 if {
 test_Group_Correct_V4 if {
     # In cases where Groups 6.1 is compliant, Groups 7.1 should be automatically compliant,
     # even if "allowExternalMembers" is set to true.
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -128,7 +128,7 @@ test_Group_Correct_V4 if {
 
 test_Group_Correct_V5 if {
     # If Groups 6.1 is compliant test for multiple groups
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -180,7 +180,7 @@ test_Group_Correct_V5 if {
 
 test_Group_Correct_V6 if {
     # If Groups 6.1 is noncompliant, Groups 7.1 must have restricted access type to be compliant
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -221,7 +221,7 @@ test_Group_Correct_V6 if {
 
 test_Group_Incorrect_V1 if {
     # Test one group that is incorrect
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "group_settings": [
             {
@@ -247,7 +247,7 @@ test_Group_Incorrect_V1 if {
 
 test_Group_Incorrect_V2 if {
     # Test multiple groups where 1 is incorrect
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "group_settings": [
             {
@@ -284,7 +284,7 @@ test_Group_Incorrect_V2 if {
 
 test_Group_Incorrect_V3 if {
     # Test multiple groups where both are incorrect
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "group_settings": [
             {
@@ -321,7 +321,7 @@ test_Group_Incorrect_V3 if {
 
 test_Group_Incorrect_V4 if {
     # Test multiple groups where both are incorrect in multiple ways
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as { 
         "group_settings": [
             {
@@ -358,7 +358,7 @@ test_Group_Incorrect_V4 if {
 
 test_Group_Incorrect_V5 if {
     # If ability for groups to be hidden is enabled, then Groups 7.1 should be disabled
-    PolicyId := "GWS.GROUPS.7.1v0.1"
+    PolicyId := "GWS.GROUPS.7.1v0.2"
     Output := tests with input as {
         "groups_logs": {"items": [
             {

@@ -2,11 +2,11 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.4.1v0.1
+# GWS.COMMONCONTROLS.4.1v0.2
 #--
 test_Limit_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -35,7 +35,7 @@ test_Limit_Correct_V1 if {
 
 test_Limit_Correct_V2 if {
     # Test 1 event, smaller limit than needed
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -64,7 +64,7 @@ test_Limit_Correct_V2 if {
 
 test_Limit_Correct_V3 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -104,7 +104,7 @@ test_Limit_Correct_V3 if {
 
 test_Limit_Correct_V4 if {
     # Test 1 event, tenant_info["topLevelOU"] empty
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -139,7 +139,7 @@ test_Limit_Correct_V4 if {
 
 test_Limit_Correct_V5 if {
     # Test inheritance
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -190,7 +190,7 @@ test_Limit_Correct_V5 if {
 
 test_Limit_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -223,7 +223,7 @@ test_Limit_Incorrect_V1 if {
 
 test_Limit_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -266,7 +266,7 @@ test_Limit_Incorrect_V2 if {
 
 test_Limit_Incorrect_V3 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -310,7 +310,7 @@ test_Limit_Incorrect_V3 if {
 
 test_Limit_Incorrect_V4 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
         ]},
@@ -332,7 +332,7 @@ test_Limit_Incorrect_V4 if {
 
 test_Limit_Incorrect_V5 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.4.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {

@@ -6,7 +6,7 @@ import future.keywords
 #--
 test_ExtInvitationsWarning_Correct_V1 if {
     # Test external invitations warnings when there's only one event
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -35,7 +35,7 @@ test_ExtInvitationsWarning_Correct_V1 if {
 
 test_ExtInvitationsWarning_Correct_V2 if {
     # Test external invitations warning when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -75,7 +75,7 @@ test_ExtInvitationsWarning_Correct_V2 if {
 
 test_ExtInvitationsWarning_Correct_V3 if {
     # Test external invitations warning when there's multiple OUs
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -115,7 +115,7 @@ test_ExtInvitationsWarning_Correct_V3 if {
 
 test_ExtInvitationsWarning_Correct_V4 if {
     # Test external invitations warning when there's multiple OUs, and an older event is non-compliant
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -166,7 +166,7 @@ test_ExtInvitationsWarning_Correct_V4 if {
 
 test_ExtInvitationsWarning_Incorrect_V1 if {
     # Test external invitations warning when there are no relevant events
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -199,7 +199,7 @@ test_ExtInvitationsWarning_Incorrect_V1 if {
 
 test_ExtInvitationsWarning_Incorrect_V2 if {
     # Test external invitations warning when there's only one event and it's wrong
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -230,7 +230,7 @@ test_ExtInvitationsWarning_Incorrect_V2 if {
 
 test_ExtInvitationsWarning_Incorrect_V3 if {
     # Test external invitations warning when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -273,7 +273,7 @@ test_ExtInvitationsWarning_Incorrect_V3 if {
 
 test_ExtInvitationsWarning_Incorrect_V4 if {
     # Test external invitations warning when there is no event for the Top-level OU but there is one for a different OU
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -306,7 +306,7 @@ test_ExtInvitationsWarning_Incorrect_V4 if {
 
 test_ExtInvitationsWarning_Incorrect_V5 if {
     # Test external invitations warning when the Top-Level OU is compliant, but a secondary OU is non-compliant
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -348,7 +348,7 @@ test_ExtInvitationsWarning_Incorrect_V5 if {
 
 test_ExtInvitationsWarning_Incorrect_V6 if {
     # Test ou and group
-    PolicyId := "GWS.CALENDAR.2.1v0.1"
+    PolicyId := "GWS.CALENDAR.2.1v0.2"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {

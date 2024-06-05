@@ -9,8 +9,8 @@ arguments for now just modify the constants below.
 import os
 import re
 
-CURRENT_VERSION = 'v1'
-REPLACEMENT_VERSION ='v0.1'
+CURRENT_VERSION = 'v0.1'
+REPLACEMENT_VERSION ='v0.2'
 
 PATH_TO_FILES = '../'
 FILES_TO_PROCESS = ['.md','rego','.csv']
@@ -52,8 +52,11 @@ def process_files(directory_path):
     and replaces the version number with the specified file
     extensions
     """
+
+    exclude = set(['.github', '.venv', '.vscode', 'build', 'scubagoggles.egg-info'])
     # pylint: disable=unused-variable
     for root, dirs, files in os.walk(directory_path):
+        dirs[:] = [d for d in dirs if d not in exclude]
         for file in files:
             if any(file.lower().endswith(ext) for ext in FILES_TO_PROCESS):
                 file_path = os.path.join(root, file)

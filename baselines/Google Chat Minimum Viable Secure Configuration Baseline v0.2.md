@@ -38,7 +38,7 @@ This section covers chat history retention for users within the organization and
 
 ### Policies
 
-#### GWS.CHAT.1.1v0.1
+#### GWS.CHAT.1.1v0.2
 Chat history SHALL be enabled for information traceability.
 
 - _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations and details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
@@ -48,7 +48,7 @@ Chat history SHALL be enabled for information traceability.
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
     - [T1562:001: Impair Defenses: Disable or Modify Tools](https://attack.mitre.org/techniques/T1562/001/)
 
-#### GWS.CHAT.1.2v0.1
+#### GWS.CHAT.1.2v0.2
 Users SHALL NOT be allowed to change their history setting.
 
 - _Rationale:_ Altering the history settings in Google Chat can potentially allow users to obfuscate the sharing of sensitive information via Chat. This policy ensures that all chat histories are preserved, enhancing data security and promoting accountability among users.
@@ -70,14 +70,14 @@ Users SHALL NOT be allowed to change their history setting.
 
 To configure the settings for History for chats:
 
-#### GWS.CHAT.1.1v0.1 Instructions
+#### GWS.CHAT.1.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **History for chats**.
 4.  Select **History is ON**.
 5.  Select **Save**
 
-#### GWS.CHAT.1.2v0.1 Instructions
+#### GWS.CHAT.1.2v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Uncheck the **Allow users to change their history setting** checkbox.
@@ -89,7 +89,7 @@ This section covers what types of files users are allowed to share external to t
 
 ### Policies
 
-#### GWS.CHAT.2.1v0.1
+#### GWS.CHAT.2.1v0.2
 External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.
 
 - _Rationale:_ Enabling external file sharing in Google Chat opens an additional avenue for data loss, one that may not be as rigorously monitored or protected as traditional collaboration channels, such as email. This policy limits the potential for unauthorized or accidental sharing.
@@ -111,7 +111,7 @@ External file sharing SHALL be disabled to protect sensitive information from un
 
 To configure the settings for External filesharing:
 
-#### GWS.CHAT.2.1v0.1 Instructions
+#### GWS.CHAT.2.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **Chat File Sharing**.
@@ -124,7 +124,7 @@ This section covers whether chat history is retained by default for users within
 
 ### Policies
 
-#### GWS.CHAT.3.1v0.1
+#### GWS.CHAT.3.1v0.2
 Space history SHOULD be enabled for traceability of information.
 
 - _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations. Details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
@@ -146,7 +146,7 @@ Space history SHOULD be enabled for traceability of information.
 
 To configure the settings for History for spaces:
 
-#### GWS.CHAT.3.1v0.1 Instructions
+#### GWS.CHAT.3.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **History for spaces**.
@@ -159,7 +159,7 @@ This section permits users to send Chat messages outside of their organization, 
 
 ### Policies
 
-#### GWS.CHAT.4.1v0.1
+#### GWS.CHAT.4.1v0.2
 External Chat messaging SHALL be restricted to allowlisted domains only.
 
 - _Rationale:_ Allowing external chat messaging in Google Chat to unrestricted domains opens additional avenues for data exfiltration, increasing the risk of data leakage. By restricting external chat messaging to allowlisted domains only, the risk of sensitive information being distributed outside the organization without explicit consent and approval is minimized.
@@ -182,7 +182,7 @@ External Chat messaging SHALL be restricted to allowlisted domains only.
 
 To configure the settings for External Chat:
 
-#### GWS.CHAT.4.1v0.1 Instructions
+#### GWS.CHAT.4.1v0.2 Instructions
 To enable external chat for allowlisted domains only:
 1. Sign in to the [Google Admin Console](https://admin.google.com).
 2. Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
@@ -205,7 +205,7 @@ This section covers preventing ordinary users from being able to install Chat ap
 
 ### Policies
 
-#### GWS.CHAT.5.1v0.1
+#### GWS.CHAT.5.1v0.2
 User-level ability to install Chat apps SHALL be disabled.
 
 - _Rationale:_ Unrestricted access to Chat apps can expose the agency to potential vulnerabilities present in those apps or apps developed with malicious intent. This policy prevents unauthorized app installations and promotes the protection of sensitive information.
@@ -232,7 +232,7 @@ User-level ability to install Chat apps SHALL be disabled.
 
 To configure the settings for Chat apps:
 
-#### GWS.CHAT.5.1v0.1 Instructions
+#### GWS.CHAT.5.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **Chat apps** -\> **Chat apps access settings**.
@@ -249,7 +249,7 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 
 ### Policies
 
-#### GWS.CHAT.6.1v0.1
+#### GWS.CHAT.6.1v0.2
 Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
 
 - _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. By blocking and/or having warnings on these DLP-scanned files from being shared with users, the risk of unintentional introduction of sensitive content is reduced.
@@ -275,7 +275,7 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 
 ### Implementation
 
-#### GWS.CHAT.6.1v0.1 Instructions
+#### GWS.CHAT.6.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
 3.  Click **Manage Rules**. Then click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
@@ -294,7 +294,7 @@ This section covers the content reporting functionality, a feature that allows u
 
 ### Policies
 
-#### GWS.CHAT.7.1v0.1
+#### GWS.CHAT.7.1v0.2
 Chat content reporting SHALL be enabled for all conversation types.
 
 - _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies help ensure that their users are able to report risky messages regardless of the conversation type.
@@ -303,7 +303,7 @@ Chat content reporting SHALL be enabled for all conversation types.
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.CHAT.7.2v0.1
+#### GWS.CHAT.7.2v0.2
 All reporting message categories SHOULD be selected.
 
 - _Rationale:_ Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
@@ -320,7 +320,7 @@ All reporting message categories SHOULD be selected.
 
 ### Implementation
 
-#### GWS.CHAT.7.1v0.1 Instructions
+#### GWS.CHAT.7.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.
@@ -328,7 +328,7 @@ All reporting message categories SHOULD be selected.
 5.  Ensure all conversation type checkboxes are selected. 
 6.  Click **Save**.
 
-#### GWS.CHAT.7.2v0.1 Instructions
+#### GWS.CHAT.7.2v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.

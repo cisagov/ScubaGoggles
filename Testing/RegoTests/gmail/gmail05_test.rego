@@ -2,12 +2,12 @@ package gmail
 import future.keywords
 
 #
-# GWS.GMAIL.5.1v0.1
+# GWS.GMAIL.5.1v0.2
 #--
 
 test_Encrypted_Correct_V1 if {
     # Test inheritance
-    PolicyId := "GWS.GMAIL.5.1v0.1"
+    PolicyId := "GWS.GMAIL.5.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -68,7 +68,7 @@ test_Encrypted_Correct_V1 if {
 
 test_Encrypted_Incorrect_V1 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.1v0.1"
+    PolicyId := "GWS.GMAIL.5.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -101,7 +101,7 @@ test_Encrypted_Incorrect_V1 if {
 
 test_Encrypted_Incorrect_V2 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.1v0.1"
+    PolicyId := "GWS.GMAIL.5.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -148,11 +148,11 @@ test_Encrypted_Incorrect_V2 if {
 #--
 
 #
-# GWS.GMAIL.5.2v0.1
+# GWS.GMAIL.5.2v0.2
 #--
 test_Scripts_Correct_V1 if {
     # Test Attachment Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.2v0.1"
+    PolicyId := "GWS.GMAIL.5.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -186,7 +186,7 @@ test_Scripts_Correct_V1 if {
 
 test_Scripts_Correct_V2 if {
     # Test Attachment Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.5.2v0.1"
+    PolicyId := "GWS.GMAIL.5.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -236,7 +236,7 @@ test_Scripts_Correct_V2 if {
 
 test_Scripts_Correct_V3 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.2v0.1"
+    PolicyId := "GWS.GMAIL.5.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -286,7 +286,7 @@ test_Scripts_Correct_V3 if {
 
 test_Scripts_Incorrect_V1 if {
     # Test Attachment Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.5.2v0.1"
+    PolicyId := "GWS.GMAIL.5.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -318,7 +318,7 @@ test_Scripts_Incorrect_V1 if {
 
 test_Scripts_Incorrect_V2 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.2v0.1"
+    PolicyId := "GWS.GMAIL.5.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -353,7 +353,7 @@ test_Scripts_Incorrect_V2 if {
 
 test_Scripts_Incorrect_V3 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.2v0.1"
+    PolicyId := "GWS.GMAIL.5.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -404,11 +404,11 @@ test_Scripts_Incorrect_V3 if {
 #--
 
 #
-# GWS.GMAIL.5.3v0.1
+# GWS.GMAIL.5.3v0.2
 #--
 test_AttachmentProtectionAnomalousAttachment_Correct_V1 if {
     # Test Attachment Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.3v0.1"
+    PolicyId := "GWS.GMAIL.5.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -439,7 +439,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V1 if {
 
 test_AttachmentProtectionAnomalousAttachment_Correct_V2 if {
     # Test Attachment Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.5.3v0.1"
+    PolicyId := "GWS.GMAIL.5.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -483,7 +483,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V2 if {
 
 test_AttachmentProtectionAnomalousAttachment_Correct_V3 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.3v0.1"
+    PolicyId := "GWS.GMAIL.5.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -527,7 +527,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V3 if {
 
 test_AttachmentProtectionAnomalousAttachment_Correct_V4 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.3v0.1"
+    PolicyId := "GWS.GMAIL.5.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -571,7 +571,7 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V4 if {
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V1 if {
     # Test Attachment Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.5.3v0.1"
+    PolicyId := "GWS.GMAIL.5.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -603,7 +603,7 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V1 if {
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V2 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.3v0.1"
+    PolicyId := "GWS.GMAIL.5.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -635,7 +635,7 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V2 if {
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V3 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.3v0.1"
+    PolicyId := "GWS.GMAIL.5.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -680,7 +680,7 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V3 if {
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V4 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.3v0.1"
+    PolicyId := "GWS.GMAIL.5.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -712,7 +712,7 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V4 if {
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V5 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.3v0.1"
+    PolicyId := "GWS.GMAIL.5.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -757,11 +757,11 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V5 if {
 
 
 #
-# GWS.GMAIL.5.4v0.1
+# GWS.GMAIL.5.4v0.2
 #--
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V1 if {
     # Test Attachment Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.4v0.1"
+    PolicyId := "GWS.GMAIL.5.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -792,7 +792,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V1 if {
 
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V2 if {
     # Test Attachment Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.5.4v0.1"
+    PolicyId := "GWS.GMAIL.5.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -836,7 +836,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V2 if {
 
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V3 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.4v0.1"
+    PolicyId := "GWS.GMAIL.5.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -880,7 +880,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V3 if {
 
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V4 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.4v0.1"
+    PolicyId := "GWS.GMAIL.5.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -924,7 +924,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V4 if {
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V1 if {
     # Test Attachment Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.5.4v0.1"
+    PolicyId := "GWS.GMAIL.5.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -956,7 +956,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V1 if {
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V2 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.4v0.1"
+    PolicyId := "GWS.GMAIL.5.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -988,7 +988,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V2 if {
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V3 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.4v0.1"
+    PolicyId := "GWS.GMAIL.5.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1033,7 +1033,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V3 if {
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V4 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.4v0.1"
+    PolicyId := "GWS.GMAIL.5.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1065,7 +1065,7 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V4 if {
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V5 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.4v0.1"
+    PolicyId := "GWS.GMAIL.5.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1109,11 +1109,11 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V5 if {
 }
 
 #
-# GWS.GMAIL.5.5v0.1
+# GWS.GMAIL.5.5v0.2
 #--
 test_AttachmentSafety_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.5v0.1"
+    PolicyId := "GWS.GMAIL.5.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1170,7 +1170,7 @@ test_AttachmentSafety_Correct_V1 if {
 
 test_AttachmentSafety_InCorrect_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.5v0.1"
+    PolicyId := "GWS.GMAIL.5.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1228,7 +1228,7 @@ test_AttachmentSafety_InCorrect_V1 if {
 
 test_AttachmentSafety_InCorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.5v0.1"
+    PolicyId := "GWS.GMAIL.5.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
