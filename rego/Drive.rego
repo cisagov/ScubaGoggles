@@ -378,12 +378,10 @@ if {
 #
 # Baseline GWS.DRIVEDOCS.1.6v0.1
 #--
-GetFriendlyValue1_6(Value):= concat("", ["Access Checker allows users to share ",
-    "files to the public (no Google account required)"])
-
 NonCompliantOUs1_6 contains {
     "Name":OU,
-    "Value": GetFriendlyValue1_6(LastEvent.NewValue)
+    "Value": concat("", ["Access Checker allows users to share ",
+    "files to the public (no Google account required)"])
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", OU)
@@ -395,7 +393,8 @@ NonCompliantOUs1_6 contains {
 
 NonCompliantGroups1_6 contains {
     "Name":Group,
-    "Value": GetFriendlyValue1_6(LastEvent.NewValue)
+    "Value": concat("", ["Access Checker allows users to share ",
+    "files to the public (no Google account required)"])
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", Group)
