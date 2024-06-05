@@ -10,7 +10,7 @@ LogEvents := utils.GetEvents("chat_logs")
 ##############
 
 #
-# Baseline GWS.CHAT.1v1
+# Baseline GWS.CHAT.1v0.2
 #--
 
 GetFriendlyValue1_1(Value) := "History is OFF" if {
@@ -35,7 +35,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.1.1v0.1",
+    "PolicyId": "GWS.CHAT.1.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -49,7 +49,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.1.1v0.1",
+    "PolicyId": "GWS.CHAT.1.1v0.2",
     "Criticality": "Shall",
     # Empty list in next line for non compliant groups, as this setting can't be changed at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
@@ -65,7 +65,7 @@ if {
 #--
 
 #
-# Baseline GWS.CHAT.1.2v0.1
+# Baseline GWS.CHAT.1.2v0.2
 #--
 NonCompliantOUs1_2 contains {
     "Name": OU,
@@ -83,7 +83,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.1.2v0.1",
+    "PolicyId": "GWS.CHAT.1.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -98,7 +98,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.1.2v0.1",
+    "PolicyId": "GWS.CHAT.1.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
@@ -119,7 +119,7 @@ if {
 ##############
 
 #
-# Baseline GWS.CHAT.2.1v0.1
+# Baseline GWS.CHAT.2.1v0.2
 #--
 GetFriendlyValue2_1(Value) := "Allow all files" if {
     Value == "ALL_FILES"
@@ -144,7 +144,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.2.1v0.1",
+    "PolicyId": "GWS.CHAT.2.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -159,7 +159,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.2.1v0.1",
+    "PolicyId": "GWS.CHAT.2.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
@@ -179,7 +179,7 @@ if {
 ##############
 
 #
-# Baseline GWS.CHAT.3.1v0.1
+# Baseline GWS.CHAT.3.1v0.2
 #--
 GetFriendlyValue3_1(Value) := "History is OFF by default" if {
     Value == "DEFAULT_OFF_THE_RECORD"
@@ -202,7 +202,7 @@ NonCompliantOUs3_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.3.1v0.1",
+    "PolicyId": "GWS.CHAT.3.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -216,7 +216,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.3.1v0.1",
+    "PolicyId": "GWS.CHAT.3.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -235,7 +235,7 @@ if {
 ##############
 
 #
-# Baseline GWS.CHAT.4.1v0.1
+# Baseline GWS.CHAT.4.1v0.2
 #--
 default NoSuchEvent4_1(_) := false
 
@@ -270,7 +270,7 @@ NonCompliantOUs4_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.4.1v0.1",
+    "PolicyId": "GWS.CHAT.4.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -283,7 +283,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.4.1v0.1",
+    "PolicyId": "GWS.CHAT.4.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -301,7 +301,7 @@ if {
 ##############
 
 #
-# GWS.CHAT.5.1v0.1
+# GWS.CHAT.5.1v0.2
 #--
 NonCompliantOUs5_1 contains {
     "Name": OU,
@@ -322,7 +322,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.5.1v0.1",
+    "PolicyId": "GWS.CHAT.5.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -336,7 +336,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.5.1v0.1",
+    "PolicyId": "GWS.CHAT.5.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
@@ -355,10 +355,10 @@ if {
 ##############
 
 #
-# GWS.CHAT.6.1v0.1
+# GWS.CHAT.6.1v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.CHAT.6.1v0.1",
+    "PolicyId": "GWS.CHAT.6.1v0.2",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -390,7 +390,7 @@ Chat7Warning := concat("", [
 ])
 
 #
-# GWS.CHAT.7.1v0.1
+# GWS.CHAT.7.1v0.2
 #--
 
 GetFriendlyValue7_1(NonCompBooleans) := Description if {
@@ -504,7 +504,7 @@ NoSuchEvent7_1 := true if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.7.1v0.1",
+    "PolicyId": "GWS.CHAT.7.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -517,7 +517,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.7.1v0.1",
+    "PolicyId": "GWS.CHAT.7.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": concat("<br>", [utils.ReportDetails(NonCompliantOUs7_1, []), Chat7Warning]),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_1},
@@ -531,7 +531,7 @@ if {
 #--
 
 #
-# GWS.CHAT.7.2v0.1
+# GWS.CHAT.7.2v0.2
 #--
 AllReportingCategories := {
     "system_violation: HARASSMENT",
@@ -612,7 +612,7 @@ NonCompliantOUs7_2 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.7.2v0.1",
+    "PolicyId": "GWS.CHAT.7.2v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -626,7 +626,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CHAT.7.2v0.1",
+    "PolicyId": "GWS.CHAT.7.2v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_2},

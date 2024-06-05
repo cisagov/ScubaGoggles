@@ -346,7 +346,7 @@ EmailOnlyRules := {
 #--
 tests contains {
     "Requirement": Rule.RuleName,
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
     "Criticality": Rule.Criticality,
     "ReportDetails": Rule.Details,
     "ActualValue": Events,
@@ -361,7 +361,7 @@ if {
 
 tests contains {
     "Requirement": Rule.RuleName,
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
     "Criticality": Rule.Criticality,
     "ReportDetails": Rule.Details,
     "ActualValue": Events,
@@ -382,7 +382,7 @@ if {
 #--
 tests contains {
     "Requirement": Rule.RuleName,
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
     "Criticality": Rule.Criticality,
     "ReportDetails": Rule.Details,
     "ActualValue": Events,
@@ -397,7 +397,7 @@ if {
 
 tests contains {
     "Requirement": Rule.RuleName,
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
     "Criticality": Rule.Criticality,
     "ReportDetails": Rule.Details,
     "ActualValue": Events,

@@ -2,12 +2,12 @@ package chat
 import future.keywords
 
 #
-# GWS.CHAT.6.1v0.1
+# GWS.CHAT.6.1v0.2
 #--
 
 test_FromList_Correct_V1 if {
     # Test enforcing MFA when there's only one event set to only key
-    PolicyId := "GWS.CHAT.6.1v0.1"
+    PolicyId := "GWS.CHAT.6.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
         ]},

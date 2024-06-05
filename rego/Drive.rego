@@ -10,7 +10,7 @@ LogEvents := utils.GetEvents("drive_logs")
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.1.1v0.1
+# Baseline GWS.DRIVEDOCS.1.1v0.2
 #--
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
@@ -23,7 +23,7 @@ NonCompliantOUs1_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -37,7 +37,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -53,7 +53,7 @@ if {
 
 # Can be combined with 1.1, since this is a single setting with the same value that will pass for both conditions
 #
-# Baseline GWS.DRIVEDOCS.1.2v0.1
+# Baseline GWS.DRIVEDOCS.1.2v0.2
 #--
 NonCompliantOUs1_2 contains OU if {
     some OU in utils.OUsWithEvents
@@ -64,7 +64,7 @@ NonCompliantOUs1_2 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.2v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.2v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -78,7 +78,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.2v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.2v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
@@ -94,7 +94,7 @@ if {
 
 # Can be combined with 1.4 since a single policy can be used to check both conditions
 #
-# Baseline GWS.DRIVEDOCS.1.3v0.1
+# Baseline GWS.DRIVEDOCS.1.3v0.2
 #--
 NonCompliantOUs1_3 contains OU if {
     some OU in utils.OUsWithEvents
@@ -107,7 +107,7 @@ NonCompliantOUs1_3 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.3v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -121,7 +121,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.3v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_3),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_3},
@@ -136,7 +136,7 @@ if {
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.4v0.1
+# Baseline GWS.DRIVEDOCS.1.4v0.2
 #--
 NoSuchEvent1_4(TopLevelOU) := true if {
     SettingName := "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS"
@@ -169,7 +169,7 @@ NonCompliantOUs1_4 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.4v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -182,7 +182,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.4v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_4),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4},
@@ -196,7 +196,7 @@ if {
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.5v0.1
+# Baseline GWS.DRIVEDOCS.1.5v0.2
 #--
 NonCompliantOUs1_5 contains OU if {
     some OU in utils.OUsWithEvents
@@ -207,7 +207,7 @@ NonCompliantOUs1_5 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.5v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.5v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -221,7 +221,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.5v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.5v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_5),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_5},
@@ -236,7 +236,7 @@ if {
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.6v0.1
+# Baseline GWS.DRIVEDOCS.1.6v0.2
 #--
 NonCompliantOUs1_6 contains OU if {
     some OU in utils.OUsWithEvents
@@ -247,7 +247,7 @@ NonCompliantOUs1_6 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.6v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.6v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -261,7 +261,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.6v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.6v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_6),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_6},
@@ -276,7 +276,7 @@ if {
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.7v0.1
+# Baseline GWS.DRIVEDOCS.1.7v0.2
 #--
 NonCompliantOUs1_7 contains OU if {
     some OU in utils.OUsWithEvents
@@ -288,7 +288,7 @@ NonCompliantOUs1_7 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.7v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.7v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -302,7 +302,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.7v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.7v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_7),
     "ActualValue": {"NonComplaintOUs": NonCompliantOUs1_7},
@@ -317,7 +317,7 @@ if {
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.8v0.1
+# Baseline GWS.DRIVEDOCS.1.8v0.2
 #--
 NonCompliantOUs1_8 contains OU if {
     some OU in utils.OUsWithEvents
@@ -329,7 +329,7 @@ NonCompliantOUs1_8 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.8v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.8v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -343,7 +343,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.8v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.1.8v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_8),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_8},
@@ -362,7 +362,7 @@ if {
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.2.1v0.1
+# Baseline GWS.DRIVEDOCS.2.1v0.2
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
@@ -374,7 +374,7 @@ NonCompliantOUs2_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.2.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -388,7 +388,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.2.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
     "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_1},
@@ -403,7 +403,7 @@ if {
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.2.2v0.1
+# Baseline GWS.DRIVEDOCS.2.2v0.2
 #--
 NonCompliantOUs2_2 contains OU if {
     some OU in utils.OUsWithEvents
@@ -415,7 +415,7 @@ NonCompliantOUs2_2 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.2v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.2.2v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -430,7 +430,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.2v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.2.2v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_2),
     "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_2},
@@ -446,7 +446,7 @@ if {
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.2.3v0.1
+# Baseline GWS.DRIVEDOCS.2.3v0.2
 #--
 NonCompliantOUs2_3 contains OU if {
     some OU in utils.OUsWithEvents
@@ -458,7 +458,7 @@ NonCompliantOUs2_3 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.2.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -473,7 +473,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.3v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.2.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_3),
     "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_3},
@@ -489,7 +489,7 @@ if {
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.2.4v0.1
+# Baseline GWS.DRIVEDOCS.2.4v0.2
 #--
 NonCompliantOUs2_4 contains OU if {
     some OU in utils.OUsWithEvents
@@ -501,7 +501,7 @@ NonCompliantOUs2_4 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.4v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.2.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -515,7 +515,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.4v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.2.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_4),
     "ActualValue": {"NonComplaintOUs": NonCompliantOUs2_4},
@@ -535,7 +535,7 @@ if {
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.3.1v0.1
+# Baseline GWS.DRIVEDOCS.3.1v0.2
 #--
 NoSuchEvent3_1(TopLevelOU) := true if {
     # No such event...
@@ -569,7 +569,7 @@ NonCompliantOUs3_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.3.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.3.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -582,7 +582,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.3.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.3.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs3_1),
     "ActualValue" : {"NonComplaintOUs": NonCompliantOUs3_1},
@@ -600,7 +600,7 @@ if {
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.4.1v0.1
+# Baseline GWS.DRIVEDOCS.4.1v0.2
 #--
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
@@ -612,7 +612,7 @@ NonCompliantOUs4_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.4.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.4.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -627,7 +627,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.4.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.4.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
     "ActualValue": {"NonComplaintOUs": NonCompliantOUs4_1},
@@ -647,7 +647,7 @@ if {
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.5.1v0.1
+# Baseline GWS.DRIVEDOCS.5.1v0.2
 #--
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
@@ -659,7 +659,7 @@ NonCompliantOUs5_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.5.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.5.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -674,7 +674,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.5.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.5.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_1),
     "ActualValue": {"NonComplaintOUs": NonCompliantOUs5_1},
@@ -693,7 +693,7 @@ if {
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.6.1v0.1
+# Baseline GWS.DRIVEDOCS.6.1v0.2
 #--
 default NoSuchEvent6_1(_) := true
 
@@ -727,7 +727,7 @@ NonCompliantOUs6_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.6.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.6.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -740,7 +740,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.6.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.6.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs6_1),
     "ActualValue" : {"NonComplaintOUs": NonCompliantOUs6_1},
@@ -758,13 +758,13 @@ if {
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.7.1v0.1
+# Baseline GWS.DRIVEDOCS.7.1v0.2
 #--
 # not implementable: Need a way to see when a rule is created.
 # The fact that a rule is created gets logged but the rule's
 # contents are not.
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.7.1v0.1",
+    "PolicyId": "GWS.DRIVEDOCS.7.1v0.2",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",

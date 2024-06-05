@@ -2,12 +2,12 @@ package classroom
 import future.keywords
 
 #
-# GWS.CLASSROOM.4.1v0.1
+# GWS.CLASSROOM.4.1v0.2
 #--
 
 test_UnenrollStudents_Correct_V1 if {
     # Test only teachers can unenroll students when there's only one event
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -37,7 +37,7 @@ test_UnenrollStudents_Correct_V1 if {
 test_UnenrollStudents_Correct_V2 if {
     # Test enforcing only teachers can unenroll students when there's multiple events, with the chronological latest
     # correct but not last in json list
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -77,7 +77,7 @@ test_UnenrollStudents_Correct_V2 if {
 
 test_UnenrollStudents_Correct_V3 if {
     # Test enforcing only teachers can unenroll students is correct when there are events in multiple OUs
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -115,7 +115,7 @@ test_UnenrollStudents_Correct_V3 if {
 
 test_UnenrollStudents_Correct_V4 if {
     # Test only teachers can unenroll students when set to inherit from parent
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -163,7 +163,7 @@ test_UnenrollStudents_Correct_V4 if {
 
 test_UnenrollStudents_Incorrect_V1 if {
     # Test only teachers can unenroll students when there's only one event and it's wrong
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -196,7 +196,7 @@ test_UnenrollStudents_Incorrect_V1 if {
 test_UnenrollStudents_Incorrect_V2 if {
     # Test only teachers can unenroll students when there's multiple events, with the chronological latest
     # incorrect but not last in json list
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -240,7 +240,7 @@ test_UnenrollStudents_Incorrect_V2 if {
 
 test_UnenrollStudents_Incorrect_V3 if {
     # Test only teachers can unenroll students when there no applicable event
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -272,7 +272,7 @@ test_UnenrollStudents_Incorrect_V3 if {
 }
 test_UnenrollStudents_Incorrect_V4 if {
     # Test allow only teachers can unenroll students when there are multiple OU and a secondary OU is wrong
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -314,7 +314,7 @@ test_UnenrollStudents_Incorrect_V4 if {
 
 test_UnenrollStudents_Incorrect_V5 if {
     # Test only teachers can unenroll students when the primary OU is missing but a different one is present
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -346,7 +346,7 @@ test_UnenrollStudents_Incorrect_V5 if {
 
 test_UnenrollStudents_Incorrect_V6 if {
     # Test only teachers can unenroll students access when there's only one event and it's wrong
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -377,7 +377,7 @@ test_UnenrollStudents_Incorrect_V6 if {
 
 test_UnenrollStudents_Incorrect_V7 if {
     # Test only teachers can unenroll students when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -418,7 +418,7 @@ test_UnenrollStudents_Incorrect_V7 if {
 
 test_UnenrollStudents_Incorrect_V8 if {
     # Test only teachers can unenroll students when there are multiple OU and a secondary OU is wrong
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -460,7 +460,7 @@ test_UnenrollStudents_Incorrect_V8 if {
 
 test_UnenrollStudents_Incorrect_V9 if {
     # Test only teachers can unenroll students when the primary OU is missing but a different one is present
-    PolicyId := "GWS.CLASSROOM.4.1v0.1"
+    PolicyId := "GWS.CLASSROOM.4.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {

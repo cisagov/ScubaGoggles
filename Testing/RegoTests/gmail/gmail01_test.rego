@@ -3,11 +3,11 @@ import future.keywords
 
 
 #
-# GWS.GMAIL.1.1v0.1
+# GWS.GMAIL.1.1v0.2
 #--
 test_MailDelegation_Correct_V1 if {
     # Test mail delegation when there's only one event
-    PolicyId := "GWS.GMAIL.1.1v0.1"
+    PolicyId := "GWS.GMAIL.1.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -35,7 +35,7 @@ test_MailDelegation_Correct_V1 if {
 
 test_MailDelegation_Correct_V2 if {
     # Test mail delegation when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.1.1v0.1"
+    PolicyId := "GWS.GMAIL.1.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -73,7 +73,7 @@ test_MailDelegation_Correct_V2 if {
 
 test_MailDelegation_Correct_V3 if {
     # Test mail delegation when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.1.1v0.1"
+    PolicyId := "GWS.GMAIL.1.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -111,7 +111,7 @@ test_MailDelegation_Correct_V3 if {
 
 test_MailDelegation_Incorrect_V1 if {
     # Test mail delegation when there are no relevant events
-    PolicyId := "GWS.GMAIL.1.1v0.1"
+    PolicyId := "GWS.GMAIL.1.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -143,7 +143,7 @@ test_MailDelegation_Incorrect_V1 if {
 
 test_MailDelegation_Incorrect_V2 if {
     # Test mail delegation when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.1.1v0.1"
+    PolicyId := "GWS.GMAIL.1.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -172,7 +172,7 @@ test_MailDelegation_Incorrect_V2 if {
 
 test_MailDelegation_Incorrect_V3 if {
     # Test mail delegation when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.1.1v0.1"
+    PolicyId := "GWS.GMAIL.1.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -211,7 +211,7 @@ test_MailDelegation_Incorrect_V3 if {
 
 test_MailDelegation_Incorrect_V4 if {
     # Test mail delegation when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.1.1v0.1"
+    PolicyId := "GWS.GMAIL.1.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -240,7 +240,7 @@ test_MailDelegation_Incorrect_V4 if {
 
 test_MailDelegation_Incorrect_V5 if {
     # Test mail delegation when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.1.1v0.1"
+    PolicyId := "GWS.GMAIL.1.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {

@@ -70,7 +70,7 @@ if {
 ###############
 
 #
-# Baseline GWS.SITES.1.1v0.1
+# Baseline GWS.SITES.1.1v0.2
 #--
 NonCompliantOUs1_1 contains {
     "Name": OU,
@@ -101,7 +101,7 @@ NonCompliantGroups1_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.SITES.1.1v0.1",
+    "PolicyId": "GWS.SITES.1.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -115,7 +115,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.SITES.1.1v0.1",
+    "PolicyId": "GWS.SITES.1.1v0.2",
     "Criticality": "Should",
     "ReportDetails":utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},

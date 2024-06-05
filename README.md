@@ -4,9 +4,9 @@
   </ul>
   <ul>
         <a href="https://github.com/cisagov/ScubaGoggles/releases" alt="ScubaGoggles version #">
-        <img src="https://img.shields.io/badge/ScubaGoggles-v0.1.0-%2385B065?labelColor=%23005288" /></a>
+        <img src="https://img.shields.io/badge/ScubaGoggles-v0.2.0-%2385B065?labelColor=%23005288" /></a>
         <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" alt="GWS SCB version #">
-        <img src="https://img.shields.io/badge/GWS_SCB-v0.1-%2385B065?labelColor=%23005288" /></a>
+        <img src="https://img.shields.io/badge/GWS_SCB-v0.2-%2385B065?labelColor=%23005288" /></a>
         <a href="" alt="Downloads">
         <img src="https://img.shields.io/github/downloads/cisagov/ScubaGoggles/total.svg" /></a>
   </ul>
@@ -21,23 +21,27 @@ For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://git
 > This tool is in an alpha state and in active development. At this time, outputs could be incorrect and should be reviewed carefully.
 
 ## Table of Contents
+- [Table of Contents](#table-of-contents)
 - [Limitations of the tool](#limitations-of-the-tool)
-- [Getting Started](#getting-started)
+- [Getting started](#getting-started)
   - [Downloading the Latest Release](#downloading-the-latest-release)
-  - [Python Dependencies](#install-python-dependencies)
+  - [Install Python dependencies](#install-python-dependencies)
   - [Installing in a Virtual Environment](#installing-in-a-virtual-environment)
-  - [Downloading the OPA executable](#download-the-opa-executable)
+  - [Download the OPA executable](#download-the-opa-executable)
   - [Permissions](#permissions)
-  - [Create a Project](#create-a-project)
+    - [OAuth API Scopes](#oauth-api-scopes)
+  - [Create a project](#create-a-project)
   - [Authentication](#authentication)
+    - [Using OAuth](#using-oauth)
+    - [Using a Service Account](#using-a-service-account)
 - [Usage](#usage)
-  - [Examples](#example-1-run-an-assessment-against-all-gws-products)
+  - [Examples](#examples)
 - [Organization](#organization)
-- [Design](#project-license)
+- [Design](#design)
 - [Troubleshooting](#troubleshooting)
-  - [Not Authorized to Access this Resource](#not-authorized-to-access-this-resource)
-  - [ScubaGoggles not Found](#scubagoggles-not-found)
-  - [Unable to view HTML report due to environment limitations](#Unable-to-view-HTML-report-due-to-environment-limitations)
+  - [Not Authorized to Access This Resource](#not-authorized-to-access-this-resource)
+  - [Scubagoggles Not Found](#scubagoggles-not-found)
+  - [Unable to view HTML report due to environment limitations](#unable-to-view-html-report-due-to-environment-limitations)
 - [Project License](#project-license)
 
 ## Limitations of the tool
@@ -66,14 +70,14 @@ Minimum required Python version to run the tool is `3.7.16`.
 The following commands are used to set up a python virtual environment (venv) to install the needed python dependencies.
 Inside the release or repo folder, open up a terminal and run the following commands based on your OS.
 
-#### Windows
+#### Windows <!-- omit from toc --> 
 ```
 pip3 install virtualenv
 python -m venv .venv
 .venv\Scripts\activate
 ```
 
-#### macOS
+#### macOS <!-- omit from toc --> 
 ```
 pip3 install virtualenv
 virtualenv -p python3 .venv
@@ -83,13 +87,13 @@ source .venv/bin/activate
 Users can run the tool via the `scuba.py` script as a developer or by installing the `scubagoggles` package in a python venv.
 Choose either of these next steps to install the needed python dependencies in the `venv`.
 
-#### Installing dependencies for running scubagoggles directly
+#### Installing dependencies for running scubagoggles directly <!-- omit from toc --> 
 In the root directory of the release/repo, install the `scubagoggles` package and dependencies with the following command.
 ```
 python3 -m pip install .
 ```
 
-#### Installing dependencies for running via scuba.py script
+#### Installing dependencies for running via scuba.py script <!-- omit from toc --> 
 In the root directory of the release/repo, install the the required dependencies with the following command.
 ```
 pip3 install -r requirements.txt
@@ -162,7 +166,7 @@ Follow the instructions below for the authentication method of your choice.
 
 
 #### Using OAuth
-##### Create an OAuth credential
+##### Create an OAuth credential <!-- omit from toc --> 
 1. Be signed into http://console.cloud.google.com/.
 1. From the hamburger menu on the left, select **APIs & Services** -> **OAuth consent screen**
 1. Select **Internal** for **User Type**
@@ -191,20 +195,21 @@ Follow the instructions below for the authentication method of your choice.
 1. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
 with an account with the necessary privileges and click allow.
 
-##### Add the Oauth App to the allowlist
-If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](https://github.com/cisagov/ScubaGoggles/blob/main/baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.1.md#11-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
+##### Add the Oauth App to the allowlist <!-- omit from toc --> 
+If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](./baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#10-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
+
 
 1. Login to https://console.cloud.google.com
-1. Navigate to the appropriate project
-1. Select **API's & Services** from the top left hamburger icon
-1. Select **Credentials**
-1. Copy your client ID under **OAuth 2.0 Client IDs**
-1. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
-1. Select **Add App** -> **Oauth App Name** or **Client ID**
-1. Search by your **OAuth client ID**
-1. Select the App
-1. Select your root organization as the domain
-1. Select **Trusted**
+2. Navigate to the appropriate project
+3. Select **API's & Services** from the top left hamburger icon
+4. Select **Credentials**
+5. Copy your client ID under **OAuth 2.0 Client IDs**
+6. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
+7. Select **Add App** -> **Oauth App Name** or **Client ID**
+8. Search by your **OAuth client ID**
+9. Select the App
+10. Select your root organization as the domain
+11. Select **Trusted**
 
 #### Using a Service Account
 
@@ -278,22 +283,23 @@ optional arguments:
   --debug               This switch is used to print debugging information for OPA.
 ```
 
-### Example 1: Run an assessment against all GWS products
+### Examples
+#### Example 1: Run an assessment against all GWS products <!-- omit from toc --> 
 ```
 scubagoggles gws
 ```
 
-### Example 2: Run an assessment against just Gmail and Google Calendar
+#### Example 2: Run an assessment against just Gmail and Google Calendar <!-- omit from toc --> 
 ```
 scubagoggles gws -b gmail calendar
 ```
 
-### Example 3: Run an assessment and store the results under a folder called output
+#### Example 3: Run an assessment and store the results under a folder called output <!-- omit from toc --> 
 ```
 scubagoggles gws -b calendar gmail groups chat meet sites -o ./output
 ```
 
-### Example 4: Do a run cached assessment
+#### Example 4: Do a run cached assessment <!-- omit from toc --> 
 ```
 # skip authentication and provider export stage
 # used for running against a cached provider json
@@ -301,7 +307,7 @@ scubagoggles gws -b calendar gmail groups chat meet sites -o ./output
 scubagoggles gws --runcached --skipexport
 ```
 
-### Example 5: Run with a service account on a different tenant
+#### Example 5: Run with a service account on a different tenant <!-- omit from toc --> 
 ```
 scubagoggles gws --customerid <customer_id> --subjectemail admin@example.com
 ```
@@ -386,7 +392,7 @@ Each baseline will appear in the following format:
             "GroupNumber": "1",
             "Controls": [
                 {
-                  "Control ID": "GWS.GMAIL.1.1v0.1",
+                  "Control ID": "GWS.GMAIL.1.1v0.2",
                   "Requirement": "Mail Delegation SHOULD be disabled.",
                   "Result": "Pass",
                   "Criticality": "Should",
@@ -394,7 +400,6 @@ Each baseline will appear in the following format:
                 }
                 ...
 ```
-
 
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative Commons Zero license. With developer approval, contributions may be submitted with an alternate compatible license. If accepted, those contributions will be listed herein with the appropriate license.
