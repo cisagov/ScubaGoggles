@@ -164,8 +164,8 @@ const colorRows = () => {
             }
             else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
                 rows[i].style.background = "var(--test-fail)";
-                rows[i].querySelectorAll('td')[1].style.borderColor = "var(--border-color)";
-                rows[i].querySelectorAll('td')[1].style.color = "#d10000";
+                rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
+                rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
             }
         }
         catch (error) {
@@ -192,7 +192,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Groups for Business Baseline Report</h1>
             <h4><p><br/></p></h4>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Name </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>Org Name</td><td>12/06/2023 11:15:27 Pacific Daylight Time</td><td>0.1</td><td>0.1.0</td></tr>         </table>
+                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:18 Pacific Daylight Time</td><td>0.2</td><td>0.2.0</td></tr>         </table>
             <h2>GROUPS-1         External Group Access</h2><table>
   <thead>
     <tr>
@@ -205,7 +205,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.1.1v0.1</td>
+      <td>GWS.GROUPS.1.1v0.2</td>
       <td>Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.</td>
       <td>Pass</td>
       <td>Shall</td>
@@ -224,7 +224,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.2.1v0.1</td>
+      <td>GWS.GROUPS.2.1v0.2</td>
       <td>Group owners&#x27; ability to add external members to groups SHOULD be disabled unless necessary for agency mission fulfillment.</td>
       <td>Pass</td>
       <td>Should</td>
@@ -243,11 +243,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.3.1v0.1</td>
+      <td>GWS.GROUPS.3.1v0.2</td>
       <td>Group owners&#x27; ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.</td>
-      <td>Pass</td>
+      <td>No events found</td>
       <td>Should</td>
-      <td>Requirement met in all OUs.</td>
+      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
     </tr>
   </tbody>
 </table><h2>GROUPS-4         Group Creation</h2><table>
@@ -262,7 +262,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.4.1v0.1</td>
+      <td>GWS.GROUPS.4.1v0.2</td>
       <td>Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.</td>
       <td>Pass</td>
       <td>Should</td>
@@ -281,11 +281,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.5.1v0.1</td>
+      <td>GWS.GROUPS.5.1v0.2</td>
       <td>The default permission to view conversations SHOULD be set to All Group Members.</td>
-      <td>Pass</td>
+      <td>Warning</td>
       <td>Should</td>
-      <td>Requirement met in all OUs.</td>
+      <td>Requirement failed in Org Name.</td>
     </tr>
   </tbody>
 </table><h2>GROUPS-6         Ability to Hide Groups from the Directory</h2><table>
@@ -300,7 +300,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.6.1v0.1</td>
+      <td>GWS.GROUPS.6.1v0.2</td>
       <td>The Ability for Groups to be Hidden from the Directory SHALL be disabled.</td>
       <td>Pass</td>
       <td>Shall</td>
@@ -319,11 +319,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.7.1v0.1</td>
+      <td>GWS.GROUPS.7.1v0.2</td>
       <td>New Groups SHOULD be created with an Access type of Restricted unless necessary for agency mission fulfillment.</td>
-      <td>Warning</td>
+      <td>Pass</td>
       <td>Should</td>
-      <td>Requirement failed in Antonio Padilla MD, Howard Carlson, Randall Johnson, Jill Daniels, Kaitlyn Merritt, James Mendoza, Tony Craig, David Griffin, Test Group, Test2, Seth Watkins.</td>
+      <td>Requirement met in all groups.</td>
     </tr>
   </tbody>
 </table>

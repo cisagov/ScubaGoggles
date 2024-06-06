@@ -243,7 +243,7 @@ def run_reporter(args):
         "ProductsAssessed": products_assessed,
         "ProductAbbreviationMapping": product_abbreviation_mapping,
         "Tool":  "ScubaGoggles",
-        "ToolVersion":  "0.1.0",
+        "ToolVersion":  "0.2.0",
         "TimeStampZulu": timestamp_zulu
     }
 

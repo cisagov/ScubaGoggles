@@ -164,8 +164,8 @@ const colorRows = () => {
             }
             else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
                 rows[i].style.background = "var(--test-fail)";
-                rows[i].querySelectorAll('td')[1].style.borderColor = "var(--border-color)";
-                rows[i].querySelectorAll('td')[1].style.color = "#d10000";
+                rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
+                rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
             }
         }
         catch (error) {
@@ -192,7 +192,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Google Drive and Docs Baseline Report</h1>
             <h4><p><br/></p></h4>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Name </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>Org Name</td><td>12/06/2023 11:15:27 Pacific Daylight Time</td><td>0.1</td><td>0.1.0</td></tr>         </table>
+                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:18 Pacific Daylight Time</td><td>0.2</td><td>0.2.0</td></tr>         </table>
             <h2>DRIVEDOCS-1         Sharing Outside the Organization</h2><table>
   <thead>
     <tr>
@@ -205,56 +205,56 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.1.1v0.1</td>
+      <td>GWS.DRIVEDOCS.1.1v0.2</td>
       <td>Agencies SHOULD disable sharing outside of the organization&#x27;s domain.</td>
-      <td>Warning</td>
+      <td>Pass</td>
       <td>Should</td>
-      <td>Requirement failed in Org Name.</td>
+      <td>Requirement met in all OUs.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.2v0.1</td>
-      <td>If disabling sharing outside of the organization&#x27;s domain, then agencies SHOULD also disable users&#x27; receiving files from outside of the organization&#x27;s domain.</td>
+      <td>GWS.DRIVEDOCS.1.2v0.2</td>
+      <td>Agencies SHOULD disable users&#x27; receiving files from outside of the organization&#x27;s domain.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>Requirement failed in Org Name.</td>
+      <td>Requirement failed in Test Target Audience.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.3v0.1</td>
-      <td>Warnings SHOULD be enabled when a user is attempting to share something outside the domain.</td>
-      <td>Warning</td>
-      <td>Should</td>
-      <td>Requirement failed in Heidi Mccarty.</td>
+      <td>GWS.DRIVEDOCS.1.3v0.2</td>
+      <td>Warnings SHALL be enabled when a user is attempting to share something outside the domain.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.4v0.1</td>
+      <td>GWS.DRIVEDOCS.1.4v0.2</td>
       <td>If sharing outside of the organization, then agencies SHALL disable sharing of files with individuals who are not using a Google account.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.5v0.1</td>
+      <td>GWS.DRIVEDOCS.1.5v0.2</td>
       <td>Agencies SHALL disable making files and published web content visible to anyone with the link.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.6v0.1</td>
+      <td>GWS.DRIVEDOCS.1.6v0.2</td>
       <td>Agencies SHALL enable access checking for file sharing outside of Docs or Drive.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.7v0.1</td>
-      <td>Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organizations.</td>
+      <td>GWS.DRIVEDOCS.1.7v0.2</td>
+      <td>Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organization.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement failed in Katherine Smith.</td>
+      <td>Requirement failed in Org Name.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.8v0.1</td>
+      <td>GWS.DRIVEDOCS.1.8v0.2</td>
       <td>Agencies SHALL set newly created items to have Private to the Owner as the default level of access.</td>
       <td>Fail</td>
       <td>Shall</td>
@@ -273,39 +273,32 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.2.1v0.1</td>
-      <td>Agencies SHOULD enable shared drive creation to allow for effective collaboration.</td>
-      <td>Warning</td>
-      <td>Should</td>
-      <td>Requirement failed in Org Name.</td>
-    </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.2.2v0.1</td>
+      <td>GWS.DRIVEDOCS.2.1v0.2</td>
       <td>Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.2.3v0.1</td>
+      <td>GWS.DRIVEDOCS.2.2v0.2</td>
       <td>Agencies SHOULD NOT allow users outside of their organization to access files in shared drives.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.2.4v0.1</td>
+      <td>GWS.DRIVEDOCS.2.3v0.2</td>
       <td>Agencies SHALL allow users who are not shared drive members to be added to files.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.2.5v0.1</td>
+      <td>GWS.DRIVEDOCS.2.4v0.2</td>
       <td>Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.</td>
-      <td>Fail</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td>Requirement failed in Org Name.</td>
+      <td>Requirement met in all OUs.</td>
     </tr>
   </tbody>
 </table><h2>DRIVEDOCS-3         Security Updates for Files</h2><table>
@@ -320,11 +313,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.3.1v0.1</td>
+      <td>GWS.DRIVEDOCS.3.1v0.2</td>
       <td>Agencies SHALL enable security updates for Drive files.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td>Requirement failed in Org Name.</td>
     </tr>
   </tbody>
 </table><h2>DRIVEDOCS-4         Drive SDK</h2><table>
@@ -339,11 +332,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.4.1v0.1</td>
-      <td>Agencies SHOULD disable Drive SDK access to restrict information sharing and prevent data leakage.</td>
+      <td>GWS.DRIVEDOCS.4.1v0.2</td>
+      <td>Agencies SHOULD disable Drive SDK access.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>Requirement failed in Org Name.</td>
+      <td>Requirement failed in Jerry Jackson.</td>
     </tr>
   </tbody>
 </table><h2>DRIVEDOCS-5         User Installation of Drive and Docs Add-Ons</h2><table>
@@ -358,8 +351,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.5.1v0.1</td>
-      <td>Agencies SHALL disable Add-Ons with the exception of those that are approved within the organization.</td>
+      <td>GWS.DRIVEDOCS.5.1v0.2</td>
+      <td>Agencies SHALL disable Add-Ons.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs.</td>
@@ -377,11 +370,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.6.1v0.1</td>
+      <td>GWS.DRIVEDOCS.6.1v0.2</td>
       <td>Agencies SHOULD either disable Google Drive for Desktop or only allow Google Drive for Desktop on authorized devices.</td>
-      <td>Warning</td>
+      <td>Pass</td>
       <td>Should</td>
-      <td>Requirement failed in Org Name.</td>
+      <td>Requirement met in all OUs.</td>
     </tr>
   </tbody>
 </table><h2>DRIVEDOCS-7         DLP rules</h2><table>
@@ -396,7 +389,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.7.1v0.1</td>
+      <td>GWS.DRIVEDOCS.7.1v0.2</td>
       <td>Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>

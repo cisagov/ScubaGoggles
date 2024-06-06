@@ -164,8 +164,8 @@ const colorRows = () => {
             }
             else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
                 rows[i].style.background = "var(--test-fail)";
-                rows[i].querySelectorAll('td')[1].style.borderColor = "var(--border-color)";
-                rows[i].querySelectorAll('td')[1].style.color = "#d10000";
+                rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
+                rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
             }
         }
         catch (error) {
@@ -192,8 +192,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Google Calendar Baseline Report</h1>
             <h4><p><br/></p></h4>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Name </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>Org Name</td><td>12/06/2023 11:15:27 Pacific Daylight Time</td><td>0.1</td><td>0.1.0</td></tr>         </table>
-            <h2>CALENDAR-1         External Sharing Options for Primary Calendars</h2><table>
+                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:18 Pacific Daylight Time</td><td>0.2</td><td>0.2.0</td></tr>         </table>
+            <h2>CALENDAR-1         External Sharing Options</h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -205,18 +205,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CALENDAR.1.1v0.1</td>
-      <td>External Sharing Options for Primary Calendars SHALL be configured to &quot;Only free/busy information (hide event details)&quot; to restrict information sharing and prevent data leakage.</td>
-      <td>Pass</td>
+      <td>GWS.CALENDAR.1.1v0.2</td>
+      <td>External Sharing Options for Primary Calendars SHALL be configured to &quot;Only free/busy information (hide event details).&quot;</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td>The following OUs are non-compliant:<ul><li>Anthony Graves: External sharing options for primary calendars is set to Share all information, and allow managing of calendars</li></ul><br>The following groups are non-compliant:<ul><li>timothy01@example.net: External sharing options for primary calendars is set to Share all information, and outsiders can change calendars</li><li>timothy01@example.net: External sharing options for primary calendars is set to Share all information, and outsiders can change calendars</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.CALENDAR.1.2v0.1</td>
-      <td>External sharing options for primary calendars between multiple components within an organization MAY be configured.</td>
-      <td>N/A</td>
-      <td>May/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>GWS.CALENDAR.1.2v0.2</td>
+      <td>External sharing options for secondary calendars SHALL be configured to &quot;Only free/busy information (hide event details).&quot;</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met.<br>Highest Level of Sharing: Only free/busy information (hide event details).</td>
     </tr>
   </tbody>
 </table><h2>CALENDAR-2         External Invitations Warnings</h2><table>
@@ -231,14 +231,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CALENDAR.2.1v0.1</td>
+      <td>GWS.CALENDAR.2.1v0.2</td>
       <td>External invitations warnings SHALL be enabled to prompt users before sending invitations.</td>
-      <td>Pass</td>
+      <td>No events found</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
     </tr>
   </tbody>
-</table><h2>CALENDAR-3         External Sharing Options for Secondary Calendars</h2><table>
+</table><h2>CALENDAR-3         Calendar Interop Management</h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -250,47 +250,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CALENDAR.3.1v0.1</td>
-      <td>External sharing options for secondary calendars SHALL be configured to &quot;Only free/busy information (hide event details)&quot; to restrict information sharing and prevent data leakage.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td><span class=setting>Only free busy/information for secondary calendars </span> is shared outside example.org</td>
-    </tr>
-    <tr>
-      <td>GWS.CALENDAR.3.2v0.1</td>
-      <td>External sharing options for secondary calendars between multiple components within an organization MAY be configured.</td>
-      <td>N/A</td>
-      <td>May/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-  </tbody>
-</table><h2>CALENDAR-4         Calendar Interop Management</h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.CALENDAR.4.1v0.1</td>
-      <td>Calendar Interop SHOULD be disabled unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar.</td>
-      <td>Warning</td>
+      <td>GWS.CALENDAR.3.1v0.2</td>
+      <td>Calendar Interop SHOULD be disabled.</td>
+      <td>No events found</td>
       <td>Should</td>
-      <td><span class=setting>Calendar interop is enabled </span> for example.org</td>
+      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
     </tr>
     <tr>
-      <td>GWS.CALENDAR.4.2v0.1</td>
+      <td>GWS.CALENDAR.3.2v0.2</td>
       <td>OAuth 2.0 SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>CALENDAR-5         Paid Appointments</h2><table>
+</table><h2>CALENDAR-4         Paid Appointments</h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -302,11 +276,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CALENDAR.5.1v0.1</td>
+      <td>GWS.CALENDAR.4.1v0.2</td>
       <td>Appointment Schedule with Payments SHALL be disabled.</td>
-      <td>Pass</td>
+      <td>No events found</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
     </tr>
   </tbody>
 </table>
