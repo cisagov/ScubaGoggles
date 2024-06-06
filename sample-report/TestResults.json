@@ -1,1351 +1,1351 @@
 [
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.CALENDAR.3.2v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.CALENDAR.2.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.CALENDAR.3.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "No relevant event for the top-level OU in the current logs.",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.CALENDAR.4.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantGroups': [{'Name': 'haleylandry@example.com', 'Value': 'External sharing options for primary calendars is set to Share all information, and outsiders can change calendars'}, {'Name': 'haleylandry@example.com', 'Value': 'External sharing options for primary calendars is set to Share all information, and outsiders can change calendars'}], 'NonCompliantOUs': [{'Name': \"Andrew Mcdonald\", 'Value': 'External sharing options for primary calendars is set to Share all information, and allow managing of calendars'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CALENDAR.1.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Brian Pham: External sharing options for primary calendars is set to Share all information, and allow managing of calendars</li></ul><br>The following groups are non-compliant:<ul><li>joncollins@example.net: External sharing options for primary calendars is set to Share all information, and outsiders can change calendars</li><li>joncollins@example.net: External sharing options for primary calendars is set to Share all information, and outsiders can change calendars</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR': 'SHOW_ONLY_FREE_BUSY_INFORMATION'}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CALENDAR.1.2v0.2",
-    "ReportDetails": "Requirement met.<br>Highest Level of Sharing: Only free/busy information (hide event details).",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.CHAT.6.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.CHAT.2.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "No relevant event in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.CHAT.1.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "No relevant event in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.CHAT.1.2v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CHAT.4.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CHAT.7.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.<br>WARNING: from the log events alone, it is not possible to distinguish between an OU inheriting settings from its parent and content reporting being disabled entirely. It's possible this tool classified some child OUs as compliant due to this limitation; manual check recommended for child OUs due to this edge case.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CHAT.7.2v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.CALENDAR.3.2v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.CALENDAR.2.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.CALENDAR.3.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs.\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.CALENDAR.4.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantGroups\": [{\"Name\": \"mcgeerobin@example.net\", \"Value\": \"External sharing options for primary calendars is set to Share all information, and outsiders can change calendars\"}, {\"Name\": \"mcgeerobin@example.net\", \"Value\": \"External sharing options for primary calendars is set to Share all information, and outsiders can change calendars\"}], \"NonCompliantOUs\": [{\"Name\": \"Amy Foster\", \"Value\": \"External sharing options for primary calendars is set to Share all information, and allow managing of calendars\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CALENDAR.1.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Amanda Ward: External sharing options for primary calendars is set to Share all information, and allow managing of calendars</li></ul><br>The following groups are non-compliant:<ul><li>qbrewer@example.net: External sharing options for primary calendars is set to Share all information, and outsiders can change calendars</li><li>qbrewer@example.net: External sharing options for primary calendars is set to Share all information, and outsiders can change calendars</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"SHARING_OUTSIDE_DOMAIN_FOR_SECONDARY_CALENDAR\": \"SHOW_ONLY_FREE_BUSY_INFORMATION\"}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CALENDAR.1.2v0.2\"",
+    "ReportDetails": "\"Requirement met.<br>Highest Level of Sharing: Only free/busy information (hide event details).\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.CHAT.6.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.CHAT.2.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.CHAT.1.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.CHAT.1.2v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CHAT.4.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CHAT.7.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.<br>WARNING: from the log events alone, it is not possible to distinguish between an OU inheriting settings from its parent and content reporting being disabled entirely. It's possible this tool classified some child OUs as compliant due to this limitation; manual check recommended for child OUs due to this edge case.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CHAT.7.2v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': \"Margaret Hunt\", 'Value': 'Allow users to install Chat apps is set to true'}, {'Name': 'Org Name', 'Value': 'Allow users to install Chat apps is set to true'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CHAT.5.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>James Washington: Allow users to install Chat apps is set to true</li><li>Org Name: Allow users to install Chat apps is set to true</li></ul>",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Tyler Knight\", \"Value\": \"Allow users to install Chat apps is set to true\"}, {\"Name\": \"Org Name\", \"Value\": \"Allow users to install Chat apps is set to true\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CHAT.5.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Ronald Barnes: Allow users to install Chat apps is set to true</li><li>Org Name: Allow users to install Chat apps is set to true</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Conversation history settings for spaces is set to History is OFF by default'}]}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CHAT.3.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Conversation history settings for spaces is set to History is OFF by default</li></ul>",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Conversation history settings for spaces is set to History is OFF by default\"}]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CHAT.3.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Conversation history settings for spaces is set to History is OFF by default</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CLASSROOM.1.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CLASSROOM.1.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CLASSROOM.4.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CLASSROOM.4.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Data access is set to ON'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CLASSROOM.2.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Data access is set to ON</li></ul>",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Data access is set to ON\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CLASSROOM.2.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Data access is set to ON</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Roster import is set to ON - CLEVER'}]}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CLASSROOM.3.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Roster import is set to ON - CLEVER</li></ul>",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Roster import is set to ON - CLEVER\"}]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CLASSROOM.3.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Roster import is set to ON - CLEVER</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Which classes can users in your domain join is set to Classes in allowlisted domains'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.CLASSROOM.1.2v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Which classes can users in your domain join is set to Classes in allowlisted domains</li></ul>",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Which classes can users in your domain join is set to Classes in allowlisted domains\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CLASSROOM.1.2v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Which classes can users in your domain join is set to Classes in allowlisted domains</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "May/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.2.2v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"May/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.2.2v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.10.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Results for GWS.COMMONCONTROLS.13 are listed in the <a href='../IndividualReports/RulesReport.html'>Rules Report</a>.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Results for GWS.COMMONCONTROLS.13 are listed in the <a href='../IndividualReports/RulesReport.html'>Rules Report</a>.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.14.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.14.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.14.2v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.14.2v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.15.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.15.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.6.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.6.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.7.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.7.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.9.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.9.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.9.2v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.9.2v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.1.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.1.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.4v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.10.5v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.5v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is compliant; manual check recommended.",
-    "RequirementMet": "True"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.12.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is compliant; manual check recommended.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.15.2v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.3.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.3.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.5.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.5.2v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.2v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.5.3v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.3v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.5.4v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.4v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.5.5v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.5v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.8.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.8.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.11.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.11.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.11.2v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "No relevant event in the current logs",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.2.1v0.2",
-    "ReportDetails": "No relevant event in the current logs. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
+    "ActualValue": "\"No relevant event in the current logs\"",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.2.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantGroups': [{'Name': 'harrisnatalie@example.com', 'Value': 'Allow user to trust the device is ON'}], 'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Allow user to trust the device is ON'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.COMMONCONTROLS.1.3v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Allow user to trust the device is ON</li></ul><br>The following groups are non-compliant:<ul><li>steven34@example.net: Allow user to trust the device is ON</li></ul>",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantGroups\": [{\"Name\": \"mramos@example.com\", \"Value\": \"Allow user to trust the device is ON\"}], \"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Allow user to trust the device is ON\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.1.3v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Allow user to trust the device is ON</li></ul><br>The following groups are non-compliant:<ul><li>kristen16@example.org: Allow user to trust the device is ON</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantGroups': [{'Name': 'michelle60@example.net', 'Value': 'Allowed methods is set to Any'}], 'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Allowed methods is set to Any'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.COMMONCONTROLS.1.4v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Allowed methods is set to Any</li></ul><br>The following groups are non-compliant:<ul><li>summerselizabeth@example.com: Allowed methods is set to Any</li></ul>",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantGroups\": [{\"Name\": \"johnsonphillip@example.net\", \"Value\": \"Allowed methods is set to Any\"}], \"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Allowed methods is set to Any\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.1.4v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Allowed methods is set to Any</li></ul><br>The following groups are non-compliant:<ul><li>shafferdeborah@example.org: Allowed methods is set to Any</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantGroups': [{'Name': 'jason55@example.com', 'Value': 'New user enrollment period is set to None'}], 'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.COMMONCONTROLS.1.2v0.2",
-    "ReportDetails": "The following groups are non-compliant:<ul><li>danamason@example.net: New user enrollment period is set to None</li></ul>",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantGroups\": [{\"Name\": \"amberdavis@example.org\", \"Value\": \"New user enrollment period is set to None\"}], \"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.1.2v0.2\"",
+    "ReportDetails": "\"The following groups are non-compliant:<ul><li>macdonaldrodney@example.net: New user enrollment period is set to None</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Web session duration is set to 30 days'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.COMMONCONTROLS.4.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Web session duration is set to 30 days</li></ul>",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Web session duration is set to 30 days\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.4.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Web session duration is set to 30 days</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "['michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org', 'michael99@example.org']",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.COMMONCONTROLS.6.2v0.2",
-    "Prerequisites": "['directory/v1/users/list']",
-    "ReportDetails": "The following super admins are configured: carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org, carolynmyers@example.org. <i>Note: Exceptions are allowed for \"break glass\" super admin accounts, though we are not able to account for this automatically.</i>",
-    "RequirementMet": "False"
+    "ActualValue": "[\"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\", \"goodwinronald@example.com\"]",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.6.2v0.2\"",
+    "Prerequisites": "[\"directory/v1/users/list\"]",
+    "ReportDetails": "\"The following super admins are configured: gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org, gibsonrobert@example.org. <i>Note: Exceptions are allowed for \\\"break glass\\\" super admin accounts, though we are not able to account for this automatically.</i>\"",
+    "RequirementMet": "false"
   },
   {
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.COMMONCONTROLS.10.2v0.2",
-    "ReportDetails": "Requirement met.",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.2v0.2\"",
+    "ReportDetails": "\"Requirement met.\"",
+    "RequirementMet": "true"
   },
   {
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.2",
-    "ReportDetails": "Requirement met.",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.3v0.2\"",
+    "ReportDetails": "\"Requirement met.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.DRIVEDOCS.7.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.DRIVEDOCS.7.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonComplaintOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.2.3v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonComplaintOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.2.3v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonComplaintOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.2.4v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonComplaintOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.2.4v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonComplaintOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.5.1v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonComplaintOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.5.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonComplaintOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.2.1v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonComplaintOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.2.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonComplaintOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.2.2v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonComplaintOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.2.2v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonComplaintOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.6.1v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonComplaintOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.6.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonComplaintOUs': [\"Lee Gray\"]}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.4.1v0.2",
-    "ReportDetails": "Requirement failed in Darrell Bryant.",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonComplaintOUs\": [\"Mark Brown DVM\"]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.4.1v0.2\"",
+    "ReportDetails": "\"Requirement failed in Kelly Jenkins MD.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonComplaintOUs': ['Org Name']}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.1.7v0.2",
-    "ReportDetails": "Requirement failed in Org Name.",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonComplaintOUs\": [\"Org Name\"]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.7v0.2\"",
+    "ReportDetails": "\"Requirement failed in Org Name.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonComplaintOUs': ['Org Name']}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.3.1v0.2",
-    "ReportDetails": "Requirement failed in Org Name.",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonComplaintOUs\": [\"Org Name\"]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.3.1v0.2\"",
+    "ReportDetails": "\"Requirement failed in Org Name.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.1.3v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.3v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.1.4v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.4v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.1.5v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.5v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.1.6v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.6v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.1.1v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': ['Org Name']}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.1.8v0.2",
-    "ReportDetails": "Requirement failed in Org Name.",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantOUs\": [\"Org Name\"]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.8v0.2\"",
+    "ReportDetails": "\"Requirement failed in Org Name.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantOUs': ['Test Target Audience']}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.DRIVEDOCS.1.2v0.2",
-    "ReportDetails": "Requirement failed in Test Target Audience.",
-    "RequirementMet": "False"
+    "ActualValue": "{\"NonCompliantOUs\": [\"Test Target Audience\"]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.2v0.2\"",
+    "ReportDetails": "\"Requirement failed in Test Target Audience.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "May",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.9.2v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
+    "ActualValue": "\"\"",
+    "Criticality": "\"May\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.9.2v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
   },
   {
-    "ActualValue": "",
-    "Criticality": "May/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.10.2v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"May/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.10.2v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Shall/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.18.3v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.18.3v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.15.2v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
-  },
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.15.2v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
   {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.16.2v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.17.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.18.1v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.18.2v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.5.6v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please check manually.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.6.5v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "",
-    "Criticality": "Should/Not-Implemented",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.7.8v0.2",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "No relevant event in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.GMAIL.12.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "No relevant event in the current logs",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.GMAIL.13.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "[{'domain': 'David Barker', 'log': [{'query_method': 'traditional', 'query_name': '_dmarc.David Barker', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': '_dmarc.dhs.gov', 'query_result': 'Query returned 1 txt records'}], 'rdata': ['v=DMARC1; p=reject; pct=100; rua=mailto:richardlewis@example.net,  mailto:richardlewis@example.net']}, {'domain': 'example.org', 'log': [{'query_method': 'traditional', 'query_name': '_dmarc.example.org', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': '_dmarc.example.org', 'query_result': 'Query returned NXDOMAIN'}], 'rdata': []}]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.4.1v0.2",
-    "Prerequisites": "['directory/v1/domains/list', 'get_dmarc_records']",
-    "ReportDetails": "1 of 2 agency domain(s) found in violation: example.org.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "[{'domain': 'Nancy Burke', 'log': [{'query_method': 'traditional', 'query_name': '_dmarc.Nancy Burke', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': '_dmarc.dhs.gov', 'query_result': 'Query returned 1 txt records'}], 'rdata': ['v=DMARC1; p=reject; pct=100; rua=mailto:nsims@example.net,  mailto:nsims@example.net']}, {'domain': 'example.org', 'log': [{'query_method': 'traditional', 'query_name': '_dmarc.example.org', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': '_dmarc.example.org', 'query_result': 'Query returned NXDOMAIN'}], 'rdata': []}]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.4.2v0.2",
-    "Prerequisites": "['directory/v1/domains/list', 'get_dmarc_records']",
-    "ReportDetails": "1 of 2 agency domain(s) found in violation: example.org.",
-    "RequirementMet": "False"
-  },
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.16.2v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.17.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.18.1v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.18.2v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.5.6v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please check manually.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.6.5v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.7.8v0.2\"",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.GMAIL.12.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event in the current logs\"",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.GMAIL.13.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "[{\"domain\": \"Anthony Deleon\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.Anthony Deleon\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:leslieshannon@example.org,  mailto:leslieshannon@example.org\"]}, {\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}], \"rdata\": []}]",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.4.1v0.2\"",
+    "Prerequisites": "[\"directory/v1/domains/list\", \"get_dmarc_records\"]",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "[{\"domain\": \"Jocelyn Garcia\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.Jocelyn Garcia\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:lowerykatherine@example.net,  mailto:lowerykatherine@example.net\"]}, {\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}], \"rdata\": []}]",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.4.2v0.2\"",
+    "Prerequisites": "[\"directory/v1/domains/list\", \"get_dmarc_records\"]",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org.\"",
+    "RequirementMet": "false"
+  },
   {
-    "ActualValue": "[{'domain': 'Eric Gonzalez', 'log': [{'query_method': 'traditional', 'query_name': '_dmarc.Eric Gonzalez', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': '_dmarc.dhs.gov', 'query_result': 'Query returned 1 txt records'}], 'rdata': ['v=DMARC1; p=reject; pct=100; rua=mailto:vcollins@example.net,  mailto:vcollins@example.net']}, {'domain': 'example.org', 'log': [{'query_method': 'traditional', 'query_name': '_dmarc.example.org', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': '_dmarc.example.org', 'query_result': 'Query returned NXDOMAIN'}], 'rdata': []}]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.4.3v0.2",
-    "Prerequisites": "['directory/v1/domains/list', 'get_dmarc_records']",
-    "ReportDetails": "1 of 2 agency domain(s) found in violation: example.org.",
-    "RequirementMet": "False"
+    "ActualValue": "[{\"domain\": \"Chris Farley\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.Chris Farley\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:derrick99@example.net,  mailto:derrick99@example.net\"]}, {\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}], \"rdata\": []}]",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.4.3v0.2\"",
+    "Prerequisites": "[\"directory/v1/domains/list\", \"get_dmarc_records\"]",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org.\"",
+    "RequirementMet": "false"
   },
-  {
-    "ActualValue": "[{'domain': 'Christina Payne', 'log': [{'query_method': 'traditional', 'query_name': '_dmarc.Christina Payne', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': '_dmarc.dhs.gov', 'query_result': 'Query returned 1 txt records'}], 'rdata': ['v=DMARC1; p=reject; pct=100; rua=mailto:bblack@example.org,  mailto:bblack@example.org']}, {'domain': 'example.org', 'log': [{'query_method': 'traditional', 'query_name': '_dmarc.example.org', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': '_dmarc.example.org', 'query_result': 'Query returned NXDOMAIN'}], 'rdata': []}]",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.4.4v0.2",
-    "Prerequisites": "['directory/v1/domains/list', 'get_dmarc_records']",
-    "ReportDetails": "1 of 2 agency domain(s) found in violation: example.org.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "[{'domain': 'Amy Sloan', 'log': [{'query_method': 'traditional', 'query_name': 'google._domainkey.Amy Sloan', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': 'selector1._domainkey.Amy Sloan', 'query_result': 'Query returned NXDOMAIN'}, {'query_method': 'traditional', 'query_name': 'selector2._domainkey.Amy Sloan', 'query_result': 'Query returned 1 txt records'}], 'rdata': ['v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwVCM2ZRZbi+HfMpoGMmEuv+0x+Fc7++ObO11SXDvyrm5OhMGDzyR6lMJPRhovYu4y4WxgKvYtalHtORzIzbcs5+m07uee/bmz6vZJqsSc/52O0UJGHYpBAPWktBb5Trjaj4Hr26FkTIJCPxy4z8m4Wsx9/+jimn5cdb4zbQhnwccBii6wptEekvATQu6cX8vo\" \"gy8NDFr6wcSxcM923EQSUout2OrUGmkJnQvrkKvCCj4Gjt8ZNoGGaLpd+vzKVbvyHaLOMbVreIWTm6fg5vM0DDmhVwIAfHUhoOlLOQ5GiGM4pK+z6MMzvAJE3bTLEvuoAji96GDSlLU+Kj+6rOWMQIDAQAB;']}, {'domain': 'example.org', 'log': [{'query_method': 'traditional', 'query_name': 'google._domainkey.example.org', 'query_result': 'Query returned 1 txt records'}], 'rdata': ['v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszok\" \"yLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHAqC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb\" \"4QIDAQAB']}]",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.2.1v0.2",
-    "Prerequisites": "['directory/v1/domains/list', 'get_dkim_records']",
-    "ReportDetails": "Requirement met.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'EMAIL_SPAM_ALLOWLIST': 'No relevant event in the current logs'}",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.GMAIL.14.1v0.2",
-    "ReportDetails": "No relevant event in the current logs. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantGroups': [{'Name': 'tamarasalas@example.org', 'Value': 'POP access is enabled'}], 'NonCompliantOUs': [{'Name': \"Thomas Hodge\", 'Value': 'IMAP access is enabled'}, {'Name': 'Org Name', 'Value': 'POP and IMAP access are enabled'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.9.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Paul Melendez: IMAP access is enabled</li><li>Org Name: POP and IMAP access are enabled</li></ul><br>The following groups are non-compliant:<ul><li>courtneymosley@example.net: POP access is enabled</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.15.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.5.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.5.2v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.5.3v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.7.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.7.2v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.7.3v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.7.4v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.7.5v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.16.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.5.4v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.7.6v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.7.7v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': \"Steven Davis\", 'Value': 'Emails with encrypted attachments from untrusted senders are kept in the inbox'}, {'Name': 'Org Name', 'Value': 'Emails with encrypted attachments from untrusted senders are kept in the inbox'}]}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.5.5v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Christine Henderson: Emails with encrypted attachments from untrusted senders are kept in the inbox</li><li>Org Name: Emails with encrypted attachments from untrusted senders are kept in the inbox</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': \"Debbie Webb\", 'Value': 'Mail delegation is set to enabled'}, {'Name': 'Org Name', 'Value': 'Mail delegation is set to enabled'}]}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.1.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Patrick Guerra: Mail delegation is set to enabled</li><li>Org Name: Mail delegation is set to enabled</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Apply future recommended settings automatically is disabled'}]}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.6.4v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Apply future recommended settings automatically is disabled</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Automatically enable email autoforwarding is set to enabled'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.11.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Automatically enable email autoforwarding is set to enabled</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Automatically enable outlook sync is set to enabled'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.10.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Automatically enable outlook sync is set to enabled</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Identify links behind shortened URLs is disabled'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.6.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Identify links behind shortened URLs is disabled</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Scan linked images is disabled'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.6.2v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Scan linked images is disabled</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Show warning prompt for click on links to untrusted domains is disabled'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.6.3v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Show warning prompt for click on links to untrusted domains is disabled</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'User email uploads is set to enabled'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.8.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: User email uploads is set to enabled</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "['example.org']",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GMAIL.3.1v0.2",
-    "Prerequisites": "['directory/v1/domains/list', 'get_spf_records']",
-    "ReportDetails": "1 of 2 agency domain(s) found in violation: example.org.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "No relevant event in the current logs",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.GROUPS.3.1v0.2",
-    "ReportDetails": "No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantGroups': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GROUPS.7.1v0.2",
-    "Prerequisites": "['directory/v1/domains/list', 'directory/v1/groups/list', 'groups-settings/v1/groups/get']",
-    "ReportDetails": "Requirement met in all groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GROUPS.1.1v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GROUPS.6.1v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GROUPS.2.1v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GROUPS.4.1v0.2",
-    "ReportDetails": "Requirement met in all OUs.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': ['Org Name']}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.GROUPS.5.1v0.2",
-    "ReportDetails": "Requirement failed in Org Name.",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': []}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.MEET.4.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Host management when video calls start is set to off'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.MEET.3.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Host management when video calls start is set to off</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'What meetings can org users join is set to any meetings, including meetings created with personal accounts'}]}",
-    "Criticality": "Shall",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.MEET.2.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>",
-    "RequirementMet": "False"
-  },
-  {
-    "ActualValue": "{'NonCompliantOUs': [{'Name': 'Org Name', 'Value': 'Who can join meetings is set to all users (including users not signed in with a Google account)'}]}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.MEET.1.1v0.2",
-    "ReportDetails": "The following OUs are non-compliant:<ul><li>Org Name: Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>",
-    "RequirementMet": "False"
+  {
+    "ActualValue": "[{\"domain\": \"Cathy Holder\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.Cathy Holder\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:vanessa49@example.org,  mailto:vanessa49@example.org\"]}, {\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}], \"rdata\": []}]",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.4.4v0.2\"",
+    "Prerequisites": "[\"directory/v1/domains/list\", \"get_dmarc_records\"]",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "[{\"domain\": \"Jessica Harris\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"google._domainkey.Jessica Harris\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"selector1._domainkey.Jessica Harris\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_method\": \"traditional\", \"query_name\": \"selector2._domainkey.Jessica Harris\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwVCM2ZRZbi+HfMpoGMmEuv+0x+Fc7++ObO11SXDvyrm5OhMGDzyR6lMJPRhovYu4y4WxgKvYtalHtORzIzbcs5+m07uee/bmz6vZJqsSc/52O0UJGHYpBAPWktBb5Trjaj4Hr26FkTIJCPxy4z8m4Wsx9/+jimn5cdb4zbQhnwccBii6wptEekvATQu6cX8vo\\\" \\\"gy8NDFr6wcSxcM923EQSUout2OrUGmkJnQvrkKvCCj4Gjt8ZNoGGaLpd+vzKVbvyHaLOMbVreIWTm6fg5vM0DDmhVwIAfHUhoOlLOQ5GiGM4pK+z6MMzvAJE3bTLEvuoAji96GDSlLU+Kj+6rOWMQIDAQAB;\"]}, {\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"google._domainkey.example.org\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszok\\\" \\\"yLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHAqC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb\\\" \\\"4QIDAQAB\"]}]",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.2.1v0.2\"",
+    "Prerequisites": "[\"directory/v1/domains/list\", \"get_dkim_records\"]",
+    "ReportDetails": "\"Requirement met.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"EMAIL_SPAM_ALLOWLIST\": \"No relevant event in the current logs\"}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.GMAIL.14.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantGroups\": [{\"Name\": \"lauren67@example.org\", \"Value\": \"POP access is enabled\"}], \"NonCompliantOUs\": [{\"Name\": \"Maxwell Wells\", \"Value\": \"IMAP access is enabled\"}, {\"Name\": \"Org Name\", \"Value\": \"POP and IMAP access are enabled\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.9.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Holly Dickson: IMAP access is enabled</li><li>Org Name: POP and IMAP access are enabled</li></ul><br>The following groups are non-compliant:<ul><li>gsmith@example.net: POP access is enabled</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.15.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.5.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.5.2v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.5.3v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.7.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.7.2v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.7.3v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.7.4v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.7.5v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.16.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.5.4v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.7.6v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.7.7v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Janet Ramirez\", \"Value\": \"Emails with encrypted attachments from untrusted senders are kept in the inbox\"}, {\"Name\": \"Org Name\", \"Value\": \"Emails with encrypted attachments from untrusted senders are kept in the inbox\"}]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.5.5v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Dr. Claire Rodriguez: Emails with encrypted attachments from untrusted senders are kept in the inbox</li><li>Org Name: Emails with encrypted attachments from untrusted senders are kept in the inbox</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Joseph Richardson\", \"Value\": \"Mail delegation is set to enabled\"}, {\"Name\": \"Org Name\", \"Value\": \"Mail delegation is set to enabled\"}]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.1.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Troy Martin: Mail delegation is set to enabled</li><li>Org Name: Mail delegation is set to enabled</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Apply future recommended settings automatically is disabled\"}]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.6.4v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Apply future recommended settings automatically is disabled</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Automatically enable email autoforwarding is set to enabled\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.11.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Automatically enable email autoforwarding is set to enabled</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Automatically enable outlook sync is set to enabled\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.10.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Automatically enable outlook sync is set to enabled</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Identify links behind shortened URLs is disabled\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.6.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Identify links behind shortened URLs is disabled</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Scan linked images is disabled\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.6.2v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Scan linked images is disabled</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Show warning prompt for click on links to untrusted domains is disabled\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.6.3v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Show warning prompt for click on links to untrusted domains is disabled</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"User email uploads is set to enabled\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.8.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: User email uploads is set to enabled</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "[\"example.org\"]",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.3.1v0.2\"",
+    "Prerequisites": "[\"directory/v1/domains/list\", \"get_spf_records\"]",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event in the current logs\"",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.GROUPS.3.1v0.2\"",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantGroups\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GROUPS.7.1v0.2\"",
+    "Prerequisites": "[\"directory/v1/domains/list\", \"directory/v1/groups/list\", \"groups-settings/v1/groups/get\"]",
+    "ReportDetails": "\"Requirement met in all groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GROUPS.1.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GROUPS.6.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GROUPS.2.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GROUPS.4.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [\"Org Name\"]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GROUPS.5.1v0.2\"",
+    "ReportDetails": "\"Requirement failed in Org Name.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.MEET.4.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Host management when video calls start is set to off\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.MEET.3.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Host management when video calls start is set to off</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"What meetings can org users join is set to any meetings, including meetings created with personal accounts\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.MEET.2.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Who can join meetings is set to all users (including users not signed in with a Google account)\"}]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.MEET.1.1v0.2\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A Super Administrator for your Google account has started exporting data from your domain.",
-    "Requirement": "Domain data export initiated",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A Super Administrator for your Google account has started exporting data from your domain.\"",
+    "Requirement": "\"Domain data export initiated\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A problem has been detected with your client-side encryption service indicating an outage or misconfigured setting.",
-    "Requirement": "[Beta] Client-side encryption service unavailable",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A problem has been detected with your client-side encryption service indicating an outage or misconfigured setting.\"",
+    "Requirement": "\"[Beta] Client-side encryption service unavailable\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A sender has sent messages to your domain that users have classified as phishings.",
-    "Requirement": "User-reported phishing",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A sender has sent messages to your domain that users have classified as phishings.\"",
+    "Requirement": "\"User-reported phishing\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A sender has sent messages to your domain that users have classified as spam.",
-    "Requirement": "Suspicious message reported",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A sender has sent messages to your domain that users have classified as spam.\"",
+    "Requirement": "\"Suspicious message reported\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A suspended user is made active.",
-    "Requirement": "Suspended user made active",
-    "RequirementMet": "False"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A suspended user is made active.\"",
+    "Requirement": "\"Suspended user made active\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A user is granted an admin privilege.",
-    "Requirement": "User granted Admin privilege",
-    "RequirementMet": "False"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A user is granted an admin privilege.\"",
+    "Requirement": "\"User granted Admin privilege\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A user is revoked of their admin privilege.",
-    "Requirement": "User's Admin privilege revoked",
-    "RequirementMet": "False"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A user is revoked of their admin privilege.\"",
+    "Requirement": "\"User's Admin privilege revoked\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "An admin has suspended the account.",
-    "Requirement": "User suspended (by admin)",
-    "RequirementMet": "False"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"An admin has suspended the account.\"",
+    "Requirement": "\"User suspended (by admin)\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "An unusually high volume of messages from a sender that users have marked as spam.",
-    "Requirement": "Spike in user-reported spam",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"An unusually high volume of messages from a sender that users have marked as spam.\"",
+    "Requirement": "\"Spike in user-reported spam\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Auto attendants and ring groups with invalid references may hang up at unexpected times.",
-    "Requirement": "Google Voice configuration problem",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Auto attendants and ring groups with invalid references may hang up at unexpected times.\"",
+    "Requirement": "\"Google Voice configuration problem\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Directory sync has been automatically cancelled and disabled as the directory sync service detected a possibility to exceed deprovisioning safeguard threshold.",
-    "Requirement": "Directory sync cancelled due to safeguard threshold exceeded",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Directory sync has been automatically cancelled and disabled as the directory sync service detected a possibility to exceed deprovisioning safeguard threshold.\"",
+    "Requirement": "\"Directory sync cancelled due to safeguard threshold exceeded\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Google Workspace accounts engaging in suspicious activity may have their account suspended. Google Workspace accounts must comply with the Google Workspace Terms of Service, Google Workspace for Education Terms of Service, Google Cloud Platform Terms of Service or Cloud Identity Terms of Service.",
-    "Requirement": "Account suspension warning",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Google Workspace accounts engaging in suspicious activity may have their account suspended. Google Workspace accounts must comply with the Google Workspace Terms of Service, Google Workspace for Education Terms of Service, Google Cloud Platform Terms of Service or Cloud Identity Terms of Service.\"",
+    "Requirement": "\"Account suspension warning\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Google detected a sign-in attempt that doesn't match a user's normal behavior, such as a sign-in from an unusual location.",
-    "Requirement": "Suspicious login",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Google detected a sign-in attempt that doesn't match a user's normal behavior, such as a sign-in from an unusual location.\"",
+    "Requirement": "\"Suspicious login\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Google detected compromised credentials requiring a reset of the user's password.",
-    "Requirement": "Leaked password",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Google detected compromised credentials requiring a reset of the user's password.\"",
+    "Requirement": "\"Leaked password\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Google detected suspicious activity and suspended the account.",
-    "Requirement": "User suspended (Google identity alert)",
-    "RequirementMet": "False"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Google detected suspicious activity and suspended the account.\"",
+    "Requirement": "\"User suspended (Google identity alert)\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Google detected suspicious activity such as spamming and suspended the account.",
-    "Requirement": "User suspended for spamming",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Google detected suspicious activity such as spamming and suspended the account.\"",
+    "Requirement": "\"User suspended for spamming\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Google detected suspicious activity such as spamming through a SMTP relay service and suspended the account.",
-    "Requirement": "User suspended for spamming through relay",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Google detected suspicious activity such as spamming through a SMTP relay service and suspended the account.\"",
+    "Requirement": "\"User suspended for spamming through relay\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Google detected suspicious login attempts from potential applications or computer programs.",
-    "Requirement": "Suspicious programmatic login",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Google detected suspicious login attempts from potential applications or computer programs.\"",
+    "Requirement": "\"Suspicious programmatic login\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Google suspended a user's account due to a potential compromise detected.",
-    "Requirement": "User suspended due to suspicious activity",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Google suspended a user's account due to a potential compromise detected.\"",
+    "Requirement": "\"User suspended due to suspicious activity\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Incoming messages where a sender's name is in your Google Workspace directory, but the mail is not from your company's domains or domain aliases.",
-    "Requirement": "Gmail potential employee spoofing",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Incoming messages where a sender's name is in your Google Workspace directory, but the mail is not from your company's domains or domain aliases.\"",
+    "Requirement": "\"Gmail potential employee spoofing\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Messages classified as spam by Gmail filters delivered to user inboxes due to whitelisting settings in the Google Admin console that override the spam filters.",
-    "Requirement": "Phishing in inboxes due to bad whitelist",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Messages classified as spam by Gmail filters delivered to user inboxes due to whitelisting settings in the Google Admin console that override the spam filters.\"",
+    "Requirement": "\"Phishing in inboxes due to bad whitelist\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Messages detected as malware post-delivery that are automatically reclassified.",
-    "Requirement": "Malware message detected post-delivery",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Messages detected as malware post-delivery that are automatically reclassified.\"",
+    "Requirement": "\"Malware message detected post-delivery\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Messages detected as phishing post-delivery that are automatically reclassified.",
-    "Requirement": "Phishing message detected post-delivery",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Messages detected as phishing post-delivery that are automatically reclassified.\"",
+    "Requirement": "\"Phishing message detected post-delivery\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Messages requiring Transport Layer Security (TLS) can't be delivered.",
-    "Requirement": "TLS failure",
-    "RequirementMet": "False"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Messages requiring Transport Layer Security (TLS) can't be delivered.\"",
+    "Requirement": "\"TLS failure\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Provides details about devices in your domain that have entered a compromised state.",
-    "Requirement": "Device compromised",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Provides details about devices in your domain that have entered a compromised state.\"",
+    "Requirement": "\"Device compromised\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Provides details about security and privacy issues that affect your Google Workspace services.",
-    "Requirement": "Google Operations",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Provides details about security and privacy issues that affect your Google Workspace services.\"",
+    "Requirement": "\"Google Operations\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Provides details if device properties such as device ID, serial number, type of device, or device manufacturer are updated.",
-    "Requirement": "Suspicious device activity",
-    "RequirementMet": "True"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Provides details if device properties such as device ID, serial number, type of device, or device manufacturer are updated.\"",
+    "Requirement": "\"Suspicious device activity\"",
+    "RequirementMet": "true"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Shall",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Warnings about potential government-backed attacks.",
-    "Requirement": "Government-backed attacks",
-    "RequirementMet": "False"
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Warnings about potential government-backed attacks.\"",
+    "Requirement": "\"Government-backed attacks\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A high rate of incoming email indicating a potential malicious attack or misconfigured setting.",
-    "Requirement": "Rate limited recipient",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A high rate of incoming email indicating a potential malicious attack or misconfigured setting.\"",
+    "Requirement": "\"Rate limited recipient\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A new user has been added to the domain.",
-    "Requirement": "New user added",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A new user has been added to the domain.\"",
+    "Requirement": "\"New user added\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A user has been deleted from the domain.",
-    "Requirement": "User deleted",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A user has been deleted from the domain.\"",
+    "Requirement": "\"User deleted\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "A user has requested a Google Cloud SQL instance to be set up for use with App Maker.",
-    "Requirement": "App Maker Cloud SQL setup",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"A user has requested a Google Cloud SQL instance to be set up for use with App Maker.\"",
+    "Requirement": "\"App Maker Cloud SQL setup\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Alerts about new, updated, or resolved outage on the Google Workspace Status Dashboard.",
-    "Requirement": "Apps outage alert",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Alerts about new, updated, or resolved outage on the Google Workspace Status Dashboard.\"",
+    "Requirement": "\"Apps outage alert\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Alerts if a large number of messages can't be delivered to one of your smart host servers.",
-    "Requirement": "Smarthost failure",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Alerts if a large number of messages can't be delivered to one of your smart host servers.\"",
+    "Requirement": "\"Smarthost failure\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "An admin has changed Google Workspace Calendar settings.",
-    "Requirement": "Calendar settings changed",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"An admin has changed Google Workspace Calendar settings.\"",
+    "Requirement": "\"Calendar settings changed\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "An admin has changed Google Workspace Drive settings.",
-    "Requirement": "Drive settings changed",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"An admin has changed Google Workspace Drive settings.\"",
+    "Requirement": "\"Drive settings changed\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "An admin has changed Google Workspace Gmail settings.",
-    "Requirement": "Email settings changed",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"An admin has changed Google Workspace Gmail settings.\"",
+    "Requirement": "\"Email settings changed\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "An admin has changed mobile management settings.",
-    "Requirement": "Mobile settings changed",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"An admin has changed mobile management settings.\"",
+    "Requirement": "\"Mobile settings changed\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "[]",
-    "Criticality": "Should",
-    "NoSuchEvent": "True",
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
-    "ReportDetails": "Failures with Exchange journaling that ensures email traffic generated by Microsoft\u00ae Exchange server users is properly archived in Google Vault.",
-    "Requirement": "Exchange journaling failure",
-    "RequirementMet": "False"
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.2\"",
+    "ReportDetails": "\"Failures with Exchange journaling that ensures email traffic generated by Microsoft\\u00ae Exchange server users is properly archived in Google Vault.\"",
+    "Requirement": "\"Exchange journaling failure\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{'NonCompliantGroups': [], 'NonCompliantOUs': []}",
-    "Criticality": "Should",
-    "NoSuchEvent": "False",
-    "PolicyId": "GWS.SITES.1.1v0.2",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "RequirementMet": "True"
+    "ActualValue": "{\"NonCompliantGroups\": [], \"NonCompliantOUs\": []}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.SITES.1.1v0.2\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
   }
 ]
