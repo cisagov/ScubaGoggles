@@ -164,8 +164,8 @@ const colorRows = () => {
             }
             else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
                 rows[i].style.background = "var(--test-fail)";
-                rows[i].querySelectorAll('td')[1].style.borderColor = "var(--border-color)";
-                rows[i].querySelectorAll('td')[1].style.color = "#d10000";
+                rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
+                rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
             }
         }
         catch (error) {
@@ -192,7 +192,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Google Sites Baseline Report</h1>
             <h4><p><br/></p></h4>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Name </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>Org Name</td><td>12/06/2023 11:15:27 Pacific Daylight Time</td><td>0.1</td><td>0.1.0</td></tr>         </table>
+                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:18 Pacific Daylight Time</td><td>0.2</td><td>0.2.0</td></tr>         </table>
             <h2>SITES-1         Sites Service Status</h2><table>
   <thead>
     <tr>
@@ -205,11 +205,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.SITES.1.1v0.1</td>
+      <td>GWS.SITES.1.1v0.2</td>
       <td>Sites Service SHOULD be disabled for all users.</td>
       <td>Pass</td>
       <td>Should</td>
-      <td>Requirement met in all OUs.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
 </table>
