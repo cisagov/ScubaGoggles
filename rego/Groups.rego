@@ -10,7 +10,7 @@ LogEvents := utils.GetEvents("groups_logs")
 ################
 
 #
-# Baseline GWS.GROUPS.1.1v0.1
+# Baseline GWS.GROUPS.1.1v0.2
 #--
 NonCompliantOUs1_1 contains OU if {
     some OU in utils.OUsWithEvents
@@ -24,7 +24,7 @@ NonCompliantOUs1_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.1.1v0.1",
+    "PolicyId": "GWS.GROUPS.1.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -38,7 +38,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.1.1v0.1",
+    "PolicyId": "GWS.GROUPS.1.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -58,7 +58,7 @@ if {
 ################
 
 #
-# Baseline GWS.GROUPS.2.1v0.1
+# Baseline GWS.GROUPS.2.1v0.2
 #--
 NonCompliantOUs2_1 contains OU if {
     some OU in utils.OUsWithEvents
@@ -73,7 +73,7 @@ NonCompliantOUs2_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.2.1v0.1",
+    "PolicyId": "GWS.GROUPS.2.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -88,7 +88,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.2.1v0.1",
+    "PolicyId": "GWS.GROUPS.2.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs2_1),
     "ActualValue": {"NonCompliantOUs":NonCompliantOUs2_1},
@@ -108,7 +108,7 @@ if {
 ################
 
 #
-# Baseline GWS.GROUPS.3.1v0.1
+# Baseline GWS.GROUPS.3.1v0.2
 #--
 NonCompliantOUs3_1 contains OU if {
     some OU in utils.OUsWithEvents
@@ -122,7 +122,7 @@ NonCompliantOUs3_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.3.1v0.1",
+    "PolicyId": "GWS.GROUPS.3.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -137,7 +137,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.3.1v0.1",
+    "PolicyId": "GWS.GROUPS.3.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs3_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -158,7 +158,7 @@ if {
 ################
 
 #
-# Baseline GWS.GROUPS.4.1v0.1
+# Baseline GWS.GROUPS.4.1v0.2
 #--
 NonCompliantOUs4_1 contains OU if {
     some OU in utils.OUsWithEvents
@@ -172,7 +172,7 @@ NonCompliantOUs4_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.4.1v0.1",
+    "PolicyId": "GWS.GROUPS.4.1v0.2",
     "Criticality": "Should",
     "ReportDetails":utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -186,7 +186,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.4.1v0.1",
+    "PolicyId": "GWS.GROUPS.4.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs4_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -206,7 +206,7 @@ if {
 ################
 
 #
-# Baseline GWS.GROUPS.5.1v0.1
+# Baseline GWS.GROUPS.5.1v0.2
 #--
 NonCompliantOUs5_1 contains OU if {
     some OU in utils.OUsWithEvents
@@ -220,7 +220,7 @@ NonCompliantOUs5_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.5.1v0.1",
+    "PolicyId": "GWS.GROUPS.5.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -235,7 +235,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.5.1v0.1",
+    "PolicyId": "GWS.GROUPS.5.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsOUs(NonCompliantOUs5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
@@ -256,7 +256,7 @@ if {
 ################
 
 #
-# Baseline GWS.GROUPS.6.1v0.1
+# Baseline GWS.GROUPS.6.1v0.2
 #--
 CheckGroups6_1Compliance(Events, OUs) := true if {
     Groups := utils.FilterEventsOU(Events, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
@@ -277,7 +277,7 @@ NonCompliantOUs6_1 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.6.1v0.1",
+    "PolicyId": "GWS.GROUPS.6.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue":"No relevant event in the current logs",
@@ -291,7 +291,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GROUPS.6.1v0.1",
+    "PolicyId": "GWS.GROUPS.6.1v0.2",
     "Criticality": "Shall",
     "ReportDetails":utils.ReportDetailsOUs(NonCompliantOUs6_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1},
@@ -310,7 +310,7 @@ if {
 ################
 
 #
-# Baseline GWS.GROUPS.7.1v0.1
+# Baseline GWS.GROUPS.7.1v0.2
 #--
 NonCompliantGroups7_1 contains Group.name if {
     CheckGroups6_1Compliance(LogEvents, NonCompliantOUs6_1) == false
@@ -356,7 +356,7 @@ NonCompliantGroups7_1 contains Group.name if {
 
 # if there are no groups, it has to be safe.
 tests contains {
-    "PolicyId": "GWS.GROUPS.7.1v0.1",
+    "PolicyId": "GWS.GROUPS.7.1v0.2",
     "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list", "groups-settings/v1/groups/get"],
     "Criticality": "Should",
     "ReportDetails": utils.NoGroupsDetails(Groups),
@@ -371,7 +371,7 @@ if {
 
 # if there are groups
 tests contains {
-    "PolicyId": "GWS.GROUPS.7.1v0.1",
+    "PolicyId": "GWS.GROUPS.7.1v0.2",
     "Prerequisites": ["directory/v1/domains/list", "directory/v1/groups/list", "groups-settings/v1/groups/get"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsGroups(NonCompliantGroups7_1),

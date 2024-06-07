@@ -2,11 +2,11 @@ package drive
 import future.keywords
 
 #
-# GWS.DRIVE.6.1v0.1
+# GWS.DRIVE.6.1v0.2
 #--
 test_DriveFs_Setting_Correct_V1 if {
     # Test Drive setting when there's OU inhertitence setting
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -64,7 +64,7 @@ test_DriveFs_Setting_Correct_V1 if {
 
 test_DriveFs_Setting_Correct_V2 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -112,7 +112,7 @@ test_DriveFs_Setting_Correct_V2 if {
 
 test_DriveFs_Setting_Correct_V3 if {
     # Test Drive setting when there's multiple events and inherited OU setting
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -180,7 +180,7 @@ test_DriveFs_Setting_Correct_V3 if {
 
 test_DriveFs_Setting_Correct_V4 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -218,7 +218,7 @@ test_DriveFs_Setting_Correct_V4 if {
 
 test_DriveFs_Setting_InCorrect_V1 if {
     # Test Drive setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -257,7 +257,7 @@ test_DriveFs_Setting_InCorrect_V1 if {
 
 test_DriveFs_Setting_InCorrect_V2 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -316,7 +316,7 @@ test_DriveFs_Setting_InCorrect_V2 if {
 
 test_DriveFs_Setting_InCorrect_V3 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {

@@ -3,11 +3,11 @@ import future.keywords
 
 
 #
-# GWS.GMAIL.15.1v0.1
+# GWS.GMAIL.15.1v0.2
 #--
 test_EnhancedPreDeliveryMessageScanning_Correct_V1 if {
     # Test Enhanced Pre-Delivery Message Scanning when there's only one event
-    PolicyId := "GWS.GMAIL.15.1v0.1"
+    PolicyId := "GWS.GMAIL.15.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -18,7 +18,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V1 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -33,12 +33,12 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_EnhancedPreDeliveryMessageScanning_Correct_V2 if {
     # Test Enhanced Pre-Delivery Message Scanning when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.15.1v0.1"
+    PolicyId := "GWS.GMAIL.15.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -49,7 +49,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V2 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -77,12 +77,12 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
     # Test Enhanced Pre-Delivery Message Scanning when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.15.1v0.1"
+    PolicyId := "GWS.GMAIL.15.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -93,7 +93,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -106,7 +106,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -121,12 +121,12 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_EnhancedPreDeliveryMessageScanning_Correct_V4 if {
     # Test Enhanced Pre-Delivery Message Scanning when there's correct events in multiple OUs and inherited setting
-    PolicyId := "GWS.GMAIL.15.1v0.1"
+    PolicyId := "GWS.GMAIL.15.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -137,7 +137,7 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V4 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -165,12 +165,12 @@ test_EnhancedPreDeliveryMessageScanning_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V1 if {
     # Test Enhanced Pre-Delivery Message Scanning when there are no relevant events
-    PolicyId := "GWS.GMAIL.15.1v0.1"
+    PolicyId := "GWS.GMAIL.15.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -201,7 +201,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V1 if {
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {
     # Test Enhanced Pre-Delivery Message Scanning when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.15.1v0.1"
+    PolicyId := "GWS.GMAIL.15.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -212,7 +212,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -227,12 +227,13 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Enhanced pre-delivery message scanning is set to disabled</li></ul>"])
 }
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
     # Test Enhanced Pre-Delivery Message Scanning when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.15.1v0.1"
+    PolicyId := "GWS.GMAIL.15.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -243,7 +244,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -256,7 +257,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -271,12 +272,13 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Enhanced pre-delivery message scanning is set to disabled</li></ul>"])
 }
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V4 if {
     # Test Enhanced Pre-Delivery Message Scanning when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.15.1v0.1"
+    PolicyId := "GWS.GMAIL.15.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -287,7 +289,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V4 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -302,12 +304,13 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Enhanced pre-delivery message scanning is set to disabled</li></ul>"])
 }
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
     # Test Enhanced Pre-Delivery Message Scanning when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.15.1v0.1"
+    PolicyId := "GWS.GMAIL.15.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -318,7 +321,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -331,7 +334,7 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
                             "name": "SETTING_NAME",
                             "value": "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -346,16 +349,17 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+                                        "Enhanced pre-delivery message scanning is set to disabled</li></ul>"])
 }
 #--
 
 #
-# GWS.GMAIL.15.2v0.1
+# GWS.GMAIL.15.2v0.2
 #--
 test_Other_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.GMAIL.15.2v0.1"
+    PolicyId := "GWS.GMAIL.15.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},

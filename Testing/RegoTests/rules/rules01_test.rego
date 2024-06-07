@@ -3,7 +3,7 @@ import future.keywords
 
 test_Alert_Correct_V1 if {
     # 1 event
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "Government-backed attacks"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -43,7 +43,7 @@ test_Alert_Correct_V1 if {
 
 test_Alert_Correct_V2 if {
     # Just a status unchanged event, but rule is default-on
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "User-reported phishing"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -86,7 +86,7 @@ test_Alert_Correct_V2 if {
 
 test_Alert_Correct_V3 if {
     # Multiple events, but one is a "Status unchanged." event
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "Government-backed attacks"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -147,7 +147,7 @@ test_Alert_Correct_V3 if {
 
 test_Alert_Correct_V4 if {
     # Multiple events
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "Government-backed attacks"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -208,7 +208,7 @@ test_Alert_Correct_V4 if {
 
 test_Alert_Correct_V5 if {
     # no events, but default on
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "User-reported phishing"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -228,7 +228,7 @@ test_Alert_Correct_V5 if {
 
 test_Alert_Incorrect_V1 if {
     # 1 event
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "Government-backed attacks"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -268,7 +268,7 @@ test_Alert_Incorrect_V1 if {
 
 test_Alert_Incorrect_V2 if {
     # 1 status unchanged event, default is off
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "Government-backed attacks"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -308,7 +308,7 @@ test_Alert_Incorrect_V2 if {
 
 test_Alert_Incorrect_V3 if {
     # No events, default is off
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "Government-backed attacks"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -328,7 +328,7 @@ test_Alert_Incorrect_V3 if {
 
 test_Email_Correct_V1 if {
     # 1 event
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "TLS failure"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -368,7 +368,7 @@ test_Email_Correct_V1 if {
 
 test_Email_Correct_V2 if {
     # Multiple events, but one is a "Status unchanged." event
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "TLS failure"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -429,7 +429,7 @@ test_Email_Correct_V2 if {
 
 test_Email_Correct_V3 if {
     # Multiple events
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "TLS failure"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -490,7 +490,7 @@ test_Email_Correct_V3 if {
 
 test_Email_Correct_V4 if {
     # 1 event, receiver changed
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "TLS failure"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -533,7 +533,7 @@ test_Email_Correct_V4 if {
 
 test_Email_Incorrect_V1 if {
     # 1 event
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "TLS failure"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -573,7 +573,7 @@ test_Email_Incorrect_V1 if {
 
 test_Email_Incorrect_V2 if {
     # 1 status unchanged event, default is off
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "TLS failure"
     Output := tests with input as {
         "rules_logs": {"items": [
@@ -613,7 +613,7 @@ test_Email_Incorrect_V2 if {
 
 test_Email_Incorrect_V3 if {
     # No events, default is off
-    PolicyId := "GWS.COMMONCONTROLS.13.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.13.1v0.2"
     Requirement := "TLS failure"
     Output := tests with input as {
         "rules_logs": {"items": [

@@ -135,8 +135,8 @@ tenant_domain : str, main_report_name: str) -> str:
     now = datetime.now()
 
     report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
-    baseline_version = "0.1"
-    tool_version = "0.1.0"
+    baseline_version = "0.2"
+    tool_version = "0.2.0"
     meta_data = f"\
         <table style = \"text-align:center;\"> \
             <colgroup><col/><col/><col/></colgroup> \

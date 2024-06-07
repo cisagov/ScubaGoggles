@@ -3,11 +3,11 @@ import future.keywords
 
 
 #
-# GWS.GMAIL.7.1v0.1
+# GWS.GMAIL.7.1v0.2
 #--
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.1v0.1"
+    PolicyId := "GWS.GMAIL.7.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -36,12 +36,12 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.1v0.1"
+    PolicyId := "GWS.GMAIL.7.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -86,12 +86,12 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.1v0.1"
+    PolicyId := "GWS.GMAIL.7.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -136,12 +136,12 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-        PolicyId := "GWS.GMAIL.7.1v0.1"
+        PolicyId := "GWS.GMAIL.7.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -186,12 +186,12 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.1v0.1"
+    PolicyId := "GWS.GMAIL.7.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -223,7 +223,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V1 if {
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.1v0.1"
+    PolicyId := "GWS.GMAIL.7.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -252,12 +252,13 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against domain spoofing using similar domain names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.1v0.1"
+    PolicyId := "GWS.GMAIL.7.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -302,12 +303,13 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against domain spoofing using similar domain names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.1v0.1"
+    PolicyId := "GWS.GMAIL.7.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -336,12 +338,13 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against domain spoofing using similar domain names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.1v0.1"
+    PolicyId := "GWS.GMAIL.7.1v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -386,18 +389,19 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against domain spoofing using similar domain names is set to disabled</li></ul>"])
 }
 #--
 
 
 #
-# GWS.GMAIL.7.2v0.1
+# GWS.GMAIL.7.2v0.2
 #--
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.2v0.1"
+    PolicyId := "GWS.GMAIL.7.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -424,12 +428,12 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.2v0.1"
+    PolicyId := "GWS.GMAIL.7.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -470,12 +474,12 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.2v0.1"
+    PolicyId := "GWS.GMAIL.7.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -516,12 +520,12 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.2v0.1"
+    PolicyId := "GWS.GMAIL.7.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -562,12 +566,12 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.2v0.1"
+    PolicyId := "GWS.GMAIL.7.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -599,7 +603,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V1 if {
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.2v0.1"
+    PolicyId := "GWS.GMAIL.7.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -626,12 +630,13 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against spoofing of employee names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.2v0.1"
+    PolicyId := "GWS.GMAIL.7.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -672,12 +677,13 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against spoofing of employee names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.2v0.1"
+    PolicyId := "GWS.GMAIL.7.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -704,12 +710,13 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against spoofing of employee names is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.2v0.1"
+    PolicyId := "GWS.GMAIL.7.2v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -750,16 +757,17 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against spoofing of employee names is set to disabled</li></ul>"])
 }
 
 
 #
-# GWS.GMAIL.7.3v0.1
+# GWS.GMAIL.7.3v0.2
 #--
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.3v0.1"
+    PolicyId := "GWS.GMAIL.7.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -788,12 +796,12 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.3v0.1"
+    PolicyId := "GWS.GMAIL.7.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -838,12 +846,12 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.3v0.1"
+    PolicyId := "GWS.GMAIL.7.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -888,12 +896,12 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.3v0.1"
+    PolicyId := "GWS.GMAIL.7.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -938,12 +946,12 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.3v0.1"
+    PolicyId := "GWS.GMAIL.7.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -975,7 +983,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V1 if 
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.3v0.1"
+    PolicyId := "GWS.GMAIL.7.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1004,12 +1012,13 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V2 if 
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.3v0.1"
+    PolicyId := "GWS.GMAIL.7.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1054,12 +1063,13 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V3 if 
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.3v0.1"
+    PolicyId := "GWS.GMAIL.7.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1088,12 +1098,13 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V4 if 
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.3v0.1"
+    PolicyId := "GWS.GMAIL.7.3v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1138,17 +1149,18 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V5 if 
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 
 #
-# GWS.GMAIL.7.4v0.1
+# GWS.GMAIL.7.4v0.2
 #--
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.4v0.1"
+    PolicyId := "GWS.GMAIL.7.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1175,12 +1187,12 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.4v0.1"
+    PolicyId := "GWS.GMAIL.7.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1221,12 +1233,12 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.4v0.1"
+    PolicyId := "GWS.GMAIL.7.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1267,12 +1279,12 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.4v0.1"
+    PolicyId := "GWS.GMAIL.7.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1313,13 +1325,13 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.4v0.1"
+    PolicyId := "GWS.GMAIL.7.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1351,7 +1363,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V1 if {
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.4v0.1"
+    PolicyId := "GWS.GMAIL.7.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1378,12 +1390,13 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against any unauthenticated emails is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.4v0.1"
+    PolicyId := "GWS.GMAIL.7.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1424,12 +1437,13 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect against any unauthenticated emails is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.4v0.1"
+    PolicyId := "GWS.GMAIL.7.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1456,12 +1470,13 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against any unauthenticated emails is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.4v0.1"
+    PolicyId := "GWS.GMAIL.7.4v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1502,16 +1517,17 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect against any unauthenticated emails is set to disabled</li></ul>"])
 }
 
 
 #
-# GWS.GMAIL.7.5v0.1
+# GWS.GMAIL.7.5v0.2
 #--
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.5v0.1"
+    PolicyId := "GWS.GMAIL.7.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1540,12 +1556,12 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V1
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.5v0.1"
+    PolicyId := "GWS.GMAIL.7.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1590,12 +1606,12 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V2
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.5v0.1"
+    PolicyId := "GWS.GMAIL.7.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1640,12 +1656,12 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V3
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.5v0.1"
+    PolicyId := "GWS.GMAIL.7.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1690,12 +1706,12 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V4
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.5v0.1"
+    PolicyId := "GWS.GMAIL.7.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1727,7 +1743,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.5v0.1"
+    PolicyId := "GWS.GMAIL.7.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1756,12 +1772,13 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect your Groups from inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.5v0.1"
+    PolicyId := "GWS.GMAIL.7.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1806,12 +1823,13 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Protect your Groups from inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.5v0.1"
+    PolicyId := "GWS.GMAIL.7.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1840,12 +1858,13 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect your Groups from inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.5v0.1"
+    PolicyId := "GWS.GMAIL.7.5v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1890,15 +1909,16 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Protect your Groups from inbound emails spoofing your domain is set to disabled</li></ul>"])
 }
 
 #
-# GWS.GMAIL.7.6v0.1
+# GWS.GMAIL.7.6v0.2
 #--
 test_SpoofingAuthenticationProtection_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.6v0.1"
+    PolicyId := "GWS.GMAIL.7.6v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1987,12 +2007,12 @@ test_SpoofingAuthenticationProtection_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtection_InCorrect_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.6v0.1"
+    PolicyId := "GWS.GMAIL.7.6v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2081,12 +2101,13 @@ test_SpoofingAuthenticationProtection_InCorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Inbound emails spoofing domain names are kept in the inbox</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtection_InCorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.6v0.1"
+    PolicyId := "GWS.GMAIL.7.6v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2175,16 +2196,17 @@ test_SpoofingAuthenticationProtection_InCorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Inbound emails spoofing domain names are kept in the inbox</li></ul>"])
 }
 
 
 #
-# GWS.GMAIL.7.7v0.1
+# GWS.GMAIL.7.7v0.2
 #--
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.7v0.1"
+    PolicyId := "GWS.GMAIL.7.7v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2213,12 +2235,12 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.7v0.1"
+    PolicyId := "GWS.GMAIL.7.7v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2263,12 +2285,12 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.7v0.1"
+    PolicyId := "GWS.GMAIL.7.7v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2313,12 +2335,12 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.7v0.1"
+    PolicyId := "GWS.GMAIL.7.7v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2363,12 +2385,12 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.7v0.1"
+    PolicyId := "GWS.GMAIL.7.7v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2400,7 +2422,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V1 if {
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.7v0.1"
+    PolicyId := "GWS.GMAIL.7.7v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2429,12 +2451,13 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Automatically enable all future added settings is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.7v0.1"
+    PolicyId := "GWS.GMAIL.7.7v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2479,12 +2502,13 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+        "Automatically enable all future added settings is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.7v0.1"
+    PolicyId := "GWS.GMAIL.7.7v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2513,12 +2537,13 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Automatically enable all future added settings is set to disabled</li></ul>"])
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.7v0.1"
+    PolicyId := "GWS.GMAIL.7.7v0.2"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2563,5 +2588,6 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        "Automatically enable all future added settings is set to disabled</li></ul>"])
 }
