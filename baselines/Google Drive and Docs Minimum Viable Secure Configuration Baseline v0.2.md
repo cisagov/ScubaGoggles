@@ -98,10 +98,11 @@ Agencies SHALL disable making files and published web content visible to anyone 
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.6v0.2
-Agencies SHALL enable access checking for file sharing outside of Docs or Drive.
+Agencies SHOULD set access checking to recipients only.
 
 - _Rationale:_ The Access Checker feature can be configured to allows users to grant access to the public if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients or the suggested target audience.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ June 7, 2024
+- _Note:_ Agencies SHALL NOT set access checking to Recipients only, suggested target audience, or public (no Google account required).
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
