@@ -368,10 +368,10 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 ### Policies
 
 #### GWS.DRIVEDOCS.6.1v0.2
-Agencies SHOULD either disable Google Drive for Desktop or only allow Google Drive for Desktop on authorized devices.
+Google Drive for Desktop SHOULD only be enabled for authorized devices.
 
 - _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ June 7, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
