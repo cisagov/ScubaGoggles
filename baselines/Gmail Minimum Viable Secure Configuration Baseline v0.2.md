@@ -695,20 +695,10 @@ POP and IMAP access SHALL be disabled to protect sensitive agency or organizatio
 
 - _Rationale:_ Enabling POP and IMAP access could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. By disabling POP and IMAP access, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
+- _Note:_ POP and IMAP access MAY be enabled on a per-user and per-application basis as needed.
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
-
-#### GWS.GMAIL.9.2v0.2
-POP and IMAP access MAY be enabled on a per-user and per-application basis as needed.
-
-- _Rationale:_ Enabling POP and IMAP access indiscriminately could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. Allowing POP and IMAP access only on a per-user and per-application basis as needed can reduce this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:001: Exfiltration Over Alternative Protocol: Exfiltration Over Symmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/001/)
     - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
 
 ### Resources
@@ -723,18 +713,15 @@ POP and IMAP access MAY be enabled on a per-user and per-application basis as ne
 
 To configure the settings for POP and IMAP access:
 
-#### Policies Group 9 common Instructions
+
+#### GWS.GMAIL.9.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
 3.  Select **End User Access -\> POP and IMAP access**.
 4.  Follow the implementation for each policy.
 5.  Select **Save**.
-
-#### GWS.GMAIL.9.1v0.2 Instructions
-1.  Uncheck the **Enable IMAP access for all users** checkbox.
-
-#### GWS.GMAIL.9.2v0.2 Instructions
-1.  Uncheck the **Enable POP access for all users** checkbox.
+6.  Uncheck the **Enable IMAP access for all users** checkbox.
+7.  Uncheck the **Enable POP access for all users** checkbox.
 
 
 ## 10. Google Workspace Sync
