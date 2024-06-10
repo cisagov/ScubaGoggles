@@ -718,10 +718,9 @@ To configure the settings for POP and IMAP access:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
 3.  Select **End User Access -\> POP and IMAP access**.
-4.  Follow the implementation for each policy.
-5.  Select **Save**.
-6.  Uncheck the **Enable IMAP access for all users** checkbox.
-7.  Uncheck the **Enable POP access for all users** checkbox.
+4.  Select **Save**.
+5.  Uncheck the **Enable IMAP access for all users** checkbox.
+6.  Uncheck the **Enable POP access for all users** checkbox.
 
 
 ## 10. Google Workspace Sync
