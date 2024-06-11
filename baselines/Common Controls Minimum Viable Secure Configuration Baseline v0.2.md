@@ -24,6 +24,7 @@ This baseline is based on Google documentation and addresses the following:
 - [System-Defined Rules](#13-system-defined-rules)
 - [Google Workspace Logs](#14-google-workspace-logs)
 - [Data Regions](#15-data-regions-and-storage)
+- [Additional Google Services](#16-additional-google-services)
 
 ## Assumptions
 
@@ -239,16 +240,7 @@ Policies restricting access to GWS based on signals about enterprise devices SHO
 
 - _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on user/device attributes.
 - _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
-    - [T1098:005: Account Manipulation: Device Registration](https://attack.mitre.org/techniques/T1098/005/)
-
-#### GWS.COMMONCONTROLS.2.2v0.2
-Use of context-aware access for more granular controls, including using Advanced Mode (CEL), MAY be maximized and tailored if necessary.
-
-- _Rationale:_ Unless you create and assign access levels, enabling context-aware access does not provide any additional protection. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on the user and/or device context. Advanced Mode's Common Expressions Language (CEL) gives administrators the ability to tailor access policies for devices, time-based use cases, authentication, and to combine multiple conditions into tailored controls.
-- _Last modified:_ July 11, 2023
+- _Note:_ More granular controls may be used if the agency needs it.
 
 - MITRE ATT&CK TTP Mapping
   - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
@@ -1075,11 +1067,9 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 ### Implementation
 
 #### GWS.COMMONCONTROLS.14.1v0.2 Instructions
-1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.  Go to Menu [Account \> Account settings \> Legal and compliance](https://admin.google.com/ac/companyprofile/legal).
-3.  Click **Sharing options.**
-4.  Select **Enabled.**
-5.  Click **Save**.
+Follow the configuration instructions unique to the products and integration patterns at your organization to send the security logs to the security operations center for monitoring.
+
+Note: Agencies can benefit from security detection capabilities offered by the CISA Cloud Log Aggregation Warehouse (CLAW) system. Agencies are urged to send the logs to CLAW. Contact CISA at [cyberliason@cisa.dhs.gov]
 
 #### GWS.COMMONCONTROLS.14.2v0.2 Instructions
 1.  There is no implementation for this policy.
@@ -1138,4 +1128,39 @@ To configure Supplemental Data Storage per the policy:
 2.	Navigate to **Account** -> **Account settings**.
 3.	Click the **Supplemental Data Storage** card.
 4.	Ensure the checkbox for "**Russian Federation**" is unchecked.
+6.	Click **Save**.
+
+
+## 16. Additional Google Services
+
+This section covers the Google services that do not have an individual control and whether these services are on or off.
+
+### Policy
+
+#### GWS.COMMONCONTROLS.16.1v0.1
+Service status SHOULD be set to OFF for everyone.
+
+- _Rationale_: Allowing access to additional google services without a need creates unnceccessary vulnerabilities within the Google Workspace enviroment. By turning these services off, it mitigates the risk by not allowing access.
+- _Last modified:_ October 30, 2023
+
+- MITRE ATT&CK TTP Mapping
+  - Pending
+
+### Resources
+-	[GWS Admin Help \| Data regions: Choose a geographic location for your data](https://support.google.com/a/answer/7630496)
+-	[GWS Admin Help \| What data is covered by a data region policy?](https://support.google.com/a/answer/9223653)
+
+### Prerequisites
+
+- Super Admin role
+
+### Implementation
+
+#### GWS.COMMONCONTROLS.16.1v0.1 Instructions
+To configure Data Regions per the policy:
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.	Navigate to **Account** -> **Account settings**.
+3.	Click the **Data Regions** card.
+4.	Click the **Data Regions** policy card.
+5.	Select the radio button option: "**United States**"
 6.	Click **Save**.
