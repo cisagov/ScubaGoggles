@@ -1,4 +1,4 @@
-# Download and Install
+# Download and Python Install
 
 ## Downloading the Latest Release
 To download ScubaGoggles:
@@ -46,5 +46,6 @@ pip3 install -r requirements.txt
 > [!IMPORTANT]
 > Users will need to rerun the `activate` script from the OS specific directions above in each new terminal session to reactivate the `venv` containing the dependencies.
 
-<!-- TODO segway into OPA>
-<!-- TODO segway into Python Dependencies>
+## Navigation
+- Continue to [Install OPA](/docs/installation/OPA.md)
+- Return [Home](/README.md)
