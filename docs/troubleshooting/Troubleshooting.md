@@ -1,7 +1,7 @@
 # Troubleshooting
 
 ## Lots of Manual Checks
-The report output by ScubaGoggles may include indicate that many manual checks are needed (e.g., https://github.com/cisagov/ScubaGoggles/issues/260). This is likely a symptom of ScubaGoggles' primary limitation. As the API calls to check these settings are have not been made public by Google, ScubaGoggles relies on [GWS Admin log events](https://support.google.com/a/answer/4579579?hl=en) to determine the current state. If there are no log event corresponding to a SCuBA baseline policy (e.g., because the setting hasn't been changed within the past 6 months), ScubaGoggles will indicate that the setting needs to be checked manually. See [Limitations](/docs/usage/Limitations.md) for more details.
+The report output by ScubaGoggles may indicate that many manual checks are needed (e.g., https://github.com/cisagov/ScubaGoggles/issues/260). This is a symptom of ScubaGoggles' primary limitation. As the API calls to check these settings are have not been made public by Google, ScubaGoggles relies on [GWS Admin log events](https://support.google.com/a/answer/4579579?hl=en) to determine the current state. If there are no log events corresponding to a SCuBA baseline policy (e.g., because the setting hasn't been changed within the past 6 months), ScubaGoggles will indicate that the setting needs to be checked manually. See [Limitations](/docs/usage/Limitations.md) for more details.
 
 ## Not Authorized to Access This Resource
 
@@ -10,8 +10,7 @@ If an authorization error similar to the one below appears:
 /Users/scubagoggles/provider.py:463: RuntimeWarning: An exception was thrown trying to get the tenant info:
 <HttpError 403 when requesting https://admin.googleapis.com/admin/directory/v1/customers/my_customer?alt=json returned "Not Authorized to access this resource/api">
 ```
-Ensure that you consented to the following API scopes as a user with the proper [permissions to consent](#permissions) and have enabled the required [APIs and Services](#create-an-oauth-credential).
-
+Ensure that you consented to the following API scopes as a user with the proper [permissions to consent](/docs/prerequisites/Prerequisites.md#permissions) and have enabled the required [APIs and Services](/docs/authentication/OAuth.md).
 
 ## Scubagoggles Not Found
 If an error similar to the one below appears:
@@ -19,7 +18,7 @@ If an error similar to the one below appears:
 command not found: scubagoggles
 ```
 
-Ensure that you have properly [configured the virtual environment](#installing-in-a-virtual-environment) and have activated the virtual environment using the OS appropriate commands.
+Ensure that you have properly [configured the virtual environment](/docs/installation/DownloadAndInstall.md#installing-in-a-virtual-environment) and have activated the virtual environment using the OS appropriate commands.
 
 Alternatively, to run scubagoggles without installing it as a package, you can replace the `scubagoggles` command with `python scuba.py`.
 
@@ -70,3 +69,6 @@ The output will resemble the following:
                 }
                 ...
 ```
+
+## Navigation
+- Return to [Documentation Home](/README.md)
