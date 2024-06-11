@@ -39,5 +39,5 @@ The html report should open automatically. If not, navigate to the output folder
 > If you chose not install the `scubagoggles` package in a venv but do have the dependencies installed from `requirements.txt`, you may execute the tool using the `scuba.py` script located in the root directory of this repository. Replace any `scubagoggles` directions with `python scuba.py`
 
 ## Navigation
-- Continue to [Reviewing Output](/docs/usage/Output.md)
+- Continue to [Reviewing Output](/docs/usage/ReviewOutput.md)
 - Return to [Documentation Home](/README.md)

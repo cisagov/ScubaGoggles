@@ -54,7 +54,7 @@ The majority of the conformance checks done by ScubaGoggles rely on [GWS Admin l
 
 - [Usage: Parameters](/docs/usage/Parameters.md)
 - [Usage: Examples](/docs/usage/Examples.md)
-- [Reviewing Output](/docs/usage/Output.md)
+- [Reviewing Output](/docs/usage/ReviewOutput.md)
 - [Limitations](/docs/usage/Limitations.md)
 
 ### Troubleshooting
