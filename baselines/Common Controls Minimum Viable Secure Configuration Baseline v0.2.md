@@ -508,7 +508,7 @@ All highly privileged accounts SHALL leverage Google Account authentication with
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 #### GWS.COMMONCONTROLS.6.2v0.2
-A minimum of **two** and maximum of **four** separate and distinct super admin users SHALL be configured.
+A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.
 
 - _Rationale:_ The super admin role provides unfettered access to the workspace. Properly managing the number of users with this level of access makes workspace compromise more challenging. However, having too few accounts can be problematic as it increases the risk of losing admin access entirely (e.g., if a super admin forgets their password); having between 2 and 4 balances these two concerns.
 - _Last modified:_ July 10, 2023
@@ -585,6 +585,7 @@ Account conflict management SHALL be configured to replace conflicting unmanaged
 -   [Google Workspace Updates Blog | Resolve conflict accounts faster with the new Conflict Accounts Management tool](https://workspaceupdates.googleblog.com/2023/08/conflict-accounts-management-tool.html)
 -   [Google Cloud Architecture Center | Migrating consumer accounts](https://cloud.google.com/architecture/identity/migrating-consumer-accounts#using_a_conflicting_account)
 -   [Google Cloud Architecture Center | Best practices for planning accounts and organizations](https://cloud.google.com/architecture/identity/best-practices-for-planning)
+-   [How a conflicting account is created](https://support.google.com/accounts/answer/181526)
 
 ### Prerequisites
 
