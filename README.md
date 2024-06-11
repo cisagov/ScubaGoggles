@@ -1,6 +1,6 @@
 
+![CISA Logo](/docs/images/cisa.png)
 <div align='center' style="margin:0;" id="user-content-toc">
-  ![CISA Logo](/docs/images/cisa.png)
   <ul>
     <summary><h1 style="display: inline-block;">ScubaGoggles</h1></summary>
   </ul>
