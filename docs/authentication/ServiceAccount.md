@@ -22,5 +22,5 @@ Only complete this section if not authenticating via [OAuth](/docs/authenticatio
 > To do so, specify the `--customerid` argument with the customer ID of the target organization (found in [admin.google.com](https://admin.google.com/) under **Account** -> **Account settings**)
 
 ## Navigation
-- Continue to [Parameters](/docs/usage/Parameters.md)
+- Continue to [Usage: Parameters](/docs/usage/Parameters.md)
 - Return to [Documentation Home](/README.md)

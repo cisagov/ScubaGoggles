@@ -1,5 +1,5 @@
 
-## Parameters
+# Usage: Parameters
 Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS, all commands will be under the `gws` subparser.
 
 ```
@@ -22,7 +22,7 @@ optional arguments:
   --outjsonfilename     The name of the file that encapsulates all assessment output. Defaults to ScubaResults.
   --subjectemail        Only applicable when using a service account. The email address of a user the service account
                         should act on behalf of. This user must have the necessary privileges to run scubagoggles.
-  --customerid          The customer ID the tool should run on. Defaults to "my_customer" which will be the domain of 
+  --customerid          The customer ID the tool should run on. Defaults to "my_customer" which will be the domain of
                         the user / service account authenticating.
   --opapath             The relative path to the directory containing the OPA executable. Defaults to "./" the current
                         executing directory.
@@ -37,11 +37,11 @@ optional arguments:
   --outputfoldername    The name of the folder created in --outputpath where both the output JSON and the HTML report
                         will be created. Defaults to GWSBaselineConformance. The client's local timestamp will be
                         appended to this name.
-  --outputproviderfilename 
+  --outputproviderfilename
                         The name of the Provider output json in --outputpath. Defaults to ProviderSettingsExport.
-  --outputregofilename 
+  --outputregofilename
                         The name of the Rego output json in --outputpath. Defaults to TestResults.
-  --outputreportfilename 
+  --outputreportfilename
                         The name of the main html file homepage created in --outputpath. Defaults to BaselineReports.
   --omitsudo            This switch prevents running the OPA executable with sudo.
   --quiet               This switch suppresses automatically launching a web browser to open the html report output
@@ -49,4 +49,6 @@ optional arguments:
   --debug               This switch is used to print debugging information for OPA.
 ```
 
-<!-- TODO segway into examples md>
+## Navigation
+- Continue to [Usage: Examples](/docs/usage/Examples.md)
+- Return to [Documentation Home](/README.md)

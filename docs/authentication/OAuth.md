@@ -46,5 +46,5 @@ If you've limited application access to Google's APIs in your organization, the 
 11. Select **Trusted**
 
 ## Navigation
-- Continue to [Parameters](/docs/usage/Parameters.md)
+- Continue to [Usage: Parameters](/docs/usage/Parameters.md)
 - Return to [Documentation Home](/README.md)
