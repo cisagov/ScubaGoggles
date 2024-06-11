@@ -1,5 +1,5 @@
 
-### Download the OPA executable
+# Download the OPA executable
 
 The tool makes use of [Open Policy Agent's Rego Policy language](https://www.openpolicyagent.org/docs/latest/policy-language/).
 An OPA executable is required to execute this tool and can be downloaded using our `download_opa.py` script.
@@ -37,4 +37,6 @@ python download_opa.py -v 0.60.0 -os macos
 chmod +x opa_darwin_amd64 # give the opa executable execute permissions
 ```
 
-<!-- TODO segway into permissions md>
+## Navigation
+- Continue to [Permissions](/docs/prerequisites/Permissions.md)
+- Return to [Documentation Home](/README.md)

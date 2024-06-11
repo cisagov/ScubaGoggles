@@ -47,5 +47,5 @@ pip3 install -r requirements.txt
 > Users will need to rerun the `activate` script from the OS specific directions above in each new terminal session to reactivate the `venv` containing the dependencies.
 
 ## Navigation
-- Continue to [Install OPA](/docs/installation/OPA.md)
+- Continue to [Download the OPA executable](/docs/installation/OPA.md)
 - Return to [Documentation Home](/README.md)

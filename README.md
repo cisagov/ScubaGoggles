@@ -38,7 +38,7 @@ The majority of the conformance checks done by ScubaGoggles rely on [GWS Admin l
 ### Installation
 
 - [Download and Python Install](/docs/installation/DownloadAndInstall.md)
-- [Install OPA](/docs/installation/OPA.md)
+- [Download the OPA Executable](/docs/installation/OPA.md)
 
 ### Prerequisites
 
