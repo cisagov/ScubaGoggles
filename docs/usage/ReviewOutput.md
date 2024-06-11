@@ -4,6 +4,8 @@ By default, ScubaGoggles output will be saved in a folder within the current wor
 
 Unless run with the `--quiet` parameter, the HTML report will open automatically using the system's default browser.
 
+See [Usage: Parameters](/docs/usage/Parameters.md) for more details on these and other parameters.
+
 ## Output Format
 The output will be saved in both HTML and json formats. See [Sample Report](/sample-report) for an example of the output.
 
