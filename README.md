@@ -42,8 +42,8 @@ The majority of the conformance checks done by ScubaGoggles rely on [GWS Admin l
 
 ### Prerequisites
 
-- [Permissions](/docs/prerequisites/Permissions.md)
-- [Create a Project](/docs/prerequisites/CreateAProject.md)
+- [Permissions](/docs/prerequisites/Prerequisites.md#permissions)
+- [Create a Project](/docs/prerequisites/Prerequisites.md#create-a-project)
 
 ### Authentication
 

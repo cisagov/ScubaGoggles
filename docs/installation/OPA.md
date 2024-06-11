@@ -38,5 +38,5 @@ chmod +x opa_darwin_amd64 # give the opa executable execute permissions
 ```
 
 ## Navigation
-- Continue to [Permissions](/docs/prerequisites/Permissions.md)
+- Continue to [Prerequisites](/docs/prerequisites/Prerequisites.md)
 - Return to [Documentation Home](/README.md)
