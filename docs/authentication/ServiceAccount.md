@@ -13,7 +13,7 @@ Only complete this section if not authenticating via [OAuth](/docs/authenticatio
 1. Select **MANAGE DOMAIN WIDE DELEGATION**
 1. Select **Add new**
 1. Enter the `client_id` from the downloaded credentials (also visible after clicking on the created Service account under Details -> Unique ID)
-1. Enter each OAuth scope as listed in [OAuth API Scopes](#oauth-api-scopes)
+1. Enter each OAuth scope as listed in [Permissions](/docs/prerequisites/Prerequisites.md#permissions)
 1. Select **AUTHORIZE**
 1. Finally, run ScubaGoggles with the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
 
