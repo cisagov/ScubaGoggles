@@ -190,3 +190,41 @@ To enable Host Management meeting features:
 3.  Select **Meet safety settings** -\> **Warn for external participants**.
 4.  Check the **External or unidentified participants in a meeting are given a label** checkbox.
 5.  Select **Save**.
+
+## 5. 1:1 Calling
+
+This section covers who domain users are allowed to receive a 1:1 call from.
+
+### Policies
+
+#### GWS.CHAT.5.1v0.1
+Users receive calls only from contacts and other users in the organization SHALL be selected.
+
+- _Rationale:_ Calls could potentially be used to pass sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
+- Last Modified: March 15, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:004: Phishing: Spearphishing Voice](https://attack.mitre.org/techniques/T1566/004/)
+  - [T1598: Phishing for Information](https://attack.mitre.org/techniques/T1598/)
+    - [T1598:004: Phishing for Information: Spearphishing Voice](https://attack.mitre.org/techniques/T1598/004/)
+  - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
+  - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)
+  - [T1125: Video Capture](https://attack.mitre.org/techniques/T1125/)
+
+### Resources
+- [Restrict who can call my organization's users with Google Meet](https://apps.google.com/supportwidget/articlehome?article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F14277985&assistant_id=generic-unu&product_context=14277985&product_name=UnuFlow&trigger_context=a)
+
+### Prerequisites
+-   None
+
+### Implementation
+
+#### GWS.MEET.5.1v0.1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
+3.  Click **Meet safety settings**.
+4.  Click **Incoming call restrictions**.
+5.  Ensure **Users receive calls only from contacts and other users in the organization** is selected.
+6.  Click **Save**.
