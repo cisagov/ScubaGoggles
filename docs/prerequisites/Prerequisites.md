@@ -21,5 +21,5 @@ When running ScubaGoggles for the first time you will be prompted to consent to 
 3. Follow the [directions outlined in this guide to create a project](https://developers.google.com/workspace/guides/create-project)
 
 ## Navigation
-- Continue to [Authentication](/docs/prerequisites/README.md)
+- Continue to [Authentication Methods](/docs/authentication/AuthenticationMethods.md)
 - Return to [Documentation Home](/README.md)

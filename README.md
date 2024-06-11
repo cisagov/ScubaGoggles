@@ -46,7 +46,7 @@ The majority of the conformance checks done by ScubaGoggles rely on [GWS Admin l
 - [Create a Project](/docs/prerequisites/Prerequisites.md#create-a-project)
 
 ### Authentication
-
+- [Authentication Methods](/docs/authentication/AuthenticationMethods.md)
 - [Using OAuth](/docs/authentication/OAuth.md)
 - [Using a Service Account](/docs/authentication/ServiceAccount.md)
 
