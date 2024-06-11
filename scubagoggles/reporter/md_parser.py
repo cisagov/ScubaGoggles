@@ -4,9 +4,10 @@ This modules contains functions petaining to the baseline markdown documents.
 """
 
 import re
+import pathlib
 from html import escape
 
-def read_baseline_docs(baseline_path:str, prod_to_fullname:dict):
+def read_baseline_docs(baseline_path:pathlib.Path, prod_to_fullname:dict):
     """
     This function parses the secure baseline via each product markdown
     document to align policy with the software baseline.
@@ -17,14 +18,13 @@ def read_baseline_docs(baseline_path:str, prod_to_fullname:dict):
         filename.stem for filename in baseline_path.glob('*.md')
     ]
 
-    # map baseline short name i.e gmail to markdown file name
-    # assumes the product fullname is in the markdown file name
+    # # map baseline short name i.e gmail to markdown file name
+    # # assumes the product short name is in the markdown file name
     prod_to_baselinemd = {}
-    for product, fullname in prod_to_fullname.items():
+    for product in prod_to_fullname:
         for baseline in baseline_md:
-            if fullname in baseline:
+            if product in baseline:
                 prod_to_baselinemd[product] = baseline
-
 
     # create a dict containing Policy Group and Individual policies
     baseline_output = {}
@@ -32,7 +32,7 @@ def read_baseline_docs(baseline_path:str, prod_to_fullname:dict):
         baseline_output[product] = []
         baselinemd_path = baseline_path / f"{baselinemd}.md"
         with baselinemd_path.open(mode='r',encoding='UTF-8') as baseline_f:
-            md_lines =baseline_f.readlines()
+            md_lines = baseline_f.readlines()
 
         # Select the policy group number via "## Number." regex
         # example line this would match on: ## 1. PolicyGroup

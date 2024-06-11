@@ -15,7 +15,7 @@
 </div>
 <h2 align='center' stye="margin:0;">GWS Secure Configuration Baseline Assessment Tool </h2>
 
-Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google Workspace (GWS) organization's configuration conforms to the policies described in the Secure Cloud Business Applications ([SCuBA](https://cisa.gov/scuba)) Security Configuration Baseline [documents](https://github.com/cisagov/ScubaGoggles/tree/main/baselines).
+Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google Workspace (GWS) organization's configuration conforms to the policies described in the Secure Cloud Business Applications ([SCuBA](https://cisa.gov/scuba)) Security Configuration Baseline [documents](/baselines).
 
 For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://github.com/cisagov/ScubaGear).
 
