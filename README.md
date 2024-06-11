@@ -58,10 +58,10 @@ The majority of the conformance checks done by ScubaGoggles rely on [GWS Admin l
 - [Limitations](/docs/usage/Limitations.md)
 
 ### Troubleshooting
-
-- [Not Authorized to Access This Resource](/docs/usage/NotAuthorized.md)
-- [scubagoggles Not Found](/docs/usage/NotFound.md)
-- [Unable to view HTML report due to environment limitations](/docs/usage/CantViewHTML.md)
+- [Lots of Manual Checks](/docs/troubleshooting/Troubleshooting.md#lots-of-manual-checks)
+- [Not Authorized to Access This Resource](/docs/troubleshooting/Troubleshooting.md#not-authorized-to-access-this-resource)
+- [scubagoggles Not Found](/docs/troubleshooting/Troubleshooting.md#scubagoggles-not-found)
+- [Unable to view HTML report due to environment limitations](/docs/troubleshooting/Troubleshooting.md#unable-to-view-html-report-due-to-environment-limitations)
 
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative Commons Zero license. With developer approval, contributions may be submitted with an alternate compatible license. If accepted, those contributions will be listed herein with the appropriate license.
