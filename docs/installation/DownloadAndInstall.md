@@ -1,5 +1,13 @@
+# Download and Install
 
-### Install Python dependencies
+## Downloading the Latest Release
+To download ScubaGoggles:
+
+1. Click [here](https://github.com/cisagov/ScubaGoggles/releases) to see the latest release.
+2. Click scubagoggles-[latest-version].zip to download the release.
+3. Extract the folder in the zip file.
+
+## Installing Python Dependencies
 Minimum required Python version to run the tool is `3.7.16`.
 
 ### Installing in a Virtual Environment
@@ -39,3 +47,4 @@ pip3 install -r requirements.txt
 > Users will need to rerun the `activate` script from the OS specific directions above in each new terminal session to reactivate the `venv` containing the dependencies.
 
 <!-- TODO segway into OPA>
+<!-- TODO segway into Python Dependencies>
