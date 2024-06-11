@@ -48,4 +48,4 @@ pip3 install -r requirements.txt
 
 ## Navigation
 - Continue to [Install OPA](/docs/installation/OPA.md)
-- Return [Home](/README.md)
+- Return to [Documentation Home](/README.md)
