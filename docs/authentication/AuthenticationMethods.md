@@ -1,7 +1,13 @@
-### Authentication
+# Authentication Methods
 
-ScubaGoggles supports both OAuth and Service Accounts for authorization/authentication.
-OAuth requires regular user consent while using a service account allows for more automation.
-Follow the instructions below for the authentication method of your choice.
+ScubaGoggles supports both OAuth and Service Accounts for authorization/authentication. See the following table for the tradeoffs between the two methods.
 
-<!-- TODO discuss pros/cons of each method -->
+| OAuth    | Service Account |
+| -------- | ------- |
+| + Allows user consent to specific scopes | - Requires domain-wide delegation |
+| - Requires a browser for authentication | + Does not require a browser for authentication, allowing for more automation. |
+
+## Navigation
+- Continue to [Using OAuth](/docs/authentication/OAuth.md)
+- Continue to [Using a Service Account](/docs/authentication/ServiceAccount.md)
+- Return to [Documentation Home](/README.md)

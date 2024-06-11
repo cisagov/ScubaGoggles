@@ -1,7 +1,7 @@
-<!-- TODO link to discussion of pros/cons of the two auth methods -->
+# Using OAuth
+Only complete this section if not authenticating via [Service Account](/docs/authentication/ServiceAccount.md). See [Authentication Methods](/docs/authentication/AuthenticationMethods.md) for more details.
 
-#### Using OAuth
-##### Create an OAuth credential
+## Create an OAuth credential
 1. Be signed into http://console.cloud.google.com/.
 1. From the hamburger menu on the left, select **APIs & Services** -> **OAuth consent screen**
 1. Select **Internal** for **User Type**
@@ -30,9 +30,8 @@
 1. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
 with an account with the necessary privileges and click allow.
 
-##### Add the Oauth App to the allowlist
-If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](./baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#10-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
-
+## Add the Oauth App to the allowlist
+If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](/baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#10-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
 
 1. Login to https://console.cloud.google.com
 2. Navigate to the appropriate project
@@ -45,3 +44,7 @@ If you've limited application access to Google's APIs in your organization, the 
 9. Select the App
 10. Select your root organization as the domain
 11. Select **Trusted**
+
+## Navigation
+- Continue to [Parameters](/docs/usage/Parameters.md)
+- Return to [Documentation Home](/README.md)

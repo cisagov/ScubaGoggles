@@ -1,9 +1,8 @@
-<!-- TODO link to discussion of pros/cons of the two auth methods -->
-
-#### Using a Service Account
+# Using a Service Account
+Only complete this section if not authenticating via [OAuth](/docs/authentication/OAuth.md). See [Authentication Methods](/docs/authentication/AuthenticationMethods.md) for more details.
 
 > [!Important]
-> ScubaGoggles requires the service account to have [domain-wide delegation of authority](https://support.google.com/a/answer/162106?hl=en) to function. Only complete this section if not authenticating via OAuth credential (see [Using OAuth](#using-oauth)).
+> ScubaGoggles requires the service account to have [domain-wide delegation of authority](https://support.google.com/a/answer/162106?hl=en) to function.
 
 1. Login to https://console.cloud.google.com and navigate to your GCP project.
 1. From the hamburger menu, select **IAM & Admin** -> **Service Accounts**
@@ -18,6 +17,10 @@
 1. Select **AUTHORIZE**
 1. Finally, run ScubaGoggles with the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
 
-> [!NOTE] 
-> ScubaGoggles can be run using a service account in a different organization. 
-> To do so, specify the `--customerid` argument with the customer ID of the target organization (found in [admin.google.com](https://admin.google.com/) under **Account** -> **Account settings**) 
+> [!NOTE]
+> ScubaGoggles can be run using a service account in a different organization.
+> To do so, specify the `--customerid` argument with the customer ID of the target organization (found in [admin.google.com](https://admin.google.com/) under **Account** -> **Account settings**)
+
+## Navigation
+- Continue to [Parameters](/docs/usage/Parameters.md)
+- Return to [Documentation Home](/README.md)
