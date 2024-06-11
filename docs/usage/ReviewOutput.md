@@ -10,5 +10,5 @@ See [Usage: Parameters](/docs/usage/Parameters.md) for more details on these and
 The output will be saved in both HTML and json formats. See [Sample Report](/sample-report) for an example of the output.
 
 ## Navigation
-- Continue to [Limitations](/docs/prerequisites/Limitations.md)
+- Continue to [Limitations](/docs/usage/Limitations.md)
 - Return to [Documentation Home](/README.md)
