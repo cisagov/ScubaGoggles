@@ -54,7 +54,7 @@ The following graphic illustrates the spectrum of MFA options and their relative
 Please note there is a distinction between Google 2 Step Verification (2SV) and MFA as a general term. While FIDO Security Key and Phone as a Security Key are acceptable forms of Phishing-Resistant MFA which rely on Google 2SV as the underlying mechanism, the other forms listed in the "strongest" column do not use Google
 2SV but are still acceptable forms of Phishing-Resistant MFA.
 
-<img src="/images/MFA.PNG">
+<img src="/baselines/images/MFA.PNG">
 
 ### Policies
 
