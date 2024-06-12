@@ -221,7 +221,7 @@ Users receive calls only from contacts and other users in the organization SHALL
 
 ### Implementation
 
-#### GWS.MEET.5.1v0.1 Instructions
+#### GWS.MEET.5.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Meet safety settings**.
