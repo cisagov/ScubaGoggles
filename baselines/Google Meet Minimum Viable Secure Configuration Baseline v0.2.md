@@ -197,7 +197,7 @@ This section covers who domain users are allowed to receive a 1:1 call from.
 
 ### Policies
 
-#### GWS.CHAT.5.1v0.1
+#### GWS.CHAT.5.1v0.2
 Users receive calls only from contacts and other users in the organization SHALL be selected.
 
 - _Rationale:_ Calls could potentially be used to pass sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
