@@ -191,14 +191,14 @@ To enable Host Management meeting features:
 4.  Check the **External or unidentified participants in a meeting are given a label** checkbox.
 5.  Select **Save**.
 
-## 5. 1:1 Calling
+## 5. Incoming Calls
 
 This section covers who domain users are allowed to receive a 1:1 call from.
 
 ### Policies
 
 #### GWS.CHAT.5.1v0.2
-Users receive calls only from contacts and other users in the organization SHALL be selected.
+Incoming calls SHALL be restricted to contacts and other users in the organization.
 
 - _Rationale:_ Calls could potentially be used to pass sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - Last Modified: March 15, 2024
@@ -226,5 +226,5 @@ Users receive calls only from contacts and other users in the organization SHALL
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Meet safety settings**.
 4.  Click **Incoming call restrictions**.
-5.  Ensure **Users receive calls only from contacts and other users in the organization** is selected.
+5.  Ensure **Users receive calls only from contacts and other users in the organization** or **Users can't receive calls** is selected.
 6.  Click **Save**.
