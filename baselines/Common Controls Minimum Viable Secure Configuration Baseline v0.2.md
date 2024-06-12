@@ -711,20 +711,6 @@ Agencies need to have a process in place to manage and control application acces
 ### Policies
 
 #### GWS.COMMONCONTROLS.10.1v0.2
-Agencies SHALL develop and implement a process to explicitly allow-list (trust) third-party app access to GWS services.
-
-- _Rationale:_ Third-party apps may include malicious content. Developing a process to review and approve apps reduces the risk of allowing malicious apps to connect to the workspace.
-- _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
-    - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
-  - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
-    - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
-  - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
-    - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
-
-#### GWS.COMMONCONTROLS.10.2v0.2
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
 
 - _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
@@ -738,7 +724,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.3v0.2
+#### GWS.COMMONCONTROLS.10.2v0.2
 Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 
 - _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with policy 10.1.
@@ -752,7 +738,7 @@ Agencies SHALL NOT allow users to consent to access to low-risk scopes.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.4v0.2
+#### GWS.COMMONCONTROLS.10.3v0.2
 Agencies SHALL NOT trust unconfigured internal apps.
 
 - _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
@@ -766,7 +752,7 @@ Agencies SHALL NOT trust unconfigured internal apps.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.5v0.2
+#### GWS.COMMONCONTROLS.10.4v0.2
 Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 - _Rationale:_ External apps may contain vulnerabilities and malicious content. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
@@ -800,28 +786,25 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
 2.  Go to **Security** -\> **Access and Data Control** -\> **API controls.**
 
 #### GWS.COMMONCONTROLS.10.1v0.2 instructions:
-1.  There are no implementation steps for this policy
-
-#### GWS.COMMONCONTROLS.10.2v0.2 instructions:
 1.  Select **Manage Google Services.**
 2.  Select the **Services box** to check all services boxes.
 3.  Once this box is selected, then the **Change access** link at the top of console will be available; select it.
 4.  Select **Restricted: Only trusted apps can access a service.**
 5.  Select **Change** then **confirm** if prompted.
 
-#### GWS.COMMONCONTROLS.10.3v0.2 instructions:
+#### GWS.COMMONCONTROLS.10.2v0.2 instructions:
 1.  Select **Manage Google Services.**
 2.  Select the **Services box** to check all services boxes.
 3.  Once this box is selected, then the **Change access** link at the top of console will be available; select it.
 4.  Ensure to uncheck the check box next to **For apps that are not trusted, allow users to give access to OAuth scopes that aren't classified as high-risk.**
 5.  Select **Change** then **confirm** if prompted.
 
-#### GWS.COMMONCONTROLS.10.4v0.2 Instructions
+#### GWS.COMMONCONTROLS.10.3v0.2 Instructions
 1.  Select **Settings.**
 2.  Select **Internal apps** and uncheck the box next to **Trust internal apps.**
 3.  Select **SAVE.**
 
-#### GWS.COMMONCONTROLS.10.5v0.2 Instructions
+#### GWS.COMMONCONTROLS.10.4v0.2 Instructions
 1.  Select **Settings.**
 2.  Select **Unconfigured third-party apps** and select **Don't allow users to access any third-party apps**
 3.  Select **SAVE.**
