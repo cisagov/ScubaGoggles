@@ -1,7 +1,7 @@
 # Troubleshooting
 
 ## Lots of Manual Checks
-The report output by ScubaGoggles may indicate that many manual checks are needed (e.g., https://github.com/cisagov/ScubaGoggles/issues/260). This is a symptom of ScubaGoggles' primary limitation. As the API calls to check these settings are have not been made public by Google, ScubaGoggles relies on [GWS Admin log events](https://support.google.com/a/answer/4579579?hl=en) to determine the current state. If there are no log events corresponding to a SCuBA baseline policy (e.g., because the setting hasn't been changed within the past 6 months), ScubaGoggles will indicate that the setting needs to be checked manually. See [Limitations](/docs/usage/Limitations.md) for more details.
+The report output by ScubaGoggles may indicate that many manual checks are needed (e.g., https://github.com/cisagov/ScubaGoggles/issues/260). This is a symptom of ScubaGoggles' primary limitation. As the API calls to check most of the settings relevant to ScubaGoggles are have not been made public by Google, ScubaGoggles relies on [GWS Admin log events](https://support.google.com/a/answer/4579579?hl=en) to determine the current state. If there are no log events corresponding to a SCuBA baseline policy (e.g., because the setting hasn't been changed within the past 6 months), ScubaGoggles will indicate that the setting needs to be checked manually. See [Limitations](/docs/usage/Limitations.md) for more details.
 
 ## Not Authorized to Access This Resource
 
