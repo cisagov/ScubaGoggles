@@ -1125,7 +1125,7 @@ This section covers the Google services that do not have an individual control a
 Service status SHOULD be set to OFF for everyone.
 
 - _Rationale_: Allowing access to additional google services without a need creates unnceccessary vulnerabilities within the Google Workspace enviroment. By turning these services off, it mitigates the risk by not allowing access.
-- _Last modified:_ October 30, 2023
+- _Last modified:_ June 11, 2024
 
 - MITRE ATT&CK TTP Mapping
   - Pending
