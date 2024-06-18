@@ -197,7 +197,7 @@ This section covers who domain users are allowed to receive a 1:1 call from.
 
 ### Policies
 
-#### GWS.CHAT.5.1v0.2
+#### GWS.MEET.5.1v0.2
 Incoming calls SHALL be restricted to contacts and other users in the organization.
 
 - _Rationale:_ Calls could potentially be used to pass sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
