@@ -1121,7 +1121,7 @@ This section covers the Google services that do not have an individual control a
 
 ### Policy
 
-#### GWS.COMMONCONTROLS.16.1v0.1
+#### GWS.COMMONCONTROLS.16.1v0.2
 Service status SHOULD be set to OFF for everyone.
 
 - _Rationale_: Allowing access to additional google services without a need may create unnecessary vulnerabilities within the Google Workspace environment. By turning these services off, it mitigates the risk by not allowing access.
