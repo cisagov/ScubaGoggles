@@ -22,7 +22,7 @@ NonCompliantOUs1_1 contains {
         "Who can join meetings is set to",
         GetFriendlyValue1_1(LastEvent.NewValue)
     ])
-} 
+}
 if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SafetyDomainLockProto users_allowed_to_join", OU)
@@ -193,8 +193,8 @@ NonCompliantOUs4_1 contains {
     "Value": concat(" ", [
         "Warning label for external or unidentified meeting participants is set to",
         GetFriendlyValue4_1(LastEvent.NewValue)
-    ])  
-} 
+    ])
+}
 if {
     some OU in utils.OUsWithEvents
     SettingName := "Warn for external participants External or unidentified participants in a meeting are given a label"
@@ -235,3 +235,67 @@ if {
     Status := count(NonCompliantOUs4_1) == 0
 }
 #--
+
+##############
+# GWS.MEET.5 #
+##############
+
+#
+# Baseline GWS.MEET.5.1v0.2
+#--
+NonCompliantOUs5_1 contains {
+    "Name": OU,
+    "Value": "Users can receive calls from anyone"
+}
+if {
+    some OU in utils.OUsWithEvents
+    SettingName := "Incoming call restrictions Allowed caller type"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "ALL"
+}
+
+NonCompliantGroups5_1 contains {
+    "Name": Group,
+    "Value": "Users can receive calls from anyone"
+}
+if {
+    some Group in utils.GroupsWithEvents
+    SettingName := "Incoming call restrictions Allowed caller type"
+    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "ALL"
+}
+
+tests contains {
+    "PolicyId": "GWS.MEET.5.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    SettingName := "Incoming call restrictions Allowed caller type"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.MEET.5.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1, "NonCompliantGroups": NonCompliantGroups5_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    SettingName := "Incoming call restrictions Allowed caller type"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) > 0
+    Conditions := {count(NonCompliantOUs5_1) == 0, count(NonCompliantGroups5_1) == 0}
+    Status := (false in Conditions) == false
+}
