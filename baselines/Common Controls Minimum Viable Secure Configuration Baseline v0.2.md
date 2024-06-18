@@ -1117,7 +1117,7 @@ To configure Supplemental Data Storage per the policy:
 
 ## 16. Additional Google Services
 
-This section covers the Google services that do not have an individual control and whether these services are on or off.
+This section covers the oogle services that do not have an individual control and whether these serviGces are on or off.
 
 ### Policy
 
@@ -1131,8 +1131,7 @@ Service status for Google services that do not have an individual control SHOULD
   - Pending
 
 ### Resources
--	[GWS Admin Help \| Data regions: Choose a geographic location for your data](https://support.google.com/a/answer/7630496)
--	[GWS Admin Help \| What data is covered by a data region policy?](https://support.google.com/a/answer/9223653)
+-	[GWS Admin Help \| Turn on or off additional Google services](https://support.google.com/a/answer/181865)
 
 ### Prerequisites
 
@@ -1141,10 +1140,9 @@ Service status for Google services that do not have an individual control SHOULD
 ### Implementation
 
 #### GWS.COMMONCONTROLS.16.1v0.2 Instructions
-To configure Data Regions per the policy:
+To configure additional services per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Account** -> **Account settings**.
-3.	Click the **Data Regions** card.
-4.	Click the **Data Regions** policy card.
-5.	Select the radio button option: "**United States**"
+2.	Navigate to **Apps** -> **Additional Google services**.
+3.	Click **CHANGE** at the top where it says if **Access to additional services without individual control for all organizational units is On/Off**.
+4.	Select the option: "**OFF for everyone**"
 6.	Click **Save**.
