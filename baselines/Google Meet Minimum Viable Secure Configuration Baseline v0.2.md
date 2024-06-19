@@ -201,7 +201,7 @@ This section covers who domain users are allowed to receive a 1:1 call from.
 Incoming calls SHALL be restricted to contacts and other users in the organization.
 
 - _Rationale:_ Calls could potentially be used to pass sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
-- Last Modified: March 15, 2024
+- _Last modified:_ March 15, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -214,7 +214,7 @@ Incoming calls SHALL be restricted to contacts and other users in the organizati
   - [T1125: Video Capture](https://attack.mitre.org/techniques/T1125/)
 
 ### Resources
-- [Restrict who can call my organization's users with Google Meet](https://apps.google.com/supportwidget/articlehome?article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F14277985&assistant_id=generic-unu&product_context=14277985&product_name=UnuFlow&trigger_context=a)
+- [Restrict who can call my organization's users with Google Meet](https://support.google.com/a/answer/14277985)
 
 ### Prerequisites
 -   None
