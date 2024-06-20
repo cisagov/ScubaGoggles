@@ -1146,3 +1146,34 @@ To configure additional services per the policy:
 3.	Click **CHANGE** at the top where it says if **Access to additional services without individual control for all organizational units is On/Off**.
 4.	Select the option: "**OFF for everyone**"
 6.	Click **Save**.
+
+## 17. Multi-Party Approval
+
+This section covers the oogle services that do not have an individual control and whether these serviGces are on or off.
+
+### Policy
+
+#### GWS.COMMONCONTROLS.17.1v0.2
+Require multi party approval for sensitive admin actions SHALL be enabled.
+
+- _Rationale_: Changes to certain admin settings creates the potential for security weaknesses. Therefore, requiring multiple super admins to approve changes to those settings mitigates the risk.
+- _Last modified:_ June 20, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - Pending
+
+### Resources
+-	[GWS Admin Help \| Multi-party approval for sensitive actions](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13790448%3Fhl%3Den&assistant_id=generic-unu&product_context=13790448&product_name=UnuFlow&trigger_context=a)
+
+### Prerequisites
+
+- Super Admin role
+
+### Implementation
+
+#### GWS.COMMONCONTROLS.17.1v0.2 Instructions
+To configure additional services per the policy:
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.	Navigate to **Security** -> **Authentication** -> **Multi-party approval settings**.
+3.	Ensure **Require multi party approval for sensitive admin actions** is checked.
+4.	Click **Save**.
