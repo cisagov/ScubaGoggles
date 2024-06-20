@@ -261,7 +261,7 @@ This section covers whether a security update issued by Google will be applied t
 ### Policies
 
 #### GWS.DRIVEDOCS.3.1v0.2
-Agencies SHALL enable security updates for Drive files.
+Agencies SHALL enable the security update for Drive files.
 
 - _Rationale:_ Google may add new security features over time. Allowing security updates helps ensure that your files are protected with the latest features Google makes available.
 - _Last modified:_ July 10, 2023
