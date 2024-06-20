@@ -1568,22 +1568,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.9.2v0.2
-#--
-
-# This policy will be removed once the SCB is updated
-tests contains {
-    "PolicyId": "GWS.GMAIL.9.2v0.2",
-    "Criticality": "May",
-    "ReportDetails": "Requirement met in all OUs and groups.",
-    "ActualValue": "",
-    "RequirementMet": true,
-    "NoSuchEvent": false
-}
-#--
-
-
 ################
 # GWS.GMAIL.10 #
 ################
