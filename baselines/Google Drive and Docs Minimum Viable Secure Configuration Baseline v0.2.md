@@ -98,10 +98,11 @@ Agencies SHALL disable making files and published web content visible to anyone 
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.6v0.2
-Agencies SHALL enable access checking for file sharing outside of Docs or Drive.
+Agencies SHOULD set access checking to recipients only.
 
 - _Rationale:_ The Access Checker feature can be configured to allows users to grant access to the public if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients or the suggested target audience.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ June 7, 2024
+- _Note:_ Agencies SHALL NOT set access checking to Recipients only, suggested target audience, or public (no Google account required).
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -260,7 +261,7 @@ This section covers whether a security update issued by Google will be applied t
 ### Policies
 
 #### GWS.DRIVEDOCS.3.1v0.2
-Agencies SHALL enable security updates for Drive files.
+Agencies SHALL enable the security update for Drive files.
 
 - _Rationale:_ Google may add new security features over time. Allowing security updates helps ensure that your files are protected with the latest features Google makes available.
 - _Last modified:_ July 10, 2023
@@ -367,10 +368,10 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 ### Policies
 
 #### GWS.DRIVEDOCS.6.1v0.2
-Agencies SHOULD either disable Google Drive for Desktop or only allow Google Drive for Desktop on authorized devices.
+Google Drive for Desktop SHOULD be enabled only for authorized devices.
 
 - _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ June 7, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
