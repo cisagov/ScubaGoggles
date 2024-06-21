@@ -318,10 +318,12 @@ successful_calls : set, unsuccessful_calls : set) -> list:
                                 'Criticality': test['Criticality'],
                                 'Details': details})
         full_name = prod_to_fullname[product]
+        if full_name == 'Rules':
+            full_name = 'Common Controls'
         markdown_group_name = "-".join(baseline_group['GroupName'].split())
         group_reference_url = f'<a href="{SCUBA_GITHUB_URL}/tree/main/baselines/'\
         f'{full_name} Minimum Viable Secure Configuration Baseline v0.2.md#'\
-        f'{baseline_group["GroupNumber"]}-{markdown_group_name}" target="_blank"\>'\
+        fr'{baseline_group["GroupNumber"]}-{markdown_group_name}" target="_blank"\>'\
         f'{baseline_group["GroupName"]}</a>'
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {group_reference_url}</h2>")
