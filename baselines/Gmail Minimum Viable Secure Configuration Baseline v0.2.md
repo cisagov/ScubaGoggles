@@ -1169,7 +1169,10 @@ Domains SHALL NOT be added to lists that bypass spam filters.
 - _Note:_ Allowed senders MAY be added.
 
 - MITRE ATT&CK TTP Mapping
-  - { Needs TTP Mappings }
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
+    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
 
 #### GWS.GMAIL.19.2v0.1
 Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
@@ -1178,7 +1181,10 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 - _Last modified:_ April 10, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - { Needs TTP Mappings }
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
+    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
 
 #### GWS.GMAIL.19.3v0.1
 Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.
@@ -1187,7 +1193,10 @@ Bypass spam filters and hide warnings for all messages from internal and externa
 - _Last modified:_ April 10, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - { Needs TTP Mappings }
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
+    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
 
 ### Resources
 
