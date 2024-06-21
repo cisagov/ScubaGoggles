@@ -175,16 +175,16 @@ Only teachers SHALL be allowed to unenroll students from classes.
 ### Implementation
 To configure the settings for Student Unenrollment:
 
-#### GWS.CLASSROOM.4.1v0.2 Instructions
+#### GWS.CLASSROOM.5.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Student unenrollment**.
 4.  Select **Teachers Only**.
 5.  Select **Save**.
 
-## 5. Teacher Permissions
+## 5. Class Creation
 
-This section covers policies related to unenrolling a student from a class.
+This section covers who has the ability to create classes.
 
 ### Policy
 
