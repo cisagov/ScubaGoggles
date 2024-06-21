@@ -1161,10 +1161,10 @@ This section covers the settings relating to bypassing spam filters.
 
 ### Policies
 
-#### GWS.GMAIL.19.1v0.1
+#### GWS.GMAIL.19.1v0.2
 Domains SHALL NOT be added to lists that bypass spam filters.
 
-- _Rationale:_ Allowing an entire domain to bypass the spam filters allows for the potential for a spoofed email within the domain to bypass the filter. Only allowing specific users to bypass helps mitigate the risk.
+- _Rationale:_ Legitimate emails may be incorrectly filtered by spam protections. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, however, provides for a large number of potentially unknown users to bypass spam protections.
 - _Last modified:_ April 10, 2024
 - _Note:_ Allowed senders MAY be added.
 
@@ -1174,10 +1174,10 @@ Domains SHALL NOT be added to lists that bypass spam filters.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
   - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
 
-#### GWS.GMAIL.19.2v0.1
+#### GWS.GMAIL.19.2v0.2
 Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 
-- _Rationale:_ Allowing an entire domain to bypass the spam filters and hide warnings allows for the potential for a spoofed email within the domain to bypass the filter and prevents the user from knowing. Not adding domains and users helps mitigate the risk.
+- _Rationale:_ Legitimate emails may be incorrectly filtered by spam protections. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, however, provides for a large number of potentially unknown users to bypass spam protections.
 - _Last modified:_ April 10, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -1186,10 +1186,10 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
   - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
 
-#### GWS.GMAIL.19.3v0.1
+#### GWS.GMAIL.19.3v0.2
 Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.
 
-- _Rationale:_ Bypassing spam filters and hiding warning for all messages from internal and external senders creates a security risk because of the potential for a malicious message being able to bypass filters. Disabling this feature mitigates the risk.
+- _Rationale:_ Bypassing spam filters and hiding warning for all messages from internal and external senders creates a security risk because all messages are allowed to bypass filters. Disabling this feature mitigates the risk.
 - _Last modified:_ April 10, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -1215,14 +1215,14 @@ To configure the settings for spam filtering:
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
 3.  Select **Spam, Phishing, and Malware**.
 
-#### GWS.GMAIL.19.1v0.1 Instructions
+#### GWS.GMAIL.19.1v0.2 Instructions
 1.  Un-select **Bypass spam filters for messages from senders or domains in selected lists.**
 2.  Select **Save**.
 
-#### GWS.GMAIL.19.2v0.1 Instructions
+#### GWS.GMAIL.19.2v0.2 Instructions
 1.  Un-select **Bypass spam filters and hide warnings for messages from senders or domains in selected lists.**
 2.  Select **Save**.
 
-#### GWS.GMAIL.19.3v0.1 Instructions
+#### GWS.GMAIL.19.3v0.2 Instructions
 1.  Un-select **Bypass spam filters and hide warnings for all messages from internal and external senders**
 2.  Select **Save**.
