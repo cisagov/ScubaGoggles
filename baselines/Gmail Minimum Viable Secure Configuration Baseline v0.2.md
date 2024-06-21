@@ -1200,7 +1200,7 @@ Bypass spam filters and hide warnings for all messages from internal and externa
 
 ### Resources
 
--   [How to bypass the spam filter for incoming emails using the spam settings ](https://knowledge.workspace.google.com/kb/how-to-bypass-the-spam-filter-for-incoming-emails-using-the-spam-settings-000006661)
+-   [How to bypass the spam filter for incoming emails using the spam settings ](https://knowledge.workspace.google.com/kb/how-to-bypass-the-spam-filter-for-incoming-emails-000006661)
 
 ### Prerequisites
 
