@@ -246,6 +246,7 @@ successful_calls : set, unsuccessful_calls : set) -> list:
     for baseline_group in product_policies:
         table_data = []
         results_data ={}
+        full_name = prod_to_fullname[product]
         for control in baseline_group['Controls']:
             tests = [test for test in test_results_data if test['PolicyId'] == control['Id']]
             if len(tests) == 0:
@@ -293,6 +294,7 @@ successful_calls : set, unsuccessful_calls : set) -> list:
                                 # results that belong to the Common Controls report is they're
                                 # marked as Not-Implemented. This if excludes them from the
                                 # rules report.
+                                full_name = "Common Controls"
                                 continue
                             report_stats[get_summary_category(result)] += 1
                             table_data.append({
@@ -317,9 +319,6 @@ successful_calls : set, unsuccessful_calls : set) -> list:
                                 'Result': result,
                                 'Criticality': test['Criticality'],
                                 'Details': details})
-        full_name = prod_to_fullname[product]
-        if full_name == 'Rules':
-            full_name = 'Common Controls'
         markdown_group_name = "-".join(baseline_group['GroupName'].split())
         group_reference_url = f'<a href="{SCUBA_GITHUB_URL}/tree/main/baselines/'\
         f'{full_name} Minimum Viable Secure Configuration Baseline v0.2.md#'\
