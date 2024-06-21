@@ -181,3 +181,37 @@ To configure the settings for Student Unenrollment:
 3.  Select **Student unenrollment**.
 4.  Select **Teachers Only**.
 5.  Select **Save**.
+
+## 5. Teacher Permissions
+
+This section covers policies related to unenrolling a student from a class.
+
+### Policy
+
+#### GWS.CLASSROOM.5.1v0.2
+Who can create classes SHALL be set to Verified teachers only.
+
+- _Rationale:_ Allowing pending teachers to create classes allows for potential unauthorized data creation which creates a security risk. By allowing only verified teachers to create classes mitigates the risk.
+- _Last modified:_ June 21, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - Pending
+
+### Resources
+
+-   [Verify teachers and set permissions](https://support.google.com/edu/classroom/answer/6071551?hl=en)
+
+### Prerequisites
+
+-   None
+
+### Implementation
+To configure the settings for Student Unenrollment:
+
+#### GWS.CLASSROOM.4.1v0.2 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
+3.  Select **General Settings**.
+4.  Select **Teacher permissions**.
+5.  Select **Verified teachers only** for **Who can create classes?**
+5.  Select **Save**.
