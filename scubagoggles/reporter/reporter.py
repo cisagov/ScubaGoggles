@@ -322,8 +322,8 @@ successful_calls : set, unsuccessful_calls : set) -> list:
         markdown_group_name = "-".join(baseline_group['GroupName'].split())
         group_reference_url = f'{SCUBA_GITHUB_URL}/tree/v0.2.0/baselines/'\
         f'{full_name} Minimum Viable Secure Configuration Baseline v0.2.md#'\
-        fr'{baseline_group["GroupNumber"]}-{markdown_group_name}'
-        markdown_link = f'<a href="{group_reference_url}" target="_blank"\>'\
+        f'{baseline_group["GroupNumber"]}-{markdown_group_name}'
+        markdown_link = fr'<a href="{group_reference_url}" target="_blank"\>'\
         f'{baseline_group["GroupName"]}</a>'
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {markdown_link}</h2>")
