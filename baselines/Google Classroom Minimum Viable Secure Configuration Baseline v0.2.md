@@ -206,7 +206,7 @@ Who can create classes SHALL be set to verified teachers only.
 -   None
 
 ### Implementation
-To configure the settings for Student Unenrollment:
+To configure the settings for Class Creation:
 
 #### GWS.CLASSROOM.5.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
