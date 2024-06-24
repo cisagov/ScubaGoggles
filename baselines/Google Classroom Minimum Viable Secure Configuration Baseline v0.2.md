@@ -16,6 +16,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Classroom API](#2-classroom-api)
 -   [Roster Import](#3-roster-import)
 -   [Student Unenrollment](#4-student-unenrollment)
+-   [Class Creation](#5-class-creation)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
