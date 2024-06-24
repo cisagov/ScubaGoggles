@@ -190,7 +190,7 @@ The first time users sign in to Classroom, they self-identify as either a studen
 ### Policy
 
 #### GWS.CLASSROOM.5.1v0.2
-Who can create classes SHALL be set to verified teachers only.
+Class creation SHALL be restricted to verified teachers only.
 
 - _Rationale:_ Allowing pending teachers to create classes potentially allows students to impersonate teachers and exploit the trusted relationship between teacher and student, e.g., to phish sensitive information from the students. Restricting class creation to verified teachers reduces this risk.
 - _Last modified:_ June 21, 2024
