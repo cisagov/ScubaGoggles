@@ -1117,7 +1117,7 @@ To configure Supplemental Data Storage per the policy:
 
 ## 16. Additional Google Services
 
-This section covers the oogle services that do not have an individual control and whether these serviGces are on or off.
+This section covers the Google services that do not have an individual control and whether these services are on or off.
 
 ### Policy
 
@@ -1156,7 +1156,7 @@ This section covers the oogle services that do not have an individual control an
 #### GWS.COMMONCONTROLS.17.1v0.2
 Require multi party approval for sensitive admin actions SHALL be enabled.
 
-- _Rationale_: Changes to certain admin settings creates the potential for security weaknesses. Therefore, requiring multiple super admins to approve changes to those settings mitigates the risk.
+- _Rationale_: Changes to sensitive admin settings, such as disabling 2-step verification, could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
 - _Last modified:_ June 20, 2024
 
 - MITRE ATT&CK TTP Mapping
