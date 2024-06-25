@@ -320,17 +320,18 @@ successful_calls : set, unsuccessful_calls : set) -> list:
                                 'Criticality': test['Criticality'],
                                 'Details': details})
         markdown_group_name = "-".join(baseline_group['GroupName'].split())
-        group_reference_url = f'{SCUBA_GITHUB_URL}/tree/v0.2.0/baselines/'\
+        group_reference_url = f'{SCUBA_GITHUB_URL}/blob/v0.2.0/baselines/'\
         f'{full_name} Minimum Viable Secure Configuration Baseline v0.2.md#'\
         f'{baseline_group["GroupNumber"]}-{markdown_group_name}'
-        markdown_link = fr'<a href="{group_reference_url}" target="_blank"\>'\
+        group_reference_url_spacing = "%20".join(group_reference_url.split())
+        markdown_link = fr'<a href="{group_reference_url_spacing}" target="_blank"\>'\
         f'{baseline_group["GroupName"]}</a>'
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
         {markdown_link}</h2>")
         fragments.append(create_html_table(table_data))
         results_data.update({"GroupName": baseline_group['GroupName']})
         results_data.update({"GroupNumber": baseline_group['GroupNumber']})
-        results_data.update({"GroupReferenceURL":group_reference_url})
+        results_data.update({"GroupReferenceURL":group_reference_url_spacing})
         results_data.update({"Controls": table_data})
         json_data.append(results_data)
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
