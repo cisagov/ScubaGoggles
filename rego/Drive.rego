@@ -697,7 +697,7 @@ if {
 #--
 NonCompliantOUs2_3 contains {
     "Name": OU,
-    "Value": "People who aren't shared drive members cannot be added to files"
+    "Value": "People who aren't shared drive members can be added to files"
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents,
@@ -709,7 +709,7 @@ NonCompliantOUs2_3 contains {
 }
 NonCompliantGroups2_3 contains {
     "Name": Group,
-    "Value": "People who aren't shared drive members cannot be added to files"
+    "Value": "People who aren't shared drive members can be added to files"
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents,
@@ -841,10 +841,10 @@ NoSuchEvent3_1(TopLevelOU) := true if {
 default NoSuchEvent3_1(_) := false
 
 GetFriendlyValue3_1(Value_B, Value_A) :=
-"Remove security update from all impacted files" if {
+"The security update is removed from all impacted files" if {
     Value_B == "REQUIRE_LESS_SECURE_LINKS"
 }
-else := "Allow users to remove/apply the security update for files they own or manage" if {
+else := "Users are allowed to remove/apply the security update for files they own or manage" if {
     Value_A == "true"
 }
 NonCompliantOUs3_1 contains {
@@ -904,7 +904,7 @@ if {
 #--
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": "Drive SDK is Enabled"
+    "Value": "Drive SDK is enabled"
 }
 if {
     some OU in utils.OUsWithEvents
@@ -916,7 +916,7 @@ if {
 }
 NonCompliantGroups4_1 contains {
     "Name": Group,
-    "Value": "Drive SDK is Enabled"
+    "Value": "Drive SDK is enabled"
 } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "ENABLE_DRIVE_APPS", Group)
@@ -1030,7 +1030,7 @@ if {
 default NoSuchEvent6_1(_) := true
 
 GetFriendlyValue6_1(Value_B, Value_A) :=
-"Drive for Desktop is Enabled, but can be used on any device." if {
+"Drive for Desktop is enabled, but can be used on any device." if {
     Value_B == "false"
 }
 else := "Drive for Desktop is disabled" if {
