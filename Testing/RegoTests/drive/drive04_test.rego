@@ -166,7 +166,7 @@ test_Security_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Drive SDK is Enabled</li></ul>"])
+    "<ul><li>Test Top-Level OU: Drive SDK is enabled</li></ul>"])
 }
 
 test_Security_Incorrect_V3 if {
@@ -205,7 +205,7 @@ test_Security_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Drive SDK is Enabled</li></ul>"])
+    "<ul><li>Test Top-Level OU: Drive SDK is enabled</li></ul>"])
 }
 
 test_Security_Incorrect_V4 if {
@@ -244,7 +244,7 @@ test_Security_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: Drive SDK is Enabled</li></ul>"])
+    "<ul><li>Test Secondary OU: Drive SDK is enabled</li></ul>"])
 }
 
 test_Security_Incorrect_V5 if {

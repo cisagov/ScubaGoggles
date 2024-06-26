@@ -773,7 +773,7 @@ test_SharedDrive_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: People who aren't shared drive members cannot be added to files</li></ul>"])
+    "<ul><li>Test Top-Level OU: People who aren't shared drive members can be added to files</li></ul>"])
 }
 
 test_SharedDrive_Incorrect_V3 if {
@@ -818,7 +818,7 @@ test_SharedDrive_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: People who aren't shared drive members cannot be added to files</li></ul>"])
+    "<ul><li>Test Top-Level OU: People who aren't shared drive members can be added to files</li></ul>"])
 }
 
 
@@ -864,7 +864,7 @@ test_SharedDrive_Incorrect_V4 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: People who aren't shared drive members cannot be added to files</li></ul>"])
+    "<ul><li>Test Secondary OU: People who aren't shared drive members can be added to files</li></ul>"])
 }
 
 test_SharedDrive_Incorrect_V5 if {

@@ -236,7 +236,7 @@ test_Sharing_Incorrect_V2 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Top-Level OU: ",
-    "Allow users to remove/apply the security update for files they own or manage</li></ul>"])
+    "Users are allowed to remove/apply the security update for files they own or manage</li></ul>"])
 }
 
 test_Sharing_Incorrect_V3 if {
@@ -292,7 +292,7 @@ test_Sharing_Incorrect_V3 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Top-Level OU: ",
-    "Allow users to remove/apply the security update for files they own or manage</li></ul>"])
+    "Users are allowed to remove/apply the security update for files they own or manage</li></ul>"])
 }
 
 test_Sharing_Incorrect_V4 if {
@@ -358,7 +358,7 @@ test_Sharing_Incorrect_V4 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Secondary OU: ",
-    "Allow users to remove/apply the security update for files they own or manage</li></ul>"])
+    "Users are allowed to remove/apply the security update for files they own or manage</li></ul>"])
 }
 
 test_Sharing_Incorrect_V5 if {
