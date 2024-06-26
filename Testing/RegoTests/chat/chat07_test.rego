@@ -2,11 +2,11 @@ package chat
 import future.keywords
 
 #
-# GWS.CHAT.7.1v0.1
+# GWS.CHAT.7.1v0.2
 #--
 test_Enable_Correct_V1 if {
     # Test correct 1 OU
-    PolicyId := "GWS.CHAT.7.1v0.1"
+    PolicyId := "GWS.CHAT.7.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -59,12 +59,12 @@ test_Enable_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met in all OUs and groups.", Chat7Warning])
 }
 
 test_Enable_Correct_V2 if {
     # Test correct 2 OUs, child OU overrides top-level settings
-    PolicyId := "GWS.CHAT.7.1v0.1"
+    PolicyId := "GWS.CHAT.7.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -157,12 +157,12 @@ test_Enable_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met in all OUs and groups.", Chat7Warning])
 }
 
 test_Enable_Correct_V3 if {
     # Test correct 2 OUs, child OU inherits
-    PolicyId := "GWS.CHAT.7.1v0.1"
+    PolicyId := "GWS.CHAT.7.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -255,12 +255,12 @@ test_Enable_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met in all OUs and groups.", Chat7Warning])
 }
 
 test_Enable_Incorrect_V1 if {
     # Test incorrect 1 OU, one conversation type is disabled
-    PolicyId := "GWS.CHAT.7.1v0.1"
+    PolicyId := "GWS.CHAT.7.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -313,12 +313,17 @@ test_Enable_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Content reporting for 1:1 direct messages is disabled.</li></ul>",
+        "<br>",
+        Chat7Warning
+    ])
 }
 
 test_Enable_Incorrect_V2 if {
     # Test incorrect 1 OU, spaces restricted
-    PolicyId := "GWS.CHAT.7.1v0.1"
+    PolicyId := "GWS.CHAT.7.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -371,12 +376,17 @@ test_Enable_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Content reporting for spaces is restricted to discoverable spaces only.</li></ul>",
+        "<br>",
+        Chat7Warning
+    ])
 }
 
 test_Enable_Incorrect_V3 if {
     # Test correct 2 OUs, child OU overrides top-level settings
-    PolicyId := "GWS.CHAT.7.1v0.1"
+    PolicyId := "GWS.CHAT.7.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -469,12 +479,17 @@ test_Enable_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Other OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Other OU: Content reporting for spaces is disabled.</li></ul>",
+        "<br>",
+        Chat7Warning
+    ])
 }
 
 test_Enable_Incorrect_V4 if {
     # Test incorrect 1 OU, one setting is missing
-    PolicyId := "GWS.CHAT.7.1v0.1"
+    PolicyId := "GWS.CHAT.7.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -526,11 +541,11 @@ test_Enable_Incorrect_V4 if {
 #--
 
 #
-# GWS.CHAT.7.2v0.1
+# GWS.CHAT.7.2v0.2
 #--
 test_Categories_Correct_V1 if {
     # Test correct 1 OU
-    PolicyId := "GWS.CHAT.7.2v0.1"
+    PolicyId := "GWS.CHAT.7.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -561,12 +576,12 @@ test_Categories_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Categories_Correct_V2 if {
     # Test correct, 2 OUs, child OU overrides
-    PolicyId := "GWS.CHAT.7.2v0.1"
+    PolicyId := "GWS.CHAT.7.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -615,12 +630,12 @@ test_Categories_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Categories_Correct_V3 if {
     # Test correct, 2 OUs, child OU inherits
-    PolicyId := "GWS.CHAT.7.2v0.1"
+    PolicyId := "GWS.CHAT.7.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -661,12 +676,12 @@ test_Categories_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Categories_Incorrect_V1 if {
     # Test incorrect 1 OU
-    PolicyId := "GWS.CHAT.7.2v0.1"
+    PolicyId := "GWS.CHAT.7.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -697,12 +712,15 @@ test_Categories_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: The following reporting types are disabled: other</li></ul>"
+    ])
 }
 
 test_Categories_Incorrect_V2 if {
     # Test incorrect 2 OUs
-    PolicyId := "GWS.CHAT.7.2v0.1"
+    PolicyId := "GWS.CHAT.7.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -751,12 +769,15 @@ test_Categories_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Other OU."
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Other OU: The following reporting types are disabled: harassment</li></ul>"
+    ])
 }
 
 test_Categories_Incorrect_V3 if {
     # Test incorrect no 
-    PolicyId := "GWS.CHAT.7.2v0.1"
+    PolicyId := "GWS.CHAT.7.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
 

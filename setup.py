@@ -4,7 +4,7 @@ ScubaGoggles setuptools
 from setuptools import setup, find_packages
 
 setup(name='scubagoggles',
-      version='0.1.0',
+      version='0.2.0',
       description='SCuBA security baseline assessment tool',
       author='CISA',
       packages=find_packages(exclude=['__pycache__']),
@@ -21,7 +21,7 @@ setup(name='scubagoggles',
         'dnspython==2.6.1',
         'pandas==1.5.0',
         'tqdm==4.66.3',
-        'requests==2.31.0'
+        'requests==2.32.0'
       ],
       entry_points={
           'console_scripts': ['scubagoggles=scubagoggles.main:dive']

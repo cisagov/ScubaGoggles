@@ -10,7 +10,7 @@ LogEvents := utils.GetEvents("classroom_logs")
 ###################
 
 #
-# Baseline GWS.CLASSROOM.1.1v0.1
+# Baseline GWS.CLASSROOM.1.1v0.2
 #--
 GetFriendlyValue1_1(Value) := "Users in your domain only" if {
     Value == "1"
@@ -40,7 +40,7 @@ NonCompliantOUs1_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.1.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.1.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -54,7 +54,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.1.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.1.1v0.2",
     "Criticality": "Shall",
     # Empty list is for noncompliant groups as classroom settings can't be modified at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
@@ -70,7 +70,7 @@ if {
 #--
 
 #
-# Baseline GWS.CLASSROOM.1.2v0.1
+# Baseline GWS.CLASSROOM.1.2v0.2
 #--
 GetFriendlyValue1_2(Value) := "Classes in your domain only" if {
     Value == "1"
@@ -98,7 +98,7 @@ NonCompliantOUs1_2 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.1.2v0.1",
+    "PolicyId": "GWS.CLASSROOM.1.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -113,7 +113,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.1.2v0.1",
+    "PolicyId": "GWS.CLASSROOM.1.2v0.2",
     "Criticality": "Shall",
     # Empty list is for noncompliant groups as classroom settings can't be modified at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
@@ -134,7 +134,7 @@ if {
 ###################
 
 #
-# Baseline GWS.CLASSROOM.2.1v0.1
+# Baseline GWS.CLASSROOM.2.1v0.2
 #--
 GetFriendlyValue2_1(Value) := "OFF" if {
     Value == "false"
@@ -161,7 +161,7 @@ NonCompliantOUs2_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.2.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.2.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -175,7 +175,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.2.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.2.1v0.2",
     "Criticality": "Shall",
     # Empty list is for noncompliant groups as classroom settings can't be modified at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
@@ -195,7 +195,7 @@ if {
 ###################
 
 #
-# Baseline GWS.CLASSROOM.3.1v0.1
+# Baseline GWS.CLASSROOM.3.1v0.2
 #--
 GetFriendlyValue3_1(Value) := "OFF" if {
     Value == "SIS_INTEGRATOR_NONE"
@@ -222,7 +222,7 @@ NonCompliantOUs3_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.3.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.3.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -236,7 +236,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.3.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.3.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -255,7 +255,7 @@ if {
 ###################
 
 #
-# Baseline GWS.CLASSROOM.4.1v0.1
+# Baseline GWS.CLASSROOM.4.1v0.2
 #--
 GetFriendlyValue4_1(Value) := "Students and teachers" if {
     Value == "STUDENTS_AND_TEACHERS_CAN_UNENROLL_STUDENTS"
@@ -282,7 +282,7 @@ NonCompliantOUs4_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.4.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.4.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -297,7 +297,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.4.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.4.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},

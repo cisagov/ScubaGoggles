@@ -2,12 +2,12 @@ package classroom
 import future.keywords
 
 #
-# GWS.CLASSROOM.1.1v0.1
+# GWS.CLASSROOM.1.1v0.2
 #--
 
 test_JoinClassroom_Correct_V1 if {
     # Test enforcing who can join classroom when there's only one event
-    PolicyId := "GWS.CLASSROOM.1.1v0.1"
+    PolicyId := "GWS.CLASSROOM.1.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -37,7 +37,7 @@ test_JoinClassroom_Correct_V1 if {
 test_JoinClassroom_Correct_V2 if {
     # Test enforcing MFA when there's multiple events, with the chronological latest
     # correct but not last in json list
-    PolicyId := "GWS.CLASSROOM.1.1v0.1"
+    PolicyId := "GWS.CLASSROOM.1.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -77,7 +77,7 @@ test_JoinClassroom_Correct_V2 if {
 
 test_JoinClassroom_Incorrect_V1 if {
     # Test enforcing who can join classroom when there's only one event and it's wrong
-    PolicyId := "GWS.CLASSROOM.1.1v0.1"
+    PolicyId := "GWS.CLASSROOM.1.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -110,7 +110,7 @@ test_JoinClassroom_Incorrect_V1 if {
 test_JoinClassroom_Incorrect_V2 if {
     # Test who can join classroom when there's multiple events, with the chronological latest
     # incorrect but not last in json list
-    PolicyId := "GWS.CLASSROOM.1.1v0.1"
+    PolicyId := "GWS.CLASSROOM.1.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -154,7 +154,7 @@ test_JoinClassroom_Incorrect_V2 if {
 
 test_JoinClassroom_Incorrect_V3 if {
     # Test enforcing who can join classroom when there no applicable event
-    PolicyId := "GWS.CLASSROOM.1.1v0.1"
+    PolicyId := "GWS.CLASSROOM.1.1v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -187,12 +187,12 @@ test_JoinClassroom_Incorrect_V3 if {
 
 
 #
-# GWS.CLASSROOM.1.2v0.1
+# GWS.CLASSROOM.1.2v0.2
 #--
 
 test_WhichClasses_Correct_V1 if {
     # Test enforcing which classes users can join when there's only one event
-    PolicyId := "GWS.CLASSROOM.1.2v0.1"
+    PolicyId := "GWS.CLASSROOM.1.2v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -222,7 +222,7 @@ test_WhichClasses_Correct_V1 if {
 test_WhichClasses_Correct_V2 if {
     # Test enforcing which classes users can join when there's multiple events, with the chronological latest
     # correct but not last in json list
-    PolicyId := "GWS.CLASSROOM.1.2v0.1"
+    PolicyId := "GWS.CLASSROOM.1.2v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -262,7 +262,7 @@ test_WhichClasses_Correct_V2 if {
 
 test_WhichClasses_Incorrect_V1 if {
     # Test enforcing which classes users can join when there's only one event and it's wrong
-    PolicyId := "GWS.CLASSROOM.1.2v0.1"
+    PolicyId := "GWS.CLASSROOM.1.2v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -295,7 +295,7 @@ test_WhichClasses_Incorrect_V1 if {
 test_WhichClasses_Incorrect_V2 if {
     # Test enforcing which classes users can join when there's multiple events, with the chronological latest
     # incorrect but not last in json list
-    PolicyId := "GWS.CLASSROOM.1.2v0.1"
+    PolicyId := "GWS.CLASSROOM.1.2v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -338,7 +338,7 @@ test_WhichClasses_Incorrect_V2 if {
 
 test_WhichClasses_Incorrect_V3 if {
     # Test enforcing which classes users can join when there no applicable event
-    PolicyId := "GWS.CLASSROOM.1.2v0.1"
+    PolicyId := "GWS.CLASSROOM.1.2v0.2"
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
