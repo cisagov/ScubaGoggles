@@ -206,7 +206,7 @@ This section covers preventing ordinary users from being able to install Chat ap
 ### Policies
 
 #### GWS.CHAT.5.1v0.2
-User-level ability to install Chat apps SHOULD be enabled.
+User-level ability to install Chat apps SHOULD be disabled.
 
 - _Rationale:_ Unrestricted access to Chat apps can expose the agency to potential vulnerabilities present in those apps or apps developed with malicious intent. This policy prevents unauthorized app installations and promotes the protection of sensitive information.
 - _Last modified:_ July 10, 2023
