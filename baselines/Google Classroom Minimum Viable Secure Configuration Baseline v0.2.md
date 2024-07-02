@@ -196,7 +196,12 @@ Class creation SHALL be restricted to verified teachers only.
 - _Last modified:_ June 21, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - Pending
+  - [T1656: Impersonation](https://attack.mitre.org/techniques/T1656/)
+  - [T534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
+  - [T1598: Phishing for Information](https://attack.mitre.org/techniques/T1598/)
+    - [T1598:002: Phishing for Information: Spearphishing Attachment](https://attack.mitre.org/techniques/T1598/002/)
+    - [T1598:003: Phishing for Information: Spearphishing Link](https://attack.mitre.org/techniques/T1598/003/)
+    - [T1598:004: Phishing for Information: Spearphishing Voice](https://attack.mitre.org/techniques/T1598/004/)
 
 ### Resources
 
