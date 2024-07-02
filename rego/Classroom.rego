@@ -311,3 +311,67 @@ if {
     Status := count(NonCompliantOUs4_1) == 0
 }
 #--
+
+
+###################
+# GWS.CLASSROOM.5 #
+###################
+
+#
+# Baseline GWS.CLASSROOM.5.1v0.2
+#--
+GetFriendlyValue5_1(Value) := "anyone in this domain" if {
+    Value == "1"
+} else := "all pending and verified teachers" if {
+    Value == "2"
+} else := Value
+
+NonCompliantOUs5_1 contains {
+    "Name": OU,
+    "Value":  concat(" ", [
+        "Who can create classes is set to",
+        GetFriendlyValue5_1(LastEvent.NewValue)
+    ])
+} if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, "TeacherPermissionsSettingProto who_can_create_class", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "3"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.5.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    SettingName := "TeacherPermissionsSettingProto who_can_create_class"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.5.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    SettingName := "TeacherPermissionsSettingProto who_can_create_class"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) > 0
+    Status := count(NonCompliantOUs5_1) == 0
+}
+#--
+
