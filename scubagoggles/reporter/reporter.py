@@ -235,6 +235,8 @@ successful_calls : set, unsuccessful_calls : set) -> list:
     ind_report_name =  product_capitalized + "Report"
     fragments = []
     json_data = []
+    baseline_version = '0.2'
+    tool_version = '0.2.0'
     report_stats = {
         "Manual": 0,
         "Passes": 0,
@@ -246,6 +248,7 @@ successful_calls : set, unsuccessful_calls : set) -> list:
     for baseline_group in product_policies:
         table_data = []
         results_data ={}
+        full_name = prod_to_fullname[product]
         for control in baseline_group['Controls']:
             tests = [test for test in test_results_data if test['PolicyId'] == control['Id']]
             if len(tests) == 0:
@@ -293,6 +296,7 @@ successful_calls : set, unsuccessful_calls : set) -> list:
                                 # results that belong to the Common Controls report is they're
                                 # marked as Not-Implemented. This if excludes them from the
                                 # rules report.
+                                full_name = "Common Controls"
                                 continue
                             report_stats[get_summary_category(result)] += 1
                             table_data.append({
@@ -317,11 +321,19 @@ successful_calls : set, unsuccessful_calls : set) -> list:
                                 'Result': result,
                                 'Criticality': test['Criticality'],
                                 'Details': details})
+        markdown_group_name = "-".join(baseline_group['GroupName'].split())
+        group_reference_url = f'{SCUBA_GITHUB_URL}/blob/v{tool_version}/baselines/'\
+        f'{full_name} Minimum Viable Secure Configuration Baseline v{baseline_version}.md#'\
+        f'{baseline_group["GroupNumber"]}-{markdown_group_name}'
+        group_reference_url_spacing = "%20".join(group_reference_url.split())
+        markdown_link = fr'<a href="{group_reference_url_spacing}" target="_blank"\>'\
+        f'{baseline_group["GroupName"]}</a>'
         fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} \
-        {baseline_group['GroupName']}</h2>")
+        {markdown_link}</h2>")
         fragments.append(create_html_table(table_data))
         results_data.update({"GroupName": baseline_group['GroupName']})
         results_data.update({"GroupNumber": baseline_group['GroupNumber']})
+        results_data.update({"GroupReferenceURL":group_reference_url_spacing})
         results_data.update({"Controls": table_data})
         json_data.append(results_data)
     html = build_report_html(fragments, prod_to_fullname[product], tenant_domain, main_report_name)
