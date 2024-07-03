@@ -61,7 +61,8 @@ The below screenshot appears happens when trying to install the Zoom app.
 <img src="images/Chat 5.1 is enabled but CC11 restricts any app from being enabled.png">
 > Note that the `+` option to install apps in google chat `disappears` altogether
 
-Here is the option to install apps when common controls 11.1 is set to `any setting other than disallowing installation of apps`.
+
+In the next image below, the option to install apps reappears, when common controls 11.1 is set to `any setting other than disallowing installation of apps`.
 <img src="images/Common Controls 11.1 is enabled in any form.png">
 > Note that the `+` option to install apps in google chat `reappears`
 
