@@ -19,7 +19,7 @@ Only approved Google Workspace Marketplace applications SHOULD be allowed for in
 
 In the Google documentation for Chat 5.1 there is this line.
 
-<img src="/images/chat 5.1 documentation.png">
+<img src="images/chatdocumentation.png">
 
 The takeaway of this line was that if the setting for Chat 5.1 is `disabled` then users and admins would not be able install any chat app.
 
@@ -44,7 +44,7 @@ The below screenshot appears happens when trying to install the Zoom app.
 - If Common Controls 11.1 is `enabled for allowlisting`
 - The `app is Allowlisted`. 
 The below screenshot appears happens when trying to install the Zoom app.
-<img src="/images/Chat 5.1 is enabled and CC 11.1 is configured for allowlists and the app is allowlisted.png">
+<img src="images/enabledandAllowlisted.png">
 > Note that the option for both admins and users to install this chat app is available.
 
 ### Scenario 3
@@ -62,14 +62,14 @@ The below screenshot appears happens when trying to install the Zoom app.
 > Note that the `+` option to install apps in google chat `disappears` altogether
 
 Here is the option to install apps when common controls 11.1 is set to `any setting other than disallowing installation of apps`.
-<img src="/images/Common Controls 11.1 is enabled in any form.png">
+<img src="images/Common Controls 11.1 is enabled in any form.png">
 > Note that the `+` option to install apps in google chat `reappears`
 
 ### Scenario 5
 - If Chat 5.1 is `disabled`
 - If Common Controls 11.1 is `enabled for allowlisting`
 - The `app is Allowlisted`. 
-<img src="/images/Chat 5.1 is disabled but CC 11.1 is enabled but the app is allowlisted.png">
+<img src="images/Chat 5.1 is disabled but CC 11.1 is enabled but the app is allowlisted.png">
 > Note that both options are still grayed out even with the app allowlisted in common controls 11.1
 
 ## Discussion
