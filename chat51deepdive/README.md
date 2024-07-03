@@ -12,7 +12,7 @@ User-level ability to install Chat apps SHALL be disabled.
 ### Common Controls 11.1v0.2
 Only approved Google Workspace Marketplace applications SHOULD be allowed for installation.
 
-- [Common Controls 11.1 SCuBA Policy Link](https://github.com/cisagov/ScubaGoggles/blob/v0.2.0/baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#gwscommoncontrols111v02)
+- [Common Controls 11.1 SCuBA Policy Link](https://github.com/cisagov/ScubaGoggles/blob/v0.2.0/baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#11-authorized-google-marketplace-apps)
 - [Common Controls 11.1 Google setting documentation](https://support.google.com/a/answer/6089179?fl=1)
 
 ## Background 
