@@ -44,7 +44,7 @@ The below screenshot appears happens when trying to install the Zoom app.
 - If Common Controls 11.1 is `enabled for allowlisting`
 - The `app is Allowlisted`. 
 The below screenshot appears happens when trying to install the Zoom app.
-<img src="images/enabledandAllowlisted.png">
+<img src="images/Chat 5.1 is enabled and CC 11.1 is configured for allowlists and the app is allowlisted.png">
 > Note that the option for both admins and users to install this chat app is available.
 
 ### Scenario 3
