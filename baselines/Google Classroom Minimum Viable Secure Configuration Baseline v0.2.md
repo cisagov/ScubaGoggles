@@ -16,6 +16,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Classroom API](#2-classroom-api)
 -   [Roster Import](#3-roster-import)
 -   [Student Unenrollment](#4-student-unenrollment)
+-   [Class Creation](#5-class-creation)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
@@ -180,4 +181,43 @@ To configure the settings for Student Unenrollment:
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Student unenrollment**.
 4.  Select **Teachers Only**.
+5.  Select **Save**.
+
+## 5. Class Creation
+
+The first time users sign in to Classroom, they self-identify as either a student or teacher. Users who identify as teachers will be marked as a pending teacher until an administrator verifies them. Google Classroom allows administrators to restrict class creation to only verified teachers.
+
+### Policy
+
+#### GWS.CLASSROOM.5.1v0.2
+Class creation SHALL be restricted to verified teachers only.
+
+- _Rationale:_ Allowing pending teachers to create classes potentially allows students to impersonate teachers and exploit the trusted relationship between teacher and student, e.g., to phish sensitive information from the students. Restricting class creation to verified teachers reduces this risk.
+- _Last modified:_ June 21, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1656: Impersonation](https://attack.mitre.org/techniques/T1656/)
+  - [T534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
+  - [T1598: Phishing for Information](https://attack.mitre.org/techniques/T1598/)
+    - [T1598:002: Phishing for Information: Spearphishing Attachment](https://attack.mitre.org/techniques/T1598/002/)
+    - [T1598:003: Phishing for Information: Spearphishing Link](https://attack.mitre.org/techniques/T1598/003/)
+    - [T1598:004: Phishing for Information: Spearphishing Voice](https://attack.mitre.org/techniques/T1598/004/)
+
+### Resources
+
+-   [Verify teachers and set permissions](https://support.google.com/edu/classroom/answer/6071551?hl=en)
+
+### Prerequisites
+
+-   None
+
+### Implementation
+To configure the settings for Class Creation:
+
+#### GWS.CLASSROOM.5.1v0.2 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
+3.  Select **General Settings**.
+4.  Select **Teacher permissions**.
+5.  Select **Verified teachers only** for **Who can create classes?**
 5.  Select **Save**.
