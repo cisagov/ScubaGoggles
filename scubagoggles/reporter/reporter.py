@@ -235,6 +235,8 @@ successful_calls : set, unsuccessful_calls : set) -> list:
     ind_report_name =  product_capitalized + "Report"
     fragments = []
     json_data = []
+    baseline_version = '0.2'
+    tool_version = '0.2.0'
     report_stats = {
         "Manual": 0,
         "Passes": 0,
@@ -320,8 +322,8 @@ successful_calls : set, unsuccessful_calls : set) -> list:
                                 'Criticality': test['Criticality'],
                                 'Details': details})
         markdown_group_name = "-".join(baseline_group['GroupName'].split())
-        group_reference_url = f'{SCUBA_GITHUB_URL}/blob/v0.2.0/baselines/'\
-        f'{full_name} Minimum Viable Secure Configuration Baseline v0.2.md#'\
+        group_reference_url = f'{SCUBA_GITHUB_URL}/blob/v{tool_version}/baselines/'\
+        f'{full_name} Minimum Viable Secure Configuration Baseline v{baseline_version}.md#'\
         f'{baseline_group["GroupNumber"]}-{markdown_group_name}'
         group_reference_url_spacing = "%20".join(group_reference_url.split())
         markdown_link = fr'<a href="{group_reference_url_spacing}" target="_blank"\>'\
