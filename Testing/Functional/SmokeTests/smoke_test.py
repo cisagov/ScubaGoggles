@@ -5,6 +5,7 @@ outputs (i.e., files) are generated.
 
 import pytest
 import subprocess
+import os
 
 """
     Test virtualenv setup, activation
@@ -23,14 +24,21 @@ class TestScuba:
     #    print(result.stderr)
 
 
-    def test_cli(self):
-        command = f"scubagoggles gws --subjectemail mbaker@scubagws.org --quiet"
+    def test_cli(self, subjectemail):
+        command = f"scubagoggles gws --subjectemail {subjectemail} --quiet -b commoncontrols"
         result = subprocess.run(command)
-        print(result)
-        print(result.stderr)
 
         if result.returncode != 0:
             raise AssertionError(f"Expected 0, but got {result.returncode}")
+        
+        cwd = os.getcwd()
+        print(cwd)
+        prefix = "GWSBaselineConformance"
+
+        directories = [d for d in os.listdir() if os.path.isdir(d) and d.startswith(prefix)]
+        directories.sort(key=lambda d: os.path.getctime(d), reverse=True)
+        print(directories)
+        print(directories[0])
 
 
 #def create_venv(env):
