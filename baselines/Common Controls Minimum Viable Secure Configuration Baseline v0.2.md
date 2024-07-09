@@ -25,6 +25,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Google Workspace Logs](#14-google-workspace-logs)
 - [Data Regions](#15-data-regions-and-storage)
 - [Additional Google Services](#16-additional-google-services)
+- [Multi-Party Approvals](#17-multi-party-approval)
 
 ## Assumptions
 
@@ -1148,8 +1149,7 @@ To configure additional services per the policy:
 6.	Click **Save**.
 
 ## 17. Multi-Party Approval
-
-This section covers the oogle services that do not have an individual control and whether these serviGces are on or off.
+This section covers whether multiple super admins need to approve changes to specific admin console settings.
 
 ### Policy
 
