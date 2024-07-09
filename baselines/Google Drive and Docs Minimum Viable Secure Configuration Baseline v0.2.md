@@ -271,7 +271,7 @@ Agencies SHALL enable the security update for Drive files.
 
 ### Resources
 
--   [Google Workspace Admin Help: Security update for Google Drive](https://support.google.com/drive/answer/10729743?hl=en#zippy=%2Care-any-file-types-not-impacted%2Cwhat-happens-if-i-dont-apply-the-security-update-to-my-files%2Chow-will-this-security-update-change-access-to-my-impacted-files)
+-   [Google Workspace Admin Help: Security update for Google Drive](https://apps.google.com/supportwidget/articlehome?article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F10685032%3Fvisit_id%3D638533824698144528-3160863719&assistant_event=welcome&assistant_id=mega-bot-shared-drive&product_context=10685032&product_name=UnuFlow&trigger_context=a)
 
 ### Prerequisites
 
