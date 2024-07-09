@@ -16,6 +16,62 @@ import os
 
 """
 
+def verify_output_type(output_path, contents):
+    try:
+        entries = os.listdir(output_path)
+        print(entries)
+        for entry in entries:
+            contents.append(entry)
+
+            # Check if entry is a valid directory or file
+            child_path = os.path.join(output_path, entry)
+            if os.path.isdir(child_path):
+                assert True
+                verify_output_type(child_path, contents)
+            elif os.path.isfile(child_path):
+                assert True
+            else:
+                assert False, f"Entry is not a directory or file (symlink, etc.)"
+
+        return contents
+    except FileNotFoundError:
+        assert False, f"The directory {output_path} does not exist"
+    except Exception as e:
+        assert False, f"An error occurred, {e}"
+
+required_contents = [
+    "BaselineReports.html", 
+    "IndividualReports", 
+    "ProviderSettingsExport.json", 
+    "TestResults.json",
+    "images",
+    "CalendarReport.html",
+    "ChatReport.html",
+    "ClassroomReport.html",
+    "CommoncontrolsReport.html",
+    "DriveReport.html",
+    "GmailReport.html",
+    "GroupsReport.html",
+    "MeetReport.html",
+    "RulesReport.html",
+    "SitesReport.html",
+    "cisa_logo.png",
+    "triangle-exclamation-solid.svg"
+]
+
+def verify_all_outputs_exist(contents):
+    
+    try: 
+        print(contents)
+        for required_content in required_contents:
+            if required_content in contents:
+                assert True
+            else:
+                assert False, f"{required_content} was not found in the generated report"
+    except Exception as e:
+        assert False, f"An error occurred, {e}"
+    
+
 class TestScuba:
     #def test_venv_setup(self):
     #    command = f"scubagoggles gws "
@@ -42,31 +98,9 @@ class TestScuba:
         individual_reports_path = f"{output_path}/IndividualReports"
         print(individual_reports_path)
 
-        def check_output_contents(output_path):
-            try:
-                entries = os.listdir(output_path)
-                print(entries)
-                for entry in entries:
-                    child_path = os.path.join(output_path, entry)
-
-                    # Directory case
-                    if os.path.isdir(child_path):
-                        assert os.path.isdir(child_path)
-                        check_output_contents(child_path)
-                    
-                    # File case
-                    elif os.path.isfile(child_path):
-                        assert os.path.isfile(child_path)
-                    
-                    # Neither a directory or file (symlink, etc.)
-                    else:
-                        assert False
-            except FileNotFoundError:
-                assert False, f"The directory {output_path} does not exist"
-            except Exception as e:
-                assert False, f"An error occurred, {e}"
         
-        check_output_contents(output_path)
+        contents = verify_output_type(output_path, [])
+        verify_all_outputs_exist(contents)
 
         #assert "BaselineReports.html" in entries and os.path.isfile(f"{output_path}/BaselineReports.html")
         #assert "IndividualReports" in entries and os.path.isdir(individual_reports_path)
