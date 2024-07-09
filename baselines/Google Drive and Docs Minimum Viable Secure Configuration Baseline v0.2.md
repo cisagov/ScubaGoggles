@@ -100,9 +100,9 @@ Agencies SHALL disable making files and published web content visible to anyone 
 #### GWS.DRIVEDOCS.1.6v0.2
 Agencies SHOULD set access checking to recipients only.
 
-- _Rationale:_ The Access Checker feature can be configured to allows users to grant access to the public if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients or the suggested target audience.
+- _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients or the suggested target audience.
 - _Last modified:_ June 7, 2024
-- _Note:_ Agencies SHALL NOT set access checking to Recipients only, suggested target audience, or public (no Google account required).
+- _Note:_ Agencies need to ensure that access checking is not set to the "Recipients only, suggested target audience, or public (no Google account required)" option.
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -263,7 +263,7 @@ This section covers whether a security update issued by Google will be applied t
 #### GWS.DRIVEDOCS.3.1v0.2
 Agencies SHALL enable the security update for Drive files.
 
-- _Rationale:_ Google may add new security features over time. Allowing security updates helps ensure that your files are protected with the latest features Google makes available.
+- _Rationale:_ By not enabling the resource key security update it creates the potential for an unauthorized access to files. Enabling this security update mitigates the risk by ensuring access is controlled properly.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
