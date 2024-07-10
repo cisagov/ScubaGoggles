@@ -98,11 +98,10 @@ Agencies SHALL disable making files and published web content visible to anyone 
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.6v0.2
-Agencies SHOULD set access checking to recipients only.
+Agencies SHALL set access checking to recipients only.
 
 - _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients or the suggested target audience.
 - _Last modified:_ June 7, 2024
-- _Note:_ Agencies need to ensure that access checking is not set to the "Recipients only, suggested target audience, or public (no Google account required)" option.
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -170,7 +169,7 @@ To configure the settings for Sharing options:
 
 #### GWS.DRIVEDOCS.1.6v0.2 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Select **Access Checker** -\> **Recipients only, or suggested target audience.**
+2.  Select **Access Checker** -\> **Recipients only.**
 
 #### GWS.DRIVEDOCS.1.7v0.2 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
