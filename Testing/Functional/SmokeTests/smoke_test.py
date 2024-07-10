@@ -9,22 +9,14 @@ import os
 
 from smoke_test_utils import verify_all_outputs_exist, verify_output_type
 
-"""
-    Test virtualenv setup, activation
-
-    Test installing dependencies for running scuba.py script 
-
-    Test installing dependencies for running scubagoggles directly 
-
-"""    
-
 class SmokeTest:
     def test_venv_creation(self):
-        result = subprocess.run(["dir", ".venv"], shell=True, capture_output=True, text=True)
+        result = subprocess.run(["ls", ".venv"], shell=True, capture_output=True, text=True)
         if "Scripts" in result.stdout: 
             assert True
         else: 
             assert False, f"Scripts was not found in the virtual environment"
+
 
     def test_scubagoggles(self, subjectemail):
         command = f"scubagoggles gws --subjectemail {subjectemail} --quiet"
