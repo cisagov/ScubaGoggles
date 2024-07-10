@@ -555,3 +555,52 @@ test_JoinExternalPers_Incorrect_V7 if {
     "What meetings can org users join is set to any meetings, ",
     "including meetings created with personal accounts</li></ul>"])
 }
+
+test_JoinExternalPers_Incorrect_V8 if {
+    # Test group wrong
+    PolicyId := "GWS.MEET.2.1v0.2"
+    Output := tests with input as {
+        "meet_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "SafetyAccessLockProto meetings_allowed_to_join"
+                        },
+                        {"name": "NEW_VALUE", "value": "SAME_DOMAIN"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "SafetyAccessLockProto meetings_allowed_to_join"
+                        },
+                        {"name": "NEW_VALUE", "value": "ALL"},
+                        {"name": "GROUP_EMAIL", "value": "group@example.com"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following groups are non-compliant:<ul>",
+        "<li>group@example.com: What meetings can org users join is set to ",
+        "any meetings, including meetings created with personal accounts</li>",
+        "</ul>"
+    ])
+}
