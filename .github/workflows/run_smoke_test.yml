@@ -20,6 +20,22 @@ jobs:
       - name: Checkout repository 
         uses: actions/checkout@v4
 
+      - name: Setup virtualenv
+        run: |
+          pip3 install virtualenv
+          python -m venv .venv
+          .venv\Scripts\activate
+          python -c "import sys; print(sys.prefix != sys.base_prefix)"
+
+      - name: Install dependencies
+        run: |
+          pip3 install -r requirements.txt
+
+      - name: Download OPA executable
+        run: |
+          python download_opa.py -v 0.60.0 -os windows
+
       - name: Execute ScubaGoggles and check for correct output
         run: |
-          echo "In step to execute ScubaGoggles" 
+          echo "In step to execute ScubaGoggles smoke test" 
+          pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="${$env:SCUBA_GITHUB_AUTOMATION_CREDS.subjectemail}"
