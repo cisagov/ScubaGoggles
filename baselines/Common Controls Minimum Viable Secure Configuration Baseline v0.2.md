@@ -824,7 +824,7 @@ Some older versions of common software may break when this control is implemente
 ### Policies
 
 #### GWS.COMMONCONTROLS.11.1v0.2
-Only approved Google Workspace Marketplace applications SHOULD be allowed for installation.
+Only approved Google Workspace Marketplace applications SHALL be allowed for installation.
 
 - _Rationale:_ Marketplace apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
 - _Last modified:_ October 24, 2023
