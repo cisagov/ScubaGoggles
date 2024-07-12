@@ -15,7 +15,8 @@ from googleapiclient.discovery import build
 from scubagoggles.auth import gws_auth
 from scubagoggles.provider import Provider
 from scubagoggles.run_rego import opa_eval
-from scubagoggles.reporter import reporter, md_parser
+from scubagoggles.reporter import md_parser
+from scubagoggles.reporter.reporter import Reporter
 from scubagoggles.utils import rel_abs_path
 
 
@@ -277,17 +278,16 @@ class Orchestrator:
         products_bar = tqdm(products, leave=False, disable=args.quiet)
         for product in products_bar:
             products_bar.set_description(f"Creating the HTML and JSON Report for {product}...")
-            stats_and_data[product] = reporter.rego_json_to_ind_reports(
-                test_results_data,
-                product,
-                out_folder,
-                tenant_domain,
-                main_report_name,
-                prod_to_fullname,
-                baseline_policies[product],
-                successful_calls,
-                unsuccessful_calls
-            )
+            reporter = Reporter(product,
+                                tenant_domain,
+                                main_report_name,
+                                prod_to_fullname,
+                                baseline_policies[product],
+                                successful_calls,
+                                unsuccessful_calls)
+            stats_and_data[product] = \
+                reporter.rego_json_to_ind_reports(test_results_data,
+                                                  out_folder)
             baseline_product_summary = {product:stats_and_data[product][0]}
             baseline_product_results_json = {product:stats_and_data[product][1]}
             summary.update(baseline_product_summary)
@@ -323,9 +323,9 @@ class Orchestrator:
                 "Details": self._generate_summary(stats[0])
             })
 
-        fragments.append(reporter.create_html_table(table_data))
+        fragments.append(Reporter.create_html_table(table_data))
         with open(f"{report_path}", mode='w', encoding='UTF-8') as file:
-            file.write(reporter.build_front_page_html(fragments, tenant_info))
+            file.write(Reporter.build_front_page_html(fragments, tenant_info))
 
         # suppress opening the report in the browser
         if args.quiet:
@@ -359,7 +359,7 @@ class Orchestrator:
         if not os.path.exists(f'{args.outputpath}/{args.outputproviderfilename}.json'):
             # When running run_cached, the provider output might not exist as a stand-alone
             # file depending what version of ScubaGoggles created the output. If the provider
-            # ouptut doesn't exist as a standa-lone file, create it from the scuba results
+            # output doesn't exist as a standalone file, create it from the scuba results
             # file so the other functions can execute as normal.
             with open(f'{args.outputpath}/{args.outjsonfilename}.json', 'r',
                     encoding='UTF-8') as scuba_results:
