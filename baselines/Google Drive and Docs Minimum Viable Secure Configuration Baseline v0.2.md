@@ -432,7 +432,7 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 
 ### Prerequisites
 
--   None
+-   Google Workspace Enterprise
 
 ### Implementation
 
