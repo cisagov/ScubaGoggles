@@ -14,9 +14,8 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [External File Sharing](#2-external-file-sharing)
 -   [History for Spaces](#3-history-for-spaces)
 -   [External Chat Messaging](#4-external-chat-messaging)
--   [Installation of Chat Apps](#5-installation-of-chat-apps)
--   [DLP Rules](#6-dlp-rules)
--   [Content Reporting](#7-content-reporting)
+-   [DLP Rules](#5-dlp-rules)
+-   [Content Reporting](#6-content-reporting)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
@@ -199,47 +198,7 @@ Alternatively, to disable external chat entirely:
 4. Select **OFF**
 5. Select **Save**.
 
-## 5. Installation of Chat Apps
-
-This section covers preventing ordinary users from being able to install Chat apps.
-
-### Policies
-
-#### GWS.CHAT.5.1v0.2
-User-level ability to install Chat apps SHALL be disabled.
-
-- _Rationale:_ Unrestricted access to Chat apps can expose the agency to potential vulnerabilities present in those apps or apps developed with malicious intent. This policy prevents unauthorized app installations and promotes the protection of sensitive information.
-- _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1195:002: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
-    - [T1195:002: Supply Chain Compromise: Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
-  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
-    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
-    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
-    - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
-
-### Resources
-
--   [Google Workspace Admin Help: Allow users to install Chat apps](https://support.google.com/a/answer/7651360?product_name=UnuFlow&hl=en&visit_id=637916846359382524-3147840186&rd=1&src=supportwidget0&hl=en#zippy=%2Cstep-add-marketplace-apps-to-your-allowlist-optional%2Cstep-decide-what-apps-users-can-install%2Cstep-let-users-install-apps-in-chat)
--   GWS Common Controls Minimum Viable Secure Configuration Baseline
-
-### Prerequisites
-
--   None
-
-### Implementation
-
-To configure the settings for Chat apps:
-
-#### GWS.CHAT.5.1v0.2 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
-3.  Select **Chat apps** -\> **Chat apps access settings**.
-4.  Select **OFF** for **Allow users to install Chat apps**.
-5.  Select **SAVE**.
-
-## 6. DLP rules
+## 5. DLP rules
 
 This recommendation applies only to agencies that allow external sharing (see section 2.1).
 
@@ -249,7 +208,7 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 
 ### Policies
 
-#### GWS.CHAT.6.1v0.2
+#### GWS.CHAT.5.1v0.2
 Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
 
 - _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. By blocking and/or having warnings on these DLP-scanned files from being shared with users, the risk of unintentional introduction of sensitive content is reduced.
@@ -275,7 +234,7 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 
 ### Implementation
 
-#### GWS.CHAT.6.1v0.2 Instructions
+#### GWS.CHAT.5.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
 3.  Click **Manage Rules**. Then click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
@@ -288,13 +247,13 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 10. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 11. Review the rule details, mark the rule as **Active**, and click **Create.**
 
-## 7. Content Reporting
+## 6. Content Reporting
 
 This section covers the content reporting functionality, a feature that allows users to report messages that violate organizational guidelines to workspace admins.
 
 ### Policies
 
-#### GWS.CHAT.7.1v0.2
+#### GWS.CHAT.6.1v0.2
 Chat content reporting SHALL be enabled for all conversation types.
 
 - _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies help ensure that their users are able to report risky messages regardless of the conversation type.
@@ -303,7 +262,7 @@ Chat content reporting SHALL be enabled for all conversation types.
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.CHAT.7.2v0.2
+#### GWS.CHAT.6.2v0.2
 All reporting message categories SHOULD be selected.
 
 - _Rationale:_ Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
@@ -320,7 +279,7 @@ All reporting message categories SHOULD be selected.
 
 ### Implementation
 
-#### GWS.CHAT.7.1v0.2 Instructions
+#### GWS.CHAT.6.1v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.
@@ -328,7 +287,7 @@ All reporting message categories SHOULD be selected.
 5.  Ensure all conversation type checkboxes are selected. 
 6.  Click **Save**.
 
-#### GWS.CHAT.7.2v0.2 Instructions
+#### GWS.CHAT.6.2v0.2 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.

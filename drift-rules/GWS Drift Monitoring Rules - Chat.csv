@@ -7,5 +7,4 @@ OR
 DEFAULT_ON_THE_RECORD",rules/00gjdgxs13kc3ei,JK 08-01-23 @ 11:58
 GWS.CHAT.4.1v0.2(a),"External Chat messaging SHALL be restricted to allowlisted domains only.",Admin Log Event,Change Application Setting,RestrictChatProto restrictChatToOrganization,false,rules/00gjdgxs3vz76ij,JK 08-01-23 @ 13:17
 GWS.CHAT.4.1v0.2(b),External Chat messaging SHALL be restricted to allowlisted domains only.,Admin Log Event,Change Application Setting,RestrictChatProto externalChatRestriction,TRUSTED_DOMAINS,rules/00gjdgxs3exvv2u,JK 08-01-23 @ 13:27
-GWS.CHAT.5.1v0.2,User-level ability to install Chat apps SHALL be disabled.,Admin Log Event,Change Application Setting,Chat app Settings - Chat apps enabled,false,rules/00gjdgxs2g5w3mm,JK 08-01-23 @ 10:27
-GWS.CHAT.6.1v0.2,Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.,N/A,N/A,N/A,N/A,N/A,Not Alertable
+GWS.CHAT.5.1v0.2,Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.,N/A,N/A,N/A,N/A,N/A,Not Alertable
