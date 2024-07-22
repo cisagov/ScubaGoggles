@@ -1129,7 +1129,12 @@ Service status for Google services that do not have an individual control SHOULD
 - _Last modified:_ June 11, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - Pending
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
+  - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
+    - [T1204:001: Trusted Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
+    - [T1204:002: Trusted Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
+    - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 ### Resources
 -	[GWS Admin Help \| Turn on or off additional Google services](https://support.google.com/a/answer/181865)
@@ -1160,7 +1165,7 @@ Require multi party approval for sensitive admin actions SHALL be enabled.
 - _Last modified:_ June 20, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - Pending
+  - No TTP Mappings
 
 ### Resources
 -	[GWS Admin Help \| Multi-party approval for sensitive actions](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13790448%3Fhl%3Den&assistant_id=generic-unu&product_context=13790448&product_name=UnuFlow&trigger_context=a)
