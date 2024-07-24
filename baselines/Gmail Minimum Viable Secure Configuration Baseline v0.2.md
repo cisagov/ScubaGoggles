@@ -1214,14 +1214,17 @@ To configure the settings for spam filtering:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
 3.  Select **Spam, Phishing, and Malware**.
+4.  Under **Spam** select **Add Another Rule**.
 
 #### GWS.GMAIL.19.1v0.2 Instructions
-1.  Un-select **Bypass spam filters for messages from senders or domains in selected lists.**
-2.  Select **Save**.
+1.  Un-select **Bypass spam filters for messages from senders or domains in selected lists**.
+2.  Or select **Bypass spam filters for messages from senders or domains in selected lists** and select or create a list that does not include entire domains.
+3.  Select **Save**.
 
 #### GWS.GMAIL.19.2v0.2 Instructions
-1.  Un-select **Bypass spam filters and hide warnings for messages from senders or domains in selected lists.**
-2.  Select **Save**.
+1.  Un-select **Bypass spam filters and hide warnings for messages from senders or domains in selected lists**.
+2.  Or select **Bypass spam filters and hide warnings for messages from senders or domains in selected lists** and select or create a list that does not include entire domains.
+3.  Select **Save**.
 
 #### GWS.GMAIL.19.3v0.2 Instructions
 1.  Un-select **Bypass spam filters and hide warnings for all messages from internal and external senders**
