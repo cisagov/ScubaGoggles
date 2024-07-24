@@ -262,7 +262,7 @@ This section covers whether a security update issued by Google will be applied t
 #### GWS.DRIVEDOCS.3.1v0.2
 Agencies SHALL enable the security update for Drive files.
 
-- _Rationale:_ By not enabling the resource key security update it creates the potential for an unauthorized access to files. Enabling this security update mitigates the risk by ensuring access is controlled properly.
+- _Rationale:_ By not enabling the update to the resource key security update a user could potentially gain unauthorized access to files. Enabling this security update decreases risk of unauthorized access and data spillage by controlling access to files in Google Drive.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
