@@ -328,3 +328,51 @@ test_HostMan_Incorrect_V5 if {
     ])
 }
 #--
+
+test_HostMan_Incorrect_V6 if {
+    # Test group wrong
+    PolicyId := "GWS.MEET.3.1v0.2"
+    Output := tests with input as {
+        "meet_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "SafetyModerationLockProto host_management_enabled"
+                        },
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "SafetyModerationLockProto host_management_enabled"
+                        },
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "GROUP_EMAIL", "value": "group@example.com"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following groups are non-compliant:<ul>",
+        "<li>group@example.com: Host management when video calls start is set to off</li>",
+        "</ul>"
+    ])
+}

@@ -32,6 +32,23 @@ if {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
+NonCompliantGroups1_1 contains {
+    "Name": Group,
+    "Value": concat(" ", [
+        "Who can join meetings is set to",
+        GetFriendlyValue1_1(LastEvent.NewValue)
+    ])
+}
+if {
+    some Group in utils.GroupsWithEvents
+    SettingName := "SafetyDomainLockProto users_allowed_to_join"
+    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "ALL"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
 tests contains {
     "PolicyId": "GWS.MEET.1.1v0.2",
     "Criticality": "Should",
@@ -49,20 +66,18 @@ if {
 tests contains {
     "PolicyId": "GWS.MEET.1.1v0.2",
     "Criticality": "Should",
-    # Empty list in next line for non-compliant groups, as Meet settings can't be changed at the group level
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "SafetyDomainLockProto users_allowed_to_join", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs1_1) == 0
-    # as long as it is not all, this is disabled.
+    Conditions := {count(NonCompliantOUs1_1) == 0, count(NonCompliantGroups1_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
-
 
 ##############
 # GWS.MEET.2 #
@@ -91,6 +106,23 @@ if {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
+NonCompliantGroups2_1 contains {
+    "Name": Group,
+    "Value": concat(" ", [
+        "What meetings can org users join is set to",
+        GetFriendlyValue2_1(LastEvent.NewValue)
+    ])
+}
+if {
+    some Group in utils.GroupsWithEvents
+    SettingName := "SafetyAccessLockProto meetings_allowed_to_join"
+    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "ALL"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
 tests contains {
     "PolicyId": "GWS.MEET.2.1v0.2",
     "Criticality": "Shall",
@@ -108,18 +140,18 @@ if {
 tests contains {
     "PolicyId": "GWS.MEET.2.1v0.2",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, NonCompliantGroups2_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1, "NonCompliantGroups": NonCompliantGroups2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "SafetyAccessLockProto meetings_allowed_to_join", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs2_1) == 0
+    Conditions := {count(NonCompliantOUs2_1) == 0, count(NonCompliantGroups2_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
-
 
 ##############
 # GWS.MEET.3 #
@@ -148,6 +180,23 @@ if {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
+NonCompliantGroups3_1 contains {
+    "Name": Group,
+    "Value": concat(" ", [
+        "Host management when video calls start is set to",
+        GetFriendlyValue3_1(LastEvent.NewValue)
+    ])
+}
+if {
+    some Group in utils.GroupsWithEvents
+    SettingName := "SafetyModerationLockProto host_management_enabled"
+    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
 tests contains {
         "PolicyId": "GWS.MEET.3.1v0.2",
         "Criticality": "Shall",
@@ -165,15 +214,16 @@ if {
 tests contains {
     "PolicyId": "GWS.MEET.3.1v0.2",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, NonCompliantGroups3_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1, "NonCompliantGroups": NonCompliantGroups3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "SafetyModerationLockProto host_management_enabled", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs3_1) == 0
+    Conditions := {count(NonCompliantOUs3_1) == 0, count(NonCompliantGroups3_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 
@@ -205,6 +255,23 @@ if {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
+NonCompliantGroups4_1 contains {
+    "Name": Group,
+    "Value": concat(" ", [
+        "Warning label for external or unidentified meeting participants is set to",
+        GetFriendlyValue4_1(LastEvent.NewValue)
+    ])
+}
+if {
+    some Group in utils.GroupsWithEvents
+    SettingName := "Warn for external participants External or unidentified participants in a meeting are given a label"
+    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
 tests contains {
     "PolicyId": "GWS.MEET.4.1v0.2",
     "Criticality": "Shall",
@@ -223,8 +290,8 @@ if {
 tests contains {
     "PolicyId": "GWS.MEET.4.1v0.2",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, NonCompliantGroups4_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1, "NonCompliantGroups": NonCompliantGroups4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -232,7 +299,8 @@ if {
     SettingName := "Warn for external participants External or unidentified participants in a meeting are given a label"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs4_1) == 0
+    Conditions := {count(NonCompliantOUs4_1) == 0, count(NonCompliantGroups4_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--
 

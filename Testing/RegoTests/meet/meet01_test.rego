@@ -467,3 +467,52 @@ test_Access_Incorrect_V9 if {
         "is non-compliant; manual check recommended."
     ])}
 #--
+
+test_Access_Incorrect_V10 if {
+    # Test group wrong
+    PolicyId := "GWS.MEET.1.1v0.2"
+    Output := tests with input as {
+        "meet_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "SafetyDomainLockProto users_allowed_to_join"
+                        },
+                        {"name": "NEW_VALUE", "value": "LOGGED_IN"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "SafetyDomainLockProto users_allowed_to_join"
+                        },
+                        {"name": "NEW_VALUE", "value": "ALL"},
+                        {"name": "GROUP_EMAIL", "value": "group@example.com"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following groups are non-compliant:<ul>",
+        "<li>group@example.com: Who can join meetings is set to all users ",
+        "(including users not signed in with a Google account)</li>",
+        "</ul>"
+    ])
+}
