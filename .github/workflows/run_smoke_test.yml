@@ -10,6 +10,8 @@ on:
     branches:
       - "main"
       - "*smoke*"
+  workflow_dispatch:
+
 jobs:
   smoke-test-windows:
     name: Smoke Test for Windows OS 
