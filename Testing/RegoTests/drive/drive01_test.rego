@@ -1508,7 +1508,7 @@ test_SharingChecker_Correct_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES"},
+                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1536,7 +1536,7 @@ test_SharingChecker_Correct_V2 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES"},
+                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1574,7 +1574,7 @@ test_SharingChecker_Correct_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES"},
+                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1584,7 +1584,7 @@ test_SharingChecker_Correct_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES"},
+                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
                     ]
                 }]
@@ -1644,7 +1644,7 @@ test_SharingChecker_Incorrect_V2 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "ALLOWED"},
+                        {"name": "NEW_VALUE", "value": "ALL"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1662,7 +1662,7 @@ test_SharingChecker_Incorrect_V2 if {
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Top-Level OU: ",
     "Access Checker allows users to share ",
-    "files to the public (no Google account required)</li></ul>"])
+    "files to Recipients only, suggested target audience, or public (no Google account required)</li></ul>"])
 }
 
 test_SharingChecker_Incorrect_V3 if {
@@ -1675,7 +1675,7 @@ test_SharingChecker_Incorrect_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "ALLOWED"},
+                        {"name": "NEW_VALUE", "value": "ALL"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1685,7 +1685,7 @@ test_SharingChecker_Incorrect_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "NOT_ALLOWED"},
+                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1703,7 +1703,7 @@ test_SharingChecker_Incorrect_V3 if {
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Top-Level OU: ",
     "Access Checker allows users to share ",
-    "files to the public (no Google account required)</li></ul>"])
+    "files to Recipients only, suggested target audience, or public (no Google account required)</li></ul>"])
 }
 
 test_SharingChecker_Incorrect_V4 if {
@@ -1716,7 +1716,7 @@ test_SharingChecker_Incorrect_V4 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES"},
+                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -1726,7 +1726,7 @@ test_SharingChecker_Incorrect_V4 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "ALLOWED"},
+                        {"name": "NEW_VALUE", "value": "DOMAIN_OR_NAMED_PARTIES"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Secondary OU"},
                     ]
                 }]
@@ -1744,7 +1744,7 @@ test_SharingChecker_Incorrect_V4 if {
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
     "<ul><li>Test Secondary OU: ",
     "Access Checker allows users to share ",
-    "files to the public (no Google account required)</li></ul>"])
+    "files to Recipients only, or suggested target audience</li></ul>"])
 }
 
 test_SharingChecker_Incorrect_V5 if {
@@ -1757,7 +1757,7 @@ test_SharingChecker_Incorrect_V5 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_ACCESS_CHECKER_OPTIONS"},
-                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIE"},
+                        {"name": "NEW_VALUE", "value": "NAMED_PARTIES_ONLY"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Secondary OU"},
                     ]
                 }]

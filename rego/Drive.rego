@@ -378,30 +378,38 @@ if {
 #
 # Baseline GWS.DRIVEDOCS.1.6v0.2
 #--
+
+GetFriendlyValue1_6(Value) :=
+"Recipients only, suggested target audience, or public (no Google account required)" if {
+    Value == "ALL"
+} else := "Recipients only, or suggested target audience" if {
+    Value == "DOMAIN_OR_NAMED_PARTIES"
+} else := Value
+
 NonCompliantOUs1_6 contains {
-    "Name":OU,
-    "Value": concat("", ["Access Checker allows users to share ",
-    "files to the public (no Google account required)"])
+    "Name": OU,
+    "Value": concat("", ["Access Checker allows users to share files to ",
+        GetFriendlyValue1_6(LastEvent.NewValue)])
     } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES INHERIT_FROM_PARENT",
-        LastEvent.NewValue) == false
+    AcceptableValues := {"NAMED_PARTIES_ONLY", "INHERIT_FROM_PARENT"}
+    not LastEvent.NewValue in AcceptableValues
 }
 
 NonCompliantGroups1_6 contains {
     "Name":Group,
-    "Value": concat("", ["Access Checker allows users to share ",
-    "files to the public (no Google account required)"])
+    "Value": concat("", ["Access Checker allows users to share files to ",
+        GetFriendlyValue1_6(LastEvent.NewValue)])
     } if {
     some Group in utils.GroupsWithEvents
     Events := utils.FilterEventsGroup(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    contains("NAMED_PARTIES_ONLY DOMAIN_OR_NAMED_PARTIES INHERIT_FROM_PARENT",
-        LastEvent.NewValue) == false
+    AcceptableValues := {"NAMED_PARTIES_ONLY", "INHERIT_FROM_PARENT"}
+    not LastEvent.NewValue in AcceptableValues
 }
 
 tests contains {
