@@ -52,7 +52,5 @@ jobs:
       - name: Execute ScubaGoggles and check for correct output
         run: |
           echo "In step to execute ScubaGoggles smoke test" 
-          echo $env:SCUBA_GITHUB_AUTOMATION_CREDS.subjectemail
-          echo $env:SCUBA_GITHUB_AUTOMATION_CREDS.subjectemail | ConvertFrom-Json
           echo $env:GWS_SERVICE_ACCOUNT
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SERVICE_ACCOUNT"
