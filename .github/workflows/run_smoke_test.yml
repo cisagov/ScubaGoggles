@@ -25,14 +25,6 @@ jobs:
     steps:
       - name: Checkout repository 
         uses: actions/checkout@v4
-      
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
 
       - name: Setup virtualenv
         run: |
@@ -54,3 +46,9 @@ jobs:
           echo "In step to execute ScubaGoggles smoke test" 
           echo $env:GWS_SERVICE_ACCOUNT
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SERVICE_ACCOUNT"
+      
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}

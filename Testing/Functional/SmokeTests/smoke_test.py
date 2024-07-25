@@ -20,7 +20,7 @@ class SmokeTest:
 
     def test_scubagoggles(self, subjectemail):
         command = f"scubagoggles gws --subjectemail {subjectemail} --quiet"
-        subprocess.run(command)
+        subprocess.run(command, shell=True)
         
         prefix = "GWSBaselineConformance"
         directories = [d for d in os.listdir() if os.path.isdir(d) and d.startswith(prefix)]
