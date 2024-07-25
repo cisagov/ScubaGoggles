@@ -44,7 +44,6 @@ jobs:
       - name: Execute ScubaGoggles and check for correct output
         run: |
           echo "In step to execute ScubaGoggles smoke test" 
-          echo $env:GWS_SERVICE_ACCOUNT
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SERVICE_ACCOUNT"
       
       - name: Cache dependencies

@@ -25,9 +25,11 @@ class SmokeTest:
         prefix = "GWSBaselineConformance"
         directories = [d for d in os.listdir() if os.path.isdir(d) and d.startswith(prefix)]
         directories.sort(key=lambda d: os.path.getctime(d), reverse=True)
+        print(directories)
 
         cwd = os.getcwd()
         output_path = os.path.join(cwd, directories[0])
+        print(cwd, directories[0])
         contents = verify_output_type(output_path, [])
         verify_all_outputs_exist(contents)
 
