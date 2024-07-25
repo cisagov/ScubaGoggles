@@ -31,11 +31,12 @@ jobs:
           pip3 install virtualenv
           python -m venv .venv
           .venv\Scripts\activate
+          pytest ./Testing/Functional/SmokeTests/ -k "SmokeTest and test_venv_creation"
 
       - name: Install dependencies
         run: |
           pip3 install -r requirements.txt
-          pip3 install -U pytest
+          pip3 install pytest
 
       - name: Download OPA executable
         run: |
