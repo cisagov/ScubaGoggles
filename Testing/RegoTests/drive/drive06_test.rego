@@ -252,7 +252,7 @@ test_DriveFs_Setting_InCorrect_V1 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled, but can be used on any device.</li></ul>"])
+    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled and can be used on any device.</li></ul>"])
 }
 
 test_DriveFs_Setting_InCorrect_V2 if {
@@ -311,7 +311,7 @@ test_DriveFs_Setting_InCorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled, but can be used on any device.</li></ul>"])
+    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled and can be used on any device.</li></ul>"])
 }
 
 test_DriveFs_Setting_InCorrect_V3 if {
@@ -390,5 +390,5 @@ test_DriveFs_Setting_InCorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled, but can be used on any device.</li></ul>"])
+    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled and can be used on any device.</li></ul>"])
 }

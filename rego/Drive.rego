@@ -1035,18 +1035,22 @@ if {
 #
 # Baseline GWS.DRIVEDOCS.6.1v0.2
 #--
+
+GetFriendlyValue6_1(CompanyOnly, DesktopEnabled) :=
+    "Drive for Desktop is enabled and can be used on any device." if {
+        CompanyOnly == "false"
+        DesktopEnabled == "true"
+    }
+    else := "Drive for Desktop is disabled" if {
+        DesktopEnabled == "false"
+    }
+    else := "Drive for Desktop is enabled but only on approved devices." if {
+        CompanyOnly == "true"
+        DesktopEnabled == "true"
+    }
+
 default NoSuchEvent6_1(_) := true
 
-GetFriendlyValue6_1(Value_B, Value_A) :=
-"Drive for Desktop is enabled, but can be used on any device." if {
-    Value_B == "false"
-}
-else := "Drive for Desktop is disabled" if {
-    Value_A == "false"
-}
-else := "Drive for Desktop is enabled, and only on approved devices." if {
-    Value_A == "true"
-}
 NoSuchEvent6_1(TopLevelOU) := false if {
     Events := utils.FilterEventsOU(LogEvents,
         "DriveFsSettingsProto drive_fs_enabled", TopLevelOU)
@@ -1054,7 +1058,6 @@ NoSuchEvent6_1(TopLevelOU) := false if {
 }
 
 NoSuchEvent6_1(TopLevelOU) := false if {
-    # No such event...
     Events := utils.FilterEventsOU(LogEvents,
         "DriveFsSettingsProto company_owned_only_enabled", TopLevelOU)
     count(Events) != 0
@@ -1062,49 +1065,47 @@ NoSuchEvent6_1(TopLevelOU) := false if {
 
 NonCompliantOUs6_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue6_1(LastEvent_B.NewValue, LastEvent_A.NewValue)
+    "Value": GetFriendlyValue6_1(LastCompanyOnlyEvent.NewValue, LastDriveEnabledEvent.NewValue)
     } if {
-    some OU in utils.OUsWithEvents
-    Events_A := utils.FilterEventsOU(LogEvents,
-        "DriveFsSettingsProto drive_fs_enabled", OU)
-    count(Events_A) > 0
-    LastEvent_A := utils.GetLastEvent(Events_A)
-    LastEvent_A.NewValue != "DELETE_APPLICATION_SETTING"
+        some OU in utils.OUsWithEvents
 
-    Events_B := utils.FilterEventsOU(LogEvents,
-        "DriveFsSettingsProto company_owned_only_enabled", OU)
-    count(Events_B) > 0
-    LastEvent_B := utils.GetLastEvent(Events_B)
-    LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
+        DriveEnabledEvents := utils.FilterEventsOU(LogEvents,
+            "DriveFsSettingsProto drive_fs_enabled", OU)
+        count(DriveEnabledEvents) > 0
+        LastDriveEnabledEvent := utils.GetLastEvent(DriveEnabledEvents)
+        LastDriveEnabledEvent.NewValue != "DELETE_APPLICATION_SETTING"
 
+        CompanyOnlyEvents := utils.FilterEventsOU(LogEvents,
+            "DriveFsSettingsProto company_owned_only_enabled", OU)
+        count(CompanyOnlyEvents) > 0
+        LastCompanyOnlyEvent := utils.GetLastEvent(CompanyOnlyEvents)
+        LastCompanyOnlyEvent.NewValue != "DELETE_APPLICATION_SETTING"
 
-    LastEvent_A.NewValue == "true"
-    LastEvent_B.NewValue != "true"
-
-}
+        LastDriveEnabledEvent.NewValue == "true"
+        LastCompanyOnlyEvent.NewValue != "true"
+    }
 
 NonCompliantGroups6_1 contains {
     "Name": Group,
-    "Value": GetFriendlyValue6_1(LastEvent_B.NewValue, LastEvent_A.NewValue)
+    "Value": GetFriendlyValue6_1(LastCompanyOnlyEvent.NewValue, LastDriveEnabledEvent.NewValue)
     } if {
-    some Group in utils.GroupsWithEvents
-    Events_A := utils.FilterEventsGroup(LogEvents,
-        "DriveFsSettingsProto drive_fs_enabled", Group)
-    count(Events_A) > 0
-    LastEvent_A := utils.GetLastEvent(Events_A)
-    LastEvent_A.NewValue != "DELETE_APPLICATION_SETTING"
+        some Group in utils.GroupsWithEvents
 
-    Events_B := utils.FilterEventsGroup(LogEvents,
-        "DriveFsSettingsProto company_owned_only_enabled", Group)
-    count(Events_B) > 0
-    LastEvent_B := utils.GetLastEvent(Events_B)
-    LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
- 
-    LastEvent_A.NewValue == "true"
-    LastEvent_B.NewValue != "true"
+        DriveEnabledEvents := utils.FilterEventsGroup(LogEvents,
+            "DriveFsSettingsProto drive_fs_enabled", Group)
+        count(DriveEnabledEvents) > 0
+        LastDriveEnabledEvent := utils.GetLastEvent(DriveEnabledEvents)
+        LastDriveEnabledEvent.NewValue != "DELETE_APPLICATION_SETTING"
 
+        CompanyOnlyEvents := utils.FilterEventsGroup(LogEvents,
+            "DriveFsSettingsProto company_owned_only_enabled", Group)
+        count(CompanyOnlyEvents) > 0
+        LastCompanyOnlyEvent := utils.GetLastEvent(CompanyOnlyEvents)
+        LastCompanyOnlyEvent.NewValue != "DELETE_APPLICATION_SETTING"
 
-}
+        LastDriveEnabledEvent.NewValue == "true"
+        LastCompanyOnlyEvent.NewValue != "true"
+    }
 
 tests contains {
     "PolicyId": "GWS.DRIVEDOCS.6.1v0.2",
