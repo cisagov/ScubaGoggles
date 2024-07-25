@@ -30,7 +30,6 @@ jobs:
           pip3 install virtualenv
           python -m venv .venv
           .venv\Scripts\activate
-          python -c "import sys; print(sys.prefix != sys.base_prefix)"
 
       - name: Install dependencies
         run: |
@@ -44,4 +43,5 @@ jobs:
       - name: Execute ScubaGoggles and check for correct output
         run: |
           echo "In step to execute ScubaGoggles smoke test" 
+          echo ${$env:SCUBA_GITHUB_AUTOMATION_CREDS.subjectemail}
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="${$env:SCUBA_GITHUB_AUTOMATION_CREDS.subjectemail}"
