@@ -143,7 +143,7 @@ test_GroupIncomingMailPosting_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Group owner has the ability to allow an ",
+        "Group owners have the ability to allow an ",
         "external non-member to post to the group</li></ul>"])
 }
 
@@ -190,7 +190,7 @@ test_GroupIncomingMailPosting_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Group owner has the ability to allow an ",
+        "Group owners have the ability to allow an ",
         "external non-member to post to the group</li></ul>"])
 }
 #--

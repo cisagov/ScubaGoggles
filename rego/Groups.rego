@@ -74,9 +74,9 @@ if {
 #--
 
 GetFriendlyValue2_1(Value) :=
-"Group owner has the ability to add external members to the group" if {
+"Group owners have the ability to add external members to the group" if {
     Value != "false"
-} else := concat("", ["Group owner does not have the ability to ",
+} else := concat("", ["Group owners do not have the ability to ",
     "add external members to the group"]) if {
     Value == "false"
 } else := Value
@@ -135,11 +135,11 @@ if {
 # Baseline GWS.GROUPS.3.1v0.1
 #--
 
-GetFriendlyValue3_1(Value) := concat("", ["Group owner has the ability to allow an ",
-    "external non-member to post to the group"]) if {
-    Value != "false"
-} else := concat("", ["Group owner does not have the ability to allow an ",
-    "external non-member to post to the group"]) if {
+GetFriendlyValue3_1(Value) := concat("", ["Group owners have the ability to allow an ",
+    "external non-group member to post to the group"]) if {
+    Value == "true"
+} else := concat("", ["Group owners do not have the ability to allow an ",
+    "external non-group member to post to the group"]) if {
     Value == "false"
 } else := Value
 
@@ -199,9 +199,11 @@ if {
 #--
 
 GetFriendlyValue4_1(Value) :=
-"Group creation ability is not restricted to admins within the organization" if {
-    Value != "ADMIN_ONLY"
-}
+"Anyone in the organization can create groups" if {
+    Value == "USERS_IN_DOMAIN"
+} else := "Anyone on the internet can create groups" if {
+    Value == "WORLD"
+} else := Value
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
@@ -262,6 +264,8 @@ GetFriendlyValue5_1(Value) := "owners"
     Value == "MANAGERS"
 } else := "domain users" if {
     Value == "DOMAIN_USERS"
+} else := "anyone on the internet" if {
+    Value == "PUBLIC"
 } else := Value
 
 NonCompliantOUs5_1 contains {
