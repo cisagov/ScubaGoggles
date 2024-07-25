@@ -100,7 +100,7 @@ Agencies SHALL disable making files and published web content visible to anyone 
 #### GWS.DRIVEDOCS.1.6v0.2
 Agencies SHALL set access checking to recipients only.
 
-- _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients or the suggested target audience.
+- _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients.
 - _Last modified:_ June 7, 2024
 
 - MITRE ATT&CK TTP Mapping
