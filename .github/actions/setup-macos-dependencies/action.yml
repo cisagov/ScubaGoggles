@@ -24,7 +24,7 @@ runs:
         pip install -r requirements.txt
         pip install pytest
         pip uninstall numpy
-        pip install -y numpy==1.26.4
+        pip install numpy==1.26.4
     
     - name: Download OPA executable
       shell: bash
