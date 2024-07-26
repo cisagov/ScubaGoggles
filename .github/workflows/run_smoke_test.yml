@@ -23,8 +23,8 @@ jobs:
       run:
         shell: powershell
     env:
-      SCUBA_GITHUB_AUTOMATION_CREDS: ${{ secrets.SCUBA_GITHUB_AUTOMATION_CREDS }}
-      GWS_SERVICE_ACCOUNT: ${{ secrets.GWS_SERVICE_ACCOUNT }}
+      GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
+      GWS_GITHUB_AUTOMATION_CREDS: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -46,8 +46,9 @@ jobs:
           python -m pip install .
           pip install -r requirements.txt
           pip install pytest
-          pip uninstall numpy
-          pip install numpy==1.26.4
+      
+      - name: Create credentials.json for service account
+        run: Set-Content -Path credentials.json -Value $env:GWS_GITHUB_AUTOMATION_CREDS -Encoding utf8
 
       - name: Download OPA executable
         run: python download_opa.py -v 0.60.0 -os windows
@@ -56,4 +57,4 @@ jobs:
         run: |
           echo "In step to execute ScubaGoggles smoke test" 
           pip show scubagoggles
-          pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SERVICE_ACCOUNT"
+          pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
