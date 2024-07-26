@@ -28,7 +28,7 @@ jobs:
         shell: powershell
     steps:
       - name: Initialize smoke test 
-        uses: cisagov/ScubaGoggles/.github/actions/initialize_smoke_test@v1
+        uses: ./.github/actions/initialize_smoke_test
         with:
           python-version: "3.12"
           cache-dependency-path: "requirements.txt"
@@ -63,7 +63,7 @@ jobs:
     needs: smoke-test-windows
     steps:
       - name: Initialize smoke test 
-        uses: cisagov/ScubaGoggles/.github/actions/initialize_smoke_test@v1
+        uses: ./.github/actions/initialize_smoke_test
         with:
           python-version: "3.12"
           cache-dependency-path: "requirements.txt"
