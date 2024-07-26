@@ -46,6 +46,8 @@ jobs:
           python -m pip install .
           pip install -r requirements.txt
           pip install pytest
+          pip uninstall numpy
+          pip install numpy==1.26.4
 
       - name: Download OPA executable
         run: python download_opa.py -v 0.60.0 -os windows
