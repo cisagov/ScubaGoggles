@@ -26,10 +26,14 @@ jobs:
       SCUBA_GITHUB_AUTOMATION_CREDS: ${{ secrets.SCUBA_GITHUB_AUTOMATION_CREDS }}
       GWS_SERVICE_ACCOUNT: ${{ secrets.GWS_SERVICE_ACCOUNT }}
     steps:
+      - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Setup Python
         uses: actions/setup-python@v5
         with: 
-          python-version: '3.12'
+          python-version: "3.12"
+          cache: "pip"
 
       - name: Install pytest
         run: pip3 install pytest
@@ -57,9 +61,3 @@ jobs:
           .venv\Scripts\activate
           scubagoggles gws
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SERVICE_ACCOUNT"
-      
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
