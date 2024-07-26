@@ -1,4 +1,4 @@
-name: Initialize ScubaGoggles
+name: Setup Python
 inputs:
   python-version:
     required: true

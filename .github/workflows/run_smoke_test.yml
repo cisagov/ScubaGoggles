@@ -30,8 +30,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Initialize ScubaGoggles
-        uses: ./.github/actions/initialize-scubagoggles
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
         with:
           python-version: "3.12"
           cache-dependency-path: "requirements.txt"
@@ -59,8 +59,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Initialize ScubaGoggles
-        uses: ./.github/actions/initialize-scubagoggles
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
         with:
           python-version: "3.12"
           cache-dependency-path: "requirements.txt"
