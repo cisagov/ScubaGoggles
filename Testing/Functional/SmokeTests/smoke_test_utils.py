@@ -4,7 +4,7 @@ import os
 required_contents = [
     "BaselineReports.html", 
     "IndividualReports", 
-    "ProviderExport.json",
+    "ScubaResults.json",
     "TestResults.json",
     "images",
     "CalendarReport.html",

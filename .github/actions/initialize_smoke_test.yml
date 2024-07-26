@@ -1,0 +1,21 @@
+name: Setup Repository and Python Environment
+inputs:
+  python-version:
+    required: true
+    default: "3.12"
+  cache-dependency-path:
+    required: true
+    default: "requirements.txt"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with: 
+        python-version: ${{ inputs.python-version }}
+        cache: "pip"
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}

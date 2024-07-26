@@ -15,25 +15,22 @@ on:
       - "main"
       - "*smoke*"
 
+env:
+  GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
+  GWS_GITHUB_AUTOMATION_CREDS: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
+
 jobs:
   smoke-test-windows:
-    name: Smoke Test for Windows OS 
+    name: Smoke Test for Windows
     runs-on: windows-latest 
     defaults:
       run:
         shell: powershell
-    env:
-      GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
-      GWS_GITHUB_AUTOMATION_CREDS: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with: 
+      - name: Initialize smoke test 
+        uses: cisagov/ScubaGoggles/.github/actions/initialize_smoke_test@v1
+        with:
           python-version: "3.12"
-          cache: "pip"
           cache-dependency-path: "requirements.txt"
 
       - name: Setup virtualenv
@@ -59,3 +56,17 @@ jobs:
           # Setup credentials for service account
           Set-Content -Path credentials.json -Value $env:GWS_GITHUB_AUTOMATION_CREDS
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
+  
+  smoke-test-macos:
+    name: Smoke Test for Mac OS
+    runs-on: macos-latest
+    steps:
+      - name: Initialize smoke test 
+        uses: cisagov/ScubaGoggles/.github/actions/initialize_smoke_test@v1
+        with:
+          python-version: "3.12"
+          cache-dependency-path: "requirements.txt"
+      
+      - name: Execute ScubaGoggles and check for correct output
+        run: |
+          echo "in second step"
