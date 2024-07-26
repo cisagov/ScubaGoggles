@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-python@v5
         with: 
           python-version: "3.12"
-          cache: "pip"
+          cache: "pip3"
 
       - name: Setup virtualenv
         run: |
@@ -53,4 +53,5 @@ jobs:
       - name: Execute ScubaGoggles and check for correct output
         run: |
           echo "In step to execute ScubaGoggles smoke test" 
+          pip3 show scubagoggles
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SERVICE_ACCOUNT"
