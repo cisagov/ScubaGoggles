@@ -37,15 +37,15 @@ jobs:
 
       - name: Setup virtualenv
         run: |
-          pip3 install virtualenv
+          pip install virtualenv
           python -m venv .venv
           .venv\Scripts\activate
 
       - name: Install dependencies
         run: |
-          python -m pip3 install .
-          pip3 install -r requirements.txt
-          pip3 install pytest
+          python -m pip install .
+          pip install -r requirements.txt
+          pip install pytest
 
       - name: Download OPA executable
         run: python download_opa.py -v 0.60.0 -os windows
@@ -53,5 +53,5 @@ jobs:
       - name: Execute ScubaGoggles and check for correct output
         run: |
           echo "In step to execute ScubaGoggles smoke test" 
-          pip3 show scubagoggles
+          pip show scubagoggles
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SERVICE_ACCOUNT"
