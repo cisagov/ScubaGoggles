@@ -66,8 +66,8 @@ jobs:
     needs: smoke-test-windows
     steps:
       - name: Checkout Repository
-      uses: actions/checkout@v4
-      
+        uses: actions/checkout@v4
+
       - name: Initialize smoke test 
         uses: ./.github/actions/initialize_smoke_test
         with:
