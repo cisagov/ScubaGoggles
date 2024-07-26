@@ -29,33 +29,17 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        
-      - name: Initialize smoke test 
-        uses: ./.github/actions/initialize-smoke-test
+
+      - name: Initialize ScubaGoggles
+        uses: ./.github/actions/initialize-scubagoggles
         with:
           python-version: "3.12"
           cache-dependency-path: "requirements.txt"
-
-      - name: Setup virtualenv
-        run: |
-          pip install virtualenv
-          python -m venv .venv
-          .venv\Scripts\activate
-
-      - name: Install dependencies
-        run: |
-          python -m pip install .
-          pip install -r requirements.txt
-          pip install pytest
-          pip uninstall numpy
-          pip install numpy==1.26.4
-
-      - name: Download OPA executable
-        run: python download_opa.py -v 0.60.0 -os windows
+          operating-system: "windows"
+          opa-version: "0.60.0"
 
       - name: Execute ScubaGoggles and check for correct output
         run: |
-          pip show scubagoggles
           # Setup credentials for service account
           Set-Content -Path credentials.json -Value $env:GWS_GITHUB_AUTOMATION_CREDS
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
@@ -68,11 +52,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Initialize smoke test 
-        uses: ./.github/actions/initialize-smoke-test
+      - name: Initialize ScubaGoggles
+        uses: ./.github/actions/initialize-scubagoggles
         with:
           python-version: "3.12"
           cache-dependency-path: "requirements.txt"
+          operating-system: "macos"
+          opa-version: "0.60.0"
       
       - name: Execute ScubaGoggles and check for correct output
         run: |
