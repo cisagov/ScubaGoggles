@@ -1,4 +1,4 @@
-name: Smoke Test 
+name: Run Smoke Test 
 on: 
   workflow_call:
   workflow_dispatch:
@@ -51,7 +51,7 @@ jobs:
           pip install numpy==1.26.4
       
       - name: Create credentials.json for service account
-        run: Set-Content -Path credentials.json -Value $env:GWS_GITHUB_AUTOMATION_CREDS -Encoding utf8
+        run: Set-Content -Path credentials.json -Value $env:GWS_GITHUB_AUTOMATION_CREDS
 
       - name: Download OPA executable
         run: python download_opa.py -v 0.60.0 -os windows
