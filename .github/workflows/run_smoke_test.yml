@@ -49,7 +49,7 @@ jobs:
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
   
   smoke-test-macos:
-    name: Smoke Test for Mac OS
+    name: Smoke Test for MacOS
     runs-on: macos-latest
     defaults:
       run:
