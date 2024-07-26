@@ -27,6 +27,9 @@ jobs:
       run:
         shell: powershell
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
       - name: Initialize smoke test 
         uses: ./.github/actions/initialize-smoke-test
         with:
@@ -62,6 +65,9 @@ jobs:
     runs-on: macos-latest
     needs: smoke-test-windows
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Initialize smoke test 
         uses: ./.github/actions/initialize-smoke-test
         with:
