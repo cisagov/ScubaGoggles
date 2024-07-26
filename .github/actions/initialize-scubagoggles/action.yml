@@ -49,4 +49,5 @@ runs:
         pip install -y numpy==1.26.4
     
     - name: Download OPA executable
+      shell: powershell
       run: python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
