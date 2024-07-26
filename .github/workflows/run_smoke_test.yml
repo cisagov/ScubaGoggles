@@ -23,9 +23,6 @@ jobs:
   smoke-test-windows:
     name: Smoke Test for Windows
     runs-on: windows-latest 
-    defaults:
-      run:
-        shell: powershell
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -51,9 +48,6 @@ jobs:
   smoke-test-macos:
     name: Smoke Test for MacOS
     runs-on: macos-latest
-    defaults:
-      run:
-        shell: bash
     needs: smoke-test-windows
     steps:
       - name: Checkout Repository
