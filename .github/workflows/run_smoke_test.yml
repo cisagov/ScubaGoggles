@@ -34,6 +34,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m pip3 install .
           pip3 install -r requirements.txt
           pip3 install pytest
 
