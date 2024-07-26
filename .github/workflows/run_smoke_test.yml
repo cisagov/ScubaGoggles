@@ -36,7 +36,7 @@ jobs:
           python-version: "3.12"
           cache-dependency-path: "requirements.txt"
       
-      - name: Setup Windows dependencies
+      - name: Setup dependencies
         uses: ./.github/actions/setup-windows-dependencies
         with:
           operating-system: "windows"
@@ -51,6 +51,9 @@ jobs:
   smoke-test-macos:
     name: Smoke Test for Mac OS
     runs-on: macos-latest
+    defaults:
+      run:
+        shell: bash
     needs: smoke-test-windows
     steps:
       - name: Checkout Repository
@@ -62,7 +65,7 @@ jobs:
           python-version: "3.12"
           cache-dependency-path: "requirements.txt"
       
-      - name: Setup MacOS dependencies
+      - name: Setup dependencies
         uses: ./.github/actions/setup-macos-dependencies
         with:
           operating-system: "macos"
