@@ -60,6 +60,7 @@ jobs:
   smoke-test-macos:
     name: Smoke Test for Mac OS
     runs-on: macos-latest
+    needs: smoke-test-windows
     steps:
       - name: Initialize smoke test 
         uses: cisagov/ScubaGoggles/.github/actions/initialize_smoke_test@v1
