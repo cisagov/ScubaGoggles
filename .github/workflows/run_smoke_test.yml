@@ -66,3 +66,7 @@ jobs:
           
           # Give OPA executable execute permissions
           chmod +x opa_darwin_amd64
+
+          # Setup credentials for service account
+          echo "$env:GWS_GITHUB_AUTOMATION_CREDS" > credentials.json
+          pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
