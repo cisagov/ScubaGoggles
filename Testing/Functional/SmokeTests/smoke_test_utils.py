@@ -3,7 +3,7 @@ import os
 required_contents = [
     "BaselineReports.html", 
     "IndividualReports", 
-    "ProviderSettingsExport.json", 
+    "ScubaResults.json",
     "TestResults.json",
     "images",
     "CalendarReport.html",
@@ -21,33 +21,26 @@ required_contents = [
 ]
 
 def verify_all_outputs_exist(contents):
-    try: 
-        for required_content in required_contents:
-            if required_content in contents:
-                assert True
-            else:
-                assert False, f"{required_content} was not found in the generated report"
-    except Exception as e:
-        assert False, f"An error occurred, {e}"
+    for required_content in required_contents:
+        if required_content in contents:
+            assert True
+        else:
+            assert False, f"{required_content} was not found in the generated report"
 
 def verify_output_type(output_path, contents):
-    try:
-        entries = os.listdir(output_path)
-        for entry in entries:
-            contents.append(entry)
+    entries = os.listdir(output_path)
 
-            # Check if entry is a valid directory or file
-            child_path = os.path.join(output_path, entry)
-            if os.path.isdir(child_path):
-                assert True
-                verify_output_type(child_path, contents)
-            elif os.path.isfile(child_path):
-                assert True
-            else:
-                assert False, f"Entry is not a directory or file (symlink, etc.)"
+    for entry in entries:
+        contents.append(entry)
 
-        return contents
-    except FileNotFoundError:
-        assert False, f"The directory {output_path} does not exist"
-    except Exception as e:
-        assert False, f"An error occurred, {e}"
+        # Check if entry is a valid directory or file
+        child_path = os.path.join(output_path, entry)
+        if os.path.isdir(child_path):
+            assert True
+            verify_output_type(child_path, contents)
+        elif os.path.isfile(child_path):
+            assert True
+        else:
+            assert False, f"Entry is not a directory or file (symlink, etc.)"
+
+    return contents
