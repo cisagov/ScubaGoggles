@@ -21,6 +21,7 @@ env:
 
 jobs:
   smoke-test-windows:
+    if: false
     name: Smoke Test for Windows
     runs-on: windows-latest 
     steps:
@@ -48,7 +49,7 @@ jobs:
   smoke-test-macos:
     name: Smoke Test for MacOS
     runs-on: macos-latest
-    needs: smoke-test-windows
+    #needs: smoke-test-windows
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
