@@ -9,15 +9,16 @@ inputs:
 
 runs:
   using: "composite"
-  shell: bash
   steps:
     - name: Setup virtualenv
+      shell: bash
       run: |
         pip install virtualenv
         virtualenv -p python .venv
         source .venv/bin/activate
     
     - name: Install dependencies
+      shell: bash
       run: |
         python -m pip install .
         pip install -r requirements.txt
@@ -26,4 +27,5 @@ runs:
         pip install -y numpy==1.26.4
     
     - name: Download OPA executable
+      shell: bash
       run: python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
