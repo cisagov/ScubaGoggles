@@ -1,9 +1,10 @@
+import pytest
 import os
 
 required_contents = [
     "BaselineReports.html", 
     "IndividualReports", 
-    "ScubaResults.json",
+    "ProviderExport.json",
     "TestResults.json",
     "images",
     "CalendarReport.html",
@@ -20,13 +21,6 @@ required_contents = [
     "triangle-exclamation-solid.svg"
 ]
 
-def verify_all_outputs_exist(contents):
-    for required_content in required_contents:
-        if required_content in contents:
-            assert True
-        else:
-            assert False, f"{required_content} was not found in the generated report"
-
 def verify_output_type(output_path, contents):
     entries = os.listdir(output_path)
 
@@ -41,6 +35,13 @@ def verify_output_type(output_path, contents):
         elif os.path.isfile(child_path):
             assert True
         else:
-            assert False, f"Entry is not a directory or file (symlink, etc.)"
+            raise OSError(f"Entry is not a directory or file (symlink, etc.)")
 
     return contents
+
+def verify_all_outputs_exist(contents):
+    for required_content in required_contents:
+        if required_content in contents:
+            assert True
+        else:
+            raise ValueError(f"{required_content} was not found in the generated report")

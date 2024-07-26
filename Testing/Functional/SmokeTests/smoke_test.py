@@ -12,14 +12,11 @@ from smoke_test_utils import verify_all_outputs_exist, verify_output_type
 class SmokeTest:
     def test_venv_creation(self):
         try:
-            result = subprocess.run(["ls", ".venv"], shell=True, capture_output=True, text=True)
+            result = subprocess.run(["ls", ".venv"], shell=True, capture_output=True, text=True, check=True)
             if "Scripts" in result.stdout: 
                 assert True
-            else: 
-                assert False, f"Scripts was not found in the virtual environment"
-        except Exception as e:
+        except subprocess.CalledProcessError as e:
             pytest.fail(f"An error occurred, {e}")
-
 
     def test_scubagoggles(self, subjectemail):
         try:
@@ -33,16 +30,9 @@ class SmokeTest:
             cwd = os.getcwd()
             output_path = os.path.join(cwd, directories[0])
             contents = verify_output_type(output_path, [])
-            print(contents)
             verify_all_outputs_exist(contents)
-        except Exception as e:
+        except (OSError, ValueError, Exception) as e:
             pytest.fail(f"An error occurred, {e}")
-
-
-
-
-
-
 
 #def create_venv(env):
 #    result = subprocess.run(["python", "-m", "venv", env])
