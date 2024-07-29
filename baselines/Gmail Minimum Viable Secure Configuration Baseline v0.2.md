@@ -28,6 +28,7 @@ This baseline is based on Google documentation available at the [Gmail Google Wo
 - [Security Sandbox](#16-security-sandbox)
 - [Comprehensive Mail Storage](#17-comprehensive-mail-storage)
 - [Content Compliance Filtering](#18-content-compliance-filtering)
+- [Spam Filtering](#19-spam-filtering)
 
 
 Within Google Workspace, settings can be assigned to users through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
@@ -1152,3 +1153,83 @@ To configure the settings for Objectionable content:
 
 #### GWS.GMAIL.18.3v0.2 Instructions
 1.  There is no implementation steps for this policy.
+
+
+## 19. Spam Filtering
+
+This section covers the settings relating to bypassing spam filters.
+
+### Policies
+
+#### GWS.GMAIL.19.1v0.2
+Domains SHALL NOT be added to lists that bypass spam filters.
+
+- _Rationale:_ Legitimate emails may be incorrectly filtered by spam protections. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, however, provides for a large number of potentially unknown users to bypass spam protections.
+- _Last modified:_ April 10, 2024
+- _Note:_ Allowed senders MAY be added.
+
+- MITRE ATT&CK TTP Mapping
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
+    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
+
+#### GWS.GMAIL.19.2v0.2
+Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
+
+- _Rationale:_ Legitimate emails may be incorrectly filtered by spam protections. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, however, provides for a large number of potentially unknown users to bypass spam protections.
+- _Last modified:_ April 10, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
+    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
+
+#### GWS.GMAIL.19.3v0.2
+Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.
+
+- _Rationale:_ Bypassing spam filters and hiding warning for all messages from internal and external senders creates a security risk because all messages are allowed to bypass filters. Disabling this feature mitigates the risk.
+- _Last modified:_ April 10, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
+    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
+  - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
+
+### Resources
+
+-   [How to bypass the spam filter for incoming emails using the spam settings ](https://knowledge.workspace.google.com/kb/how-to-bypass-the-spam-filter-for-incoming-emails-000006661)
+
+### Prerequisites
+
+-   N/A
+
+### Implementation
+
+To configure the settings for spam filtering:
+
+#### Policy Group 19 Common Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Apps -\> Google Workspace -\> Gmail**.
+3.  Select **Spam, Phishing, and Malware**.
+ 
+#### GWS.GMAIL.19.1v0.2 Instructions
+For each rule listed under **Spam**:
+1. Ensure that either:
+    * **Bypass spam filters for messages from senders or domains in selected lists** is not selected, or
+    * None of the lists shown under **Bypass spam filters for messages from senders or domains in selected lists** contain an entire domain. For example, the entire domain "example.com" is not acceptable, but the specific address, john.doe@example.com, would be.
+2. Modify the rule or lists associated with the rule as needed, then select **Save.**
+ 
+#### GWS.GMAIL.19.2v0.2 Instructions
+For each rule listed under **Spam**:
+1. Ensure that either:
+    * **Bypass spam filters and hide warnings for messages from senders or domains in selected lists** is not selected, or
+    * None of the lists shown under **Bypass spam filters and hide warnings for messages from senders or domains in selected lists** contain an entire domain. For example, the entire domain "example.com" is not acceptable, but the specific address, john.doe@example.com, would be.
+2. Modify the rule or lists associated with the rule as needed, then select **Save.**
+ 
+#### GWS.GMAIL.19.3v0.2 Instructions
+For each rule listed under **Spam**:
+1. Ensure that **Bypass spam filters and hide warnings for all messages from internal and external sender* is not selected.
+2. Select **Save.**
