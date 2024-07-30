@@ -98,10 +98,10 @@ Agencies SHALL disable making files and published web content visible to anyone 
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.6v0.2
-Agencies SHALL enable access checking for file sharing outside of Docs or Drive.
+Agencies SHALL set access checking to recipients only.
 
-- _Rationale:_ The Access Checker feature can be configured to allows users to grant access to the public if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients or the suggested target audience.
-- _Last modified:_ July 10, 2023
+- _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients.
+- _Last modified:_ June 7, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -169,7 +169,7 @@ To configure the settings for Sharing options:
 
 #### GWS.DRIVEDOCS.1.6v0.2 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Select **Access Checker** -\> **Recipients only, or suggested target audience.**
+2.  Select **Access Checker** -\> **Recipients only.**
 
 #### GWS.DRIVEDOCS.1.7v0.2 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
@@ -260,9 +260,9 @@ This section covers whether a security update issued by Google will be applied t
 ### Policies
 
 #### GWS.DRIVEDOCS.3.1v0.2
-Agencies SHALL enable security updates for Drive files.
+Agencies SHALL enable the security update for Drive files.
 
-- _Rationale:_ Google may add new security features over time. Allowing security updates helps ensure that your files are protected with the latest features Google makes available.
+- _Rationale:_ By not enabling the update to the resource key security update a user could potentially gain unauthorized access to files. Enabling this security update decreases risk of unauthorized access and data spillage by controlling access to files in Google Drive.
 - _Last modified:_ July 10, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -270,7 +270,7 @@ Agencies SHALL enable security updates for Drive files.
 
 ### Resources
 
--   [Google Workspace Admin Help: Security update for Google Drive](https://support.google.com/drive/answer/10729743?hl=en#zippy=%2Care-any-file-types-not-impacted%2Cwhat-happens-if-i-dont-apply-the-security-update-to-my-files%2Chow-will-this-security-update-change-access-to-my-impacted-files)
+-   [Google Workspace Admin Help: Security update for Google Drive](https://apps.google.com/supportwidget/articlehome?article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F10685032%3Fvisit_id%3D638533824698144528-3160863719&assistant_event=welcome&assistant_id=mega-bot-shared-drive&product_context=10685032&product_name=UnuFlow&trigger_context=a)
 
 ### Prerequisites
 
@@ -367,10 +367,10 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 ### Policies
 
 #### GWS.DRIVEDOCS.6.1v0.2
-Agencies SHOULD either disable Google Drive for Desktop or only allow Google Drive for Desktop on authorized devices.
+Google Drive for Desktop SHOULD be enabled only for authorized devices.
 
 - _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ June 7, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
