@@ -22,9 +22,10 @@ env:
 jobs:
   smoke-test:
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, macos-latest]
-        python: [3.8.4, 3.12]
+        python: [3.8, 3.12]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repository
