@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest]
-        python-version: [3.8.4, 3.12]
+        python: [3.8.4, 3.12]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repository
@@ -33,7 +33,7 @@ jobs:
       - name: Setup Python
         uses: ./.github/actions/setup-python
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python }}
           cache-dependency-path: "requirements.txt"
       
       - name: Setup Windows dependencies
