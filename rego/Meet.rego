@@ -281,7 +281,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Warn for external participants External or unidentified participants in a meeting are given a label"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -346,7 +346,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Incoming call restrictions Allowed caller type"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0

@@ -48,7 +48,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents, "ClassMembershipSettingProto who_can_join_classes", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -106,7 +106,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "ClassMembershipSettingProto which_classes_can_users_join"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -290,7 +290,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := true
+    DefaultSafe := false
     SettingName := "StudentUnenrollmentSettingsProto who_can_unenroll_students"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
