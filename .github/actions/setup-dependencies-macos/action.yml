@@ -12,12 +12,19 @@ inputs:
 runs:
   using: "composite"
   steps:
+    #- name: Setup credentials for service account
+    #  shell: bash
+    #  run: |
+    #    # Setup credentials for service account
+    #    touch credentials.json
+    #    echo ${{ inputs.credentials }}   > credentials.json
+    #
     - name: Setup credentials for service account
-      shell: bash
-      run: |
-        # Setup credentials for service account
-        touch credentials.json
-        echo ${{ inputs.credentials }} | base64 -d --ignore-garbage  > credentials.json
+      uses: jsdaniell/create-json@v1.2.3
+      with: 
+        name: "credentials.json"
+        json: ${{ inputs.credentials }}
+        dir: "./"
 
     - name: Setup virtualenv
       shell: bash

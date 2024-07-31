@@ -55,5 +55,5 @@ jobs:
 
       - name: Execute ScubaGoggles and check for correct output
         run: |
-          echo "run scubagoggles ttest"
+          echo "run scubagoggles"
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
