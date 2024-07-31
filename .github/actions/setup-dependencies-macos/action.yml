@@ -35,8 +35,6 @@ runs:
     - name: Setup credentials for service account
       shell: bash
       run: |
-        echo "in second step"
-        
         # Give OPA executable execute permissions
         chmod +x opa_darwin_amd64
         # Setup credentials for service account
