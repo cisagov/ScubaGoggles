@@ -12,6 +12,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Setup credentials for service account
+      shell: bash
+      run: |
+        # Setup credentials for service account
+        echo ${{ inputs.credentials }} | base64 -di > credentials.json
+        
     - name: Setup virtualenv
       shell: bash
       run: |
@@ -36,8 +42,4 @@ runs:
         # Give OPA executable execute permissions
         chmod +x opa_darwin_amd64
     
-    - name: Setup credentials for service account
-      shell: bash
-      run: |
-        # Setup credentials for service account
-        echo ${{ inputs.credentials }} | base64 -d > credentials.json
+    
