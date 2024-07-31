@@ -16,8 +16,9 @@ runs:
       shell: bash
       run: |
         # Setup credentials for service account
-        echo ${{ inputs.credentials }} | base64 -di > credentials.json
-        
+        touch credentials.json
+        echo ${{ inputs.credentials }} | base64 -d --ignore-garbage  > credentials.json
+
     - name: Setup virtualenv
       shell: bash
       run: |
