@@ -12,17 +12,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup credentials for service account
-      id: create-json
-      uses: jsdaniell/create-json@v1.2.3
-      with: 
-        name: "credentials.json"
-        json: ${{ inputs.credentials }}
-
-    - name: Setup credentials for service account
-      shell: bash
-      run: |
-        ls -la
+    #- name: Setup credentials for service account
+    #  id: create-json
+    #  uses: jsdaniell/create-json@v1.2.3
+    #  with: 
+    #    name: "credentials.json"
+    #    json: ${{ inputs.credentials }}
+#
+    #- name: Setup credentials for service account
+    #  shell: bash
+    #  run: |
+    #    ls -la
 
     - name: Setup virtualenv
       shell: bash
