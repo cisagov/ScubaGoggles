@@ -17,9 +17,9 @@ on:
       - "main"
       - "*smoke*"
 
-env:
-  GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
-  GWS_GITHUB_AUTOMATION_CREDS: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
+#env:
+#  GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
+#  GWS_GITHUB_AUTOMATION_CREDS: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
 jobs:
   smoke-test:
@@ -29,6 +29,7 @@ jobs:
         os: [windows-latest, macos-latest]
         python-version: [3.12]
     runs-on: ${{ matrix.os }}
+    environment: Development
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -45,7 +46,7 @@ jobs:
         with:
           operating-system: "windows"
           opa-version: "0.60.0"
-          credentials: $env:GWS_GITHUB_AUTOMATION_CREDS
+          credentials: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
       
       - name: Setup Dependencies (macOS)
         if: ${{ matrix.os == 'macos-latest' }}
@@ -53,10 +54,10 @@ jobs:
         with:
           operating-system: "macos"
           opa-version: "0.60.0"
-          credentials: $env:GWS_GITHUB_AUTOMATION_CREDS
+          credentials: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
       - name: Execute ScubaGoggles and check for correct output
         run: |
           echo "run scubagoggles"
           ls
-          pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
+          pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}"
