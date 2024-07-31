@@ -11,9 +11,10 @@ on:
   push:
     paths:
       - ".github/workflows/run_smoke_test.yml"
+      - ".github/actions/setup-dependencies-windows/action.yml"
+      - ".github/actions/setup-dependencies-macos/action.yml"
     branches:
       - "main"
-      - "*smoke*"
 
 env:
   GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
@@ -58,9 +59,7 @@ jobs:
         with: 
           name: "credentials.json"
           json: $env:GWS_GITHUB_AUTOMATION_CREDS
-          dir: "./"
 
       - name: Execute ScubaGoggles and check for correct output
         run: |
-          echo "run scubagoggles"
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
