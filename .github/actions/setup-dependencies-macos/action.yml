@@ -22,7 +22,6 @@ runs:
     - name: Setup credentials for service account
       shell: bash
       run: |
-        cat credentials.json
         ls -la
 
     - name: Setup virtualenv
