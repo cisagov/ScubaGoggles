@@ -1,4 +1,4 @@
-name: Setup MacOS Dependencies
+name: Setup Dependencies (macOS)
 inputs:
   operating-system:
     required: true
@@ -29,3 +29,15 @@ runs:
     - name: Download OPA executable
       shell: bash
       run: python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
+    
+    - name: Setup credentials for service account
+      shell: bash
+      run: |
+        echo "in second step"
+        
+        # Give OPA executable execute permissions
+        chmod +x opa_darwin_amd64
+        # Setup credentials for service account
+        echo $env:GWS_GITHUB_AUTOMATION_CREDS
+        echo $env:GWS_GITHUB_AUTOMATION_CREDS >> credentials.json
+        cat credentials.json

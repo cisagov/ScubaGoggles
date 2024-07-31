@@ -1,4 +1,4 @@
-name: Setup Windows Dependencies
+name: Setup Dependencies (Windows)
 inputs:
   operating-system:
     required: true
@@ -6,6 +6,8 @@ inputs:
   opa-version:
     required: true
     default: "0.60.0"
+  credentials:
+    required: true
 
 runs:
   using: "composite"
@@ -29,3 +31,7 @@ runs:
     - name: Download OPA executable
       shell: powershell
       run: python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
+    
+    - name: Setup credentials for service account
+      shell: powershell
+      run: Set-Content -Path credentials.json -Value ${{ inputs.credentials }}

@@ -25,7 +25,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest]
-        python: [3.8, 3.12]
+        python-version: [3.12]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repository
@@ -34,43 +34,27 @@ jobs:
       - name: Setup Python
         uses: ./.github/actions/setup-python
         with:
-          python-version: ${{ matrix.python }}
+          python-version: ${{ matrix.python-version }}
           cache-dependency-path: "requirements.txt"
       
-      - name: Setup Windows dependencies
+      - name: Run ScubaGoggles (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
-        uses: ./.github/actions/setup-windows-dependencies
+        uses: ./.github/actions/setup-dependencies-windows
         with:
           operating-system: "windows"
           opa-version: "0.60.0"
+          credentials: $env:GWS_GITHUB_AUTOMATION_CREDS
       
-      - name: Setup macOS dependencies
+      - name: Run ScubaGoggles (macOS)
         if: ${{ matrix.os == 'macos-latest' }}
-        uses: ./.github/actions/setup-windows-dependencies
+        uses: ./.github/actions/setup-dependencies-macos
         with:
           operating-system: "macos"
           opa-version: "0.60.0"
+          credentials: $env:GWS_GITHUB_AUTOMATION_CREDS
 
       - name: Execute ScubaGoggles and check for correct output
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          # Setup credentials for service account
-          Set-Content -Path credentials.json -Value $env:GWS_GITHUB_AUTOMATION_CREDS
-          pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
-      
-      - name: Execute ScubaGoggles and check for correct output
-        if: ${{ matrix.os == 'macos-latest'  }}
-        run: |
-          echo "in second step"
-          
-          # Give OPA executable execute permissions
-          chmod +x opa_darwin_amd64
-
-          # Setup credentials for service account
-          echo $env:GWS_GITHUB_AUTOMATION_CREDS
-          echo $env:GWS_GITHUB_AUTOMATION_CREDS >> credentials.json
-          cat credentials.json
-          #pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
+        run: pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
 
   #smoke-test-windows:
   #  if: false
