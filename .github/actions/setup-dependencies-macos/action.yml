@@ -13,10 +13,18 @@ runs:
   using: "composite"
   steps:
     - name: Setup credentials for service account
+      id: create-json
       uses: jsdaniell/create-json@v1.2.3
       with: 
         name: "credentials.json"
         json: ${{ inputs.credentials }}
+    
+    - name: Setup credentials for service account
+      id: create-json-1
+      uses: jsdaniell/create-json@v1.2.3
+      with: 
+        name: "credentials-1.json"
+        json: "${{ inputs.credentials }}"
 
     #- name: Setup credentials for service account
     #  shell: bash
