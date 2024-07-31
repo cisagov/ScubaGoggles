@@ -32,6 +32,6 @@ runs:
       shell: powershell
       run: python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
     
-    - name: Setup credentials for service account
-      shell: powershell
-      run: Set-Content -Path credentials.json -Value ${{ inputs.credentials }}
+    #- name: Setup credentials for service account
+    #  shell: powershell
+    #  run: Set-Content -Path credentials.json -Value ${{ inputs.credentials }}

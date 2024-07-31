@@ -19,12 +19,12 @@ runs:
     #    touch credentials.json
     #    echo ${{ inputs.credentials }}   > credentials.json
     #
-    - name: Setup credentials for service account
-      uses: jsdaniell/create-json@v1.2.3
-      with: 
-        name: "credentials.json"
-        json: ${{ inputs.credentials }}
-        dir: "./"
+    #- name: Setup credentials for service account
+    #  uses: jsdaniell/create-json@v1.2.3
+    #  with: 
+    #    name: "credentials.json"
+    #    json: ${{ inputs.credentials }}
+    #    dir: "./"
 
     - name: Setup virtualenv
       shell: bash
