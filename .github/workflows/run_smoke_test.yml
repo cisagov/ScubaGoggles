@@ -17,10 +17,6 @@ on:
       - "main"
       - "*smoke*"
 
-#env:
-#  GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
-#  GWS_GITHUB_AUTOMATION_CREDS: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
-
 jobs:
   smoke-test:
     strategy:
@@ -46,7 +42,6 @@ jobs:
         with:
           operating-system: "windows"
           opa-version: "0.60.0"
-          credentials: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
       
       - name: Setup Dependencies (macOS)
         if: ${{ matrix.os == 'macos-latest' }}
@@ -54,7 +49,6 @@ jobs:
         with:
           operating-system: "macos"
           opa-version: "0.60.0"
-          credentials: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
       
       - name: Setup credentials for service account
         id: create-json
@@ -64,5 +58,4 @@ jobs:
           json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
       - name: Execute ScubaGoggles and check for correct output
-        run: |
-          pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}"
+        run: pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}"
