@@ -12,10 +12,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: "Setup jq"
+      uses: dcarbone/install-jq-action@v2
+        
     - name: Setup credentials for service account
       shell: bash
       run: |
-        sudo apt-get install jq
         echo ${{ inputs.credentials }} | jq '.' > credentials.json
         ls -la
 
