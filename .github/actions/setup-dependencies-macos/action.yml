@@ -30,14 +30,14 @@ runs:
     
     - name: Download OPA executable
       shell: bash
-      run: python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
+      run: |
+        python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
+
+        # Give OPA executable execute permissions
+        chmod +x opa_darwin_amd64
     
     - name: Setup credentials for service account
       shell: bash
       run: |
-        # Give OPA executable execute permissions
-        chmod +x opa_darwin_amd64
         # Setup credentials for service account
-        echo "${{ inputs.credentials }}"
-        echo "${{ inputs.credentials }}" >> credentials.json
-        cat credentials.json
+        echo ${{ inputs.credentials }} | base64 -d > credentials.json
