@@ -38,28 +38,28 @@ jobs:
           cache-dependency-path: "requirements.txt"
       
       - name: Setup Windows dependencies
-        if: ${{ matrix.os == "windows-latest" }}
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: ./.github/actions/setup-windows-dependencies
         with:
           operating-system: "windows"
           opa-version: "0.60.0"
       
       - name: Setup macOS dependencies
-        if: ${{ matrix.os == "macos-latest" }}
+        if: ${{ matrix.os == 'macos-latest' }}
         uses: ./.github/actions/setup-windows-dependencies
         with:
           operating-system: "macos"
           opa-version: "0.60.0"
 
       - name: Execute ScubaGoggles and check for correct output
-        if: ${{ matrix.os == "windows-latest" }}
+        if: ${{ matrix.os == 'windows-latest' }}
         run: |
           # Setup credentials for service account
           Set-Content -Path credentials.json -Value $env:GWS_GITHUB_AUTOMATION_CREDS
           pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="$env:GWS_SUBJECT_EMAIL"
       
       - name: Execute ScubaGoggles and check for correct output
-        if: ${{ matrix.os == "macos-latest"  }}
+        if: ${{ matrix.os == 'macos-latest'  }}
         run: |
           echo "in second step"
           
