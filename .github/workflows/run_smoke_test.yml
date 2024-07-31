@@ -11,8 +11,11 @@ on:
   push:
     paths:
       - ".github/workflows/run_smoke_test.yml"
+      - ".github/actions/setup-dependencies-windows/action.yml"
+      - ".github/actions/setup-dependencies-macos/action.yml"
     branches:
       - "main"
+      - "*smoke*"
 
 env:
   GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
