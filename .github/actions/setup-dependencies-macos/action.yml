@@ -40,6 +40,6 @@ runs:
         # Give OPA executable execute permissions
         chmod +x opa_darwin_amd64
         # Setup credentials for service account
-        echo ${{ inputs.credentials }}
-        echo ${{ inputs.credentials }} >> credentials.json
+        echo "${{ inputs.credentials }}"
+        echo "${{ inputs.credentials }}" >> credentials.json
         cat credentials.json
