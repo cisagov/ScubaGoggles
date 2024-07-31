@@ -15,7 +15,7 @@ runs:
     - name: Setup credentials for service account
       shell: bash
       run: |
-        apt install jq
+        sudo apt-get install jq
         echo ${{ inputs.credentials }} | jq '.' > credentials.json
         ls -la
 
