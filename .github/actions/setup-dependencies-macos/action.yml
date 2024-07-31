@@ -26,11 +26,10 @@ runs:
         name: "credentials-1.json"
         json: "${{ inputs.credentials }}"
 
-    #- name: Setup credentials for service account
-    #  shell: bash
-    #  run: |
-    #    echo ${{ inputs.credentials }} >> credentials.json
-    #    ls -la
+    - name: Setup credentials for service account
+      shell: bash
+      run: |
+        ls -la
 
     - name: Setup virtualenv
       shell: bash
