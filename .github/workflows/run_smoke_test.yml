@@ -37,7 +37,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache-dependency-path: "requirements.txt"
       
-      - name: Run ScubaGoggles (Windows)
+      - name: Setup Dependencies (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         uses: ./.github/actions/setup-dependencies-windows
         with:
@@ -45,7 +45,7 @@ jobs:
           opa-version: "0.60.0"
           credentials: $env:GWS_GITHUB_AUTOMATION_CREDS
       
-      - name: Run ScubaGoggles (macOS)
+      - name: Setup Dependencies (macOS)
         if: ${{ matrix.os == 'macos-latest' }}
         uses: ./.github/actions/setup-dependencies-macos
         with:
