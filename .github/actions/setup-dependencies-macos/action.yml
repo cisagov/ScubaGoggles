@@ -18,7 +18,7 @@ runs:
     - name: Setup credentials for service account
       shell: bash
       run: |
-        echo "${{ inputs.credentials }}" | jq '.' > credentials.json
+        echo "${{ inputs.credentials }}" > credentials.json
         ls -la
 
     - name: Setup virtualenv
