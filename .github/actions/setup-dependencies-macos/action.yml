@@ -12,14 +12,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Setup jq"
-      uses: dcarbone/install-jq-action@v2
-
     - name: Setup credentials for service account
-      shell: bash
-      run: |
-        echo ${{ inputs.credentials }} >> credentials.json
-        ls -la
+      uses: jsdaniell/create-json@v1.2.3
+      with: 
+        name: "credentials.json"
+        json: ${{ inputs.credentials }}
+
+    #- name: Setup credentials for service account
+    #  shell: bash
+    #  run: |
+    #    echo ${{ inputs.credentials }} >> credentials.json
+    #    ls -la
 
     - name: Setup virtualenv
       shell: bash
