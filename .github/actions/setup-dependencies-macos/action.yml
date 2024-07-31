@@ -12,18 +12,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    #- name: Setup credentials for service account
-    #  shell: bash
-    #  run: |
-    #    # Setup credentials for service account
-    #    touch credentials.json
-    #    echo ${{ inputs.credentials }}   > credentials.json
-    #
     - name: Setup credentials for service account
-      uses: jsdaniell/create-json@v1.2.3
-      with: 
-        name: "credentials.json"
-        json: ${{ inputs.credentials }}
+      shell: bash
+      run: |
+        apt install jq
+        echo ${{ inputs.credentials }} | jq '.' > credentials.json
+        ls -la
 
     - name: Setup virtualenv
       shell: bash
