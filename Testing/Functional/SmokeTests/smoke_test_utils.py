@@ -2,25 +2,10 @@ import pytest
 import os
 import json
 
-required_contents = [
-    "BaselineReports.html", 
-    "IndividualReports", 
-    "ScubaResults.json",
-    "TestResults.json",
-    "images",
-    "CalendarReport.html",
-    "ChatReport.html",
-    "ClassroomReport.html",
-    "CommoncontrolsReport.html",
-    "DriveReport.html",
-    "GmailReport.html",
-    "GroupsReport.html",
-    "MeetReport.html",
-    "RulesReport.html",
-    "SitesReport.html",
-    "cisa_logo.png",
-    "triangle-exclamation-solid.svg"
-]
+def get_output_path() -> str:
+    directories: list[str] = [d for d in os.listdir() if os.path.isdir(d) and d.startswith("GWSBaselineConformance")]
+    directories.sort(key=lambda d: os.path.getctime(d), reverse=True)
+    return os.path.join(os.getcwd(), directories[0])
 
 def verify_output_type(output_path: str, contents: list[str]) -> list[str]:
     entries: list[str] = os.listdir(output_path)
@@ -43,6 +28,26 @@ def verify_output_type(output_path: str, contents: list[str]) -> list[str]:
         else:
             raise OSError(f"Entry is not a directory or file (symlink, etc.)")
     return contents
+
+required_contents = [
+    "BaselineReports.html", 
+    "IndividualReports", 
+    "ScubaResults.json",
+    "TestResults.json",
+    "images",
+    "CalendarReport.html",
+    "ChatReport.html",
+    "ClassroomReport.html",
+    "CommoncontrolsReport.html",
+    "DriveReport.html",
+    "GmailReport.html",
+    "GroupsReport.html",
+    "MeetReport.html",
+    "RulesReport.html",
+    "SitesReport.html",
+    "cisa_logo.png",
+    "triangle-exclamation-solid.svg"
+]
 
 def verify_all_outputs_exist(contents: list[str]):
     for required_content in required_contents:
