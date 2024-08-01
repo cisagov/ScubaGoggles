@@ -7,6 +7,11 @@ def get_output_path() -> str:
     directories.sort(key=lambda d: os.path.getctime(d), reverse=True)
     return os.path.join(os.getcwd(), directories[0])
 
+def prepend_file_protocol(path: str) -> str:
+    if not path.startsWith("file://"):
+        path = "file://" + path
+    return path
+
 def verify_output_type(output_path: str, contents: list[str]) -> list[str]:
     entries: list[str] = os.listdir(output_path)
     for entry in entries:

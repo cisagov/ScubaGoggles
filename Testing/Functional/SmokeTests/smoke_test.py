@@ -9,7 +9,12 @@ import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from smoke_test_utils import get_output_path, verify_all_outputs_exist, verify_output_type
+from smoke_test_utils import (
+    get_output_path, 
+    prepend_file_protocol, 
+    verify_all_outputs_exist, 
+    verify_output_type,
+)
 
 class SmokeTest:
     def test_scubagoggles_output(self, subjectemail):
@@ -26,7 +31,8 @@ class SmokeTest:
     def test_scubagoggles_report(self, browser, domain):
         try:
             output_path: str = get_output_path()
-            browser.get("file://" + os.path.join(output_path, "BaselineReports.html"))
+            report_path: str = prepend_file_protocol(os.path.join(output_path, "BaselineReports.html"))
+            browser.get(report_path)
 
             h1 = browser.find_element(By.TAG_NAME, "h1").text
             assert h1 == "SCuBA GWS Security Baseline Conformance Reports"
