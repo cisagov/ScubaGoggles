@@ -8,7 +8,7 @@ def get_output_path() -> str:
     return os.path.join(os.getcwd(), directories[0])
 
 def prepend_file_protocol(path: str) -> str:
-    if not path.startsWith("file://"):
+    if not path.startswith("file://"):
         path = "file://" + path
     return path
 
