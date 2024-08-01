@@ -1014,19 +1014,6 @@ tests contains {
 #
 # Baseline GWS.COMMONCONTROLS.10.1v0.2
 #--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.1v0.2",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.10.2v0.2
-#--
 
 # NOTE: App access cannot be controlled at the group/OU level
 
@@ -1091,6 +1078,69 @@ UnrestrictedServices10_2 contains Service if {
     not concat("", [Service, "_HIGH_RISK"]) in HighRiskBlocked
 }
 
+ReportDetails10_1(true) := "Requirement met."
+
+ReportDetails10_1(false) := concat("", [
+    "The following services allow access: ",
+    concat(", ", UnrestrictedServices10_2), "."
+])
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.10.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": concat("", [
+        "No API Access Allowed/Blocked events in the current logs. ",
+        "While we are unable to determine the state from the logs, ",
+        "the default setting is non-compliant; manual check recommended."
+    ]),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    Events := APIAccessEvents
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.10.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetails10_1(Status),
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Events := APIAccessEvents
+    count(Events) > 0
+    Status := count(UnrestrictedServices10_1) == 0
+}
+
+# Note that the above logic doesn't filter for OU. As the logic for this setting
+# is already fairly complex and GWS doesn't currently allow you to modify this
+# setting at the OU level, leaving that as out of scope for now.
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.10.2v0.2
+#--
+# Identify services whose most recent event is an allow event
+UnrestrictedServices10_2 contains Service if {
+    # Iterate through all services
+    some Service in {Event.ServiceName | some Event in APIAccessEvents}
+    # Ignore services that end risk _HIGH_RISK. Those are handled later
+    not endswith(Service, "_HIGH_RISK")
+    # Filter for just that service
+    FilteredEvents := {Event | some Event in APIAccessEvents; Event.ServiceName == Service}
+    # Get the most recent change
+    Event := utils.GetLastEvent(FilteredEvents)
+    # If the most recent change is ALLOW..., even if the _HIGH_RISK
+    # version of the service is blocked, then the app is unrestricted
+    # for the purposes of 11.3, so we don't need to check the high
+    # risk part for this one.
+    Event.EventName == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS"
+}
+
 ReportDetails10_2(true) := "Requirement met."
 
 ReportDetails10_2(false) := concat("", [
@@ -1100,7 +1150,7 @@ ReportDetails10_2(false) := concat("", [
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.10.2v0.2",
-    "Criticality": "Shall",
+    "Criticality": "SHALL",
     "ReportDetails": concat("", [
         "No API Access Allowed/Blocked events in the current logs. ",
         "While we are unable to determine the state from the logs, ",
@@ -1128,73 +1178,10 @@ if {
     count(Events) > 0
     Status := count(UnrestrictedServices10_2) == 0
 }
-
-# Note that the above logic doesn't filter for OU. As the logic for this setting
-# is already fairly complex and GWS doesn't currently allow you to modify this
-# setting at the OU level, leaving that as out of scope for now.
 #--
 
 #
 # Baseline GWS.COMMONCONTROLS.10.3v0.2
-#--
-# Identify services whose most recent event is an allow event
-UnrestrictedServices10_3 contains Service if {
-    # Iterate through all services
-    some Service in {Event.ServiceName | some Event in APIAccessEvents}
-    # Ignore services that end risk _HIGH_RISK. Those are handled later
-    not endswith(Service, "_HIGH_RISK")
-    # Filter for just that service
-    FilteredEvents := {Event | some Event in APIAccessEvents; Event.ServiceName == Service}
-    # Get the most recent change
-    Event := utils.GetLastEvent(FilteredEvents)
-    # If the most recent change is ALLOW..., even if the _HIGH_RISK
-    # version of the service is blocked, then the app is unrestricted
-    # for the purposes of 11.3, so we don't need to check the high
-    # risk part for this one.
-    Event.EventName == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS"
-}
-
-ReportDetails10_3(true) := "Requirement met."
-
-ReportDetails10_3(false) := concat("", [
-    "The following services allow access: ",
-    concat(", ", UnrestrictedServices10_3), "."
-])
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.2",
-    "Criticality": "SHALL",
-    "ReportDetails": concat("", [
-        "No API Access Allowed/Blocked events in the current logs. ",
-        "While we are unable to determine the state from the logs, ",
-        "the default setting is non-compliant; manual check recommended."
-    ]),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    Events := APIAccessEvents
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.2",
-    "Criticality": "Shall",
-    "ReportDetails": ReportDetails10_3(Status),
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Events := APIAccessEvents
-    count(Events) > 0
-    Status := count(UnrestrictedServices10_3) == 0
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.10.4v0.2
 #--
 
 # NOTE: this setting cannot be set at the group level.
@@ -1216,7 +1203,7 @@ if {
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
-NonCompliantOUs10_4 contains {
+NonCompliantOUs10_3 contains {
     "Name": OU,
     "Value": "Trust internal apps is ON"
 } if {
@@ -1231,7 +1218,7 @@ NonCompliantOUs10_4 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.2",
+    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1245,22 +1232,22 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.2",
+    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.2",
         "Criticality": "Shall",
-        "ReportDetails": utils.ReportDetails(NonCompliantOUs10_4, []),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_4},
+        "ReportDetails": utils.ReportDetails(NonCompliantOUs10_3, []),
+        "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_3},
         "RequirementMet": Status,
         "NoSuchEvent": false
 }
 if {
     Events := {Event | some Event in DomainOwnedAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
     count(Events) > 0
-    Status := count(NonCompliantOUs10_4) == 0
+    Status := count(NonCompliantOUs10_3) == 0
 }
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.10.5v0.2
+# Baseline GWS.COMMONCONTROLS.10.4v0.2
 #--
 
 # NOTE: this setting cannot be set at the group level.
@@ -1283,13 +1270,13 @@ if {
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
-GetFriendlyValue10_5(Value) := "Allow users to access any third-party apps" if {
+GetFriendlyValue10_4(Value) := "Allow users to access any third-party apps" if {
     Value == "UNBLOCK_ALL_THIRD_PARTY_API_ACCESS"
 } else := "Allow users to access third-party apps that only request basic info needed for Sign in with Google." if {
     Value == "SIGN_IN_ONLY_THIRD_PARTY_API_ACCESS"
 } else := concat(" ", [Value, "seconds"])
 
-NonCompliantOUs10_5 contains {
+NonCompliantOUs10_4 contains {
     "Name": OU,
     "Value": concat("", ["Unconfigured third-party app access is set to ", GetFriendlyValue10_5(LastEvent.EventName)])
 } if {
@@ -1304,7 +1291,7 @@ NonCompliantOUs10_5 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.5v0.2",
+    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1318,17 +1305,17 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.5v0.2",
+    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.2",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_5, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_5},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_4, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := {Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
     count(Events) > 0
-    Status := count(NonCompliantOUs10_5) == 0
+    Status := count(NonCompliantOUs10_4) == 0
 }
 #--
 
