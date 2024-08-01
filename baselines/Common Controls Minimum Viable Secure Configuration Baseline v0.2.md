@@ -289,10 +289,10 @@ To turn on Context-Aware Access:
 1.  Access the [Google Admin console](https://admin.google.com/).
 2.  From the menu, go to **Security** -\> **Access and data control** -\> **Context-Aware Access**.
 3.  Verify **Context-Aware Access** is **ON for everyone**. If not, click **Turn On**.
+4.  Select **Access Level** and select **Create Access Level** and determine the conditions of the rule per agency needs.
+5.  Select **Assign access levels to apps** and select Apps to apply the rule onto.
 
-#### GWS.COMMONCONTROLS.2.2v0.2 Instructions
 Note that the implementation details of context-aware access use cases will vary per agency. Refer to [Google's documentation](https://support.google.com/a/answer/12643733) on implementing context-aware access for your specific use cases. Common use cases include:
-
 -   Require company-owned on desktop but not on mobile device
 -   Require basic device security
 -   Allow access to contractors only through the corporate network
