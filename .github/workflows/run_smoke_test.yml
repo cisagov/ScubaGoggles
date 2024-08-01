@@ -23,7 +23,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest]
-        python-version: ["3.8.4", "3.12"]
+        # See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json,
+        # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
+        python-version: ["3.8.10", "3.9", "3.10", "3.12"]
     runs-on: ${{ matrix.os }}
     environment: Development
     steps:
