@@ -25,6 +25,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Google Workspace Logs](#14-google-workspace-logs)
 - [Data Regions](#15-data-regions-and-storage)
 - [Additional Google Services](#16-additional-google-services)
+- [Multi-Party Approvals](#17-multi-party-approval)
 
 ## Assumptions
 
@@ -288,10 +289,10 @@ To turn on Context-Aware Access:
 1.  Access the [Google Admin console](https://admin.google.com/).
 2.  From the menu, go to **Security** -\> **Access and data control** -\> **Context-Aware Access**.
 3.  Verify **Context-Aware Access** is **ON for everyone**. If not, click **Turn On**.
+4.  Select **Access Level** and select **Create Access Level** and determine the conditions of the rule per agency needs.
+5.  Select **Assign access levels to apps** and select Apps to apply the rule onto.
 
-#### GWS.COMMONCONTROLS.2.2v0.2 Instructions
 Note that the implementation details of context-aware access use cases will vary per agency. Refer to [Google's documentation](https://support.google.com/a/answer/12643733) on implementing context-aware access for your specific use cases. Common use cases include:
-
 -   Require company-owned on desktop but not on mobile device
 -   Require basic device security
 -   Allow access to contractors only through the corporate network
@@ -823,7 +824,7 @@ Some older versions of common software may break when this control is implemente
 ### Policies
 
 #### GWS.COMMONCONTROLS.11.1v0.2
-Only approved Google Workspace Marketplace applications SHOULD be allowed for installation.
+Only approved Google Workspace Marketplace applications SHALL be allowed for installation.
 
 - _Rationale:_ Marketplace apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
 - _Last modified:_ October 24, 2023
@@ -1128,7 +1129,12 @@ Service status for Google services that do not have an individual control SHOULD
 - _Last modified:_ June 11, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - Pending
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
+  - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
+    - [T1204:001: Trusted Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
+    - [T1204:002: Trusted Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
+    - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 ### Resources
 -	[GWS Admin Help \| Turn on or off additional Google services](https://support.google.com/a/answer/181865)
@@ -1148,8 +1154,7 @@ To configure additional services per the policy:
 6.	Click **Save**.
 
 ## 17. Multi-Party Approval
-
-This section covers the oogle services that do not have an individual control and whether these serviGces are on or off.
+This section covers whether multiple super admins need to approve changes to specific admin console settings.
 
 ### Policy
 
@@ -1160,7 +1165,7 @@ Require multi party approval for sensitive admin actions SHALL be enabled.
 - _Last modified:_ June 20, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - Pending
+  - No TTP Mappings
 
 ### Resources
 -	[GWS Admin Help \| Multi-party approval for sensitive actions](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13790448%3Fhl%3Den&assistant_id=generic-unu&product_context=13790448&product_name=UnuFlow&trigger_context=a)
