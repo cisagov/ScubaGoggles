@@ -1404,7 +1404,7 @@ NonCompliantGroups11_1 contains {
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.11.1v0.2",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -1417,7 +1417,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.11.1v0.2",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs11_1, NonCompliantGroups11_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1, "NonCompliantGroups": NonCompliantGroups11_1},
     "RequirementMet": Status,
