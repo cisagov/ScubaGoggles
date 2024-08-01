@@ -1,6 +1,9 @@
 """
-smoke_test.py is a test script to verify `scubagoggles gws`
-generates the correct outputs (i.e., directories, files).
+smoke_test.py is a test script to verify `scubagoggles gws`.
+
+It checks for the following cases:
+- Generate the correct output files (BaselineReports.html, ScubaResults.json, etc)
+- Check the content of html files, verify href attributes are correct, etc
 """
 
 import pytest
@@ -23,8 +26,8 @@ class SmokeTest:
             subprocess.run(command, shell=True)
 
             output_path: str = get_output_path()
-            contents: list[str] = verify_output_type(output_path, [])
-            verify_all_outputs_exist(contents)
+            output: list[str] = verify_output_type(output_path, [])
+            verify_all_outputs_exist(output)
         except (OSError, ValueError, Exception) as e:
             pytest.fail(f"An error occurred, {e}")
 

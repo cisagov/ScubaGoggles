@@ -23,28 +23,28 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest]
-        python-version: [3.9, 3.12]
+        python-version: ["3.8.4", "3.12"]
     runs-on: ${{ matrix.os }}
     environment: Development
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Setup Python v${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with: 
           python-version: ${{ matrix.python-version }}
           cache: "pip"
           cache-dependency-path: "requirements.txt"
       
-      - name: Setup Dependencies (Windows)
+      - name: Setup Dependencies (${{ matrix.os }})
         if: ${{ matrix.os == 'windows-latest' }}
         uses: ./.github/actions/setup-dependencies-windows
         with:
           operating-system: "windows"
           opa-version: "0.60.0"
       
-      - name: Setup Dependencies (macOS)
+      - name: Setup Dependencies (${{ matrix.os }})
         if: ${{ matrix.os == 'macos-latest' }}
         uses: ./.github/actions/setup-dependencies-macos
         with:
@@ -58,5 +58,5 @@ jobs:
           name: "credentials.json"
           json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
-      - name: Execute ScubaGoggles and check for correct output
+      - name: Run ScubaGoggles and check for correct output
         run: pytest -s ./Testing/Functional/SmokeTests/ --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --domain="${{ secrets.GWS_DOMAIN }}"
