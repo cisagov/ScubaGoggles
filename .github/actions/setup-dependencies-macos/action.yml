@@ -10,13 +10,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Cache packages
-      uses: actions/cache@v3
-      with: 
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip=${{ hashFiles("**/requirements.txt") }}
-        restore-keys: ${{ runner.os }}-pip-
-        
     - name: Setup virtualenv
       shell: bash
       run: |
