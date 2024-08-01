@@ -1063,7 +1063,7 @@ HighRiskBlocked contains Service if {
 
 # Step 3: Identify services whose most recent event is an allow event and where
 # the high-risk context isn't blocked
-UnrestrictedServices10_2 contains Service if {
+UnrestrictedServices10_1 contains Service if {
     # Iterate through all services
     some Service in {Event.ServiceName | some Event in APIAccessEvents}
     # Ignore services that end risk _HIGH_RISK. Those are handled later
@@ -1278,7 +1278,7 @@ GetFriendlyValue10_4(Value) := "Allow users to access any third-party apps" if {
 
 NonCompliantOUs10_4 contains {
     "Name": OU,
-    "Value": concat("", ["Unconfigured third-party app access is set to ", GetFriendlyValue10_5(LastEvent.EventName)])
+    "Value": concat("", ["Unconfigured third-party app access is set to ", GetFriendlyValue10_4(LastEvent.EventName)])
 } if {
     some OU in utils.OUsWithEvents
     Events := {Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == OU}
