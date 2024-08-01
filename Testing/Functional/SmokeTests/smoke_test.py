@@ -26,7 +26,7 @@ class SmokeTest:
     def test_scubagoggles_report(self, browser, domain):
         try:
             output_path: str = get_output_path()
-            browser.get(os.path.join(output_path, "BaselineReports.html"))
+            browser.get("file://" + os.path.join(output_path, "BaselineReports.html"))
 
             h1 = browser.find_element(By.TAG_NAME, "h1").text
             assert h1 == "SCuBA GWS Security Baseline Conformance Reports"
