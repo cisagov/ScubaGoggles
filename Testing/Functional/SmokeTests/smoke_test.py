@@ -60,7 +60,7 @@ class SmokeTest:
 
                 individual_report_anchor = td.find_element(By.TAG_NAME, "a")
                 href = individual_report_anchor.get_attribute("href")
-                individual_report_anchor.get_attribute("href").click()
+                individual_report_anchor.click()
                 current_url = browser.current_url
                 assert href == current_url
 
