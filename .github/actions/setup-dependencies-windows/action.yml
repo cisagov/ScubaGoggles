@@ -27,12 +27,14 @@ runs:
         pip install pytest
         pip install selenium
 
+        pip uninstall -y numpy
+        pip install numpy==1.26.4
         # Below python v3.9, a lower numpy v1.24.4 is used
-        $pythonVersion = [version]${{ inputs.python-version }}
-        if ($pythonVersion -ge [version]"3.9") {
-          pip uninstall -y numpy
-          pip install numpy==1.26.4
-        } 
+        #$pythonVersion = [version]${{ inputs.python-version }}
+        #if ($pythonVersion -ge [version]"3.9") {
+        #  pip uninstall -y numpy
+        #  pip install numpy==1.26.4
+        #} 
     
     - name: Download OPA executable
       shell: powershell
