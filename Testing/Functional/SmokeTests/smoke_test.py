@@ -23,7 +23,7 @@ class SmokeTest:
             command: str = f"scubagoggles gws --subjectemail {subjectemail} --quiet"
             subprocess.run(command, shell=True)
             output_path: str = get_output_path()
-            output: list[str] = verify_output_type(output_path, [])
+            output: list = verify_output_type(output_path, [])
             required_entries = get_required_entries(os.path.join(os.getcwd(), "sample-report"), [])
             verify_all_outputs_exist(output, required_entries)
         except (OSError, ValueError, Exception) as e:

@@ -10,7 +10,7 @@ CISA_GOV_URL = "https://www.cisa.gov/scuba"
 SCUBAGOGGLES_BASELINES_URL = "https://github.com/cisagov/ScubaGoggles/tree/main/baselines"
 
 def get_output_path() -> str:
-    directories: list[str] = [d for d in os.listdir() if os.path.isdir(d) and d.startswith("GWSBaselineConformance")]
+    directories: list = [d for d in os.listdir() if os.path.isdir(d) and d.startswith("GWSBaselineConformance")]
     directories.sort(key=lambda d: os.path.getctime(d), reverse=True)
     return os.path.join(os.getcwd(), directories[0])
 
@@ -19,8 +19,8 @@ def prepend_file_protocol(path: str) -> str:
         path = "file://" + path
     return path
 
-def verify_output_type(output_path: str, output: list[str]) -> list[str]:
-    entries: list[str] = os.listdir(output_path)
+def verify_output_type(output_path: str, output: list) -> list:
+    entries: list = os.listdir(output_path)
     for entry in entries:
         output.append(entry)
 
@@ -44,7 +44,7 @@ def verify_output_type(output_path: str, output: list[str]) -> list[str]:
             raise OSError(f"Entry is not a directory or file (symlink, etc.)")
     return output
 
-def get_required_entries(directory, required_entries) -> list[str]:
+def get_required_entries(directory, required_entries) -> list:
     with os.scandir(directory) as entries:
         for entry in entries:
             required_entries.append(entry.name)
@@ -52,7 +52,7 @@ def get_required_entries(directory, required_entries) -> list[str]:
                 get_required_entries(entry.path, required_entries)
     return required_entries
 
-def verify_all_outputs_exist(output: list[str], required_entries: list[str]):
+def verify_all_outputs_exist(output: list, required_entries: list):
     for required_entry in required_entries:
         if required_entry in output:
             assert True
@@ -87,10 +87,10 @@ def run_selenium(browser, domain):
             assert product in products
 
             individual_report_anchor = baseline_report.find_element(By.TAG_NAME, "a")
-            href = individual_report_anchor.get_attribute("href")
+            individual_report_anchor_href = individual_report_anchor.get_attribute("href")
             individual_report_anchor.click()
             current_url = browser.current_url
-            assert href == current_url
+            assert individual_report_anchor_href == current_url
 
             # Check at the individual report level
             verify_navigation_links(browser)
@@ -120,7 +120,15 @@ def run_selenium(browser, domain):
                 rows = tbody.find_elements(By.TAG_NAME, "tr")
                 assert len(rows) > 0
 
-            browser.back()
+            parent_report_anchor = (
+                browser.find_element(By.TAG_NAME, "header")
+                .find_element(By.TAG_NAME, "a")
+            )
+            parent_report_anchor_href = parent_report_anchor.get_attribute("href")
+            parent_report_anchor.click()
+            current_url = browser.current_url
+            assert parent_report_anchor_href == current_url
+
             WebDriverWait(browser, 10).until(
                 expected_conditions.presence_of_element_located(
                     (By.TAG_NAME, "body")
