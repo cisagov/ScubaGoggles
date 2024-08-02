@@ -1,5 +1,5 @@
 """
-smoke_test.py is a test script to verify `scubagoggles gws`.
+smoke_test.py is a test script to verify `scubagoggles gws` output.
 
 It checks for the following cases:
 - Generate the correct output files (BaselineReports.html, ScubaResults.json, etc)
@@ -39,7 +39,9 @@ class SmokeTest:
             with open(scubaresults_path) as jsonfile:
                 verify_scubaresults(jsonfile)
         except ValueError as e:
-            raise ValueError(f"{scubaresults_path} contains invalid json, {e}")
+            pytest.fail(f"{scubaresults_path} contains invalid json, {e}")
+        except Exception as e:
+            pytest.fail(f"An error occurred, {e}")
 
     def test_scubagoggles_report(self, browser, domain):
         try:

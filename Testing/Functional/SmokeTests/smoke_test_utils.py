@@ -61,9 +61,9 @@ def verify_all_outputs_exist(output: list, required_entries: list):
 
 def verify_scubaresults(jsonfile):
     scubaresults = json.load(jsonfile)
-    summary = scubaresults["Summary"]
-    for v in summary.values():
-        assert v["Errors"] == 0
+    summaries = scubaresults["Summary"]
+    for summary in summaries.values():
+        assert summary["Errors"] == 0
 
 def run_selenium(browser, domain):
     verify_navigation_links(browser)
@@ -95,7 +95,7 @@ def run_selenium(browser, domain):
             individual_report_anchor = baseline_report.find_element(By.TAG_NAME, "a")
             individual_report_anchor_href = individual_report_anchor.get_attribute("href")
             individual_report_anchor.click()
-            current_url = browser.current_url
+            current_url = browser.current_url()
             assert individual_report_anchor_href == current_url
 
             # Check at the individual report level
@@ -132,7 +132,7 @@ def run_selenium(browser, domain):
             )
             parent_report_anchor_href = parent_report_anchor.get_attribute("href")
             parent_report_anchor.click()
-            current_url = browser.current_url
+            current_url = browser.current_url()
             assert parent_report_anchor_href == current_url
 
             WebDriverWait(browser, 10).until(
