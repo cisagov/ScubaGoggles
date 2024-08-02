@@ -31,8 +31,4 @@ runs:
       shell: bash
       run: |
         python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
-
-        # Give OPA executable execute permissions
         chmod +x opa_darwin_amd64
-    
-    

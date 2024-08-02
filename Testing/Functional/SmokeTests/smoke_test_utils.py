@@ -6,6 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
+CISA_GOV_URL = "https://www.cisa.gov/scuba"
+SCUBAGOGGLES_BASELINES_URL = "https://github.com/cisagov/ScubaGoggles/tree/main/baselines"
+
 def get_output_path() -> str:
     directories: list[str] = [d for d in os.listdir() if os.path.isdir(d) and d.startswith("GWSBaselineConformance")]
     directories.sort(key=lambda d: os.path.getctime(d), reverse=True)
@@ -20,6 +23,7 @@ def verify_output_type(output_path: str, output: list[str]) -> list[str]:
     entries: list[str] = os.listdir(output_path)
     for entry in entries:
         output.append(entry)
+
         # Check if entry is a valid directory or file
         # If a valid directory, then recurse
         child_path: str = os.path.join(output_path, entry)
@@ -27,6 +31,7 @@ def verify_output_type(output_path: str, output: list[str]) -> list[str]:
             assert True
             verify_output_type(child_path, output)
         elif os.path.isfile(child_path):
+
             # Check for valid json
             if child_path.endswith(".json"):
                 try:
@@ -39,27 +44,15 @@ def verify_output_type(output_path: str, output: list[str]) -> list[str]:
             raise OSError(f"Entry is not a directory or file (symlink, etc.)")
     return output
 
-required_entries = [
-    "BaselineReports.html", 
-    "IndividualReports", 
-    "ScubaResults.json",
-    "TestResults.json",
-    "images",
-    "CalendarReport.html",
-    "ChatReport.html",
-    "ClassroomReport.html",
-    "CommoncontrolsReport.html",
-    "DriveReport.html",
-    "GmailReport.html",
-    "GroupsReport.html",
-    "MeetReport.html",
-    "RulesReport.html",
-    "SitesReport.html",
-    "cisa_logo.png",
-    "triangle-exclamation-solid.svg"
-]
+def get_required_entries(directory, required_entries) -> list[str]:
+    with os.scandir(directory) as entries:
+        for entry in entries:
+            required_entries.append(entry.name)
+            if entry.is_dir():
+                get_required_entries(entry.path, required_entries)
+    return required_entries
 
-def verify_all_outputs_exist(output: list[str]):
+def verify_all_outputs_exist(output: list[str], required_entries: list[str]):
     for required_entry in required_entries:
         if required_entry in output:
             assert True
@@ -67,6 +60,7 @@ def verify_all_outputs_exist(output: list[str]):
             raise ValueError(f"{required_entry} was not found in the generated report")
 
 def run_selenium(browser, domain):
+    verify_navigation_links(browser)
     h1 = browser.find_element(By.TAG_NAME, "h1").text
     assert h1 == "SCuBA GWS Security Baseline Conformance Reports"
 
@@ -74,18 +68,18 @@ def run_selenium(browser, domain):
         product: { "title": f"{product} Baseline Report" }
         for product in gws_products()["prod_to_fullname"].values()
     }
-    print(products)
 
     # Before entering loop check that we actually display 10 rows in table
     reports_table = get_reports_table(browser)
 
     if len(reports_table) == 10:
         for i in range(len(reports_table)): 
-            # Verify domain is present in agency table
-            tenant_table = get_tenant_table(browser)
-            assert len(tenant_table) == 2
-            customer_domain = tenant_table[1].find_elements(By.TAG_NAME, "td")[0].text
-            assert customer_domain == domain
+
+            # Check if domain is present in agency table
+            verify_tenant_table(browser, domain)
+
+            # TODO:
+            # Check for correct baseline and tool version, e.g. 0.2, 0.2.0
 
             reports_table = get_reports_table(browser)[i]
             baseline_report = reports_table.find_elements(By.TAG_NAME, "td")[0]
@@ -99,17 +93,15 @@ def run_selenium(browser, domain):
             assert href == current_url
 
             # Check at the individual report level
-            tenant_table = get_tenant_table(browser)
-            assert len(tenant_table) == 2
-            assert tenant_table[1].find_elements(By.TAG_NAME, "td")[0].text == domain
-
+            verify_navigation_links(browser)
             h1 = browser.find_element(By.TAG_NAME, "h1").text
-            print(products[product])
-            print(products[product]["title"])
             assert h1 == products[product]["title"]
+
+            verify_tenant_table(browser, domain)
 
             policy_tables = browser.find_elements(By.TAG_NAME, "table")
             for table in policy_tables[1:]:
+
                 # Verify policy table headers are correct 
                 headers = (
                     table.find_element(By.TAG_NAME, "thead")
@@ -137,12 +129,14 @@ def run_selenium(browser, domain):
     else:
         raise ValueError(f"Expected the reports table to have a length of 10")
 
-def get_tenant_table(browser):
-    return (
-        browser.find_element(By.TAG_NAME, "table")
-        .find_element(By.TAG_NAME, "tbody")
-        .find_elements(By.TAG_NAME, "tr")
+def verify_navigation_links(browser):
+    links = (
+        browser.find_element(By.CLASS_NAME, "links")
+        .find_elements(By.TAG_NAME, "a")
     )
+    if len(links) == 2:
+        assert links[0].get_attribute("href") == CISA_GOV_URL
+        assert links[1].get_attribute("href") == SCUBAGOGGLES_BASELINES_URL
 
 def get_reports_table(browser):
     return (
@@ -150,3 +144,13 @@ def get_reports_table(browser):
         .find_element(By.TAG_NAME, "tbody")
         .find_elements(By.TAG_NAME, "tr")
     )
+
+def verify_tenant_table(browser, domain):
+    tenant_table = (
+        browser.find_element(By.TAG_NAME, "table")
+        .find_element(By.TAG_NAME, "tbody")
+        .find_elements(By.TAG_NAME, "tr")
+    )
+    assert len(tenant_table) == 2
+    customer_domain = tenant_table[1].find_elements(By.TAG_NAME, "td")[0].text
+    assert customer_domain == domain

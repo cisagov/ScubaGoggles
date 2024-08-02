@@ -45,6 +45,7 @@ jobs:
         with:
           operating-system: "windows"
           opa-version: "0.60.0"
+          python-version: ${{ matrix.python-version }}
       
       - name: Setup Dependencies (macOS)
         if: ${{ matrix.os == 'macos-latest' }}
@@ -52,6 +53,7 @@ jobs:
         with:
           operating-system: "macos"
           opa-version: "0.60.0"
+          python-version: ${{ matrix.python-version }}
       
       - name: Setup credentials for service account
         id: create-json
