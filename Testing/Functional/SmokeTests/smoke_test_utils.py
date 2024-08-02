@@ -59,6 +59,12 @@ def verify_all_outputs_exist(output: list, required_entries: list):
         else:
             raise ValueError(f"{required_entry} was not found in the generated report")
 
+def verify_scubaresults(jsonfile):
+    scubaresults = json.load(jsonfile)
+    summary = scubaresults["Summary"]
+    for v in summary.values():
+        assert v["Errors"] == 0
+
 def run_selenium(browser, domain):
     verify_navigation_links(browser)
     h1 = browser.find_element(By.TAG_NAME, "h1").text
