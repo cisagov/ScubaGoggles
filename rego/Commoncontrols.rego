@@ -1836,6 +1836,55 @@ if {
     count(Events) > 0
     Status := count(NonCompliantOUs16_1) == 0
 }
+#--
 
+#
+# Baseline GWS.COMMONCONTROLS.17.1v0.2
+#--
 
+# NOTE: This setting cannot be controlled at the group level
+
+NonCompliantOUs17_1 contains {
+    "Name": OU,
+    "Value": "Require multi party approval for sensitive admin actions is DISABLED"
+} if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, "Multi Party Approval (MPA) Control Multi Party Approval Control", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "disabled"
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.17.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    SettingName := "Multi Party Approval (MPA) Control Multi Party Approval Control"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.17.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs17_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs17_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    SettingName := "Multi Party Approval (MPA) Control Multi Party Approval Control"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) > 0
+    Status := count(NonCompliantOUs17_1) == 0
+}
 #--

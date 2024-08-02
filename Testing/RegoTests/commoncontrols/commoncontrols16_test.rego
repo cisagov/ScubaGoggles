@@ -34,7 +34,7 @@ test_Unlisted_Correct_V1 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
-test_Unlisted_Correct_V1 if {
+test_Unlisted_Correct_V2 if {
     # Test inheritance
     PolicyId := "GWS.COMMONCONTROLS.16.1v0.2"
     Output := tests with input as {
