@@ -25,7 +25,7 @@ jobs:
         os: [windows-latest, macos-latest]
         # See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json,
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
-        python-version: ["3.8.10", "3.9", "3.10", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"] # "3.8 fails with numpy uninstall"
     runs-on: ${{ matrix.os }}
     environment: Development
     steps:

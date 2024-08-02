@@ -20,6 +20,11 @@ from smoke_test_utils import (
     run_selenium,
     verify_scubaresults,
 )
+
+SAMPLE_REPORT = "sample-report"
+SCUBA_RESULTS = "ScubaResults.json"
+BASELINE_REPORTS = "BaselineReports.html"
+
 class SmokeTest:
     def test_scubagoggles_output(self, subjectemail):
         try:
@@ -27,7 +32,7 @@ class SmokeTest:
             subprocess.run(command, shell=True)
             output_path: str = get_output_path()
             output: list = verify_output_type(output_path, [])
-            required_entries = get_required_entries(os.path.join(os.getcwd(), "sample-report"), [])
+            required_entries = get_required_entries(os.path.join(os.getcwd(), SAMPLE_REPORT), [])
             verify_all_outputs_exist(output, required_entries)
         except (OSError, ValueError, Exception) as e:
             pytest.fail(f"An error occurred, {e}")
@@ -35,7 +40,7 @@ class SmokeTest:
     def test_scubaresults(self):
         try:
             output_path: str = get_output_path()
-            scubaresults_path: str = os.path.join(output_path, "ScubaResults.json")
+            scubaresults_path: str = os.path.join(output_path, SCUBA_RESULTS)
             with open(scubaresults_path) as jsonfile:
                 verify_scubaresults(jsonfile)
         except ValueError as e:
@@ -46,7 +51,7 @@ class SmokeTest:
     def test_scubagoggles_report(self, browser, domain):
         try:
             output_path: str = get_output_path()
-            report_path: str = prepend_file_protocol(os.path.join(output_path, "BaselineReports.html"))
+            report_path: str = prepend_file_protocol(os.path.join(output_path, BASELINE_REPORTS))
             browser.get(report_path)
             run_selenium(browser, domain)
         except (ValueError, Exception) as e:

@@ -6,11 +6,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
+OUTPUT_DIRECTORY = "GWSBaselineConformance"
+BASELINE_REPORT_H1 = "SCuBA GWS Security Baseline Conformance Reports"
 CISA_GOV_URL = "https://www.cisa.gov/scuba"
 SCUBAGOGGLES_BASELINES_URL = "https://github.com/cisagov/ScubaGoggles/tree/main/baselines"
 
 def get_output_path() -> str:
-    directories: list = [d for d in os.listdir() if os.path.isdir(d) and d.startswith("GWSBaselineConformance")]
+    directories: list = [
+        d for d in os.listdir() 
+        if os.path.isdir(d) and d.startswith(OUTPUT_DIRECTORY)
+    ]
     directories.sort(key=lambda d: os.path.getctime(d), reverse=True)
     return os.path.join(os.getcwd(), directories[0])
 
@@ -68,7 +73,7 @@ def verify_scubaresults(jsonfile):
 def run_selenium(browser, domain):
     verify_navigation_links(browser)
     h1 = browser.find_element(By.TAG_NAME, "h1").text
-    assert h1 == "SCuBA GWS Security Baseline Conformance Reports"
+    assert h1 == BASELINE_REPORT_H1
 
     products = {
         product: { "title": f"{product} Baseline Report" }
