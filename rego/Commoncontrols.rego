@@ -457,19 +457,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.COMMONCONTROLS.2.2v0.2
-#--
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.2.2v0.2",
-    "Criticality": "May/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-
 ########################
 # GWS.COMMONCONTROLS.3 #
 ########################
