@@ -897,7 +897,7 @@ tests contains {
 }
 if {
     SuperAdmins := {Admin.primaryEmail | some Admin in input.super_admins}
-    Conditions := {count(SuperAdmins) >= 2, count(SuperAdmins) <= 4}
+    Conditions := {count(SuperAdmins) >= 2, count(SuperAdmins) <= 8}
     Status := (false in Conditions) == false
 }
 #--
