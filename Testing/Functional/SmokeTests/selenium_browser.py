@@ -1,3 +1,7 @@
+"""
+    selenium_browser.py declares a Browser class for use in ScubaGoggles testing.    
+"""
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 

@@ -1,3 +1,7 @@
+"""
+    Helper methods for running the functional smoke tests. 
+"""
+
 import pytest
 import os
 import json
@@ -12,8 +16,16 @@ CISA_GOV_URL = "https://www.cisa.gov/scuba"
 SCUBAGOGGLES_BASELINES_URL = "https://github.com/cisagov/ScubaGoggles/tree/main/baselines"
 
 def get_output_path() -> str:
+    """
+        Get the latest output directory created by `scubagoggles gws`.
+        The default name is "GWSBaselineConformance_<timestamp>.
+
+        Returns:
+            str: The path to the latest output directory
+    """
+
     directories: list = [
-        d for d in os.listdir() 
+        d for d in os.listdir()
         if os.path.isdir(d) and d.startswith(OUTPUT_DIRECTORY)
     ]
     directories.sort(key=lambda d: os.path.getctime(d), reverse=True)
@@ -85,12 +97,12 @@ def run_selenium(browser, domain):
     reports_table = get_reports_table(browser)
 
     if len(reports_table) == 10:
-        for i in range(len(reports_table)): 
+        for i in range(len(reports_table)):
 
             # Check if domain is present in agency table
             verify_tenant_table(browser, domain)
 
-            # TODO:
+            # TODO
             # Check for correct baseline and tool version, e.g. 0.2, 0.2.0
 
             reports_table = get_reports_table(browser)[i]
@@ -114,7 +126,7 @@ def run_selenium(browser, domain):
             policy_tables = browser.find_elements(By.TAG_NAME, "table")
             for table in policy_tables[1:]:
 
-                # Verify policy table headers are correct 
+                # Verify policy table headers are correct
                 headers = (
                     table.find_element(By.TAG_NAME, "thead")
                     .find_elements(By.TAG_NAME, "tr")[0]

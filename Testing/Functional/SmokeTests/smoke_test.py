@@ -1,3 +1,7 @@
+"""
+    smoke_test.py declares a SmokeTest class for ScubaGoggles automation testing.
+"""
+
 import subprocess
 import os
 import pytest
