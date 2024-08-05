@@ -2,11 +2,11 @@ package drive
 import future.keywords
 
 #
-# GWS.DRIVEDOCS.4.1v0.1
+# GWS.DRIVEDOCS.4.1v0.2
 #--
 test_Security_Correct_V1 if {
     # Test security setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.4.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.4.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -29,12 +29,12 @@ test_Security_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Security_Correct_V2 if {
     # Test security setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.4.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.4.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -67,12 +67,12 @@ test_Security_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Security_Correct_V3 if {
     # Test security setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.4.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.4.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -105,12 +105,12 @@ test_Security_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_Security_Incorrect_V1 if {
     # Test security setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.4.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.4.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -142,7 +142,7 @@ test_Security_Incorrect_V1 if {
 
 test_Security_Incorrect_V2 if {
     # Test security setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.4.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.4.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -165,12 +165,13 @@ test_Security_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Drive SDK is enabled</li></ul>"])
 }
 
 test_Security_Incorrect_V3 if {
     # Test security setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.4.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.4.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -203,12 +204,13 @@ test_Security_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Drive SDK is enabled</li></ul>"])
 }
 
 test_Security_Incorrect_V4 if {
     # Test security setting when top level OU is right but secondary isn't
-    PolicyId := "GWS.DRIVEDOCS.4.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.4.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -241,12 +243,13 @@ test_Security_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Secondary OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Secondary OU: Drive SDK is enabled</li></ul>"])
 }
 
 test_Security_Incorrect_V5 if {
     # Test security setting when top level OU is missing
-    PolicyId := "GWS.DRIVEDOCS.4.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.4.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {

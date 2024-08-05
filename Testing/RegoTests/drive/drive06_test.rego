@@ -2,11 +2,11 @@ package drive
 import future.keywords
 
 #
-# GWS.DRIVE.6.1v0.1
+# GWS.DRIVE.6.1v0.2
 #--
 test_DriveFs_Setting_Correct_V1 if {
     # Test Drive setting when there's OU inhertitence setting
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -59,12 +59,12 @@ test_DriveFs_Setting_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_DriveFs_Setting_Correct_V2 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -107,12 +107,12 @@ test_DriveFs_Setting_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_DriveFs_Setting_Correct_V3 if {
     # Test Drive setting when there's multiple events and inherited OU setting
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -175,12 +175,12 @@ test_DriveFs_Setting_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_DriveFs_Setting_Correct_V4 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -213,12 +213,12 @@ test_DriveFs_Setting_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs."
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
 test_DriveFs_Setting_InCorrect_V1 if {
     # Test Drive setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -226,7 +226,7 @@ test_DriveFs_Setting_InCorrect_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "DriveFsSettingsProto company_owned_only_enabled"},
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -236,7 +236,7 @@ test_DriveFs_Setting_InCorrect_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "DriveFsSettingsProto drive_fs_enabled"},
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -251,12 +251,13 @@ test_DriveFs_Setting_InCorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled and can be used on any device.</li></ul>"])
 }
 
 test_DriveFs_Setting_InCorrect_V2 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -264,7 +265,7 @@ test_DriveFs_Setting_InCorrect_V2 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "DriveFsSettingsProto company_owned_only_enabled"},
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -274,7 +275,7 @@ test_DriveFs_Setting_InCorrect_V2 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "DriveFsSettingsProto drive_fs_enabled"},
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -284,7 +285,7 @@ test_DriveFs_Setting_InCorrect_V2 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "DriveFsSettingsProto company_owned_only_enabled"},
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary-Level OU"},
                     ]
                 }]
@@ -309,12 +310,13 @@ test_DriveFs_Setting_InCorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled and can be used on any device.</li></ul>"])
 }
 
 test_DriveFs_Setting_InCorrect_V3 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.1"
+    PolicyId := "GWS.DRIVEDOCS.6.1v0.2"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -322,7 +324,7 @@ test_DriveFs_Setting_InCorrect_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "DriveFsSettingsProto company_owned_only_enabled"},
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
@@ -332,13 +334,13 @@ test_DriveFs_Setting_InCorrect_V3 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "DriveFsSettingsProto drive_fs_enabled"},
-                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "NEW_VALUE", "value": "true"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                     ]
                 }]
             },
             {
-                "id": {"time": "2022-22-20T00:02:24.672Z"},
+                "id": {"time": "2022-05-20T00:02:24.672Z"},
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "DriveFsSettingsProto company_owned_only_enabled"},
@@ -348,11 +350,11 @@ test_DriveFs_Setting_InCorrect_V3 if {
                 }]
             },
             {
-                "id": {"time": "2022-21-20T00:02:25.672Z"},
+                "id": {"time": "2022-05-20T00:02:25.672Z"},
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "DriveFsSettingsProto drive_fs_enabled"},
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Secondary-Level OU"},
                     ]
                 }]
@@ -387,5 +389,6 @@ test_DriveFs_Setting_InCorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement failed in Test Top-Level OU."
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled and can be used on any device.</li></ul>"])
 }

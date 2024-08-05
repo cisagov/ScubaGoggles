@@ -10,7 +10,7 @@ LogEvents := utils.GetEvents("classroom_logs")
 ###################
 
 #
-# Baseline GWS.CLASSROOM.1.1v0.1
+# Baseline GWS.CLASSROOM.1.1v0.2
 #--
 GetFriendlyValue1_1(Value) := "Users in your domain only" if {
     Value == "1"
@@ -40,7 +40,7 @@ NonCompliantOUs1_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.1.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.1.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -54,7 +54,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.1.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.1.1v0.2",
     "Criticality": "Shall",
     # Empty list is for noncompliant groups as classroom settings can't be modified at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
@@ -70,7 +70,7 @@ if {
 #--
 
 #
-# Baseline GWS.CLASSROOM.1.2v0.1
+# Baseline GWS.CLASSROOM.1.2v0.2
 #--
 GetFriendlyValue1_2(Value) := "Classes in your domain only" if {
     Value == "1"
@@ -98,7 +98,7 @@ NonCompliantOUs1_2 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.1.2v0.1",
+    "PolicyId": "GWS.CLASSROOM.1.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -113,7 +113,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.1.2v0.1",
+    "PolicyId": "GWS.CLASSROOM.1.2v0.2",
     "Criticality": "Shall",
     # Empty list is for noncompliant groups as classroom settings can't be modified at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
@@ -134,7 +134,7 @@ if {
 ###################
 
 #
-# Baseline GWS.CLASSROOM.2.1v0.1
+# Baseline GWS.CLASSROOM.2.1v0.2
 #--
 GetFriendlyValue2_1(Value) := "OFF" if {
     Value == "false"
@@ -161,7 +161,7 @@ NonCompliantOUs2_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.2.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.2.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -175,7 +175,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.2.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.2.1v0.2",
     "Criticality": "Shall",
     # Empty list is for noncompliant groups as classroom settings can't be modified at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
@@ -195,7 +195,7 @@ if {
 ###################
 
 #
-# Baseline GWS.CLASSROOM.3.1v0.1
+# Baseline GWS.CLASSROOM.3.1v0.2
 #--
 GetFriendlyValue3_1(Value) := "OFF" if {
     Value == "SIS_INTEGRATOR_NONE"
@@ -222,7 +222,7 @@ NonCompliantOUs3_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.3.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.3.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -236,7 +236,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.3.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.3.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -255,7 +255,7 @@ if {
 ###################
 
 #
-# Baseline GWS.CLASSROOM.4.1v0.1
+# Baseline GWS.CLASSROOM.4.1v0.2
 #--
 GetFriendlyValue4_1(Value) := "Students and teachers" if {
     Value == "STUDENTS_AND_TEACHERS_CAN_UNENROLL_STUDENTS"
@@ -282,7 +282,7 @@ NonCompliantOUs4_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.4.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.4.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -297,7 +297,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CLASSROOM.4.1v0.1",
+    "PolicyId": "GWS.CLASSROOM.4.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -311,3 +311,67 @@ if {
     Status := count(NonCompliantOUs4_1) == 0
 }
 #--
+
+
+###################
+# GWS.CLASSROOM.5 #
+###################
+
+#
+# Baseline GWS.CLASSROOM.5.1v0.2
+#--
+GetFriendlyValue5_1(Value) := "anyone in this domain" if {
+    Value == "1"
+} else := "all pending and verified teachers" if {
+    Value == "2"
+} else := Value
+
+NonCompliantOUs5_1 contains {
+    "Name": OU,
+    "Value":  concat(" ", [
+        "Who can create classes is set to",
+        GetFriendlyValue5_1(LastEvent.NewValue)
+    ])
+} if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, "TeacherPermissionsSettingProto who_can_create_class", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "3"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.5.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    SettingName := "TeacherPermissionsSettingProto who_can_create_class"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.CLASSROOM.5.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    SettingName := "TeacherPermissionsSettingProto who_can_create_class"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) > 0
+    Status := count(NonCompliantOUs5_1) == 0
+}
+#--
+

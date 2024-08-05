@@ -164,8 +164,8 @@ const colorRows = () => {
             }
             else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
                 rows[i].style.background = "var(--test-fail)";
-                rows[i].querySelectorAll('td')[1].style.borderColor = "var(--border-color)";
-                rows[i].querySelectorAll('td')[1].style.color = "#d10000";
+                rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
+                rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
             }
         }
         catch (error) {
@@ -192,7 +192,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Google Meet Baseline Report</h1>
             <h4><p><br/></p></h4>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Name </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>Org Name</td><td>12/06/2023 11:15:27 Pacific Daylight Time</td><td>0.1</td><td>0.1.0</td></tr>         </table>
+                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:18 Pacific Daylight Time</td><td>0.2</td><td>0.2.0</td></tr>         </table>
             <h2>MEET-1         Meeting Access</h2><table>
   <thead>
     <tr>
@@ -205,11 +205,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.MEET.1.1v0.1</td>
-      <td>Meeting access SHALL be restricted to users signed in with a Google Account or Dialing in using a phone.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td>GWS.MEET.1.1v0.2</td>
+      <td>Meeting access SHOULD be restricted to users signed in with a Google Account or Dialing in using a phone.</td>
+      <td>Warning</td>
+      <td>Should</td>
+      <td>The following OUs are non-compliant:<ul><li>Org Name: Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul></td>
     </tr>
   </tbody>
 </table><h2>MEET-2         Internal Access to External Meetings</h2><table>
@@ -224,11 +224,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.MEET.2.1v0.1</td>
+      <td>GWS.MEET.2.1v0.2</td>
       <td>Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace tenant or organization.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td>The following OUs are non-compliant:<ul><li>Org Name: What meetings can org users join is set to any meetings, including meetings created with personal accounts</li></ul></td>
     </tr>
   </tbody>
 </table><h2>MEET-3         Host Management Meeting Features</h2><table>
@@ -243,11 +243,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.MEET.3.1v0.1</td>
-      <td>Host Management meeting features SHALL be enabled so that they are available by default when a host starts their meeting.</td>
-      <td>Pass</td>
+      <td>GWS.MEET.3.1v0.2</td>
+      <td>Host Management meeting features SHALL be enabled.</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td>The following OUs are non-compliant:<ul><li>Org Name: Host management when video calls start is set to off</li></ul></td>
     </tr>
   </tbody>
 </table><h2>MEET-4         External Participants</h2><table>
@@ -262,11 +262,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.MEET.4.1v0.1</td>
+      <td>GWS.MEET.4.1v0.2</td>
       <td>Warn for external participants SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
 </table>

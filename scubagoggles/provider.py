@@ -42,6 +42,7 @@ EVENTS = {
         'CHANGE_DATA_LOCALIZATION_FOR_RUSSIA'
     ],
     'drive': [
+        'CREATE_APPLICATION_SETTING',
         'CHANGE_APPLICATION_SETTING',
         'CHANGE_DOCS_SETTING',
         'DELETE_APPLICATION_SETTING'
@@ -387,6 +388,7 @@ class Provider:
                 'Timeline - Location History',
                 'YouTube',
                 'Google Cloud Platform Sharing Options',
+                'Multi Party Approval'
             ],
             'drive': ['Drive and Docs'],
             'gmail': ['Gmail'],

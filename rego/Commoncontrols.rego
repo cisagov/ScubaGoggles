@@ -71,6 +71,29 @@ if {
     Group := utils.GetEventGroup(Event)
 }
 
+ToggleServiceEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
+    "TimestampStr": Item.id.time,
+    "NewValue": NewValue,
+    "OrgUnit": OrgUnit,
+    "Group": Group
+}
+if {
+    some Item in input.commoncontrols_logs.items
+    some Event in Item.events
+    Event.name == "TOGGLE_SERVICE_ENABLED"
+
+    "SERVICE_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
+
+    ServiceName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SERVICE_NAME"][0]
+    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
+    OrgUnit := utils.GetEventOu(Event)
+    Group := utils.GetEventGroup(Event)
+
+    ServiceName == "DISABLE_UNLISTED_SERVICES"
+}
+
 LogEvents := utils.GetEvents("commoncontrols_logs")
 
 ########################
@@ -78,7 +101,7 @@ LogEvents := utils.GetEvents("commoncontrols_logs")
 ########################
 
 #
-# Baseline GWS.COMMONCONTROLS.1.1v0.1
+# Baseline GWS.COMMONCONTROLS.1.1v0.2
 #--
 
 # For 1.1, we need to assert three different things:
@@ -197,7 +220,7 @@ NonCompliantGroups1_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.1.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.1.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -210,7 +233,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.1.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.1.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
@@ -225,7 +248,7 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.1.2v0.1
+# Baseline GWS.COMMONCONTROLS.1.2v0.2
 #--
 
 NonCompliantOUs1_2 contains {
@@ -257,7 +280,7 @@ NonCompliantGroups1_2 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.1.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.1.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -271,7 +294,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.1.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.1.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, NonCompliantGroups1_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2, "NonCompliantGroups": NonCompliantGroups1_2},
@@ -287,7 +310,7 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.1.3v0.1
+# Baseline GWS.COMMONCONTROLS.1.3v0.2
 #--
 
 GetFriendlyValue1_3(Value) := "ON" if {
@@ -323,7 +346,7 @@ NonCompliantGroups1_3 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.1.3v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.1.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -337,7 +360,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.1.3v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.1.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_3, NonCompliantGroups1_3),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_3, "NonCompliantGroups": NonCompliantGroups1_3},
@@ -353,7 +376,7 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.1.4v0.1
+# Baseline GWS.COMMONCONTROLS.1.4v0.2
 #--
 
 NonCompliantOUs1_4 contains {
@@ -383,7 +406,7 @@ NonCompliantGroups1_4 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.1.4v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.1.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -397,7 +420,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.1.4v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.1.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_4, NonCompliantGroups1_4),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4, "NonCompliantGroups": NonCompliantGroups1_4},
@@ -415,7 +438,7 @@ if {
 ########################
 
 #
-# Baseline GWS.COMMONCONTROLS.2.1v0.1
+# Baseline GWS.COMMONCONTROLS.2.1v0.2
 #--
 
 # This setting isn't controlled at the OU level, and in this case,
@@ -423,7 +446,7 @@ if {
 # we just need to ensure the last event is compliant, we don't need
 # to check each OU.
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.2.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.2.1v0.2",
     "Criticality": "Should",
     "ReportDetails": concat("", [
         "No relevant event in the current logs. While we are unable ",
@@ -442,7 +465,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.2.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.2.1v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsBoolean(Status),
     "ActualValue": {"TOGGLE_CAA_ENABLEMENT": LastEvent.NewValue},
@@ -457,25 +480,12 @@ if {
 }
 #--
 
-#
-# Baseline GWS.COMMONCONTROLS.2.2v0.1
-#--
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.2.2v0.1",
-    "Criticality": "May/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-
 ########################
 # GWS.COMMONCONTROLS.3 #
 ########################
 
 #
-# Baseline GWS.COMMONCONTROLS.3.1v0.1
+# Baseline GWS.COMMONCONTROLS.3.1v0.2
 #--
 
 # NOTE: this setting cannot be controlled at the group-level,
@@ -496,7 +506,7 @@ NonCompliantOUs3_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.3.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.3.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -510,7 +520,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.3.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.3.1v0.2",
     "Criticality": "Shall",
     # Empty list on the next line as this setting can't be set at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
@@ -530,7 +540,7 @@ if {
 ########################
 
 #
-# Baseline GWS.COMMONCONTROLS.4.1v0.1
+# Baseline GWS.COMMONCONTROLS.4.1v0.2
 #--
 
 # NOTE: this setting cannot be controlled at the group-level,
@@ -576,7 +586,7 @@ NonCompliantOUs4_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.4.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.4.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -591,7 +601,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.4.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.4.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -614,7 +624,7 @@ if {
 # so only checks at the OU-level are implemented here.
 
 #
-# Baseline GWS.COMMONCONTROLS.5.1v0.1
+# Baseline GWS.COMMONCONTROLS.5.1v0.2
 #--
 
 NonCompliantOUs5_1 contains {
@@ -633,7 +643,7 @@ NonCompliantOUs5_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -647,7 +657,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
@@ -661,7 +671,7 @@ tests contains {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.5.2v0.1
+# Baseline GWS.COMMONCONTROLS.5.2v0.2
 #--
 
 NonCompliantOUs5_2 contains {
@@ -681,7 +691,7 @@ NonCompliantOUs5_2 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -695,7 +705,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_2},
@@ -710,7 +720,7 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.5.3v0.1
+# Baseline GWS.COMMONCONTROLS.5.3v0.2
 #--
 NonCompliantOUs5_3 contains {
     "Name": OU,
@@ -728,7 +738,7 @@ NonCompliantOUs5_3 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.3v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -743,7 +753,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.3v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_3},
@@ -759,7 +769,7 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.5.4v0.1
+# Baseline GWS.COMMONCONTROLS.5.4v0.2
 #--
 NonCompliantOUs5_4 contains {
     "Name": OU,
@@ -777,7 +787,7 @@ NonCompliantOUs5_4 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.4v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -791,7 +801,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.4v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_4},
@@ -806,7 +816,7 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.5.5v0.1
+# Baseline GWS.COMMONCONTROLS.5.5v0.2
 #--
 NonCompliantOUs5_5 contains {
     "Name": OU,
@@ -824,7 +834,7 @@ NonCompliantOUs5_5 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.5v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.5v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -838,7 +848,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.5v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.5.5v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
@@ -857,10 +867,10 @@ if {
 ########################
 
 #
-# Baseline GWS.COMMONCONTROLS.6.1v0.1
+# Baseline GWS.COMMONCONTROLS.6.1v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.6.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.6.1v0.2",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -870,10 +880,10 @@ tests contains {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.6.2v0.1
+# Baseline GWS.COMMONCONTROLS.6.2v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.6.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.6.2v0.2",
     "Prerequisites": ["directory/v1/users/list"],
     "Criticality": "Shall",
     "ReportDetails": concat("", [
@@ -887,7 +897,7 @@ tests contains {
 }
 if {
     SuperAdmins := {Admin.primaryEmail | some Admin in input.super_admins}
-    Conditions := {count(SuperAdmins) >= 2, count(SuperAdmins) <= 4}
+    Conditions := {count(SuperAdmins) >= 2, count(SuperAdmins) <= 8}
     Status := (false in Conditions) == false
 }
 #--
@@ -897,10 +907,10 @@ if {
 ########################
 
 #
-# Baseline GWS.COMMONCONTROLS.7.1v0.1
+# Baseline GWS.COMMONCONTROLS.7.1v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.7.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.7.1v0.2",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -914,7 +924,7 @@ tests contains {
 ########################
 
 #
-# Baseline GWS.COMMONCONTROLS.8.1v0.1
+# Baseline GWS.COMMONCONTROLS.8.1v0.2
 #--
 NonCompliantOUs8_1 contains {
     "Name": OU,
@@ -947,7 +957,7 @@ NonCompliantGroups8_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.8.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.8.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -962,7 +972,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.8.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.8.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs8_1, NonCompliantGroups8_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_1, "NonCompliantGroups": NonCompliantGroups8_1},
@@ -982,10 +992,10 @@ tests contains {
 ########################
 
 #
-# Baseline GWS.COMMONCONTROLS.9.1v0.1
+# Baseline GWS.COMMONCONTROLS.9.1v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.9.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.9.1v0.2",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -995,10 +1005,10 @@ tests contains {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.9.2v0.1
+# Baseline GWS.COMMONCONTROLS.9.2v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.9.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.9.2v0.2",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1012,20 +1022,7 @@ tests contains {
 #########################
 
 #
-# Baseline GWS.COMMONCONTROLS.10.1v0.1
-#--
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.1v0.1",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.10.2v0.1
+# Baseline GWS.COMMONCONTROLS.10.1v0.2
 #--
 
 # NOTE: App access cannot be controlled at the group/OU level
@@ -1076,7 +1073,7 @@ HighRiskBlocked contains Service if {
 
 # Step 3: Identify services whose most recent event is an allow event and where
 # the high-risk context isn't blocked
-UnrestrictedServices10_2 contains Service if {
+UnrestrictedServices10_1 contains Service if {
     # Iterate through all services
     some Service in {Event.ServiceName | some Event in APIAccessEvents}
     # Ignore services that end risk _HIGH_RISK. Those are handled later
@@ -1091,15 +1088,15 @@ UnrestrictedServices10_2 contains Service if {
     not concat("", [Service, "_HIGH_RISK"]) in HighRiskBlocked
 }
 
-ReportDetails10_2(true) := "Requirement met."
+ReportDetails10_1(true) := "Requirement met."
 
-ReportDetails10_2(false) := concat("", [
+ReportDetails10_1(false) := concat("", [
     "The following services allow access: ",
     concat(", ", UnrestrictedServices10_2), "."
 ])
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": concat("", [
         "No API Access Allowed/Blocked events in the current logs. ",
@@ -1117,16 +1114,16 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.1v0.2",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetails10_2(Status),
+    "ReportDetails": ReportDetails10_1(Status),
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := APIAccessEvents
     count(Events) > 0
-    Status := count(UnrestrictedServices10_2) == 0
+    Status := count(UnrestrictedServices10_1) == 0
 }
 
 # Note that the above logic doesn't filter for OU. As the logic for this setting
@@ -1135,10 +1132,10 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.10.3v0.1
+# Baseline GWS.COMMONCONTROLS.10.2v0.2
 #--
 # Identify services whose most recent event is an allow event
-UnrestrictedServices10_3 contains Service if {
+UnrestrictedServices10_2 contains Service if {
     # Iterate through all services
     some Service in {Event.ServiceName | some Event in APIAccessEvents}
     # Ignore services that end risk _HIGH_RISK. Those are handled later
@@ -1154,15 +1151,15 @@ UnrestrictedServices10_3 contains Service if {
     Event.EventName == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS"
 }
 
-ReportDetails10_3(true) := "Requirement met."
+ReportDetails10_2(true) := "Requirement met."
 
-ReportDetails10_3(false) := concat("", [
+ReportDetails10_2(false) := concat("", [
     "The following services allow access: ",
-    concat(", ", UnrestrictedServices10_3), "."
+    concat(", ", UnrestrictedServices10_2), "."
 ])
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.2v0.2",
     "Criticality": "SHALL",
     "ReportDetails": concat("", [
         "No API Access Allowed/Blocked events in the current logs. ",
@@ -1180,21 +1177,21 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.2v0.2",
     "Criticality": "Shall",
-    "ReportDetails": ReportDetails10_3(Status),
+    "ReportDetails": ReportDetails10_2(Status),
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := APIAccessEvents
     count(Events) > 0
-    Status := count(UnrestrictedServices10_3) == 0
+    Status := count(UnrestrictedServices10_2) == 0
 }
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.10.4v0.1
+# Baseline GWS.COMMONCONTROLS.10.3v0.2
 #--
 
 # NOTE: this setting cannot be set at the group level.
@@ -1216,7 +1213,7 @@ if {
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
-NonCompliantOUs10_4 contains {
+NonCompliantOUs10_3 contains {
     "Name": OU,
     "Value": "Trust internal apps is ON"
 } if {
@@ -1231,7 +1228,7 @@ NonCompliantOUs10_4 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1245,22 +1242,22 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.3v0.2",
         "Criticality": "Shall",
-        "ReportDetails": utils.ReportDetails(NonCompliantOUs10_4, []),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_4},
+        "ReportDetails": utils.ReportDetails(NonCompliantOUs10_3, []),
+        "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_3},
         "RequirementMet": Status,
         "NoSuchEvent": false
 }
 if {
     Events := {Event | some Event in DomainOwnedAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
     count(Events) > 0
-    Status := count(NonCompliantOUs10_4) == 0
+    Status := count(NonCompliantOUs10_3) == 0
 }
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.10.5v0.1
+# Baseline GWS.COMMONCONTROLS.10.4v0.2
 #--
 
 # NOTE: this setting cannot be set at the group level.
@@ -1283,15 +1280,15 @@ if {
     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
 }
 
-GetFriendlyValue10_5(Value) := "Allow users to access any third-party apps" if {
+GetFriendlyValue10_4(Value) := "Allow users to access any third-party apps" if {
     Value == "UNBLOCK_ALL_THIRD_PARTY_API_ACCESS"
 } else := "Allow users to access third-party apps that only request basic info needed for Sign in with Google." if {
     Value == "SIGN_IN_ONLY_THIRD_PARTY_API_ACCESS"
 } else := concat(" ", [Value, "seconds"])
 
-NonCompliantOUs10_5 contains {
+NonCompliantOUs10_4 contains {
     "Name": OU,
-    "Value": concat("", ["Unconfigured third-party app access is set to ", GetFriendlyValue10_5(LastEvent.EventName)])
+    "Value": concat("", ["Unconfigured third-party app access is set to ", GetFriendlyValue10_4(LastEvent.EventName)])
 } if {
     some OU in utils.OUsWithEvents
     Events := {Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == OU}
@@ -1304,7 +1301,7 @@ NonCompliantOUs10_5 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.5v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1318,17 +1315,17 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.10.5v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.10.4v0.2",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_5, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_5},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_4, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := {Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
     count(Events) > 0
-    Status := count(NonCompliantOUs10_5) == 0
+    Status := count(NonCompliantOUs10_4) == 0
 }
 #--
 
@@ -1337,7 +1334,7 @@ if {
 #########################
 
 #
-# Baseline GWS.COMMONCONTROLS.11.1v0.1
+# Baseline GWS.COMMONCONTROLS.11.1v0.2
 #--
 
 # For 11.1, we need to assert two different things:
@@ -1416,8 +1413,8 @@ NonCompliantGroups11_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.1v0.1",
-    "Criticality": "Should",
+    "PolicyId": "GWS.COMMONCONTROLS.11.1v0.2",
+    "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -1429,8 +1426,8 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.1v0.1",
-    "Criticality": "Should",
+    "PolicyId": "GWS.COMMONCONTROLS.11.1v0.2",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs11_1, NonCompliantGroups11_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1, "NonCompliantGroups": NonCompliantGroups11_1},
     "RequirementMet": Status,
@@ -1444,7 +1441,7 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.11.2v0.1
+# Baseline GWS.COMMONCONTROLS.11.2v0.2
 #--
 NonCompliantOUs11_2 contains {
     "Name": OU,
@@ -1481,7 +1478,7 @@ NonCompliantGroups11_2 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.2",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1495,7 +1492,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs11_2, NonCompliantGroups11_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_2, "NonCompliantGroups": NonCompliantGroups11_2},
@@ -1632,7 +1629,7 @@ NonCompliantGroups12_1 contains {
 }
 
 #
-# Baseline GWS.COMMONCONTROLS.12.1v0.1
+# Baseline GWS.COMMONCONTROLS.12.1v0.2
 #--
 
 NoSuchEvent12_1 := true if {
@@ -1648,7 +1645,7 @@ NoSuchEvent12_1 := true if {
 default NoSuchEvent12_1 := false
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1661,7 +1658,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.12.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs12_1, NonCompliantGroups12_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_1, "NonCompliantGroups": NonCompliantGroups12_1},
@@ -1680,10 +1677,10 @@ if {
 #########################
 
 #
-# Baseline GWS.COMMONCONTROLS.13.1v0.1
+# Baseline GWS.COMMONCONTROLS.13.1v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.2",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": concat("", [
         "Results for GWS.COMMONCONTROLS.13 are listed in the ",
@@ -1700,10 +1697,10 @@ tests contains {
 #########################
 
 #
-# Baseline GWS.COMMONCONTROLS.14.1v0.1
+# Baseline GWS.COMMONCONTROLS.14.1v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.14.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.14.1v0.2",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1713,10 +1710,10 @@ tests contains {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.14.2v0.1
+# Baseline GWS.COMMONCONTROLS.14.2v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.14.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.14.2v0.2",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1730,10 +1727,10 @@ tests contains {
 #########################
 
 #
-# Baseline GWS.COMMONCONTROLS.15.1v0.1
+# Baseline GWS.COMMONCONTROLS.15.1v0.2
 #--
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.15.1v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.15.1v0.2",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1743,7 +1740,7 @@ tests contains {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.15.2v0.1
+# Baseline GWS.COMMONCONTROLS.15.2v0.2
 #--
 
 # NOTE: This setting cannot be controlled at the group level
@@ -1763,7 +1760,7 @@ NonCompliantOUs15_2 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1777,7 +1774,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.1",
+    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs15_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_2},
@@ -1788,5 +1785,106 @@ if {
     Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs15_2) == 0
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.16.1v0.2
+#--
+
+# NOTE: This setting cannot be controlled at the group level
+
+NonCompliantOUs16_1 contains {
+    "Name": OU,
+    "Value": "Access to additional services without individual control is turned on"
+} if {
+    some OU in utils.OUsWithEvents
+    # Note that this setting requires the custom ToggleServiceEvents rule
+    Events := {Event | some Event in ToggleServiceEvents; Event.OrgUnit == OU}
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.16.1v0.2",
+    "Criticality": "Should",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    Events := {Event | some Event in ToggleServiceEvents; Event.OrgUnit == utils.TopLevelOU}
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.16.1v0.2",
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs16_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Events := {Event | some Event in ToggleServiceEvents; Event.OrgUnit == utils.TopLevelOU}
+    count(Events) > 0
+    Status := count(NonCompliantOUs16_1) == 0
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.17.1v0.2
+#--
+
+# NOTE: This setting cannot be controlled at the group level
+
+NonCompliantOUs17_1 contains {
+    "Name": OU,
+    "Value": "Require multi party approval for sensitive admin actions is DISABLED"
+} if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, "Multi Party Approval (MPA) Control Multi Party Approval Control", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "disabled"
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.17.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    SettingName := "Multi Party Approval (MPA) Control Multi Party Approval Control"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.17.1v0.2",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs17_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs17_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    SettingName := "Multi Party Approval (MPA) Control Multi Party Approval Control"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) > 0
+    Status := count(NonCompliantOUs17_1) == 0
 }
 #--

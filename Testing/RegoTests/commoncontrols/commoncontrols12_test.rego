@@ -2,11 +2,11 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.12.1v0.1
+# GWS.COMMONCONTROLS.12.1v0.2
 #--
 test_Takeout_Correct_V1 if {
     # Test basic correct
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.12.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -46,7 +46,7 @@ test_Takeout_Correct_V1 if {
 
 test_Takeout_Incorrect_V1 if {
     # Test specifc apps allowed, ou
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.12.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -102,7 +102,7 @@ test_Takeout_Incorrect_V1 if {
 
 test_Takeout_Incorrect_V2 if {
     # Test nonspecific apps allowed, ou
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.12.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -146,7 +146,7 @@ test_Takeout_Incorrect_V2 if {
 
 test_Takeout_Incorrect_V3 if {
     # Test nonspecific apps and specific apps allowed, ou
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.12.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -191,7 +191,7 @@ test_Takeout_Incorrect_V3 if {
 
 test_Takeout_Incorrect_V4 if {
     # Test nonspecific apps allowed, group
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.1"
+    PolicyId := "GWS.COMMONCONTROLS.12.1v0.2"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {

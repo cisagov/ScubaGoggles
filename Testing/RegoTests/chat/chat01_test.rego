@@ -2,11 +2,11 @@ package chat
 import future.keywords
 
 #
-#GWS.CHAT.1.1v0.1
+#GWS.CHAT.1.1v0.2
 #--
 test_History_Correct_V1 if {
     # Test history setting when there's only one event
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -35,7 +35,7 @@ test_History_Correct_V1 if {
 
 test_History_Correct_V2 if {
     # Test history setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -73,7 +73,7 @@ test_History_Correct_V2 if {
 
 test_History_Correct_V3 if {
     # Test history setting when there's multiple OUs
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -111,7 +111,7 @@ test_History_Correct_V3 if {
 
 test_History_Correct_V4 if {
     # Test history setting when there's multiple OUs and an older event non-compliant
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -159,7 +159,7 @@ test_History_Correct_V4 if {
 
 test_History_Correct_V5 if {
     # Test history setting when set to inherit from parent
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -207,7 +207,7 @@ test_History_Correct_V5 if {
 
 test_History_Incorrect_V1 if {
     # Test history setting when there are no relevant events
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -239,7 +239,7 @@ test_History_Incorrect_V1 if {
 
 test_History_Incorrect_V2 if {
     # Test history setting when there's only one event and it's wrong
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -268,7 +268,7 @@ test_History_Incorrect_V2 if {
 
 test_History_Incorrect_V3 if {
     # Test history setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -307,7 +307,7 @@ test_History_Incorrect_V3 if {
 
 test_History_Incorrect_V4 if {
     # Test history setting when there is no event for the Top-level OU but there is one for a different OU
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -340,7 +340,7 @@ test_History_Incorrect_V4 if {
 
 test_History_Incorrect_V5 if {
     # Test history setting when the Top-level OU is compliant but a secondary OU is non-compliant
-    PolicyId := "GWS.CHAT.1.1v0.1"
+    PolicyId := "GWS.CHAT.1.1v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -379,11 +379,11 @@ test_History_Incorrect_V5 if {
 #--
 
 #
-# GWS.CHAT.1.2v0.1
+# GWS.CHAT.1.2v0.2
 #--
 test_Change_History_Setting_Correct_V1 if {
     # Test allow user to change history setting when there's only one event
-    PolicyId := "GWS.CHAT.1.2v0.1"
+    PolicyId := "GWS.CHAT.1.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -414,7 +414,7 @@ test_Change_History_Setting_Correct_V1 if {
 
 test_Change_History_Setting_Correct_V2 if {
     # Test allow user to change history setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.CHAT.1.2v0.1"
+    PolicyId := "GWS.CHAT.1.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -458,7 +458,7 @@ test_Change_History_Setting_Correct_V2 if {
 
 test_Change_History_Setting_Correct_V3 if {
     # Test history setting when set to inherit from parent
-    PolicyId := "GWS.CHAT.1.2v0.1"
+    PolicyId := "GWS.CHAT.1.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -515,7 +515,7 @@ test_Change_History_Setting_Correct_V3 if {
 
 test_Change_History_Setting_Incorrect_V1 if {
     # Test allow user to change history setting when there are no relevant events
-    PolicyId := "GWS.CHAT.1.2v0.1"
+    PolicyId := "GWS.CHAT.1.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -547,7 +547,7 @@ test_Change_History_Setting_Incorrect_V1 if {
 
 test_Change_History_Setting_Incorrect_V2 if {
     # Test allow user to change history setting when there's only one event and it's wrong
-    PolicyId := "GWS.CHAT.1.2v0.1"
+    PolicyId := "GWS.CHAT.1.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -579,7 +579,7 @@ test_Change_History_Setting_Incorrect_V2 if {
 
 test_Change_History_Setting_Incorrect_V3 if {
     # Test allow user to change history setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CHAT.1.2v0.1"
+    PolicyId := "GWS.CHAT.1.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -625,7 +625,7 @@ test_Change_History_Setting_Incorrect_V3 if {
 
 test_Change_History_Setting_Incorrect_V4 if {
     # Test allow user to change history setting when there are multiple OU and a secondary OU is wrong
-    PolicyId := "GWS.CHAT.1.2v0.1"
+    PolicyId := "GWS.CHAT.1.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -671,7 +671,7 @@ test_Change_History_Setting_Incorrect_V4 if {
 
 test_Change_History_Setting_Incorrect_V5 if {
     # Test allow user to change history setting when the primary OU is missing but a different one is present
-    PolicyId := "GWS.CHAT.1.2v0.1"
+    PolicyId := "GWS.CHAT.1.2v0.2"
     Output := tests with input as {
         "chat_logs": {"items": [
             {

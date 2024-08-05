@@ -126,3 +126,26 @@ img {
     font-style: italic;
     color: rgba(0, 0, 0, 0.8);
 }
+
+a.control_group:link {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--unvisited-link-color);
+    text-decoration: underline;
+}
+
+a.control_group:visited {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+}
+
+a.control_group:hover {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a.control_group:active {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
+}

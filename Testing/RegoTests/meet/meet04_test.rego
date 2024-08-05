@@ -2,11 +2,11 @@ package meet
 import future.keywords
 
 #
-# GWS.MEET.4.1v0.1
+# GWS.MEET.4.1v0.2
 #--
 test_HostMan_Correct_V1 if {
     # Test meeting access when there's only one event
-    PolicyId := "GWS.MEET.4.1v0.1"
+    PolicyId := "GWS.MEET.4.1v0.2"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -38,7 +38,7 @@ test_HostMan_Correct_V1 if {
 
 test_HostMan_Correct_V2 if {
     # Test meeting access when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.MEET.4.1v0.1"
+    PolicyId := "GWS.MEET.4.1v0.2"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -84,7 +84,7 @@ test_HostMan_Correct_V2 if {
 
 test_HostMan_Correct_V3 if {
     # Test meeting access when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.MEET.4.1v0.1"
+    PolicyId := "GWS.MEET.4.1v0.2"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -128,9 +128,9 @@ test_HostMan_Correct_V3 if {
     RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
 }
 
-test_Access_Correct_V4 if {
+test_HostMan_Correct_V4 if {
     # Test history setting when set to inherit from parent
-    PolicyId := "GWS.MEET.4.1v0.1"
+    PolicyId := "GWS.MEET.4.1v0.2"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -190,7 +190,7 @@ test_Access_Correct_V4 if {
 
 test_HostMan_Incorrect_V1 if {
     # Test meeting access when there are no relevant events
-    PolicyId := "GWS.MEET.4.1v0.1"
+    PolicyId := "GWS.MEET.4.1v0.2"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -222,7 +222,7 @@ test_HostMan_Incorrect_V1 if {
 
 test_HostMan_Incorrect_V2 if {
     # Test meeting access when there's only one event and it's wrong
-    PolicyId := "GWS.MEET.4.1v0.1"
+    PolicyId := "GWS.MEET.4.1v0.2"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -255,7 +255,7 @@ test_HostMan_Incorrect_V2 if {
 
 test_HostMan_Incorrect_V3 if {
     # Test meeting access when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.MEET.4.1v0.1"
+    PolicyId := "GWS.MEET.4.1v0.2"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -302,7 +302,7 @@ test_HostMan_Incorrect_V3 if {
 
 test_HostMan_Incorrect_V4 if {
     # Test allow user to change history setting when there are multiple OU and a secondary OU is wrong
-    PolicyId := "GWS.MEET.4.1v0.1"
+    PolicyId := "GWS.MEET.4.1v0.2"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -350,7 +350,7 @@ test_HostMan_Incorrect_V4 if {
 
 test_HostMan_Incorrect_V5 if {
     # Test allow user to change history setting when the primary OU is missing but a different one is present
-    PolicyId := "GWS.MEET.4.1v0.1"
+    PolicyId := "GWS.MEET.4.1v0.2"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -384,3 +384,54 @@ test_HostMan_Incorrect_V5 if {
     ])
 }
 #--
+
+test_HostMan_Incorrect_V6 if {
+    # Test group wrong
+    PolicyId := "GWS.MEET.4.1v0.2"
+    Output := tests with input as {
+        "meet_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value":
+                "Warn for external participants External or unidentified participants in a meeting are given a label"
+                        },
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value":
+                "Warn for external participants External or unidentified participants in a meeting are given a label"
+                        },
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "GROUP_EMAIL", "value": "group@example.com"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following groups are non-compliant:<ul>",
+        "<li>group@example.com: Warning label for external or unidentified ",
+        "meeting participants is set to no warning label</li>",
+        "</ul>"
+    ])
+}
