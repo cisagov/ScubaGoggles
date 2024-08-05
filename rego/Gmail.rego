@@ -2101,6 +2101,10 @@ tests contains {
 }
 #--
 
+################
+# GWS.GMAIL.19 #
+################
+
 #
 # Baseline GWS.GMAIL.19.1v0.2
 #--
@@ -2108,6 +2112,32 @@ tests contains {
 # and not available within the generated logs
 tests contains {
     "PolicyId": "GWS.GMAIL.19.1v0.2",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.GMAIL.19.2v0.2
+#--
+tests contains {
+    "PolicyId": "GWS.GMAIL.19.2v0.2",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.GMAIL.19.3v0.2
+#--
+tests contains {
+    "PolicyId": "GWS.GMAIL.19.3v0.2",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
