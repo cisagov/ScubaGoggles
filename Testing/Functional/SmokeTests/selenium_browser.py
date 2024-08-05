@@ -1,12 +1,12 @@
-"""
-The Browser class encapsulates the setup, usage, and teardown of a
-Selenium WebDriver instance for automated browser interactions.
-"""
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 class Browser:
+    """
+    The Browser class encapsulates the setup, usage, and teardown of a
+    Selenium WebDriver instance for automated browser interactions.
+    """
+
     def __init__(self):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
@@ -16,14 +16,20 @@ class Browser:
         self.driver = webdriver.Chrome(options=chrome_options)
 
     def get(self, url):
+        """
+        Load a new web page in the current browser window.
+
+        Args:
+            url: The URL to load. Bust be a fully qualified URL
+        """
         self.driver.get(url)
-    
+
     def quit(self):
         self.driver.quit()
-    
+
     def find_element(self, by, value):
         return self.driver.find_element(by, value)
-    
+
     def find_elements(self, by, value):
         return self.driver.find_elements(by, value)
 

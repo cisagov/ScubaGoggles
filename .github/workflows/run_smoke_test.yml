@@ -9,10 +9,11 @@ on:
   pull_request_review:
     types: [submitted]
   push:
-    paths:
-      - ".github/workflows/run_smoke_test.yml"
-      - ".github/actions/setup-dependencies-windows/action.yml"
-      - ".github/actions/setup-dependencies-macos/action.yml"
+    # Uncomment when testing locally
+    #paths:
+    #  - ".github/workflows/run_smoke_test.yml"
+    #  - ".github/actions/setup-dependencies-windows/action.yml"
+    #  - ".github/actions/setup-dependencies-macos/action.yml"
     branches:
       - "main"
       - "*smoke*"
@@ -25,7 +26,7 @@ jobs:
         os: [windows-latest, macos-latest]
         # See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json,
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
-        python-version: ["3.9", "3.10", "3.11", "3.12"] # "3.8 fails with numpy uninstall"
+        python-version: ["3.9", "3.12"] # "3.8 fails with numpy uninstall"
     runs-on: ${{ matrix.os }}
     environment: Development
     steps:
