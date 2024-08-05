@@ -28,7 +28,6 @@ class SmokeTest:
     - Check if ScubaResults.json contains errors in the summary. If errors exist, then
       either API calls or functions produced exceptions which need to be handled
     """
-
     def test_scubagoggles_output(self, subjectemail):
         """
             Test if the `scubagoggles gws` command generates correct output for all baselines.
