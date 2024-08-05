@@ -24,6 +24,8 @@ This baseline is based on Google documentation and addresses the following:
 - [System-Defined Rules](#13-system-defined-rules)
 - [Google Workspace Logs](#14-google-workspace-logs)
 - [Data Regions](#15-data-regions-and-storage)
+- [Additional Google Services](#16-additional-google-services)
+- [Multi-Party Approvals](#17-multi-party-approval)
 
 ## Assumptions
 
@@ -239,16 +241,7 @@ Policies restricting access to GWS based on signals about enterprise devices SHO
 
 - _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on user/device attributes.
 - _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
-    - [T1098:005: Account Manipulation: Device Registration](https://attack.mitre.org/techniques/T1098/005/)
-
-#### GWS.COMMONCONTROLS.2.2v0.2
-Use of context-aware access for more granular controls, including using Advanced Mode (CEL), MAY be maximized and tailored if necessary.
-
-- _Rationale:_ Unless you create and assign access levels, enabling context-aware access does not provide any additional protection. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on the user and/or device context. Advanced Mode's Common Expressions Language (CEL) gives administrators the ability to tailor access policies for devices, time-based use cases, authentication, and to combine multiple conditions into tailored controls.
-- _Last modified:_ July 11, 2023
+- _Note:_ More granular controls may be used if the agency needs it.
 
 - MITRE ATT&CK TTP Mapping
   - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
@@ -296,10 +289,10 @@ To turn on Context-Aware Access:
 1.  Access the [Google Admin console](https://admin.google.com/).
 2.  From the menu, go to **Security** -\> **Access and data control** -\> **Context-Aware Access**.
 3.  Verify **Context-Aware Access** is **ON for everyone**. If not, click **Turn On**.
+4.  Select **Access Level** and select **Create Access Level** and determine the conditions of the rule per agency needs.
+5.  Select **Assign access levels to apps** and select Apps to apply the rule onto.
 
-#### GWS.COMMONCONTROLS.2.2v0.2 Instructions
 Note that the implementation details of context-aware access use cases will vary per agency. Refer to [Google's documentation](https://support.google.com/a/answer/12643733) on implementing context-aware access for your specific use cases. Common use cases include:
-
 -   Require company-owned on desktop but not on mobile device
 -   Require basic device security
 -   Allow access to contractors only through the corporate network
@@ -516,7 +509,7 @@ All highly privileged accounts SHALL leverage Google Account authentication with
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 #### GWS.COMMONCONTROLS.6.2v0.2
-A minimum of **two** and maximum of **four** separate and distinct super admin users SHALL be configured.
+A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.
 
 - _Rationale:_ The super admin role provides unfettered access to the workspace. Properly managing the number of users with this level of access makes workspace compromise more challenging. However, having too few accounts can be problematic as it increases the risk of losing admin access entirely (e.g., if a super admin forgets their password); having between 2 and 4 balances these two concerns.
 - _Last modified:_ July 10, 2023
@@ -593,6 +586,7 @@ Account conflict management SHALL be configured to replace conflicting unmanaged
 -   [Google Workspace Updates Blog | Resolve conflict accounts faster with the new Conflict Accounts Management tool](https://workspaceupdates.googleblog.com/2023/08/conflict-accounts-management-tool.html)
 -   [Google Cloud Architecture Center | Migrating consumer accounts](https://cloud.google.com/architecture/identity/migrating-consumer-accounts#using_a_conflicting_account)
 -   [Google Cloud Architecture Center | Best practices for planning accounts and organizations](https://cloud.google.com/architecture/identity/best-practices-for-planning)
+-   [How a conflicting account is created](https://support.google.com/accounts/answer/181526)
 
 ### Prerequisites
 
@@ -718,20 +712,6 @@ Agencies need to have a process in place to manage and control application acces
 ### Policies
 
 #### GWS.COMMONCONTROLS.10.1v0.2
-Agencies SHALL develop and implement a process to explicitly allow-list (trust) third-party app access to GWS services.
-
-- _Rationale:_ Third-party apps may include malicious content. Developing a process to review and approve apps reduces the risk of allowing malicious apps to connect to the workspace.
-- _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
-    - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
-  - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
-    - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
-  - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
-    - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
-
-#### GWS.COMMONCONTROLS.10.2v0.2
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
 
 - _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
@@ -745,7 +725,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.3v0.2
+#### GWS.COMMONCONTROLS.10.2v0.2
 Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 
 - _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with policy 10.1.
@@ -759,7 +739,7 @@ Agencies SHALL NOT allow users to consent to access to low-risk scopes.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.4v0.2
+#### GWS.COMMONCONTROLS.10.3v0.2
 Agencies SHALL NOT trust unconfigured internal apps.
 
 - _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
@@ -773,7 +753,7 @@ Agencies SHALL NOT trust unconfigured internal apps.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.5v0.2
+#### GWS.COMMONCONTROLS.10.4v0.2
 Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 - _Rationale:_ External apps may contain vulnerabilities and malicious content. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
@@ -807,28 +787,25 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
 2.  Go to **Security** -\> **Access and Data Control** -\> **API controls.**
 
 #### GWS.COMMONCONTROLS.10.1v0.2 instructions:
-1.  There are no implementation steps for this policy
-
-#### GWS.COMMONCONTROLS.10.2v0.2 instructions:
 1.  Select **Manage Google Services.**
 2.  Select the **Services box** to check all services boxes.
 3.  Once this box is selected, then the **Change access** link at the top of console will be available; select it.
 4.  Select **Restricted: Only trusted apps can access a service.**
 5.  Select **Change** then **confirm** if prompted.
 
-#### GWS.COMMONCONTROLS.10.3v0.2 instructions:
+#### GWS.COMMONCONTROLS.10.2v0.2 instructions:
 1.  Select **Manage Google Services.**
 2.  Select the **Services box** to check all services boxes.
 3.  Once this box is selected, then the **Change access** link at the top of console will be available; select it.
 4.  Ensure to uncheck the check box next to **For apps that are not trusted, allow users to give access to OAuth scopes that aren't classified as high-risk.**
 5.  Select **Change** then **confirm** if prompted.
 
-#### GWS.COMMONCONTROLS.10.4v0.2 Instructions
+#### GWS.COMMONCONTROLS.10.3v0.2 Instructions
 1.  Select **Settings.**
 2.  Select **Internal apps** and uncheck the box next to **Trust internal apps.**
 3.  Select **SAVE.**
 
-#### GWS.COMMONCONTROLS.10.5v0.2 Instructions
+#### GWS.COMMONCONTROLS.10.4v0.2 Instructions
 1.  Select **Settings.**
 2.  Select **Unconfigured third-party apps** and select **Don't allow users to access any third-party apps**
 3.  Select **SAVE.**
@@ -847,7 +824,7 @@ Some older versions of common software may break when this control is implemente
 ### Policies
 
 #### GWS.COMMONCONTROLS.11.1v0.2
-Only approved Google Workspace Marketplace applications SHOULD be allowed for installation.
+Only approved Google Workspace Marketplace applications SHALL be allowed for installation.
 
 - _Rationale:_ Marketplace apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
 - _Last modified:_ October 24, 2023
@@ -1075,11 +1052,9 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 ### Implementation
 
 #### GWS.COMMONCONTROLS.14.1v0.2 Instructions
-1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.  Go to Menu [Account \> Account settings \> Legal and compliance](https://admin.google.com/ac/companyprofile/legal).
-3.  Click **Sharing options.**
-4.  Select **Enabled.**
-5.  Click **Save**.
+Follow the configuration instructions unique to the products and integration patterns at your organization to send the security logs to the security operations center for monitoring.
+
+Note: Agencies can benefit from security detection capabilities offered by the CISA Cloud Log Aggregation Warehouse (CLAW) system. Agencies are urged to send the logs to CLAW. Contact CISA at [cyberliason@cisa.dhs.gov]
 
 #### GWS.COMMONCONTROLS.14.2v0.2 Instructions
 1.  There is no implementation for this policy.
@@ -1139,3 +1114,71 @@ To configure Supplemental Data Storage per the policy:
 3.	Click the **Supplemental Data Storage** card.
 4.	Ensure the checkbox for "**Russian Federation**" is unchecked.
 6.	Click **Save**.
+
+
+## 16. Additional Google Services
+
+This section covers the Google services that do not have an individual control and whether these services are on or off.
+
+### Policy
+
+#### GWS.COMMONCONTROLS.16.1v0.2
+Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.
+
+- _Rationale_: Allowing access to additional google services without a need may create unnecessary vulnerabilities within the Google Workspace environment. By turning these services off, it mitigates the risk by not allowing access.
+- _Last modified:_ June 11, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
+  - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
+    - [T1204:001: Trusted Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
+    - [T1204:002: Trusted Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
+    - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
+
+### Resources
+-	[GWS Admin Help \| Turn on or off additional Google services](https://support.google.com/a/answer/181865)
+
+### Prerequisites
+
+- Super Admin role
+
+### Implementation
+
+#### GWS.COMMONCONTROLS.16.1v0.2 Instructions
+To configure additional services per the policy:
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.	Navigate to **Apps** -> **Additional Google services**.
+3.	Click **CHANGE** at the top where it says if **Access to additional services without individual control for all organizational units is On/Off**.
+4.	Select the option: "**OFF for everyone**"
+6.	Click **Save**.
+
+## 17. Multi-Party Approval
+This section covers whether multiple super admins need to approve changes to specific admin console settings.
+
+### Policy
+
+#### GWS.COMMONCONTROLS.17.1v0.2
+Require multi party approval for sensitive admin actions SHALL be enabled.
+
+- _Rationale_: Changes to sensitive admin settings, such as disabling 2-step verification, could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
+- _Last modified:_ June 20, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - No TTP Mappings
+
+### Resources
+-	[GWS Admin Help \| Multi-party approval for sensitive actions](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13790448%3Fhl%3Den&assistant_id=generic-unu&product_context=13790448&product_name=UnuFlow&trigger_context=a)
+
+### Prerequisites
+
+- Super Admin role
+
+### Implementation
+
+#### GWS.COMMONCONTROLS.17.1v0.2 Instructions
+To configure additional services per the policy:
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.	Navigate to **Security** -> **Authentication** -> **Multi-party approval settings**.
+3.	Ensure **Require multi party approval for sensitive admin actions** is checked.
+4.	Click **Save**.
