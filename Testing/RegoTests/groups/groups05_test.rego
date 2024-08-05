@@ -346,7 +346,7 @@ test_GroupConservationViewPermission_Incorrect_V7 if {
 
 test_GroupConservationViewPermission_Incorrect_V8 if {
     # Test group conversation view permissions when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.5.1v0.1"
+    PolicyId := "GWS.GROUPS.5.1v0.2"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -382,6 +382,7 @@ test_GroupConservationViewPermission_Incorrect_V8 if {
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    print(RuleOutput)
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
