@@ -40,7 +40,7 @@ def verify_output_type(output_path: str, output: list) -> list:
             # Check for valid json
             if child_path.endswith(".json"):
                 try:
-                    with open(child_path) as jsonfile:
+                    with open(child_path, encoding="utf-8") as jsonfile:
                         json.load(jsonfile)
                 except ValueError as e:
                     raise ValueError(f"{child_path} contains invalid json, {e}")
