@@ -140,7 +140,8 @@ test_GroupConservationViewPermission_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+        "<ul><li>Test Top-Level OU: ",
         "Permission to view conversations is set to domain users</li></ul>"])
 }
 
@@ -172,7 +173,8 @@ test_GroupConservationViewPermission_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+        "<ul><li>Test Top-Level OU: ",
         "Permission to view conversations is set to managers</li></ul>"])
 }
 
@@ -204,7 +206,8 @@ test_GroupConservationViewPermission_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+        "<ul><li>Test Top-Level OU: ",
         "Permission to view conversations is set to owners</li></ul>"])
 }
 
@@ -249,7 +252,8 @@ test_GroupConservationViewPermission_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+        "<ul><li>Test Top-Level OU: ",
         "Permission to view conversations is set to domain users</li></ul>"])
 }
 
@@ -294,7 +298,8 @@ test_GroupConservationViewPermission_Incorrect_V6 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+        "<ul><li>Test Top-Level OU: ",
         "Permission to view conversations is set to managers</li></ul>"])
 }
 
@@ -339,7 +344,8 @@ test_GroupConservationViewPermission_Incorrect_V7 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+        "<ul><li>Test Top-Level OU: ",
         "Permission to view conversations is set to owners</li></ul>"])
 }
 #--
@@ -382,11 +388,11 @@ test_GroupConservationViewPermission_Incorrect_V8 if {
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    print(RuleOutput)
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
+        "<ul><li>Test Top-Level OU: ",
         "Permission to view conversations is set to anyone on the internet</li></ul>"])
 }
 #--
