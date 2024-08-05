@@ -5,7 +5,7 @@ def pytest_addoption(parser):
     parser.addoption("--subjectemail", action="store")
     parser.addoption("--domain", action="store")
 
-@pytest.fixture 
+@pytest.fixture
 def subjectemail(pytestconfig):
     return pytestconfig.getoption("subjectemail")
 

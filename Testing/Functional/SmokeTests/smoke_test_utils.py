@@ -5,7 +5,7 @@
 import pytest
 import os
 import json
-from scubagoggles.orchestrator import gws_products
+from scubagoggles.orchestrator import Orchestrator
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
@@ -32,6 +32,10 @@ def get_output_path() -> str:
     return os.path.join(os.getcwd(), directories[0])
 
 def prepend_file_protocol(path: str) -> str:
+    """
+
+    """
+
     if not path.startswith("file://"):
         path = "file://" + path
     return path
@@ -88,9 +92,10 @@ def run_selenium(browser, domain):
     h1 = browser.find_element(By.TAG_NAME, "h1").text
     assert h1 == BASELINE_REPORT_H1
 
+    gws_products = Orchestrator.gws_products()
     products = {
         product: { "title": f"{product} Baseline Report" }
-        for product in gws_products()["prod_to_fullname"].values()
+        for product in gws_products["prod_to_fullname"].values()
     }
 
     # Before entering loop check that we actually display 10 rows in table
