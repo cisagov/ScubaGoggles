@@ -67,8 +67,9 @@ def verify_all_outputs_exist(output: list, required_entries: list):
 def verify_scubaresults(jsonfile):
     scubaresults = json.load(jsonfile)
     summaries = scubaresults["Summary"]
-    for summary in summaries.values():
-        assert summary["Errors"] == 0
+    for product, summary in summaries.items():
+        if summary["Errors"] != 0:
+            raise ValueError(f"{product} contains errors in the report")
 
 def run_selenium(browser, domain):
     verify_navigation_links(browser)

@@ -43,9 +43,7 @@ class SmokeTest:
             scubaresults_path: str = os.path.join(output_path, SCUBA_RESULTS)
             with open(scubaresults_path) as jsonfile:
                 verify_scubaresults(jsonfile)
-        except ValueError as e:
-            pytest.fail(f"{scubaresults_path} contains invalid json, {e}")
-        except Exception as e:
+        except (ValueError, Exception) as e:
             pytest.fail(f"An error occurred, {e}")
 
     def test_scubagoggles_report(self, browser, domain):

@@ -6,6 +6,8 @@ inputs:
   opa-version:
     required: true
     default: "0.60.0"
+  python-version:
+    required: true
 
 runs:
   using: "composite"
