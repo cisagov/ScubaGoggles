@@ -1,5 +1,5 @@
 """
-    smoke_test.py declares a SmokeTest class for ScubaGoggles automation testing.
+smoke_test.py declares a SmokeTest class for ScubaGoggles automation testing.
 """
 
 import subprocess
@@ -30,10 +30,10 @@ class SmokeTest:
     """
     def test_scubagoggles_output(self, subjectemail):
         """
-            Test if the `scubagoggles gws` command generates correct output for all baselines.
-
-            Args:
-                subjectemail: The email address of a user for the service account
+        Test if the `scubagoggles gws` command generates correct output for all baselines.
+        
+        Args:
+            subjectemail: The email address of a user for the service account
         """
         try:
             command: str = f"scubagoggles gws --subjectemail {subjectemail} --quiet"
@@ -47,7 +47,7 @@ class SmokeTest:
 
     def test_scubaresults(self):
         """
-            Determine if ScubaResults.json contains API errors or exceptions.
+        Determine if ScubaResults.json contains API errors or exceptions.
         """
         try:
             output_path: str = get_output_path()
@@ -59,14 +59,14 @@ class SmokeTest:
 
     def test_scubagoggles_report(self, browser, domain):
         """
-            Test if the generated baseline reports are correct,
-            i.e. BaselineReports.html, CalendarReport.html, ChatReport.html
+        Test if the generated baseline reports are correct,
+        i.e. BaselineReports.html, CalendarReport.html, ChatReport.html
         """
         try:
             output_path: str = get_output_path()
             report_path: str = prepend_file_protocol(os.path.join(output_path, BASELINE_REPORTS))
             browser.get(report_path)
             run_selenium(browser, domain)
-        except (ValueError, Exception) as e:
+        except (ValueError, AssertionError, Exception) as e:
             browser.quit()
             pytest.fail(f"An error occurred, {e}")

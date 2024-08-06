@@ -1,5 +1,5 @@
 """
-    selenium_browser.py declares a Browser class for use in ScubaGoggles testing.    
+selenium_browser.py declares a Browser class for use in ScubaGoggles testing.    
 """
 
 from selenium import webdriver
@@ -10,7 +10,6 @@ class Browser:
     The Browser class encapsulates the setup, usage, and teardown of a
     Selenium WebDriver instance for automated browser interactions.
     """
-
     def __init__(self):
         chrome_options = Options()
         chrome_options.add_argument("--headless")

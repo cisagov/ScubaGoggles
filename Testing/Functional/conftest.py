@@ -1,3 +1,7 @@
+"""
+    conftest.py serves as a configuration file for pytest.
+"""
+
 import pytest
 from SmokeTests.selenium_browser import Browser
 
