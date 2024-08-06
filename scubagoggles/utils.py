@@ -63,4 +63,4 @@ def get_package_version(package: str) -> str:
         package_version = version(package)
         return package_version
     except PackageNotFoundError as e:
-        raise PackageNotFoundError(f"Package was not found, {e}")
+        raise PackageNotFoundError("Package was not found") from e
