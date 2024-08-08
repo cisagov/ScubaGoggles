@@ -1856,7 +1856,7 @@ tests contains {
         "the default setting is non-compliant; manual check recommended."
     ]),
     "ActualValue": {"EMAIL_SPAM_ALLOWLIST": "No relevant event in the current logs"},
-    "RequirementMet": false,
+    "RequirementMet": true,
     "NoSuchEvent": true
 }
 if {
@@ -1869,7 +1869,7 @@ tests contains {
     "Criticality": "Should",
     "ReportDetails": EmailAllowlistSettingDetailsStr(LastEvent),
     "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
-    "RequirementMet": true,
+    "RequirementMet": Status,
     "NoSuchEvent": true
 }
 if {
