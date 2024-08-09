@@ -276,7 +276,11 @@ tests contains {
     "PolicyId": "GWS.MEET.4.1v0.2",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
+    "ActualValue": concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ]),
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
