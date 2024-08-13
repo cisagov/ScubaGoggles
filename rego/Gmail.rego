@@ -1853,7 +1853,7 @@ tests contains {
     "ReportDetails": concat("", [
         "No relevant event in the current logs. ",
         "While we are unable to determine the state from the logs, ",
-        "the default setting is non-compliant; manual check recommended."
+        "the default setting is compliant; manual check recommended."
     ]),
     "ActualValue": {"EMAIL_SPAM_ALLOWLIST": "No relevant event in the current logs"},
     "RequirementMet": true,
@@ -1870,7 +1870,7 @@ tests contains {
     "ReportDetails": EmailAllowlistSettingDetailsStr(LastEvent),
     "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
     "RequirementMet": Status,
-    "NoSuchEvent": true
+    "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsNoOU(LogEvents, "EMAIL_SPAM_ALLOWLIST")
