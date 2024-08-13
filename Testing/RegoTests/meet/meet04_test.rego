@@ -369,8 +369,8 @@ test_HostMan_Incorrect_V5 if {
             }
         ]},
         "tenant_info": {
-            "topLevelOU": "Test Top-Level OU"
-        },
+            "topLevelOU": ""
+        }
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
