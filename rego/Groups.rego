@@ -45,7 +45,7 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto collaboration_policy", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "GroupsSharingSettingsProto collaboration_policy", utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -358,7 +358,7 @@ tests contains {
 }
 if {
     DefaultSafe := true
-    Events := utils.FilterEvents(LogEvents, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, "GroupsSharingSettingsProto allow_unlisted_groups", utils.TopLevelOU)
     count(Events) == 0
 }
 
