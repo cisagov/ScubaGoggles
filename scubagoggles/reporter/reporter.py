@@ -276,6 +276,8 @@ class Reporter:
             "Errors": 0,
             "Failures": 0,
             "Warnings": 0,
+            # While ScubaGoggles doesn't currently have the capability to omit controls,
+            # this key is needed here to maintain parity with ScubaGear.
             "Omit": 0
         }
 
