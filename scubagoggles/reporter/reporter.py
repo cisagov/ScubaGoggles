@@ -275,7 +275,8 @@ class Reporter:
             "Passes": 0,
             "Errors": 0,
             "Failures": 0,
-            "Warnings": 0
+            "Warnings": 0,
+            "Omit": 0
         }
 
         for baseline_group in self._product_policies:
