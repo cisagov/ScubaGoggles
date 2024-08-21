@@ -8,7 +8,7 @@ We adhere to [GitHub flow](https://docs.github.com/en/get-started/using-github/g
 
 There are exceptions to this, necessitated by the extensive review process the baseline documents themselves undergo, during which no baseline changes can be made.
 To accommodate this, the development lifecycle on ScubaGoggles is as follows:
-![image](https://github.com/user-attachments/assets/5747d1f5-2fa0-49a6-9efe-dc719ef3ed43)
+![image](/docs/images/scubagoggles_lifecycle.svg)
 
 
 Baseline submission triggers a baseline freeze, at which point the following actions need to be performed:
