@@ -47,7 +47,8 @@ In some cases, there may be reasonable exceptions to this rule, but in general, 
 
 ### Step 2: Make a Pull Request
 1. Open a new pull request for your branch. If you recently pushed to your branch, when you visit the GitHub repo in a web browser you'll see a suggestion to start a pull request.
-![image](https://github.com/user-attachments/assets/67619b70-9fc9-41cf-a4d7-8c611e007194)
+![image](https://github.com/user-attachments/assets/e6de2e67-6fd6-4d30-8c5b-790151ea906b)
+
 
 Otherwise, go to the "Pull requests" tab and click "New pull request"
 
@@ -56,7 +57,7 @@ Otherwise, go to the "Pull requests" tab and click "New pull request"
 4. If this is a baseline change and we are in a baseline freeze, select the dedicated baseline change branch as the "base ref." Otherwise, leave it as its default of main.
 ![image](https://github.com/user-attachments/assets/0779cdbb-b888-463a-9cc8-35a16a1735ee)
 5. Give the pull request a descriptive, human readable name, preferably describing an action in the imperative form.
-For example, for the issue above I might name the pull request "Add smoke test documentation."
+For example, for the issue above you might name the pull request "Add smoke test documentation."
 6. Add the PR to the correct project and the current milestone.
 7. Follow the template!
     - Under motivation and context, if you’re not sure what to put, you can just put "Closes #issue-number," e.g., "Closes #341."
