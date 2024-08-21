@@ -267,7 +267,6 @@ class Reporter:
         ind_report_name = product_capitalized + "Report"
         fragments = []
         json_data = []
-        baseline_version = '0.2'
         tool_version = '0.2.0'
         github_url = self._github_url
         report_stats = {
