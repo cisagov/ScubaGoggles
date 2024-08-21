@@ -8,18 +8,21 @@ We adhere to [GitHub flow](https://docs.github.com/en/get-started/using-github/g
 
 There are exceptions to this, necessitated by the extensive review process the baseline documents themselves undergo, during which no baseline changes can be made.
 To accommodate this, the development lifecycle on ScubaGoggles is as follows:
-![image](https://github.com/user-attachments/assets/cc9fbcea-16b9-4e31-a77d-7f53bb4b22d3)
+![image](https://github.com/user-attachments/assets/5747d1f5-2fa0-49a6-9efe-dc719ef3ed43)
+
 
 Baseline submission triggers a baseline freeze, at which point the following actions need to be performed:
 1. Bump the code in main to the upcoming version (to reduce merge conflicts downstream)
-2. Create a temporary protected branch dedicated to baseline changes.
+2. Make a note of the last commit hash, to help in case of complications rebasing down the line.
+3. Create a temporary protected branch dedicated to baseline changes.
 
 A new release triggers the transision back to normal operations. At this time, the following actions need to be performed:
-1. Create the release off of current main
-2. Rebase the temporary baseline branch with main
-3. Implement the baseline code issues created during step 3 to get the release branch into a fully functional state. Pause all other code development
-4. Merge the baseline branch into main
-5. Delete the baseline branch
+1. Pause development on main and perform functional testing
+2. Assuming the testing results are satisfactory, create the release off of main
+3. Rebase the temporary baseline branch with main
+4. Implement the baseline code issues created during step 3 to get the release branch into a fully functional state
+5. Merge the baseline branch into main
+6. Delete the baseline branch
 
 ## Creating Issues
 All needed changes (e.g., new features, bug fixes) need to be tracked in an issue. When creating an issue:
