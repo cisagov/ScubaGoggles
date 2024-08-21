@@ -4,6 +4,7 @@ utils.py is for functions that could be used in more than one place
 """
 
 from pathlib import Path
+from importlib.metadata import version, PackageNotFoundError
 
 def create_subset_inverted_dict(dictionary: dict, keys: list) -> dict:
     """
@@ -53,3 +54,13 @@ def rel_abs_path(file_path: str, rel_path) -> str:
     """
     current_dir = Path(file_path).resolve().parent
     return (current_dir / rel_path).resolve()
+
+def get_package_version(package: str) -> str:
+    """
+    Get the current version for a package
+    """
+    try:
+        package_version = version(package)
+        return package_version
+    except PackageNotFoundError as e:
+        raise PackageNotFoundError("Package was not found") from e
