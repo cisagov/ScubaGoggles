@@ -19,7 +19,7 @@ setup(name='scubagoggles',
         'google-auth-oauthlib==0.4.0',
         'MarkupSafe==2.1.1',
         'dnspython==2.6.1',
-        'pandas==1.5.0',
+        'pandas==2.0.0',
         'tqdm==4.66.3',
         'requests==2.32.0'
       ],

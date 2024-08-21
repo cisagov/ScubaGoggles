@@ -8,7 +8,7 @@ To download ScubaGoggles:
 3. Extract the folder in the zip file.
 
 ## Installing Python Dependencies
-Minimum required Python version to run the tool is `3.7.16`.
+As of August 2024, minimum required Python version to run the tool is `3.10.x` to support newer version of dependent packages. To support newer version of packages, you may need to update to a newer Python version.
 
 ### Installing in a Virtual Environment
 The following commands are used to set up a python virtual environment (venv) to install the needed python dependencies.
