@@ -21,9 +21,9 @@ def read_baseline_docs(baseline_path:pathlib.Path, prod_to_fullname:dict):
     # map baseline short name i.e gmail to markdown file name
     # assumes the product fullname is in the markdown file name
     prod_to_baselinemd = {}
-    for product, fullname in prod_to_fullname.items():
+    for product in prod_to_fullname.keys():
         for baseline in baseline_md:
-            if fullname in baseline:
+            if product in baseline:
                 prod_to_baselinemd[product] = baseline
 
     # create a dict containing Policy Group and Individual policies
