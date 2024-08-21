@@ -191,12 +191,12 @@ test_EnhancedPreDeliveryMessageScanning_Incorrect_V1 if {
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
+    RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
         "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
         "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
+        "is compliant; manual check recommended."
     ])}
 
 test_EnhancedPreDeliveryMessageScanning_Incorrect_V2 if {

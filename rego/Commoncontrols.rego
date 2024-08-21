@@ -651,7 +651,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Enforce strong password", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -795,7 +795,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Enable password reuse", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -842,7 +842,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Password reset frequency", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -1486,7 +1486,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -1653,7 +1653,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := true
+    DefaultSafe := false
     NoSuchEvent12_1 == true
 }
 
@@ -1768,7 +1768,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
     count(Events) == 0
 }

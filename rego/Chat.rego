@@ -43,7 +43,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents,  "ChatArchivingProto chatsDefaultToOffTheRecord", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -210,7 +210,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents,  "RoomOtrSettingsProto otr_state", utils.TopLevelOU)
     count(Events) == 0
 }

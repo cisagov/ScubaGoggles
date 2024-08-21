@@ -199,7 +199,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -557,7 +557,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents, "DEFAULT_LINK_SHARING_FOR_NEW_DOCS", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -738,7 +738,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -800,7 +800,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents,
         "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
     count(Events) == 0
@@ -885,7 +885,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     NoSuchEvent3_1(utils.TopLevelOU)
 }
 

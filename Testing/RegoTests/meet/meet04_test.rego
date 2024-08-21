@@ -211,12 +211,12 @@ test_HostMan_Incorrect_V1 if {
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
+    RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
         "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
         "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
+        "is compliant; manual check recommended."
     ])
 }
 
@@ -362,26 +362,23 @@ test_HostMan_Incorrect_V5 if {
                             "value":
                 "Warn for external participants External or unidentified participants in a meeting are given a label"
                         },
-                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "NEW_VALUE", "value": "false"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Secondary OU"},
                     ]
                 }]
             }
         ]},
         "tenant_info": {
-            "topLevelOU": "Test Top-Level OU"
-        },
+            "topLevelOU": ""
+        }
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ",
+    "Warning label for external or unidentified meeting participants is set to no warning label</li></ul>"])
 }
 #--
 

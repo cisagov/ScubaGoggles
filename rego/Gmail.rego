@@ -300,7 +300,7 @@ tests contains {
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 } if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Attachment safety Enable: protect against encrypted attachments from untrusted senders"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -358,7 +358,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Attachment safety Enable: protect against attachments with scripts from untrusted senders"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -475,7 +475,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Attachment safety Enable: automatically enables all future added settings"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -641,7 +641,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Links and external images safety Enable: identify links behind shortened URLs"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -698,7 +698,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Links and external images safety Enable: scan linked images"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -756,7 +756,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := concat("", [
         "Links and external images safety Enable: show warning prompt for click on links to ",
         "unstrusted domains" # NOTE: "unstrusted" really is the spelling the API uses
@@ -821,7 +821,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Links and external images safety Enable: automatically enables all future added settings"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -900,7 +900,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := concat("", [
         "Spoofing and authentication safety Enable: protect against domain spoofing using ",
         "similar domain names"
@@ -965,7 +965,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := concat("", ["Spoofing and authentication safety Enable: ",
                     "protect against spoofing of employee names"])
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
@@ -1039,7 +1039,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "Spoofing and authentication safety Enable: protect against inbound emails spoofing your domain"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -1439,7 +1439,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents, "ENABLE_EMAIL_USER_IMPORT", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -1739,7 +1739,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     Events := utils.FilterEventsOU(LogEvents, "OUTBOUND_RELAY_ENABLED", utils.TopLevelOU)
     count(Events) == 0
 }
@@ -1799,7 +1799,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "OutOfDomainWarningProto disable_untrusted_recipient_warning"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -1853,10 +1853,10 @@ tests contains {
     "ReportDetails": concat("", [
         "No relevant event in the current logs. ",
         "While we are unable to determine the state from the logs, ",
-        "the default setting is non-compliant; manual check recommended."
+        "the default setting is compliant; manual check recommended."
     ]),
     "ActualValue": {"EMAIL_SPAM_ALLOWLIST": "No relevant event in the current logs"},
-    "RequirementMet": false,
+    "RequirementMet": true,
     "NoSuchEvent": true
 }
 if {
@@ -1921,7 +1921,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    DefaultSafe := true
     SettingName := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
