@@ -20,7 +20,7 @@ A new release triggers the transision back to normal operations. At this time, t
 1. Pause development on main and perform functional testing
 2. Assuming the testing results are satisfactory, create the release off of main
 3. Rebase the temporary baseline branch with main
-4. Implement the baseline code issues created during step 3 to get the release branch into a fully functional state
+4. Implement the baseline code issues created during the baseline freeze to get the release branch into a fully functional state
 5. Merge the baseline branch into main
 6. Delete the baseline branch
 
