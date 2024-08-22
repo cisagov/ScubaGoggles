@@ -71,4 +71,5 @@ the two "closes" statements need to be on separate lines.
 ### Step 3: Closing Steps
 1. Address review feedback. NOTE: only the reviewer should click the "Resolve conversation" button for the feedack.
 2. After both reviewers approve, one of the reviewers should merge the PR (selecting "squash and commit")
-3. Delete the feature branch
+3. If this PR was merged to the dedicated baseline change branch, manually close any associated issues.
+4. Delete the feature branch
