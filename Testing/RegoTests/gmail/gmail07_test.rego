@@ -3,11 +3,11 @@ import future.keywords
 
 
 #
-# GWS.GMAIL.7.1v0.2
+# GWS.GMAIL.7.1v0.3
 #--
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.1v0.2"
+    PolicyId := "GWS.GMAIL.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -41,7 +41,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V1 if {
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.1v0.2"
+    PolicyId := "GWS.GMAIL.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -91,7 +91,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V2 if {
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.1v0.2"
+    PolicyId := "GWS.GMAIL.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -141,7 +141,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V3 if {
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-        PolicyId := "GWS.GMAIL.7.1v0.2"
+        PolicyId := "GWS.GMAIL.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -191,7 +191,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Correct_V4 if {
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.1v0.2"
+    PolicyId := "GWS.GMAIL.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -223,7 +223,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V1 if {
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.1v0.2"
+    PolicyId := "GWS.GMAIL.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -258,7 +258,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V2 if {
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.1v0.2"
+    PolicyId := "GWS.GMAIL.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -309,7 +309,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V3 if {
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.1v0.2"
+    PolicyId := "GWS.GMAIL.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -344,7 +344,7 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V4 if {
 
 test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.1v0.2"
+    PolicyId := "GWS.GMAIL.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -396,12 +396,12 @@ test_SpoofingAuthenticationProtectionSimilarDomainNameSpoofing_Incorrect_V5 if {
 
 
 #
-# GWS.GMAIL.7.2v0.2
+# GWS.GMAIL.7.2v0.3
 #--
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.2v0.2"
+    PolicyId := "GWS.GMAIL.7.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -433,7 +433,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V1 if {
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.2v0.2"
+    PolicyId := "GWS.GMAIL.7.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -479,7 +479,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V2 if {
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.2v0.2"
+    PolicyId := "GWS.GMAIL.7.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -525,7 +525,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V3 if {
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.2v0.2"
+    PolicyId := "GWS.GMAIL.7.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -571,7 +571,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Correct_V4 if {
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.2v0.2"
+    PolicyId := "GWS.GMAIL.7.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -603,7 +603,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V1 if {
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.2v0.2"
+    PolicyId := "GWS.GMAIL.7.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -636,7 +636,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V2 if {
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.2v0.2"
+    PolicyId := "GWS.GMAIL.7.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -683,7 +683,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V3 if {
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.2v0.2"
+    PolicyId := "GWS.GMAIL.7.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -716,7 +716,7 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V4 if {
 
 test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.2v0.2"
+    PolicyId := "GWS.GMAIL.7.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -763,11 +763,11 @@ test_SpoofingAuthenticationProtectionEmployeeNameSpoofing_Incorrect_V5 if {
 
 
 #
-# GWS.GMAIL.7.3v0.2
+# GWS.GMAIL.7.3v0.3
 #--
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.3v0.2"
+    PolicyId := "GWS.GMAIL.7.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -801,7 +801,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V1 if {
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.3v0.2"
+    PolicyId := "GWS.GMAIL.7.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -851,7 +851,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V2 if {
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.3v0.2"
+    PolicyId := "GWS.GMAIL.7.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -901,7 +901,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V3 if {
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.3v0.2"
+    PolicyId := "GWS.GMAIL.7.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -951,7 +951,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Correct_V4 if {
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.3v0.2"
+    PolicyId := "GWS.GMAIL.7.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -983,7 +983,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V1 if 
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.3v0.2"
+    PolicyId := "GWS.GMAIL.7.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1018,7 +1018,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V2 if 
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.3v0.2"
+    PolicyId := "GWS.GMAIL.7.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1069,7 +1069,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V3 if 
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.3v0.2"
+    PolicyId := "GWS.GMAIL.7.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1104,7 +1104,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V4 if 
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.3v0.2"
+    PolicyId := "GWS.GMAIL.7.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1155,12 +1155,12 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofing_Incorrect_V5 if 
 
 
 #
-# GWS.GMAIL.7.4v0.2
+# GWS.GMAIL.7.4v0.3
 #--
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.4v0.2"
+    PolicyId := "GWS.GMAIL.7.4v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1192,7 +1192,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V1 if {
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.4v0.2"
+    PolicyId := "GWS.GMAIL.7.4v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1238,7 +1238,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V2 if {
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.4v0.2"
+    PolicyId := "GWS.GMAIL.7.4v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1284,7 +1284,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V3 if {
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.4v0.2"
+    PolicyId := "GWS.GMAIL.7.4v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1331,7 +1331,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Correct_V4 if {
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.4v0.2"
+    PolicyId := "GWS.GMAIL.7.4v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1363,7 +1363,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V1 if {
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.4v0.2"
+    PolicyId := "GWS.GMAIL.7.4v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1396,7 +1396,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V2 if {
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.4v0.2"
+    PolicyId := "GWS.GMAIL.7.4v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1443,7 +1443,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V3 if {
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.4v0.2"
+    PolicyId := "GWS.GMAIL.7.4v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1476,7 +1476,7 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V4 if {
 
 test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.4v0.2"
+    PolicyId := "GWS.GMAIL.7.4v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1523,11 +1523,11 @@ test_SpoofingAuthenticationProtectionUnauthenticatedEmail_Incorrect_V5 if {
 
 
 #
-# GWS.GMAIL.7.5v0.2
+# GWS.GMAIL.7.5v0.3
 #--
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.5v0.2"
+    PolicyId := "GWS.GMAIL.7.5v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1561,7 +1561,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V1
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.5v0.2"
+    PolicyId := "GWS.GMAIL.7.5v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1611,7 +1611,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V2
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.5v0.2"
+    PolicyId := "GWS.GMAIL.7.5v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1661,7 +1661,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V3
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.5v0.2"
+    PolicyId := "GWS.GMAIL.7.5v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1711,7 +1711,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Correct_V4
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.5v0.2"
+    PolicyId := "GWS.GMAIL.7.5v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1743,7 +1743,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.5v0.2"
+    PolicyId := "GWS.GMAIL.7.5v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1778,7 +1778,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.5v0.2"
+    PolicyId := "GWS.GMAIL.7.5v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1829,7 +1829,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.5v0.2"
+    PolicyId := "GWS.GMAIL.7.5v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1864,7 +1864,7 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
 
 test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.5v0.2"
+    PolicyId := "GWS.GMAIL.7.5v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1914,11 +1914,11 @@ test_SpoofingAuthenticationProtectionInboundEmailDomainSpoofingGroups_Incorrect_
 }
 
 #
-# GWS.GMAIL.7.6v0.2
+# GWS.GMAIL.7.6v0.3
 #--
 test_SpoofingAuthenticationProtection_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.6v0.2"
+    PolicyId := "GWS.GMAIL.7.6v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2012,7 +2012,7 @@ test_SpoofingAuthenticationProtection_Correct_V1 if {
 
 test_SpoofingAuthenticationProtection_InCorrect_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.6v0.2"
+    PolicyId := "GWS.GMAIL.7.6v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2107,7 +2107,7 @@ test_SpoofingAuthenticationProtection_InCorrect_V1 if {
 
 test_SpoofingAuthenticationProtection_InCorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.6v0.2"
+    PolicyId := "GWS.GMAIL.7.6v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2202,11 +2202,11 @@ test_SpoofingAuthenticationProtection_InCorrect_V2 if {
 
 
 #
-# GWS.GMAIL.7.7v0.2
+# GWS.GMAIL.7.7v0.3
 #--
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.7.7v0.2"
+    PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2240,7 +2240,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V1 if {
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V2 if {
     # Test Spoofing and Authentication Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.7.7v0.2"
+    PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2290,7 +2290,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V2 if {
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V3 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.7v0.2"
+    PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2340,7 +2340,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V3 if {
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V4 if {
     # Test Spoofing and Authentication Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.7.7v0.2"
+    PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2390,7 +2390,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Correct_V4 if {
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V1 if {
     # Test Spoofing and Authentication Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.7.7v0.2"
+    PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2422,7 +2422,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V1 if {
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.7v0.2"
+    PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2457,7 +2457,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V2 if {
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.7v0.2"
+    PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2508,7 +2508,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V3 if {
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.7.7v0.2"
+    PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -2543,7 +2543,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V4 if {
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.7.7v0.2"
+    PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {

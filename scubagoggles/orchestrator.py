@@ -268,7 +268,7 @@ class Orchestrator:
             "ProductsAssessed": products_assessed,
             "ProductAbbreviationMapping": product_abbreviation_mapping,
             "Tool":  "ScubaGoggles",
-            "ToolVersion":  "0.2.0",
+            "ToolVersion":  "0.3.0",
             "TimeStampZulu": timestamp_zulu
         }
 

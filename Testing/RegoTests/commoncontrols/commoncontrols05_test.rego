@@ -2,12 +2,12 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.5.1v0.2
+# GWS.COMMONCONTROLS.5.1v0.3
 #--
 
 test_Strength_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -36,7 +36,7 @@ test_Strength_Correct_V1 if {
 
 test_Strength_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -76,7 +76,7 @@ test_Strength_Correct_V2 if {
 
 test_Strength_Correct_V3 if {
     # Test inheritance
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -127,7 +127,7 @@ test_Strength_Correct_V3 if {
 
 test_Strength_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -160,7 +160,7 @@ test_Strength_Incorrect_V1 if {
 
 test_Strength_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -204,7 +204,7 @@ test_Strength_Incorrect_V2 if {
 
 test_Strength_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -227,7 +227,7 @@ test_Strength_Incorrect_V3 if {
 
 test_Strength_Incorrect_V4 if {
     # Test no relevant events for top-level ou
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -260,7 +260,7 @@ test_Strength_Incorrect_V4 if {
 
 test_Strength_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -305,11 +305,11 @@ test_Strength_Incorrect_V5 if {
 
 
 #
-# GWS.COMMONCONTROLS.5.2v0.2
+# GWS.COMMONCONTROLS.5.2v0.3
 #--
 test_Length_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -338,7 +338,7 @@ test_Length_Correct_V1 if {
 
 test_Length_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -378,7 +378,7 @@ test_Length_Correct_V2 if {
 
 test_Length_Correct_V3 if {
     # Test longer than needed
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -407,7 +407,7 @@ test_Length_Correct_V3 if {
 
 test_Length_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -440,7 +440,7 @@ test_Length_Incorrect_V1 if {
 
 test_Length_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -484,7 +484,7 @@ test_Length_Incorrect_V2 if {
 
 test_Length_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -507,7 +507,7 @@ test_Length_Incorrect_V3 if {
 
 test_Length_Incorrect_V4 if {
     # Test no relevant events in top-level ou
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -540,7 +540,7 @@ test_Length_Incorrect_V4 if {
 
 test_Length_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -585,11 +585,11 @@ test_Length_Incorrect_V5 if {
 
 
 #
-# GWS.COMMONCONTROLS.5.3v0.2
+# GWS.COMMONCONTROLS.5.3v0.3
 #--
 test_Enforce_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -621,7 +621,7 @@ test_Enforce_Correct_V1 if {
 
 test_Enforce_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -667,7 +667,7 @@ test_Enforce_Correct_V2 if {
 
 test_Enforce_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -703,7 +703,7 @@ test_Enforce_Incorrect_V1 if {
 
 test_Enforce_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -753,7 +753,7 @@ test_Enforce_Incorrect_V2 if {
 
 test_Enforce_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -776,7 +776,7 @@ test_Enforce_Incorrect_V3 if {
 
 test_Enforce_Incorrect_V4 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -812,7 +812,7 @@ test_Enforce_Incorrect_V4 if {
 
 test_Enforce_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -863,11 +863,11 @@ test_Enforce_Incorrect_V5 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.5.4v0.2
+# GWS.COMMONCONTROLS.5.4v0.3
 #--
 test_Reuse_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -896,7 +896,7 @@ test_Reuse_Correct_V1 if {
 
 test_Reuse_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -936,7 +936,7 @@ test_Reuse_Correct_V2 if {
 
 test_Reuse_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -969,7 +969,7 @@ test_Reuse_Incorrect_V1 if {
 
 test_Reuse_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1013,7 +1013,7 @@ test_Reuse_Incorrect_V2 if {
 
 test_Reuse_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -1036,7 +1036,7 @@ test_Reuse_Incorrect_V3 if {
 
 test_Reuse_Incorrect_V4 if {
     # Test no relevant events for top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1069,7 +1069,7 @@ test_Reuse_Incorrect_V4 if {
 
 test_Reuse_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1113,12 +1113,12 @@ test_Reuse_Incorrect_V5 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.5.5v0.2
+# GWS.COMMONCONTROLS.5.5v0.3
 #--
 
 test_Expire_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1147,7 +1147,7 @@ test_Expire_Correct_V1 if {
 
 test_Expire_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1187,7 +1187,7 @@ test_Expire_Correct_V2 if {
 
 test_Expire_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1220,7 +1220,7 @@ test_Expire_Incorrect_V1 if {
 
 test_Expire_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1264,7 +1264,7 @@ test_Expire_Incorrect_V2 if {
 
 test_Expire_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -1287,7 +1287,7 @@ test_Expire_Incorrect_V3 if {
 
 test_Expire_Incorrect_V4 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1320,7 +1320,7 @@ test_Expire_Incorrect_V4 if {
 
 test_Expire_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {

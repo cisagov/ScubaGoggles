@@ -2,11 +2,11 @@ package chat
 import future.keywords
 
 #
-# GWS.CHAT.2.1v0.2
+# GWS.CHAT.2.1v0.3
 #--
 test_External_File_Sharing_Correct_V1 if {
     # Test users are not allowed to share files externally when there's only one event
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -38,7 +38,7 @@ test_External_File_Sharing_Correct_V1 if {
 test_External_File_Sharing_Correct_V2 if {
     # Test users are not allowed to share files externally when there's multiple events
     # and the most most recent is correct
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -82,7 +82,7 @@ test_External_File_Sharing_Correct_V2 if {
 
 test_External_File_Sharing_Correct_V3 if {
     # Test OU inheriting from parent
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -139,7 +139,7 @@ test_External_File_Sharing_Correct_V3 if {
 
 test_External_File_Sharing_Incorrect_V1 if {
     # Test no relevant events
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -171,7 +171,7 @@ test_External_File_Sharing_Incorrect_V1 if {
 
 test_External_File_Sharing_Incorrect_V2 if {
     # Test all allowed
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -203,7 +203,7 @@ test_External_File_Sharing_Incorrect_V2 if {
 
 test_External_File_Sharing_Incorrect_V3 if {
     # Test images allowed
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -235,7 +235,7 @@ test_External_File_Sharing_Incorrect_V3 if {
 
 test_External_File_Sharing_Incorrect_V4 if {
     # Test sharing allowed when there are multiple events
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -280,7 +280,7 @@ test_External_File_Sharing_Incorrect_V4 if {
 
 test_External_File_Sharing_Incorrect_V5 if {
     # Test allowing images, multiple events
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -325,7 +325,7 @@ test_External_File_Sharing_Incorrect_V5 if {
 
 test_External_File_Sharing_Incorrect_V6 if {
     # Test there's one event for a secondary OU but none for the primary OU
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -360,7 +360,7 @@ test_External_File_Sharing_Incorrect_V6 if {
 
 test_External_File_Sharing_Incorrect_V7 if {
     # Test there's multiple OUs
-    PolicyId := "GWS.CHAT.2.1v0.2"
+    PolicyId := "GWS.CHAT.2.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {

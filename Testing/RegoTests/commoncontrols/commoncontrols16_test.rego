@@ -2,12 +2,12 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.16.1v0.2
+# GWS.COMMONCONTROLS.16.1v0.3
 #--
 
 test_Unlisted_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.16.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.16.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -36,7 +36,7 @@ test_Unlisted_Correct_V1 if {
 
 test_Unlisted_Correct_V2 if {
     # Test inheritance
-    PolicyId := "GWS.COMMONCONTROLS.16.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.16.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -75,7 +75,7 @@ test_Unlisted_Correct_V2 if {
 }
 
 test_Unlisted_Incorrect_V1 if {
-    PolicyId := "GWS.COMMONCONTROLS.16.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.16.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -108,7 +108,7 @@ test_Unlisted_Incorrect_V1 if {
 
 test_Unlisted_Incorrect_V2 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.16.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.16.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 

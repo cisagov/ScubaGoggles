@@ -2,11 +2,11 @@ package gmail
 import future.keywords
 
 #
-# GWS.GMAIL.19.1v0.2
+# GWS.GMAIL.19.1v0.3
 #--
 test_Domains_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.GMAIL.19.1v0.2"
+    PolicyId := "GWS.GMAIL.19.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},
@@ -24,11 +24,11 @@ test_Domains_Correct_V1 if {
 #--
 
 #
-# GWS.GMAIL.19.2v0.2
+# GWS.GMAIL.19.2v0.3
 #--
 test_HideWarnings_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.GMAIL.19.2v0.2"
+    PolicyId := "GWS.GMAIL.19.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},
@@ -46,11 +46,11 @@ test_HideWarnings_Correct_V1 if {
 #--
 
 #
-# GWS.GMAIL.19.3v0.2
+# GWS.GMAIL.19.3v0.3
 #--
 test_BypassAll_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.GMAIL.19.3v0.2"
+    PolicyId := "GWS.GMAIL.19.3v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},

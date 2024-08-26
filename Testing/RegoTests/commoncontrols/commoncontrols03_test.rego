@@ -2,12 +2,12 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.3.1v0.2
+# GWS.COMMONCONTROLS.3.1v0.3
 #--
 
 test_SSO_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.3.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.3.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -36,7 +36,7 @@ test_SSO_Correct_V1 if {
 
 test_SSO_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.3.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.3.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -76,7 +76,7 @@ test_SSO_Correct_V2 if {
 
 test_SSO_Correct_V3 if {
     # Test inheritance
-    PolicyId := "GWS.COMMONCONTROLS.3.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.3.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -127,7 +127,7 @@ test_SSO_Correct_V3 if {
 
 test_SSO_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.3.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.3.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -160,7 +160,7 @@ test_SSO_Incorrect_V1 if {
 
 test_SSO_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.3.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.3.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -204,7 +204,7 @@ test_SSO_Incorrect_V2 if {
 
 test_SSO_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.3.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.3.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -227,7 +227,7 @@ test_SSO_Incorrect_V3 if {
 
 test_SSO_Incorrect_V4 if {
     # Test no relevant events in the top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.3.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.3.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -260,7 +260,7 @@ test_SSO_Incorrect_V4 if {
 
 test_SSO_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.3.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.3.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {

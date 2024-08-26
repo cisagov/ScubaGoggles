@@ -2,11 +2,11 @@ package chat
 import future.keywords
 
 #
-# GWS.CHAT.3.1v0.2
+# GWS.CHAT.3.1v0.3
 #--
 test_Space_History_Setting_Correct_V1 if {
     # Test space history setting when there's only one event - use case #1
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -34,7 +34,7 @@ test_Space_History_Setting_Correct_V1 if {
 
 test_Space_History_Setting_Correct_V2 if {
     # Test space history setting when there's only one event - use case #2
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -62,7 +62,7 @@ test_Space_History_Setting_Correct_V2 if {
 
 test_Space_History_Setting_Correct_V3 if {
     # Test space history setting when there's multiple events and the most most recent is correct - use case #1
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -100,7 +100,7 @@ test_Space_History_Setting_Correct_V3 if {
 
 test_Space_History_Setting_Correct_V4 if {
     # Test space history setting when there's multiple events and the most most recent is correct - use case #2
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -138,7 +138,7 @@ test_Space_History_Setting_Correct_V4 if {
 
 test_Space_History_Setting_Incorrect_V1 if {
     # Test space history setting when there are no relevant events
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -170,7 +170,7 @@ test_Space_History_Setting_Incorrect_V1 if {
 
 test_Space_History_Setting_Incorrect_V2 if {
     # Test space history setting when there's only one event and it's wrong - use case #1
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -199,7 +199,7 @@ test_Space_History_Setting_Incorrect_V2 if {
 
 test_Space_History_Setting_Incorrect_V3 if {
     # Test space history setting when there's only one event and it's wrong - use case #2
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -228,7 +228,7 @@ test_Space_History_Setting_Incorrect_V3 if {
 
 test_Space_History_Setting_Incorrect_V4 if {
     # Test space history setting when there are multiple events and the most recent is wrong - use case #1
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -267,7 +267,7 @@ test_Space_History_Setting_Incorrect_V4 if {
 
 test_Space_History_Setting_Incorrect_V5 if {
     # Test space history setting when there are multiple events and the most recent is wrong - use case #2
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -306,7 +306,7 @@ test_Space_History_Setting_Incorrect_V5 if {
 
 test_Space_History_Setting_Incorrect_V6 if {
     # Test there's an event for a secondary OU but not the top-level OU
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -338,7 +338,7 @@ test_Space_History_Setting_Incorrect_V6 if {
 
 test_Space_History_Setting_Incorrect_V7 if {
     # Test multiple OUs
-    PolicyId := "GWS.CHAT.3.1v0.2"
+    PolicyId := "GWS.CHAT.3.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {

@@ -2,11 +2,11 @@ package chat
 import future.keywords
 
 #
-# GWS.CHAT.6.1v0.2
+# GWS.CHAT.6.1v0.3
 #--
 test_Enable_Correct_V1 if {
     # Test correct 1 OU
-    PolicyId := "GWS.CHAT.6.1v0.2"
+    PolicyId := "GWS.CHAT.6.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -64,7 +64,7 @@ test_Enable_Correct_V1 if {
 
 test_Enable_Correct_V2 if {
     # Test correct 2 OUs, child OU overrides top-level settings
-    PolicyId := "GWS.CHAT.6.1v0.2"
+    PolicyId := "GWS.CHAT.6.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -162,7 +162,7 @@ test_Enable_Correct_V2 if {
 
 test_Enable_Correct_V3 if {
     # Test correct 2 OUs, child OU inherits
-    PolicyId := "GWS.CHAT.6.1v0.2"
+    PolicyId := "GWS.CHAT.6.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -260,7 +260,7 @@ test_Enable_Correct_V3 if {
 
 test_Enable_Incorrect_V1 if {
     # Test incorrect 1 OU, one conversation type is disabled
-    PolicyId := "GWS.CHAT.6.1v0.2"
+    PolicyId := "GWS.CHAT.6.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -323,7 +323,7 @@ test_Enable_Incorrect_V1 if {
 
 test_Enable_Incorrect_V2 if {
     # Test incorrect 1 OU, spaces restricted
-    PolicyId := "GWS.CHAT.6.1v0.2"
+    PolicyId := "GWS.CHAT.6.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -386,7 +386,7 @@ test_Enable_Incorrect_V2 if {
 
 test_Enable_Incorrect_V3 if {
     # Test correct 2 OUs, child OU overrides top-level settings
-    PolicyId := "GWS.CHAT.6.1v0.2"
+    PolicyId := "GWS.CHAT.6.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -489,7 +489,7 @@ test_Enable_Incorrect_V3 if {
 
 test_Enable_Incorrect_V4 if {
     # Test incorrect 1 OU, one setting is missing
-    PolicyId := "GWS.CHAT.6.1v0.2"
+    PolicyId := "GWS.CHAT.6.1v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -541,11 +541,11 @@ test_Enable_Incorrect_V4 if {
 #--
 
 #
-# GWS.CHAT.6.2v0.2
+# GWS.CHAT.6.2v0.3
 #--
 test_Categories_Correct_V1 if {
     # Test correct 1 OU
-    PolicyId := "GWS.CHAT.6.2v0.2"
+    PolicyId := "GWS.CHAT.6.2v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -581,7 +581,7 @@ test_Categories_Correct_V1 if {
 
 test_Categories_Correct_V2 if {
     # Test correct, 2 OUs, child OU overrides
-    PolicyId := "GWS.CHAT.6.2v0.2"
+    PolicyId := "GWS.CHAT.6.2v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -635,7 +635,7 @@ test_Categories_Correct_V2 if {
 
 test_Categories_Correct_V3 if {
     # Test correct, 2 OUs, child OU inherits
-    PolicyId := "GWS.CHAT.6.2v0.2"
+    PolicyId := "GWS.CHAT.6.2v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -681,7 +681,7 @@ test_Categories_Correct_V3 if {
 
 test_Categories_Incorrect_V1 if {
     # Test incorrect 1 OU
-    PolicyId := "GWS.CHAT.6.2v0.2"
+    PolicyId := "GWS.CHAT.6.2v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -720,7 +720,7 @@ test_Categories_Incorrect_V1 if {
 
 test_Categories_Incorrect_V2 if {
     # Test incorrect 2 OUs
-    PolicyId := "GWS.CHAT.6.2v0.2"
+    PolicyId := "GWS.CHAT.6.2v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -777,7 +777,7 @@ test_Categories_Incorrect_V2 if {
 
 test_Categories_Incorrect_V3 if {
     # Test incorrect no events
-    PolicyId := "GWS.CHAT.6.2v0.2"
+    PolicyId := "GWS.CHAT.6.2v0.3"
     Output := tests with input as {
         "chat_logs": {"items": [
 

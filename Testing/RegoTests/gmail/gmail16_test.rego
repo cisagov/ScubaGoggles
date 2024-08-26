@@ -3,11 +3,11 @@ import future.keywords
 
 
 #
-# GWS.GMAIL.16.1v0.2
+# GWS.GMAIL.16.1v0.3
 #--
 test_SecuritySandbox_Correct_V1 if {
     # Test Security Sandbox when there's only one event
-    PolicyId := "GWS.GMAIL.16.1v0.2"
+    PolicyId := "GWS.GMAIL.16.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -35,7 +35,7 @@ test_SecuritySandbox_Correct_V1 if {
 
 test_SecuritySandbox_Correct_V2 if {
     # Test Security Sandbox when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.16.1v0.2"
+    PolicyId := "GWS.GMAIL.16.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -73,7 +73,7 @@ test_SecuritySandbox_Correct_V2 if {
 
 test_SecuritySandbox_Correct_V3 if {
     # Test Security Sandbox when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.16.1v0.2"
+    PolicyId := "GWS.GMAIL.16.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -111,7 +111,7 @@ test_SecuritySandbox_Correct_V3 if {
 
     test_SecuritySandbox_Correct_V4 if {
     # Test Security Sandbox when there's correct events in multiple OUs and setting is inherited
-    PolicyId := "GWS.GMAIL.16.1v0.2"
+    PolicyId := "GWS.GMAIL.16.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -149,7 +149,7 @@ test_SecuritySandbox_Correct_V3 if {
 
 test_SecuritySandbox_Incorrect_V1 if {
     # Test Security Sandbox when there are no relevant events
-    PolicyId := "GWS.GMAIL.16.1v0.2"
+    PolicyId := "GWS.GMAIL.16.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -181,7 +181,7 @@ test_SecuritySandbox_Incorrect_V1 if {
 
 test_SecuritySandbox_Incorrect_V2 if {
     # Test Security Sandbox when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.16.1v0.2"
+    PolicyId := "GWS.GMAIL.16.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -210,7 +210,7 @@ test_SecuritySandbox_Incorrect_V2 if {
 
 test_SecuritySandbox_Incorrect_V3 if {
     # Test Security Sandbox when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.16.1v0.2"
+    PolicyId := "GWS.GMAIL.16.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -249,7 +249,7 @@ test_SecuritySandbox_Incorrect_V3 if {
 
 test_SecuritySandbox_Incorrect_V4 if {
     # Test Security Sandbox when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.16.1v0.2"
+    PolicyId := "GWS.GMAIL.16.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -278,7 +278,7 @@ test_SecuritySandbox_Incorrect_V4 if {
 
 test_SecuritySandbox_Incorrect_V5 if {
     # Test Security Sandbox when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.16.1v0.2"
+    PolicyId := "GWS.GMAIL.16.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -317,11 +317,11 @@ test_SecuritySandbox_Incorrect_V5 if {
 #--
 
 #
-# GWS.GMAIL.16.2v0.2
+# GWS.GMAIL.16.2v0.3
 #--
 test_Other_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.GMAIL.16.2v0.2"
+    PolicyId := "GWS.GMAIL.16.2v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},

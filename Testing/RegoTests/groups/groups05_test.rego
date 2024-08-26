@@ -7,7 +7,7 @@ import future.keywords
 #--
 test_GroupConservationViewPermission_Correct_V1 if {
     # Test group conversation view permissions when there's only one event
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -38,7 +38,7 @@ test_GroupConservationViewPermission_Correct_V1 if {
 
 test_GroupConservationViewPermission_Correct_V2 if {
     # Test group conversation view permissions when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -82,7 +82,7 @@ test_GroupConservationViewPermission_Correct_V2 if {
 
 test_GroupConservationViewPermission_Incorrect_V1 if {
     # Test group conversation view permissions when there are no relevant events
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -114,7 +114,7 @@ test_GroupConservationViewPermission_Incorrect_V1 if {
 
 test_GroupConservationViewPermission_Incorrect_V2 if {
     # Test group conversation view permissions when there's only one event and it's wrong
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -147,7 +147,7 @@ test_GroupConservationViewPermission_Incorrect_V2 if {
 
 test_GroupConservationViewPermission_Incorrect_V3 if {
     # Test group conversation view permissions when there's only one event and it's wrong
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -180,7 +180,7 @@ test_GroupConservationViewPermission_Incorrect_V3 if {
 
 test_GroupConservationViewPermission_Incorrect_V4 if {
     # Test group conversation view permissions when there's only one event and it's wrong
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -213,7 +213,7 @@ test_GroupConservationViewPermission_Incorrect_V4 if {
 
 test_GroupConservationViewPermission_Incorrect_V5 if {
     # Test group conversation view permissions when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -259,7 +259,7 @@ test_GroupConservationViewPermission_Incorrect_V5 if {
 
 test_GroupConservationViewPermission_Incorrect_V6 if {
     # Test group conversation view permissions when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -305,7 +305,7 @@ test_GroupConservationViewPermission_Incorrect_V6 if {
 
 test_GroupConservationViewPermission_Incorrect_V7 if {
     # Test group conversation view permissions when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -352,7 +352,7 @@ test_GroupConservationViewPermission_Incorrect_V7 if {
 
 test_GroupConservationViewPermission_Incorrect_V8 if {
     # Test group conversation view permissions when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.5.1v0.2"
+    PolicyId := "GWS.GROUPS.5.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
