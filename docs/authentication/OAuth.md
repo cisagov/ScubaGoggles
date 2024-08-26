@@ -31,7 +31,7 @@ Only complete this section if not authenticating via [Service Account](/docs/aut
 with an account with the necessary privileges and click allow.
 
 ## Add the Oauth App to the allowlist
-If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](/baselines/Common%20Controls%20Minimum%20Viable%20Secure%20Configuration%20Baseline%20v0.2.md#10-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
+If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](/baselines/commoncontrols.md#10-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
 
 1. Login to https://console.cloud.google.com
 2. Navigate to the appropriate project
