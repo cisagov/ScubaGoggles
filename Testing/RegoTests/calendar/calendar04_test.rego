@@ -2,11 +2,11 @@ package calendar
 import future.keywords
 
 #
-# GWS.CALENDAR.4.1v0.2
+# GWS.CALENDAR.4.1v0.3
 #--
 test_CalendarAppointmentSlot_Correct_V1 if {
     # Test Calendar Appointment Slot when there's only one event
-    PolicyId := "GWS.CALENDAR.4.1v0.2"
+    PolicyId := "GWS.CALENDAR.4.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -34,7 +34,7 @@ test_CalendarAppointmentSlot_Correct_V1 if {
 
 test_CalendarAppointmentSlot_Correct_V2 if {
     # Test Calendar Appointment Slot when there's multiple events and the most recent is correct
-    PolicyId := "GWS.CALENDAR.4.1v0.2"
+    PolicyId := "GWS.CALENDAR.4.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -72,7 +72,7 @@ test_CalendarAppointmentSlot_Correct_V2 if {
 
 test_CalendarAppointmentSlot_Correct_V3 if {
     # Test Calendar Appointment Slot when there's correct events in multiple OUs
-    PolicyId := "GWS.CALENDAR.4.1v0.2"
+    PolicyId := "GWS.CALENDAR.4.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -110,7 +110,7 @@ test_CalendarAppointmentSlot_Correct_V3 if {
 
 test_CalendarAppointmentSlot_Incorrect_V1 if {
     # Test Calendar Appointment Slot when there are no relevant events
-    PolicyId := "GWS.CALENDAR.4.1v0.2"
+    PolicyId := "GWS.CALENDAR.4.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -142,7 +142,7 @@ test_CalendarAppointmentSlot_Incorrect_V1 if {
 
 test_CalendarAppointmentSlot_Incorrect_V2 if {
     # Test Calendar Appointment Slot when there's only one event and it's wrong
-    PolicyId := "GWS.CALENDAR.4.1v0.2"
+    PolicyId := "GWS.CALENDAR.4.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -171,7 +171,7 @@ test_CalendarAppointmentSlot_Incorrect_V2 if {
 
 test_CalendarAppointmentSlot_Incorrect_V3 if {
     # Test Calendar Appointment Slot when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CALENDAR.4.1v0.2"
+    PolicyId := "GWS.CALENDAR.4.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -210,7 +210,7 @@ test_CalendarAppointmentSlot_Incorrect_V3 if {
 
 test_CalendarAppointmentSlot_Incorrect_V4 if {
     # Test Calendar Appointment Slot when there's only one event and it's wrong
-    PolicyId := "GWS.CALENDAR.4.1v0.2"
+    PolicyId := "GWS.CALENDAR.4.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -239,7 +239,7 @@ test_CalendarAppointmentSlot_Incorrect_V4 if {
 
 test_CalendarAppointmentSlot_Incorrect_V5 if {
     # Test Calendar Appointment Slot when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CALENDAR.4.1v0.2"
+    PolicyId := "GWS.CALENDAR.4.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {

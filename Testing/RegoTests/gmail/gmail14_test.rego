@@ -3,11 +3,11 @@ import future.keywords
 
 
 #
-# GWS.GMAIL.14.1v0.2
+# GWS.GMAIL.14.1v0.3
 #--
 test_EmailAllowlist_Correct_V1 if {
     # Test Email Allowlists when there's only one event
-    PolicyId := "GWS.GMAIL.14.1v0.2"
+    PolicyId := "GWS.GMAIL.14.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -38,7 +38,7 @@ test_EmailAllowlist_Correct_V1 if {
 
 test_EmailAllowlist_Correct_V2 if {
     # Test Email Allowlists when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.14.1v0.2"
+    PolicyId := "GWS.GMAIL.14.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -78,7 +78,7 @@ test_EmailAllowlist_Correct_V2 if {
 
 test_EmailAllowlist_Incorrect_V1 if {
     # Test Email Allowlists when there are no relevant events
-    PolicyId := "GWS.GMAIL.14.1v0.2"
+    PolicyId := "GWS.GMAIL.14.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -110,7 +110,7 @@ test_EmailAllowlist_Incorrect_V1 if {
 
 test_EmailAllowlist_Incorrect_V2 if {
     # Test Email Allowlists when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.14.1v0.2"
+    PolicyId := "GWS.GMAIL.14.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -138,7 +138,7 @@ test_EmailAllowlist_Incorrect_V2 if {
 
 test_EmailAllowlist_Incorrect_V3 if {
     # Test Email Allowlists when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.14.1v0.2"
+    PolicyId := "GWS.GMAIL.14.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {

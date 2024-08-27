@@ -10,7 +10,7 @@ import os
 import re
 
 CURRENT_VERSION = 'v0.1'
-REPLACEMENT_VERSION ='v0.2'
+REPLACEMENT_VERSION ='v0.3'
 
 PATH_TO_FILES = '../'
 FILES_TO_PROCESS = ['.md','rego','.csv']

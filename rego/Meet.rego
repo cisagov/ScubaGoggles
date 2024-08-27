@@ -10,7 +10,7 @@ LogEvents := utils.GetEvents("meet_logs")
 ##############
 
 #
-# Baseline GWS.MEET.1.1v0.2
+# Baseline GWS.MEET.1.1v0.3
 #--
 GetFriendlyValue1_1(Value) := "all users (including users not signed in with a Google account)" if {
     Value == "ALL"
@@ -50,7 +50,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.MEET.1.1v0.2",
+    "PolicyId": "GWS.MEET.1.1v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -64,7 +64,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.MEET.1.1v0.2",
+    "PolicyId": "GWS.MEET.1.1v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
@@ -84,7 +84,7 @@ if {
 ##############
 
 #
-# Baseline GWS.MEET.2.1v0.2
+# Baseline GWS.MEET.2.1v0.3
 #--
 GetFriendlyValue2_1(Value) := "any meetings, including meetings created with personal accounts" if {
     Value == "ALL"
@@ -124,7 +124,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.MEET.2.1v0.2",
+    "PolicyId": "GWS.MEET.2.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -138,7 +138,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.MEET.2.1v0.2",
+    "PolicyId": "GWS.MEET.2.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, NonCompliantGroups2_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1, "NonCompliantGroups": NonCompliantGroups2_1},
@@ -158,7 +158,7 @@ if {
 ##############
 
 #
-# Baseline GWS.MEET.3.1v0.2
+# Baseline GWS.MEET.3.1v0.3
 #--
 GetFriendlyValue3_1(Value) := "off" if {
     Value == "false"
@@ -198,7 +198,7 @@ if {
 }
 
 tests contains {
-        "PolicyId": "GWS.MEET.3.1v0.2",
+        "PolicyId": "GWS.MEET.3.1v0.3",
         "Criticality": "Shall",
         "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
         "ActualValue": "No relevant event in the current logs",
@@ -212,7 +212,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.MEET.3.1v0.2",
+    "PolicyId": "GWS.MEET.3.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, NonCompliantGroups3_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1, "NonCompliantGroups": NonCompliantGroups3_1},
@@ -232,7 +232,7 @@ if {
 ##############
 
 #
-# Baseline GWS.MEET.4.1v0.2
+# Baseline GWS.MEET.4.1v0.3
 #--
 GetFriendlyValue4_1(Value) := "no warning label" if {
     Value == "false"
@@ -273,7 +273,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.MEET.4.1v0.2",
+    "PolicyId": "GWS.MEET.4.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -288,7 +288,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.MEET.4.1v0.2",
+    "PolicyId": "GWS.MEET.4.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, NonCompliantGroups4_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1, "NonCompliantGroups": NonCompliantGroups4_1},
@@ -309,7 +309,7 @@ if {
 ##############
 
 #
-# Baseline GWS.MEET.5.1v0.2
+# Baseline GWS.MEET.5.1v0.3
 #--
 NonCompliantOUs5_1 contains {
     "Name": OU,
@@ -338,7 +338,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.MEET.5.1v0.2",
+    "PolicyId": "GWS.MEET.5.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -353,7 +353,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.MEET.5.1v0.2",
+    "PolicyId": "GWS.MEET.5.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1, "NonCompliantGroups": NonCompliantGroups5_1},

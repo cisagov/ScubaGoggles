@@ -41,7 +41,7 @@ Note: Even with this setting configured, group owners can still explicitly add e
 
 ### Baseline Policies
 
-#### GWS.GROUPS.1.1v0.2
+#### GWS.GROUPS.1.1v0.3
 Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.
 
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
@@ -61,7 +61,7 @@ Group access from outside the organization SHALL be disabled unless explicitly g
 
 ### Implementation
 
-#### GWS.GROUPS.1.1v0.2 Instructions
+#### GWS.GROUPS.1.1v0.3 Instructions
 To configure the settings for Sharing options:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
@@ -76,7 +76,7 @@ This section covers whether or not the owner of the group has the ability to add
 
 ### Policies
 
-#### GWS.GROUPS.2.1v0.2
+#### GWS.GROUPS.2.1v0.3
 Group owners' ability to add external members to groups SHOULD be disabled unless necessary for agency mission fulfillment.
 
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
@@ -98,7 +98,7 @@ Group owners' ability to add external members to groups SHOULD be disabled unles
 
 ### Implementation
 
-#### GWS.GROUPS.2.1v0.2 Instructions
+#### GWS.GROUPS.2.1v0.3 Instructions
 To configure the settings for Sharing options:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
@@ -113,7 +113,7 @@ This section covers whether or not an owner of a group has the ability to allow 
 
 ### Policies
 
-#### GWS.GROUPS.3.1v0.2
+#### GWS.GROUPS.3.1v0.3
 Group owners' ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.
 
 - _Rationale:_ Allowing external users to post opens the door for phishing or other malicious activity to be shared via Groups. Restricting posting by non-group members reduces this risk.
@@ -138,7 +138,7 @@ Group owners' ability to allow posting to a group by an external, non-group memb
 
 ### Implementation
 
-#### GWS.GROUPS.3.1v0.2 Instructions
+#### GWS.GROUPS.3.1v0.3 Instructions
 To configure the settings for Sharing options:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
@@ -153,7 +153,7 @@ This section covers who has the ability to create a new group within the organiz
 
 ### Policies
 
-#### GWS.GROUPS.4.1v0.2
+#### GWS.GROUPS.4.1v0.3
 Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.
 
 - _Rationale:_ Many settings for Google Workspace products can be set at the Group level. Allowing unrestricted group creation complicates setting management and opens channels of unmanaged communication.
@@ -175,7 +175,7 @@ Group creation SHOULD be restricted to admins within the organization unless nec
 
 ### Implementation
 
-#### GWS.GROUPS.4.1v0.2 Instructions
+#### GWS.GROUPS.4.1v0.3 Instructions
 To configure the settings for Sharing options:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
@@ -190,7 +190,7 @@ This section covers the default permissions assigned to the viewing of conversat
 
 ### Policies
 
-#### GWS.GROUPS.5.1v0.2
+#### GWS.GROUPS.5.1v0.3
 The default permission to view conversations SHOULD be set to All Group Members.
 
 - _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace organization. Restricting access to group members reduces the risk of data loss.
@@ -214,7 +214,7 @@ The default permission to view conversations SHOULD be set to All Group Members.
 
 ### Implementation
 
-#### GWS.GROUPS.5.1v0.2 Instructions
+#### GWS.GROUPS.5.1v0.3 Instructions
 To configure the settings for Sharing options:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
@@ -229,7 +229,7 @@ This section covers whether or not the owner of a group can hide the group from 
 
 ### Policies
 
-#### GWS.GROUPS.6.1v0.2
+#### GWS.GROUPS.6.1v0.3
 The Ability for Groups to be Hidden from the Directory SHALL be disabled.
 
 - _Rationale:_ Hidden groups are not visible, even to admins, in the list of groups found at groups.google.com, though they are still visible on the directory page on admin.google.com. As such, allowing for hidden groups increases the risk of groups being created without admin oversight.
@@ -251,7 +251,7 @@ The Ability for Groups to be Hidden from the Directory SHALL be disabled.
 
 ### Implementation
 
-#### GWS.GROUPS.6.1v0.2 Instructions
+#### GWS.GROUPS.6.1v0.3 Instructions
 To configure the settings for Sharing options:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
@@ -267,7 +267,7 @@ This section covers the access type setting for new groups that are created.
 
 ### Policies
 
-#### GWS.GROUPS.7.1v0.2
+#### GWS.GROUPS.7.1v0.3
 New Groups SHOULD be created with an Access type of Restricted unless necessary for agency mission fulfillment.
 
 - _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace organization. Restricting access to group members reduces the risk of data loss.
@@ -288,7 +288,7 @@ New Groups SHOULD be created with an Access type of Restricted unless necessary 
 
 ### Implementation
 
-#### GWS.GROUPS.7.1v0.2 Instructions
+#### GWS.GROUPS.7.1v0.3 Instructions
 To configure Access type for a Google Group:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).

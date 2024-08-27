@@ -2,11 +2,11 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.7.1v0.2
+# GWS.COMMONCONTROLS.7.1v0.3
 #--
 test_Conflicting_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.COMMONCONTROLS.7.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.7.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 

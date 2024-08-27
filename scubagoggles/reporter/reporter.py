@@ -174,8 +174,8 @@ class Reporter:
         now = datetime.now()
 
         report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
-        baseline_version = "0.2"
-        tool_version = "0.2.0"
+        baseline_version = "0.3"
+        tool_version = "0.3.0"
         meta_data = f"\
             <table style = \"text-align:center;\"> \
                 <colgroup><col/><col/><col/></colgroup> \
@@ -267,7 +267,7 @@ class Reporter:
         ind_report_name = product_capitalized + "Report"
         fragments = []
         json_data = []
-        tool_version = '0.2.0'
+        tool_version = '0.3.0'
         github_url = self._github_url
         report_stats = {
             "Manual": 0,

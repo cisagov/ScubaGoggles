@@ -3,12 +3,12 @@ import future.keywords
 
 
 #
-# GWS.GMAIL.9.1v0.2
+# GWS.GMAIL.9.1v0.3
 #--
 
 test_ImapAccess_Correct_V1 if {
     # Test IMAP and POP Access when there's only one event
-    PolicyId := "GWS.GMAIL.9.1v0.2"
+    PolicyId := "GWS.GMAIL.9.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -46,7 +46,7 @@ test_ImapAccess_Correct_V1 if {
 
 test_ImapAccess_Incorrect_V1 if {
     # Test IMAP and POP Access when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.9.1v0.2"
+    PolicyId := "GWS.GMAIL.9.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -85,7 +85,7 @@ test_ImapAccess_Incorrect_V1 if {
 
 test_ImapAccess_Incorrect_V2 if {
     # Test IMAP and POP Access when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.9.1v0.2"
+    PolicyId := "GWS.GMAIL.9.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -124,7 +124,7 @@ test_ImapAccess_Incorrect_V2 if {
 
 test_ImapAccess_Incorrect_V3 if {
     # Test IMAP and POP Access when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.9.1v0.2"
+    PolicyId := "GWS.GMAIL.9.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
             {

@@ -2,11 +2,11 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.15.1v0.2
+# GWS.COMMONCONTROLS.15.1v0.3
 #--
 test_AccessControl_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.COMMONCONTROLS.15.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.15.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -26,11 +26,11 @@ test_AccessControl_Correct_V1 if {
 
 
 #
-# GWS.COMMONCONTROLS.15.2v0.2
+# GWS.COMMONCONTROLS.15.2v0.3
 #--
 test_Logs_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -58,7 +58,7 @@ test_Logs_Correct_V1 if {
 
 test_Logs_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -96,7 +96,7 @@ test_Logs_Correct_V2 if {
 
 test_Logs_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -128,7 +128,7 @@ test_Logs_Incorrect_V1 if {
 
 test_Logs_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -170,7 +170,7 @@ test_Logs_Incorrect_V2 if {
 
 test_Logs_Incorrect_V3 if {
     # Test no relevent events
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -194,7 +194,7 @@ test_Logs_Incorrect_V3 if {
 
 test_Logs_Incorrect_V4 if {
     # Test multiple ous
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {

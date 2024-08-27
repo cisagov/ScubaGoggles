@@ -2,12 +2,12 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.10.1v0.2
+# GWS.COMMONCONTROLS.10.1v0.3
 #--
 test_AccessControl_Correct_V1 if {
     # Test restricted when there is no _HIGH_RISK event present
     # (not all services have a risk version, just Drive and Gmail)
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -35,7 +35,7 @@ test_AccessControl_Correct_V1 if {
 
 test_AccessControl_Correct_V2 if {
     # Test allowed with not high risk allowed
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -73,7 +73,7 @@ test_AccessControl_Correct_V2 if {
 
 test_AccessControl_Correct_V3 if {
     # Test restricted with not high risk disallowed
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -111,7 +111,7 @@ test_AccessControl_Correct_V3 if {
 
 test_AccessControl_Correct_V4 if {
     # Test multiple services
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -159,7 +159,7 @@ test_AccessControl_Correct_V4 if {
 
 test_AccessControl_Correct_V5 if {
     # Test multiple services, multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -228,7 +228,7 @@ test_AccessControl_Correct_V5 if {
 test_AccessControl_Incorrect_V1 if {
     # Test unrestricted when there is no _HIGH_RISK event present
     # (not all services have a risk version, just Drive and Gmail)
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -256,7 +256,7 @@ test_AccessControl_Incorrect_V1 if {
 
 test_AccessControl_Incorrect_V2 if {
     # Test unrestricted with not high risk disallowed
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -294,7 +294,7 @@ test_AccessControl_Incorrect_V2 if {
 
 test_AccessControl_Incorrect_V3 if {
     # Test unrestricted with no high risk version
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -322,7 +322,7 @@ test_AccessControl_Incorrect_V3 if {
 
 test_AccessControl_Incorrect_V4 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -345,11 +345,11 @@ test_AccessControl_Incorrect_V4 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.10.2v0.2
+# GWS.COMMONCONTROLS.10.2v0.3
 #--
 test_Consent_Correct_V1 if {
     # Test disallow with no high risk version
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -377,7 +377,7 @@ test_Consent_Correct_V1 if {
 
 test_Consent_Correct_V2 if {
     # Test disallow with high risk version
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -415,7 +415,7 @@ test_Consent_Correct_V2 if {
 
 test_Consent_Incorrect_V1 if {
     # Test allow with no high risk version
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -443,7 +443,7 @@ test_Consent_Incorrect_V1 if {
 
 test_Consent_Incorrect_V2 if {
     # Test allow with high risk version allowed
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -481,7 +481,7 @@ test_Consent_Incorrect_V2 if {
 
 test_Consent_Incorrect_V3 if {
     # Test allow with high risk version blocked
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -519,7 +519,7 @@ test_Consent_Incorrect_V3 if {
 
 test_Consent_Incorrect_V4 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -542,11 +542,11 @@ test_Consent_Incorrect_V4 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.10.3v0.2
+# GWS.COMMONCONTROLS.10.3v0.3
 #--
 test_Internal_Correct_V1 if {
     # Test basic
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -573,7 +573,7 @@ test_Internal_Correct_V1 if {
 
 test_Internal_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -609,7 +609,7 @@ test_Internal_Correct_V2 if {
 
 test_Internal_Incorrect_V1 if {
     # Test basic
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -640,7 +640,7 @@ test_Internal_Incorrect_V1 if {
 
 test_Internal_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -680,7 +680,7 @@ test_Internal_Incorrect_V2 if {
 
 test_Internal_Incorrect_V3 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -703,11 +703,11 @@ test_Internal_Incorrect_V3 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.10.4v0.2
+# GWS.COMMONCONTROLS.10.4v0.3
 #--
 test_Unconfigured_Correct_V1 if {
     # Test basic
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -734,7 +734,7 @@ test_Unconfigured_Correct_V1 if {
 
 test_Unconfigured_Correct_V2 if {
     # Test basic multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -770,7 +770,7 @@ test_Unconfigured_Correct_V2 if {
 
 test_Unconfigured_Incorrect_V1 if {
     # Test unblock
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -802,7 +802,7 @@ test_Unconfigured_Incorrect_V1 if {
 
 test_Unconfigured_Incorrect_V2 if {
     # Test signin only
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -834,7 +834,7 @@ test_Unconfigured_Incorrect_V2 if {
 
 test_Unconfigured_Incorrect_V3 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.2"
+    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
