@@ -1236,22 +1236,6 @@ NoSuchEvent7_6(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-# GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) :=
-#     "Inbound emails spoofing domain names are kept in the inbox"
-#     if {
-#         NewValueA == "Show warning"
-#     } else := "Inbound emails spoofing employee names are kept in the inbox"
-#     if { NewValueB == "Show warning" }
-#     else := "Inbound spoofing emails are kept in the inbox"
-#     if { NewValueC == "Show warning" }
-#     else := "Unauthenticated emails are kept in the inbox"
-#     if { NewValueD == "Show warning" }
-#     else := "Unauthenticated emails are kept in the inbox"
-#     if { NewValueD == "No action" }
-#     else := "Inbound spoofing emails addresed to groups are kept in the inbox"
-#     if { NewValueE == "Show warning" }
-#     else := "Emails flagged by the spoofing and authentication controls are not kept in the inbox"
-
 DetailedMessageA(NewValueA) := "Inbound emails spoofing domain names are kept in the inbox"
     if { NewValueA == "Show warning" }
     else := ""
@@ -1281,23 +1265,6 @@ GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) =
         DetailedMessageA(NewValueA), DetailedMessageB(NewValueB),
         DetailedMessageC(NewValueC), DetailedMessageD(NewValueD),
         DetailedMessageDNoAction(NewValueD), DetailedMessageE(NewValueE)])
-    
-    
-    
-#     messages := [msg |
-#         NewValueA == true; msg := "Inbound emails spoofing domain names are kept in the inbox"
-#     ] + [msg |
-#         NewValueB == true; msg := "Inbound emails spoofing employee names are kept in the inbox"
-#     ] + [msg |
-#         NewValueC == true; msg := "Inbound spoofing emails are kept in the inbox"
-#     ] + [msg |
-#         NewValueD == true; msg := "Unauthenticated emails are kept in the inbox"
-#     ] + [msg |
-#         NewValueE == true; msg := "Inbound spoofing emails addressed to groups are kept in the inbox"
-#     ]
-
-#     result := concat(", ", messages)
-# }
 
 NonCompliantOUs7_6 contains {
     "Name": OU,
