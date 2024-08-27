@@ -1256,9 +1256,31 @@ DetailedMessageA(NewValueA) := "Inbound emails spoofing domain names are kept in
     if { NewValueA == "Show warning" }
     else := ""
 
+DetailedMessageB(NewValueB) := "Inbound emails spoofing employee names are kept in the inbox"
+    if { NewValueB == "Show warning" }
+    else := ""
+
+DetailedMessageC(NewValueC) := "Unauthenticated emails are kept in the inbox"
+    if { NewValueC == "Show warning" }
+    else := ""
+
+DetailedMessageD(NewValueD) := "Unauthenticated emails are kept in the inbox"
+    if { NewValueD == "Show warning" }
+    else := ""
+
+DetailedMessageDNoAction(NewValueD) := "Unauthenticated emails are kept in the inbox"
+    if { NewValueD == "No action" }
+    else := ""
+
+DetailedMessageE(NewValueE) := "Inbound spoofing emails addresed to groups are kept in the inbox"
+    if { NewValueE == "Show warning" }
+    else := ""
+
 GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) =
     concat("", ["List of email types left in inbox:",
-        DetailedMessageA(NewValueA)])
+        DetailedMessageA(NewValueA), DetailedMessageB(NewValueB),
+        DetailedMessageC(NewValueC), DetailedMessageD(NewValueD),
+        DetailedMessageDNoAction(NewValueD), DetailedMessageE(NewValueE)])
     
     
     
