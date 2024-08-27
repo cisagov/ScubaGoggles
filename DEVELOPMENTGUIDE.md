@@ -24,6 +24,9 @@ A new release triggers the transision back to normal operations. At this time, t
 5. Merge the baseline branch into main
 6. Delete the baseline branch
 
+## Branching Structure
+See [Branching Strategy Diagram](BRANCHINGSTRUCTURE.md) for a visual representation of the branch structure, both during a code freeze and otherwise.
+
 ## Creating Issues
 All needed changes (e.g., new features, bug fixes) need to be tracked in an issue. When creating an issue:
 - Be sure to follow the template
