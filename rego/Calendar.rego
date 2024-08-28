@@ -10,7 +10,7 @@ LogEvents := utils.GetEvents("calendar_logs")
 ##################
 
 #
-# Baseline GWS.CALENDAR.1.1v0.2
+# Baseline GWS.CALENDAR.1.1v0.3
 #--
 GetFriendlyValue1_1(Value) := "Share all information, but outsiders cannot change calendars" if {
     Value == "READ_ONLY_ACCESS"
@@ -55,7 +55,7 @@ NonCompliantGroups1_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CALENDAR.1.1v0.2",
+    "PolicyId": "GWS.CALENDAR.1.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs.",
@@ -69,7 +69,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CALENDAR.1.1v0.2",
+    "PolicyId": "GWS.CALENDAR.1.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
@@ -85,7 +85,7 @@ if {
 #--
 
 #
-# Baseline GWS.CALENDAR.1.2v0.2
+# Baseline GWS.CALENDAR.1.2v0.3
 #--
 
 GetFriendlyValue1_2(Value) := "Secondary Calendars Share all information, but outsiders cannot change calendars." if {
@@ -100,7 +100,7 @@ GetFriendlyValue1_2(Value) := "Secondary Calendars Share all information, but ou
 
 
 tests contains {
-    "PolicyId": "GWS.CALENDAR.1.2v0.2",
+    "PolicyId": "GWS.CALENDAR.1.2v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -114,7 +114,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CALENDAR.1.2v0.2",
+    "PolicyId": "GWS.CALENDAR.1.2v0.3",
     "Criticality": "Shall",
     "ReportDetails": concat("",[utils.ReportDetailsBoolean(Status), "<br>Highest Level of Sharing: ",
     GetFriendlyValue1_2(LastEvent.NewValue)]),
@@ -136,7 +136,7 @@ if {
 ##################
 
 #
-# Baseline GWS.CALENDAR.2.1v0.2
+# Baseline GWS.CALENDAR.2.1v0.3
 #--
 
 NonCompliantOUs2_1 contains {
@@ -166,7 +166,7 @@ NonCompliantGroups2_1 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.CALENDAR.2.1v0.2",
+    "PolicyId": "GWS.CALENDAR.2.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -180,7 +180,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CALENDAR.2.1v0.2",
+    "PolicyId": "GWS.CALENDAR.2.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, NonCompliantGroups2_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1, "NonCompliantGroups": NonCompliantGroups2_1},
@@ -201,10 +201,10 @@ if {
 ##################
 
 #
-# Baseline GWS.CALENDAR.3.1v0.2
+# Baseline GWS.CALENDAR.3.1v0.3
 #--
 tests contains {
-    "PolicyId": "GWS.CALENDAR.3.1v0.2",
+    "PolicyId": "GWS.CALENDAR.3.1v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -218,7 +218,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CALENDAR.3.1v0.2",
+    "PolicyId": "GWS.CALENDAR.3.1v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsBoolean(Status),
     "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
@@ -235,10 +235,10 @@ if {
 
 
 #
-# Baseline GWS.CALENDAR.3.2v0.2
+# Baseline GWS.CALENDAR.3.2v0.3
 #--
 tests contains {
-    "PolicyId": "GWS.CALENDAR.3.2v0.2",
+    "PolicyId": "GWS.CALENDAR.3.2v0.3",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -267,10 +267,10 @@ NonCompliantOUs4_1 contains {
 }
 
 #
-# Baseline GWS.CALENDAR.4.1v0.2
+# Baseline GWS.CALENDAR.4.1v0.3
 #--
 tests contains {
-    "PolicyId": "GWS.CALENDAR.4.1v0.2",
+    "PolicyId": "GWS.CALENDAR.4.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs.",
@@ -285,7 +285,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.CALENDAR.4.1v0.2",
+    "PolicyId": "GWS.CALENDAR.4.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},

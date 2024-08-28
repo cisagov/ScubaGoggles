@@ -6,9 +6,9 @@
   </ul>
   <ul>
         <a href="https://github.com/cisagov/ScubaGoggles/releases" alt="ScubaGoggles version #">
-        <img src="https://img.shields.io/badge/ScubaGoggles-v0.2.0-%2385B065?labelColor=%23005288" /></a>
+        <img src="https://img.shields.io/badge/ScubaGoggles-v0.3.0-%2385B065?labelColor=%23005288" /></a>
         <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" alt="GWS SCB version #">
-        <img src="https://img.shields.io/badge/GWS_SCB-v0.2-%2385B065?labelColor=%23005288" /></a>
+        <img src="https://img.shields.io/badge/GWS_SCB-v0.3-%2385B065?labelColor=%23005288" /></a>
         <a href="" alt="Downloads">
         <img src="https://img.shields.io/github/downloads/cisagov/ScubaGoggles/total.svg" /></a>
   </ul>

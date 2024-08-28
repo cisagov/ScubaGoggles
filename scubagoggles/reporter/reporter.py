@@ -174,8 +174,8 @@ class Reporter:
         now = datetime.now()
 
         report_date = now.strftime("%m/%d/%Y %H:%M:%S") + " " + time.tzname[time.daylight]
-        baseline_version = "0.2"
-        tool_version = "0.2.0"
+        baseline_version = "0.3"
+        tool_version = "0.3.0"
         meta_data = f"\
             <table style = \"text-align:center;\"> \
                 <colgroup><col/><col/><col/></colgroup> \
@@ -267,8 +267,7 @@ class Reporter:
         ind_report_name = product_capitalized + "Report"
         fragments = []
         json_data = []
-        baseline_version = '0.2'
-        tool_version = '0.2.0'
+        tool_version = '0.3.0'
         github_url = self._github_url
         report_stats = {
             "Manual": 0,
@@ -357,9 +356,9 @@ class Reporter:
                                     'Criticality': test['Criticality'],
                                     'Details': details})
             markdown_group_name = "-".join(baseline_group['GroupName'].split())
+            md_basename = "commoncontrols" if self._product == "rules" else self._product
             group_reference_url = f'{github_url}/blob/v{tool_version}/baselines/'\
-            f'{self._full_name} Minimum Viable Secure Configuration '\
-            f'Baseline v{baseline_version}.md#'\
+            f'{md_basename}.md#'\
             f'{baseline_group["GroupNumber"]}-{markdown_group_name}'
             group_reference_url_spacing = "%20".join(group_reference_url.split())
             markdown_link = fr'<a href="{group_reference_url_spacing}" target="_blank"\>'\

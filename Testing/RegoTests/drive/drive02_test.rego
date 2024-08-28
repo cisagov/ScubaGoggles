@@ -2,11 +2,11 @@ package drive
 import future.keywords
 
 #
-# GWS.DRIVEDOCS.2.1v0.2
+# GWS.DRIVEDOCS.2.1v0.3
 #--
 test_Managers_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.2.1v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.1v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -34,7 +34,7 @@ test_Managers_Correct_V1 if {
 
 test_Managers_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.2.1v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.1v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -72,7 +72,7 @@ test_Managers_Correct_V2 if {
 
 test_Managers_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.2.1v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.1v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -110,7 +110,7 @@ test_Managers_Correct_V3 if {
 
 test_Managers_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.2.1v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.1v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -142,7 +142,7 @@ test_Managers_Incorrect_V1 if {
 
 test_Managers_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.2.1v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.1v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -171,7 +171,7 @@ test_Managers_Incorrect_V2 if {
 
 test_Managers_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.2.1v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.1v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -210,7 +210,7 @@ test_Managers_Incorrect_V3 if {
 
 test_Managers_Incorrect_V4 if {
     # Test sharing setting when top OU is correct but secondary isn't
-    PolicyId := "GWS.DRIVEDOCS.2.1v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.1v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -249,7 +249,7 @@ test_Managers_Incorrect_V4 if {
 
 test_Managers_Incorrect_V5 if {
     # Test sharing setting when top OU is missing
-    PolicyId := "GWS.DRIVEDOCS.2.1v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.1v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -280,11 +280,11 @@ test_Managers_Incorrect_V5 if {
 }
 
 #
-# GWS.DRIVEDOCS.2.2v0.2
+# GWS.DRIVEDOCS.2.2v0.3
 #--
 test_Outside_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.2.2v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.2v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -315,7 +315,7 @@ test_Outside_Correct_V1 if {
 
 test_Outside_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.2.2v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.2v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -359,7 +359,7 @@ test_Outside_Correct_V2 if {
 
 test_Outside_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.2.2v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.2v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -403,7 +403,7 @@ test_Outside_Correct_V3 if {
 
 test_Outside_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.2.2v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.2v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -435,7 +435,7 @@ test_Outside_Incorrect_V1 if {
 
 test_Outside_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.2.2v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.2v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -467,7 +467,7 @@ test_Outside_Incorrect_V2 if {
 
 test_Outside_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.2.2v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.2v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -512,7 +512,7 @@ test_Outside_Incorrect_V3 if {
 
 test_Outside_Incorrect_V4 if {
     # Test sharing setting when top OU is correct but secondary isn't
-    PolicyId := "GWS.DRIVEDOCS.2.2v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.2v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -557,7 +557,7 @@ test_Outside_Incorrect_V4 if {
 
 test_Outside_Incorrect_V5 if {
     # Test sharing setting when top OU is missing
-    PolicyId := "GWS.DRIVEDOCS.2.2v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.2v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -591,11 +591,11 @@ test_Outside_Incorrect_V5 if {
 }
 
 #
-# GWS.DRIVEDOCS.2.3v0.2
+# GWS.DRIVEDOCS.2.3v0.3
 #--
 test_SharedDrive_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.2.3v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.3v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -626,7 +626,7 @@ test_SharedDrive_Correct_V1 if {
 
 test_SharedDrive_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.2.3v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.3v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -670,7 +670,7 @@ test_SharedDrive_Correct_V2 if {
 
 test_SharedDrive_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.2.3v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.3v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -714,7 +714,7 @@ test_SharedDrive_Correct_V3 if {
 
 test_SharedDrive_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.2.3v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.3v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -746,7 +746,7 @@ test_SharedDrive_Incorrect_V1 if {
 
 test_SharedDrive_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.2.3v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.3v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -778,7 +778,7 @@ test_SharedDrive_Incorrect_V2 if {
 
 test_SharedDrive_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.2.3v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.3v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -824,7 +824,7 @@ test_SharedDrive_Incorrect_V3 if {
 
 test_SharedDrive_Incorrect_V4 if {
     # Test sharing setting when top OU is correct but secondary isn't
-    PolicyId := "GWS.DRIVEDOCS.2.3v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.3v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -869,7 +869,7 @@ test_SharedDrive_Incorrect_V4 if {
 
 test_SharedDrive_Incorrect_V5 if {
     # Test sharing setting when top OU is missing
-    PolicyId := "GWS.DRIVEDOCS.2.3v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.3v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -903,11 +903,11 @@ test_SharedDrive_Incorrect_V5 if {
 }
 
 #
-# GWS.DRIVEDOCS.2.4v0.2
+# GWS.DRIVEDOCS.2.4v0.3
 #--
 test_Viewers_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.2.4v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.4v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -935,7 +935,7 @@ test_Viewers_Correct_V1 if {
 
 test_Viewers_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.2.4v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.4v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -973,7 +973,7 @@ test_Viewers_Correct_V2 if {
 
 test_Viewers_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.2.4v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.4v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1011,7 +1011,7 @@ test_Viewers_Correct_V3 if {
 
 test_Viewers_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.2.4v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.4v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1043,7 +1043,7 @@ test_Viewers_Incorrect_V1 if {
 
 test_Viewers_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.2.4v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.4v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1072,7 +1072,7 @@ test_Viewers_Incorrect_V2 if {
 
 test_Viewers_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.2.4v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.4v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1112,7 +1112,7 @@ test_Viewers_Incorrect_V3 if {
 
 test_Viewers_Incorrect_V4 if {
     # Test sharing setting when top OU is correct but secondary isn't
-    PolicyId := "GWS.DRIVEDOCS.2.4v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.4v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1152,7 +1152,7 @@ test_Viewers_Incorrect_V4 if {
 
 test_Viewers_Incorrect_V5 if {
     # Test sharing setting when top OU is missing
-    PolicyId := "GWS.DRIVEDOCS.2.4v0.2"
+    PolicyId := "GWS.DRIVEDOCS.2.4v0.3"
     Output := tests with input as {
         "drive_logs": {"items": [
             {

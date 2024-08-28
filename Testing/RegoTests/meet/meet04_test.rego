@@ -2,11 +2,11 @@ package meet
 import future.keywords
 
 #
-# GWS.MEET.4.1v0.2
+# GWS.MEET.4.1v0.3
 #--
 test_HostMan_Correct_V1 if {
     # Test meeting access when there's only one event
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -38,7 +38,7 @@ test_HostMan_Correct_V1 if {
 
 test_HostMan_Correct_V2 if {
     # Test meeting access when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -84,7 +84,7 @@ test_HostMan_Correct_V2 if {
 
 test_HostMan_Correct_V3 if {
     # Test meeting access when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -130,7 +130,7 @@ test_HostMan_Correct_V3 if {
 
 test_HostMan_Correct_V4 if {
     # Test history setting when set to inherit from parent
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -190,7 +190,7 @@ test_HostMan_Correct_V4 if {
 
 test_HostMan_Incorrect_V1 if {
     # Test meeting access when there are no relevant events
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -222,7 +222,7 @@ test_HostMan_Incorrect_V1 if {
 
 test_HostMan_Incorrect_V2 if {
     # Test meeting access when there's only one event and it's wrong
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -255,7 +255,7 @@ test_HostMan_Incorrect_V2 if {
 
 test_HostMan_Incorrect_V3 if {
     # Test meeting access when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -302,7 +302,7 @@ test_HostMan_Incorrect_V3 if {
 
 test_HostMan_Incorrect_V4 if {
     # Test allow user to change history setting when there are multiple OU and a secondary OU is wrong
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -350,7 +350,7 @@ test_HostMan_Incorrect_V4 if {
 
 test_HostMan_Incorrect_V5 if {
     # Test allow user to change history setting when the primary OU is missing but a different one is present
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -384,7 +384,7 @@ test_HostMan_Incorrect_V5 if {
 
 test_HostMan_Incorrect_V6 if {
     # Test group wrong
-    PolicyId := "GWS.MEET.4.1v0.2"
+    PolicyId := "GWS.MEET.4.1v0.3"
     Output := tests with input as {
         "meet_logs": {"items": [
             {

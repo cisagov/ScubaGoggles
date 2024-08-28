@@ -7,7 +7,7 @@ import future.keywords
 #--
 test_GroupIncomingMailPosting_Correct_V1 if {
     # Test group owners' ability to allow incoming mail for posting group messages when there's only one event
-    PolicyId := "GWS.GROUPS.3.1v0.2"
+    PolicyId := "GWS.GROUPS.3.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -39,7 +39,7 @@ test_GroupIncomingMailPosting_Correct_V1 if {
 test_GroupIncomingMailPosting_Correct_V2 if {
     # Test group owners' ability to allow incoming mail for posting group messages when
     # there's multiple events and the most most recent is correct
-    PolicyId := "GWS.GROUPS.3.1v0.2"
+    PolicyId := "GWS.GROUPS.3.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -83,7 +83,7 @@ test_GroupIncomingMailPosting_Correct_V2 if {
 
 test_GroupIncomingMailPosting_Incorrect_V1 if {
     # Test group owners' ability to allow incoming mail for posting group messages when there are no relevant events
-    PolicyId := "GWS.GROUPS.3.1v0.2"
+    PolicyId := "GWS.GROUPS.3.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -116,7 +116,7 @@ test_GroupIncomingMailPosting_Incorrect_V1 if {
 test_GroupIncomingMailPosting_Incorrect_V2 if {
     # Test group owners' ability to allow incoming mail for posting group messages when
     # there's only one event and it's wrong
-    PolicyId := "GWS.GROUPS.3.1v0.2"
+    PolicyId := "GWS.GROUPS.3.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -150,7 +150,7 @@ test_GroupIncomingMailPosting_Incorrect_V2 if {
 test_GroupIncomingMailPosting_Incorrect_V3 if {
     # Test group owners' ability to allow incoming mail for posting group messages
     # when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.3.1v0.2"
+    PolicyId := "GWS.GROUPS.3.1v0.3"
     Output := tests with input as {
         "groups_logs": {"items": [
             {

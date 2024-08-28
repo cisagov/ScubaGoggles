@@ -2,11 +2,11 @@ package calendar
 import future.keywords
 
 #
-# GWS.CALENDAR.1.1v0.2
+# GWS.CALENDAR.1.1v0.3
 #--
 test_ExtSharingPrimaryCal_Correct_V1 if {
     # Test external sharing for primary calendars when there's only one event
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -35,7 +35,7 @@ test_ExtSharingPrimaryCal_Correct_V1 if {
 
 test_ExtSharingPrimaryCal_Correct_V2 if {
     # Test external sharing for primary calendars when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -75,7 +75,7 @@ test_ExtSharingPrimaryCal_Correct_V2 if {
 
 test_ExtSharingPrimaryCal_Correct_V3 if {
     # Test external sharing for primary calendars when there's multiple OUs
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -115,7 +115,7 @@ test_ExtSharingPrimaryCal_Correct_V3 if {
 
 test_ExtSharingPrimaryCal_Correct_V4 if {
     # Test external sharing for primary calendars when there's multiple OUs, and an older event is non-compliant
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -166,7 +166,7 @@ test_ExtSharingPrimaryCal_Correct_V4 if {
 
 test_ExtSharingPrimaryCal_Correct_V5 if {
     # Test external sharing for primary, inherit from parent
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -217,7 +217,7 @@ test_ExtSharingPrimaryCal_Correct_V5 if {
 
 test_ExtSharingPrimaryCal_Correct_V6 if {
     # Test group
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -258,7 +258,7 @@ test_ExtSharingPrimaryCal_Correct_V6 if {
 
 test_ExtSharingPrimaryCal_Incorrect_V1 if {
     # Test external sharing for primary calendars when there are no relevant events
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -291,7 +291,7 @@ test_ExtSharingPrimaryCal_Incorrect_V1 if {
 
 test_ExtSharingPrimaryCal_Incorrect_V2 if {
     # Test external sharing for primary calendars when there's only one event and it's wrong
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -322,7 +322,7 @@ test_ExtSharingPrimaryCal_Incorrect_V2 if {
 
 test_ExtSharingPrimaryCal_Incorrect_V3 if {
     # Test external sharing for primary calendars when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -365,7 +365,7 @@ test_ExtSharingPrimaryCal_Incorrect_V3 if {
 test_ExtSharingPrimaryCal_Incorrect_V4 if {
     # Test external sharing for primary calendars when there is no event for the Top-level OU
     # but there is one for a different OU
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -399,7 +399,7 @@ test_ExtSharingPrimaryCal_Incorrect_V4 if {
 test_ExtSharingPrimaryCal_Incorrect_V5 if {
     # Test external sharing for primary calendars when the Top-Level OU is compliant,
     # but a secondary OU is non-compliant
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -441,7 +441,7 @@ test_ExtSharingPrimaryCal_Incorrect_V5 if {
 
 test_ExtSharingPrimaryCal_Incorrect_V6 if {
     # Test: top-level OU is compliant but a group is non-compliant
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -484,7 +484,7 @@ test_ExtSharingPrimaryCal_Incorrect_V6 if {
 
 test_ExtSharingPrimaryCal_Incorrect_V if {
     # Test: top-level OU and a group are non-compliant
-    PolicyId := "GWS.CALENDAR.1.1v0.2"
+    PolicyId := "GWS.CALENDAR.1.1v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -530,11 +530,11 @@ test_ExtSharingPrimaryCal_Incorrect_V if {
 #--
 
 #
-# GWS.CALENDAR.1.2v0.2
+# GWS.CALENDAR.1.2v0.3
 #--
 test_ExtSharingSecondaryCal_Correct_V1 if {
  # Test external sharing for secondary calendars when there's only one event
-    PolicyId := "GWS.CALENDAR.1.2v0.2"
+    PolicyId := "GWS.CALENDAR.1.2v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -566,7 +566,7 @@ test_ExtSharingSecondaryCal_Correct_V1 if {
 
 test_ExtSharingSecondaryCal_Correct_V2 if {
     # Test external sharing for secondary calendars when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.CALENDAR.1.2v0.2"
+    PolicyId := "GWS.CALENDAR.1.2v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -609,7 +609,7 @@ test_ExtSharingSecondaryCal_Correct_V2 if {
 
 test_ExtSharingSecondaryCal_Incorrect_V1 if {
     # Test external sharing for secondary calendars when there are no relevant events
-    PolicyId := "GWS.CALENDAR.1.2v0.2"
+    PolicyId := "GWS.CALENDAR.1.2v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -642,7 +642,7 @@ test_ExtSharingSecondaryCal_Incorrect_V1 if {
 
 test_ExtSharingSecondaryCal_Incorrect_V2 if {
     # Test external sharing for secondary calendars when there's only one event and it's wrong
-    PolicyId := "GWS.CALENDAR.1.2v0.2"
+    PolicyId := "GWS.CALENDAR.1.2v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -675,7 +675,7 @@ test_ExtSharingSecondaryCal_Incorrect_V2 if {
 
 test_ExtSharingSecondaryCal_Incorrect_V3 if {
     # Test external sharing for secondary calendars when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CALENDAR.1.2v0.2"
+    PolicyId := "GWS.CALENDAR.1.2v0.3"
     Output := tests with input as {
         "calendar_logs": {"items": [
             {

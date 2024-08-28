@@ -2,11 +2,11 @@ package drive
 import future.keywords
 
 #
-# GWS.DRIVEDOCS.7.1v0.2
+# GWS.DRIVEDOCS.7.1v0.3
 #--
 test_Rule_Correct_V1 if {
     # Test Attachment Compliance Filtering when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.7.1v0.2"
+    PolicyId := "GWS.DRIVEDOCS.7.1v0.3"
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},

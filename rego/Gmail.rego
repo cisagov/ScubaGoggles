@@ -28,7 +28,7 @@ LogEvents := utils.GetEvents("gmail_logs")
 ###############
 
 #
-# Baseline GWS.GMAIL.1.1v0.2
+# Baseline GWS.GMAIL.1.1v0.3
 #--
 
 # Cannot be controlled at group level
@@ -54,7 +54,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.1.1v0.2",
+    "PolicyId": "GWS.GMAIL.1.1v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -68,7 +68,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.1.1v0.2",
+    "PolicyId": "GWS.GMAIL.1.1v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -87,7 +87,7 @@ if {
 ###############
 
 #
-# Baseline GWS.GMAIL.2.1v0.2
+# Baseline GWS.GMAIL.2.1v0.3
 #--
 
 # Not applicable at OU or Group level
@@ -98,7 +98,7 @@ DomainsWithDkim contains DkimRecord.domain if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.2.1v0.2",
+    "PolicyId": "GWS.GMAIL.2.1v0.3",
     "Prerequisites": ["directory/v1/domains/list", "get_dkim_records"],
     "Criticality": "Should",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDkim, AllDomains),
@@ -118,7 +118,7 @@ if {
 ###############
 
 #
-# Baseline GWS.GMAIL.3.1v0.2
+# Baseline GWS.GMAIL.3.1v0.3
 #--
 
 # Not applicable at OU or Group level
@@ -134,7 +134,7 @@ DomainsWithSpf contains SpfRecord.domain if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.3.1v0.2",
+    "PolicyId": "GWS.GMAIL.3.1v0.3",
     "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutSpf, AllDomains),
@@ -154,7 +154,7 @@ if {
 ###############
 
 #
-# Baseline GWS.GMAIL.4.1v0.2
+# Baseline GWS.GMAIL.4.1v0.3
 #--
 
 # Not applicable at OU or Group level
@@ -165,7 +165,7 @@ DomainsWithDmarc contains DmarcRecord.domain if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.4.1v0.2",
+    "PolicyId": "GWS.GMAIL.4.1v0.3",
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains),
@@ -180,7 +180,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.4.2v0.2
+# Baseline GWS.GMAIL.4.2v0.3
 #--
 
 # Not applicable at OU or Group level
@@ -191,7 +191,7 @@ DomainsWithPreject contains DmarcRecord.domain if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.4.2v0.2",
+    "PolicyId": "GWS.GMAIL.4.2v0.3",
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains),
@@ -206,7 +206,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.4.3v0.2
+# Baseline GWS.GMAIL.4.3v0.3
 #--
 
 # Not applicable at OU or Group level
@@ -217,7 +217,7 @@ DomainsWithDHSContact contains DmarcRecord.domain if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.4.3v0.2",
+    "PolicyId": "GWS.GMAIL.4.3v0.3",
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains),
@@ -232,7 +232,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.4.4v0.2
+# Baseline GWS.GMAIL.4.4v0.3
 #--
 
 # Not applicable at OU or Group level
@@ -243,7 +243,7 @@ DomainsWithAgencyContact contains DmarcRecord.domain if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.4.4v0.2",
+    "PolicyId": "GWS.GMAIL.4.4v0.3",
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Should",
     "ReportDetails": ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains),
@@ -263,7 +263,7 @@ if {
 ###############
 
 #
-# Baseline GWS.GMAIL.5.1v0.2
+# Baseline GWS.GMAIL.5.1v0.3
 #--
 
 # Cannot be controlled at group level
@@ -293,7 +293,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.1v0.2",
+    "PolicyId": "GWS.GMAIL.5.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -307,7 +307,7 @@ tests contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.1v0.2",
+    "PolicyId": "GWS.GMAIL.5.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
@@ -322,7 +322,7 @@ if {
 }
 
 #
-# Baseline GWS.GMAIL.5.2v0.2
+# Baseline GWS.GMAIL.5.2v0.3
 #--
 
 GetFriendlyValue5_2(Value) := "enabled" if {
@@ -350,7 +350,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.2v0.2",
+    "PolicyId": "GWS.GMAIL.5.2v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -365,7 +365,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.2v0.2",
+    "PolicyId": "GWS.GMAIL.5.2v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_2},
@@ -382,7 +382,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.5.3v0.2
+# Baseline GWS.GMAIL.5.3v0.3
 #--
 
 GetFriendlyValue5_3(Value) := "enabled" if {
@@ -409,7 +409,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.3v0.2",
+    "PolicyId": "GWS.GMAIL.5.3v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -424,7 +424,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.3v0.2",
+    "PolicyId": "GWS.GMAIL.5.3v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_3},
@@ -440,7 +440,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.5.4v0.2
+# Baseline GWS.GMAIL.5.4v0.3
 #--
 
 GetFriendlyValue5_4(Value) := "enabled" if {
@@ -467,7 +467,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.4v0.2",
+    "PolicyId": "GWS.GMAIL.5.4v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -482,7 +482,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.4v0.2",
+    "PolicyId": "GWS.GMAIL.5.4v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_4},
@@ -498,7 +498,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.5.5v0.2
+# Baseline GWS.GMAIL.5.5v0.3
 #--
 default NoSuchEvent5_5(_) := true
 
@@ -559,7 +559,7 @@ NonCompliantOUs5_5 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.5v0.2",
+    "PolicyId": "GWS.GMAIL.5.5v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -572,7 +572,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.5v0.2",
+    "PolicyId": "GWS.GMAIL.5.5v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
@@ -586,11 +586,11 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.5.6v0.2
+# Baseline GWS.GMAIL.5.6v0.3
 #--
 # No implementation steps provided for this policy
 tests contains {
-    "PolicyId": "GWS.GMAIL.5.6v0.2",
+    "PolicyId": "GWS.GMAIL.5.6v0.3",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please check manually.",
     "ActualValue": "",
@@ -606,7 +606,7 @@ tests contains {
 # Cannot be controlled at Group level
 
 #
-# Baseline GWS.GMAIL.6.1v0.2
+# Baseline GWS.GMAIL.6.1v0.3
 #--
 
 GetFriendlyValue6_1(Value) := "enabled" if {
@@ -633,7 +633,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.6.1v0.2",
+    "PolicyId": "GWS.GMAIL.6.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -648,7 +648,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.6.1v0.2",
+    "PolicyId": "GWS.GMAIL.6.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1},
@@ -664,7 +664,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.6.2v0.2
+# Baseline GWS.GMAIL.6.2v0.3
 #--
 
 GetFriendlyValue6_2(Value) := "enabled" if {
@@ -690,7 +690,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.6.2v0.2",
+    "PolicyId": "GWS.GMAIL.6.2v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -705,7 +705,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.6.2v0.2",
+    "PolicyId": "GWS.GMAIL.6.2v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_2},
@@ -721,7 +721,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.6.3v0.2
+# Baseline GWS.GMAIL.6.3v0.3
 #--
 
 GetFriendlyValue6_3(Value) := "enabled" if {
@@ -748,7 +748,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.6.3v0.2",
+    "PolicyId": "GWS.GMAIL.6.3v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -766,7 +766,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.6.3v0.2",
+    "PolicyId": "GWS.GMAIL.6.3v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_3},
@@ -785,7 +785,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.6.4v0.2
+# Baseline GWS.GMAIL.6.4v0.3
 #--
 
 GetFriendlyValue6_4(Value) := "enabled" if {
@@ -813,7 +813,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.6.4v0.2",
+    "PolicyId": "GWS.GMAIL.6.4v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -828,7 +828,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.6.4v0.2",
+    "PolicyId": "GWS.GMAIL.6.4v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_4},
@@ -844,11 +844,11 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.6.5v0.2
+# Baseline GWS.GMAIL.6.5v0.3
 #--
 # No implementation steps provided for this policy
 tests contains {
-    "PolicyId": "GWS.GMAIL.6.5v0.2",
+    "PolicyId": "GWS.GMAIL.6.5v0.3",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -861,7 +861,7 @@ tests contains {
 ###############
 
 #
-# Baseline GWS.GMAIL.7.1v0.2
+# Baseline GWS.GMAIL.7.1v0.3
 #--
 
 # No group level control
@@ -892,7 +892,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.1v0.2",
+    "PolicyId": "GWS.GMAIL.7.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -910,7 +910,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.1v0.2",
+    "PolicyId": "GWS.GMAIL.7.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_1},
@@ -929,7 +929,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.7.2v0.2
+# Baseline GWS.GMAIL.7.2v0.3
 #--
 
 GetFriendlyValue7_2(Value) := "enabled" if {
@@ -957,7 +957,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.2v0.2",
+    "PolicyId": "GWS.GMAIL.7.2v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -973,7 +973,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.2v0.2",
+    "PolicyId": "GWS.GMAIL.7.2v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_2},
@@ -990,7 +990,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.7.3v0.2
+# Baseline GWS.GMAIL.7.3v0.3
 #--
 
 GetFriendlyValue7_3(Value) := "enabled" if {
@@ -1031,7 +1031,7 @@ NonCompliantOUs7_3 contains OU if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.3v0.2",
+    "PolicyId": "GWS.GMAIL.7.3v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1046,7 +1046,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.3v0.2",
+    "PolicyId": "GWS.GMAIL.7.3v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_3},
@@ -1062,7 +1062,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.7.4v0.2
+# Baseline GWS.GMAIL.7.4v0.3
 #--
 
 GetFriendlyValue7_4(Value) := "enabled" if {
@@ -1090,7 +1090,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.4v0.2",
+    "PolicyId": "GWS.GMAIL.7.4v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1105,7 +1105,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.4v0.2",
+    "PolicyId": "GWS.GMAIL.7.4v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_4},
@@ -1121,7 +1121,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.7.5v0.2
+# Baseline GWS.GMAIL.7.5v0.3
 #--
 
 GetFriendlyValue7_5(Value) := "enabled" if {
@@ -1150,7 +1150,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.5v0.2",
+    "PolicyId": "GWS.GMAIL.7.5v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1168,7 +1168,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.5v0.2",
+    "PolicyId": "GWS.GMAIL.7.5v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_5},
@@ -1187,7 +1187,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.7.6v0.2
+# Baseline GWS.GMAIL.7.6v0.3
 #--
 
 default NoSuchEvent7_6(_) := true
@@ -1316,7 +1316,7 @@ NonCompliantOUs7_6 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.6v0.2",
+    "PolicyId": "GWS.GMAIL.7.6v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1329,7 +1329,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.6v0.2",
+    "PolicyId": "GWS.GMAIL.7.6v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_6, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_6},
@@ -1343,7 +1343,7 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.7.7v0.2
+# Baseline GWS.GMAIL.7.7v0.3
 #--
 
 GetFriendlyValue7_7(Value) := "enabled" if {
@@ -1371,7 +1371,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.7v0.2",
+    "PolicyId": "GWS.GMAIL.7.7v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1386,7 +1386,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.7v0.2",
+    "PolicyId": "GWS.GMAIL.7.7v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_7, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_7},
@@ -1402,11 +1402,11 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.7.8v0.2
+# Baseline GWS.GMAIL.7.8v0.3
 #--
 # No implementation steps provided for this policy
 tests contains {
-    "PolicyId": "GWS.GMAIL.7.8v0.2",
+    "PolicyId": "GWS.GMAIL.7.8v0.3",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1421,7 +1421,7 @@ tests contains {
 ###############
 
 #
-# Baseline GWS.GMAIL.8.1v0.2
+# Baseline GWS.GMAIL.8.1v0.3
 #--
 GetFriendlyValue8_1(Value) := "enabled" if {
     Value == "true"
@@ -1445,7 +1445,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.8.1v0.2",
+    "PolicyId": "GWS.GMAIL.8.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1459,7 +1459,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.8.1v0.2",
+    "PolicyId": "GWS.GMAIL.8.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs8_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_1},
@@ -1478,7 +1478,7 @@ if {
 ###############
 
 #
-# Baseline GWS.GMAIL.9.1v0.2
+# Baseline GWS.GMAIL.9.1v0.3
 #--
 default NoSuchEvent9_1(_) := false
 
@@ -1554,7 +1554,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.9.1v0.2",
+    "PolicyId": "GWS.GMAIL.9.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1567,7 +1567,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.9.1v0.2",
+    "PolicyId": "GWS.GMAIL.9.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, NonCompliantGroups9_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1, "NonCompliantGroups": NonCompliantGroups9_1},
@@ -1587,7 +1587,7 @@ if {
 ################
 
 #
-# Baseline GWS.GMAIL.10.1v0.2
+# Baseline GWS.GMAIL.10.1v0.3
 #--
 
 GetFriendlyValue10_1(Value) := "enabled" if {
@@ -1613,7 +1613,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.10.1v0.2",
+    "PolicyId": "GWS.GMAIL.10.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1627,7 +1627,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.10.1v0.2",
+    "PolicyId": "GWS.GMAIL.10.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_1},
@@ -1642,11 +1642,11 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.10.2v0.2
+# Baseline GWS.GMAIL.10.2v0.3
 #--
 # No implementation steps provided for this policy
 tests contains {
-    "PolicyId": "GWS.GMAIL.10.2v0.2",
+    "PolicyId": "GWS.GMAIL.10.2v0.3",
     "Criticality": "May/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1660,7 +1660,7 @@ tests contains {
 ################
 
 #
-# Baseline GWS.GMAIL.11.1v0.2
+# Baseline GWS.GMAIL.11.1v0.3
 #--
 
 GetFriendlyValue11_1(Value) := "enabled" if {
@@ -1686,7 +1686,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.11.1v0.2",
+    "PolicyId": "GWS.GMAIL.11.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1700,7 +1700,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.11.1v0.2",
+    "PolicyId": "GWS.GMAIL.11.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs11_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1},
@@ -1720,7 +1720,7 @@ if {
 ################
 
 #
-# Baseline GWS.GMAIL.12.1v0.2
+# Baseline GWS.GMAIL.12.1v0.3
 #--
 
 GetFriendlyValue12_1(Value) := "enabled" if {
@@ -1745,7 +1745,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.12.1v0.2",
+    "PolicyId": "GWS.GMAIL.12.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1759,7 +1759,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.12.1v0.2",
+    "PolicyId": "GWS.GMAIL.12.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs12_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_1},
@@ -1779,7 +1779,7 @@ if {
 ################
 
 #
-# Baseline GWS.GMAIL.13.1v0.2
+# Baseline GWS.GMAIL.13.1v0.3
 #--
 
 GetFriendlyValue13_1(Value) := "enabled" if {
@@ -1805,7 +1805,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.13.1v0.2",
+    "PolicyId": "GWS.GMAIL.13.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1820,7 +1820,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.13.1v0.2",
+    "PolicyId": "GWS.GMAIL.13.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs13_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs13_1},
@@ -1841,7 +1841,7 @@ if {
 ################
 
 #
-# Baseline GWS.GMAIL.14.1v0.2
+# Baseline GWS.GMAIL.14.1v0.3
 #--
 EmailAllowlistSettingDetailsStr(LastEvent) := Description if {
     LastEvent.NewValue != "[]"
@@ -1862,7 +1862,7 @@ EmailAllowlistSettingDetailsStr(LastEvent) := Description if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.14.1v0.2",
+    "PolicyId": "GWS.GMAIL.14.1v0.3",
     "Criticality": "Should",
     "ReportDetails": concat("", [
         "No relevant event in the current logs. ",
@@ -1879,7 +1879,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.14.1v0.2",
+    "PolicyId": "GWS.GMAIL.14.1v0.3",
     "Criticality": "Should",
     "ReportDetails": EmailAllowlistSettingDetailsStr(LastEvent),
     "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
@@ -1900,7 +1900,7 @@ if {
 ################
 
 #
-# Baseline GWS.GMAIL.15.1v0.2
+# Baseline GWS.GMAIL.15.1v0.3
 #--
 
 GetFriendlyValue15_1(Value) := "enabled" if {
@@ -1927,7 +1927,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.15.1v0.2",
+    "PolicyId": "GWS.GMAIL.15.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1942,7 +1942,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.15.1v0.2",
+    "PolicyId": "GWS.GMAIL.15.1v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs15_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_1},
@@ -1958,11 +1958,11 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.15.2v0.2
+# Baseline GWS.GMAIL.15.2v0.3
 #--
 # No implementation steps provided for this policy
 tests contains {
-    "PolicyId": "GWS.GMAIL.15.2v0.2",
+    "PolicyId": "GWS.GMAIL.15.2v0.3",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1976,7 +1976,7 @@ tests contains {
 ################
 
 #
-# Baseline GWS.GMAIL.16.1v0.2
+# Baseline GWS.GMAIL.16.1v0.3
 #--
 
 GetFriendlyValue16_1(Value) := "enabled" if {
@@ -2002,7 +2002,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.16.1v0.2",
+    "PolicyId": "GWS.GMAIL.16.1v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -2017,7 +2017,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.GMAIL.16.1v0.2",
+    "PolicyId": "GWS.GMAIL.16.1v0.3",
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs16_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_1},
@@ -2033,11 +2033,11 @@ if {
 #--
 
 #
-# Baseline GWS.GMAIL.16.2v0.2
+# Baseline GWS.GMAIL.16.2v0.3
 #--
 # No implementation steps provided for this policy
 tests contains {
-    "PolicyId": "GWS.GMAIL.16.2v0.2",
+    "PolicyId": "GWS.GMAIL.16.2v0.3",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -2051,12 +2051,12 @@ tests contains {
 ################
 
 #
-# Baseline GWS.GMAIL.17.1v0.2
+# Baseline GWS.GMAIL.17.1v0.3
 #--
 # At this time we are unable to test because settings are configured in the GWS Admin Console
 # and not available within the generated logs
 tests contains {
-    "PolicyId": "GWS.GMAIL.17.1v0.2",
+    "PolicyId": "GWS.GMAIL.17.1v0.3",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -2071,12 +2071,12 @@ tests contains {
 ################
 
 #
-# Baseline GWS.GMAIL.18.1v0.2
+# Baseline GWS.GMAIL.18.1v0.3
 #--
 # At this time we are unable to test because settings are configured in the GWS Admin Console
 # and not available within the generated logs
 tests contains {
-    "PolicyId": "GWS.GMAIL.18.1v0.2",
+    "PolicyId": "GWS.GMAIL.18.1v0.3",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -2086,12 +2086,12 @@ tests contains {
 #--
 
 #
-# Baseline GWS.GMAIL.18.2v0.2
+# Baseline GWS.GMAIL.18.2v0.3
 #--
 # At this time we are unable to test because settings are configured in the GWS Admin Console
 # and not available within the generated logs
 tests contains {
-    "PolicyId": "GWS.GMAIL.18.2v0.2",
+    "PolicyId": "GWS.GMAIL.18.2v0.3",
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -2101,12 +2101,12 @@ tests contains {
 #--
 
 #
-# Baseline GWS.GMAIL.18.3v0.2
+# Baseline GWS.GMAIL.18.3v0.3
 #--
 # At this time we are unable to test because settings are configured in the GWS Admin Console
 # and not available within the generated logs
 tests contains {
-    "PolicyId": "GWS.GMAIL.18.3v0.2",
+    "PolicyId": "GWS.GMAIL.18.3v0.3",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -2120,12 +2120,12 @@ tests contains {
 ################
 
 #
-# Baseline GWS.GMAIL.19.1v0.2
+# Baseline GWS.GMAIL.19.1v0.3
 #--
 # At this time we are unable to test because settings are configured in the GWS Admin Console
 # and not available within the generated logs
 tests contains {
-    "PolicyId": "GWS.GMAIL.19.1v0.2",
+    "PolicyId": "GWS.GMAIL.19.1v0.3",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -2135,10 +2135,10 @@ tests contains {
 #--
 
 #
-# Baseline GWS.GMAIL.19.2v0.2
+# Baseline GWS.GMAIL.19.2v0.3
 #--
 tests contains {
-    "PolicyId": "GWS.GMAIL.19.2v0.2",
+    "PolicyId": "GWS.GMAIL.19.2v0.3",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -2148,10 +2148,10 @@ tests contains {
 #--
 
 #
-# Baseline GWS.GMAIL.19.3v0.2
+# Baseline GWS.GMAIL.19.3v0.3
 #--
 tests contains {
-    "PolicyId": "GWS.GMAIL.19.3v0.2",
+    "PolicyId": "GWS.GMAIL.19.3v0.3",
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
