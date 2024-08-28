@@ -3,7 +3,7 @@ on:
   workflow_call:
   workflow_dispatch:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened]
     branches:
       - "main"
   pull_request_review:
@@ -16,7 +16,6 @@ on:
     #  - ".github/actions/setup-dependencies-macos/action.yml"
     branches:
       - "main"
-      #- "*smoke*"
 
 jobs:
   smoke-test:
