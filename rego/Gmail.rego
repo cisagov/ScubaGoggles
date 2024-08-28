@@ -500,6 +500,8 @@ if {
 #
 # Baseline GWS.GMAIL.5.5v0.3
 #--
+
+default NoSuchEvent5_5 := false
 NoSuchEvent5_5 := true if {
     SettingName := "Attachment safety Encrypted attachment protection setting action"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
@@ -512,7 +514,7 @@ NoSuchEvent5_5 := true if {
     SettingName := "Attachment safety Anomalous attachment protection setting action"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
-} else := false
+}
 
 GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) :=
     "Emails with encrypted attachments from untrusted senders are kept in the inbox"
@@ -1182,6 +1184,7 @@ if {
 #--
 
 # No such event is true if any of the revelant settings doesn't having any events
+default NoSuchEvent7_6 := false
 NoSuchEvent7_6 := true if {
     SettingName :=
         "Spoofing and authentication safety Protect against domain spoofing based on similar domain names action"
@@ -1204,7 +1207,7 @@ NoSuchEvent7_6 := true if {
         "Spoofing and authentication safety Protect your Groups from inbound emails spoofing your domain action"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
-} else := false
+}
 
 GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) :=
     "Inbound emails spoofing domain names are kept in the inbox"
