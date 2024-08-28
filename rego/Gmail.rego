@@ -500,28 +500,19 @@ if {
 #
 # Baseline GWS.GMAIL.5.5v0.3
 #--
-default NoSuchEvent5_5(_) := true
-
-NoSuchEvent5_5(TopLevelOU) := false if {
-    # No such event...
+NoSuchEvent5_5 := true if {
     SettingName := "Attachment safety Encrypted attachment protection setting action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent5_5(TopLevelOU) := false if {
-    # No such event...
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Attachment safety Attachment with scripts protection action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent5_5(TopLevelOU) := false if {
-    # No such event...
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Attachment safety Anomalous attachment protection setting action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := false
 
 GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) :=
     "Emails with encrypted attachments from untrusted senders are kept in the inbox"
@@ -568,7 +559,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    NoSuchEvent5_5(utils.TopLevelOU)
+    NoSuchEvent5_5
 }
 
 tests contains {
@@ -580,7 +571,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent5_5(utils.TopLevelOU)
+    not NoSuchEvent5_5
     Status := count(NonCompliantOUs5_5) == 0
 }
 #--
