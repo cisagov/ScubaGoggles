@@ -523,15 +523,26 @@ NoSuchEvent5_5(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) :=
-    "Emails with encrypted attachments from untrusted senders are kept in the inbox"
-    if {
-        NewValueA == "Show warning"
-    } else := "Emails with attachments, with scripts from untrusted senders are kept in the inbox"
+DetailedMessageA_5_5(NewValueA) := "Encrypted attachments from untrusted senders"
+    if { NewValueA == "Show warning" }
+    else := ""
+
+DetailedMessageB_5_5(NewValueB) := "Emails with attachments, with scripts from untrusted senders"
     if { NewValueB == "Show warning" }
-    else := "Emails with anamolous attachements are kept in the inbox"
+    else := ""
+
+DetailedMessageC_5_5(NewValueC) := "Emails with anamolous attachements"
     if { NewValueC == "Show warning" }
-    else := "Emails flagged by the attachment protection controls are not kept in the inbox"
+    else := ""
+
+DetailedMessageD_5_5(NewValueD) := "Emails flagged by the attachment protection controls"
+    if { NewValueD == "Show warning" }
+    else := ""
+
+GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) :=
+    concat("", ["List of email types left in inbox:",
+        DetailedMessageA_5_5(NewValueA), DetailedMessageB_5_5(NewValueB),
+        DetailedMessageC_5_5(NewValueC), DetailedMessageD_5_5(NewValueD)])
 
 NonCompliantOUs5_5 contains {
     "Name": OU,
@@ -1236,27 +1247,23 @@ NoSuchEvent7_6(TopLevelOU) := false if {
     count(Events) != 0
 }
 
-DetailedMessageA(NewValueA) := "Inbound emails spoofing domain names are kept in the inbox"
+DetailedMessageA(NewValueA) := "Inbound emails spoofing domain names"
     if { NewValueA == "Show warning" }
     else := ""
 
-DetailedMessageB(NewValueB) := "Inbound emails spoofing employee names are kept in the inbox"
+DetailedMessageB(NewValueB) := "Inbound emails spoofing employee names"
     if { NewValueB == "Show warning" }
     else := ""
 
-DetailedMessageC(NewValueC) := "Unauthenticated emails are kept in the inbox"
+DetailedMessageC(NewValueC) := "Inbound spoofing emails"
     if { NewValueC == "Show warning" }
     else := ""
 
-DetailedMessageD(NewValueD) := "Unauthenticated emails are kept in the inbox"
-    if { NewValueD == "Show warning" }
+DetailedMessageD(NewValueD) := "Unauthenticated emails"
+    if { NewValueD in ["Show warning", "No action"] == true }
     else := ""
 
-DetailedMessageDNoAction(NewValueD) := "Unauthenticated emails are kept in the inbox"
-    if { NewValueD == "No action" }
-    else := ""
-
-DetailedMessageE(NewValueE) := "Inbound spoofing emails addresed to groups are kept in the inbox"
+DetailedMessageE(NewValueE) := "Inbound spoofing emails addresed to groups"
     if { NewValueE == "Show warning" }
     else := ""
 
@@ -1264,7 +1271,7 @@ GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) =
     concat("", ["List of email types left in inbox:",
         DetailedMessageA(NewValueA), DetailedMessageB(NewValueB),
         DetailedMessageC(NewValueC), DetailedMessageD(NewValueD),
-        DetailedMessageDNoAction(NewValueD), DetailedMessageE(NewValueE)])
+        DetailedMessageE(NewValueE)])
 
 NonCompliantOUs7_6 contains {
     "Name": OU,
