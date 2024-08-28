@@ -40,12 +40,12 @@ All needed changes (e.g., new features, bug fixes) need to be tracked in an issu
 3. Add the issue to the current milestone if it hasn't already been added.
 4. Click the "Create a branch for this issue" button (see screenshot)
 ![image](https://github.com/user-attachments/assets/4dbaf33b-ff53-48b3-aa39-74c97094dfbc)
-6. Ensure that the branch name follows the convention: "issue-number-short-description" and that the "short-description" is specific to that issue and not too vague.
+5. Ensure that the branch name follows the convention: "issue-number-short-description" and that the "short-description" is specific to that issue and not too vague.
 For example, if you were to create a branch name for the issue in the screenshot, you might name it "341-update-testing-docs".
-7. If this is a baseline change and we are currently in a baseline freeze: click the "Change Branch source" button and select the dedicated baseline changes branch.
+6. If this is a baseline change and we are currently in a baseline freeze: click the "Change Branch source" button and select the dedicated baseline changes branch.
 Otherwise, leave this at the default (main).
 ![image](https://github.com/user-attachments/assets/e3cafc21-9400-44f5-b7ab-2a21e63772c1)
-9. Make the needed changes in the branch. While doing that, watch out for scope creep! Resist the temptation to lump multiple issues together.
+7. Make the needed changes in the branch. While doing that, watch out for scope creep! Resist the temptation to lump multiple issues together.
 In some cases, there may be reasonable exceptions to this rule, but in general, GitHub flow encourages making quick, lightweight changes and short-lived feature branches.
 
 ### Step 2: Make a Pull Request
@@ -55,21 +55,21 @@ In some cases, there may be reasonable exceptions to this rule, but in general, 
 
 Otherwise, go to the "Pull requests" tab and click "New pull request"
 
-3. In either case, ensure your branch is selected as the "head ref"
+2. In either case, ensure your branch is selected as the "head ref"
 ![image](https://github.com/user-attachments/assets/8b3c2e73-6b64-49bf-a993-797f4d975da3)
-4. If this is a baseline change and we are in a baseline freeze, select the dedicated baseline change branch as the "base ref." Otherwise, leave it as its default of main.
+3. If this is a baseline change and we are in a baseline freeze, select the dedicated baseline change branch as the "base ref." Otherwise, leave it as its default of main.
 ![image](https://github.com/user-attachments/assets/0779cdbb-b888-463a-9cc8-35a16a1735ee)
-5. Give the pull request a descriptive, human readable name, preferably describing an action in the imperative form.
+4. Give the pull request a descriptive, human readable name, preferably describing an action in the imperative form.
 For example, for the issue above you might name the pull request "Add smoke test documentation."
-6. Add the PR to the correct project and the current milestone.
-7. Follow the template!
+5. Add the PR to the correct project and the current milestone.
+6. Follow the template!
     - Under motivation and context, if you're not sure what to put, you can just put "Closes #issue-number," e.g., "Closes #341."
 This does two things: it makes it so that GitHub will automatically close the issue when the PR is merged and it lets the reviewers know where they can look for context.
 NOTE: in order for GitHub to automatically close the issue, the "closes" statement needs to be the only thing on the line. For example: "Closes #341. Closes 342" won't work;
 the two "closes" statements need to be on separate lines.
     - Check the pre-approval checklist. If you can't check all the boxes there, reconsider making the pull request now – that is a sign that the branch isn't ready to be merged yet.
-8. Assign two reviewers. If unsure who to assign, bring up the issue in a team meeting for recommendations.
-9. Update the status for both the issue and the PR to "In Review" when ready for review
+7. Assign two reviewers. If unsure who to assign, bring up the issue in a team meeting for recommendations.
+8. Update the status for both the issue and the PR to "In Review" when ready for review
 
 ### Step 3: Closing Steps
 1. Address review feedback. Only the reviewer should click the "Resolve conversation" button for the feedback; however, note that if the reviewer makes a suggested change and you click "Commit suggestion" GitHub will automatically resolve the conversation.
