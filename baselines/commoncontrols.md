@@ -1182,3 +1182,37 @@ To configure additional services per the policy:
 2.	Navigate to **Security** -> **Authentication** -> **Multi-party approval settings**.
 3.	Ensure **Require multi party approval for sensitive admin actions** is checked.
 4.	Click **Save**.
+
+## 18. Early Access Apps
+This section covers whether users have access to early access apps or not.
+
+### Policy
+
+#### GWS.COMMONCONTROLS.18.1v0.2
+Early Access Apps Service Status SHOULD be set to OFF for everyone.
+
+- _Rationale_: Allowing access to early access apps could provide access to apps that are not needed which then creates a security risk. Disabling access to these apps mitigates that risk.
+- _Last modified:_ August 7, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
+  - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
+    - [T1204:001: User Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
+    - [T1204:002: User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
+    - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
+
+### Resources
+-	[GWS Admin Help \| Turn Early Access apps on or off for users](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13515709%3Fhl%3Den&assistant_id=generic-unu&product_context=13515709&product_name=UnuFlow&trigger_context=a)
+
+### Prerequisites
+
+- Super Admin role
+
+### Implementation
+
+#### GWS.COMMONCONTROLS.18.1v0.2 Instructions
+To configure additional services per the policy:
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.	Navigate to **Apps** -> **Additional Google services** -> **Service Status**.
+3.	Ensure **OFF for everyone** is checked.
+4.	Click **Save**.
