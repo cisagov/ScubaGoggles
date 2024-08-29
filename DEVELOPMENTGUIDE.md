@@ -29,9 +29,10 @@ See [Branching Structure Diagram](BRANCHINGSTRUCTURE.md) for a visual representa
 
 ## Creating Issues
 All needed changes (e.g., new features, bug fixes) need to be tracked in an issue. When creating an issue:
-- Be sure to follow the template.
-- Add the appropriate labels (e.g., "bug," "enhancement").
-- Add the issue to the correct project.
+1. Be sure to follow the template.
+2. Add the appropriate labels (e.g., "bug," "enhancement").
+3. Add the issue to the correct project.
+4. Leave the milestone option blank; new issues will be triaged during sprint planning and assigned to an appropriate milestone.
 
 ## Contributing Code
 ### Step 1: Create a branch and implement changes
