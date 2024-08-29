@@ -26,6 +26,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Data Regions](#15-data-regions-and-storage)
 - [Additional Google Services](#16-additional-google-services)
 - [Multi-Party Approvals](#17-multi-party-approval)
+- [Early Access Apps](#18-early-access-apps)
 
 ## Assumptions
 
