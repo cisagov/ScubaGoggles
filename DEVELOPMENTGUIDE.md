@@ -1,5 +1,5 @@
 # Development Guide
-The Development Guide establishes conventions that regular contributors are expected to follow on ScubaGoggles. If you are a new or first-time contributor, you are not required to follow all these conventions, though it is certainly appreciated. See instead [CONTRIBUTING.md](CONTRIBUTING.md) for licencing details and guidance for new contributors.
+The Development Guide establishes conventions that regular contributors are expected to follow on ScubaGoggles.
 
 ## Branching Strategy
 We adhere to [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow) as closely as our specific constraints allow. In general, this means:

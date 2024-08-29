@@ -2,7 +2,7 @@
 
 We're so glad you're thinking about contributing to this open-source project! If you're unsure or hesitant to make a recommendation, just ask, submit the issue, or pull request. The worst that can happen is that you'll be politely asked to change something. We appreciate any sort of contribution(s), and don't want a wall of rules to stifle innovation.
 
-Before contributing, we encourage you to read our CONTRIBUTING policy (you are here), our [LICENSE](https://github.com/cisagov/ScubaGoggles/blob/main/LICENSE), and our [README](https://github.com/cisagov/ScubaGoggles/blob/main/README.md), all of which are in this repository.
+Before contributing, we encourage you to read our CONTRIBUTING policy (you are here), our [LICENSE](https://github.com/cisagov/ScubaGoggles/blob/main/LICENSE), and our [README](https://github.com/cisagov/ScubaGoggles/blob/main/README.md), all of which are in this repository. Additionally, consider reviewing our [DEVELOPMENTGUIDE](DEVELOPMENTGUIDE.md), which establishes the conventions expected of regular contributors. However, if you are a new or first-time contributor, you are not required to follow all the conventions described there, though it is certainly appreciated.
 
 ## Issues
 
