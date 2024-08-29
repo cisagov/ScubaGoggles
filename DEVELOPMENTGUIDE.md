@@ -14,7 +14,7 @@ To accommodate this, the development lifecycle on ScubaGoggles is as follows:
 Baseline submission triggers a baseline freeze, at which point the following actions need to be performed:
 1. Bump the code in `main` to the upcoming version (to reduce merge conflicts downstream).
 2. Make a note of the last commit hash, to help in case of complications rebasing down the line.
-3. Create a temporary protected branch dedicated to baseline changes.
+3. Create a temporary protected branch dedicated to baseline changes that are slated for the next release.
 
 A new release triggers the transition back to normal operations. At this time, the following actions need to be performed:
 1. Pause development on main and perform functional testing.
