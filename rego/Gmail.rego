@@ -500,27 +500,19 @@ if {
 #
 # Baseline GWS.GMAIL.5.5v0.3
 #--
-default NoSuchEvent5_5(_) := true
-
-NoSuchEvent5_5(TopLevelOU) := false if {
-    # No such event...
+default NoSuchEvent5_5 := false
+NoSuchEvent5_5 := true if {
     SettingName := "Attachment safety Encrypted attachment protection setting action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent5_5(TopLevelOU) := false if {
-    # No such event...
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Attachment safety Attachment with scripts protection action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent5_5(TopLevelOU) := false if {
-    # No such event...
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Attachment safety Anomalous attachment protection setting action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
 }
 
 DetailedMessageA_5_5(NewValueA) := "Encrypted attachments from untrusted senders"
@@ -535,14 +527,10 @@ DetailedMessageC_5_5(NewValueC) := "Emails with anamolous attachements"
     if { NewValueC == "Show warning" }
     else := ""
 
-DetailedMessageD_5_5(NewValueD) := "Emails flagged by the attachment protection controls"
-    if { NewValueD == "Show warning" }
-    else := ""
-
-GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) :=
+GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) =
     concat("", ["List of email types left in inbox:",
         DetailedMessageA_5_5(NewValueA), DetailedMessageB_5_5(NewValueB),
-        DetailedMessageC_5_5(NewValueC), DetailedMessageD_5_5(NewValueD)])
+        DetailedMessageC_5_5(NewValueC)])
 
 NonCompliantOUs5_5 contains {
     "Name": OU,
@@ -579,7 +567,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    NoSuchEvent5_5(utils.TopLevelOU)
+    NoSuchEvent5_5
 }
 
 tests contains {
@@ -591,7 +579,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent5_5(utils.TopLevelOU)
+    not NoSuchEvent5_5
     Status := count(NonCompliantOUs5_5) == 0
 }
 #--
@@ -1201,50 +1189,29 @@ if {
 # Baseline GWS.GMAIL.7.6v0.3
 #--
 
-default NoSuchEvent7_6(_) := true
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
-    SettingName := concat("", [
-        "Spoofing and authentication safety Protect against domain spoofing based on similar ",
-        "domain names action"
-    ])
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
+default NoSuchEvent7_6 := false
+NoSuchEvent7_6 := true if {
+    SettingName :=
+        "Spoofing and authentication safety Protect against domain spoofing based on similar domain names action"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Spoofing and authentication safety Protect against spoofing of employee names action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
-    SettingName := concat("", [
-        "Spoofing and authentication safety Protect against domain spoofing based on similar ",
-        "domain names action"
-    ])
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
+    SettingName := "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Spoofing and authentication safety Protect against any unauthenticated emails action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
-    SettingName := concat("", [
-        "Spoofing and authentication safety Protect your Groups from inbound emails spoofing ",
-        "your domain action"
-    ])
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
+    SettingName :=
+        "Spoofing and authentication safety Protect your Groups from inbound emails spoofing your domain action"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
 }
 
 DetailedMessageA(NewValueA) := "Inbound emails spoofing domain names"
@@ -1332,7 +1299,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    NoSuchEvent7_6(utils.TopLevelOU)
+    NoSuchEvent7_6
 }
 
 tests contains {
@@ -1344,7 +1311,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent7_6(utils.TopLevelOU)
+    not NoSuchEvent7_6
     Status := count(NonCompliantOUs7_6) == 0
 }
 #--
