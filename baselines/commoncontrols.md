@@ -1214,6 +1214,6 @@ Early Access Apps Service Status SHOULD be set to OFF for everyone.
 #### GWS.COMMONCONTROLS.18.1v0.2 Instructions
 To configure additional services per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Apps** -> **Additional Google services** -> **Service Status**.
+2.	Navigate to **Apps** -> **Additional Google services** -> **Settings for Early Access Apps**.
 3.	Ensure **OFF for everyone** is checked.
 4.	Click **Save**.
