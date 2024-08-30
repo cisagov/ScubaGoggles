@@ -1192,7 +1192,7 @@ This section covers whether users have access to early access apps or not.
 #### GWS.COMMONCONTROLS.18.1v0.2
 Early Access Apps Service Status SHOULD be set to OFF for everyone.
 
-- _Rationale_: Allowing access to early access apps could provide access to apps that are not needed which then creates a security risk. Disabling access to these apps mitigates that risk.
+- _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure the latest security standards are met.
 - _Last modified:_ August 7, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -1203,7 +1203,7 @@ Early Access Apps Service Status SHOULD be set to OFF for everyone.
     - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 ### Resources
--	[GWS Admin Help \| Turn Early Access apps on or off for users](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13515709%3Fhl%3Den&assistant_id=generic-unu&product_context=13515709&product_name=UnuFlow&trigger_context=a)
+-	[GWS Admin Help \| Turn Early Access apps on or off for users](https://support.google.com/a/answer/13515709)
 
 ### Prerequisites
 
