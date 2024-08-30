@@ -1137,8 +1137,22 @@ Service status for Google services that do not have an individual control SHOULD
     - [T1204:002: Trusted Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
     - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
+#### GWS.COMMONCONTROLS.16.2v0.3
+Early Access Apps Service Status SHOULD be set to OFF for everyone.
+
+- _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure the latest security standards are met.
+- _Last modified:_ August 7, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
+  - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
+    - [T1204:001: User Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
+    - [T1204:002: User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
+    - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
+
 ### Resources
 -	[GWS Admin Help \| Turn on or off additional Google services](https://support.google.com/a/answer/181865)
+-	[GWS Admin Help \| Turn Early Access apps on or off for users](https://support.google.com/a/answer/13515709)
 
 ### Prerequisites
 
@@ -1146,13 +1160,21 @@ Service status for Google services that do not have an individual control SHOULD
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.16.1v0.3 Instructions
-To configure additional services per the policy:
+#### Policy Group 16 Common Implementation Instructions:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Apps** -> **Additional Google services**.
-3.	Click **CHANGE** at the top where it says if **Access to additional services without individual control for all organizational units is On/Off**.
-4.	Select the option: "**OFF for everyone**"
-6.	Click **Save**.
+
+#### GWS.COMMONCONTROLS.16.1v0.3 Instructions
+To configure additional services per the policy:
+1.	Click **CHANGE** at the top where it says if **Access to additional services without individual control for all organizational units is On/Off**.
+2.	Select the option: "**OFF for everyone**"
+3.	Click **Save**.
+
+#### GWS.COMMONCONTROLS.18.1v0.2 Instructions
+To configure additional services per the policy:
+1.	Navigate to **Settings for Early Access Apps**.
+2.	Ensure **OFF for everyone** is checked.
+3.	Click **Save**.
 
 ## 17. Multi-Party Approval
 This section covers whether multiple super admins need to approve changes to specific admin console settings.
@@ -1182,38 +1204,4 @@ To configure additional services per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Security** -> **Authentication** -> **Multi-party approval settings**.
 3.	Ensure **Require multi party approval for sensitive admin actions** is checked.
-4.	Click **Save**.
-
-## 18. Early Access Apps
-This section covers whether users have access to early access apps or not.
-
-### Policy
-
-#### GWS.COMMONCONTROLS.18.1v0.2
-Early Access Apps Service Status SHOULD be set to OFF for everyone.
-
-- _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure the latest security standards are met.
-- _Last modified:_ August 7, 2024
-
-- MITRE ATT&CK TTP Mapping
-  - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
-  - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
-    - [T1204:001: User Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
-    - [T1204:002: User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
-    - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
-
-### Resources
--	[GWS Admin Help \| Turn Early Access apps on or off for users](https://support.google.com/a/answer/13515709)
-
-### Prerequisites
-
-- Super Admin role
-
-### Implementation
-
-#### GWS.COMMONCONTROLS.18.1v0.2 Instructions
-To configure additional services per the policy:
-1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Apps** -> **Additional Google services** -> **Settings for Early Access Apps**.
-3.	Ensure **OFF for everyone** is checked.
 4.	Click **Save**.
