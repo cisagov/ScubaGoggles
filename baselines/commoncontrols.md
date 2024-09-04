@@ -1118,7 +1118,7 @@ To configure Supplemental Data Storage per the policy:
 
 ## 16. Additional Google Services
 
-This section covers the Google services that do not have an individual control and whether these services are on or off. This section also covers whether users have access to early access apps.
+Google Workspace considers some of its services "core services," including Gmail, Calendar, and Drive. Services outside of this core offering are controlled within the "Additional Google services" portion of the admin console. This section outlines requirements relating to those services.
 
 ### Policy
 
@@ -1169,7 +1169,7 @@ To configure additional services per the policy:
 2.	Select the option: "**OFF for everyone**"
 3.	Click **Save**.
 
-#### GWS.COMMONCONTROLS.18.1v0.2 Instructions
+#### GWS.COMMONCONTROLS.16.2v0.2 Instructions
 To configure additional services per the policy:
 1.	Navigate to **Settings for Early Access Apps**.
 2.	Ensure **OFF for everyone** is checked.
