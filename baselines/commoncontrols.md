@@ -1119,7 +1119,7 @@ To configure Supplemental Data Storage per the policy:
 
 ## 16. Additional Google Services
 
-This section covers the Google services that do not have an individual control and whether these services are on or off.
+This section covers the Google services that do not have an individual control and whether these services are on or off. This section also covers whether users have access to early access apps.
 
 ### Policy
 
