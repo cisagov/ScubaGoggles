@@ -1,4 +1,4 @@
-# CISA Google Workspace Security Configuration Baseline for Google Classroom
+# CISA Google Workspace Secure Configuration Baseline for Google Classroom
 
 Google Classroom is a service to streamline assignments, boost collaboration, and foster communication. This service allows for the creation of classes, creating and grading assignments, student collaboration, communication with teachers and students, and integration with other Google products.
 

@@ -1,4 +1,4 @@
-# CISA Google Workspace Security Configuration Baseline for Google Meet
+# CISA Google Workspace Secure Configuration Baseline for Google Meet
 
 Google Meet is a video conferencing service in Google Workspace that supports real-time video, desktop, and presentation sharing. Meet allows administrators to control and manage their video meetings. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Meet security.
 
