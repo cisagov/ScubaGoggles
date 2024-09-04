@@ -1,4 +1,4 @@
-# CISA Google Workspace Security Configuration Baseline for Google Chat
+# CISA Google Workspace Secure Configuration Baseline for Google Chat
 
 Google Chat is a communication and collaboration tool in Google Workspace that supports direct messaging, group conversations, and content creation and sharing. Chat allows administrators to control and manage their messages and files. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Chat security.
 

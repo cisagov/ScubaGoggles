@@ -1,4 +1,4 @@
-# CISA Google Workspace Security Configuration Baseline for Gmail
+# CISA Google Workspace Secure Configuration Baseline for Gmail
 
 Gmail is the Google Workspace offering for sending and receiving email. Users can upload attachments to emails and send them to a given email address. Additional Gmail features include integrating with other Google applications, such as Meet and Chat. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Gmail security.
 

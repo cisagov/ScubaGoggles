@@ -1,4 +1,4 @@
-# CISA Google Workspace Security Configuration Baseline for Google Calendar
+# CISA Google Workspace Secure Configuration Baseline for Google Calendar
 
 Google Calendar is a calendar service in Google Workspace used for creating and editing events that enables collaboration amongst users. Calendar allows administrators to control and manage their sharing settings for both internal and external use. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Calendar security.
 

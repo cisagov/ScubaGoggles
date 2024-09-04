@@ -1,4 +1,4 @@
-# CISA Google Workspace Security Configuration Baseline for Common Controls
+# CISA Google Workspace Secure Configuration Baseline for Common Controls
 
 The Google Workspace (GWS) Admin console is the primary configuration hub for configuring and setting up the subscription. The scope of this document is to provide recommendations for setting up the subscription's security controls. This Secure Configuration Baseline (SCB) provides specific policies to strengthen the security of a GWS tenant.
 

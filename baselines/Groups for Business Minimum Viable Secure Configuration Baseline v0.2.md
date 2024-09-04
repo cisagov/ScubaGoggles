@@ -1,4 +1,4 @@
-# CISA Google Workspace Security Configuration Baseline for Groups for Business
+# CISA Google Workspace Secure Configuration Baseline for Groups for Business
 
 Groups for Business is a Google Workspace collaboration tool that supports storage, access, and sharing of files, document management, and email. Groups for Business allows administrators to control and manage collaboration efforts among groups within their organizations. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Groups security.
 
