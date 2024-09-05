@@ -2421,6 +2421,90 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V1 if {
 }
 
 test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V2 if {
+    # Test Spoofing and Authentication Protections when only one setting doesn't have enents
+    PolicyId := "GWS.GMAIL.7.7v0.3"
+    Output := tests with input as {
+"gmail_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:24.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Spoofing and authentication safety Protect against domain spoofing based on similar ",
+                                "domain names action"
+                            ])
+                        },
+                        {"name": "NEW_VALUE", "value": "Quarantine"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:25.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value":
+                                "Spoofing and authentication safety Protect against spoofing of employee names action"
+                        },
+                        {"name": "NEW_VALUE", "value": "Move to spam"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:26.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": concat("", [
+                                "Spoofing and authentication safety Protect against inbound emails spoofing your ",
+                                "domain action"
+                            ])
+                        },
+                        {"name": "NEW_VALUE", "value": "Move to spam"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:27.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value":
+                                "Spoofing and authentication safety Protect against any unauthenticated emails action"
+                        },
+                        {"name": "NEW_VALUE", "value": "Move to spam"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            # Note that "Spoofing and authentication safety Protect your Groups from inbound emails spoofing your
+            # domain action" is missing
+        ]},
+        "tenant_info": {
+            "topLevelOU": ""
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
+}
+
+test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
     PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
@@ -2455,7 +2539,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V2 if {
         "Automatically enable all future added settings is set to disabled</li></ul>"])
 }
 
-test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V3 if {
+test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
     PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
@@ -2506,7 +2590,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V3 if {
         "Automatically enable all future added settings is set to disabled</li></ul>"])
 }
 
-test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V4 if {
+test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there's only one event and it's wrong
     PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {
@@ -2541,7 +2625,7 @@ test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V4 if {
         "Automatically enable all future added settings is set to disabled</li></ul>"])
 }
 
-test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V5 if {
+test_SpoofingAuthenticationProtectionFutureRecommendedSettings_Incorrect_V6 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
     PolicyId := "GWS.GMAIL.7.7v0.3"
     Output := tests with input as {

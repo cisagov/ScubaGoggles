@@ -1284,3 +1284,75 @@ test_AttachmentSafety_InCorrect_V2 if {
         "Emails with encrypted attachments from untrusted senders are kept in the inbox</li></ul>"])
 }
 
+test_AttachmentSafety_Inorrect_V3 if {
+    # Test Spoofing and Authentication Protections when one setting is missing events
+    PolicyId := "GWS.GMAIL.5.5v0.3"
+    Output := tests with input as {
+        "gmail_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:24.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Attachment safety Encrypted attachment protection setting action"
+                        },
+                        {"name": "NEW_VALUE", "value": "Move to spam"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:25.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Attachment safety Attachment with scripts protection action"
+                        },
+                        {"name": "NEW_VALUE", "value": "Move to spam"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                    ]
+                }]
+            }
+            # Note: no event for "Attachment safety Anomalous attachment protection setting action"
+        ]},
+        "tenant_info": {
+            "topLevelOU": ""
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
+}
+
+
+test_AttachmentSafety_Inorrect_V4 if {
+    # Test Spoofing and Authentication Protections when all settings have no events
+    PolicyId := "GWS.GMAIL.5.5v0.3"
+    Output := tests with input as {
+        "gmail_logs": {"items": [
+
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
+        "While we are unable to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])
+}

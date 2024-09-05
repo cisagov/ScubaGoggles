@@ -500,27 +500,20 @@ if {
 #
 # Baseline GWS.GMAIL.5.5v0.3
 #--
-default NoSuchEvent5_5(_) := true
 
-NoSuchEvent5_5(TopLevelOU) := false if {
-    # No such event...
+default NoSuchEvent5_5 := false
+NoSuchEvent5_5 := true if {
     SettingName := "Attachment safety Encrypted attachment protection setting action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent5_5(TopLevelOU) := false if {
-    # No such event...
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Attachment safety Attachment with scripts protection action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent5_5(TopLevelOU) := false if {
-    # No such event...
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Attachment safety Anomalous attachment protection setting action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
 }
 
 GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) :=
@@ -568,7 +561,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    NoSuchEvent5_5(utils.TopLevelOU)
+    NoSuchEvent5_5
 }
 
 tests contains {
@@ -580,7 +573,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent5_5(utils.TopLevelOU)
+    not NoSuchEvent5_5
     Status := count(NonCompliantOUs5_5) == 0
 }
 #--
@@ -1190,50 +1183,30 @@ if {
 # Baseline GWS.GMAIL.7.6v0.3
 #--
 
-default NoSuchEvent7_6(_) := true
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
-    SettingName := concat("", [
-        "Spoofing and authentication safety Protect against domain spoofing based on similar ",
-        "domain names action"
-    ])
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
+# No such event is true if any of the revelant settings doesn't having any events
+default NoSuchEvent7_6 := false
+NoSuchEvent7_6 := true if {
+    SettingName :=
+        "Spoofing and authentication safety Protect against domain spoofing based on similar domain names action"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Spoofing and authentication safety Protect against spoofing of employee names action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
-    SettingName := concat("", [
-        "Spoofing and authentication safety Protect against domain spoofing based on similar ",
-        "domain names action"
-    ])
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
+    SettingName := "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Spoofing and authentication safety Protect against any unauthenticated emails action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
-    SettingName := concat("", [
-        "Spoofing and authentication safety Protect your Groups from inbound emails spoofing ",
-        "your domain action"
-    ])
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
+    SettingName :=
+        "Spoofing and authentication safety Protect your Groups from inbound emails spoofing your domain action"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
 }
 
 GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) :=
@@ -1264,22 +1237,18 @@ NonCompliantOUs7_6 contains {
         "similar domain names action"
     ])
     EventsA := utils.FilterEventsOU(LogEvents, SettingA, OU)
-    count(EventsA) > 0
     LastEventA := utils.GetLastEvent(EventsA)
 
     SettingB := "Spoofing and authentication safety Protect against spoofing of employee names action"
     EventsB := utils.FilterEventsOU(LogEvents, SettingB, OU)
-    count(EventsB) > 0
     LastEventB := utils.GetLastEvent(EventsB)
 
     SettingC := "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
     EventsC := utils.FilterEventsOU(LogEvents, SettingC, OU)
-    count(EventsC) > 0
     LastEventC := utils.GetLastEvent(EventsC)
 
     SettingD := "Spoofing and authentication safety Protect against any unauthenticated emails action"
     EventsD := utils.FilterEventsOU(LogEvents, SettingD, OU)
-    count(EventsD) > 0
     LastEventD := utils.GetLastEvent(EventsD)
 
     SettingE := concat("", [
@@ -1287,7 +1256,6 @@ NonCompliantOUs7_6 contains {
         "your domain action"
     ])
     EventsE := utils.FilterEventsOU(LogEvents, SettingE, OU)
-    count(EventsE) > 0
     LastEventE := utils.GetLastEvent(EventsE)
 
     # OU is non-compliant if any of the following are true
@@ -1311,7 +1279,7 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    NoSuchEvent7_6(utils.TopLevelOU)
+    NoSuchEvent7_6
 }
 
 tests contains {
@@ -1323,7 +1291,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent7_6(utils.TopLevelOU)
+    not NoSuchEvent7_6
     Status := count(NonCompliantOUs7_6) == 0
 }
 #--
