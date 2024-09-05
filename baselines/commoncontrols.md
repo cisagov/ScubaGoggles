@@ -1137,7 +1137,7 @@ Service status for Google services that do not have an individual control SHOULD
     - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.COMMONCONTROLS.16.2v0.3
-Early Access Apps Service Status SHOULD be set to OFF for everyone.
+User access to Early Access Apps SHOULD be disabled.
 
 - _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure the latest security standards are met.
 - _Last modified:_ August 7, 2024
@@ -1159,21 +1159,20 @@ Early Access Apps Service Status SHOULD be set to OFF for everyone.
 
 ### Implementation
 
-#### Policy Group 16 Common Implementation Instructions:
+#### Policy Group 16 Common Instructions
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Apps** -> **Additional Google services**.
 
 #### GWS.COMMONCONTROLS.16.1v0.3 Instructions
-To configure additional services per the policy:
 1.	Click **CHANGE** at the top where it says if **Access to additional services without individual control for all organizational units is On/Off**.
 2.	Select the option: "**OFF for everyone**"
 3.	Click **Save**.
 
-#### GWS.COMMONCONTROLS.16.2v0.2 Instructions
-To configure additional services per the policy:
-1.	Navigate to **Settings for Early Access Apps**.
-2.	Ensure **OFF for everyone** is checked.
-3.	Click **Save**.
+#### GWS.COMMONCONTROLS.16.2v0.3 Instructions
+1.      In the list of all services, scroll to and click on the **Early Access** service. 
+2.	Click on **Service status**.
+3.	Ensure **OFF for everyone** is checked.
+4.	Click **Save**.
 
 ## 17. Multi-Party Approval
 This section covers whether multiple super admins need to approve changes to specific admin console settings.
