@@ -66,7 +66,7 @@ For example, for the issue above you might name the pull request "Add smoke test
 6. Follow the template!
     - Under motivation and context, if you're not sure what to put, you can just put "Closes #issue-number," e.g., "Closes #341."
 This does two things: it makes it so that GitHub will automatically close the issue when the PR is merged and it lets the reviewers know where they can look for context.
-NOTE: in order for GitHub to automatically close the issue, the "closes" statement needs to be the only thing on the line. For example: "Closes #341. Closes 342" won't work;
+NOTE: in order for GitHub to automatically close the issue, the "closes" statement needs to be the only thing on the line. For example: "Closes #341. Closes #342" won't work;
 the two "closes" statements need to be on separate lines.
     - Check the pre-approval checklist. If you can't check all the boxes there, reconsider making the pull request now – that is a sign that the branch isn't ready to be merged yet.
 7. Assign two reviewers. If unsure who to assign, bring up the issue in a team meeting for recommendations.
