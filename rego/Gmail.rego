@@ -527,10 +527,25 @@ DetailedMessageC_5_5(NewValueC) := "Emails with anamolous attachements"
     if { NewValueC == "Show warning" }
     else := ""
 
-GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) =
-    concat("", ["List of email types left in inbox:",
-        DetailedMessageA_5_5(NewValueA), DetailedMessageB_5_5(NewValueB),
-        DetailedMessageC_5_5(NewValueC)])
+GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) := concat("", [
+    "<p>",
+    "The following email types are kept in the inbox:",
+    "</p>",
+    "<ul>",
+    concat("", [concat("", [
+        "<li>",
+        DetailedMessageA_5_5(NewValueA),
+        ", ",
+        DetailedMessageB_5_5(NewValueB),
+        ", ",
+        DetailedMessageC_5_5(NewValueC),
+        "</li>"
+    ])]),
+    "</ul>"
+])
+    # concat("", ["List of email types left in inbox:",
+    #     DetailedMessageA_5_5(NewValueA), DetailedMessageB_5_5(NewValueB),
+    #     DetailedMessageC_5_5(NewValueC)])
 
 NonCompliantOUs5_5 contains {
     "Name": OU,
@@ -1234,11 +1249,34 @@ DetailedMessageE(NewValueE) := "Inbound spoofing emails addresed to groups"
     if { NewValueE == "Show warning" }
     else := ""
 
-GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) =
-    concat("", ["List of email types left in inbox:",
-        DetailedMessageA(NewValueA), DetailedMessageB(NewValueB),
-        DetailedMessageC(NewValueC), DetailedMessageD(NewValueD),
-        DetailedMessageE(NewValueE)])
+GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) := concat("", [
+    "<p>",
+    "The following email types are kept in the inbox:",
+    "</p>",
+    "<ul>",
+    concat("", [concat("", [
+        "<li>",
+        DetailedMessageA(NewValueA),
+        "</li>",
+        "<li>",
+        DetailedMessageB(NewValueB),
+        "</li>",
+        "<li>",
+        DetailedMessageC(NewValueC),
+        "</li>",
+        "<li>",
+        DetailedMessageD(NewValueD),
+        "</li>",
+        "<li>",
+        DetailedMessageE(NewValueE),
+        "</li>"
+    ])]),
+    "</ul>"
+])
+    # concat("", ["List of email types left in inbox:",
+    #     DetailedMessageA(NewValueA), DetailedMessageB(NewValueB),
+    #     DetailedMessageC(NewValueC), DetailedMessageD(NewValueD),
+    #     DetailedMessageE(NewValueE)])
 
 NonCompliantOUs7_6 contains {
     "Name": OU,
