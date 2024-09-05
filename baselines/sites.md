@@ -1,4 +1,4 @@
-# CISA Google Workspace Security Configuration Baseline for Google Sites
+# CISA Google Workspace Secure Configuration Baseline for Google Sites
 
 Google Sites is a collaborative tool in Google Workspace that supports the creation of websites (i.e., internal project hubs, team sites, and public-facing websites) without the need of a designer, programmer, or IT help. Sites allow administrators to control and manage their files and documents. Google Drive manages sharing and publishing settings for new Sites. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Sites security.
 
