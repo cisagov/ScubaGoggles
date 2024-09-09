@@ -1205,20 +1205,14 @@ if {
 # Baseline GWS.GMAIL.7.6v0.3
 #--
 
-default NoSuchEvent7_6(_) := true
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
-    SettingName := concat("", [
-        "Spoofing and authentication safety Protect against domain spoofing based on similar ",
-        "domain names action"
-    ])
-    Events := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(Events) != 0
-}
-
-NoSuchEvent7_6(TopLevelOU) := false if {
-    # No such event...
+# No such event is true if any of the revelant settings doesn't having any events
+default NoSuchEvent7_6 := false
+NoSuchEvent7_6 := true if {
+    SettingName :=
+        "Spoofing and authentication safety Protect against domain spoofing based on similar domain names action"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+} else := true if {
     SettingName := "Spoofing and authentication safety Protect against spoofing of employee names action"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -1237,48 +1231,52 @@ NoSuchEvent7_6(TopLevelOU) := false if {
     count(Events) == 0
 }
 
-DetailedMessageA(NewValueA) := "Inbound emails spoofing domain names"
+DomainNamesMessage(NewValueA) := "Inbound emails spoofing domain names"
     if { NewValueA == "Show warning" }
     else := ""
 
-DetailedMessageB(NewValueB) := "Inbound emails spoofing employee names"
+EmployeeNamesMessage(NewValueB) := "Inbound emails spoofing employee names"
     if { NewValueB == "Show warning" }
     else := ""
 
-DetailedMessageC(NewValueC) := "Inbound spoofing emails"
+InboundEmailsMessage(NewValueC) := "Inbound spoofing emails"
     if { NewValueC == "Show warning" }
     else := ""
 
-DetailedMessageD(NewValueD) := "Unauthenticated emails"
+UnauthenticatedEmailsMessage(NewValueD) := "Unauthenticated emails"
     if { NewValueD in ["Show warning", "No action"] == true }
     else := ""
 
-DetailedMessageE(NewValueE) := "Inbound spoofing emails addresed to groups"
+GroupEmailsMessage(NewValueE) := "Inbound spoofing emails addresed to groups"
     if { NewValueE == "Show warning" }
     else := ""
+
+DetailedMessageList (NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) := non_empty_strings {
+  domainNamesMessage := DomainNamesMessage(NewValueA)
+  employeeNamesMessage := EmployeeNamesMessage(NewValueB)
+  inboundEmailsMessage := InboundEmailsMessage(NewValueC)
+  unauthenticatedEmailsMessage := UnauthenticatedEmailsMessage(NewValueD)
+  groupEmailsMessage := GroupEmailsMessage(NewValueE)
+
+  # Store the results in an array
+  results := [domainNamesMessage, employeeNamesMessage, inboundEmailsMessage, 
+    unauthenticatedEmailsMessage, groupEmailsMessage]
+
+  # Filter out empty strings
+  non_empty_strings := [s | s := results[_]; s != ""]
+}
 
 GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) := concat("", [
     "<p>",
     "The following email types are kept in the inbox:",
     "</p>",
     "<ul>",
+    "<ul>",
     concat("", [concat("", [
         "<li>",
-        DetailedMessageA(NewValueA),
-        "</li>",
-        "<li>",
-        DetailedMessageB(NewValueB),
-        "</li>",
-        "<li>",
-        DetailedMessageC(NewValueC),
-        "</li>",
-        "<li>",
-        DetailedMessageD(NewValueD),
-        "</li>",
-        "<li>",
-        DetailedMessageE(NewValueE),
+        Value,
         "</li>"
-    ])]),
+    ]) | some Value in DetailedMessageList(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE)]),
     "</ul>"
 ])
     # concat("", ["List of email types left in inbox:",
@@ -1288,36 +1286,36 @@ GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) := co
 
 NonCompliantOUs7_6 contains {
     "Name": OU,
-    "Value": GetFriendlyValue7_6(LastEventA.NewValue, LastEventB.NewValue, LastEventC.NewValue,
-        LastEventD.NewValue, LastEventE.NewValue)
+    "Value": GetFriendlyValue7_6(LastEventDomainNames.NewValue, LastEventEmployeeNames.NewValue,
+        LastEventInboundEmails.NewValue, LastEventUnauthenticatedEmails.NewValue, LastEventGroupEmails.NewValue)
 } if {
     some OU in utils.OUsWithEvents
 
-    SettingA := concat("", [
+      DomainNamesSetting := concat("", [
         "Spoofing and authentication safety Protect against domain spoofing based on ",
         "similar domain names action"
     ])
-    EventsA := utils.FilterEventsOU(LogEvents, SettingA, OU)
-    LastEventA := utils.GetLastEvent(EventsA)
+    DomainNamesEvents := utils.FilterEventsOU(LogEvents, DomainNamesSetting, OU)
+    LastEventDomainNames := utils.GetLastEvent(DomainNamesEvents)
 
-    SettingB := "Spoofing and authentication safety Protect against spoofing of employee names action"
-    EventsB := utils.FilterEventsOU(LogEvents, SettingB, OU)
-    LastEventB := utils.GetLastEvent(EventsB)
+    EmployeeNamesSetting := "Spoofing and authentication safety Protect against spoofing of employee names action"
+    EmployeeNamesEvents := utils.FilterEventsOU(LogEvents, EmployeeNamesSetting, OU)
+    LastEventEmployeeNames := utils.GetLastEvent(EmployeeNamesEvents)
 
-    SettingC := "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
-    EventsC := utils.FilterEventsOU(LogEvents, SettingC, OU)
-    LastEventC := utils.GetLastEvent(EventsC)
+    InboundEmailsSetting := "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
+    InboundEmailsEvents := utils.FilterEventsOU(LogEvents, InboundEmailsSetting, OU)
+    LastEventInboundEmails := utils.GetLastEvent(InboundEmailsEvents)
 
-    SettingD := "Spoofing and authentication safety Protect against any unauthenticated emails action"
-    EventsD := utils.FilterEventsOU(LogEvents, SettingD, OU)
-    LastEventD := utils.GetLastEvent(EventsD)
+    UnauthenticatedEmailsSetting := "Spoofing and authentication safety Protect against any unauthenticated emails action"
+    UnauthenticatedEmailsEvents := utils.FilterEventsOU(LogEvents, UnauthenticatedEmailsSetting, OU)
+    LastEventUnauthenticatedEmails := utils.GetLastEvent(UnauthenticatedEmailsEvents)
 
-    SettingE := concat("", [
+    GroupEmailsSetting := concat("", [
         "Spoofing and authentication safety Protect your Groups from inbound emails spoofing ",
         "your domain action"
     ])
-    EventsE := utils.FilterEventsOU(LogEvents, SettingE, OU)
-    LastEventE := utils.GetLastEvent(EventsE)
+    GroupEmailsEvents := utils.FilterEventsOU(LogEvents, GroupEmailsSetting, OU)
+    LastEventGroupEmails := utils.GetLastEvent(GroupEmailsEvents)
 
     # OU is non-compliant if any of the following are true
     true in [
