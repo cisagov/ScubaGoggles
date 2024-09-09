@@ -6,7 +6,7 @@ import warnings
 from tqdm import tqdm
 
 from scubagoggles.utils import create_subset_inverted_dict, create_key_to_list, merge_dicts
-from scubagoggles.types import ApiReference
+from scubagoggles.scuba_constants import ApiReference
 from scubagoggles.robust_dns import RobustDNSClient
 
 EVENTS = {

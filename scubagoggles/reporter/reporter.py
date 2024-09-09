@@ -9,7 +9,7 @@ import warnings
 from datetime import datetime
 import pandas as pd
 from scubagoggles.utils import rel_abs_path
-from scubagoggles.types import API_LINKS
+from scubagoggles.scuba_constants import API_LINKS
 
 
 class Reporter:
