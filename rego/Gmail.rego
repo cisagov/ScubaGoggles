@@ -1278,7 +1278,7 @@ DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundE
   results := [domainNamesMessage, employeeNamesMessage, inboundEmailsMessage,
     unauthenticatedEmailsMessage, groupEmailsMessage]
 
-  non_empty_strings := [s | s := results[_], s != ""]
+  non_empty_strings = [s | s = results[_]; s != ""]
 }
 
 GetFriendlyValue7_6(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
