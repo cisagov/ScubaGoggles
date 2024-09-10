@@ -2102,7 +2102,17 @@ test_SpoofingAuthenticationProtection_InCorrect_V1 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Inbound emails spoofing domain names are kept in the inbox</li></ul>"])
+        concat("", [
+        "The following email types are kept in the inbox:",
+        "<ul>",
+        concat("", [concat("", [
+            "<li>",
+            "Inbound emails spoofing domain names",
+            "</li>",
+            "<li>",
+            "Inbound spoofing emails addresed to groups",
+            "</li></ul>"]),]),
+            "</li></ul>"])])
 }
 
 test_SpoofingAuthenticationProtection_InCorrect_V2 if {
@@ -2197,7 +2207,17 @@ test_SpoofingAuthenticationProtection_InCorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Inbound emails spoofing domain names are kept in the inbox</li></ul>"])
+        concat("", [
+        "The following email types are kept in the inbox:",
+        "<ul>",
+        concat("", [concat("", [
+            "<li>",
+            "Inbound emails spoofing domain names",
+            "</li>",
+            "<li>",
+            "Inbound spoofing emails addresed to groups",
+            "</li></ul>"]),]),
+            "</li></ul>"])])
 }
 
 

@@ -533,11 +533,9 @@ DetailedMessageListEmailAttachments(NewValueEncryptedAttachment, NewValueAttachm
   attachmentWithScriptsMessage := AttachmentWithScriptsMessage(NewValueAttachmentWithScripts)
   anomalousAttachmentMessage := AnomalousAttachmentMessage(NewValueAnomalousAttachment)
 
-  # Store the results in an array
-  results := [encryptedAttachmentMessage, attachmentWithScriptsMessage, anomalousAttachmentMessage]
+ results := [encryptedAttachmentMessage, attachmentWithScriptsMessage, anomalousAttachmentMessage]
 
-  # Filter out empty strings
-  non_empty_strings := [s | s := results[_]; s != ""]
+ non_empty_strings := [s | s := results[_]; s != ""]
 }
 
 GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScripts, NewValueAnomalousAttachment) := concat("", [
@@ -551,9 +549,6 @@ GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScri
         NewValueAnomalousAttachment)]),
     "</ul>"
 ])
-    # concat("", ["List of email types left in inbox:",
-    #     DetailedMessageA_5_5(NewValueA), DetailedMessageB_5_5(NewValueB),
-    #     DetailedMessageC_5_5(NewValueC)])
 
 NonCompliantOUs5_5 contains {
     "Name": OU,
@@ -1267,11 +1262,9 @@ DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundE
   unauthenticatedEmailsMessage := UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails)
   groupEmailsMessage := GroupEmailsMessage(NewValueGroupEmails)
 
-  # Store the results in an array
   results := [domainNamesMessage, employeeNamesMessage, inboundEmailsMessage,
     unauthenticatedEmailsMessage, groupEmailsMessage]
 
-  # Filter out empty strings
   non_empty_strings := [s | s := results[_]; s != ""]
 }
 

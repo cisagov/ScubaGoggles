@@ -1223,7 +1223,14 @@ test_AttachmentSafety_InCorrect_V1 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Emails with attachments, with scripts from untrusted senders are kept in the inbox</li></ul>"])
+        concat("", [
+        "The following email types are kept in the inbox:",
+        "<ul>",
+        concat("", [concat("", [
+            "<li>",
+            "Emails with attachments, with scripts from untrusted senders",
+            "</li></ul>"]),]),
+            "</li></ul>"])])
 }
 
 test_AttachmentSafety_InCorrect_V2 if {
@@ -1281,7 +1288,14 @@ test_AttachmentSafety_InCorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Emails with encrypted attachments from untrusted senders are kept in the inbox</li></ul>"])
+        concat("", [
+        "The following email types are kept in the inbox:",
+        "<ul>",
+        concat("", [concat("", [
+            "<li>",
+            "Encrypted attachments from untrusted senders",
+            "</li></ul>"]),]),
+            "</li></ul>"])])
 }
 
 test_AttachmentSafety_Inorrect_V3 if {
@@ -1334,7 +1348,7 @@ test_AttachmentSafety_Inorrect_V3 if {
 }
 
 
-test_AttachmentSafety_Inorrect_V4 if {
+test_AttachmentSafety_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when all settings have no events
     PolicyId := "GWS.GMAIL.5.5v0.3"
     Output := tests with input as {
@@ -1355,4 +1369,72 @@ test_AttachmentSafety_Inorrect_V4 if {
         "While we are unable to determine the state from the logs, the default setting ",
         "is non-compliant; manual check recommended."
     ])
+}
+
+test_AttachmentSafety_InCorrect_V5 if {
+    # Test Spoofing and Authentication Protections when there are multiple events
+    PolicyId := "GWS.GMAIL.5.5v0.3"
+    Output := tests with input as {
+        "gmail_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:24.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Attachment safety Encrypted attachment protection setting action"
+                        },
+                        {"name": "NEW_VALUE", "value": "Show warning"},
+                        {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:25.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Attachment safety Attachment with scripts protection action"
+                        },
+                        {"name": "NEW_VALUE", "value": "Show warning"},
+                        {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2022-12-20T00:02:26.672Z"},
+                "events": [{
+                    "parameters": [
+                        {
+                            "name": "SETTING_NAME",
+                            "value": "Attachment safety Anomalous attachment protection setting action"
+                        },
+                        {"name": "NEW_VALUE", "value": "Move to spam"},
+                        {"name": "ORG_UNIT_NAME", "value": "Secondary OU"},
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": ""
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
+        concat("", [
+        "The following email types are kept in the inbox:",
+        "<ul>",
+        concat("", [concat("", [
+            "<li>",
+            "Encrypted attachments from untrusted senders",
+            "</li>",
+            "<li>",
+            "Emails with attachments, with scripts from untrusted senders",
+            "</li></ul>"]),]),
+            "</li></ul>"])])
 }
