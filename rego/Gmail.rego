@@ -1281,7 +1281,7 @@ AllDetailedMessages(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundE
     ]
 
 DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
-    NewValueUnauthenticatedEmails, NewValueGroupEmails) = [s | some s in
+    NewValueUnauthenticatedEmails, NewValueGroupEmails) := [s | some s in
         AllDetailedMessages(
             NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
     NewValueUnauthenticatedEmails, NewValueGroupEmails
