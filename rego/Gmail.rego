@@ -538,7 +538,7 @@ DetailedMessageListEmailAttachments(NewValueEncryptedAttachment, NewValueAttachm
 
  results := [encryptedAttachmentMessage, attachmentWithScriptsMessage, anomalousAttachmentMessage]
 
- non_empty_strings = s [s | some s, in results[_]; s != ""]
+ non_empty_strings = concat(["", s [s | some s, in results[_]; s != ""]])
 }
 
 GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScripts,
