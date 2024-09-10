@@ -594,7 +594,7 @@ NonCompliantOUs5_5 contains {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.5.5v0.3",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -607,7 +607,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.5.5v0.3",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
     "RequirementMet": Status,
