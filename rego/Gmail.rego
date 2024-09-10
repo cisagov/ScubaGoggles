@@ -1363,7 +1363,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.GMAIL.7.6v0.3",
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_6, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_6},
     "RequirementMet": Status,
