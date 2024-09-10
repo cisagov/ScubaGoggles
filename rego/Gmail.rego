@@ -531,7 +531,8 @@ AnomalousAttachmentMessage(NewValueAnomalousAttachment)
     if { NewValueAnomalousAttachment == "Show warning" }
     else := ""
 
-DetailedMessageListEmailAttachments(NewValueEncryptedAttachment, NewValueAttachmentWithScripts, NewValueAnomalousAttachment) := non_empty_strings {
+DetailedMessageListEmailAttachments(NewValueEncryptedAttachment,
+    NewValueAttachmentWithScripts, NewValueAnomalousAttachment) = non_empty_strings {
   encryptedAttachmentMessage := EncryptedAttachmentMessage(NewValueEncryptedAttachment)
   attachmentWithScriptsMessage := AttachmentWithScriptsMessage(NewValueAttachmentWithScripts)
   anomalousAttachmentMessage := AnomalousAttachmentMessage(NewValueAnomalousAttachment)
@@ -1266,7 +1267,8 @@ GroupEmailsMessage(NewValueGroupEmails) := "Inbound spoofing emails addresed to 
     if { NewValueGroupEmails == "Show warning" }
     else := ""
 
-DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails, NewValueUnauthenticatedEmails, NewValueGroupEmails) := non_empty_strings {
+DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
+    NewValueUnauthenticatedEmails, NewValueGroupEmails) = non_empty_strings {
   domainNamesMessage := DomainNamesMessage(NewValueDomainNames)
   employeeNamesMessage := EmployeeNamesMessage(NewValueEmployeeNames)
   inboundEmailsMessage := InboundEmailsMessage(NewValueInboundEmails)
