@@ -539,7 +539,7 @@ DetailedMessageListEmailAttachments(NewValueEncryptedAttachment, NewValueAttachm
 
  results := [encryptedAttachmentMessage, attachmentWithScriptsMessage, anomalousAttachmentMessage]
 
- non_empty_strings := [s | some s in results[_], s != ""]
+ non_empty_strings := [s | s := results[_], s != ""]
 }
 
 GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScripts,
@@ -1278,7 +1278,7 @@ DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundE
   results := [domainNamesMessage, employeeNamesMessage, inboundEmailsMessage,
     unauthenticatedEmailsMessage, groupEmailsMessage]
 
-  non_empty_strings := [s | s := results[_]; if s != ""]
+  non_empty_strings := [s | s := results[_], s != ""]
 }
 
 GetFriendlyValue7_6(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
