@@ -531,15 +531,14 @@ AnomalousAttachmentMessage(NewValueAnomalousAttachment)
     if { NewValueAnomalousAttachment == "Show warning" }
     else := ""
 
-DetailedMessageListEmailAttachments(NewValueEncryptedAttachment, NewValueAttachmentWithScripts,
-    NewValueAnomalousAttachment) := non_empty_strings {
+DetailedMessageListEmailAttachments(NewValueEncryptedAttachment, NewValueAttachmentWithScripts, NewValueAnomalousAttachment) := non_empty_strings {
   encryptedAttachmentMessage := EncryptedAttachmentMessage(NewValueEncryptedAttachment)
   attachmentWithScriptsMessage := AttachmentWithScriptsMessage(NewValueAttachmentWithScripts)
   anomalousAttachmentMessage := AnomalousAttachmentMessage(NewValueAnomalousAttachment)
 
  results := [encryptedAttachmentMessage, attachmentWithScriptsMessage, anomalousAttachmentMessage]
 
- non_empty_strings = [s | s = results[_]; s != ""]
+ non_empty_strings = s [s | some s in results[_]; s != ""]
 }
 
 GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScripts,
@@ -1267,8 +1266,7 @@ GroupEmailsMessage(NewValueGroupEmails) := "Inbound spoofing emails addresed to 
     if { NewValueGroupEmails == "Show warning" }
     else := ""
 
-DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
-    NewValueUnauthenticatedEmails, NewValueGroupEmails) := non_empty_strings {
+DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails, NewValueUnauthenticatedEmails, NewValueGroupEmails) := non_empty_strings {
   domainNamesMessage := DomainNamesMessage(NewValueDomainNames)
   employeeNamesMessage := EmployeeNamesMessage(NewValueEmployeeNames)
   inboundEmailsMessage := InboundEmailsMessage(NewValueInboundEmails)
@@ -1278,7 +1276,7 @@ DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundE
   results := [domainNamesMessage, employeeNamesMessage, inboundEmailsMessage,
     unauthenticatedEmailsMessage, groupEmailsMessage]
 
-  non_empty_strings = [s | s = results[_]; s != ""]
+  non_empty_strings = [s | some s in results[_]; s != ""]
 }
 
 GetFriendlyValue7_6(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
