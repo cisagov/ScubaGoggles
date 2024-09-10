@@ -283,7 +283,7 @@ NonCompliantOUs5_1 contains {
 }
 if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, 
+    Events := utils.FilterEventsOU(LogEvents,
                 concat("", ["Attachment safety Enable: ",
                     "protect against encrypted attachments from untrusted senders"]), OU)
     count(Events) > 0
@@ -516,32 +516,39 @@ NoSuchEvent5_5 := true if {
     count(Events) == 0
 }
 
-DetailedMessageA_5_5(NewValueA) := "Encrypted attachments from untrusted senders"
-    if { NewValueA == "Show warning" }
+EncryptedAttachmentMessage(NewValueEncryptedAttachment) := "Encrypted attachments from untrusted senders"
+    if { NewValueEncryptedAttachment == "Show warning" }
     else := ""
 
-DetailedMessageB_5_5(NewValueB) := "Emails with attachments, with scripts from untrusted senders"
-    if { NewValueB == "Show warning" }
+AttachmentWithScriptsMessage(NewValueAttachmentWithScripts) := "Emails with attachments, with scripts from untrusted senders"
+    if { NewValueAttachmentWithScripts == "Show warning" }
     else := ""
 
-DetailedMessageC_5_5(NewValueC) := "Emails with anamolous attachements"
-    if { NewValueC == "Show warning" }
+AnomalousAttachmentMessage(NewValueAnomalousAttachment) := "Emails with anamolous attachements"
+    if { NewValueAnomalousAttachment == "Show warning" }
     else := ""
 
-GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) := concat("", [
-    "<p>",
+DetailedMessageListEmailAttachments(NewValueEncryptedAttachment, NewValueAttachmentWithScripts, NewValueAnomalousAttachment) := non_empty_strings {
+  encryptedAttachmentMessage := EncryptedAttachmentMessage(NewValueEncryptedAttachment)
+  attachmentWithScriptsMessage := AttachmentWithScriptsMessage(NewValueAttachmentWithScripts)
+  anomalousAttachmentMessage := AnomalousAttachmentMessage(NewValueAnomalousAttachment)
+
+  # Store the results in an array
+  results := [encryptedAttachmentMessage, attachmentWithScriptsMessage, anomalousAttachmentMessage]
+
+  # Filter out empty strings
+  non_empty_strings := [s | s := results[_]; s != ""]
+}
+
+GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScripts, NewValueAnomalousAttachment) := concat("", [
     "The following email types are kept in the inbox:",
-    "</p>",
     "<ul>",
     concat("", [concat("", [
         "<li>",
-        DetailedMessageA_5_5(NewValueA),
-        ", ",
-        DetailedMessageB_5_5(NewValueB),
-        ", ",
-        DetailedMessageC_5_5(NewValueC),
+        Value,
         "</li>"
-    ])]),
+    ]) | some Value in DetailedMessageListEmailAttachments(NewValueEventEncryptedAttachment, NewValueAttachmentWithScripts,
+        NewValueAnomalousAttachment)]),
     "</ul>"
 ])
     # concat("", ["List of email types left in inbox:",
@@ -550,26 +557,27 @@ GetFriendlyValue5_5(NewValueA, NewValueB, NewValueC) := concat("", [
 
 NonCompliantOUs5_5 contains {
     "Name": OU,
-    "Value": GetFriendlyValue5_5(LastEvent_A.NewValue, LastEvent_B.NewValue, LastEvent_C.NewValue)
+    "Value": GetFriendlyValue5_5(LastEventEncryptedAttachment.NewValue, LastEventAttachmentWithScripts.NewValue,
+        LastEventAnomalousAttachment.NewValue)
 } if {
     some OU in utils.OUsWithEvents
-    Events_A := utils.FilterEventsOU(LogEvents, "Attachment safety Encrypted attachment protection setting action", OU)
-    count(Events_A) > 0
-    LastEvent_A := utils.GetLastEvent(Events_A)
+    EncryptedAttachmentEvents := utils.FilterEventsOU(LogEvents, "Attachment safety Encrypted attachment protection setting action", OU)
+    count(EncryptedAttachmentEvents) > 0
+    LastEventEncryptedAttachment := utils.GetLastEvent(EncryptedAttachmentEvents)
 
-    Events_B := utils.FilterEventsOU(LogEvents, "Attachment safety Attachment with scripts protection action", OU)
-    count(Events_B) > 0
-    LastEvent_B := utils.GetLastEvent(Events_B)
+    AttachmentWithScriptsEvents := utils.FilterEventsOU(LogEvents, "Attachment safety Attachment with scripts protection action", OU)
+    count(AttachmentWithScriptsEvents) > 0
+    LastEventAttachmentWithScripts := utils.GetLastEvent(AttachmentWithScriptsEvents)
 
-    Events_C := utils.FilterEventsOU(LogEvents, "Attachment safety Anomalous attachment protection setting action", OU)
-    count(Events_C) > 0
-    LastEvent_C := utils.GetLastEvent(Events_C)
+    AnomalousAttachmentEvents := utils.FilterEventsOU(LogEvents, "Attachment safety Anomalous attachment protection setting action", OU)
+    count(AnomalousAttachmentEvents) > 0
+    LastEventAnomalousAttachment := utils.GetLastEvent(AnomalousAttachmentEvents)
 
     # OU is non-compliant if any of the following are true
     true in [
-        LastEvent_A.NewValue == "Show warning",
-        LastEvent_B.NewValue == "Show warning",
-        LastEvent_C.NewValue == "Show warning"
+        LastEventEncryptedAttachment.NewValue == "Show warning",
+        LastEventAttachmentWithScripts.NewValue == "Show warning",
+        LastEventAnomalousAttachment.NewValue == "Show warning"
     ]
 }
 
@@ -1231,58 +1239,54 @@ NoSuchEvent7_6 := true if {
     count(Events) == 0
 }
 
-DomainNamesMessage(NewValueA) := "Inbound emails spoofing domain names"
-    if { NewValueA == "Show warning" }
+DomainNamesMessage(NewValueDomainNames) := "Inbound emails spoofing domain names"
+    if { NewValueDomainNames == "Show warning" }
     else := ""
 
-EmployeeNamesMessage(NewValueB) := "Inbound emails spoofing employee names"
-    if { NewValueB == "Show warning" }
+EmployeeNamesMessage(NewValueEmployeeNames) := "Inbound emails spoofing employee names"
+    if { NewValueEmployeeNames == "Show warning" }
     else := ""
 
-InboundEmailsMessage(NewValueC) := "Inbound spoofing emails"
-    if { NewValueC == "Show warning" }
+InboundEmailsMessage(NewValueInboundEmail) := "Inbound spoofing emails"
+    if { NewValueInboundEmail == "Show warning" }
     else := ""
 
-UnauthenticatedEmailsMessage(NewValueD) := "Unauthenticated emails"
-    if { NewValueD in ["Show warning", "No action"] == true }
+UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails) := "Unauthenticated emails"
+    if { NewValueUnauthenticatedEmails in ["Show warning", "No action"] == true }
     else := ""
 
-GroupEmailsMessage(NewValueE) := "Inbound spoofing emails addresed to groups"
-    if { NewValueE == "Show warning" }
+GroupEmailsMessage(NewValueGroupEmails) := "Inbound spoofing emails addresed to groups"
+    if { NewValueGroupEmails == "Show warning" }
     else := ""
 
-DetailedMessageList (NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) := non_empty_strings {
-  domainNamesMessage := DomainNamesMessage(NewValueA)
-  employeeNamesMessage := EmployeeNamesMessage(NewValueB)
-  inboundEmailsMessage := InboundEmailsMessage(NewValueC)
-  unauthenticatedEmailsMessage := UnauthenticatedEmailsMessage(NewValueD)
-  groupEmailsMessage := GroupEmailsMessage(NewValueE)
+DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
+    NewValueUnauthenticatedEmails, NewValueGroupEmails) := non_empty_strings {
+  domainNamesMessage := DomainNamesMessage(NewValueDomainNames)
+  employeeNamesMessage := EmployeeNamesMessage(NewValueEmployeeNames)
+  inboundEmailsMessage := InboundEmailsMessage(NewValueInboundEmails)
+  unauthenticatedEmailsMessage := UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails)
+  groupEmailsMessage := GroupEmailsMessage(NewValueGroupEmails)
 
   # Store the results in an array
-  results := [domainNamesMessage, employeeNamesMessage, inboundEmailsMessage, 
+  results := [domainNamesMessage, employeeNamesMessage, inboundEmailsMessage,
     unauthenticatedEmailsMessage, groupEmailsMessage]
 
   # Filter out empty strings
   non_empty_strings := [s | s := results[_]; s != ""]
 }
 
-GetFriendlyValue7_6(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE) := concat("", [
-    "<p>",
+GetFriendlyValue7_6(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
+    NewValueUnauthenticatedEmails, NewValueGroupEmails) := concat("", [
     "The following email types are kept in the inbox:",
-    "</p>",
-    "<ul>",
     "<ul>",
     concat("", [concat("", [
         "<li>",
         Value,
         "</li>"
-    ]) | some Value in DetailedMessageList(NewValueA, NewValueB, NewValueC, NewValueD, NewValueE)]),
+    ]) | some Value in DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
+        NewValueUnauthenticatedEmails, NewValueGroupEmails)]),
     "</ul>"
 ])
-    # concat("", ["List of email types left in inbox:",
-    #     DetailedMessageA(NewValueA), DetailedMessageB(NewValueB),
-    #     DetailedMessageC(NewValueC), DetailedMessageD(NewValueD),
-    #     DetailedMessageE(NewValueE)])
 
 NonCompliantOUs7_6 contains {
     "Name": OU,
@@ -1319,12 +1323,12 @@ NonCompliantOUs7_6 contains {
 
     # OU is non-compliant if any of the following are true
     true in [
-        LastEventA.NewValue == "Show warning",
-        LastEventB.NewValue == "Show warning",
-        LastEventC.NewValue == "Show warning",
-        LastEventD.NewValue == "Show warning",
-        LastEventD.NewValue == "No action",
-        LastEventE.NewValue == "Show warning"
+        LastEventDomainNames.NewValue == "Show warning",
+        LastEventEmployeeNames.NewValue == "Show warning",
+        LastEventInboundEmails.NewValue == "Show warning",
+        LastEventUnauthenticatedEmails.NewValue == "Show warning",
+        LastEventUnauthenticatedEmails.NewValue == "No action",
+        LastEventGroupEmails.NewValue == "Show warning"
     ]
 }
 
