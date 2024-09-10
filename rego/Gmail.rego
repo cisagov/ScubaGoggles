@@ -531,16 +531,22 @@ AnomalousAttachmentMessage(NewValueAnomalousAttachment)
     if { NewValueAnomalousAttachment == "Show warning" }
     else := ""
 
+AllDetailedMessageListEmailAttachments(
+    NewValueEncryptedAttachment,
+    NewValueAttachmentWithScripts, NewValueAnomalousAttachment
+) := [
+    EncryptedAttachmentMessage(NewValueEncryptedAttachment),
+    AttachmentWithScriptsMessage(NewValueAttachmentWithScripts),
+    AnomalousAttachmentMessage(NewValueAnomalousAttachment)
+]
+
 DetailedMessageListEmailAttachments(NewValueEncryptedAttachment,
-    NewValueAttachmentWithScripts, NewValueAnomalousAttachment) = non_empty_strings {
-  encryptedAttachmentMessage := EncryptedAttachmentMessage(NewValueEncryptedAttachment)
-  attachmentWithScriptsMessage := AttachmentWithScriptsMessage(NewValueAttachmentWithScripts)
-  anomalousAttachmentMessage := AnomalousAttachmentMessage(NewValueAnomalousAttachment)
-
- results := [encryptedAttachmentMessage, attachmentWithScriptsMessage, anomalousAttachmentMessage]
-
- non_empty_strings = [s | some s in results; s != ""]
-}
+    NewValueAttachmentWithScripts, NewValueAnomalousAttachment) := [
+        s | some s in AllDetailedMessageListEmailAttachments(
+            NewValueEncryptedAttachment, NewValueAttachmentWithScripts,
+            NewValueAnomalousAttachment
+        ); s != ""
+    ]
 
 GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScripts,
     NewValueAnomalousAttachment) := concat("", [
@@ -1267,19 +1273,19 @@ GroupEmailsMessage(NewValueGroupEmails) := "Inbound spoofing emails addresed to 
     if { NewValueGroupEmails == "Show warning" }
     else := ""
 
+AllDetailedMessages(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
+    NewValueUnauthenticatedEmails, NewValueGroupEmails) := [
+        DomainNamesMessage(NewValueDomainNames), EmployeeNamesMessage(NewValueEmployeeNames),
+        InboundEmailsMessage(NewValueInboundEmails), UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails),
+        UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails), GroupEmailsMessage(NewValueGroupEmails)
+    ]
+
 DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
-    NewValueUnauthenticatedEmails, NewValueGroupEmails) = non_empty_strings {
-  domainNamesMessage := DomainNamesMessage(NewValueDomainNames)
-  employeeNamesMessage := EmployeeNamesMessage(NewValueEmployeeNames)
-  inboundEmailsMessage := InboundEmailsMessage(NewValueInboundEmails)
-  unauthenticatedEmailsMessage := UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails)
-  groupEmailsMessage := GroupEmailsMessage(NewValueGroupEmails)
-
-  results := [domainNamesMessage, employeeNamesMessage, inboundEmailsMessage,
-    unauthenticatedEmailsMessage, groupEmailsMessage]
-
-  non_empty_strings = [s | some s in results; s != ""]
-}
+    NewValueUnauthenticatedEmails, NewValueGroupEmails) = [s | some s in
+        AllDetailedMessages(
+            NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
+    NewValueUnauthenticatedEmails, NewValueGroupEmails
+        ); s != ""]
 
 GetFriendlyValue7_6(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
     NewValueUnauthenticatedEmails, NewValueGroupEmails) := concat("", [
