@@ -539,7 +539,7 @@ DetailedMessageListEmailAttachments(NewValueEncryptedAttachment, NewValueAttachm
 
  results := [encryptedAttachmentMessage, attachmentWithScriptsMessage, anomalousAttachmentMessage]
 
- non_empty_strings := [s | s := results[_] if s != ""]
+ non_empty_strings := [s | s := results[_]; if s != ""]
 }
 
 GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScripts,
@@ -1226,17 +1226,17 @@ NoSuchEvent7_6 := true if {
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 } else := true if {
-    SettingName := 
+    SettingName :=
         "Spoofing and authentication safety Protect against spoofing of employee names action"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 } else := true if {
-    SettingName := 
+    SettingName :=
         "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
 } else := true if {
-    SettingName := 
+    SettingName :=
         "Spoofing and authentication safety Protect against any unauthenticated emails action"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
@@ -1278,7 +1278,7 @@ DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundE
   results := [domainNamesMessage, employeeNamesMessage, inboundEmailsMessage,
     unauthenticatedEmailsMessage, groupEmailsMessage]
 
-  non_empty_strings := [s | s := results[_] if s != ""]
+  non_empty_strings := [s | s := results[_]; if s != ""]
 }
 
 GetFriendlyValue7_6(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
