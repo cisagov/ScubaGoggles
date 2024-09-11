@@ -1266,7 +1266,7 @@ InboundEmailsMessage(NewValueInboundEmail) := "Inbound spoofing emails"
     else := ""
 
 UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails) := "Unauthenticated emails"
-    if { NewValueUnauthenticatedEmails in ["Show warning", "No action"] == true }
+    if { NewValueUnauthenticatedEmails in ["Show warning", "No action"] }
     else := ""
 
 GroupEmailsMessage(NewValueGroupEmails) := "Inbound spoofing emails addresed to groups"
