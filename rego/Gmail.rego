@@ -1277,7 +1277,7 @@ AllDetailedMessages(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundE
     NewValueUnauthenticatedEmails, NewValueGroupEmails) := [
         DomainNamesMessage(NewValueDomainNames), EmployeeNamesMessage(NewValueEmployeeNames),
         InboundEmailsMessage(NewValueInboundEmails), UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails),
-        UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails), GroupEmailsMessage(NewValueGroupEmails)
+        GroupEmailsMessage(NewValueGroupEmails)
     ]
 
 DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
