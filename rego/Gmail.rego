@@ -1253,7 +1253,7 @@ NoSuchEvent7_6 := true if {
     count(Events) == 0
 }
 
-DomainNamesMessage(NewValueDomainNames) := "Inbound emails spoofing domain names"
+DomainNamesMessage(NewValueDomainNames) := "Inbound emails spoofing similar domain names"
     if { NewValueDomainNames == "Show warning" }
     else := ""
 
@@ -1261,7 +1261,7 @@ EmployeeNamesMessage(NewValueEmployeeNames) := "Inbound emails spoofing employee
     if { NewValueEmployeeNames == "Show warning" }
     else := ""
 
-InboundEmailsMessage(NewValueInboundEmail) := "Inbound spoofing emails"
+InboundEmailsMessage(NewValueInboundEmail) := "Inbound emails spoofing your domain name"
     if { NewValueInboundEmail == "Show warning" }
     else := ""
 
