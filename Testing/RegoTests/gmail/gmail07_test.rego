@@ -2107,7 +2107,7 @@ test_SpoofingAuthenticationProtection_InCorrect_V1 if {
         "<ul>",
         concat("", [concat("", [
             "<li>",
-            "Inbound emails spoofing domain names",
+            "Inbound emails spoofing similar domain names",
             "</li>",
             "<li>",
             "Inbound spoofing emails addresed to groups",
@@ -2212,7 +2212,7 @@ test_SpoofingAuthenticationProtection_InCorrect_V2 if {
         "<ul>",
         concat("", [concat("", [
             "<li>",
-            "Inbound emails spoofing domain names",
+            "Inbound emails spoofing similar domain names",
             "</li>",
             "<li>",
             "Inbound spoofing emails addresed to groups",
