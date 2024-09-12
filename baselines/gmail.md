@@ -376,7 +376,7 @@ To configure the settings for Attachment Protections:
 1.  Check the **Protect against attachments with scripts from untrusted senders** checkbox.
 
 #### GWS.GMAIL.5.3v0.3 Instructions
-1Ok.  Check the **Protect against anomalous attachment types in emails** checkbox
+1.  Check the **Protect against anomalous attachment types in emails** checkbox.
 
 #### GWS.GMAIL.5.4v0.3 Instructions
 1.  Check the **Apply future recommended settings automatically** checkbox.
