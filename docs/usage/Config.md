@@ -20,3 +20,7 @@ It can also be invoked while overriding the `baselines` parameter.
 ```
 scubagoggles gws --config basic_config.yaml -b gmail chat
 ```
+
+## Navigation
+- Continue to [Usage: Examples](/docs/usage/Examples.md)
+- Return to [Documentation Home](/README.md)
