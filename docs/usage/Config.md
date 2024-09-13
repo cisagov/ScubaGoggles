@@ -6,7 +6,7 @@ All ScubaGoggles [parameters](/docs/usage/Parameters.md) can be placed into a co
 > If a parameter is specified both on the command-line and in a configuration file, the command-line parameter has precedence over the config file.
 
 ## Sample Configuration Files
-[Sample config files](/sample-config-files) are available in the repo and discussed below.
+[Sample config files](/sample-config-files) are available in the repo and are discussed below.
 
 ### Basic Usage
 The [basic use](/sample-config-files/basic_config.yaml) example config file specifies the `outpath`, `baselines`, and `quiet` parameters.
