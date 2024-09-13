@@ -7,6 +7,7 @@ rego, and report creation stages for the automated SCuBA conformance assessment
 
 import argparse
 from scubagoggles.orchestrator import Orchestrator
+from scubagoggles.scuba_config import ScubaConfig
 
 def get_gws_args(parser):
     """
@@ -24,6 +25,9 @@ def get_gws_args(parser):
         "output_folder_name": "GWSBaselineConformance",
         "json_output_name": "ScubaResults"
     }
+
+    parser.add_argument('--config', required=False,
+        help='Config file path. TODO add details')
 
     parser.add_argument('-b', '--baselines',
     type = str, nargs="+", default=gws_baselines, choices=gws_baselines, metavar='',
@@ -137,9 +141,8 @@ def dive():
     gws_parser = subparsers.add_parser('gws', help=gws_parser_help)
     get_gws_args(gws_parser)
 
-    args = parser.parse_args()
-
-    if args.scuba_cmd == 'gws':
-        Orchestrator(args).start_automation()
+    config = ScubaConfig(parser)
+    if config.scuba_cmd == 'gws':
+        Orchestrator(config).start_automation()
     else:
         raise Exception("Invalid subparser. Run scubagoggles -h to see a list of valid subparsers")

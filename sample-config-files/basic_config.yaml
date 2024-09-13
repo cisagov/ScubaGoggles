@@ -1,0 +1,12 @@
+Description: YAML Basic Configuration file with examples of how to specify
+  various types of parameters.
+
+# Example specifying a string parameter
+outputpath: example_output
+
+# Example specifying a list parameter
+# baselines: [gmail, calendar, groups, chat, drive, meet, sites, commoncontrols]
+baselines: [chat]
+
+# Example specifying a boolean paramter
+quiet: false
