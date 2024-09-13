@@ -26,9 +26,6 @@ def get_gws_args(parser):
         "json_output_name": "ScubaResults"
     }
 
-    parser.add_argument('--config', required=False,
-        help='Config file path. TODO add details')
-
     parser.add_argument('-b', '--baselines',
     type = str, nargs="+", default=gws_baselines, choices=gws_baselines, metavar='',
     help='A list of one or more abbreviated GWS baseline names that the tool will assess.' +
@@ -42,6 +39,13 @@ def get_gws_args(parser):
     help='The relative path and name of the OAuth / service account credentials json file. ' +
     'Defaults to "./credentials.json" which means the tool will look ' +
     'for the file named credentials.json in the current directory.')
+
+    parser.add_argument('--config', type=str, required=False, metavar='',
+    help='Local file path to a YAML formatted configuration file. ' +
+    'Configuration file parameters can be used in place of command-line ' +
+    'parameters. Additional parameters and variables not available on the ' +
+    'command line can also be included in the file that will be provided to the ' +
+    'tool for use in specific tests.')
 
     parser.add_argument('--outjsonfilename', type=str,
     default=default_file_output_names['json_output_name'], metavar='',
