@@ -33,6 +33,11 @@ See the `help` options yourself
 scubagoggles gws -h
 ```
 
+## Example 6: Run with a config file
+```
+scubagoggles gws --config sample-config-files/basic_config.yaml
+```
+
 The html report should open automatically. If not, navigate to the output folder and open the `*.html` file using a browser of your choice. The json output will also be located in this folder.
 
 > [!NOTE]

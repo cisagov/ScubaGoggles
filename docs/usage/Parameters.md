@@ -54,5 +54,5 @@ optional arguments:
 ```
 
 ## Navigation
-- Continue to [Usage: Examples](/docs/usage/Examples.md)
+- Continue to [Usage: Config File](/docs/usage/Config.md)
 - Return to [Documentation Home](/README.md)
