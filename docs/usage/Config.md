@@ -5,9 +5,6 @@ All ScubaGoggles [parameters](/docs/usage/Parameters.md) can be placed into a co
 > [!NOTE]
 > If a parameter is specified both on the command-line and in a configuration file, the command-line parameter has precedence over the config file.
 
-> [!NOTE]
-> The config file only supports the long form of the parameter names (e.g., `baselines` instead of `b`).
-
 ## Sample Configuration Files
 [Sample config files](/sample-config-files) are available in the repo and discussed below.
 
