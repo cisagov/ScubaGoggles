@@ -9,7 +9,7 @@ All ScubaGoggles [parameters](/docs/usage/Parameters.md) can be placed into a co
 [Sample config files](/sample-config-files) are available in the repo and discussed below.
 
 ### Basic Usage
-The [basic use][/sample-config-files/basic_config.yaml] example config file specifies the `outpath`, `baselines`, and `quiet` parameters.
+The [basic use](/sample-config-files/basic_config.yaml) example config file specifies the `outpath`, `baselines`, and `quiet` parameters.
 
 ScubaGoggles can be invokes with this config file:
 ```
