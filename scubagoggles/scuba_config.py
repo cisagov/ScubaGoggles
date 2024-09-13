@@ -1,6 +1,9 @@
+"""
+Class for parsing the config file and command-line arguments.
+"""
+
 import argparse
 import yaml
-import sys
 
 class ScubaConfig:
     """
@@ -60,7 +63,7 @@ class ScubaConfig:
 
         # If a config file is not specified, just return the args unchanged.
         if args.config is not None:
-            with open(args.config, 'r') as f:
+            with open(args.config, 'r', encoding="utf-8") as f:
                 config = yaml.safe_load(f)
             config_params = list(config)
             for param in config_params:
@@ -73,7 +76,6 @@ class ScubaConfig:
                 # command-line arg takes precedence
                 if param in cli_args:
                     continue
-                else:
-                    vars(args)[param] = config[param]
+                vars(args)[param] = config[param]
         # Return the args (argparse.Namespace) as a dictionary
         return vars(args)
