@@ -7,7 +7,7 @@ rego, and report creation stages for the automated SCuBA conformance assessment
 
 import argparse
 from scubagoggles.orchestrator import Orchestrator
-from scubagoggles.scuba_config import ScubaConfig
+from scubagoggles.scuba_argument_parser import ScubaArgumentParser
 
 def get_gws_args(parser):
     """
@@ -144,9 +144,10 @@ def dive():
     "check against one or more Google Workspace products"
     gws_parser = subparsers.add_parser('gws', help=gws_parser_help)
     get_gws_args(gws_parser)
+    scuba_parser = ScubaArgumentParser(parser)
+    args = scuba_parser.parse_args_with_config()
 
-    config = ScubaConfig(parser)
-    if config.scuba_cmd == 'gws':
-        Orchestrator(config).start_automation()
+    if args.scuba_cmd == 'gws':
+        Orchestrator(args).start_automation()
     else:
         raise Exception("Invalid subparser. Run scubagoggles -h to see a list of valid subparsers")
