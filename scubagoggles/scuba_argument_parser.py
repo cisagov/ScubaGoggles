@@ -11,7 +11,7 @@ class ScubaArgumentParser:
     """
 
     # Create a mapping of the long form of parameters to their short aliases
-    _aliases_long = {
+    _param_to_alias = {
         "baselines": "b",
         "outputpath": "o",
         "credentials": "c"
@@ -34,8 +34,8 @@ class ScubaArgumentParser:
         args = self.parse_args()
 
         # Create a mapping of the short param aliases to the long form
-        aliases_short = {
-            self._aliases_long[key]: key for key in self._aliases_long
+        alias_to_param = {
+            value: key for key, value in self._param_to_alias.items()
         }
 
         # Get the args explicitly specified on the command-line so we know
@@ -50,9 +50,9 @@ class ScubaArgumentParser:
             for param in config_params:
                 # If the short form of a param was provided in the config,
                 # translate it to the long form
-                if param in aliases_short:
-                    config[aliases_short[param]] = config[param]
-                    param = aliases_short[param]
+                if param in alias_to_param:
+                    config[alias_to_param[param]] = config[param]
+                    param = alias_to_param[param]
                 # If the param was specified in the command-line, the
                 # command-line arg takes precedence
                 if param in cli_args:
@@ -74,8 +74,8 @@ class ScubaArgumentParser:
         for arg, val in vars(args).items():
             dests = [f"--{arg}"]
             # If the arg has a short form alias, add the short form as well
-            if arg in cls._aliases_long:
-                dests.append(f"-{cls._aliases_long[arg]}")
+            if arg in cls._param_to_alias:
+                dests.append(f"-{cls._param_to_alias[arg]}")
             # If the arg is a boolean, need to specify the store action
             # otherwise the boolean args will cause an error
             if isinstance(val, bool):
