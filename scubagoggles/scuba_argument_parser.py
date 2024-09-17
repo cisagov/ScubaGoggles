@@ -20,13 +20,13 @@ class ScubaArgumentParser:
     def __init__(self, parser):
         self.parser = parser
 
-    def parse_args(self):
+    def parse_args(self) -> argparse.Namespace:
         """
         Parse the arguments without loading config file.
         """
         return self.parser.parse_args()
 
-    def parse_args_with_config(self) -> argparse.ArgumentParser():
+    def parse_args_with_config(self) -> argparse.Namespace:
         """
         Parse the arguments and the config file, if provided, resolving any
         differences between the two.
