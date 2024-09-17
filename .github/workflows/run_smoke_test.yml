@@ -36,6 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate Workflow Dispatch Inputs
+        shell: bash
         run: |
           os_input="${{ inputs.os }}"
           pythonversion_input="${{ inputs.python-version }}"
