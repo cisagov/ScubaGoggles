@@ -915,7 +915,6 @@ Google Takeout services SHALL be disabled.
 5.  Select **Don't allow for everyone**.
 6.  Click **Save**.
 7.  For services with an individual admin control, under **apps** select the checkbox next to **Service name** and select **Don't allow**.
-8.  Click **Save**.
 
 ## 13. System-defined Rules
 
