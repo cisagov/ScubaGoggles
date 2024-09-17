@@ -909,7 +909,7 @@ Google Takeout services SHALL be disabled.
 
 #### GWS.COMMONCONTROLS.12.1v0.3 Instructions
 1.  Sign in to https://admin.google.com as an administrator.
-2.  Select **Data** -\> **Data Import & Export** -\> **Google Takeout**.
+2.  Select **Data** -\> **Data import & export** -\> **Google Takeout**.
 3.  Select **User access to Takeout for Google services**.
 4.  For services without an individual admin control, select **Services without an individual admin control** then **Edit**.
 5.  Select **Don't allow for everyone**.
