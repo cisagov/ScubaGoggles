@@ -32,40 +32,39 @@ on:
         default: "0.60.0"
 
 jobs:
-  validate-inputs:
+  configure-inputs:
     runs-on: ubuntu-latest
+    outputs:
+      os: ${{ steps.set.outputs.os }}
+      python-version: ${{ steps.set.outputs.python-version }}
     steps:
-      - name: Validate Workflow Dispatch Inputs
-        shell: bash
+      - name: Configure inputs 
+        id: set
         run: |
-          os_input="${{ inputs.os }}"
-          pythonversion_input="${{ inputs.python-version }}"
-
-          # Validate the input format with a regular expression
-          if [[ ! "$os_input" =~ ^\[\'.+\'(, \'.+\')*\]$ ]]; then
-            echo "Invalid OS input: $os_input. Expected format: ['os-1', 'os-2', ...]"
-            exit 1
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            os_val="${{ inputs.os }}"
+            pythonversion_val="${{ inputs.python-version }}"
           else
-            echo "OS input is valid: $os_input"
+            # Default values for other events
+            os_val="['windows-latest', 'macos-latest']"
+            pythonversion_val="['3.10']"
           fi
-
-          # Validate the input format with a regular expression
-          if [[ ! "$pythonversion_input" =~ ^\[\'.+\'(, \'.+\')*\]$ ]]; then
-            echo "Invalid Python version input: $pythonversion_input. Expected format: ['3.10', '3.11', ...]"
-            exit 1
-          else
-            echo "Python version input is valid: $pythonversion_input"
-          fi
-          
+          echo "os=$os_val" >> $GITHUB_ENV
+          echo "python-version=$pythonversion_val >> $GITHUB_ENV
+          echo "::set-output name=os::$os_val"
+          echo "::set-output name=os::$pythonversion_val"
+    
   smoke-test:
-    needs: validate-inputs
+    needs: configure-inputs
     strategy:
       fail-fast: false
       matrix:
-        os: ${{ fromJSON(inputs.os) }}
+        os: ${{ needs.configure-inputs.outputs.os }}
+        #os: ${{ fromJSON(inputs.os) }}
         # See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json,
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
-        python-version: ${{ fromJSON(inputs.python-version) }}
+        #python-version: ${{ fromJSON(inputs.python-version) }}
+        python-version: ${{ needs.configure-inputs.outputs.python-version }}
     runs-on: ${{ matrix.os }}
     environment: Development
     steps:
