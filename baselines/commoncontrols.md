@@ -1164,15 +1164,15 @@ User access to Early Access Apps SHOULD be disabled.
 2.	Navigate to **Apps** -> **Additional Google services**.
 
 #### GWS.COMMONCONTROLS.16.1v0.3 Instructions
-1.	Click **CHANGE** at the top where it says if **Access to additional services without individual control for all organizational units is On/Off**.
-2.	Select the option: "**OFF for everyone**"
-3.	Click **Save**.
+1. Click **CHANGE** at the top where it says if **Access to additional services without individual control for all organizational units is On/Off**.
+2. Select the option: "**OFF for everyone**"
+3. Click **Save**.
 
 #### GWS.COMMONCONTROLS.16.2v0.3 Instructions
-1.      In the list of all services, scroll to and click on the **Early Access** service. 
-2.	Click on **Service status**.
-3.	Ensure **OFF for everyone** is checked.
-4.	Click **Save**.
+1. In the list of all services, scroll to and click on the **Early Access** service. 
+2. Click on **Service status**.
+3. Ensure **OFF for everyone** is checked.
+4. Click **Save**.
 
 ## 17. Multi-Party Approval
 This section covers whether multiple super admins need to approve changes to specific admin console settings.
