@@ -32,7 +32,7 @@ on:
         default: "0.60.0"
 
 jobs:
-  validate-workflow-inputs:
+  validate-inputs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate Workflow Dispatch Inputs
@@ -57,6 +57,7 @@ jobs:
           fi
           
   smoke-test:
+    needs: validate-inputs
     strategy:
       fail-fast: false
       matrix:
