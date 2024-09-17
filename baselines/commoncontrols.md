@@ -876,8 +876,8 @@ To add an app to the allowlist:
 
 #### GWS.COMMONCONTROLS.11.2v0.3 Instructions
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.  Select **Security.**
-3.  Select **Access and data control** -\> **Less secure apps.**
+2.  Select **Security.** -\> **Overview**
+3.  Select **Less Secure Apps**
 4.  Select **Disable access to less secure apps (Recommended).**
 5.  Click **Save** to commit this configuration change.
 
