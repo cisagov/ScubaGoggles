@@ -16,7 +16,7 @@ on:
   workflow_call:
   workflow_dispatch:
     inputs:
-      os:
+      operating-system:
         description: "Choose operating system(s), format must be an array of strings:"
         required: true
         type: string
@@ -36,7 +36,7 @@ jobs:
   configuration:
     runs-on: ubuntu-latest
     outputs:
-      os: ${{ steps.variables.outputs.os }}
+      operating-system: ${{ steps.variables.outputs.operating-system }}
       python-version: ${{ steps.variables.outputs.python-version }}
       opa-version: ${{ steps.variables.outputs.opa-version }}
     steps:
@@ -45,17 +45,17 @@ jobs:
         run: |
           # For manual runs
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            os_val="${{ inputs.os }}"
+            operatingsystem_val="${{ inputs.operating-system }}"
             pythonversion_val="${{ inputs.python-version }}"
             opaversion_val="${{ inputs.opa-version }}"
 
           # Default values for other events
           else
-            os_val="['windows-latest', 'macos-latest']"
+            operatingsystem_val="['windows-latest', 'macos-latest']"
             pythonversion_val="['3.10']"
             opaversion_val="0.60.0"
           fi
-          echo "os=$os_val" >> "$GITHUB_OUTPUT"
+          echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
           echo "python-version=$pythonversion_val" >> "$GITHUB_OUTPUT"
           echo "opa-version=$opaversion_val" >> "$GITHUB_OUTPUT"
 
@@ -64,11 +64,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ${{ fromJSON(needs.configuration.outputs.os) }}
+        operating-system: ${{ fromJSON(needs.configuration.outputs.operating-system) }}
         # See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json,
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.operating-system }}
     environment: Development
     steps:
       - name: Checkout Repository
@@ -82,18 +82,18 @@ jobs:
           cache-dependency-path: "requirements.txt"
       
       - name: Setup Dependencies (Windows)
-        if: ${{ matrix.os == 'windows-latest' }}
+        if: ${{ matrix.operating-system == 'windows-latest' }}
         uses: ./.github/actions/setup-dependencies-windows
         with:
-          os: "windows"
+          operating-system: "windows"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
       
       - name: Setup Dependencies (macOS)
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.operating-system == 'macos-latest' }}
         uses: ./.github/actions/setup-dependencies-macos
         with:
-          os: "macos"
+          operating-system: "macos"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
       
