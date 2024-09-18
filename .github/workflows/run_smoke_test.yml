@@ -32,10 +32,14 @@ on:
         default: "0.60.0"
 
 jobs:
-  configure-inputs:
+  configuration:
     runs-on: ubuntu-latest
+    outputs:
+      os: ${{ steps.variables.outputs.os }}
+      python-version: ${{ steps.variables.outputs.python-version }}
     steps:
-      - name: Configure inputs 
+      - name: Configure variable outputs
+        id: variables
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             os_val="${{ inputs.os }}"
@@ -45,27 +49,18 @@ jobs:
             os_val="['windows-latest', 'macos-latest']"
             pythonversion_val="['3.10']"
           fi
-          echo "os=$os_val" >> $GITHUB_ENV
-          echo "python-version=$pythonversion_val >> $GITHUB_ENV
+          echo "os=$os_val" >> $GITHUB_OUTPUT
+          echo "python-version=$pythonversion_val >> $GITHUB_OUTPUT
 
-  test-job:
-    needs: configure-inputs
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test
-        run: |
-          echo ${{ env.os }}
-          echo ${{ env.python-version }}
-    
   smoke-test:
-    needs: configure-inputs
+    needs: configuration
     strategy:
       fail-fast: false
       matrix:
-        os: ${{ fromJSON(env.os) }}
+        os: ${{ fromJSON(needs.configuration.outputs.os) }}
         # See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json,
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
-        python-version: ${{ fromJSON(env.python-version) }}
+        python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.os }}
     environment: Development
     steps:
