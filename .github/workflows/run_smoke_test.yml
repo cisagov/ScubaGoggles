@@ -69,7 +69,11 @@ jobs:
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.operating-system }}
-    environment: Development
+    env:
+      GWS_GITHUB_AUTOMATION_CREDS: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
+      GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
+      GWS_DOMAIN: ${{ secrets.GWS_DOMAIN }}
+    #environment: Development
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -102,7 +106,7 @@ jobs:
         uses: jsdaniell/create-json@v1.2.3
         with: 
           name: "credentials.json"
-          json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
+          json: $env:GWS_GITHUB_AUTOMATION_CREDS
 
       - name: Run ScubaGoggles and check for correct output
-        run: pytest ./Testing/Functional/SmokeTests/ -s -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+        run: pytest ./Testing/Functional/SmokeTests/ -s -vvv --subjectemail="$env:GWS_SUBJECT_EMAIL" --customerdomain="$env:GWS_DOMAIN"
