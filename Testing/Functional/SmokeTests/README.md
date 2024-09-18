@@ -90,18 +90,17 @@ Common Pytest parameters and their use cases:
 Run `pytest -h` for a full list of CLI options, or [learn more about Pytest usage here.](https://docs.pytest.org/en/7.1.x/how-to/usage.html)
 
 ### Running Remotely via GitHub Actions ### 
-Go to the [run_smoke_test.yml workflow](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_smoke_test.yml) in the GitHub Actions tab.
+Go to the [run_smoke_test.yml workflow](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_smoke_test.yml) in the GitHub Actions tab, then click the "Run workflow" dropdown button. 
 
-![Screenshot (216)](https://github.com/user-attachments/assets/adb1c656-7065-4031-850c-0dc1402e3bda)
-
-The default values are the following: 
+The default values are the following:
+- ref branch: `main` but can be set to any branch
 - operating system: `['windows-latest', 'macos-latest']` ([list of supported GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories))
 - python version: `['3.10']`
 - opa version: "0.60.0"
 
-![Screenshot (214)](https://github.com/user-attachments/assets/9ce1f00e-24e5-4e06-b3ad-aad7b7bc16c7)
+![Screenshot (226)](https://github.com/user-attachments/assets/6f25b7a9-3981-4866-a413-93df4bae1130)
 
-Feel free to play around with the inputs. The workflow will create a matrix strategy for each combination. For example, passing `['windows-latest', 'macos-latest']`, `['3.10', '3.11', 3.12']`, and OPA version `0.60.0` will create the following:
+Feel free to play around with the inputs then click the "Run workflow" button when ready. The workflow will create a matrix strategy for each combination. For example, passing `['windows-latest', 'macos-latest']`, `['3.10', '3.11', 3.12']`, and OPA version `0.60.0` will create the following:
 
 ![Screenshot (218)](https://github.com/user-attachments/assets/212b4e4b-d552-4dc9-a3f6-7f0e29accc4b)
 
