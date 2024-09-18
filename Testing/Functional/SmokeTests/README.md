@@ -13,7 +13,7 @@ This README outlines the ScubaGoggles software test automation structure and its
 - [Functional Smoke Testing Usage](#functional-smoke-testing-usage)
   - [Running in a Local Development Environment](#running-in-a-local-development-environment)
   - [Running Remotely via GitHub Actions](#running-remotely-via-github-actions)
-- [Adding New Functional Tests](#adding-new-functional-tests)
+- [Adding New Tests](#adding-new-tests)
 
 ## Smoke Testing Prerequisites ## 
 Running the ScubaGoggles functional smoke tests requires a Windows, MacOS, or Linux computer or VM. The development environment should have Python v3.10.x installed at a minimum ([refer to our installing Python dependencies documentation if its not already installed](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md#installing-python-dependencies)), Pytest, and Selenium installed locally.
@@ -30,17 +30,17 @@ pip install pytest selenium
 ```
 
 > [!NOTE]
-> The functional smoke tests use Chrome as its WebDriver when running Selenium tests. If you don't already have the Google Chrome web browser installed, [setup ChromeDriver here](https://developer.chrome.com/docs/chromedriver/get-started).
+> The functional smoke tests use Chrome as its WebDriver when running Selenium tests. [Setup ChromeDriver](https://developer.chrome.com/docs/chromedriver/get-started) if you don't already have the Google Chrome web browser installed.
 
 ### Google Service Account ###
-The ScubaGoggles functional smoke tests must be executed with a service account. [Refer to our documentation here on how to get setup.](https://github.com/cisagov/ScubaGoggles/blob/main/docs/authentication/ServiceAccount.md#using-a-service-account)
+The ScubaGoggles functional smoke tests must be executed with a service account. [Refer to our service account documentation on how to get setup.](https://github.com/cisagov/ScubaGoggles/blob/main/docs/authentication/ServiceAccount.md#using-a-service-account)
 
 A `credentials.json` file is required at the root directory of the ScubaGoggles project if running the functional smoke tests in a local development environment.
 
 Take note of the `subjectemail`, the email used to authenticate with GWS that has necessary administrator permissions, and the GWS `customerdomain` that ScubaGoggles is run against. Both credentials are required in a later step.
 
 ## Functional Smoke Testing Structure ##
-ScubaGoggles functional smoke testing has two main components: the smoke testing orchestrator and the automated workflow which is run via GitHub Actions.
+ScubaGoggles functional smoke testing has two main components: the smoke testing orchestrator and the automated workflow run via GitHub Actions.
 
 ### Smoke Testing Classes and Methods ### 
 The smoke testing orchestrator ([/Testing/Functional/SmokeTests/smoke_test.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test.py)) executes each test declared inside the `SmokeTest` class. The tests currently cover:
@@ -55,14 +55,14 @@ The Selenium Browser class ([/Testing/Functional/SmokeTests/selenium_browser.py]
 The Pytest configuration methods ([/Testing/Functional/SmokeTests/conftest.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/conftest.py)) declare various Pytest fixtures, allowing for the use of CLI arguments when invoking the Pytest command.  
 
 ### Automated Workflow via GitHub Actions ### 
-The automated workflow for running the functional smoke tests ([/.github/workflows/run_smoke_test.yml](https://github.com/cisagov/ScubaGoggles/blob/main/.github/workflows/run_smoke_test.yml)) is triggered on `push` events to the main branch, `pull_request` events when a pull request is opened/reopened, and manually with customer user input via workflow_dispatch.
+The automated workflow for running the functional smoke tests ([/.github/workflows/run_smoke_test.yml](https://github.com/cisagov/ScubaGoggles/blob/main/.github/workflows/run_smoke_test.yml)) is triggered on `push` events to the main branch, `pull_request` events when a pull request is opened/reopened/reviewed, and manually with custom user input via workflow_dispatch.
 
 ## Functional Smoke Testing Usage ## 
-After completing all of the prerequisite steps, the functional smoke tests can be run on a local development environment or remotely via GitHub Actions.
+After completing all of the prerequisite steps, the functional smoke tests can be run in a local development environment or remotely via GitHub Actions.
 
 ### Running in a Local Development Environment ### 
 > [!IMPORTANT]
-> Ensure that you have correctly setup a Google service account and that the `credentials.json` stored at the root directory of the ScubaGoggles project is up to date. If you haven't already, please refer back to the [prerequisite step on Google Service Accounts](#google-service-account) for how to get setup before proceeding. 
+> Ensure that you have correctly setup a Google service account and that the `credentials.json` stored at the root directory of the ScubaGoggles project is up to date. If you haven't already, please refer back to the [prerequisite step on Google Service Accounts](#google-service-account) for how to setup before proceeding. 
 
 The following arguments are required when running the functional smoke tests:
 - `--subjectemail="user@domain.com"` (the email used to authenticate with GWS, must have necessary administrator permissions)
@@ -88,7 +88,7 @@ Common Pytest parameters and their use cases:
 - `--tb=short`, `tb=long`, or `tb=no` (provide either brief, full, or suppress the traceback output for failed tests)
 - `-q` (reduces output to show only minimal information)
 
-Run `pytest -h` for a full list of CLI options, or [learn more about Pytest usage here.](https://docs.pytest.org/en/7.1.x/how-to/usage.html)
+Run `pytest -h` for a full list of CLI options or [learn more about Pytest usage here.](https://docs.pytest.org/en/7.1.x/how-to/usage.html)
 
 ### Running Remotely via GitHub Actions ### 
 Go to the [run_smoke_test.yml workflow](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_smoke_test.yml) in the GitHub Actions tab, then click the "Run workflow" dropdown button. 
@@ -111,8 +111,8 @@ Some factors to consider:
 - Python versions <3.10.x are not supported and will cause the smoke test workflow to fail. 
 - [Due to the lack of an array input type from GitHub](https://github.com/orgs/community/discussions/11692), the required format is an array of strings for the operating system and python version inputs. This is something to capture as a future todo once arrays are available.
 
-## Adding New Functional Tests ##
-A new functional smoke test should be added as a method in the [SmokeTest class](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test.py). Helper methods should be stored in [smoke_test_utils.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test_utils.py).
+## Adding New Tests ##
+A new smoke test should be added as a method in the [SmokeTest class](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test.py). Helper methods should be added in [smoke_test_utils.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test_utils.py).
 
 Below is an example that tests the `scubagoggles gws` command:
 
