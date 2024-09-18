@@ -12,6 +12,7 @@ on:
     #  - ".github/actions/setup-dependencies-macos/action.yml"
     branches:
       - "main"
+      - "*smoketest*"
   workflow_call:
   workflow_dispatch:
     inputs:
