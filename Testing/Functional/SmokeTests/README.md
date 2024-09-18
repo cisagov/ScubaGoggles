@@ -114,18 +114,17 @@ Some factors to consider:
 ## Adding New Functional Tests ##
 A new functional smoke test should be added as a method in the [SmokeTest class](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test.py). Helper methods should be stored in [smoke_test_utils.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test_utils.py).
 
-Below is an example that runs the `scubagoggles gws` command then performs some conditional check with Selenium:
+Below is an example that tests the `scubagoggles gws` command:
 
 ```
 class SmokeTest:
   ...
 
-  def test_scubagoggles_execution(self, browser, subjectemail):
+  def test_scubagoggles_execution(self, subjectemail):
     """
     Test if the `scubagoggles gws` command succeeds or fails.
         
     Args:
-      browser: A Selenium WebDriver instance
       subjectemail: The email address of an admin user who created the service account
     """
     try:
