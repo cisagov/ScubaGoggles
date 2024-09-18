@@ -38,6 +38,7 @@ jobs:
     outputs:
       os: ${{ steps.variables.outputs.os }}
       python-version: ${{ steps.variables.outputs.python-version }}
+      opa-version: ${{ steps.variables.outputs.opa-version }}
     steps:
       - name: Configure variable outputs
         id: variables
@@ -56,6 +57,7 @@ jobs:
           fi
           echo "os=$os_val" >> "$GITHUB_OUTPUT"
           echo "python-version=$pythonversion_val" >> "$GITHUB_OUTPUT"
+          echo "opa-version=$opaversion_val" >> "$GITHUB_OUTPUT"
 
   smoke-test:
     needs: configuration
@@ -84,7 +86,7 @@ jobs:
         uses: ./.github/actions/setup-dependencies-windows
         with:
           os: "windows"
-          opa-version: ${{ inputs.opa-version }}
+          opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
       
       - name: Setup Dependencies (macOS)
@@ -92,7 +94,7 @@ jobs:
         uses: ./.github/actions/setup-dependencies-macos
         with:
           os: "macos"
-          opa-version: ${{ inputs.opa-version }}
+          opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
       
       - name: Setup credentials for service account
