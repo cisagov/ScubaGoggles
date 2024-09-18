@@ -1,7 +1,7 @@
 # ScubaGoggles Functional Smoke Testing Automation
 The ScubaGoggles repository consists of an automation suite to help test the functionality of the ScubaGoggles tool itself. The test automation is geared towards contributors who want to execute the functional smoke testing orchestrator as part of their development/testing activity.
 
-This README outlines the ScubaGoggles software test automation and its usage. The document also contains instructions for adding new functional tests to existing automation suite.
+This README outlines the ScubaGoggles software test automation structure and its usage. The document also contains instructions for adding new tests to the existing automation suite if necessary.
 
 ## Table of Contents
 - [Smoke Testing Prerequisites](#smoke-testing-prerequisites)
@@ -13,6 +13,7 @@ This README outlines the ScubaGoggles software test automation and its usage. Th
 - [Functional Smoke Testing Usage](#functional-smoke-testing-usage)
   - [Running in a Local Development Environment](#running-in-a-local-development-environment)
   - [Running Remotely via GitHub Actions](#running-remotely-via-github-actions)
+- [Adding New Functional Tests](#adding-new-functional-tests)
 
 ## Smoke Testing Prerequisites ## 
 Running the ScubaGoggles functional smoke tests requires a Windows, MacOS, or Linux computer or VM. The development environment should have Python v3.10.x installed at a minimum ([refer to our installing Python dependencies documentation if its not already installed](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md#installing-python-dependencies)), Pytest, and Selenium installed locally.
@@ -108,4 +109,35 @@ Some factors to consider:
 - Each input is required so an empty string will fail validation. `[]`, `['']`, `['', ]` may also cause the workflow to error out, although this is expected behavior.
 - `ubuntu-latest` has not been tested as a value for operating system. Support can be added for this, although its dependent on if this is something we want to test for ScubaGoggles as a whole. 
 - Python versions <3.10.x are not supported and will cause the smoke test workflow to fail. 
-- [Due to the lack of an array input type from GitHub](https://github.com/orgs/community/discussions/11692), the required format is an array of strings for the operating system and python version inputs. This is something to capture as a future todo once arrays are available. 
+- [Due to the lack of an array input type from GitHub](https://github.com/orgs/community/discussions/11692), the required format is an array of strings for the operating system and python version inputs. This is something to capture as a future todo once arrays are available.
+
+## Adding New Functional Tests ##
+A new functional smoke test should be added as a method in the [SmokeTest class](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test.py). Helper methods should be stored in [smoke_test_utils.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test_utils.py).
+
+Below is an example that runs the `scubagoggles gws` command then performs some conditional check with Selenium:
+
+```
+class SmokeTest:
+  ...
+
+  def test_scubagoggles_execution(self, browser, subjectemail):
+    """
+    Test if the `scubagoggles gws` command succeeds or fails.
+        
+    Args:
+      browser: A Selenium WebDriver instance
+      subjectemail: The email address of an admin user who created the service account
+    """
+    try:
+      command: str = f"scubagoggles gws --subjectemail {subjectemail} --quiet"
+      result = subprocess.run(command, shell=True, check=True, capture_output=True)
+
+      if result.returncode != 0:
+        print(f"Scubagoggles execution failed with error:\n{result.stderr}")
+        assert False
+      else:
+        print("Scubagoggles execution succeeded")
+        print(f"Output:\n{result.stdout}")
+    except Exception as e:
+      pytest.fail(f"An error occurred, {e}")
+```
