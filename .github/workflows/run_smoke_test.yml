@@ -34,9 +34,6 @@ on:
 jobs:
   configure-inputs:
     runs-on: ubuntu-latest
-    outputs:
-      os: ${{ steps.set.outputs.os }}
-      python-version: ${{ steps.set.outputs.python-version }}
     steps:
       - name: Configure inputs 
         id: set
@@ -52,20 +49,16 @@ jobs:
           fi
           echo "os=$os_val" >> $GITHUB_ENV
           echo "python-version=$pythonversion_val >> $GITHUB_ENV
-          echo "::set-output name=os::$os_val"
-          echo "::set-output name=os::$pythonversion_val"
     
   smoke-test:
     needs: configure-inputs
     strategy:
       fail-fast: false
       matrix:
-        os: ${{ needs.configure-inputs.outputs.os }}
-        #os: ${{ fromJSON(inputs.os) }}
+        os: ${{ fromJSON(env.os) }}
         # See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json,
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
-        #python-version: ${{ fromJSON(inputs.python-version) }}
-        python-version: ${{ needs.configure-inputs.outputs.python-version }}
+        python-version: ${{ fromJSON(env.python-version) }}
     runs-on: ${{ matrix.os }}
     environment: Development
     steps:
