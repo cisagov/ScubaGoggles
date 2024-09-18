@@ -11,16 +11,16 @@ This README outlines the ScubaGoggles software test automation and its usage. Th
   - [Smoke Testing Classes and Methods](#smoke-testing-classes-and-methods)
   - [Automated workflow via GitHub Actions](#automated-workflow-via-github-actions)
 - [Functional Smoke Testing Usage](#functional-smoke-testing-usage)
-  - [Running on a Local Development Environment](#running-on-a-local-development-environment)
+  - [Running in a Local Development Environment](#running-in-a-local-development-environment)
   - [Running Remotely via GitHub Actions](#running-remotely-via-github-actions)
 
 ## Smoke Testing Prerequisites ## 
 Running the ScubaGoggles functional smoke tests requires a Windows, MacOS, or Linux computer or VM. The development environment should have Python v3.10.x installed at a minimum ([refer to our installing Python dependencies documentation if its not already installed](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md#installing-python-dependencies)), Pytest, and Selenium installed locally.
 
 ### Pytest and Selenium ### 
-Pytest is a Python testing framework which is commonly used for unit, integration, and functional testing. [Pytest Get Started](https://docs.pytest.org/en/stable/getting-started.html)
+Pytest is a Python testing framework which is commonly used for unit, integration, and functional testing. ([Pytest Get Started](https://docs.pytest.org/en/stable/getting-started.html))
 
-Selenium supports automation of all the major browsers in the market through the use of WebDriver. [Selenium Get Started](https://www.selenium.dev/documentation/webdriver/getting_started/)
+Selenium supports automation of all the major browsers in the market through the use of WebDriver. ([Selenium Get Started](https://www.selenium.dev/documentation/webdriver/getting_started/))
 
 To install Pytest and Selenium on your development environment, open a new terminal session and run the following command:
 
@@ -59,14 +59,15 @@ The automated workflow for running the functional smoke tests ([/.github/workflo
 ## Functional Smoke Testing Usage ## 
 After completing all of the prerequisite steps, the functional smoke tests can be run on a local development environment or remotely via GitHub Actions.
 
-### Running on a Local Development Environment ### 
-Ensure that you have correctly setup a Google service account and that the `credentials.json` stored at the root directory of the ScubaGoggles project is up to date. If you haven't already, please refer back to the [prerequisite step](/Google-Service-Account) on how to get setup before proceeding. 
+### Running in a Local Development Environment ### 
+> [!IMPORTANT]
+> Ensure that you have correctly setup a Google service account and that the `credentials.json` stored at the root directory of the ScubaGoggles project is up to date. If you haven't already, please refer back to the [prerequisite step on Google Service Accounts](#google-service-account) for how to get setup before proceeding. 
 
 The following arguments are required when running the functional smoke tests:
-- `subjectemail`: user@domain.com (the email used to authenticate with GWS, must have necessary administrator permissions)
-- `customerdomain`: domain.com (the domain that ScubaGoggles is run against)
+- `--subjectemail="user@domain.com"` (the email used to authenticate with GWS, must have necessary administrator permissions)
+- `--customerdomain="domain.com"` (the domain that ScubaGoggles is run against)
 
-Run the following command to execute the functional smoke tests:
+Replace `user@domain.com` with your email and `domain.com` with your domain, then run the following command to execute the functional smoke tests:
 ```
 pytest ./Testing/Functional/SmokeTests/ -vvv --subjectemail="user@domain.com" --customerdomain="domain.com"
 ```
@@ -78,15 +79,15 @@ Common Pytest parameters and their use cases:
 - `-s` (disables output capturing allowing print() statements and logs to be shown in the console)
 - `-k` (run tests that match a keyword)
 
-    Example:
+    Example (only runs test_scubagoggles_output, deselects the rest):
     ```
     pytest ./Testing/Functional/SmokeTests/ -vvv -k test_scubagoggles_output --subjectemail="user@domain.com" --customerdomain="domain.com"
     ```
 
-- `--tb=short`, `tb=long`, or `tb=none` (provide either brief, full, or suppress the traceback output for failed tests)
+- `--tb=short`, `tb=long`, or `tb=no` (provide either brief, full, or suppress the traceback output for failed tests)
 - `-q` (reduces output to show only minimal information)
 
-Run `pytest -h` for a full list of CLI options, or [learn more about Pytest usage](https://docs.pytest.org/en/7.1.x/how-to/usage.html)
+Run `pytest -h` for a full list of CLI options, or [learn more about Pytest usage here.](https://docs.pytest.org/en/7.1.x/how-to/usage.html)
 
 ### Running Remotely via GitHub Actions ### 
 Go to the [run_smoke_test.yml workflow](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_smoke_test.yml) in the GitHub Actions tab.
