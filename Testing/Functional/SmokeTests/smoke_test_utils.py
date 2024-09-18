@@ -125,13 +125,13 @@ def verify_scubaresults(jsonfile):
         if summary["Errors"] != 0:
             raise ValueError(f"{product} contains errors in the report")
 
-def run_selenium(browser, domain):
+def run_selenium(browser, customerdomain):
     """
     Run Selenium tests against the generated reports.
 
     Args:
         browser: A Selenium WebDriver instance
-        domain: The user's domain
+        customerdomain: The customer domain
     """
     verify_navigation_links(browser)
     h1 = browser.find_element(By.TAG_NAME, "h1").text
@@ -149,9 +149,9 @@ def run_selenium(browser, domain):
     if len(reports_table) == 10:
         for i in range(len(reports_table)):
 
-            # Check if domain is present in agency table
+            # Check if customerdomain is present in agency table
             # Skip tool version if assessing the parent report
-            verify_tenant_table(browser, domain, True)
+            verify_tenant_table(browser, customerdomain, True)
 
             reports_table = get_reports_table(browser)[i]
             baseline_report = reports_table.find_elements(By.TAG_NAME, "td")[0]
@@ -169,8 +169,8 @@ def run_selenium(browser, domain):
             h1 = browser.find_element(By.TAG_NAME, "h1").text
             assert h1 == products[product]["title"]
 
-            # Check if domain and tool version are present in individual report
-            verify_tenant_table(browser, domain, False)
+            # Check if customerdomain and tool version are present in individual report
+            verify_tenant_table(browser, customerdomain, False)
 
             policy_tables = browser.find_elements(By.TAG_NAME, "table")
             for table in policy_tables[1:]:
@@ -239,14 +239,14 @@ def get_reports_table(browser):
         .find_elements(By.TAG_NAME, "tr")
     )
 
-def verify_tenant_table(browser, domain, parent):
+def verify_tenant_table(browser, customerdomain, parent):
     """
     Get the tenant table rows elements from the DOM.
-    (Table at the top of each report with user domain, baseline/tool version)
+    (Table at the top of each report with customer domain, baseline/tool version)
 
     Args:
         browser: A Selenium WebDriver instance
-        domain: The user's domain
+        customerdomain: The customer domain
         parent: boolean to determine parent/individual reports
     """
     tenant_table_rows = (
@@ -255,8 +255,8 @@ def verify_tenant_table(browser, domain, parent):
         .find_elements(By.TAG_NAME, "tr")
     )
     assert len(tenant_table_rows) == 2
-    customer_domain = tenant_table_rows[1].find_elements(By.TAG_NAME, "td")[0].text
-    assert customer_domain == domain
+    domain = tenant_table_rows[1].find_elements(By.TAG_NAME, "td")[0].text
+    assert domain == customerdomain
 
     if not parent:
         # Check for correct tool version, e.g. 0.2.0

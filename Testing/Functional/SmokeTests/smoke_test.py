@@ -57,7 +57,7 @@ class SmokeTest:
         except (ValueError, Exception) as e:
             pytest.fail(f"An error occurred, {e}")
 
-    def test_scubagoggles_report(self, browser, domain):
+    def test_scubagoggles_report(self, browser, customerdomain):
         """
         Test if the generated baseline reports are correct,
         i.e. BaselineReports.html, CalendarReport.html, ChatReport.html
@@ -66,7 +66,7 @@ class SmokeTest:
             output_path: str = get_output_path()
             report_path: str = prepend_file_protocol(os.path.join(output_path, BASELINE_REPORTS))
             browser.get(report_path)
-            run_selenium(browser, domain)
+            run_selenium(browser, customerdomain)
         except (ValueError, AssertionError, Exception) as e:
             browser.quit()
             pytest.fail(f"An error occurred, {e}")
