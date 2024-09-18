@@ -40,6 +40,7 @@ jobs:
     steps:
       - name: Configure inputs 
         id: set
+        shell: bash
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             os_val="${{ inputs.os }}"
