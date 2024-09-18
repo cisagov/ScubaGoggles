@@ -32,6 +32,8 @@ on:
         type: string
         default: "0.60.0"
 
+permissions: read-all
+
 jobs:
   configuration:
     runs-on: ubuntu-latest
@@ -73,6 +75,8 @@ jobs:
       GWS_GITHUB_AUTOMATION_CREDS: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
       GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
       GWS_DOMAIN: ${{ secrets.GWS_DOMAIN }}
+    permissions:
+      contents: read
     #environment: Development
     steps:
       - name: Checkout Repository
