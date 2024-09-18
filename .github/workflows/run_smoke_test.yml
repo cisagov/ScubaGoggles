@@ -5,11 +5,10 @@ on:
     branches:
       - "main"
   push:
-    # Uncomment when testing locally
     paths:
       - ".github/workflows/run_smoke_test.yml"
-    #  - ".github/actions/setup-dependencies-windows/action.yml"
-    #  - ".github/actions/setup-dependencies-macos/action.yml"
+      - ".github/actions/setup-dependencies-windows/action.yml"
+      - ".github/actions/setup-dependencies-macos/action.yml"
     branches:
       - "main"
       - "*smoketest*"
@@ -69,10 +68,6 @@ jobs:
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.operating-system }}
-    env:
-      GWS_GITHUB_AUTOMATION_CREDS: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
-      GWS_SUBJECT_EMAIL: ${{ secrets.GWS_SUBJECT_EMAIL }}
-      GWS_DOMAIN: ${{ secrets.GWS_DOMAIN }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
