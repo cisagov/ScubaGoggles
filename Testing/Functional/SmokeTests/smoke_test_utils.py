@@ -11,7 +11,7 @@ from scubagoggles.orchestrator import Orchestrator
 from scubagoggles.utils import get_package_version
 
 OUTPUT_DIRECTORY = "GWSBaselineConformance"
-BASELINE_REPORT_H1 = "SCuBA GWS Security Baseline Conformance Reports"
+BASELINE_REPORT_H1 = "SCuBA GWS Secure Configuration Baseline Reports"
 CISA_GOV_URL = "https://www.cisa.gov/scuba"
 SCUBAGOGGLES_BASELINES_URL = "https://github.com/cisagov/ScubaGoggles/tree/main/baselines"
 
