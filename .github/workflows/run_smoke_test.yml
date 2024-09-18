@@ -49,8 +49,8 @@ jobs:
             os_val="['windows-latest', 'macos-latest']"
             pythonversion_val="['3.10']"
           fi
-          echo "os=$os_val" >> $GITHUB_OUTPUT
-          echo "python-version=$pythonversion_val >> $GITHUB_OUTPUT
+          echo "os=$os_val" >> "$GITHUB_OUTPUT"
+          echo "python-version=$pythonversion_val >> "$GITHUB_OUTPUT"
 
   smoke-test:
     needs: configuration
