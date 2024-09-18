@@ -3,7 +3,16 @@ The ScubaGoggles repository consists of an automation suite to help test the fun
 
 This README outlines the ScubaGoggles software test automation and its usage. The document also contains instructions for adding new functional tests to existing automation suite.
 
-## Table of Contents 
+## Table of Contents
+- [Smoke Testing Prerequisites](#smoke-testing-prerequisites)
+  - [Pytest and Selenium](#pytest-and-selenium)
+  - [Google Service Account](#google-service-account)
+- [Functional Smoke Testing Structure](#functional-smoke-testing-structure)
+  - [Smoke Testing Classes and Methods](#smoke-testing-classes-and-methods)
+  - [Automated workflow via GitHub Actions](#automated-workflow-via-github-actions)
+- [Functional Smoke Testing Usage](#functional-smoke-testing-usage)
+  - [Running on a Local Development Environment](#running-on-a-local-development-environment)
+  - [Running Remotely via GitHub Actions](#running-remotely-via-github-actions)
 
 ## Smoke Testing Prerequisites ## 
 Running the ScubaGoggles functional smoke tests requires a Windows, MacOS, or Linux computer or VM. The development environment should have Python v3.10.x installed at a minimum ([refer to our installing Python dependencies documentation if its not already installed](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md#installing-python-dependencies)), Pytest, and Selenium installed locally.
@@ -32,7 +41,7 @@ Take note of the `subjectemail`, the email used to authenticate with GWS that ha
 ## Functional Smoke Testing Structure ##
 ScubaGoggles functional smoke testing has two main components: the smoke testing orchestrator and the automated workflow which is run via GitHub Actions.
 
-### Smoke testing directory structure ### 
+### Smoke Testing Classes and Methods ### 
 The smoke testing orchestrator ([/Testing/Functional/SmokeTests/smoke_test.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test.py)) executes each test declared inside the `SmokeTest` class. The tests currently cover:
 - if the `scubagoggles gws` command generates correct output for all baselines
 - if ScubaResults.json contains API errors or exceptions
@@ -44,13 +53,13 @@ The Selenium Browser class ([/Testing/Functional/SmokeTests/selenium_browser.py]
 
 The Pytest configuration methods ([/Testing/Functional/SmokeTests/conftest.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/conftest.py)) declare various Pytest fixtures, allowing for the use of CLI arguments when invoking the Pytest command.  
 
-### Automated workflow via GitHub Actions ### 
+### Automated Workflow via GitHub Actions ### 
 The automated workflow for running the functional smoke tests ([/.github/workflows/run_smoke_test.yml](https://github.com/cisagov/ScubaGoggles/blob/main/.github/workflows/run_smoke_test.yml)) is triggered on `push` events to the main branch, `pull_request` events when a pull request is opened/reopened, and manually with customer user input via workflow_dispatch.
 
 ## Functional Smoke Testing Usage ## 
 After completing all of the prerequisite steps, the functional smoke tests can be run on a local development environment or remotely via GitHub Actions.
 
-### Running on a local development environment ### 
+### Running on a Local Development Environment ### 
 Ensure that you have correctly setup a Google service account and that the `credentials.json` stored at the root directory of the ScubaGoggles project is up to date. If you haven't already, please refer back to the [prerequisite step](/Google-Service-Account) on how to get setup before proceeding. 
 
 The following arguments are required when running the functional smoke tests:
@@ -59,7 +68,7 @@ The following arguments are required when running the functional smoke tests:
 
 Run the following command to execute the functional smoke tests:
 ```
-pytest -vvv ./Testing/Functional/SmokeTests/ --subjectemail="user@domain.com" --customerdomain="domain.com"
+pytest ./Testing/Functional/SmokeTests/ -vvv --subjectemail="user@domain.com" --customerdomain="domain.com"
 ```
 
 Common Pytest parameters and their use cases:
@@ -67,6 +76,36 @@ Common Pytest parameters and their use cases:
 - `-vv` (increases verbosity further, shows detailed output about each test)
 - `-vvv` (shows even more detailed output and debug-level information)
 - `-s` (disables output capturing allowing print() statements and logs to be shown in the console)
+- `-k` (run tests that match a keyword)
 
-### Running remotely via GitHub Actions ### 
+    Example:
+    ```
+    pytest ./Testing/Functional/SmokeTests/ -vvv -k test_scubagoggles_output --subjectemail="user@domain.com" --customerdomain="domain.com"
+    ```
 
+- `--tb=short`, `tb=long`, or `tb=none` (provide either brief, full, or suppress the traceback output for failed tests)
+- `-q` (reduces output to show only minimal information)
+
+Run `pytest -h` for a full list of CLI options, or [learn more about Pytest usage](https://docs.pytest.org/en/7.1.x/how-to/usage.html)
+
+### Running Remotely via GitHub Actions ### 
+Go to the [run_smoke_test.yml workflow](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_smoke_test.yml) in the GitHub Actions tab.
+
+![Screenshot (216)](https://github.com/user-attachments/assets/adb1c656-7065-4031-850c-0dc1402e3bda)
+
+The default values are the following: 
+- operating system: `['windows-latest', 'macos-latest']` ([list of supported GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories))
+- python version: `['3.10']`
+- opa version: "0.60.0"
+
+![Screenshot (214)](https://github.com/user-attachments/assets/9ce1f00e-24e5-4e06-b3ad-aad7b7bc16c7)
+
+Feel free to play around with the inputs. The workflow will create a matrix strategy for each combination. For example, passing `['windows-latest', 'macos-latest']`, `['3.10', '3.11', 3.12']`, and OPA version `0.60.0` will create the following:
+
+![Screenshot (218)](https://github.com/user-attachments/assets/212b4e4b-d552-4dc9-a3f6-7f0e29accc4b)
+
+Some factors to consider:
+- Each input is required so an empty string will fail validation. `[]`, `['']`, `['', ]` may also cause the workflow to error out, although this is expected behavior.
+- `ubuntu-latest` has not been tested as a value for operating system. Support can be added for this, although its dependent on if this is something we want to test for ScubaGoggles as a whole. 
+- Python versions <3.10.x are not supported and will cause the smoke test workflow to fail. 
+- [Due to the lack of an array input type from GitHub](https://github.com/orgs/community/discussions/11692), the required format is an array of strings for the operating system and python version inputs. This is something to capture as a future todo once arrays are available. 
