@@ -44,9 +44,9 @@ ScubaGoggles functional smoke testing has two main components: the smoke testing
 
 ### Smoke Testing Classes and Methods ### 
 The smoke testing orchestrator ([/Testing/Functional/SmokeTests/smoke_test.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test.py)) executes each test declared inside the `SmokeTest` class. The tests currently cover:
-- if the `scubagoggles gws` command generates correct output for all baselines
+- if the `scubagoggles gws` command generates valid output for all baselines
 - if ScubaResults.json contains API errors or exceptions
--  if the generated baseline reports are correct, i.e. BaselineReports.html, CalendarReport.html, ChatReport.html
+- if the generated baseline reports, i.e. BaselineReports.html, CalendarReport.html, ChatReport.html, etc., contain valid content and all links redirect accordingly 
 
 The smoke testing utils ([/Testing/Functional/SmokeTests/smoke_test_utils.py](https://github.com/cisagov/ScubaGoggles/blob/main/Testing/Functional/SmokeTests/smoke_test_utils.py)) stores helper methods which perform various operations.
 
