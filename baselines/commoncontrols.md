@@ -164,8 +164,8 @@ If phishing-resistant MFA is not yet tenable, an MFA method from the following l
 -   [GWS Admin Help \| Set up SSO via a third-party Identity provider](https://support.google.com/a/topic/7579248?hl=en&ref_topic=7556686)
 -   [Google Cloud Architecture Center \| Federating Google Cloud with Active Directory](https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction)
 -   [Google Cloud Architecture Center \| Federating Google Cloud with Azure Active Directory](https://cloud.google.com/architecture/identity/federating-gcp-with-azure-active-directory)
--   [Google Workspace Updates /| Simplify and Strengthen Sign-In by Enabling Passkeys for Your Users](https://workspaceupdates.googleblog.com/2023/06/passkey-open-beta.html)
--   [Google Security Blog /| So Long Passwords, Thanks for all the Phish](https://security.googleblog.com/2023/05/so-long-passwords-thanks-for-all-phish.html)
+-   [Google Workspace Updates \| Simplify and Strengthen Sign-In by Enabling Passkeys for Your Users](https://workspaceupdates.googleblog.com/2023/06/passkey-open-beta.html)
+-   [Google Security Blog \| So Long Passwords, Thanks for all the Phish](https://security.googleblog.com/2023/05/so-long-passwords-thanks-for-all-phish.html)
 -   [Allow Users to Skip Passwords at Sign-In (Beta)](https://support.google.com/a/answer/13529161)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
 
