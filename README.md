@@ -57,6 +57,7 @@ The majority of the conformance checks done by ScubaGoggles rely on [GWS Admin l
 - [Limitations](/docs/usage/Limitations.md)
 
 ### Troubleshooting
+- [Upgrading ScubaGoggles](/docs/troubleshooting/Troubleshooting.md#upgrading-scubagoggles)
 - [Lots of Manual Checks](/docs/troubleshooting/Troubleshooting.md#lots-of-manual-checks)
 - [Not Authorized to Access This Resource](/docs/troubleshooting/Troubleshooting.md#not-authorized-to-access-this-resource)
 - [scubagoggles Not Found](/docs/troubleshooting/Troubleshooting.md#scubagoggles-not-found)
