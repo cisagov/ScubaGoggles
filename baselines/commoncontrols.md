@@ -1099,10 +1099,10 @@ The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 #### GWS.COMMONCONTROLS.15.1v0.3 Instructions
 To configure Data Regions per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Account** -> **Account settings**.
-3.	Click the **Data Regions** card.
-4.	Click the **Data Regions** policy card.
-5.	Select the radio button option: "**United States**"
+2.	Navigate to **Data** -\> **Compliances** -\> **Data Regions**.
+3.	Click the **Region** card.
+4.	Click the **Data at rest** card.
+5.	Select the radio button option: "**United States**".
 6.	Click **Save**.
 
 #### GWS.COMMONCONTROLS.15.2v0.3 Instructions
