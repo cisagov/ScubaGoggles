@@ -1,5 +1,18 @@
 # Troubleshooting
 
+## Upgrading ScubaGoggles
+Assuming you installed ScubaGoggles as described in [Download and Install](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md), upgrading to the lastest version of ScubaGoggles should be as simple as:
+- Repeating the steps described in [Download and Install](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md) with the new release.
+- Making the OPA executable available, by either:
+    - downloading the executable again as described in [Download the OPA executable](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/OPA.md),
+    - copying the executable from the old release folder to the new release folder, or
+    - using the `--opapath` parameter to tell ScubaGoggles where to look for the executable.
+- Making your credentials available, by either:
+    - copying your `credentials.json` file to the new release folder or
+    - using the `--credentials` parameter to tell ScubaGoggles where to look for your credentials.
+
+If instead you cloned the ScubaGoggles repo and wish to run ScubaGoggles on the latest code from main (only recommended for development purposes), be sure to run `python -m pip install .` inside the ScubaGoggles directory after pulling the latest code.
+
 ## Lots of Manual Checks
 The report output by ScubaGoggles may indicate that many manual checks are needed (e.g., https://github.com/cisagov/ScubaGoggles/issues/260). This is a symptom of ScubaGoggles' primary limitation. As the API calls to check most of the settings relevant to ScubaGoggles are have not been made public by Google, ScubaGoggles relies on [GWS Admin log events](https://support.google.com/a/answer/4579579?hl=en) to determine the current state. If there are no log events corresponding to a SCuBA baseline policy (e.g., because the setting hasn't been changed within the past 6 months), ScubaGoggles will indicate that the setting needs to be checked manually. See [Limitations](/docs/usage/Limitations.md) for more details.
 
