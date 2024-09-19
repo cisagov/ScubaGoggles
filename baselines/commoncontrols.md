@@ -1167,7 +1167,7 @@ User access to Early Access Apps SHOULD be disabled.
 3. Click **Save**.
 
 #### GWS.COMMONCONTROLS.16.2v0.3 Instructions
-1. In the list of all services, scroll to and click on the **Early Access** service. 
+1. In the list of all services, scroll to and click on the **Early Access Apps** service. 
 2. Click on **Service status**.
 3. Ensure **OFF for everyone** is checked.
 4. Click **Save**.
