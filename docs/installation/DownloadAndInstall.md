@@ -1,4 +1,6 @@
 # Download and Python Install
+> [!NOTE]
+> Previously installed a different version of ScubaGoggles? See [Troubleshooting: Upgrading ScubaGoggles](/docs/troubleshooting/Troubleshooting.md#upgrading-scubagoggles).
 
 ## Downloading the Latest Release
 To download ScubaGoggles:
