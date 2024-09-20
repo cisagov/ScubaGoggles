@@ -1078,6 +1078,15 @@ The data storage region SHALL be set to be the United States for all users in th
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.COMMONCONTROLS.15.2v0.3
+Process Data in the region selected for data at rest SHALL be selected.
+
+- _Rationale_: Without this policy, it allows for the data to be processed in another region other than the United States. This creates a security risk due to the potential sensitivity of the data being processed. By checking this setting, it mitigates the risk by keeping the data processing to the United States region.
+- _Last modified:_ September 20, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - Pending
+
+#### GWS.COMMONCONTROLS.15.3v0.3
 The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 
 - _Rationale:_ This policy is aligned with the concept of sovereignty, taking into account geopolitical and USG national security concerns. Keeping data out of Russia helps prevent official data from being subject to Russian law.
@@ -1106,6 +1115,15 @@ To configure Data Regions per the policy:
 6.	Click **Save**.
 
 #### GWS.COMMONCONTROLS.15.2v0.3 Instructions
+To configure Data Regions per the policy:
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
+3.	Click the **Region** card.
+4.	Click the **Data processing** card.
+5.	Select the radio button option: "**Process data in the region selected for data at rests**".
+6.	Click **Save**.
+
+#### GWS.COMMONCONTROLS.15.3v0.3 Instructions
 To configure Supplemental Data Storage per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Account** -> **Account settings**.
