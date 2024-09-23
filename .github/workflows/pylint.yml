@@ -31,7 +31,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pylint pytest selenium
+        pip install pylint==3.2.7 pytest selenium
     - name: Analysing the code with pylint
       run: |
         pylint -d R0913,R0914,R0915,R1702,W0718,W0719,R0801 $(git ls-files '*.py')

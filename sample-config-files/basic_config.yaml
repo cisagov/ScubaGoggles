@@ -1,0 +1,14 @@
+# YAML basic configuration file with examples of how to specify various types
+# of parameters.
+
+# Example specifying a string parameter
+outputpath: example_output
+
+# Example specifying a list parameter
+# Note that list parameter values must be formatted as a list (i.e., with
+# brackets) in the config file, even if only one value is specified. For
+# example, "baselines: [gmail]" is correct but "baselines: gmail" is not.
+baselines: [gmail, calendar, groups, chat, drive, meet, sites, commoncontrols]
+
+# Example specifying a boolean paramter
+quiet: false
