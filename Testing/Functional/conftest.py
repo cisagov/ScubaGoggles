@@ -13,7 +13,7 @@ def pytest_addoption(parser):
             parser: An instance of "argparse.ArgumentParser"
     """
     parser.addoption("--subjectemail", action="store")
-    parser.addoption("--domain", action="store")
+    parser.addoption("--customerdomain", action="store")
 
 @pytest.fixture
 def subjectemail(pytestconfig):
@@ -26,14 +26,14 @@ def subjectemail(pytestconfig):
     return pytestconfig.getoption("subjectemail")
 
 @pytest.fixture
-def domain(pytestconfig):
+def customerdomain(pytestconfig):
     """
-        Setup code that shares the "domain" parameter across tests.
+        Setup code that shares the "customerdomain" parameter across tests.
 
         Args:
             pytestconfig: Provides access to the "Config" object for a current test session
     """
-    return pytestconfig.getoption("domain")
+    return pytestconfig.getoption("customerdomain")
 
 @pytest.fixture
 def browser():
