@@ -11,7 +11,7 @@ All ScubaGoggles [parameters](/docs/usage/Parameters.md) can be placed into a co
 ### Basic Usage
 The [basic use](/sample-config-files/basic_config.yaml) example config file specifies the `outpath`, `baselines`, and `quiet` parameters.
 
-ScubaGoggles can be invokes with this config file:
+ScubaGoggles can be invoked with this config file:
 ```
 scubagoggles gws --config basic_config.yaml
 ```
