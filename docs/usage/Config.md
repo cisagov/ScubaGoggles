@@ -24,13 +24,13 @@ scubagoggles gws --config basic_config.yaml -b gmail chat
 ## Omit Policies
 
 In some cases, it may be appropriate to omit specific policies from ScubaGoggles evaluation. For example:
-- When a policy is implemented by a third-party service that ScubaGoggles does not audit
-- When a policy is not applicable to your organization (e.g., policy GWS.GMAIL.4.3v0.3 is only applicable to federal, executive branch, departments and agencies)
+- When a policy is implemented by a third-party service that ScubaGoggles does not audit.
+- When a policy is not applicable to your organization (e.g., policy GWS.GMAIL.4.3v0.3, which is only applicable to federal, executive branch, departments and agencies).
 
-The `omitpolicy` top-level key, shown in this [example ScubaGoggles configuration file](/Sample-Config-Files/omit_policies.yaml), allows the user to specify the policies that should be omitted from the ScubaGear report. Omitted policies will show up as "Omitted" in the HTML report and will be colored gray. Omitting policies must only be done if the omissions are approved within an organization's security risk management process. **Exercise care when omitting policies because this can inadvertently introduce blind spots when assessing your system.**
+The `omitpolicy` top-level key, shown in this [example ScubaGoggles configuration file](/Sample-Config-Files/omit_policies.yaml), allows the user to specify the policies that should be omitted from the ScubaGoggles report. Omitted policies will show up as "Omitted" in the HTML report and will be colored gray. Omitting policies must only be done if the omissions are approved within an organization's security risk management process. **Exercise care when omitting policies because this can inadvertently introduce blind spots when assessing your system.**
 
 For each omitted policy, the config file allows you to indicate the following:
-- `rationale`: The reason the policy should be omitted from the report. This value will be displayed in the "Details" column of the report. ScubaGear will output a warning if no rationale is provided.
+- `rationale`: The reason the policy should be omitted from the report. This value will be displayed in the "Details" column of the report. ScubaGoggles will output a warning if no rationale is provided.
 - `expiration`: Optional. A date after which the policy should no longer be omitted from the report. The expected format is yyyy-mm-dd.
 
 
