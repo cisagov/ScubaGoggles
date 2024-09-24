@@ -12,6 +12,8 @@ from scubagoggles.utils import rel_abs_path
 from scubagoggles.scuba_constants import API_LINKS
 
 
+# Eight instance attributes is reasonable in this case.
+# pylint: disable-next=too-many-instance-attributes
 class Reporter:
 
     """The Reporter class generates the HTML files containing the conformance
@@ -44,8 +46,6 @@ class Reporter:
             file (empty dict if none omitted)
         """
 
-        # pylint: disable=too-many-instance-attributes
-        # Eight is reasonable in this case.
         self._product = product
         self._tenant_domain = tenant_domain
         self._main_report_name = main_report_name
