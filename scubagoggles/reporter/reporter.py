@@ -27,7 +27,8 @@ class Reporter:
                  prod_to_fullname: dict,
                  product_policies: list,
                  successful_calls: set,
-                 unsuccessful_calls: set):
+                 unsuccessful_calls: set,
+                 omissions: dict):
 
         """Reporter class initialization
 
@@ -39,6 +40,8 @@ class Reporter:
             read from the baseline markdown
         :param successful_calls: set with the set of successful calls
         :param unsuccessful_calls: set with the set of unsuccessful calls
+        :param omissions: dict with the omissions specified in the config
+            file (empty dict if none omitted)
         """
 
         self._product = product
@@ -48,6 +51,10 @@ class Reporter:
         self._successful_calls = successful_calls
         self._unsuccessful_calls = unsuccessful_calls
         self._full_name = prod_to_fullname[product]
+        self._omissions = {
+            # Lowercase all the keys for case-insensitive comparisons
+            key.lower(): value for key, value in omissions.items()
+        }
 
     @staticmethod
     def _get_test_result(requirement_met: bool, criticality: str, no_such_events: bool) -> str:
@@ -131,6 +138,83 @@ class Reporter:
             </table>"
         html = html.replace('{{TENANT_DETAILS}}', meta_data)
         return html
+
+    def _is_control_omitted(self, control_id : str) -> bool:
+        '''
+        Determine if the supplied control was marked for omission in the
+        config file and if the expiration date has passed, if applicable.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        '''
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        if control_id in self._omissions:
+            # The config indicates the control should be omitted
+            if self._omissions[control_id] is None:
+                # If a user doesn't provide either a rationale or expiration
+                # date, the control ID will be in the omissions dict but it
+                # will map to None.
+                return True
+            if 'expiration' not in self._omissions[control_id]:
+                return True
+            # An expiration date for the omission expiration was
+            # provided. Evaluate the date to see if the control should
+            # still be omitted.
+            raw_date = self._omissions[control_id]['expiration']
+            if raw_date is None:
+                # Date left blank, omit the policy
+                return True
+            if raw_date == "":
+                # If the expiration date is an empty string, omit the
+                # policy
+                return True
+            try:
+                expiration_date = datetime.strptime(raw_date, '%Y-%m-%d')
+            except:
+                # Malformed date, don't omit the policy
+                warning = f"Config file indicates omitting {control_id}, " \
+                    f"but the provided expiration date, {raw_date}, is " \
+                    "malformed. The expected format is yyyy-mm-dd. Control" \
+                    " will not be omitted."
+                warnings.warn(warning, RuntimeWarning)
+                return False
+            now = datetime.now()
+            if expiration_date > now:
+                # The expiration date is in the future, omit the policy
+                return True
+            # The expiration date is passed, don't omit the policy
+            warning = f"Config file indicates omitting {control_id}, but " \
+                f"the provided expiration date, {raw_date}, has passed. " \
+                "Control will not be omitted."
+            warnings.warn(warning, RuntimeWarning)
+        return False
+
+    def _get_omission_rationale(self, control_id : str) -> str:
+        '''
+        Return the rationale indicated in the config file for the indicated
+        control, if provided. If not, return a string warning the user that
+        no rationale was provided.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        '''
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        if control_id not in self._omissions:
+            throw(f"{control_id} not omitted in config file, cannot fetch " \
+                "rationale", RuntimeError)
+        # If any of the following conditions is true, no rationale was
+        # provided
+        no_rationale = \
+            (self._omissions[control_id] is None) or \
+            ('rationale' not in self._omissions[control_id]) or \
+            (self._omissions[control_id]['rationale'] is None) or \
+            (self._omissions[control_id]['rationale'] == "")
+        if no_rationale:
+            warning = f"Config file indicates omitting {control_id}, but " \
+                "no rationale provided."
+            warnings.warn(warning, RuntimeWarning)
+            return "Rationale not provided."
+        return self._omissions[control_id]['rationale']
 
     def _build_report_html(self, fragments: list) -> str:
         '''
@@ -275,15 +359,25 @@ class Reporter:
             "Errors": 0,
             "Failures": 0,
             "Warnings": 0,
-            # While ScubaGoggles doesn't currently have the capability to omit controls,
-            # this key is needed here to maintain parity with ScubaGear.
             "Omit": 0
         }
 
         for baseline_group in self._product_policies:
             table_data = []
-            results_data ={}
+            results_data = {}
             for control in baseline_group['Controls']:
+                if self._is_control_omitted(control['Id']):
+                    # Handle the case where the control was omitted
+                    report_stats['Omit'] += 1
+                    rationale = self._get_omission_rationale(control['Id'])
+                    table_data.append({
+                        'Control ID': control['Id'],
+                        'Requirement': control['Value'],
+                        'Result': "Omitted",
+                        'Criticality': test['Criticality'],
+                        'Details': f'Test omitted by user. {rationale}'
+                    })
+                    continue
                 tests = [test for test in test_results if test['PolicyId'] == control['Id']]
                 if len(tests) == 0:
                     # Handle the case where Rego doesn't output anything for a given control
