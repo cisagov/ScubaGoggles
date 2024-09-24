@@ -161,12 +161,9 @@ class Reporter:
             # provided. Evaluate the date to see if the control should
             # still be omitted.
             raw_date = self._omissions[control_id]['expiration']
-            if raw_date is None:
-                # Date left blank, omit the policy
-                return True
-            if raw_date == "":
-                # If the expiration date is an empty string, omit the
-                # policy
+            if raw_date is None or raw_date == "":
+                # If the expiration date is left blank or an empty string,
+                # omit the policy
                 return True
             try:
                 expiration_date = datetime.strptime(raw_date, '%Y-%m-%d')
@@ -200,8 +197,8 @@ class Reporter:
         # Lowercase for case-insensitive comparison
         control_id = control_id.lower()
         if control_id not in self._omissions:
-            throw(f"{control_id} not omitted in config file, cannot fetch " \
-                "rationale", RuntimeError)
+            raise RuntimeError(f"{control_id} not omitted in config file, " \
+                "cannot fetch rationale")
         # If any of the following conditions is true, no rationale was
         # provided
         no_rationale = \
@@ -366,18 +363,6 @@ class Reporter:
             table_data = []
             results_data = {}
             for control in baseline_group['Controls']:
-                if self._is_control_omitted(control['Id']):
-                    # Handle the case where the control was omitted
-                    report_stats['Omit'] += 1
-                    rationale = self._get_omission_rationale(control['Id'])
-                    table_data.append({
-                        'Control ID': control['Id'],
-                        'Requirement': control['Value'],
-                        'Result': "Omitted",
-                        'Criticality': test['Criticality'],
-                        'Details': f'Test omitted by user. {rationale}'
-                    })
-                    continue
                 tests = [test for test in test_results if test['PolicyId'] == control['Id']]
                 if len(tests) == 0:
                     # Handle the case where Rego doesn't output anything for a given control
@@ -391,6 +376,18 @@ class Reporter:
                         'Details': f'Report issue on {issues_link}'})
                     warnings.warn(f"No test results found for Control Id {control['Id']}",
                         RuntimeWarning)
+                elif self._is_control_omitted(control['Id']):
+                    # Handle the case where the control was omitted
+                    report_stats['Omit'] += 1
+                    rationale = self._get_omission_rationale(control['Id'])
+                    table_data.append({
+                        'Control ID': control['Id'],
+                        'Requirement': control['Value'],
+                        'Result': "Omitted",
+                        'Criticality': tests[0]['Criticality'],
+                        'Details': f'Test omitted by user. {rationale}'
+                    })
+                    continue
                 else:
                     for test in tests:
                         failed_prereqs = self._get_failed_prereqs(test)
