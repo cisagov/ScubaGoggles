@@ -1084,7 +1084,12 @@ Process Data in the region selected for data at rest SHALL be selected.
 - _Last modified:_ September 20, 2024
 
 - MITRE ATT&CK TTP Mapping
-  - Pending
+  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
+    - [T1591:001: Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+  - [T1567: Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567/)
+    - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud Storage](https://attack.mitre.org/techniques/T1567/002/)
 
 #### GWS.COMMONCONTROLS.15.3v0.3
 The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
