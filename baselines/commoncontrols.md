@@ -1078,9 +1078,9 @@ The data storage region SHALL be set to be the United States for all users in th
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.COMMONCONTROLS.15.2v0.3
-Process Data in the region selected for data at rest SHALL be selected.
+Data SHALL be processed in the region selected for data at rest.
 
-- _Rationale_: Without this policy, it allows for the data to be processed in another region other than the United States. This creates a security risk due to the potential sensitivity of the data being processed. By checking this setting, it mitigates the risk by keeping the data processing to the United States region.
+- _Rationale_: Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy allows greater control over the data.
 - _Last modified:_ September 20, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -1125,7 +1125,7 @@ To configure Data Regions per the policy:
 2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
 3.	Click the **Region** card.
 4.	Click the **Data processing** card.
-5.	Select the radio button option: "**Process data in the region selected for data at rests**".
+5.	Select the radio button option: "**Process data in the region selected for data at rest**".
 6.	Click **Save**.
 
 #### GWS.COMMONCONTROLS.15.3v0.3 Instructions
