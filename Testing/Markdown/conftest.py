@@ -12,13 +12,24 @@ def pytest_addoption(parser):
             parser: An instance of "argparse.ArgumentParser"
     """
     parser.addoption("--locations", nargs="+", action="store")
+    parser.addoption("--repo_home", action="store")
 
 @pytest.fixture
-def subjectemail(pytestconfig):
+def locations(pytestconfig):
     """
-        Setup code that shares the "subjectemail" parameter across tests.
+        Setup code that shares the "locations" parameter across tests.
 
         Args:
             pytestconfig: Provides access to the "Config" object for a current test session
     """
     return pytestconfig.getoption("locations")
+
+@pytest.fixture
+def repo_home(pytestconfig):
+    """
+        Setup code that shares the "repo_home" parameter across tests.
+
+        Args:
+            pytestconfig: Provides access to the "Config" object for a current test session
+    """
+    return pytestconfig.getoption("repo_home")
