@@ -5,11 +5,9 @@ markdown files.
 
 import os
 import re
-import pytest
-import requests
 from pprint import pprint
 from collections import defaultdict
-import json
+import requests
 
 # Regex for identifying strings with markdown links, e.g., [some text](url)
 # Interpretation:
@@ -41,7 +39,7 @@ class MarkdownParser:
     def __init__(self, home, locations : list):
         self.links = []
         self.anchors = defaultdict(set)
-        self.HOME = home.replace('\\', '/') + '/'
+        self.home = home.replace('\\', '/') + '/'
         self.parse_markdowns(locations)
 
     def parse_markdowns(self, locations : list) -> None:
@@ -60,13 +58,13 @@ class MarkdownParser:
         :param path: The location to check, relative to the
             provided home location.
         '''
-        if os.path.isdir(self.HOME + path):
-            for subfile in os.listdir(self.HOME + path):
+        if os.path.isdir(self.home + path):
+            for subfile in os.listdir(self.home + path):
                 self.parse_recursive(os.path.join(path, subfile))
         else:
             if not path.endswith('.md'):
                 return
-            with open(self.HOME + path, 'r', encoding='utf-8') as f:
+            with open(self.home + path, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
             for i, line in enumerate(lines):
                 if line.startswith('#'):
@@ -75,7 +73,7 @@ class MarkdownParser:
                     tag = re.sub(r'[^a-zA-Z0-9_\-\s]+', '', tag)
                     tag = tag.strip().lower()
                     tag = re.sub(r'\s+', '-', tag)
-                    full_name = MarkdownParser.abs_path(self.HOME + path)
+                    full_name = MarkdownParser.abs_path(self.home + path)
                     if tag in self.anchors[full_name]:
                         # Handle the case where there are multiple headers
                         # with the same name. GitHub appends "-{n}" to
@@ -92,6 +90,7 @@ class MarkdownParser:
                 match = link_re.match(line)
                 if match:
                     link = match.groups()[1]
+                    path = path.replace('\\', '/')
                     self.links.append({
                         'url': link,
                         'location': f"{path}:{i+1}"
@@ -109,15 +108,14 @@ class MarkdownParser:
         location = link['location']
         if '#' not in url:
             return True
-        elif url.startswith('#'):
+        if url.startswith('#'):
             fname = location.split(':')[0].replace('\\', '/')
-            return url[1:] in self.anchors[MarkdownParser.abs_path(self.HOME + fname)]
-        else:
-            fname = url.split('#')[0]
-            anchor = url.split('#')[1]
-            file_dir = os.path.dirname(link['location'])
-            url = self.HOME + os.path.join(file_dir, fname)
-            return anchor in self.anchors[MarkdownParser.abs_path(self.HOME + url)]
+            return url[1:] in self.anchors[MarkdownParser.abs_path(self.home + fname)]
+        fname = url.split('#')[0]
+        anchor = url.split('#')[1]
+        file_dir = os.path.dirname(link['location'])
+        url = self.home + os.path.join(file_dir, fname)
+        return anchor in self.anchors[MarkdownParser.abs_path(self.home + url)]
 
     def test_relative_link(self, link : dict) -> bool:
         '''
@@ -128,24 +126,22 @@ class MarkdownParser:
         '''
         if link['url'].startswith('/'):
             # path relative to directory home
-            if not os.path.exists(self.HOME + link['url'][1:].split('#')[0]):
+            if not os.path.exists(self.home + link['url'][1:].split('#')[0]):
                 return False
-            else:
-                return self.check_anchor(link)
-        else:
-            # path relative to the file that contains it
-            file_dir = os.path.dirname(link['location'])
-            url = self.HOME + os.path.join(file_dir, link['url'].split('#')[0])
-            if not os.path.exists(url):
-                return False
-            else:
-                return self.check_anchor(link)
+            return self.check_anchor(link)
+        # path relative to the file that contains it
+        file_dir = os.path.dirname(link['location'])
+        url = self.home + os.path.join(file_dir, link['url'].split('#')[0])
+        if not os.path.exists(url):
+            return False
+        return self.check_anchor(link)
 
+# pylint: disable-next=too-few-public-methods
 class WebLinkChecker:
+    '''
+    Class for validating web links.
+    '''
     def __init__(self):
-        '''
-        Class for validating web links.
-        '''
         # Sets for preventing duplicate web requests
         self.previously_checked = set()
         self.known_bad = set()
@@ -158,10 +154,11 @@ class WebLinkChecker:
         try:
             if url not in self.previously_checked:
                 self.previously_checked.add(url)
-                if requests.get(url).status_code != 200:
+                if requests.get(url, timeout=10).status_code != 200:
                     self.known_bad.add(url)
                     return False
             return url not in self.known_bad
+        # pylint: disable-next=bare-except
         except:
             self.previously_checked.add(url)
             self.known_bad.add(url)
