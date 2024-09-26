@@ -14,3 +14,9 @@ omitpolicy:
       which ScubaGoggles does not have the ability to check."
   GWS.DRIVEDOCS.7.1v0.3:
     rationale: *DLPRationale
+
+# The "&" character used in the above example defines an anchor, which saves a value
+# for future reference. This value can then be retrieved with the "*" character. See
+# https://yaml.org/spec/1.2.2/#692-node-anchors for more details. In this case, the
+# anchor allows you to configure multiple omissions that share the same rationale
+# without repeating yourself.
