@@ -6,7 +6,7 @@ All ScubaGoggles [parameters](/docs/usage/Parameters.md) can be placed into a co
 > If a parameter is specified both on the command-line and in a configuration file, the command-line parameter has precedence over the config file.
 
 ## Sample Configuration Files
-[Sample config files](/sample-config-files) are available in the repo and are discussed below.
+[Sample config files](/sample-config-files) are available in the repo and are discussed below. When executing ScubaGoggles, only a single config file can be read in; we recommend looking through the following examples and constructing a config file that best suits your use case.
 
 ### Basic Usage
 The [basic use](/sample-config-files/basic_config.yaml) example config file specifies the `outpath`, `baselines`, and `quiet` parameters.
@@ -21,7 +21,7 @@ It can also be invoked while overriding the `baselines` parameter.
 scubagoggles gws --config basic_config.yaml -b gmail chat
 ```
 
-## Omit Policies
+### Omit Policies
 
 In some cases, it may be appropriate to omit specific policies from ScubaGoggles evaluation. For example:
 - When a policy is implemented by a third-party service that ScubaGoggles does not audit.
