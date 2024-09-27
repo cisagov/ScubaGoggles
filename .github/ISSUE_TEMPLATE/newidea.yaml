@@ -1,0 +1,39 @@
+name: "Submit an Idea"
+description: 'Describe an idea, todo, feature, task, improvement, issue, epic, or story'
+title: "[IDEA] <title>"
+labels: ["enhancement", "improvement"]
+
+body: 
+- type: textarea
+  attributes:
+    label: Summary
+    description: What is the work, as a high-level summary? 
+  validations:
+    required: true 
+- type: textareag
+  attributes:
+    label: Motivation and context 
+    description: Why does this work belong in this project?
+    placeholder: |
+     This would be useful because...
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Implementation notes
+    description: Please provide details for implementation. 
+    placeholder: |
+      1. An example for how this would be used...
+      2. What would this look like?
+      3. How this would act...
+      4. Any related work, including links to related issues...
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Acceptance Criteria
+    description: How do we know when this work is done?
+    placeholder: |
+    - [ ] Criterion
+  validations:
+    required: false

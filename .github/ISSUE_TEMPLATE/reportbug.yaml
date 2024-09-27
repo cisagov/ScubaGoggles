@@ -10,7 +10,7 @@ body:
     description: What's wrong? Please be specific. 
   validations:
     required: true 
-- type: textarea
+- type: textareag
   attributes:
     label: Expected Behavior
     description: What did you expect to happen that didn't? 
@@ -22,9 +22,9 @@ body:
     description: Steps to reproduce the behavior.
     placeholder: |
       1. In this environment...
-      1. With this config...
-      1. Run '...'
-      1. See error...
+      2. With this config...
+      3. Run '...'
+      4. See error...
   validations:
     required: false
 - type: textarea
