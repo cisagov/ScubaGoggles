@@ -34,6 +34,6 @@ body:
     label: Acceptance Criteria
     description: How do we know when this work is done?
     placeholder: |
-      1. [ ] Criterion
+      1. Criterion: 
   validations:
     required: false
