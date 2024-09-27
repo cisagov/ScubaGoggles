@@ -1,0 +1,38 @@
+name: "\U0001F41B Bug report"
+about: 'Describe a bug, error, unexpected behavior, or other problem'
+title: ''
+labels: ''
+
+body: 
+- type: textarea
+  attributes:
+    label: Summary
+    description: What's wrong? Please be specific. 
+  validations:
+    required: true 
+  - type: textarea
+  attributes:
+    label: Expected Behavior
+    description: What did you expect to happen that didn't? 
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Steps To Reproduce
+    description: Steps to reproduce the behavior.
+    placeholder: |
+      1. In this environment...
+      1. With this config...
+      1. Run '...'
+      1. See error...
+  validations:
+    required: false
+   - type: textarea
+  attributes:
+    label: Any helpful log output or screenshots?
+    description: |
+      Links? References? Anything that will give us more context about the issue you are encountering!
+
+      Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
+  validations:
+    required: false
