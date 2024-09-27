@@ -10,7 +10,7 @@ body:
     description: What's wrong? Please be specific. 
   validations:
     required: true 
-  - type: textarea
+- type: textarea
   attributes:
     label: Expected Behavior
     description: What did you expect to happen that didn't? 
@@ -27,7 +27,7 @@ body:
       1. See error...
   validations:
     required: false
-   - type: textarea
+- type: textarea
   attributes:
     label: Any helpful log output or screenshots?
     description: |
