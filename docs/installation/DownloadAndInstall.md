@@ -14,17 +14,20 @@ As of ScubaGoggles v0.3.0, the minimum required Python version to run the tool i
 The following commands are used to set up a python virtual environment (venv) to install the needed python dependencies.
 Inside the release or repo folder, open up a terminal and run the following commands based on your OS.
 
+> [!NOTE]
+> Depending on the Python installation and operating system, it might be necessary to use `pip3` and `python3` instead of `pip` and `python`.
+
 #### Windows
 ```
-pip3 install virtualenv
+pip install virtualenv
 python -m venv .venv
 .venv\Scripts\activate
 ```
 
 #### macOS
 ```
-pip3 install virtualenv
-virtualenv -p python3 .venv
+pip install virtualenv
+virtualenv -p python .venv
 source .venv/bin/activate
 ```
 
@@ -34,13 +37,13 @@ Choose either of these next steps to install the needed python dependencies in t
 #### Installing dependencies for running scubagoggles directly
 In the root directory of the release/repo, install the `scubagoggles` package and dependencies with the following command.
 ```
-python3 -m pip install .
+python -m pip install .
 ```
 
 #### Installing dependencies for running via scuba.py script
 In the root directory of the release/repo, install the the required dependencies with the following command.
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 > [!IMPORTANT]
