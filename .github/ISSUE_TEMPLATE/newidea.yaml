@@ -10,7 +10,7 @@ body:
     description: What is the work, as a high-level summary? 
   validations:
     required: true 
-- type: textareag
+- type: textarea
   attributes:
     label: Motivation and context 
     description: Why does this work belong in this project?
@@ -34,6 +34,6 @@ body:
     label: Acceptance Criteria
     description: How do we know when this work is done?
     placeholder: |
-      1. Criterion: 
+      - [ ] Criterion
   validations:
     required: false
