@@ -1078,6 +1078,20 @@ The data storage region SHALL be set to be the United States for all users in th
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.COMMONCONTROLS.15.2v0.3
+Data SHALL be processed in the region selected for data at rest.
+
+- _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy allows for data sovereignty over organizational data.
+- _Last modified:_ September 20, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
+    - [T1591:001: Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+  - [T1567: Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567/)
+    - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud Storage](https://attack.mitre.org/techniques/T1567/002/)
+
+#### GWS.COMMONCONTROLS.15.3v0.3
 The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
 
 - _Rationale:_ This policy is aligned with the concept of sovereignty, taking into account geopolitical and USG national security concerns. Keeping data out of Russia helps prevent official data from being subject to Russian law.
@@ -1106,6 +1120,14 @@ To configure Data Regions per the policy:
 6.	Click **Save**.
 
 #### GWS.COMMONCONTROLS.15.2v0.3 Instructions
+1. Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2. Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
+3. Click the **Region** card.
+4. Click the **Data processing** card.
+5. Select the radio button option: "**Process data in the region selected for data at rest**".
+6. Click **Save**.
+
+#### GWS.COMMONCONTROLS.15.3v0.3 Instructions
 To configure Supplemental Data Storage per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Account** -> **Account settings**.
