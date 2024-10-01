@@ -2,8 +2,14 @@
 Class for parsing the config file and command-line arguments.
 """
 
+import re
+import warnings
 import argparse
 import yaml
+
+from scubagoggles.reporter.md_parser import read_baseline_docs
+from scubagoggles.orchestrator import Orchestrator
+from pathlib import Path
 
 class ScubaArgumentParser:
     """
@@ -58,7 +64,11 @@ class ScubaArgumentParser:
                 if param in cli_args:
                     continue
                 vars(args)[param] = config[param]
-        # Return the args (argparse.Namespace) as a dictionary
+
+        # Check for logical errors in the resulting configuration
+        self._validate_config(args)
+
+        # Return the args (argparse.Namespace)
         return args
 
     @classmethod
@@ -84,3 +94,31 @@ class ScubaArgumentParser:
                 aux_parser.add_argument(*dests)
         cli_args, _ = aux_parser.parse_known_args()
         return cli_args
+
+    @classmethod
+    def _validate_config(cls, args : argparse.Namespace) -> None:
+        if 'omitpolicy' in args:
+            products = Orchestrator.gws_products()['prod_to_fullname']
+            prod_to_fullname = {
+                key: products[key]
+                for key in args.baselines
+                if key in products
+            }
+
+            # Parse the baselines to determine the set of valid control IDs
+            path = Path(args.documentpath).resolve()
+            baseline_policies = read_baseline_docs(path, prod_to_fullname)
+            control_ids = set()
+            for product in baseline_policies:
+                for group in baseline_policies[product]:
+                    for control in group['Controls']:
+                        control_ids.add(control['Id'].lower())
+
+            # Warn for any unexpected IDs
+            for control_id in args.omitpolicy:
+                if control_id.lower() not in control_ids:
+                    warnings.warn("Config file indicates omitting " \
+                        f"{control_id}, but {control_id} is not one of the " \
+                        "controls encompassed by the baselines indicated " \
+                        "indicated by the productnames parameter. Control " \
+                        "will not be omitted.")
