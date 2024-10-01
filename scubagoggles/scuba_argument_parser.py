@@ -2,14 +2,13 @@
 Class for parsing the config file and command-line arguments.
 """
 
-import re
 import warnings
 import argparse
-import yaml
-
-from scubagoggles.reporter.md_parser import read_baseline_docs
-from scubagoggles.orchestrator import Orchestrator
 from pathlib import Path
+
+import yaml
+from scubagoggles.orchestrator import Orchestrator
+from scubagoggles.reporter.md_parser import read_baseline_docs
 
 class ScubaArgumentParser:
     """
@@ -109,8 +108,8 @@ class ScubaArgumentParser:
             path = Path(args.documentpath).resolve()
             baseline_policies = read_baseline_docs(path, prod_to_fullname)
             control_ids = set()
-            for product in baseline_policies:
-                for group in baseline_policies[product]:
+            for product_baseline in baseline_policies.values():
+                for group in product_baseline:
                     for control in group['Controls']:
                         control_ids.add(control['Id'].lower())
 
