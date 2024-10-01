@@ -1080,7 +1080,7 @@ The data storage region SHALL be set to be the United States for all users in th
 #### GWS.COMMONCONTROLS.15.2v0.3
 Data SHALL be processed in the region selected for data at rest.
 
-- _Rationale_: Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy allows greater control over the data.
+- _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy allows for data sovereignty over organizational data.
 - _Last modified:_ September 20, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -1120,13 +1120,12 @@ To configure Data Regions per the policy:
 6.	Click **Save**.
 
 #### GWS.COMMONCONTROLS.15.2v0.3 Instructions
-To configure Data Regions per the policy:
-1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
-3.	Click the **Region** card.
-4.	Click the **Data processing** card.
-5.	Select the radio button option: "**Process data in the region selected for data at rest**".
-6.	Click **Save**.
+1. Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2. Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
+3. Click the **Region** card.
+4. Click the **Data processing** card.
+5. Select the radio button option: "**Process data in the region selected for data at rest**".
+6. Click **Save**.
 
 #### GWS.COMMONCONTROLS.15.3v0.3 Instructions
 To configure Supplemental Data Storage per the policy:
