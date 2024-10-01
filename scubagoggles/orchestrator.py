@@ -185,9 +185,6 @@ class Orchestrator:
             omit_summary = (f"<div class='summary manual'>{n_omit}"
             " omitted</div>")
 
-        # summary = f"{pass_summary}{warning_summary}{failure_summary}"
-        # summary += f"{manual_summary}{omit_summary}{error_summary}"
-        # return summary
         return f"{pass_summary}{warning_summary}{failure_summary}" \
             f"{manual_summary}{omit_summary}{error_summary}"
 
