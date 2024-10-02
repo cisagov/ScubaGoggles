@@ -33,8 +33,9 @@ python download_opa.py -v 0.60.0 -os macos
 - Use the `scubagoggles gws --omitsudo` flag to omit running the executable with `sudo`.
 - MAC and Linux OS users should have their OPA executables named `opa_darwin_amd64` or `opa_linux_amd64_static` respectively for scubagoggles execution.
 - The OPA executable must also be given execute permissions
+- Run the following command to give the opa executable execute permissions:
 ```bash
-chmod +x opa_darwin_amd64 # give the opa executable execute permissions
+chmod +x opa_darwin_amd64
 ```
 
 ## Navigation
