@@ -439,12 +439,14 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 #### GWS.DRIVEDOCS.7.1v0.3 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
-3.  Click **Manage Rules**. Then click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
-4.  In the **Name** section, add the name and description of the rule.
-5.  In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
-6.  In the **Apps** section, choose the trigger for **Google Drive, File created, modified, uploaded or shared**, and click **Continue**.
-7.  In the **Conditions** section, click **Add Condition**.
-8.  Configure appropriate content definition(s) based upon the agency's individual requirements and click **Continue**.
-9.  Select the appropriate action to warn or block sharing, based upon the agency's individual requirements.
-10. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-11. Review the rule details, mark the rule as **Active**, and click **Create.**
+3.  Click **Manage Rules**. 
+4.  For each DLP rule to meet the above requirements:
+5.  click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
+6.  In the **Name** section, add the name and description of the rule.
+7.  In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
+8.  In the **Apps** section, choose the trigger for **Google Drive, File created, modified, uploaded or shared**, and click **Continue**.
+9.  In the **Conditions** section, click **Add Condition**.
+10. Configure appropriate content definition(s) based upon the agency's individual requirements and click **Continue**.
+11. Select the appropriate action to warn or block sharing, based upon the agency's individual requirements.
+12. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+13. Review the rule details, mark the rule as **Active**, and click **Create.**
