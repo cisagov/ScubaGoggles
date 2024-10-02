@@ -980,14 +980,14 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
 
 #### GWS.COMMONCONTROLS.13.1v0.3 Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com).
-2.  Click **Rules**.
-3.  From the Rules page, click **Add a filter**.
-4.  From the drop-down menu, select **Type**.
-5.  Select the **System defined** check box.
-6.  Click **Apply**.
-7.  A list of system defined rules displays. Select one of the rules from the list by clicking the table row for that rule—for example, the Device compromised rule.
-8.  From the Rule details page, you can view the conditions and actions for the rule—for example, to confirm if email notifications are turned on, and to confirm the recipients for those email notifications.
-9. Click **Edit Rule**.
+2.  On the left navigation pane, click the hamburger menu above **Home**-\>**Show more**.
+3.  Click **Rules**.
+4.  From the Rules page, click **Add a filter**.
+5.  From the drop-down menu, select **Type**.
+6.  Select the **System defined** check box.
+7.  Click **Apply**.
+8.  A list of system defined rules displays. For each of the rules from listed above edit the configuration:
+9.  Select the rule by clicking the table row for the rule.
 10. Click **Next: View Conditions**.
 11. Click **Next: Add Actions**.
 12. From the Actions page, you can change the severity for the alert to High, Medium, or Low, send an alert to the alert center if the rule's conditions are met, set up admin email notifications, and specify recipients for those notifications.
