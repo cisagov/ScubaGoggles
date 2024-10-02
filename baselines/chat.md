@@ -237,7 +237,9 @@ Agencies SHOULD configure DLP rules to block or warn on sharing files with sensi
 #### GWS.CHAT.5.1v0.3 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
-3.  Click **Manage Rules**. Then click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
+3.  Click **Manage Rules**. 
+4.  For each DLP rule to meet the above requirements:
+4.  Click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
 4.  In the **Name** section, add the name and description of the rule.
 5.  In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
 6.  In the **Apps** section, choose the trigger for **Google Chat, Message Sent or File Upload**, and click **Continue**.
