@@ -132,5 +132,6 @@ class ScubaArgumentParser:
                 warnings.warn("Config file indicates omitting " \
                     f"{control_id}, but {control_id} is not one of the " \
                     "controls encompassed by the baselines indicated " \
-                    "indicated by the baselines parameter. Control " \
+                    "by the baselines parameter. Control " \
+
                     "will not be omitted.")
