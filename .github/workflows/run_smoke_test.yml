@@ -1,31 +1,76 @@
 name: Run Smoke Test 
 on: 
-  workflow_call:
-  workflow_dispatch:
   pull_request:
     types: [opened, reopened]
     branches:
       - "main"
+  pull_request_review:
+    types: [submitted]
   push:
-    # Uncomment when testing locally
-    #paths:
-    #  - ".github/workflows/run_smoke_test.yml"
-    #  - ".github/actions/setup-dependencies-windows/action.yml"
-    #  - ".github/actions/setup-dependencies-macos/action.yml"
+    # These paths are primarily for workflow testing purposes
+    paths:
+      - ".github/workflows/run_smoke_test.yml"
+      - ".github/actions/setup-dependencies-windows/action.yml"
+      - ".github/actions/setup-dependencies-macos/action.yml"
     branches:
       - "main"
+      - "*smoketest*"
+  workflow_call:
+  workflow_dispatch:
+    inputs:
+      operating-system:
+        description: "Choose operating system(s), format must be an array of strings:"
+        required: true
+        type: string
+        default: "['windows-latest', 'macos-latest']"
+      python-version:
+        description: "Choose python version(s), format must be an array of strings:"
+        required: true
+        type: string
+        default: "['3.10']"
+      opa-version:
+        description: "Choose OPA version"
+        required: true
+        type: string
+        default: "0.60.0"
 
 jobs:
+  configuration:
+    runs-on: ubuntu-latest
+    outputs:
+      operating-system: ${{ steps.variables.outputs.operating-system }}
+      python-version: ${{ steps.variables.outputs.python-version }}
+      opa-version: ${{ steps.variables.outputs.opa-version }}
+    steps:
+      - name: Configure variable outputs
+        id: variables
+        run: |
+          # For manual runs
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            operatingsystem_val="${{ inputs.operating-system }}"
+            pythonversion_val="${{ inputs.python-version }}"
+            opaversion_val="${{ inputs.opa-version }}"
+
+          # Default values for other events
+          else
+            operatingsystem_val="['windows-latest', 'macos-latest']"
+            pythonversion_val="['3.10']"
+            opaversion_val="0.60.0"
+          fi
+          echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
+          echo "python-version=$pythonversion_val" >> "$GITHUB_OUTPUT"
+          echo "opa-version=$opaversion_val" >> "$GITHUB_OUTPUT"
+
   smoke-test:
+    needs: configuration
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest]
+        operating-system: ${{ fromJSON(needs.configuration.outputs.operating-system) }}
         # See https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json,
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
-        python-version: ["3.9", "3.12"] # "3.8 fails with numpy uninstall"
-    runs-on: ${{ matrix.os }}
-    environment: Development
+        python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
+    runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -38,19 +83,19 @@ jobs:
           cache-dependency-path: "requirements.txt"
       
       - name: Setup Dependencies (Windows)
-        if: ${{ matrix.os == 'windows-latest' }}
+        if: ${{ matrix.operating-system == 'windows-latest' }}
         uses: ./.github/actions/setup-dependencies-windows
         with:
           operating-system: "windows"
-          opa-version: "0.60.0"
+          opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
       
       - name: Setup Dependencies (macOS)
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.operating-system == 'macos-latest' }}
         uses: ./.github/actions/setup-dependencies-macos
         with:
           operating-system: "macos"
-          opa-version: "0.60.0"
+          opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
       
       - name: Setup credentials for service account
@@ -61,4 +106,4 @@ jobs:
           json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
       - name: Run ScubaGoggles and check for correct output
-        run: pytest -s -vvv ./Testing/Functional/SmokeTests/ --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --domain="${{ secrets.GWS_DOMAIN }}"
+        run: pytest ./Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"

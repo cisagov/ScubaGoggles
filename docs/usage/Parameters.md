@@ -19,6 +19,10 @@ optional arguments:
   -c , --credentials    The relative path and name of the OAuth / service account credentials json file. Defaults to
                         "./credentials.json" which means the tool will look for the file named credentials.json in the
                         current directory.
+  --config              Local file path to a YAML formatted configuration file. Configuration file parameters can be
+                        used in place of command-line parameters. Additional parameters and variables not available
+                        on the command line can also be included in the file that will be provided to the tool for
+                        use in specific tests.
   --outjsonfilename     The name of the file that encapsulates all assessment output. Defaults to ScubaResults.
   --subjectemail        Only applicable when using a service account. The email address of a user the service account
                         should act on behalf of. This user must have the necessary privileges to run scubagoggles.
@@ -50,5 +54,5 @@ optional arguments:
 ```
 
 ## Navigation
-- Continue to [Usage: Examples](/docs/usage/Examples.md)
+- Continue to [Usage: Config File](/docs/usage/Config.md)
 - Return to [Documentation Home](/README.md)

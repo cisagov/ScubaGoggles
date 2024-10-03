@@ -249,13 +249,13 @@ dig _dmarc.example.com txt
 If DMARC is configured, a response resembling `v=DMARC1; p=reject; pct=100; rua=mailto:reports@dmarc.cyber.dhs.gov, mailto:reports@example.com; ruf=mailto:reports@example.com` will be returned, though by necessity, the contents of the record will vary by agency. In this example, the policy indicates all emails failing the SPF/DKIM checks are to be rejected and aggregate reports sent to reports@dmarc.cyber.dhs.gov and reports@example.com. Failure reports will be sent to reports@example.com.
 
 #### GWS.GMAIL.4.2v0.3 Instructions
-See [GWS.GMAIL.4.1v0.3](#gwsgmail41v02-instructions) instructions for an overview of how to publish and check a DMARC record. Ensure the record published includes `p=reject`.
+See [GWS.GMAIL.4.1v0.3](#gwsgmail41v03-instructions) instructions for an overview of how to publish and check a DMARC record. Ensure the record published includes `p=reject`.
 
 #### GWS.GMAIL.4.3v0.3 Instructions
-See [GWS.GMAIL.4.1v0.3](#gwsgmail41v02-instructions) instructions for an overview of how to publish and check a DMARC record. Ensure the record published includes reports@dmarc.cyber.dhs.gov as one of the emails for the `rua` field.
+See [GWS.GMAIL.4.1v0.3](#gwsgmail41v03-instructions) instructions for an overview of how to publish and check a DMARC record. Ensure the record published includes reports@dmarc.cyber.dhs.gov as one of the emails for the `rua` field.
 
 #### GWS.GMAIL.4.4v0.3 Instructions
-See [GWS.GMAIL.4.1v0.3](#gwsgmail41v02-instructions) instructions for an overview of how to publish and check a DMARC record. Ensure the record published includes a point of contact specific to your agency, in addition to reports@dmarc.cyber.dhs.gov, as one of the emails for the `rua` field and one or more agency-defined points of contact for the `ruf` field.
+See [GWS.GMAIL.4.1v0.3](#gwsgmail41v03-instructions) instructions for an overview of how to publish and check a DMARC record. Ensure the record published includes a point of contact specific to your agency, in addition to reports@dmarc.cyber.dhs.gov, as one of the emails for the `rua` field and one or more agency-defined points of contact for the `ruf` field.
 
 ## 5. Attachment Protections
 

@@ -7,6 +7,7 @@ rego, and report creation stages for the automated SCuBA conformance assessment
 
 import argparse
 from scubagoggles.orchestrator import Orchestrator
+from scubagoggles.scuba_argument_parser import ScubaArgumentParser
 
 def get_gws_args(parser):
     """
@@ -38,6 +39,13 @@ def get_gws_args(parser):
     help='The relative path and name of the OAuth / service account credentials json file. ' +
     'Defaults to "./credentials.json" which means the tool will look ' +
     'for the file named credentials.json in the current directory.')
+
+    parser.add_argument('--config', type=str, required=False, metavar='',
+    help='Local file path to a YAML formatted configuration file. ' +
+    'Configuration file parameters can be used in place of command-line ' +
+    'parameters. Additional parameters and variables not available on the ' +
+    'command line can also be included in the file that will be provided to the ' +
+    'tool for use in specific tests.')
 
     parser.add_argument('--outjsonfilename', type=str,
     default=default_file_output_names['json_output_name'], metavar='',
@@ -136,8 +144,8 @@ def dive():
     "check against one or more Google Workspace products"
     gws_parser = subparsers.add_parser('gws', help=gws_parser_help)
     get_gws_args(gws_parser)
-
-    args = parser.parse_args()
+    scuba_parser = ScubaArgumentParser(parser)
+    args = scuba_parser.parse_args_with_config()
 
     if args.scuba_cmd == 'gws':
         Orchestrator(args).start_automation()
