@@ -75,11 +75,11 @@ To configure the settings for Class Membership:
 4.  Select **About Class Membership**.
 
 #### GWS.CLASSROOM.1.1v0.3 Instructions
-1.  For Who can join classes in your domain, select **Users in your domain only**.
+1.  For **Who can join classes in your domain**, select **Users in your domain only**.
 2.  Select **Save**.
 
 #### GWS.CLASSROOM.1.2v0.3 Instructions
-1.  For Who can join classes in your domain, select **Classes in your domain only**.
+1.  For **Which classes can users in your domain join**, select **Classes in your domain only**.
 2.  Select **Save**.
 
 ## 2. Classroom API
