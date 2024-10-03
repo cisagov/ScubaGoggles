@@ -985,7 +985,7 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
 4.  From the drop-down menu, select **Type**.
 5.  Select the **System defined** check box.
 6.  Click **Apply**.
-7.  A list of system defined rules displays. For each of the rules from listed above, edit the configuration:
+7.  A list of system defined rules displays. For each of the rules listed above, edit the configuration:
     1.  Select the rule by clicking the table row for the rule.
     2.  Click **Next: View Conditions**.
     3.  Click **Next: Add Actions**.
