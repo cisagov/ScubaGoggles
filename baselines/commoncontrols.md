@@ -461,6 +461,8 @@ User passwords SHALL NOT expire.
 
 -   [GWS Admin Help \| Enforce and monitor password requirements for users](https://support.google.com/a/answer/139399?hl=en#zippy=%2Cwhat-makes-a-password-strong)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
+-   [NIST-800-63B Password Guidelines](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver)
+
 
 ### Prerequisites
 
