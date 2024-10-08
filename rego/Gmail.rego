@@ -1879,19 +1879,19 @@ if {
 # Baseline GWS.GMAIL.14.1v0.3
 #--
 EmailAllowlistSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue != "[]"
+    LastEvent.NewValue != "true"
     Description := concat("", [
         "<span class=setting>Email allowlists are enabled </span> in ",
-        LastEvent.DomainName,
+        utils.TopLevelOU,
         "."
     ])
 }
 
 EmailAllowlistSettingDetailsStr(LastEvent) := Description if {
-    LastEvent.NewValue == "[]"
+    LastEvent.NewValue == "true"
     Description := concat("", [
         "<span class=setting>Email allowlists are not enabled </span> in ",
-        LastEvent.DomainName,
+        utils.TopLevelOU,
         "."
     ])
 }
@@ -1904,12 +1904,12 @@ tests contains {
         "While we are unable to determine the state from the logs, ",
         "the default setting is compliant; manual check recommended."
     ]),
-    "ActualValue": {"EMAIL_SPAM_ALLOWLIST": "No relevant event in the current logs"},
+    "ActualValue": {"GmailIpWhitelistSpamFilteringProto is_empty": "No relevant event in the current logs"},
     "RequirementMet": true,
     "NoSuchEvent": true
 }
 if {
-    Events := utils.FilterEventsNoOU(LogEvents, "EMAIL_SPAM_ALLOWLIST")
+    Events := utils.FilterEventsNoOU(LogEvents, "GmailIpWhitelistSpamFilteringProto is_empty")
     count(Events) == 0
 }
 
@@ -1922,10 +1922,10 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsNoOU(LogEvents, "EMAIL_SPAM_ALLOWLIST")
+    Events := utils.FilterEventsNoOU(LogEvents, "GmailIpWhitelistSpamFilteringProto is_empty")
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    Status := LastEvent.NewValue == "[]"
+    Status := LastEvent.NewValue == "true"
 }
 #--
 
