@@ -12,7 +12,7 @@ from scubagoggles.utils import rel_abs_path
 from scubagoggles.scuba_constants import API_LINKS
 
 
-# Eight instance attributes is reasonable in this case.
+# Nine instance attributes is reasonable in this case.
 # pylint: disable-next=too-many-instance-attributes
 class Reporter:
 
@@ -30,7 +30,8 @@ class Reporter:
                  product_policies: list,
                  successful_calls: set,
                  unsuccessful_calls: set,
-                 omissions: dict):
+                 omissions: dict,
+                 progress_bar = None):
 
         """Reporter class initialization
 
@@ -44,6 +45,9 @@ class Reporter:
         :param unsuccessful_calls: set with the set of unsuccessful calls
         :param omissions: dict with the omissions specified in the config
             file (empty dict if none omitted)
+        :param progress_bar: Optional TQDM instance. If provided, the
+            progress bar will be cleared before any warnings are printed
+            while generating the report, for cleaner output.
         """
 
         self._product = product
@@ -57,6 +61,7 @@ class Reporter:
             # Lowercase all the keys for case-insensitive comparisons
             key.lower(): value for key, value in omissions.items()
         }
+        self.progress_bar = progress_bar
 
     @staticmethod
     def _get_test_result(requirement_met: bool, criticality: str, no_such_events: bool) -> str:
@@ -175,7 +180,7 @@ class Reporter:
                     f"but the provided expiration date, {raw_date}, is " \
                     "malformed. The expected format is yyyy-mm-dd. Control" \
                     " will not be omitted."
-                warnings.warn(warning, RuntimeWarning)
+                self._warn(warning, RuntimeWarning)
                 return False
             now = datetime.now()
             if expiration_date > now:
@@ -185,7 +190,7 @@ class Reporter:
             warning = f"Config file indicates omitting {control_id}, but " \
                 f"the provided expiration date, {raw_date}, has passed. " \
                 "Control will not be omitted."
-            warnings.warn(warning, RuntimeWarning)
+            self._warn(warning, RuntimeWarning)
         return False
 
     def _get_omission_rationale(self, control_id : str) -> str:
@@ -211,7 +216,7 @@ class Reporter:
         if no_rationale:
             warning = f"Config file indicates omitting {control_id}, but " \
                 "no rationale provided."
-            warnings.warn(warning, RuntimeWarning)
+            self._warn(warning, RuntimeWarning)
             return "Rationale not provided."
         return self._omissions[control_id]['rationale']
 
@@ -360,6 +365,18 @@ class Reporter:
             })
         return table_data
 
+    def _warn(self, *args, **kwargs):
+        '''
+        Wrapper for the warnings.warn function, that clears and refreshes the
+        progress bar if one has been provided, to keep the output clean.
+        Accepts all the arguments the warnings.warn function accepts.
+        '''
+        if self.progress_bar is not None:
+            self.progress_bar.clear()
+        warnings.warn(*args, **kwargs)
+        if self.progress_bar is not None:
+            self.progress_bar.refresh()
+
     def rego_json_to_ind_reports(self, test_results: list, out_path: str) -> list:
         '''
         Transforms the Rego JSON output into individual HTML and JSON reports
@@ -401,7 +418,7 @@ class Reporter:
                         'Result': "Error - Test results missing",
                         'Criticality': "-",
                         'Details': f'Report issue on {issues_link}'})
-                    warnings.warn(f"No test results found for Control Id {control['Id']}",
+                    self._warn(f"No test results found for Control Id {control['Id']}",
                         RuntimeWarning)
                     continue
                 if self._is_control_omitted(control['Id']):

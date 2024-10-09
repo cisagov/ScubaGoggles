@@ -296,7 +296,8 @@ class Orchestrator:
                                 baseline_policies[product],
                                 successful_calls,
                                 unsuccessful_calls,
-                                omissions)
+                                omissions,
+                                products_bar)
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
                                                   out_folder)
