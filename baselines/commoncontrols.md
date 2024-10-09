@@ -1222,3 +1222,106 @@ To configure additional services per the policy:
 2.	Navigate to **Security** -> **Authentication** -> **Multi-party approval settings**.
 3.	Ensure **Require multi party approval for sensitive admin actions** is checked.
 4.	Click **Save**.
+
+
+## 18. DLP rules
+
+This recommendation applies only to agencies that allow external sharing (see section 2.1).
+
+Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP gives you control over what users can share and prevents unintended exposure of sensitive information.
+
+DLP rules can use predefined content detectors to match PII (e.g., SSN), credentials (e.g., API keys), or specific document types (e.g., source code). Custom rules can also be applied based upon regex match or document labels.
+
+### Policies
+#### GWS.COMMONCONTROLS.18.1v0.3
+
+A custom policy SHALL be configured for Google Drive to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
+
+- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
+- _Last modified:_ June 20, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
+  - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
+
+
+#### GWS.COMMONCONTROLS.18.2v0.3
+
+A custom policy SHALL be configured for Google Chat to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
+
+- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
+- _Last modified:_ June 20, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
+  - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
+
+#### GWS.COMMONCONTROLS.18.3v0.3
+
+A custom policy SHALL be configured for Gmail to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
+
+- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
+- _Last modified:_ June 20, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
+  - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
+
+
+### Resources
+- [GWS Admin Help \| Protect sensitive information using DLP](https://support.google.com/a/topic/7556687?hl=en&ref_topic=7558840&fl=1&sjid=4459086914710819343-NA)
+- [GWS Admin Help \| Use Workspace DLP to prevent data loss](https://support.google.com/a/answer/9646351?hl=en&visit_id=638635679011849528-69139467&ref_topic=9646660&rd=1)
+- [GWS Admin Help \| Create DLP for Drive rules and custom content detectors](https://support.google.com/a/answer/9655387)
+- [GWS Admin Help \| Prevent data leaks from Chat messages & attachments](https://support.google.com/a/answer/10846568)
+- [GWS Admin Help \| Prevent data leaks in email & attachments](https://support.google.com/a/answer/14767988?fl=1&sjid=4620103790740920406-NA)
+
+### Prerequisites
+- None
+
+### Implementation
+
+#### GWS COMMONCONTROLS 18 Common Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
+3.  Click **Manage Rules**. 
+4.  For each DLP rule necessary to meet the standards of an agency:
+5.  Click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
+
+#### GWS.COMMONCONTROLS.18.1v0.3 Instructions
+1. For new rules:
+2. In the **Name** section, add the name and description of the rule.
+3. In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
+4. In the **Apps** section, choose the trigger for **Google Drive, Drive files** then click **Continue**.
+5. In the **Conditions** section, click **Add Condition**.
+6. Configure appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
+7. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat, Gmail, and Google Drive based upon the agency's individual requirements.
+8. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+9. Review the rule details, mark the rule as **Active**, and click **Create.**
+
+#### GWS.COMMONCONTROLS.18.2v0.3 Instructions
+1. For new rules:
+2. In the **Name** section, add the name and description of the rule.
+3. In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
+4. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
+5. In the **Conditions** section, click **Add Condition**.
+6. Configure appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
+7. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat, Gmail, and Google Drive based upon the agency's individual requirements.
+8. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+9. Review the rule details, mark the rule as **Active**, and click **Create.**
+
+#### GWS.COMMONCONTROLS.18.3v0.3 Instructions
+1. For new rules:
+2. In the **Name** section, add the name and description of the rule.
+3. In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
+4. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
+5. In the **Conditions** section, click **Add Condition**.
+6. Configure appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
+7. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat, Gmail, and Google Drive based upon the agency's individual requirements.
+8. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+9. Review the rule details, mark the rule as **Active**, and click **Create.**
