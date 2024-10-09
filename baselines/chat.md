@@ -198,62 +198,14 @@ Alternatively, to disable external chat entirely:
 4. Select **OFF**
 5. Select **Save**.
 
-## 5. DLP rules
 
-This recommendation applies only to agencies that allow external sharing (see section 2.1).
-
-Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP gives you control over what users can share and prevents unintended exposure of sensitive information.
-
-DLP rules can use predefined content detectors to match PII (e.g., SSN), credentials (e.g., API keys), or specific document types (e.g., source code). Custom rules can also be applied based upon regex match or document labels.
-
-### Policies
-
-#### GWS.CHAT.5.1v0.3
-Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
-
-- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. By blocking and/or having warnings on these DLP-scanned files from being shared with users, the risk of unintentional introduction of sensitive content is reduced.
-- _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
-  - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
-    - [T1213:001: Data from Information Repositories:Confluence](https://attack.mitre.org/techniques/T1213/001/)
-    - [T1213:002: Data from Information Repositories:Sharepoint](https://attack.mitre.org/techniques/T1213/002/)
-
-### Resources
-
--   [How to use predefined content detectors - Google Workspace Admin Help](https://support.google.com/a/answer/7047475#zippy=%2Cunited-states)
--   [Get started as a Drive labels admin - Google Workspace Admin Help](https://support.google.com/a/answer/9292382?hl=en)
--   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
-
-### Prerequisites
-
--   None
-
-### Implementation
-
-#### GWS.CHAT.5.1v0.3 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
-3.  Click **Manage Rules**. Then click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
-4.  In the **Name** section, add the name and description of the rule.
-5.  In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
-6.  In the **Apps** section, choose the trigger for **Google Chat, Message Sent or File Upload**, and click **Continue**.
-7.  In the **Conditions** section, click **Add Condition**.
-8.  Configure appropriate content definition(s) based upon the agency's individual requirements and click **Continue**.
-9.  Select the appropriate action to warn or block sharing, based upon the agency's individual requirements.
-10. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-11. Review the rule details, mark the rule as **Active**, and click **Create.**
-
-## 6. Content Reporting
+## 5. Content Reporting
 
 This section covers the content reporting functionality, a feature that allows users to report messages that violate organizational guidelines to workspace admins.
 
 ### Policies
 
-#### GWS.CHAT.6.1v0.3
+#### GWS.CHAT.5.1v0.3
 Chat content reporting SHALL be enabled for all conversation types.
 
 - _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies help ensure that their users are able to report risky messages regardless of the conversation type.
@@ -262,7 +214,7 @@ Chat content reporting SHALL be enabled for all conversation types.
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.CHAT.6.2v0.3
+#### GWS.CHAT.5.2v0.3
 All reporting message categories SHOULD be selected.
 
 - _Rationale:_ Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
@@ -279,7 +231,7 @@ All reporting message categories SHOULD be selected.
 
 ### Implementation
 
-#### GWS.CHAT.6.1v0.3 Instructions
+#### GWS.CHAT.5.1v0.3 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.
@@ -287,7 +239,7 @@ All reporting message categories SHOULD be selected.
 5.  Ensure all conversation type checkboxes are selected. 
 6.  Click **Save**.
 
-#### GWS.CHAT.6.2v0.3 Instructions
+#### GWS.CHAT.5.2v0.3 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.

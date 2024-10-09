@@ -405,46 +405,4 @@ To limit Google Drive for Desktop to authorized devices:
 
 Alternatively, [Context-Aware access policies](https://support.google.com/a/answer/9275380?hl=en) can be configured for more granular controls around authorized devices. The access level applied to Google Drive must have the "Apply to Google desktop and mobile apps" enabled to meet this requirement. For additional guidance, see the *Common Controls Minimum Viable Secure Baseline*, section "Context-Aware Access for All Devices that Connect to GWS SHOULD be Implemented."
 
-## 7. DLP rules
 
-This recommendation applies only to agencies that allow external sharing (see [Sharing Outside the Organization](#1-sharing-outside-the-organization)).
-
-Using data loss prevention (DLP), you can create and apply rules to control the content that users can share in files outside the organization. DLP gives you control over what users can share and prevents unintended exposure of sensitive information.
-
-DLP rules can use predefined content detectors to match PII (e.g., SSN), credentials (e.g., API keys), or specific document types (e.g., source code). Custom rules can also be applied based upon regex match or document labels.
-
-### Policies
-
-#### GWS.DRIVEDOCS.7.1v0.3
-Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.
-
-- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
-- _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-### Resources
-
--   [How to use predefined content detectors - Google Workspace Admin Help](https://support.google.com/a/answer/7047475#zippy=%2Cunited-states)
--   [Get started as a Drive labels admin - Google Workspace Admin Help](https://support.google.com/a/answer/9292382?hl=en)
--   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
-
-### Prerequisites
-
--   None
-
-### Implementation
-
-#### GWS.DRIVEDOCS.7.1v0.3 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
-3.  Click **Manage Rules**. Then click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
-4.  In the **Name** section, add the name and description of the rule.
-5.  In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
-6.  In the **Apps** section, choose the trigger for **Google Drive, File created, modified, uploaded or shared**, and click **Continue**.
-7.  In the **Conditions** section, click **Add Condition**.
-8.  Configure appropriate content definition(s) based upon the agency's individual requirements and click **Continue**.
-9.  Select the appropriate action to warn or block sharing, based upon the agency's individual requirements.
-10. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-11. Review the rule details, mark the rule as **Active**, and click **Create.**
