@@ -1,0 +1,22 @@
+# YAML configuration demonstrating omitting policies from ScubaGoggles evaluation.
+# Any omitted policies should be carefully considered and documented as part of an
+# organization's cybersecurity risk management program process and practices.
+
+baselines: [gmail, chat, drive]
+
+omitpolicy:
+  GWS.GMAIL.3.1v0.3:
+    rationale: "Known false positive; our SPF policy currently cannot to be retrieved via ScubaGoggles due to a split
+      horizon setup but is available publicly."
+    expiration: "2023-12-31"
+  GWS.CHAT.5.1v0.3:
+    rationale: &DLPRationale "The DLP capability required by the baselines is implemented by third party product, [x],
+      which ScubaGoggles does not have the ability to check."
+  GWS.DRIVEDOCS.7.1v0.3:
+    rationale: *DLPRationale
+
+# The "&" character used in the above example defines an anchor, which saves a value
+# for future reference. This value can then be retrieved with the "*" character. See
+# https://yaml.org/spec/1.2.2/#692-node-anchors for more details. In this case, the
+# anchor allows you to configure multiple omissions that share the same rationale
+# without repeating yourself.
