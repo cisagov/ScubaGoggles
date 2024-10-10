@@ -398,7 +398,7 @@ User password strength SHALL be enforced.
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
 #### GWS.COMMONCONTROLS.5.2v0.3
-User password length SHALL be at least 8 characters.
+User password length SHALL be at least 12 characters.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
 - _Last modified:_ July 10, 2023
@@ -410,7 +410,7 @@ User password length SHALL be at least 8 characters.
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
 #### GWS.COMMONCONTROLS.5.3v0.3
-User password length SHOULD be at least 15 characters.
+User password length SHOULD be at least 16 characters.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
 - _Last modified:_ July 10, 2023
@@ -461,7 +461,8 @@ User passwords SHALL NOT expire.
 
 -   [GWS Admin Help \| Enforce and monitor password requirements for users](https://support.google.com/a/answer/139399?hl=en#zippy=%2Cwhat-makes-a-password-strong)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
--   [NIST-800-63B Password Guidelines](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver)
+-   [Google Strong Password Guidelines](https://support.google.com/accounts/answer/9094506?fl=1&sjid=14948418137648107240-NA)
+-   [CISA Strong Password Guidelines](https://www.cisa.gov/secure-our-world/use-strong-passwords)
 
 
 ### Prerequisites
