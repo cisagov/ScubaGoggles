@@ -410,7 +410,7 @@ User password length SHALL be at least 12 characters.
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
 #### GWS.COMMONCONTROLS.5.3v0.3
-User password length SHOULD be at least 16 characters.
+User password length SHOULD be at least 15 characters.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
 - _Last modified:_ July 10, 2023
@@ -487,7 +487,7 @@ To configure a strong password policy is configured, use the Google Workspace Ad
 1.  Under **Length**, set **Minimum Length** to 12+.
 
 #### GWS.COMMONCONTROLS.5.3v0.3 Instructions
-1.  Under **Length**, set **Minimum Length** to 16+.
+1.  Under **Length**, set **Minimum Length** to 15+.
 
 #### GWS.COMMONCONTROLS.5.4v0.3 Instructions
 1.  Under **Strength and Length enforcement**, select the **Enforce password policy at next sign-in** checkbox.
