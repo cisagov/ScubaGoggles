@@ -1909,8 +1909,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "GmailIpWhitelistSpamFilteringProto is_empty", OU)
+    Events := utils.FilterEventsOU(LogEvents, "GmailIpWhitelistSpamFilteringProto is_empty",  utils.TopLevelOU)
     count(Events) == 0
 }
 
@@ -1923,7 +1922,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "GmailIpWhitelistSpamFilteringProto is_empty", utils.TopLevelOU)
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, "GmailIpWhitelistSpamFilteringProto is_empty", OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     Status := LastEvent.NewValue == "true"
