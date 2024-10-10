@@ -484,10 +484,10 @@ To configure a strong password policy is configured, use the Google Workspace Ad
 1.  Under **Strength**, select the **Enforce strong password** checkbox.
 
 #### GWS.COMMONCONTROLS.5.2v0.3 Instructions
-1.  Under **Length**, set **Minimum Length** to 8+.
+1.  Under **Length**, set **Minimum Length** to 12+.
 
 #### GWS.COMMONCONTROLS.5.3v0.3 Instructions
-1.  Under **Length**, set **Minimum Length** to 15+.
+1.  Under **Length**, set **Minimum Length** to 16+.
 
 #### GWS.COMMONCONTROLS.5.4v0.3 Instructions
 1.  Under **Strength and Length enforcement**, select the **Enforce password policy at next sign-in** checkbox.
