@@ -129,6 +129,29 @@ img {
 .setting {
     font-style: italic;
     color: rgba(0, 0, 0, 0.8);
+}
+
+a.control_group:link {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--unvisited-link-color);
+    text-decoration: underline;
+}
+
+a.control_group:visited {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+}
+
+a.control_group:hover {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a.control_group:active {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
 }</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
@@ -155,6 +178,9 @@ const colorRows = () => {
             }
             else if (rows[i].children[statusCol].innerHTML === "Pass") {
                 rows[i].style.background = "var(--test-pass)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                rows[i].style.background = "var(--test-other)";
             }
             else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
                 rows[i].style.background = "var(--test-other)";
@@ -192,8 +218,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Google Calendar Baseline Report</h1>
             <h4><p><br/></p></h4>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:18 Pacific Daylight Time</td><td>0.2</td><td>0.2.0</td></tr>         </table>
-            <h2>CALENDAR-1         External Sharing Options</h2><table>
+                        <table style = "text-align:center;">                 <colgroup><col/><col/><col/></colgroup>                 <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>                 <tr><td>example.org</td><td>10/11/2024 14:01:08 Pacific Daylight Time</td><td>0.3</td><td>0.3.0</td></tr>             </table>
+            <h2>CALENDAR-1             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/calendar.md#1-External-Sharing-Options" target="_blank"\>External Sharing Options</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -205,40 +231,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CALENDAR.1.1v0.2</td>
+      <td>GWS.CALENDAR.1.1v0.3</td>
       <td>External Sharing Options for Primary Calendars SHALL be configured to &quot;Only free/busy information (hide event details).&quot;</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>John Gomez: External sharing options for primary calendars is set to Share all information, and allow managing of calendars</li></ul><br>The following groups are non-compliant:<ul><li>ymartin@example.org: External sharing options for primary calendars is set to Share all information, and outsiders can change calendars</li><li>ymartin@example.org: External sharing options for primary calendars is set to Share all information, and outsiders can change calendars</li></ul></td>
-    </tr>
-    <tr>
-      <td>GWS.CALENDAR.1.2v0.2</td>
-      <td>External sharing options for secondary calendars SHALL be configured to &quot;Only free/busy information (hide event details).&quot;</td>
       <td>Pass</td>
       <td>Shall</td>
-      <td>Requirement met.<br>Highest Level of Sharing: Only free/busy information (hide event details).</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
-  </tbody>
-</table><h2>CALENDAR-2         External Invitations Warnings</h2><table>
-  <thead>
     <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.CALENDAR.2.1v0.2</td>
-      <td>External invitations warnings SHALL be enabled to prompt users before sending invitations.</td>
-      <td>No events found</td>
+      <td>GWS.CALENDAR.1.2v0.3</td>
+      <td>External sharing options for secondary calendars SHALL be configured to &quot;Only free/busy information (hide event details).&quot;</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td>Requirement not met.<br>Highest Level of Sharing: Share all information, and outsiders can change calendars.</td>
     </tr>
   </tbody>
-</table><h2>CALENDAR-3         Calendar Interop Management</h2><table>
+</table><h2>CALENDAR-2             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/calendar.md#2-External-Invitations-Warnings" target="_blank"\>External Invitations Warnings</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -250,21 +257,40 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CALENDAR.3.1v0.2</td>
+      <td>GWS.CALENDAR.2.1v0.3</td>
+      <td>External invitations warnings SHALL be enabled to prompt users before sending invitations.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs and groups.</td>
+    </tr>
+  </tbody>
+</table><h2>CALENDAR-3             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/calendar.md#3-Calendar-Interop-Management" target="_blank"\>Calendar Interop Management</a></h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.CALENDAR.3.1v0.3</td>
       <td>Calendar Interop SHOULD be disabled.</td>
-      <td>No events found</td>
+      <td>Pass</td>
       <td>Should</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td>Requirement met.</td>
     </tr>
     <tr>
-      <td>GWS.CALENDAR.3.2v0.2</td>
+      <td>GWS.CALENDAR.3.2v0.3</td>
       <td>OAuth 2.0 SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>CALENDAR-4         Paid Appointments</h2><table>
+</table><h2>CALENDAR-4             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/calendar.md#4-Paid-Appointments" target="_blank"\>Paid Appointments</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -276,11 +302,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CALENDAR.4.1v0.2</td>
+      <td>GWS.CALENDAR.4.1v0.3</td>
       <td>Appointment Schedule with Payments SHALL be disabled.</td>
-      <td>No events found</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
 </table>

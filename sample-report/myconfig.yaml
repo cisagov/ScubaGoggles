@@ -1,0 +1,8 @@
+# Config file used to generate this sample report
+
+omitpolicy:
+  GWS.CHAT.5.1v0.3:
+    rationale: &DLPRationale "The DLP capability required by the baselines is implemented by third party product, [x],
+      which ScubaGoggles does not have the ability to check."
+  GWS.DRIVEDOCS.7.1v0.3:
+    rationale: *DLPRationale
