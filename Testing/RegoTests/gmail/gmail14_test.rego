@@ -14,15 +14,15 @@ test_EmailAllowlist_Correct_V1 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {"name": "SETTING_NAME", "value": "GmailIpWhitelistSpamFilteringProto is_empty"},
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level Domain"},
                     ]
                 }]
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level Domain"
         }
     }
 
@@ -45,9 +45,9 @@ test_EmailAllowlist_Correct_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {"name": "SETTING_NAME", "value": "GmailIpWhitelistSpamFilteringProto is_empty"},
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level Domain"},
                     ]
                 }]
             },
@@ -55,15 +55,15 @@ test_EmailAllowlist_Correct_V2 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[123.456.7.89]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {"name": "SETTING_NAME", "value": "GmailIpWhitelistSpamFilteringProto is_empty"},
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level Domain"},
                     ]
                 }]
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level Domain"
         }
     }
 
@@ -86,14 +86,14 @@ test_EmailAllowlist_Incorrect_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "Something else"},
-                        {"name": "NEW_VALUE", "value": "[]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level Domain"},
                     ]
                 }]
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level Domain"
         }
     }
 
@@ -117,15 +117,15 @@ test_EmailAllowlist_Incorrect_V2 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[123.456.7.89]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {"name": "SETTING_NAME", "value": "GmailIpWhitelistSpamFilteringProto is_empty"},
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level Domain"},
                     ]
                 }]
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level Domain"
         }
     }
 
@@ -145,9 +145,9 @@ test_EmailAllowlist_Incorrect_V3 if {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[123.456.7.89]"},
-                        {"name": "DOMAIN_NAME", "value": "Test Top-Level Domain"},
+                        {"name": "SETTING_NAME", "value": "GmailIpWhitelistSpamFilteringProto is_empty"},
+                        {"name": "NEW_VALUE", "value": "false"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level Domain"},
                     ]
                 }]
             },
@@ -155,15 +155,15 @@ test_EmailAllowlist_Incorrect_V3 if {
                 "id": {"time": "2021-12-20T00:02:28.672Z"},
                 "events": [{
                     "parameters": [
-                        {"name": "SETTING_NAME", "value": "EMAIL_SPAM_ALLOWLIST"},
-                        {"name": "NEW_VALUE", "value": "[]"},
-                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "SETTING_NAME", "value": "GmailIpWhitelistSpamFilteringProto is_empty"},
+                        {"name": "NEW_VALUE", "value": "true"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level Domain"},
                     ]
                 }]
             }
         ]},
         "tenant_info": {
-            "topLevelOU": ""
+            "topLevelOU": "Test Top-Level Domain"
         },
     }
 
