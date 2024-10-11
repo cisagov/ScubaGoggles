@@ -462,9 +462,7 @@ User passwords SHALL NOT expire.
 -   [GWS Admin Help \| Enforce and monitor password requirements for users](https://support.google.com/a/answer/139399?hl=en#zippy=%2Cwhat-makes-a-password-strong)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
 -   [Google Strong Password Guidelines](https://support.google.com/accounts/answer/9094506?fl=1&sjid=14948418137648107240-NA)
--   [CISA Strong Password Guidelines](https://www.cisa.gov/secure-our-world/use-strong-passwords)
 -   [CISA Cross-Sector Cybersecurity Performance Goals](https://www.cisa.gov/cross-sector-cybersecurity-performance-goals#MinimumPasswordStrength2B)
-
 
 ### Prerequisites
 
