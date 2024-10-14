@@ -26,6 +26,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Data Regions](#15-data-regions-and-storage)
 - [Additional Google Services](#16-additional-google-services)
 - [Multi-Party Approvals](#17-multi-party-approval)
+- [Data Protection](#18-dlp-rules)
 
 ## Assumptions
 
@@ -1240,9 +1241,7 @@ To configure additional services per the policy:
 4.	Click **Save**.
 
 
-## 18. DLP rules
-
-This recommendation applies only to agencies that allow external sharing (see section 2.1).
+## 18. DLP Rules
 
 Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP gives you control over what users can share and prevents unintended exposure of sensitive information.
 
@@ -1305,7 +1304,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 #### GWS COMMONCONTROLS 18 Common Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
-3.  Click **Manage Rules**. 
+3.  Under Data protection rules and detectors click **Manage Rules**. 
 4.  For each DLP rule necessary to meet the standards of an agency:
 5.  Click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
 
