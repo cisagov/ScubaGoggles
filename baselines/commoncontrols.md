@@ -1240,7 +1240,6 @@ To configure additional services per the policy:
 3.	Ensure **Require multi party approval for sensitive admin actions** is checked.
 4.	Click **Save**.
 
-
 ## 18. DLP Rules
 
 Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP gives you control over what users can share and prevents unintended exposure of sensitive information.
