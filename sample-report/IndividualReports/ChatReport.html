@@ -129,6 +129,29 @@ img {
 .setting {
     font-style: italic;
     color: rgba(0, 0, 0, 0.8);
+}
+
+a.control_group:link {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--unvisited-link-color);
+    text-decoration: underline;
+}
+
+a.control_group:visited {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+}
+
+a.control_group:hover {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a.control_group:active {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
 }</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
@@ -155,6 +178,9 @@ const colorRows = () => {
             }
             else if (rows[i].children[statusCol].innerHTML === "Pass") {
                 rows[i].style.background = "var(--test-pass)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                rows[i].style.background = "var(--test-other)";
             }
             else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
                 rows[i].style.background = "var(--test-other)";
@@ -192,8 +218,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Google Chat Baseline Report</h1>
             <h4><p><br/></p></h4>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:18 Pacific Daylight Time</td><td>0.2</td><td>0.2.0</td></tr>         </table>
-            <h2>CHAT-1         Chat History</h2><table>
+                        <table style = "text-align:center;">                 <colgroup><col/><col/><col/></colgroup>                 <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>                 <tr><td>example.org</td><td>10/11/2024 14:01:08 Pacific Daylight Time</td><td>0.3</td><td>0.3.0</td></tr>             </table>
+            <h2>CHAT-1             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/chat.md#1-Chat-History" target="_blank"\>Chat History</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -205,21 +231,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CHAT.1.1v0.2</td>
+      <td>GWS.CHAT.1.1v0.3</td>
       <td>Chat history SHALL be enabled for information traceability.</td>
-      <td>No events found</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.CHAT.1.2v0.2</td>
+      <td>GWS.CHAT.1.2v0.3</td>
       <td>Users SHALL NOT be allowed to change their history setting.</td>
-      <td>No events found</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CHAT-2         External File Sharing</h2><table>
+</table><h2>CHAT-2             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/chat.md#2-External-File-Sharing" target="_blank"\>External File Sharing</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -231,14 +257,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CHAT.2.1v0.2</td>
+      <td>GWS.CHAT.2.1v0.3</td>
       <td>External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.</td>
-      <td>No events found</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CHAT-3         History for Spaces</h2><table>
+</table><h2>CHAT-3             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/chat.md#3-History-for-Spaces" target="_blank"\>History for Spaces</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -250,14 +276,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CHAT.3.1v0.2</td>
+      <td>GWS.CHAT.3.1v0.3</td>
       <td>Space history SHOULD be enabled for traceability of information.</td>
-      <td>Warning</td>
+      <td>Pass</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Conversation history settings for spaces is set to History is OFF by default</li></ul></td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CHAT-4         External Chat Messaging</h2><table>
+</table><h2>CHAT-4             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/chat.md#4-External-Chat-Messaging" target="_blank"\>External Chat Messaging</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -269,14 +295,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CHAT.4.1v0.2</td>
+      <td>GWS.CHAT.4.1v0.3</td>
       <td>External Chat messaging SHALL be restricted to allowlisted domains only.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CHAT-5         Installation of Chat Apps</h2><table>
+</table><h2>CHAT-5             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/chat.md#5-DLP-rules" target="_blank"\>DLP rules</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -288,33 +314,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CHAT.5.1v0.2</td>
-      <td>User-level ability to install Chat apps SHALL be disabled.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Charles Roberson: Allow users to install Chat apps is set to true</li><li>Org Name: Allow users to install Chat apps is set to true</li></ul></td>
-    </tr>
-  </tbody>
-</table><h2>CHAT-6         DLP rules</h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.CHAT.6.1v0.2</td>
+      <td>GWS.CHAT.5.1v0.3</td>
       <td>Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.</td>
-      <td>N/A</td>
+      <td>Omitted</td>
       <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Test omitted by user. The DLP capability required by the baselines is implemented by third party product, [x], which ScubaGoggles does not have the ability to check.</td>
     </tr>
   </tbody>
-</table><h2>CHAT-7         Content Reporting</h2><table>
+</table><h2>CHAT-6             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/chat.md#6-Content-Reporting" target="_blank"\>Content Reporting</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -326,14 +333,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CHAT.7.1v0.2</td>
+      <td>GWS.CHAT.6.1v0.3</td>
       <td>Chat content reporting SHALL be enabled for all conversation types.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.<br>WARNING: from the log events alone, it is not possible to distinguish between an OU inheriting settings from its parent and content reporting being disabled entirely. It's possible this tool classified some child OUs as compliant due to this limitation; manual check recommended for child OUs due to this edge case.</td>
     </tr>
     <tr>
-      <td>GWS.CHAT.7.2v0.2</td>
+      <td>GWS.CHAT.6.2v0.3</td>
       <td>All reporting message categories SHOULD be selected.</td>
       <td>Pass</td>
       <td>Should</td>
