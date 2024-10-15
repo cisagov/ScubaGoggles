@@ -129,6 +129,29 @@ img {
 .setting {
     font-style: italic;
     color: rgba(0, 0, 0, 0.8);
+}
+
+a.control_group:link {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--unvisited-link-color);
+    text-decoration: underline;
+}
+
+a.control_group:visited {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+}
+
+a.control_group:hover {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a.control_group:active {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
 }</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
@@ -155,6 +178,9 @@ const colorRows = () => {
             }
             else if (rows[i].children[statusCol].innerHTML === "Pass") {
                 rows[i].style.background = "var(--test-pass)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                rows[i].style.background = "var(--test-other)";
             }
             else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
                 rows[i].style.background = "var(--test-other)";
@@ -192,8 +218,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Google Classroom Baseline Report</h1>
             <h4><p>Note: Google Classroom is not available by default in GWS but as an additional Google Service.</p></h4>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:18 Pacific Daylight Time</td><td>0.2</td><td>0.2.0</td></tr>         </table>
-            <h2>CLASSROOM-1         Class Membership</h2><table>
+                        <table style = "text-align:center;">                 <colgroup><col/><col/><col/></colgroup>                 <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>                 <tr><td>example.org</td><td>10/11/2024 14:01:08 Pacific Daylight Time</td><td>0.3</td><td>0.3.0</td></tr>             </table>
+            <h2>CLASSROOM-1             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/classroom.md#1-Class-Membership" target="_blank"\>Class Membership</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -205,21 +231,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CLASSROOM.1.1v0.2</td>
+      <td>GWS.CLASSROOM.1.1v0.3</td>
       <td>Who can join classes in your domain SHALL be set to Users in your domain only.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.CLASSROOM.1.2v0.2</td>
+      <td>GWS.CLASSROOM.1.2v0.3</td>
       <td>Which classes users in your domain can join SHALL be set to Classes in your domain only.</td>
-      <td>Fail</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Which classes can users in your domain join is set to Classes in allowlisted domains</li></ul></td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-2         Classroom API</h2><table>
+</table><h2>CLASSROOM-2             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/classroom.md#2-Classroom-API" target="_blank"\>Classroom API</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -231,14 +257,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CLASSROOM.2.1v0.2</td>
+      <td>GWS.CLASSROOM.2.1v0.3</td>
       <td>Users SHALL NOT be able to authorize apps to access their Google Classroom data.</td>
-      <td>Fail</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Data access is set to ON</li></ul></td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-3         Roster Import</h2><table>
+</table><h2>CLASSROOM-3             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/classroom.md#3-Roster-Import" target="_blank"\>Roster Import</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -250,14 +276,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CLASSROOM.3.1v0.2</td>
+      <td>GWS.CLASSROOM.3.1v0.3</td>
       <td>Roster import with Clever SHOULD be turned off.</td>
-      <td>Warning</td>
+      <td>Pass</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Roster import is set to ON - CLEVER</li></ul></td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-4         Student Unenrollment</h2><table>
+</table><h2>CLASSROOM-4             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/classroom.md#4-Student-Unenrollment" target="_blank"\>Student Unenrollment</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -269,8 +295,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CLASSROOM.4.1v0.2</td>
+      <td>GWS.CLASSROOM.4.1v0.3</td>
       <td>Only teachers SHALL be allowed to unenroll students from classes.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs and groups.</td>
+    </tr>
+  </tbody>
+</table><h2>CLASSROOM-5             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/classroom.md#5-Class-Creation" target="_blank"\>Class Creation</a></h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.CLASSROOM.5.1v0.3</td>
+      <td>Class creation SHALL be restricted to verified teachers only.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>

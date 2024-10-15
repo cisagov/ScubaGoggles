@@ -155,9 +155,10 @@ class Orchestrator:
         n_fail = stats["Failures"]
         n_manual = stats["Manual"]
         n_error = stats["Errors"]
+        n_omit = stats['Omit']
 
         pass_summary = (f"<div class='summary pass'>{n_success}"
-        f" {cls._pluralize('test', 'tests', n_success)} passed</div>")
+        f" {cls._pluralize('pass', 'passes', n_success)}</div>")
 
         # The warnings, failures, and manuals are only shown if they are
         # greater than zero. Reserve the space for them here. They will
@@ -166,21 +167,26 @@ class Orchestrator:
         failure_summary = "<div class='summary'></div>"
         manual_summary = "<div class='summary'></div>"
         error_summary = "<div class='summary'></div>"
+        omit_summary = "<div class='summary'></div>"
 
         if n_warn > 0:
             warning_summary = (f"<div class='summary warning'>{n_warn}"
             f" {cls._pluralize('warning', 'warnings', n_warn)}</div>")
         if n_fail > 0:
             failure_summary = (f"<div class='summary failure'>{n_fail}"
-            f" {cls._pluralize('test', 'tests', n_fail)} failed</div>")
+            f" {cls._pluralize('failure', 'failures', n_fail)}</div>")
         if n_manual > 0:
             manual_summary = (f"<div class='summary manual'>{n_manual} manual"
-            f" {cls._pluralize('check', 'checks', n_manual)} needed</div>")
+            f" {cls._pluralize('check', 'checks', n_manual)}</div>")
         if n_error > 0:
             error_summary = (f"<div class='summary error'>{n_error}"
             f" {cls._pluralize('error', 'errors', n_error)}</div>")
+        if n_omit > 0:
+            omit_summary = (f"<div class='summary manual'>{n_omit}"
+            " omitted</div>")
 
-        return f"{pass_summary}{warning_summary}{failure_summary}{manual_summary}{error_summary}"
+        return f"{pass_summary}{warning_summary}{failure_summary}" \
+            f"{manual_summary}{omit_summary}{error_summary}"
 
     def _run_reporter(self):
         """
@@ -245,6 +251,11 @@ class Orchestrator:
             tenant_info = json.load(file)['tenant_info']
             tenant_domain = tenant_info['domain']
 
+        # Determine if any controls were omitted in the config file
+        omissions = {}
+        if 'omitpolicy' in args and args.omitpolicy is not None:
+            omissions = args.omitpolicy
+
         # Create the individual report files
         out_jsonfile = args.outjsonfilename
         summary = {}
@@ -284,7 +295,9 @@ class Orchestrator:
                                 prod_to_fullname,
                                 baseline_policies[product],
                                 successful_calls,
-                                unsuccessful_calls)
+                                unsuccessful_calls,
+                                omissions,
+                                products_bar)
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
                                                   out_folder)

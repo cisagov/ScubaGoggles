@@ -129,6 +129,29 @@ img {
 .setting {
     font-style: italic;
     color: rgba(0, 0, 0, 0.8);
+}
+
+a.control_group:link {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--unvisited-link-color);
+    text-decoration: underline;
+}
+
+a.control_group:visited {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+}
+
+a.control_group:hover {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a.control_group:active {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
 }</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
@@ -155,6 +178,9 @@ const colorRows = () => {
             }
             else if (rows[i].children[statusCol].innerHTML === "Pass") {
                 rows[i].style.background = "var(--test-pass)";
+            }
+            else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                rows[i].style.background = "var(--test-other)";
             }
             else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
                 rows[i].style.background = "var(--test-other)";
@@ -192,8 +218,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Groups for Business Baseline Report</h1>
             <h4><p><br/></p></h4>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/></colgroup>             <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:18 Pacific Daylight Time</td><td>0.2</td><td>0.2.0</td></tr>         </table>
-            <h2>GROUPS-1         External Group Access</h2><table>
+                        <table style = "text-align:center;">                 <colgroup><col/><col/><col/></colgroup>                 <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>                 <tr><td>example.org</td><td>10/11/2024 14:01:08 Pacific Daylight Time</td><td>0.3</td><td>0.3.0</td></tr>             </table>
+            <h2>GROUPS-1             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/groups.md#1-External-Group-Access" target="_blank"\>External Group Access</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -205,14 +231,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.1.1v0.2</td>
+      <td>GWS.GROUPS.1.1v0.3</td>
       <td>Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.</td>
       <td>Pass</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GROUPS-2         Adding External Members</h2><table>
+</table><h2>GROUPS-2             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/groups.md#2-Adding-External-Members" target="_blank"\>Adding External Members</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -224,14 +250,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.2.1v0.2</td>
+      <td>GWS.GROUPS.2.1v0.3</td>
       <td>Group owners&#x27; ability to add external members to groups SHOULD be disabled unless necessary for agency mission fulfillment.</td>
       <td>Pass</td>
       <td>Should</td>
-      <td>Requirement met in all OUs.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GROUPS-3         Allowing Posting by External Members</h2><table>
+</table><h2>GROUPS-3             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/groups.md#3-Allowing-Posting-by-External-Members" target="_blank"\>Allowing Posting by External Members</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -243,33 +269,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.3.1v0.2</td>
+      <td>GWS.GROUPS.3.1v0.3</td>
       <td>Group owners&#x27; ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.</td>
-      <td>No events found</td>
-      <td>Should</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                                width='15'                                height='15'>                                </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
-    </tr>
-  </tbody>
-</table><h2>GROUPS-4         Group Creation</h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GROUPS.4.1v0.2</td>
-      <td>Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.</td>
       <td>Pass</td>
       <td>Should</td>
-      <td>Requirement met in all OUs.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GROUPS-5         Default Permissions for Viewing Conversations</h2><table>
+</table><h2>GROUPS-4             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/groups.md#4-Group-Creation" target="_blank"\>Group Creation</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -281,14 +288,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.5.1v0.2</td>
-      <td>The default permission to view conversations SHOULD be set to All Group Members.</td>
+      <td>GWS.GROUPS.4.1v0.3</td>
+      <td>Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>Requirement failed in Org Name.</td>
+      <td>The following OUs are non-compliant:<ul><li>Org Name: Anyone on the internet can create groups</li></ul></td>
     </tr>
   </tbody>
-</table><h2>GROUPS-6         Ability to Hide Groups from the Directory</h2><table>
+</table><h2>GROUPS-5             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/groups.md#5-Default-Permissions-for-Viewing-Conversations" target="_blank"\>Default Permissions for Viewing Conversations</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -300,14 +307,33 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.6.1v0.2</td>
+      <td>GWS.GROUPS.5.1v0.3</td>
+      <td>The default permission to view conversations SHOULD be set to All Group Members.</td>
+      <td>Pass</td>
+      <td>Should</td>
+      <td>Requirement met in all OUs and groups.</td>
+    </tr>
+  </tbody>
+</table><h2>GROUPS-6             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/groups.md#6-Ability-to-Hide-Groups-from-the-Directory" target="_blank"\>Ability to Hide Groups from the Directory</a></h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.GROUPS.6.1v0.3</td>
       <td>The Ability for Groups to be Hidden from the Directory SHALL be disabled.</td>
       <td>Pass</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GROUPS-7         New Groups</h2><table>
+</table><h2>GROUPS-7             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/groups.md#7-New-Groups" target="_blank"\>New Groups</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -319,7 +345,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.7.1v0.2</td>
+      <td>GWS.GROUPS.7.1v0.3</td>
       <td>New Groups SHOULD be created with an Access type of Restricted unless necessary for agency mission fulfillment.</td>
       <td>Pass</td>
       <td>Should</td>

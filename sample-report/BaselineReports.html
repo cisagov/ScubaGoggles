@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
    <head>
-        <title>SCuBA GWS Security Baseline Conformance Reports</title>
+        <title>SCuBA GWS Secure Configuration Baseline Reports</title>
         <style>:root {
     --background-primary: white;
     --background-secondary: #b9bec2;
@@ -129,6 +129,29 @@ img {
 .setting {
     font-style: italic;
     color: rgba(0, 0, 0, 0.8);
+}
+
+a.control_group:link {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--unvisited-link-color);
+    text-decoration: underline;
+}
+
+a.control_group:visited {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+}
+
+a.control_group:hover {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a.control_group:active {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--link-color);
+    text-decoration: none;
 }</style>
         <style>main {
     height: 115vh;
@@ -146,7 +169,7 @@ footer {
     display: inline-block;
     padding: 5px;
     border-radius: 5px;
-    min-width: 140px;
+    min-width: 100px;
     text-align: center;
 }
 
@@ -197,8 +220,8 @@ table.tenantdata tr:first-child {
                     <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank"><h3 style="width: 100px;">Baseline Documents</h3></a>
                 </div>
             </header>
-            <h1>SCuBA GWS Security Baseline Conformance Reports</h1>
-                    <table style = "text-align:center;">             <colgroup><col/><col/><col/><col/></colgroup>             <tr><th>Customer Domain</th><th>Report Date</th></tr>             <tr><td>example.org</td><td>06/05/2024 11:01:19 Pacific Daylight Time</td></tr>         </table>
+            <h1>SCuBA GWS Secure Configuration Baseline Reports</h1>
+                        <table style = "text-align:center;">                 <colgroup><col/><col/><col/><col/></colgroup>                 <tr><th>Customer Domain</th><th>Report Date</th></tr>                 <tr><td>example.org</td><td>10/11/2024 14:01:09 Pacific Daylight Time</td></tr>             </table>
             <br> <br/>
             <table>
   <thead>
@@ -210,49 +233,49 @@ table.tenantdata tr:first-child {
   <tbody>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/CalendarReport.html>Google Calendar</a></td>
-      <td><div class='summary pass'>1 test passed</div><div class='summary'></div><div class='summary failure'>1 test failed</div><div class='summary manual'>4 manual checks needed</div><div class='summary'></div></td>
+      <td><div class='summary pass'>4 passes</div><div class='summary'></div><div class='summary failure'>1 failure</div><div class='summary manual'>1 manual check</div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/ChatReport.html>Google Chat</a></td>
-      <td><div class='summary pass'>3 tests passed</div><div class='summary warning'>1 warning</div><div class='summary failure'>1 test failed</div><div class='summary manual'>4 manual checks needed</div><div class='summary'></div></td>
+      <td><div class='summary pass'>7 passes</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary manual'>1 omitted</div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/ClassroomReport.html>Google Classroom</a></td>
-      <td><div class='summary pass'>2 tests passed</div><div class='summary warning'>1 warning</div><div class='summary failure'>2 tests failed</div><div class='summary'></div><div class='summary'></div></td>
+      <td><div class='summary pass'>6 passes</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/CommoncontrolsReport.html>Common Controls</a></td>
-      <td><div class='summary pass'>2 tests passed</div><div class='summary'></div><div class='summary failure'>5 tests failed</div><div class='summary manual'>25 manual checks needed</div><div class='summary'></div></td>
+      <td><div class='summary pass'>12 passes</div><div class='summary'></div><div class='summary failure'>6 failures</div><div class='summary manual'>14 manual checks</div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/DriveReport.html>Google Drive and Docs</a></td>
-      <td><div class='summary pass'>11 tests passed</div><div class='summary warning'>2 warnings</div><div class='summary failure'>3 tests failed</div><div class='summary manual'>1 manual check needed</div><div class='summary'></div></td>
+      <td><div class='summary pass'>10 passes</div><div class='summary warning'>3 warnings</div><div class='summary failure'>3 failures</div><div class='summary'></div><div class='summary manual'>1 omitted</div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/GmailReport.html>Gmail</a></td>
-      <td><div class='summary pass'>15 tests passed</div><div class='summary warning'>4 warnings</div><div class='summary failure'>11 tests failed</div><div class='summary manual'>13 manual checks needed</div><div class='summary'></div></td>
+      <td><div class='summary pass'>25 passes</div><div class='summary warning'>2 warnings</div><div class='summary failure'>5 failures</div><div class='summary manual'>13 manual checks</div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/GroupsReport.html>Groups for Business</a></td>
-      <td><div class='summary pass'>5 tests passed</div><div class='summary warning'>1 warning</div><div class='summary'></div><div class='summary manual'>1 manual check needed</div><div class='summary'></div></td>
+      <td><div class='summary pass'>6 passes</div><div class='summary warning'>1 warning</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/MeetReport.html>Google Meet</a></td>
-      <td><div class='summary pass'>1 test passed</div><div class='summary warning'>1 warning</div><div class='summary failure'>2 tests failed</div><div class='summary'></div><div class='summary'></div></td>
+      <td><div class='summary pass'>5 passes</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/RulesReport.html>Rules</a></td>
-      <td><div class='summary pass'>0 tests passed</div><div class='summary'></div><div class='summary'></div><div class='summary manual'>39 manual checks needed</div><div class='summary'></div></td>
+      <td><div class='summary pass'>3 passes</div><div class='summary'></div><div class='summary failure'>1 failure</div><div class='summary manual'>35 manual checks</div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/SitesReport.html>Google Sites</a></td>
-      <td><div class='summary pass'>1 test passed</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
+      <td><div class='summary pass'>1 pass</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
     </tr>
   </tbody>
 </table>
             <br> <br/>
             <footer>
-                Report generated with <a class="individual_reports" href="https://github.com/cisagov/ScubaGoggles">CISA's ScubaGoggles</a>  tool v0.2.0
+                Report generated with <a class="individual_reports" href="https://github.com/cisagov/ScubaGoggles">CISA's ScubaGoggles</a>  tool v0.3.0
             </footer>
         </main>
    </body>

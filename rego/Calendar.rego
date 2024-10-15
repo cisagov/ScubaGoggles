@@ -263,7 +263,7 @@ NonCompliantOUs4_1 contains {
     # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "false"
+    LastEvent.NewValue == "true"
 }
 
 #

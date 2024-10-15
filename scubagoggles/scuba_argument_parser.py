@@ -2,8 +2,13 @@
 Class for parsing the config file and command-line arguments.
 """
 
+import warnings
 import argparse
+from pathlib import Path
+
 import yaml
+from scubagoggles.orchestrator import Orchestrator
+from scubagoggles.reporter.md_parser import read_baseline_docs
 
 class ScubaArgumentParser:
     """
@@ -58,7 +63,11 @@ class ScubaArgumentParser:
                 if param in cli_args:
                     continue
                 vars(args)[param] = config[param]
-        # Return the args (argparse.Namespace) as a dictionary
+
+        # Check for logical errors in the resulting configuration
+        self.validate_config(args)
+
+        # Return the args (argparse.Namespace)
         return args
 
     @classmethod
@@ -84,3 +93,45 @@ class ScubaArgumentParser:
                 aux_parser.add_argument(*dests)
         cli_args, _ = aux_parser.parse_known_args()
         return cli_args
+
+    @staticmethod
+    def validate_config(args : argparse.Namespace) -> None:
+        """
+        Check for an logical errors in the advanced ScubaGoggles configuration
+        options. NOTE: "omitpolicy" is the only such option for now; more to
+        come.
+        """
+        if 'omitpolicy' in args:
+            ScubaArgumentParser.validate_omissions(args)
+
+    @staticmethod
+    def validate_omissions(args : argparse.Namespace) -> None:
+        """
+        Warn for any control IDs configured for omission that aren't in the
+        set of IDs covered by the baselines specificied in --baselines.
+        """
+        products = Orchestrator.gws_products()['prod_to_fullname']
+        prod_to_fullname = {
+            key: products[key]
+            for key in args.baselines
+            if key in products
+        }
+
+        # Parse the baselines to determine the set of valid control IDs
+        path = Path(args.documentpath).resolve()
+        baseline_policies = read_baseline_docs(path, prod_to_fullname)
+        control_ids = set()
+        for product_baseline in baseline_policies.values():
+            for group in product_baseline:
+                for control in group['Controls']:
+                    control_ids.add(control['Id'].lower())
+
+        # Warn for any unexpected IDs
+        for control_id in args.omitpolicy:
+            if control_id.lower() not in control_ids:
+                warnings.warn("Config file indicates omitting " \
+                    f"{control_id}, but {control_id} is not one of the " \
+                    "controls encompassed by the baselines indicated " \
+                    "by the baselines parameter. Control " \
+
+                    "will not be omitted.")

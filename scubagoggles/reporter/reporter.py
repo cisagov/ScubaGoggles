@@ -12,6 +12,8 @@ from scubagoggles.utils import rel_abs_path
 from scubagoggles.scuba_constants import API_LINKS
 
 
+# Nine instance attributes is reasonable in this case.
+# pylint: disable-next=too-many-instance-attributes
 class Reporter:
 
     """The Reporter class generates the HTML files containing the conformance
@@ -27,7 +29,9 @@ class Reporter:
                  prod_to_fullname: dict,
                  product_policies: list,
                  successful_calls: set,
-                 unsuccessful_calls: set):
+                 unsuccessful_calls: set,
+                 omissions: dict,
+                 progress_bar = None):
 
         """Reporter class initialization
 
@@ -39,6 +43,11 @@ class Reporter:
             read from the baseline markdown
         :param successful_calls: set with the set of successful calls
         :param unsuccessful_calls: set with the set of unsuccessful calls
+        :param omissions: dict with the omissions specified in the config
+            file (empty dict if none omitted)
+        :param progress_bar: Optional TQDM instance. If provided, the
+            progress bar will be cleared before any warnings are printed
+            while generating the report, for cleaner output.
         """
 
         self._product = product
@@ -48,6 +57,11 @@ class Reporter:
         self._successful_calls = successful_calls
         self._unsuccessful_calls = unsuccessful_calls
         self._full_name = prod_to_fullname[product]
+        self._omissions = {
+            # Lowercase all the keys for case-insensitive comparisons
+            key.lower(): value for key, value in omissions.items()
+        }
+        self.progress_bar = progress_bar
 
     @staticmethod
     def _get_test_result(requirement_met: bool, criticality: str, no_such_events: bool) -> str:
@@ -131,6 +145,80 @@ class Reporter:
             </table>"
         html = html.replace('{{TENANT_DETAILS}}', meta_data)
         return html
+
+    def _is_control_omitted(self, control_id : str) -> bool:
+        '''
+        Determine if the supplied control was marked for omission in the
+        config file and if the expiration date has passed, if applicable.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        '''
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        if control_id in self._omissions:
+            # The config indicates the control should be omitted
+            if self._omissions[control_id] is None:
+                # If a user doesn't provide either a rationale or expiration
+                # date, the control ID will be in the omissions dict but it
+                # will map to None.
+                return True
+            if 'expiration' not in self._omissions[control_id]:
+                return True
+            # An expiration date for the omission expiration was
+            # provided. Evaluate the date to see if the control should
+            # still be omitted.
+            raw_date = self._omissions[control_id]['expiration']
+            if raw_date is None or raw_date == "":
+                # If the expiration date is left blank or an empty string,
+                # omit the policy
+                return True
+            try:
+                expiration_date = datetime.strptime(raw_date, '%Y-%m-%d')
+            except ValueError:
+                # Malformed date, don't omit the policy
+                warning = f"Config file indicates omitting {control_id}, " \
+                    f"but the provided expiration date, {raw_date}, is " \
+                    "malformed. The expected format is yyyy-mm-dd. Control" \
+                    " will not be omitted."
+                self._warn(warning, RuntimeWarning)
+                return False
+            now = datetime.now()
+            if expiration_date > now:
+                # The expiration date is in the future, omit the policy
+                return True
+            # The expiration date is passed, don't omit the policy
+            warning = f"Config file indicates omitting {control_id}, but " \
+                f"the provided expiration date, {raw_date}, has passed. " \
+                "Control will not be omitted."
+            self._warn(warning, RuntimeWarning)
+        return False
+
+    def _get_omission_rationale(self, control_id : str) -> str:
+        '''
+        Return the rationale indicated in the config file for the indicated
+        control, if provided. If not, return a string warning the user that
+        no rationale was provided.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        '''
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        if control_id not in self._omissions:
+            raise RuntimeError(f"{control_id} not omitted in config file, " \
+                "cannot fetch rationale")
+        # If any of the following conditions is true, no rationale was
+        # provided
+        no_rationale = \
+            (self._omissions[control_id] is None) or \
+            ('rationale' not in self._omissions[control_id]) or \
+            (self._omissions[control_id]['rationale'] is None) or \
+            (self._omissions[control_id]['rationale'] == "")
+        if no_rationale:
+            warning = f"Config file indicates omitting {control_id}, but " \
+                "no rationale provided."
+            self._warn(warning, RuntimeWarning)
+            return "Rationale not provided."
+        return self._omissions[control_id]['rationale']
 
     def _build_report_html(self, fragments: list) -> str:
         '''
@@ -252,6 +340,43 @@ class Reporter:
             return "Passes"
         raise ValueError(f"Unexpected result, {result}", RuntimeWarning)
 
+    def _handle_rules_omission(self, control_id : str, tests : list):
+        '''Process the test results for the rules report if the rules control
+        was omitted.
+
+        :control_id: The control ID for the rules control.
+        :tests: A list of test result dictionaries.
+        '''
+        table_data = []
+        for test in tests:
+            if 'Not-Implemented' in test['Criticality']:
+                # The easiest way to identify the common controls "rules"
+                # results that belong to the Common Controls report is they're
+                # marked as Not-Implemented. This if excludes them from the
+                # rules report.
+                continue
+            rationale = self._get_omission_rationale(control_id)
+            table_data.append({
+                'Control ID': control_id,
+                'Rule Name': test['Requirement'],
+                'Result': 'Omitted',
+                'Criticality': test['Criticality'],
+                'Rule Description': f'N/A; test omitted by user. {rationale}'
+            })
+        return table_data
+
+    def _warn(self, *args, **kwargs):
+        '''
+        Wrapper for the warnings.warn function, that clears and refreshes the
+        progress bar if one has been provided, to keep the output clean.
+        Accepts all the arguments the warnings.warn function accepts.
+        '''
+        if self.progress_bar is not None:
+            self.progress_bar.clear()
+        warnings.warn(*args, **kwargs)
+        if self.progress_bar is not None:
+            self.progress_bar.refresh()
+
     def rego_json_to_ind_reports(self, test_results: list, out_path: str) -> list:
         '''
         Transforms the Rego JSON output into individual HTML and JSON reports
@@ -275,14 +400,12 @@ class Reporter:
             "Errors": 0,
             "Failures": 0,
             "Warnings": 0,
-            # While ScubaGoggles doesn't currently have the capability to omit controls,
-            # this key is needed here to maintain parity with ScubaGear.
             "Omit": 0
         }
 
         for baseline_group in self._product_policies:
             table_data = []
-            results_data ={}
+            results_data = {}
             for control in baseline_group['Controls']:
                 tests = [test for test in test_results if test['PolicyId'] == control['Id']]
                 if len(tests) == 0:
@@ -295,66 +418,84 @@ class Reporter:
                         'Result': "Error - Test results missing",
                         'Criticality': "-",
                         'Details': f'Report issue on {issues_link}'})
-                    warnings.warn(f"No test results found for Control Id {control['Id']}",
+                    self._warn(f"No test results found for Control Id {control['Id']}",
                         RuntimeWarning)
-                else:
-                    for test in tests:
-                        failed_prereqs = self._get_failed_prereqs(test)
-                        if len(failed_prereqs) > 0:
-                            report_stats["Errors"] += 1
-                            failed_details = self._get_failed_details(failed_prereqs)
-                            table_data.append({
-                                'Control ID': control['Id'],
-                                'Requirement': control['Value'],
-                                'Result': "Error",
-                                'Criticality': test['Criticality'],
-                                'Details': failed_details})
-                        else:
-                            result = self._get_test_result(test['RequirementMet'],
-                                                           test['Criticality'],
-                                                           test['NoSuchEvent'])
+                    continue
+                if self._is_control_omitted(control['Id']):
+                    # Handle the case where the control was omitted
+                    if product_capitalized == "Rules":
+                        # Rules is a special case
+                        rules_data = self._handle_rules_omission(control['Id'], tests)
+                        table_data.extend(rules_data)
+                        report_stats['Omit'] += len(rules_data)
+                        continue
+                    report_stats['Omit'] += 1
+                    rationale = self._get_omission_rationale(control['Id'])
+                    table_data.append({
+                        'Control ID': control['Id'],
+                        'Requirement': control['Value'],
+                        'Result': "Omitted",
+                        'Criticality': tests[0]['Criticality'],
+                        'Details': f'Test omitted by user. {rationale}'
+                    })
+                    continue
+                for test in tests:
+                    failed_prereqs = self._get_failed_prereqs(test)
+                    if len(failed_prereqs) > 0:
+                        report_stats["Errors"] += 1
+                        failed_details = self._get_failed_details(failed_prereqs)
+                        table_data.append({
+                            'Control ID': control['Id'],
+                            'Requirement': control['Value'],
+                            'Result': "Error",
+                            'Criticality': test['Criticality'],
+                            'Details': failed_details})
+                        continue
+                    result = self._get_test_result(test['RequirementMet'],
+                                                    test['Criticality'],
+                                                    test['NoSuchEvent'])
 
-                            details = test['ReportDetails']
+                    details = test['ReportDetails']
 
-                            if result == "No events found":
-                                warning_icon = "<object data='./images/"\
-                                    "triangle-exclamation-solid.svg'\
-                                    width='15'\
-                                    height='15'>\
-                                    </object>"
-                                details = warning_icon + " " + test['ReportDetails']
-                            # As rules doesn't have its own baseline, Rules and Common Controls
-                            # need to be handled specially
-                            if product_capitalized == "Rules":
-                                if 'Not-Implemented' in test['Criticality']:
-                                    # The easiest way to identify the GWS.COMMONCONTROLS.13.1v1
-                                    # results that belong to the Common Controls report is they're
-                                    # marked as Not-Implemented. This if excludes them from the
-                                    # rules report.
-                                    continue
-                                report_stats[self._get_summary_category(result)] += 1
-                                table_data.append({
-                                    'Control ID': control['Id'],
-                                    'Rule Name': test['Requirement'],
-                                    'Result': result,
-                                    'Criticality': test['Criticality'],
-                                    'Rule Description': test['ReportDetails']})
-                            elif product_capitalized == "Commoncontrols" \
-                                and baseline_group['GroupName'] == 'System-defined Rules' \
-                                and 'Not-Implemented' not in test['Criticality']:
-                                # The easiest way to identify the System-defined Rules
-                                # results that belong to the Common Controls report is they're
-                                # marked as Not-Implemented. This if excludes the full results
-                                # from the Common Controls report.
-                                continue
-                            else:
-                                report_stats[self._get_summary_category(result)] += 1
-                                table_data.append({
-                                    'Control ID': control['Id'],
-                                    'Requirement': control['Value'],
-                                    'Result': result,
-                                    'Criticality': test['Criticality'],
-                                    'Details': details})
+                    if result == "No events found":
+                        warning_icon = "<object data='./images/"\
+                            "triangle-exclamation-solid.svg'\
+                            width='15'\
+                            height='15'>\
+                            </object>"
+                        details = warning_icon + " " + test['ReportDetails']
+                    # As rules doesn't have its own baseline, Rules and Common Controls
+                    # need to be handled specially
+                    if product_capitalized == "Rules":
+                        if 'Not-Implemented' in test['Criticality']:
+                            # The easiest way to identify the GWS.COMMONCONTROLS.13.1v1
+                            # results that belong to the Common Controls report is they're
+                            # marked as Not-Implemented. This if excludes them from the
+                            # rules report.
+                            continue
+                        report_stats[self._get_summary_category(result)] += 1
+                        table_data.append({
+                            'Control ID': control['Id'],
+                            'Rule Name': test['Requirement'],
+                            'Result': result,
+                            'Criticality': test['Criticality'],
+                            'Rule Description': test['ReportDetails']})
+                    elif product_capitalized == "Commoncontrols" \
+                        and baseline_group['GroupName'] == 'System-defined Rules' \
+                        and 'Not-Implemented' not in test['Criticality']:
+                        # The easiest way to identify the System-defined Rules
+                        # results that belong to the Common Controls report is they're
+                        # marked as Not-Implemented. This if excludes the full results
+                        # from the Common Controls report.
+                        continue
+                    else:
+                        report_stats[self._get_summary_category(result)] += 1
+                        table_data.append({
+                            'Control ID': control['Id'],
+                            'Requirement': control['Value'],
+                            'Result': result,
+                            'Criticality': test['Criticality'],
+                            'Details': details})
             markdown_group_name = "-".join(baseline_group['GroupName'].split())
             md_basename = "commoncontrols" if self._product == "rules" else self._product
             group_reference_url = f'{github_url}/blob/v{tool_version}/baselines/'\
