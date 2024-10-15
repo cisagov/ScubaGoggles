@@ -410,6 +410,18 @@ User password length SHALL be at least 12 characters.
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
 #### GWS.COMMONCONTROLS.5.3v0.3
+User password length SHOULD be at least 15 characters.
+
+- _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
+- _Last modified:_ July 10, 2023
+
+- MITRE ATT&CK TTP Mapping
+  - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
+    - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
+    - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
+    - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
+
+#### GWS.COMMONCONTROLS.5.4v0.3
 Password policy SHALL be enforced at next sign-in.
 
 - _Rationale:_ Unless the password policy is enforced at next login, a user could potentially operate indefinitely using a weak password. Enforcing the policy at next login helps ensure that all active user passwords meet current requirements.
@@ -421,7 +433,7 @@ Password policy SHALL be enforced at next sign-in.
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
-#### GWS.COMMONCONTROLS.5.4v0.3
+#### GWS.COMMONCONTROLS.5.5v0.3
 User passwords SHALL NOT be reused.
 
 - _Rationale:_ Password reuse represents a significant security risk. Preventing password reuse when possible limits the scope of a compromised password.
@@ -433,7 +445,7 @@ User passwords SHALL NOT be reused.
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
-#### GWS.COMMONCONTROLS.5.5v0.3
+#### GWS.COMMONCONTROLS.5.6v0.3
 User passwords SHALL NOT expire.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST), OMB, and Microsoft have published guidance indicating mandated periodic password changes make user accounts less secure. For example, OMB M-22-09 states, "Password policies must not require use of special characters or regular rotation."
@@ -448,7 +460,8 @@ User passwords SHALL NOT expire.
 ### Resources
 
 -   [GWS Admin Help \| Enforce and monitor password requirements for users](https://support.google.com/a/answer/139399?hl=en#zippy=%2Cwhat-makes-a-password-strong)
--   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
+-   [Create a strong password & a more secure account](https://support.google.com/accounts/answer/9094506?fl=1&sjid=14948418137648107240-NA)
+-   [CISA Cross-Sector Cybersecurity Performance Goals](https://www.cisa.gov/cross-sector-cybersecurity-performance-goals#MinimumPasswordStrength2B)
 
 ### Prerequisites
 
@@ -472,12 +485,15 @@ To configure a strong password policy is configured, use the Google Workspace Ad
 1.  Under **Length**, set **Minimum Length** to 12+.
 
 #### GWS.COMMONCONTROLS.5.3v0.3 Instructions
-1.  Under **Strength and Length enforcement**, select the **Enforce password policy at next sign-in** checkbox.
+1.  Under **Length**, set **Minimum Length** to 15+.
 
 #### GWS.COMMONCONTROLS.5.4v0.3 Instructions
-1.  Under **Reuse**, deselect the **Allow password reuse** checkbox.
+1.  Under **Strength and Length enforcement**, select the **Enforce password policy at next sign-in** checkbox.
 
 #### GWS.COMMONCONTROLS.5.5v0.3 Instructions
+1.  Under **Reuse**, deselect the **Allow password reuse** checkbox.
+
+#### GWS.COMMONCONTROLS.5.6v0.3 Instructions
 1.  Under **Expiration**, select **Never Expires.**
 
 ## 6. Highly Privileged Accounts
