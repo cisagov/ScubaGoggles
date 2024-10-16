@@ -91,8 +91,6 @@ if {
     NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
     OrgUnit := utils.GetEventOu(Event)
     Group := utils.GetEventGroup(Event)
-
-    #ServiceName == "DISABLE_UNLISTED_SERVICES"
 }
 
 LogEvents := utils.GetEvents("commoncontrols_logs")
@@ -1860,7 +1858,7 @@ if {
 
 NonCompliantOUs16_2 contains {
     "Name": OU,
-    "Value": "User access to Early Access Apps is turned on"
+    "Value": "Service status is ON"
 } if {
     some OU in utils.OUsWithEvents
     # Note that this setting requires the custom ToggleServiceEvents rule.
@@ -1878,6 +1876,23 @@ NonCompliantOUs16_2 contains {
     # For the Early Access Apps service:
     # If service status is set to "ON for everyone", then "NewValue" == true (non-compliant state)
     # else, "NewValue" == false (compliant state)
+    LastEvent.NewValue == "true"
+}
+
+NonCompliantGroups16_2 contains {
+    "Name": Group,
+    "Value": "Service status is ON"
+} if {
+    some Group in utils.GroupsWithEvents
+    # Note that this setting requires the custom ToggleServiceEvents rule.
+    Events := {
+        Event | some Event in ToggleServiceEvents;
+        Event.Group == Group;
+        Event.ServiceName == "Early Access Apps"
+    }
+    # Ignore groups without any events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
 }
 
@@ -1903,20 +1918,16 @@ if {
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.16.2v0.3",
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs16_2, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_2},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs16_2, NonCompliantGroups16_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_2, "NonCompliantGroups": NonCompliantGroups16_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 } if {
-    # Filter based on the service name of the event, otherwise all events are returned.
-    Events := {
-        Event | some Event in ToggleServiceEvents;
-        Event.OrgUnit == utils.TopLevelOU;
-        Event.ServiceName == "Early Access Apps"
+    Conditions := {
+        count(NonCompliantOUs16_2) == 0,
+        count(NonCompliantGroups16_2) == 0
     }
-    print(Events)
-    count(Events) > 0
-    Status := count(NonCompliantOUs16_2) == 0
+    Status := (false in Conditions) == false
 }
 #--
 
