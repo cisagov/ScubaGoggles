@@ -74,6 +74,7 @@ if {
 ToggleServiceEvents contains {
     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
     "TimestampStr": Item.id.time,
+    "ServiceName": ServiceName,
     "NewValue": NewValue,
     "OrgUnit": OrgUnit,
     "Group": Group
@@ -91,7 +92,7 @@ if {
     OrgUnit := utils.GetEventOu(Event)
     Group := utils.GetEventGroup(Event)
 
-    ServiceName == "DISABLE_UNLISTED_SERVICES"
+    #ServiceName == "DISABLE_UNLISTED_SERVICES"
 }
 
 LogEvents := utils.GetEvents("commoncontrols_logs")
@@ -1799,8 +1800,13 @@ NonCompliantOUs16_1 contains {
     "Value": "Access to additional services without individual control is turned on"
 } if {
     some OU in utils.OUsWithEvents
-    # Note that this setting requires the custom ToggleServiceEvents rule
-    Events := {Event | some Event in ToggleServiceEvents; Event.OrgUnit == OU}
+    # Note that this setting requires the custom ToggleServiceEvents rule.
+    # Filter based on the service name of the event, otherwise all events are returned.
+    Events := {
+        Event | some Event in ToggleServiceEvents;
+        Event.OrgUnit == OU;
+        Event.ServiceName == "DISABLE_UNLISTED_SERVICES"
+    }
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -1819,7 +1825,12 @@ tests contains {
 }
 if {
     DefaultSafe := false
-    Events := {Event | some Event in ToggleServiceEvents; Event.OrgUnit == utils.TopLevelOU}
+    # Filter based on the service name of the event, otherwise all events are returned.
+    Events := {
+        Event | some Event in ToggleServiceEvents;
+        Event.OrgUnit == utils.TopLevelOU;
+        Event.ServiceName == "DISABLE_UNLISTED_SERVICES"
+    }
     count(Events) == 0
 }
 
@@ -1832,9 +1843,80 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := {Event | some Event in ToggleServiceEvents; Event.OrgUnit == utils.TopLevelOU}
+    # Filter based on the service name of the event, otherwise all events are returned.
+    Events := {
+        Event | some Event in ToggleServiceEvents;
+        Event.OrgUnit == utils.TopLevelOU;
+        Event.ServiceName == "DISABLE_UNLISTED_SERVICES"
+    }
     count(Events) > 0
     Status := count(NonCompliantOUs16_1) == 0
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.16.2v0.3
+#--
+
+NonCompliantOUs16_2 contains {
+    "Name": OU,
+    "Value": "User access to Early Access Apps is turned on"
+} if {
+    some OU in utils.OUsWithEvents
+    # Note that this setting requires the custom ToggleServiceEvents rule.
+    # Filter based on the service name of the event, otherwise all events are returned.
+    Events := {
+        Event | some Event in ToggleServiceEvents;
+        Event.OrgUnit == OU;
+        Event.ServiceName == "Early Access Apps"
+    }
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    # For the Early Access Apps service:
+    # If service status is set to "ON for everyone", then "NewValue" == true (non-compliant state)
+    # else, "NewValue" == false (compliant state)
+    LastEvent.NewValue == "true"
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.16.2v0.3",
+    "Criticality": "Should",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    # Filter based on the service name of the event, otherwise all events are returned.
+    Events := {
+        Event | some Event in ToggleServiceEvents;
+        Event.OrgUnit == utils.TopLevelOU;
+        Event.ServiceName == "Early Access Apps"
+    }
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.16.2v0.3",
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs16_2, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+} if {
+    # Filter based on the service name of the event, otherwise all events are returned.
+    Events := {
+        Event | some Event in ToggleServiceEvents;
+        Event.OrgUnit == utils.TopLevelOU;
+        Event.ServiceName == "Early Access Apps"
+    }
+    print(Events)
+    count(Events) > 0
+    Status := count(NonCompliantOUs16_2) == 0
 }
 #--
 
