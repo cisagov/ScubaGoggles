@@ -65,11 +65,11 @@ command = []
 if platform == 'win32':
     OPA_EXE = f"{opa_path}opa_windows_amd64.exe"
 elif platform == 'darwin':
-    OPA_EXE = f"sudo {opa_path}opa_darwin_amd64"
+    OPA_EXE = f"{opa_path}opa_darwin_amd64"
 elif platform in ('linux', 'linux2'):
-    OPA_EXE = f"sudo {opa_path}opa_linux_amd64_static"
+    OPA_EXE = f"{opa_path}opa_linux_amd64_static"
 else:
-    OPA_EXE = f"sudo {opa_path}opa"
+    OPA_EXE = f"{opa_path}opa"
 for b in args.baselines:
     b = b.lower()
     if len(args.controls) > 0:

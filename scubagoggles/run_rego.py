@@ -10,7 +10,7 @@ import logging
 
 def opa_eval(
     product_name:str, input_file:str, opa_path:str, rego_path:str,
-    omit_sudo:bool, debug:bool):
+    debug:bool):
     """
     Runs the rego scripts and outputs a json to out_path
 
@@ -23,12 +23,9 @@ def opa_eval(
 
     opa_exe = ""
     rego_file = product_name.capitalize()
-    command = []
-    windows_os = False
 
     if platform == 'win32':
         opa_exe = (opa_path / "./opa_windows_amd64.exe").resolve()
-        windows_os = True
     elif platform == 'darwin':
         opa_exe = (opa_path / "./opa_darwin_amd64").resolve()
     elif platform in ('linux', 'linux2'):
@@ -36,21 +33,15 @@ def opa_eval(
     else:
         opa_exe = (opa_path / "./opa").resolve()
 
-    if windows_os or omit_sudo:
-        command.extend([f"{opa_exe}"])
-    else:
-        command.extend(["sudo", f"{opa_exe}"])
-
     rego_file = (rego_path / f"./{rego_file}.rego").resolve()
     utils_rego = (rego_path / "./Utils.rego").resolve()
-    command.extend(
-        ["eval",
-        "-i", input_file,
-        "-d", rego_file,
-        "-d", utils_rego,
-        f"data.{product_name}.tests",
-        "-f", "values"
-        ])
+    command = [opa_exe,
+               "eval",
+               "-i", input_file,
+               "-d", rego_file,
+               "-d", utils_rego,
+               f"data.{product_name}.tests",
+               "-f", "values"]
     try:
         output = subprocess.run(command, capture_output=True, check=True)
         if debug:

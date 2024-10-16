@@ -6,7 +6,7 @@ Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS, all com
 scubagoggles gws -h
 usage: scubagoggles gws [-h] [-b  [...]] [-o] [-c] [--subjectemail] [--customerid] [--opapath] [--regopath] [--documentpath]
                     [--runcached] [--skipexport] [--outputfoldername] [--outputproviderfilename]
-                    [--outputregofilename] [--outputreportfilename] [--omitsudo] [--quiet] [--debug]
+                    [--outputregofilename] [--outputreportfilename] [--quiet] [--debug]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -47,7 +47,6 @@ optional arguments:
                         The name of the Rego output json in --outputpath. Defaults to TestResults.
   --outputreportfilename
                         The name of the main html file homepage created in --outputpath. Defaults to BaselineReports.
-  --omitsudo            This switch prevents running the OPA executable with sudo.
   --quiet               This switch suppresses automatically launching a web browser to open the html report output
                         and the loading bar output.
   --debug               This switch is used to print debugging information for OPA.

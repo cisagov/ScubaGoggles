@@ -103,9 +103,6 @@ def get_gws_args(parser):
     help='The name of the main html file homepage created in --outputpath.' +
     f" Defaults to {default_file_output_names['report_output_name']}.")
 
-    parser.add_argument('--omitsudo', action = 'store_true',
-    help='This switch prevents running the OPA executable with sudo.')
-
     parser.add_argument('--quiet', action = 'store_true',
     help='This switch suppresses automatically launching a web browser to open' +
     ' the html report output and the loading bar output.')

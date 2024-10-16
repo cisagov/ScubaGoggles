@@ -119,7 +119,6 @@ class Orchestrator:
             input_file=input_file,
             opa_path=opa_path,
             rego_path=rego_path,
-            omit_sudo=args.omitsudo,
             debug=args.debug
             )
             try:
