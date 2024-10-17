@@ -164,7 +164,7 @@ test_EarlyAccessApps_OUs_Correct_V1 if {
 }
 
 test_EarlyAccessApps_OUs_Correct_V2 if {
-    # Test inheritance
+    # Test inheritance with root and sub OUs
     PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
@@ -204,7 +204,7 @@ test_EarlyAccessApps_OUs_Correct_V2 if {
 }
 
 test_EarlyAccessApps_OUs_Incorrect_V1 if {
-    # Test 1 incorrect event
+    # Test incorrect root OU
     PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
@@ -281,7 +281,7 @@ test_EarlyAccessApps_OUs_Incorrect_V2 if {
 }
 
 test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V1 if {
-    # Test for correct OUs but with an incorrect group event
+    # Test for correct root OU but with an incorrect group event
     PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
@@ -325,7 +325,7 @@ test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V1 if {
 }
 
 test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V2 if {
-    # Test for correct OUs but with incorrect group events
+    # Test for correct root OU but with incorrect group events
     PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
