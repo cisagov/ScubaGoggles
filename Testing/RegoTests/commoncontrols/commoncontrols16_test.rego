@@ -280,7 +280,7 @@ test_EarlyAccessApps_OUs_Incorrect_V2 if {
     ])
 }
 
-test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V3 if {
+test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V1 if {
     # Test for correct OUs but with an incorrect group event
     PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
     Output := tests with input as {
@@ -324,7 +324,7 @@ test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V3 if {
     ])
 }
 
-test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V3 if {
+test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V2 if {
     # Test for correct OUs but with incorrect group events
     PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
     Output := tests with input as {
@@ -380,7 +380,7 @@ test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V3 if {
     ])
 }
 
-test_EarlyAccessApps_OUs_Groups_Incorrect_V3 if {
+test_EarlyAccessApps_OUs_Groups_Incorrect_V1 if {
     # Test for both incorrect OUs and group events
     PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
     Output := tests with input as {
@@ -431,7 +431,6 @@ test_EarlyAccessApps_OUs_Groups_Incorrect_V3 if {
     RuleOutput[0].ReportDetails == concat("", [
         "The following OUs are non-compliant:<ul>",
         "<li>Test Top-Level OU: Service status is ON</li>",
-        #"<li>Test Second-Level OU: Service status is ON</li>",
         "</ul><br>",
         "The following groups are non-compliant:<ul>",
         "<li>Test Group 1: Service status is ON</li>",
@@ -440,5 +439,3 @@ test_EarlyAccessApps_OUs_Groups_Incorrect_V3 if {
     ])
 }
 #--
-
-#"The following OUs are non-compliant:<ul><li>DHS-CISA: Service status is ON</li></ul><br>The following groups are non-compliant:<ul><li>Test Google Services: Service status is ON</li><li>Test Group: Service status is ON</li></ul>"
