@@ -722,7 +722,56 @@ if {
 #
 # Baseline GWS.COMMONCONTROLS.5.3v0.3
 #--
+
 NonCompliantOUs5_3 contains {
+    "Name": OU,
+    "Value": concat("", ["Minimum password length is set to ", LastEvent.NewValue])
+} if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Minimum password length", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+    Minimum := to_number(LastEvent.NewValue)
+    Minimum < 15
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.5.3v0.3",
+    "Criticality": "Should",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Minimum password length", utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.5.3v0.3",
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_3, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_3},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Events := utils.FilterEventsOU(LogEvents, "Password Management - Minimum password length", utils.TopLevelOU)
+    count(Events) > 0
+    Status := count(NonCompliantOUs5_3) == 0
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.5.4v0.3
+#--
+NonCompliantOUs5_4 contains {
     "Name": OU,
     "Value": "Enforce password policy at next sign-in is OFF"
 } if {
@@ -738,7 +787,7 @@ NonCompliantOUs5_3 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.3v0.3",
+    "PolicyId": "GWS.COMMONCONTROLS.5.4v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -753,10 +802,10 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.3v0.3",
+    "PolicyId": "GWS.COMMONCONTROLS.5.4v0.3",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_3, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_3},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_4, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -764,14 +813,14 @@ if {
     SettingName := "Password Management - Enforce password policy at next login"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs5_3) == 0
+    Status := count(NonCompliantOUs5_4) == 0
 }
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.5.4v0.3
+# Baseline GWS.COMMONCONTROLS.5.5v0.3
 #--
-NonCompliantOUs5_4 contains {
+NonCompliantOUs5_5 contains {
     "Name": OU,
     "Value": "Allow password reuse is ON"
 } if {
@@ -787,7 +836,7 @@ NonCompliantOUs5_4 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.4v0.3",
+    "PolicyId": "GWS.COMMONCONTROLS.5.5v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -801,24 +850,24 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.4v0.3",
+    "PolicyId": "GWS.COMMONCONTROLS.5.5v0.3",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_4, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_4},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Enable password reuse", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs5_4) == 0
+    Status := count(NonCompliantOUs5_5) == 0
 }
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.5.5v0.3
+# Baseline GWS.COMMONCONTROLS.5.6v0.3
 #--
-NonCompliantOUs5_5 contains {
+NonCompliantOUs5_6 contains {
     "Name": OU,
     "Value": concat(" ", ["Password reset frequency is", LastEvent.NewValue, "days"])
 } if {
@@ -834,7 +883,7 @@ NonCompliantOUs5_5 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.5v0.3",
+    "PolicyId": "GWS.COMMONCONTROLS.5.6v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -848,17 +897,17 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.5.5v0.3",
+    "PolicyId": "GWS.COMMONCONTROLS.5.6v0.3",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_6, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_6},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "Password Management - Password reset frequency", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs5_5) == 0
+    Status := count(NonCompliantOUs5_6) == 0
 }
 #--
 

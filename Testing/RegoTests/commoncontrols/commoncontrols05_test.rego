@@ -583,13 +583,292 @@ test_Length_Incorrect_V5 if {
 }
 #--
 
-
 #
 # GWS.COMMONCONTROLS.5.3v0.3
 #--
-test_Enforce_Correct_V1 if {
+test_Length15_Correct_V1 if {
     # Test 1 event
     PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "15"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+}
+
+test_Length15_Correct_V2 if {
+    # Test multiple events
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "15"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2021-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "12"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+}
+
+test_Length15_Correct_V3 if {
+    # Test longer than needed
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "20"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+}
+
+test_Length15_Incorrect_V1 if {
+    # Test 1 event
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "12"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Minimum password length is set to 12</li>",
+        "</ul>"
+    ])
+}
+
+test_Length15_Incorrect_V2 if {
+    # Test multiple events
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2022-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "12"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2021-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "15"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Minimum password length is set to 12</li>",
+        "</ul>"
+    ])
+}
+
+test_Length15_Incorrect_V3 if {
+    # Test no relevant events
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, ",
+        "Test Top-Level OU. While we are unable ",
+        "to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])}
+
+test_Length15_Incorrect_V4 if {
+    # Test no relevant events in top-level ou
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2021-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "12"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Second-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "No relevant event in the current logs for the top-level OU, ",
+        "Test Top-Level OU. While we are unable ",
+        "to determine the state from the logs, the default setting ",
+        "is non-compliant; manual check recommended."
+    ])}
+
+test_Length15_Incorrect_V5 if {
+    # Test multiple OUs
+    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    Output := tests with input as {
+        "commoncontrols_logs": {"items": [
+            {
+                "id": {"time": "2021-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "15"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Second-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            },
+            {
+                "id": {"time": "2021-12-20T00:02:28.672Z"},
+                "events": [{
+                    "parameters": [
+                        {"name": "NEW_VALUE", "value": "12"},
+                        {"name": "SETTING_NAME", "value": "Password Management - Minimum password length"},
+                        {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
+                        {"name": "APPLICATION_NAME", "value": "Security"}
+                    ]
+                }]
+            }
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:<ul>",
+        "<li>Test Top-Level OU: Minimum password length is set to 12</li>",
+        "</ul>"
+    ])
+}
+#--
+
+
+#
+# GWS.COMMONCONTROLS.5.4v0.3
+#--
+test_Enforce_Correct_V1 if {
+    # Test 1 event
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -621,7 +900,7 @@ test_Enforce_Correct_V1 if {
 
 test_Enforce_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -667,7 +946,7 @@ test_Enforce_Correct_V2 if {
 
 test_Enforce_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -703,7 +982,7 @@ test_Enforce_Incorrect_V1 if {
 
 test_Enforce_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -753,7 +1032,7 @@ test_Enforce_Incorrect_V2 if {
 
 test_Enforce_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -776,7 +1055,7 @@ test_Enforce_Incorrect_V3 if {
 
 test_Enforce_Incorrect_V4 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -812,7 +1091,7 @@ test_Enforce_Incorrect_V4 if {
 
 test_Enforce_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -863,11 +1142,11 @@ test_Enforce_Incorrect_V5 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.5.4v0.3
+# GWS.COMMONCONTROLS.5.5v0.3
 #--
 test_Reuse_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -896,7 +1175,7 @@ test_Reuse_Correct_V1 if {
 
 test_Reuse_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -936,7 +1215,7 @@ test_Reuse_Correct_V2 if {
 
 test_Reuse_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -969,7 +1248,7 @@ test_Reuse_Incorrect_V1 if {
 
 test_Reuse_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1013,7 +1292,7 @@ test_Reuse_Incorrect_V2 if {
 
 test_Reuse_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -1036,7 +1315,7 @@ test_Reuse_Incorrect_V3 if {
 
 test_Reuse_Incorrect_V4 if {
     # Test no relevant events for top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1069,7 +1348,7 @@ test_Reuse_Incorrect_V4 if {
 
 test_Reuse_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1113,12 +1392,12 @@ test_Reuse_Incorrect_V5 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.5.5v0.3
+# GWS.COMMONCONTROLS.5.6v0.3
 #--
 
 test_Expire_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1147,7 +1426,7 @@ test_Expire_Correct_V1 if {
 
 test_Expire_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1187,7 +1466,7 @@ test_Expire_Correct_V2 if {
 
 test_Expire_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1220,7 +1499,7 @@ test_Expire_Incorrect_V1 if {
 
 test_Expire_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1264,7 +1543,7 @@ test_Expire_Incorrect_V2 if {
 
 test_Expire_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -1287,7 +1566,7 @@ test_Expire_Incorrect_V3 if {
 
 test_Expire_Incorrect_V4 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1320,7 +1599,7 @@ test_Expire_Incorrect_V4 if {
 
 test_Expire_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
