@@ -1287,6 +1287,18 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
     - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
   - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
+#### GWS.COMMONCONTROLS.18.4v0.3
+
+The action for the custom DLP policy SHOULD be set to block external sharing.
+
+- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
+- _Last modified:_ October 23, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
+  - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
 ### Resources
 - [GWS Admin Help \| Protect sensitive information using DLP](https://support.google.com/a/topic/7556687?hl=en&ref_topic=7558840&fl=1&sjid=4459086914710819343-NA)
@@ -1310,32 +1322,39 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 #### GWS.COMMONCONTROLS.18.1v0.3 Instructions
 1. For new rules:
 2. In the **Name** section, add the name and description of the rule.
-3. In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
+3. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 4. In the **Apps** section, choose the trigger for **Google Drive, Drive files** then click **Continue**.
 5. In the **Conditions** section, click **Add Condition**.
 6. Configure appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-7. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat, Gmail, and Google Drive based upon the agency's individual requirements.
+7. In the **Actions** section, select the appropriate action to block external sharing for Google Drive based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
 8. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 9. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.2v0.3 Instructions
 1. For new rules:
 2. In the **Name** section, add the name and description of the rule.
-3. In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
+3. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
 4. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
 5. In the **Conditions** section, click **Add Condition**.
 6. Configure appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-7. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat, Gmail, and Google Drive based upon the agency's individual requirements.
+7. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
 8. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 9. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.3v0.3 Instructions
 1. For new rules:
 2. In the **Name** section, add the name and description of the rule.
-3. In the **Scope** section, apply this rule only to the entire domain or to selected organizational units or groups, and click **Continue**. If there's a conflict between organizational units and groups in terms of inclusion or exclusion, the group takes precedence.
+3. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
 4. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
 5. In the **Conditions** section, click **Add Condition**.
 6. Configure appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-7. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat, Gmail, and Google Drive based upon the agency's individual requirements.
+7. In the **Actions** section, select the appropriate action to warn or block sharing for Gmail based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
 8. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 9. Review the rule details, mark the rule as **Active**, and click **Create.**
+
+#### GWS.COMMONCONTROLS.18.4v0.3 Instructions
+1.  For each rule in the **Actions** section follow steps depending on application.
+    1. For Google Drive policies select **Block external sharing**.
+    2. For Chat policies rules select **Block message** and select **External Conversations** and **Spaces**, **Group chats**, and **1:1 chats**.
+    3. For Gmail policies select **Block message** and select **Messages sent to external recipients**.
+2. Click **Continue**.
