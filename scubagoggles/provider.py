@@ -374,6 +374,7 @@ class Provider:
         '''
 
         # Filter responses by org_unit id
+        # pylint: disable=C0301
         response = (self.services['reports'].activities().list(userKey='all',
                                                                applicationName='admin',
                                                                eventName=event).execute()).get('items', [])
