@@ -21,10 +21,12 @@ class PolicyAPI:
     # The following lambdas are used to validate that setting values are
     # correct.
 
+    # pylint: disable=C0321,C0116,C0103,E0213
     def isBool(x): return isinstance(x, bool)
 
     def isInt(x): return isinstance(x, int)
 
+    # pylint: disable=C0321,C0116,C0103,E0213,E1101
     def isState(x): return x.lower() in ('disabled', 'enabled')
 
     def isString(x): return isinstance(x, str)
@@ -392,6 +394,7 @@ class PolicyAPI:
 
             for setting_name, verifier in expected_settings.items():
                 policy_value = settings.get(setting_name)
+                # pylint: disable=E1121
                 if policy_value is None or not verifier(policy_value):
                     invalid_settings.append(setting_name)
 
@@ -403,10 +406,3 @@ class PolicyAPI:
                             sorted(invalid_settings))
 
         return policies_ok
-
-
-# if __name__ == '__main__':
-#     # gwsAuth = GwsAuth(
-#     #     './credentials.json')
-#     policyApi = PolicyAPI(gwsAuth)
-#     groupMap = policyApi._get_groups()

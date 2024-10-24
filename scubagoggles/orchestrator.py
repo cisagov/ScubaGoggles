@@ -11,6 +11,8 @@ from pathlib import Path
 from datetime import datetime
 from tqdm import tqdm
 from googleapiclient.discovery import build
+# remove later
+from google.auth.transport.requests import AuthorizedSession
 
 from scubagoggles.auth import gws_auth
 from scubagoggles.provider import Provider
@@ -18,11 +20,8 @@ from scubagoggles.run_rego import opa_eval
 from scubagoggles.reporter import md_parser
 from scubagoggles.reporter.reporter import Reporter
 from scubagoggles.utils import rel_abs_path
-
 # remove later
-from google.auth.transport.requests import AuthorizedSession
-from scubagoggles.policy import PolicyAPI
-from pprint import pprint
+from scubagoggles.policy_api import PolicyAPI
 
 
 class Orchestrator:

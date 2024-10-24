@@ -27,6 +27,7 @@ Only complete this section if not authenticating via [Service Account](/docs/aut
 1. In the center screen click **Enable APIS AND Services**
 1. Search for and enable the **Admin SDK API**
 1. Search for and enable the **Groups Settings API**
+1. Search for and enable the **Cloud Identity** subtext **Google Enterprise API**
 1. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
 with an account with the necessary privileges and click allow.
 
