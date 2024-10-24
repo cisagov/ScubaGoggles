@@ -15,4 +15,3 @@ GWS.DRIVEDOCS.3.1v0.3,Agencies SHALL enable the security update for Drive files.
 GWS.DRIVEDOCS.4.1v0.3,Agencies SHOULD disable Drive SDK access to restrict information sharing and prevent data leakage.,Admin Log Event,Change Drive Setting,ENABLE_DRIVE_APPS,true,rules/00gjdgxs1mm4n4i,JK 08-02-23 @ 14:49
 GWS.DRIVEDOCS.5.1v0.3,Agencies SHALL disable Add-Ons with the exception of those that are approved within the organization.,Admin Log Event,Change Drive Setting,ENABLE_DOCS_ADD_ONS,false,rules/00gjdgxs4d794jn,JK 08-02-23 @ 15:14
 GWS.DRIVEDOCS.6.1v0.3,Google Drive for Desktop SHOULD be enabled only for authorized devices..,Admin Log Event,Change Application Setting,DriveFsSettingsProto company_owned_only_enabled,true,rules/00gjdgxs4ghyiin,JK 10-19-23 @ 14:01
-GWS.DRIVEDOCS.7.1v0.3,Agencies SHOULD configure DLP rules to block or warn on sharing files with sensitive data.,N/A,N/A,N/A,N/A,N/A,Not Alertable due to no log event
