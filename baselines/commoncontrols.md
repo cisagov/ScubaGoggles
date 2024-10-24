@@ -1325,10 +1325,13 @@ The action for the custom DLP policy SHOULD be set to block external sharing.
 3. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 4. In the **Apps** section, choose the trigger for **Google Drive, Drive files** then click **Continue**.
 5. In the **Conditions** section, click **Add Condition**.
-6. Configure appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-7. In the **Actions** section, select the appropriate action to block external sharing for Google Drive based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
-8. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-9. Review the rule details, mark the rule as **Active**, and click **Create.**
+    1. Select **All content** then **Matches predefined data type** then **Global - Credit card number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+    2. Select **All content** then **Matches predefined data type** then **United States - Individual Taxpayer Indentification Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+    3. Select **All content** then **Matches predefined data type** then **United States - Social Security Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+    4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
+6. In the **Actions** section, select the appropriate action to block external sharing for Google Drive based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
+7. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+8. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.2v0.3 Instructions
 1. For new rules:
@@ -1336,10 +1339,13 @@ The action for the custom DLP policy SHOULD be set to block external sharing.
 3. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
 4. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
 5. In the **Conditions** section, click **Add Condition**.
-6. Configure appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-7. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
-8. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-9. Review the rule details, mark the rule as **Active**, and click **Create.**
+    1. Select **All content** then **Matches predefined data type** then **Global - Credit card number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+    2. Select **All content** then **Matches predefined data type** then **United States - Individual Taxpayer Indentification Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+    3. Select **All content** then **Matches predefined data type** then **United States - Social Security Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+    4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
+6. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
+7. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+8. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.3v0.3 Instructions
 1. For new rules:
@@ -1347,10 +1353,13 @@ The action for the custom DLP policy SHOULD be set to block external sharing.
 3. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
 4. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
 5. In the **Conditions** section, click **Add Condition**.
-6. Configure appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-7. In the **Actions** section, select the appropriate action to warn or block sharing for Gmail based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
-8. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-9. Review the rule details, mark the rule as **Active**, and click **Create.**
+    1. Select **All content** then **Matches predefined data type** then **Global - Credit card number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+    2. Select **All content** then **Matches predefined data type** then **United States - Individual Taxpayer Indentification Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+    3. Select **All content** then **Matches predefined data type** then **United States - Social Security Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+    4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
+6. In the **Actions** section, select the appropriate action to warn or block sharing for Gmail based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
+7. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+8. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.4v0.3 Instructions
 1.  For each rule in the **Actions** section follow steps depending on application.
