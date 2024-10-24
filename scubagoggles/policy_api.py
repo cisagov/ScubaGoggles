@@ -116,7 +116,7 @@ class PolicyAPI:
     def __init__(self, session):
         """PolicyAPI class instance initialization
 
-        :param GwsAuth gws_auth: GWS credentials instance.
+        :param session Google's AuthorizedSession.
         """
 
         # Google's AuthorizedSession is currently being used because this
