@@ -11,7 +11,7 @@ from pathlib import Path
 from datetime import datetime
 from tqdm import tqdm
 from googleapiclient.discovery import build
-# remove later
+# FUTURE REMOVE
 from google.auth.transport.requests import AuthorizedSession
 
 from scubagoggles.auth import gws_auth
@@ -20,7 +20,7 @@ from scubagoggles.run_rego import opa_eval
 from scubagoggles.reporter import md_parser
 from scubagoggles.reporter.reporter import Reporter
 from scubagoggles.utils import rel_abs_path
-# remove later
+# FUTURE REMOVE
 from scubagoggles.policy_api import PolicyAPI
 
 
@@ -447,6 +447,7 @@ class Orchestrator:
                 'groupssettings', 'v1', credentials=creds)
             # FUTURE REMOVE: Temporarily stick the policy API object in services
             services['cloudidentity'] = policy_api
+
             self._run_gws_providers(services)
             self._rego_eval()
             self._run_reporter()

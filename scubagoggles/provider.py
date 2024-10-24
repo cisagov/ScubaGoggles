@@ -478,7 +478,14 @@ class Provider:
         Calls the Cloud Identity Policy API
         '''
         policy_api = self.services['cloudidentity']
-        policies = policy_api.get_policies()
+
+        try:
+            policies = policy_api.get_policies()
+        except Exception as exc:
+            warnings.warn(
+                f"Exception thrown while calling policy api; outputs will be incorrect: {exc}",
+                RuntimeWarning
+            )
         return policies
 
     def call_gws_providers(self, products: list, quiet) -> dict:
@@ -514,6 +521,7 @@ class Provider:
                 RuntimeWarning
             )
 
+        # FUTURE REMOVE
         product_to_items['policies'] = self._get_cloud_identity_settings()
 
         # call the api once per event type
