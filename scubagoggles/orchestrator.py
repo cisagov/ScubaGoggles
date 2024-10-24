@@ -436,7 +436,7 @@ class Orchestrator:
 
             # FUTURE REMOVE: Temporarily authenticate to the Policy API using policy.py
             session = AuthorizedSession(creds)
-            policyAPI = PolicyAPI(session)
+            policy_api = PolicyAPI(session)
 
             services = {}
             services['reports'] = build(
@@ -446,7 +446,7 @@ class Orchestrator:
             services['groups'] = build(
                 'groupssettings', 'v1', credentials=creds)
             # FUTURE REMOVE: Temporarily stick the policy API object in services
-            services['cloudidentity'] = policyAPI
+            services['cloudidentity'] = policy_api
             self._run_gws_providers(services)
             self._rego_eval()
             self._run_reporter()
