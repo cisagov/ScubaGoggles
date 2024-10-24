@@ -1923,6 +1923,14 @@ tests contains {
     "RequirementMet": Status,
     "NoSuchEvent": false
 } if {
+    # This rule should execute only when log events exist
+    Events := {
+        Event | some Event in ToggleServiceEvents;
+        Event.OrgUnit == utils.TopLevelOU;
+        Event.ServiceName == "Early Access Apps"
+    }
+    count(Events) > 0
+
     Conditions := {
         count(NonCompliantOUs16_2) == 0,
         count(NonCompliantGroups16_2) == 0
