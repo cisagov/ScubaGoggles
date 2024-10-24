@@ -13,15 +13,18 @@ from google.oauth2.service_account import Credentials as SvcCredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/admin.reports.audit.readonly',
+SCOPES = [
+    'https://www.googleapis.com/auth/admin.reports.audit.readonly',
     "https://www.googleapis.com/auth/admin.directory.domain.readonly",
     "https://www.googleapis.com/auth/admin.directory.orgunit.readonly",
     "https://www.googleapis.com/auth/admin.directory.user.readonly",
     "https://www.googleapis.com/auth/admin.directory.group.readonly",
-    "https://www.googleapis.com/auth/apps.groups.settings"]
+    "https://www.googleapis.com/auth/apps.groups.settings",
+    "https://www.googleapis.com/auth/cloud-identity.policies.readonly"
+]
 
 
-def gws_auth(cred_path:str, subject_email: str = None):
+def gws_auth(cred_path: str, subject_email: str = None):
     """
     Generates an Oauth token for accessing Google's APIs
 

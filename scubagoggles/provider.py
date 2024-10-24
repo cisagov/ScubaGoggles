@@ -93,12 +93,13 @@ SELECTORS = ["google", "selector1", "selector2"]
 #    beginning of the domain name up to the first period
 #
 
+
 class Provider:
     '''
     Class for making the GWS api calls and tracking the results.
     '''
 
-    def __init__(self, services : dict, customer_id : str):
+    def __init__(self, services: dict, customer_id: str):
         '''
         Initialize the Provider.
 
@@ -124,7 +125,8 @@ class Provider:
                 self.successful_calls.add(ApiReference.LIST_DOMAINS.value)
             except Exception as exc:
                 self.domains = []
-                warnings.warn(f"An exception was thrown by list_domains: {exc}", RuntimeWarning)
+                warnings.warn(
+                    f"An exception was thrown by list_domains: {exc}", RuntimeWarning)
                 self.unsuccessful_calls.add(ApiReference.LIST_DOMAINS.value)
         return self.domains
 
@@ -153,7 +155,7 @@ class Provider:
     See ProviderSettingsExport.json under 'spf_records' for more details.", RuntimeWarning)
         return results
 
-    def get_dkim_records(self, domains : list) -> list:
+    def get_dkim_records(self, domains: list) -> list:
         '''
         Gets the DKIM records for each domain in domains.
 
@@ -162,7 +164,8 @@ class Provider:
         results = []
         n_low_confidence = 0
         for domain in domains:
-            qnames = [f"{selector}._domainkey.{domain}" for selector in SELECTORS]
+            qnames = [
+                f"{selector}._domainkey.{domain}" for selector in SELECTORS]
             log_entries = []
             for qname in qnames:
                 result = self.dns_client.query(qname)
@@ -190,7 +193,7 @@ class Provider:
     See ProviderSettingsExport.json under 'dkim_records' for more details.", RuntimeWarning)
         return results
 
-    def get_dmarc_records(self, domains : list) -> list:
+    def get_dmarc_records(self, domains: list) -> list:
         '''
         Gets the DMARC records for each domain in domains.
 
@@ -229,7 +232,8 @@ class Provider:
         '''
         Gets DNS Information for Gmail baseline
         '''
-        output = {"domains": [], "spf_records": [], "dkim_records": [], "dmarc_records": []}
+        output = {"domains": [], "spf_records": [],
+                  "dkim_records": [], "dmarc_records": []}
         domains = {d['domainName'] for d in self.list_domains()}
         if len(domains) == 0:
             warnings.warn("No domains found.", RuntimeWarning)
@@ -242,21 +246,24 @@ class Provider:
             self.successful_calls.add("get_spf_records")
         except Exception as exc:
             output["spf_records"] = []
-            warnings.warn(f"An exception was thrown by get_spf_records: {exc}", RuntimeWarning)
+            warnings.warn(
+                f"An exception was thrown by get_spf_records: {exc}", RuntimeWarning)
             self.unsuccessful_calls.add("get_spf_records")
         try:
             output["dkim_records"] = self.get_dkim_records(domains)
             self.successful_calls.add("get_dkim_records")
         except Exception as exc:
             output["dkim_records"] = []
-            warnings.warn(f"An exception was thrown by get_dkim_records: {exc}", RuntimeWarning)
+            warnings.warn(
+                f"An exception was thrown by get_dkim_records: {exc}", RuntimeWarning)
             self.unsuccessful_calls.add("get_dkim_records")
         try:
             output["dmarc_records"] = self.get_dmarc_records(domains)
             self.successful_calls.add("get_dmarc_records")
         except Exception as exc:
             output["dmarc_records"] = []
-            warnings.warn(f"An exception was thrown by get_dmarc_records: {exc}", RuntimeWarning)
+            warnings.warn(
+                f"An exception was thrown by get_dmarc_records: {exc}", RuntimeWarning)
             self.unsuccessful_calls.add("get_dmarc_records")
         return output
 
@@ -271,7 +278,8 @@ class Provider:
             for user in response['users']:
                 org_unit = user['orgUnitPath']
                 # strip out the leading '/'
-                org_unit = org_unit[1:] if org_unit.startswith('/') else org_unit
+                org_unit = org_unit[1:] if org_unit.startswith(
+                    '/') else org_unit
                 email = user['primaryEmail']
                 admins.append({'primaryEmail': email, 'orgUnitPath': org_unit})
             self.successful_calls.add(ApiReference.LIST_USERS.value)
@@ -339,7 +347,6 @@ class Provider:
             self.unsuccessful_calls.add(ApiReference.LIST_OUS.value)
             return "Error Retrieving"
 
-
     def get_tenant_info(self) -> dict:
         '''
         Gets the high-level tenant info using the directory API
@@ -368,9 +375,8 @@ class Provider:
 
         # Filter responses by org_unit id
         response = (self.services['reports'].activities().list(userKey='all',
-                applicationName='admin',
-                eventName=event).execute()).get('items', [])
-
+                                                               applicationName='admin',
+                                                               eventName=event).execute()).get('items', [])
 
         # Used for filtering duplicate events
         prod_to_app_name_values = {
@@ -414,7 +420,7 @@ class Provider:
                 'CHANGE_APPLICATION_SETTING',
                 'CREATE_APPLICATION_SETTING',
                 'DELETE_APPLICATION_SETTING'
-                )
+            )
             if event in dup_events:
                 app_name = 'APPLICATION_NAME'
                 for report in response:
@@ -426,7 +432,7 @@ class Provider:
                                 for prod, app_values in subset_prod_to_app_name.items():
                                     if param_val in app_values:
                                         products_to_logs[prod].append(report)
-            else: # no filtering append entire response to relevant product
+            else:  # no filtering append entire response to relevant product
                 for prod in products:
                     products_to_logs[prod].extend(response)
         except Exception as exc:
@@ -443,7 +449,8 @@ class Provider:
 
         group_service = self.services['groups']
         directory_service = self.services['directory']
-        domains = {d['domainName'] for d in self.list_domains() if d['verified']}
+        domains = {d['domainName']
+                   for d in self.list_domains() if d['verified']}
 
         try:
             # get the group settings for each groups
@@ -452,7 +459,8 @@ class Provider:
                 response = directory_service.groups().list(domain=domain).execute()
                 for group in response.get('groups'):
                     email = group.get('email')
-                    group_settings.append(group_service.groups().get(groupUniqueId=email).execute())
+                    group_settings.append(group_service.groups().get(
+                        groupUniqueId=email).execute())
             self.successful_calls.add(ApiReference.LIST_GROUPS.value)
             self.successful_calls.add(ApiReference.GET_GROUP.value)
             return {'group_settings': group_settings}
@@ -465,6 +473,14 @@ class Provider:
             self.unsuccessful_calls.add(ApiReference.GET_GROUP.value)
             return {'group_settings': []}
 
+    def _get_cloud_identity_settings(self) -> dict:
+        '''
+        Calls the Cloud Identity Policy API
+        '''
+        policy_api = self.services['cloudidentity']
+        policies = policy_api.get_policies()
+        return policies
+
     def call_gws_providers(self, products: list, quiet) -> dict:
         '''
         Calls the relevant GWS APIs to get the data we need for the baselines.
@@ -475,13 +491,14 @@ class Provider:
         '''
         # create a inverse dictionary containing a mapping of event => list of products
         events_to_products = create_subset_inverted_dict(EVENTS, products)
-        events_to_products_bar = tqdm(events_to_products.items(), leave=False, disable=quiet)
+        events_to_products_bar = tqdm(
+            events_to_products.items(), leave=False, disable=quiet)
 
         # main aggregator dict
         product_to_logs = create_key_to_list(products)
         product_to_items = {}
         ou_ids = set()
-        ou_ids.add("") # certain settings have no OU
+        ou_ids.add("")  # certain settings have no OU
         try:
             # Add top level organization unit name
             ou_ids.add(self.get_toplevel_ou())
@@ -496,6 +513,8 @@ class Provider:
                 f"Exception thrown while getting tenant data: {exc}",
                 RuntimeWarning
             )
+
+        product_to_items['policies'] = self._get_cloud_identity_settings()
 
         # call the api once per event type
         try:
@@ -512,8 +531,8 @@ class Provider:
                 )
                 self.successful_calls.add(ApiReference.LIST_ACTIVITIES.value)
         except Exception as exc:
-            warnings.warn("Provider Exception thrown while getting the logs; "\
-                f"outputs will be incorrect: {exc}", RuntimeWarning)
+            warnings.warn("Provider Exception thrown while getting the logs; "
+                          f"outputs will be incorrect: {exc}", RuntimeWarning)
             self.unsuccessful_calls.add(ApiReference.LIST_ACTIVITIES.value)
 
         # repacks the main aggregator into the original form
@@ -527,10 +546,10 @@ class Provider:
             # get tenant metadata for report front page header
             product_to_items['tenant_info'] = self.get_tenant_info()
 
-            if 'gmail' in product_to_logs: # add dns info if gmail is being run
+            if 'gmail' in product_to_logs:  # add dns info if gmail is being run
                 product_to_items.update(self.get_dnsinfo())
 
-            if 'commoncontrols' in product_to_logs: # add list of super admins if CC is being run
+            if 'commoncontrols' in product_to_logs:  # add list of super admins if CC is being run
                 product_to_items.update(self.get_super_admins())
 
             if 'groups' in product_to_logs:

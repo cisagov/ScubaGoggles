@@ -19,6 +19,11 @@ from scubagoggles.reporter import md_parser
 from scubagoggles.reporter.reporter import Reporter
 from scubagoggles.utils import rel_abs_path
 
+# remove later
+from google.auth.transport.requests import AuthorizedSession
+from scubagoggles.policy import PolicyAPI
+from pprint import pprint
+
 
 class Orchestrator:
 
@@ -58,7 +63,6 @@ class Orchestrator:
     }
 
     def __init__(self, args: argparse.Namespace):
-
         """Orchestrator class initialization
 
         :param args: command arguments parsed by the argparse module.  See
@@ -91,7 +95,7 @@ class Orchestrator:
         provider_dict['successful_calls'] = list(provider.successful_calls)
         provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
 
-        settings_json = json.dumps(provider_dict, indent = 4)
+        settings_json = json.dumps(provider_dict, indent=4)
         out_path = out_folder + f'/{args.outputproviderfilename}.json'
         with open(out_path, mode="w", encoding='UTF-8') as outfile:
             outfile.write(settings_json)
@@ -113,21 +117,22 @@ class Orchestrator:
             opa_path = args.opapath
             rego_path = args.regopath
 
-            products_bar.set_description(f"Running Rego verification for {product}...")
+            products_bar.set_description(
+                f"Running Rego verification for {product}...")
             product_tests = opa_eval(
-            product_name=product_name,
-            input_file=input_file,
-            opa_path=opa_path,
-            rego_path=rego_path,
-            omit_sudo=args.omitsudo,
-            debug=args.debug
+                product_name=product_name,
+                input_file=input_file,
+                opa_path=opa_path,
+                rego_path=rego_path,
+                omit_sudo=args.omitsudo,
+                debug=args.debug
             )
             try:
                 results.extend(product_tests[0])
             except Exception as exc:
                 raise Exception("run_rego error") from exc
 
-        settings_json = json.dumps(results,sort_keys=True ,indent = 4)
+        settings_json = json.dumps(results, sort_keys=True, indent=4)
         out_path = out_folder + f'/{args.outputregofilename}.json'
         with open(out_path, mode="w", encoding='UTF-8') as outfile:
             outfile.write(settings_json)
@@ -158,7 +163,7 @@ class Orchestrator:
         n_omit = stats['Omit']
 
         pass_summary = (f"<div class='summary pass'>{n_success}"
-        f" {cls._pluralize('pass', 'passes', n_success)}</div>")
+                        f" {cls._pluralize('pass', 'passes', n_success)}</div>")
 
         # The warnings, failures, and manuals are only shown if they are
         # greater than zero. Reserve the space for them here. They will
@@ -171,19 +176,19 @@ class Orchestrator:
 
         if n_warn > 0:
             warning_summary = (f"<div class='summary warning'>{n_warn}"
-            f" {cls._pluralize('warning', 'warnings', n_warn)}</div>")
+                               f" {cls._pluralize('warning', 'warnings', n_warn)}</div>")
         if n_fail > 0:
             failure_summary = (f"<div class='summary failure'>{n_fail}"
-            f" {cls._pluralize('failure', 'failures', n_fail)}</div>")
+                               f" {cls._pluralize('failure', 'failures', n_fail)}</div>")
         if n_manual > 0:
             manual_summary = (f"<div class='summary manual'>{n_manual} manual"
-            f" {cls._pluralize('check', 'checks', n_manual)}</div>")
+                              f" {cls._pluralize('check', 'checks', n_manual)}</div>")
         if n_error > 0:
             error_summary = (f"<div class='summary error'>{n_error}"
-            f" {cls._pluralize('error', 'errors', n_error)}</div>")
+                             f" {cls._pluralize('error', 'errors', n_error)}</div>")
         if n_omit > 0:
             omit_summary = (f"<div class='summary manual'>{n_omit}"
-            " omitted</div>")
+                            " omitted</div>")
 
         return f"{pass_summary}{warning_summary}{failure_summary}" \
             f"{manual_summary}{omit_summary}{error_summary}"
@@ -243,11 +248,11 @@ class Orchestrator:
                     break
             else:
                 raise RuntimeError("Unable to process 'rules' as no policy group named "
-                    "'System-defined Rules' found in the Common Controls baseline.")
+                                   "'System-defined Rules' found in the Common Controls baseline.")
 
         # Load Org metadata from provider
         with open(f'{out_folder}/{args.outputproviderfilename}.json',
-        mode='r',encoding='UTF-8') as file:
+                  mode='r', encoding='UTF-8') as file:
             tenant_info = json.load(file)['tenant_info']
             tenant_domain = tenant_info['domain']
 
@@ -269,7 +274,8 @@ class Orchestrator:
                                         fullname in prod_to_fullname.items()}
 
         timestamp_utc = datetime.utcnow()
-        timestamp_zulu = timestamp_utc.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+        timestamp_zulu = timestamp_utc.strftime(
+            '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
 
         report_metadata = {
             "TenantId":  None,
@@ -288,7 +294,8 @@ class Orchestrator:
         main_report_name = args.outputreportfilename
         products_bar = tqdm(products, leave=False, disable=args.quiet)
         for product in products_bar:
-            products_bar.set_description(f"Creating the HTML and JSON Report for {product}...")
+            products_bar.set_description(
+                f"Creating the HTML and JSON Report for {product}...")
             reporter = Reporter(product,
                                 tenant_domain,
                                 main_report_name,
@@ -301,8 +308,9 @@ class Orchestrator:
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
                                                   out_folder)
-            baseline_product_summary = {product:stats_and_data[product][0]}
-            baseline_product_results_json = {product:stats_and_data[product][1]}
+            baseline_product_summary = {product: stats_and_data[product][0]}
+            baseline_product_results_json = {
+                product: stats_and_data[product][1]}
             summary.update(baseline_product_summary)
             results.update(baseline_product_results_json)
             total_output.update({"Summary": summary})
@@ -312,7 +320,7 @@ class Orchestrator:
         with open(f'{out_folder}/{args.outputproviderfilename}.json', encoding='UTF-8') as file:
             raw_data = json.load(file)
         total_output.update({"Raw": raw_data})
-        report = json.dumps(total_output, indent = 4)
+        report = json.dumps(total_output, indent=4)
         with open(f"{out_folder}/{out_jsonfile}.json", mode='w', encoding='UTF-8') as results_file:
             results_file.write(report)
 
@@ -326,10 +334,10 @@ class Orchestrator:
         fragments = []
         table_data = []
         for product, stats in stats_and_data.items():
-            ## Build the "Baseline Conformance Reports" column
+            # Build the "Baseline Conformance Reports" column
             product_capitalize = product.capitalize()
             full_name = prod_to_fullname[product]
-            link_path =  "./IndividualReports/" f"{product_capitalize}Report.html"
+            link_path = "./IndividualReports/" f"{product_capitalize}Report.html"
             link = f"<a class=\"individual_reports\" href={link_path}>{full_name}</a>"
             table_data.append({
                 "Baseline Conformance Reports": link,
@@ -357,16 +365,19 @@ class Orchestrator:
         """
 
         args = self._args
-        args.outputpath = str(rel_abs_path(__file__,args.outputpath))
+        args.outputpath = str(rel_abs_path(__file__, args.outputpath))
         Path(args.outputpath).mkdir(parents=True, exist_ok=True)
         args.outputpath = os.path.abspath(args.outputpath)
 
         if not args.skipexport:
             creds = gws_auth(args.credentials)
             services = {}
-            services['reports'] = build('admin', 'reports_v1', credentials=creds)
-            services['directory'] = build('admin', 'directory_v1', credentials=creds)
-            services['groups'] = build('groupssettings', 'v1', credentials=creds)
+            services['reports'] = build(
+                'admin', 'reports_v1', credentials=creds)
+            services['directory'] = build(
+                'admin', 'directory_v1', credentials=creds)
+            services['groups'] = build(
+                'groupssettings', 'v1', credentials=creds)
             self._run_gws_providers(services)
 
         if not os.path.exists(f'{args.outputpath}/{args.outputproviderfilename}.json'):
@@ -375,10 +386,10 @@ class Orchestrator:
             # output doesn't exist as a standalone file, create it from the scuba results
             # file so the other functions can execute as normal.
             with open(f'{args.outputpath}/{args.outjsonfilename}.json', 'r',
-                    encoding='UTF-8') as scuba_results:
+                      encoding='UTF-8') as scuba_results:
                 provider_output = json.load(scuba_results)['Raw']
             with open(f'{args.outputpath}/{args.outputproviderfilename}.json', 'w',
-                    encoding='UTF-8') as provider_file:
+                      encoding='UTF-8') as provider_file:
                 json.dump(provider_output, provider_file)
         self._rego_eval()
         self._run_reporter()
@@ -409,7 +420,7 @@ class Orchestrator:
 
         if args.skipexport and not args.runcached:
             exc = 'Used --skipexport without --runcached' \
-            'please rerun scubagoggles with --runcached as well'
+                'please rerun scubagoggles with --runcached as well'
             raise Exception(exc)
 
         if not args.runcached:
@@ -423,11 +434,20 @@ class Orchestrator:
 
             # authenticate
             creds = gws_auth(args.credentials, args.subjectemail)
-            services = {}
-            services['reports'] = build('admin', 'reports_v1', credentials=creds)
-            services['directory'] = build('admin', 'directory_v1', credentials=creds)
-            services['groups'] = build('groupssettings', 'v1', credentials=creds)
 
+            # FUTURE REMOVE: Temporarily authenticate to the Policy API using policy.py
+            session = AuthorizedSession(creds)
+            policyAPI = PolicyAPI(session)
+
+            services = {}
+            services['reports'] = build(
+                'admin', 'reports_v1', credentials=creds)
+            services['directory'] = build(
+                'admin', 'directory_v1', credentials=creds)
+            services['groups'] = build(
+                'groupssettings', 'v1', credentials=creds)
+            # FUTURE REMOVE: Temporarily stick the policy API object in services
+            services['cloudidentity'] = policyAPI
             self._run_gws_providers(services)
             self._rego_eval()
             self._run_reporter()
