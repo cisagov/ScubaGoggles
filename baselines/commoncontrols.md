@@ -1242,7 +1242,7 @@ To configure additional services per the policy:
 
 ## 18. DLP Rules
 
-Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP gives you control over what users can share and prevents unintended exposure of sensitive information.
+Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP helps you control what users can share and helps prevent unintended exposure of sensitive information.
 
 DLP rules can use predefined content detectors to match PII (e.g., SSN), credentials (e.g., API keys), or specific document types (e.g., source code). Custom rules can also be applied based upon regex match or document labels.
 
@@ -1289,7 +1289,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 
 #### GWS.COMMONCONTROLS.18.4v0.3
 
-The action for the custom DLP policy SHOULD be set to block external sharing.
+The action for the above DLP policies SHOULD be set to block external sharing.
 
 - _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
 - _Last modified:_ October 23, 2024
@@ -1315,7 +1315,7 @@ The action for the custom DLP policy SHOULD be set to block external sharing.
 #### GWS COMMONCONTROLS 18 Common Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
-3.  Under Data protection rules and detectors click **Manage Rules**. 
+3.  Under **Data protection rules and detectors** click **Manage Rules**. 
 4.  For each DLP rule necessary to meet the standards of an agency:
 5.  Click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
 
@@ -1323,13 +1323,13 @@ The action for the custom DLP policy SHOULD be set to block external sharing.
 1. For new rules:
 2. In the **Name** section, add the name and description of the rule.
 3. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
-4. In the **Apps** section, choose the trigger for **Google Drive, Drive files** then click **Continue**.
+4. In the **Apps** section, under **Google Drive**, choose the trigger for **Drive files**, then click **Continue**.
 5. In the **Conditions** section, click **Add Condition**.
     1. Select **All content** then **Matches predefined data type** then **Global - Credit card number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
     2. Select **All content** then **Matches predefined data type** then **United States - Individual Taxpayer Indentification Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
     3. Select **All content** then **Matches predefined data type** then **United States - Social Security Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-6. In the **Actions** section, select the appropriate action to block external sharing for Google Drive based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
+6. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
 7. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 8. Review the rule details, mark the rule as **Active**, and click **Create.**
 
