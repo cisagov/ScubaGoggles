@@ -16,7 +16,6 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Drive SDK](#4-drive-sdk)
 -   [User Installation of Drive and Docs Add-Ons](#5-user-installation-of-drive-and-docs-add-ons)
 -   [Drive for Desktop](#6-drive-for-desktop)
--   [DLP Rules](#7-dlp-rules)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 

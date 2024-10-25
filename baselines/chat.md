@@ -14,8 +14,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [External File Sharing](#2-external-file-sharing)
 -   [History for Spaces](#3-history-for-spaces)
 -   [External Chat Messaging](#4-external-chat-messaging)
--   [DLP Rules](#5-dlp-rules)
--   [Content Reporting](#6-content-reporting)
+-   [Content Reporting](#5-content-reporting)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
