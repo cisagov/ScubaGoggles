@@ -1251,8 +1251,8 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 
 A custom policy SHALL be configured for Google Drive to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
 
-- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
-- _Last modified:_ June 20, 2024
+- _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
+- _Last modified:_ October 25, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1265,8 +1265,8 @@ A custom policy SHALL be configured for Google Drive to protect PII and sensitiv
 
 A custom policy SHALL be configured for Google Chat to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
 
-- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
-- _Last modified:_ June 20, 2024
+- _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
+- _Last modified:_ October 25, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1278,8 +1278,8 @@ A custom policy SHALL be configured for Google Chat to protect PII and sensitive
 
 A custom policy SHALL be configured for Gmail to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
 
-- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
-- _Last modified:_ June 20, 2024
+- _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
+- _Last modified:_ October 25, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1291,8 +1291,8 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 
 The action for the above DLP policies SHOULD be set to block external sharing.
 
-- _Rationale:_ Data Loss Prevention (DLP) rules help identify and limit the sharing of sensitive content, protecting agency information. Blocking and/or having warnings on these DLP-scanned files from being shared with users can reduce the risk of unintentional introduction of sensitive content.
-- _Last modified:_ October 23, 2024
+- _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
+- _Last modified:_ October 25, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1316,22 +1316,20 @@ The action for the above DLP policies SHOULD be set to block external sharing.
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
 3.  Under **Data protection rules and detectors** click **Manage Rules**. 
-4.  For each DLP rule necessary to meet the standards of an agency:
-5.  Click **Add rule** -\> **New rule** or click **Add rule** -\> **New rule from template**. For templates, select a template from the Templates page.
+4.  Click **Add rule** -\> **New rule**.
 
 #### GWS.COMMONCONTROLS.18.1v0.3 Instructions
-1. For new rules:
-2. In the **Name** section, add the name and description of the rule.
-3. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
-4. In the **Apps** section, under **Google Drive**, choose the trigger for **Drive files**, then click **Continue**.
-5. In the **Conditions** section, click **Add Condition**.
+1. In the **Name** section, add the name and description of the rule.
+2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
+3. In the **Apps** section, under **Google Drive**, choose the trigger for **Drive files**, then click **Continue**.
+4. In the **Conditions** section, click **Add Condition**.
     1. Select **All content** then **Matches predefined data type** then **Global - Credit card number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
     2. Select **All content** then **Matches predefined data type** then **United States - Individual Taxpayer Indentification Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
     3. Select **All content** then **Matches predefined data type** then **United States - Social Security Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-6. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
-7. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-8. Review the rule details, mark the rule as **Active**, and click **Create.**
+5. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
+6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.2v0.3 Instructions
 1. For new rules:
