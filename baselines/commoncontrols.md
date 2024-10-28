@@ -1322,45 +1322,43 @@ The action for the above DLP policies SHOULD be set to block external sharing.
 1. In the **Name** section, add the name and description of the rule.
 2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 3. In the **Apps** section, under **Google Drive**, choose the trigger for **Drive files**, then click **Continue**.
-4. In the **Conditions** section, click **Add Condition**.
-    1. Select **All content** then **Matches predefined data type** then **Global - Credit card number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
-    2. Select **All content** then **Matches predefined data type** then **United States - Individual Taxpayer Indentification Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
-    3. Select **All content** then **Matches predefined data type** then **United States - Social Security Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+4. In the **Conditions** section:
+    1. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
+    2. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Indentification Number**. Select the remaining condition properties according to agency need. 
+    3. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.2v0.3 Instructions
-1. For new rules:
-2. In the **Name** section, add the name and description of the rule.
-3. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
-4. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
-5. In the **Conditions** section, click **Add Condition**.
-    1. Select **All content** then **Matches predefined data type** then **Global - Credit card number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
-    2. Select **All content** then **Matches predefined data type** then **United States - Individual Taxpayer Indentification Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
-    3. Select **All content** then **Matches predefined data type** then **United States - Social Security Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+1. In the **Name** section, add the name and description of the rule.
+2. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
+3. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
+4. In the **Conditions** section:
+    1. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
+    2. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Indentification Number**. Select the remaining condition properties according to agency need. 
+    3. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-6. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
-7. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-8. Review the rule details, mark the rule as **Active**, and click **Create.**
+5. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
+6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.3v0.3 Instructions
-1. For new rules:
-2. In the **Name** section, add the name and description of the rule.
-3. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
-4. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
-5. In the **Conditions** section, click **Add Condition**.
-    1. Select **All content** then **Matches predefined data type** then **Global - Credit card number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
-    2. Select **All content** then **Matches predefined data type** then **United States - Individual Taxpayer Indentification Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
-    3. Select **All content** then **Matches predefined data type** then **United States - Social Security Number** then **very low** and enter 1 for **Minimum unique matches** **minimum match count**.
+1. In the **Name** section, add the name and description of the rule.
+2. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
+3. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
+4. In the **Conditions** section:
+    1. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
+    2. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Indentification Number**. Select the remaining condition properties according to agency need. 
+    3. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-6. In the **Actions** section, select the appropriate action to warn or block sharing for Gmail based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
-7. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-8. Review the rule details, mark the rule as **Active**, and click **Create.**
+5. In the **Actions** section, select the appropriate action to warn or block sharing for Gmail based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
+6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.4v0.3 Instructions
-1.  For each rule in the **Actions** section follow steps depending on application.
+1.  For each rule in the **Actions** section follow steps depending on application:
     1. For Google Drive policies select **Block external sharing**.
     2. For Chat policies rules select **Block message** and select **External Conversations** and **Spaces**, **Group chats**, and **1:1 chats**.
     3. For Gmail policies select **Block message** and select **Messages sent to external recipients**.
