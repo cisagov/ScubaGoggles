@@ -29,6 +29,12 @@ test_AccessControl_Correct_V1 if {
 #
 # GWS.COMMONCONTROLS.15.3v0.3
 #--
+
+#--
+
+#
+# GWS.COMMONCONTROLS.15.3v0.3
+#--
 test_Logs_Correct_V1 if {
     # Test 1 event
     PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"

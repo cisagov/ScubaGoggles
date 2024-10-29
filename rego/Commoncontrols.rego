@@ -1805,6 +1805,10 @@ tests contains {
 # Baseline GWS.COMMONCONTROLS.15.3v0.3
 #--
 
+#
+# Baseline GWS.COMMONCONTROLS.15.3v0.3
+#--
+
 # NOTE: This setting cannot be controlled at the group level
 
 NonCompliantOUs15_3 contains {
