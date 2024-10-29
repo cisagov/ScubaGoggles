@@ -1248,7 +1248,6 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 
 ### Policies
 #### GWS.COMMONCONTROLS.18.1v0.3
-
 A custom policy SHALL be configured for Google Drive to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
@@ -1262,7 +1261,6 @@ A custom policy SHALL be configured for Google Drive to protect PII and sensitiv
 
 
 #### GWS.COMMONCONTROLS.18.2v0.3
-
 A custom policy SHALL be configured for Google Chat to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
@@ -1275,7 +1273,6 @@ A custom policy SHALL be configured for Google Chat to protect PII and sensitive
   - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
 #### GWS.COMMONCONTROLS.18.3v0.3
-
 A custom policy SHALL be configured for Gmail to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
@@ -1288,7 +1285,6 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
   - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
 #### GWS.COMMONCONTROLS.18.4v0.3
-
 The action for the above DLP policies SHOULD be set to block external sharing.
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
@@ -1340,7 +1336,7 @@ The action for the above DLP policies SHOULD be set to block external sharing.
     2. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Indentification Number**. Select the remaining condition properties according to agency need. 
     3. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-5. In the **Actions** section, select the appropriate action to warn or block sharing for Google Chat based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
+5. In the **Actions** section, select **Block**. Under **Select when this action should apply**, select **External Conversations**, **Spaces**, **Group chats**, and **1:1 chats** (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
@@ -1353,7 +1349,7 @@ The action for the above DLP policies SHOULD be set to block external sharing.
     2. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Indentification Number**. Select the remaining condition properties according to agency need. 
     3. Click **Action Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-5. In the **Actions** section, select the appropriate action to warn or block sharing for Gmail based upon the agency's individual requirements (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03) ).
+5. In the **Actions** section, select **Block message**. Under **Select when this action should apply**, check **Messages sent to external recipients** (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
