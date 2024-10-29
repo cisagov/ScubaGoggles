@@ -1790,10 +1790,24 @@ tests contains {
 #
 # Baseline GWS.COMMONCONTROLS.15.2v0.3
 #--
+# TODO access actual API capabilities for 15.2, the following check is a placeholder.
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.3",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.15.3v0.3
+#--
 
 # NOTE: This setting cannot be controlled at the group level
 
-NonCompliantOUs15_2 contains {
+NonCompliantOUs15_3 contains {
     "Name": OU,
     "Value": "Supplemental data storage is set to Russian Federation"
 } if {
@@ -1808,7 +1822,7 @@ NonCompliantOUs15_2 contains {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.3",
+    "PolicyId": "GWS.COMMONCONTROLS.15.3v0.3",
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1822,17 +1836,17 @@ if {
 }
 
 tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.3",
+    "PolicyId": "GWS.COMMONCONTROLS.15.3v0.3",
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs15_2, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_2},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs15_3, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs15_2) == 0
+    Status := count(NonCompliantOUs15_3) == 0
 }
 #--
 
@@ -2036,5 +2050,76 @@ if {
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
     Status := count(NonCompliantOUs17_1) == 0
+}
+#--
+
+#########################
+# GWS.COMMONCONTROLS.18 #
+#########################
+
+# TODO access actual API capabilities for DLP, the following checks are placeholders.
+
+#
+# Baseline GWS.COMMONCONTROLS.18.1v0.3
+#--
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.18.1v0.3",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.18.1v0.3
+#--
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.18.1v0.3",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.18.2v0.3
+#--
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.18.2v0.3",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.18.3v0.3
+#--
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.18.3v0.3",
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.18.4v0.3
+#--
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.18.4v0.3",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
 }
 #--

@@ -1134,23 +1134,3 @@ if {
     Status := (false in Conditions) == false
 }
 #--
-
-###################
-# GWS.DRIVEDOCS.7 #
-###################
-
-#
-# Baseline GWS.DRIVEDOCS.7.1v0.3
-#--
-# not implementable: Need a way to see when a rule is created.
-# The fact that a rule is created gets logged but the rule's
-# contents are not.
-tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.7.1v0.3",
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
