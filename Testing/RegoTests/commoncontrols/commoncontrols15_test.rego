@@ -24,13 +24,14 @@ test_AccessControl_Correct_V1 if {
 }
 #--
 
+# 15.2 TODO
 
 #
-# GWS.COMMONCONTROLS.15.2v0.3
+# GWS.COMMONCONTROLS.15.3v0.3
 #--
 test_Logs_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -58,7 +59,7 @@ test_Logs_Correct_V1 if {
 
 test_Logs_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -96,7 +97,7 @@ test_Logs_Correct_V2 if {
 
 test_Logs_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -128,7 +129,7 @@ test_Logs_Incorrect_V1 if {
 
 test_Logs_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -170,7 +171,7 @@ test_Logs_Incorrect_V2 if {
 
 test_Logs_Incorrect_V3 if {
     # Test no relevent events
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -194,7 +195,7 @@ test_Logs_Incorrect_V3 if {
 
 test_Logs_Incorrect_V4 if {
     # Test multiple ous
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
