@@ -1246,9 +1246,13 @@ Using data loss prevention (DLP), organizations can create and apply rules to co
 
 DLP rules can use predefined content detectors to match PII (e.g., SSN), credentials (e.g., API keys), or specific document types (e.g., source code). Custom rules can also be applied based upon regex match or document labels.
 
+There are several commercial DLP solutions available that document support for Google Workspace. Google itself offers DLP services. Agencies may select any service that fits their needs and meets the baseline requirements outlined in this policy group. The DLP solution selected by an agency should offer services comparable to those offered by Google.
+
+Though use of Google's DLP solution is not strictly required, guidance for configuring Google's DLP solution can be found in the instructions of this policy section. 
+
 ### Policies
 #### GWS.COMMONCONTROLS.18.1v0.3
-A custom policy SHALL be configured for Google Drive to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
+A custom policy SHALL be configured for Google Drive to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ October 25, 2024
@@ -1261,7 +1265,7 @@ A custom policy SHALL be configured for Google Drive to protect PII and sensitiv
 
 
 #### GWS.COMMONCONTROLS.18.2v0.3
-A custom policy SHALL be configured for Google Chat to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
+A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ October 25, 2024
@@ -1273,7 +1277,7 @@ A custom policy SHALL be configured for Google Chat to protect PII and sensitive
   - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
 #### GWS.COMMONCONTROLS.18.3v0.3
-A custom policy SHALL be configured for Gmail to protect PII and sensitive information, as defined by the agency. At a minimum, credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN) SHALL be blocked.
+A custom policy SHALL be configured for Gmail to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ October 25, 2024
@@ -1304,7 +1308,9 @@ The action for the above DLP policies SHOULD be set to block external sharing.
 - [GWS Admin Help \| Prevent data leaks in email & attachments](https://support.google.com/a/answer/14767988?fl=1&sjid=4620103790740920406-NA)
 
 ### Prerequisites
-- None
+If using Google's DLP solution, the following editions of Google Workspace include Workspace DLP: Frontline Standard; Enterprise Standard and Enterprise Plus; Education Fundamentals, Education Standard, Teaching and Learning Upgrade, and Education Plus; Enterprise Essentials Plus.
+
+Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Google Workspace license. For Drive DLP, the license must include the Drive log events.
 
 ### Implementation
 
