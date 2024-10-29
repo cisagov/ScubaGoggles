@@ -26,7 +26,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Data Regions](#15-data-regions-and-storage)
 - [Additional Google Services](#16-additional-google-services)
 - [Multi-Party Approvals](#17-multi-party-approval)
-- [Data Loss Prevention](#18-dlp-rules)
+- [Data Loss Prevention](#18-data-loss-prevention)
 
 ## Assumptions
 
@@ -1240,7 +1240,7 @@ To configure additional services per the policy:
 3.	Ensure **Require multi party approval for sensitive admin actions** is checked.
 4.	Click **Save**.
 
-## 18. DLP Rules
+## 18. Data Loss Prevention
 
 Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP helps you control what users can share and helps prevent unintended exposure of sensitive information.
 
