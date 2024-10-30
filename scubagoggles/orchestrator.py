@@ -9,6 +9,7 @@ import logging
 import os
 import platform
 import shutil
+import uuid
 import webbrowser
 
 from datetime import datetime, timezone
@@ -30,6 +31,7 @@ class UserRuntimeError(RuntimeError):
     user) for which a traceback might not be appropriate (error has nothing
     to do with the code).
     """
+
 
 class Orchestrator:
 
@@ -70,7 +72,6 @@ class Orchestrator:
     }
 
     def __init__(self, args: argparse.Namespace):
-
         """Orchestrator class initialization
 
         :param args: command arguments parsed by the argparse module.  See
@@ -102,13 +103,14 @@ class Orchestrator:
             provider_dict = provider.call_gws_providers(products, args.quiet)
             provider_dict['baseline_suffix'] = Version.suffix
             provider_dict['successful_calls'] = list(provider.successful_calls)
-            provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
+            provider_dict['unsuccessful_calls'] = list(
+                provider.unsuccessful_calls)
             provider_dict['break_glass_accounts'] = break_glass_accounts
 
         out_jsonfile = args.outputpath / args.outputproviderfilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
-        with out_jsonfile.open('w', encoding = 'utf-8') as out_stream:
-            json.dump(provider_dict, out_stream, indent = 4)
+        with out_jsonfile.open('w', encoding='utf-8') as out_stream:
+            json.dump(provider_dict, out_stream, indent=4)
 
     def _rego_eval(self):
         """
@@ -122,11 +124,13 @@ class Orchestrator:
         results = []
         for product in products_bar:
             product_name = product
-            input_file = args.outputpath / f'{args.outputproviderfilename}.json'
+            input_file = args.outputpath / \
+                f'{args.outputproviderfilename}.json'
             opa_path = args.opapath
             rego_path = args.regopath
 
-            products_bar.set_description(f'Running Rego verification for {product}...')
+            products_bar.set_description(
+                f'Running Rego verification for {product}...')
             product_tests = opa_eval(product_name,
                                      input_file,
                                      opa_path,
@@ -139,8 +143,8 @@ class Orchestrator:
 
         out_jsonfile = args.outputpath / args.outputregofilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
-        with out_jsonfile.open('w', encoding = 'utf-8') as out_stream:
-            json.dump(results, out_stream, indent = 4)
+        with out_jsonfile.open('w', encoding='utf-8') as out_stream:
+            json.dump(results, out_stream, indent=4)
 
     @staticmethod
     def _pluralize(singular: str, plural: str, count: int) -> str:
@@ -276,8 +280,9 @@ class Orchestrator:
                                         fullname in prod_to_fullname.items()}
 
         timestamp_utc = datetime.now(timezone.utc)
-        timestamp_zulu = timestamp_utc.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-
+        timestamp_zulu = timestamp_utc.strftime(
+            '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+        report_uuid = str(uuid.uuid4())
         report_metadata = {
             'TenantId':  tenant_id,
             'DisplayName':  tenant_name,
@@ -287,7 +292,8 @@ class Orchestrator:
             'ProductAbbreviationMapping': product_abbreviation_mapping,
             'Tool':  'ScubaGoggles',
             'ToolVersion':  Version.number,
-            'TimestampZulu': timestamp_zulu
+            'TimestampZulu': timestamp_zulu,
+            'ReportUUID': report_uuid
         }
 
         total_output.update({'MetaData': report_metadata})
@@ -312,7 +318,8 @@ class Orchestrator:
                 reporter.rego_json_to_ind_reports(test_results_data,
                                                   out_folder)
             baseline_product_summary = {product: stats_and_data[product][0]}
-            baseline_product_results_json = {product: stats_and_data[product][1]}
+            baseline_product_results_json = {
+                product: stats_and_data[product][1]}
             summary.update(baseline_product_summary)
             results.update(baseline_product_results_json)
             total_output.update({'Summary': summary})
@@ -325,8 +332,8 @@ class Orchestrator:
         total_output.update({'Raw': raw_data})
 
         report_file = out_folder / f'{out_jsonfile}.json'
-        with report_file.open('w', encoding = 'utf-8') as results_file:
-            json.dump(total_output, results_file, indent = 4)
+        with report_file.open('w', encoding='utf-8') as results_file:
+            json.dump(total_output, results_file, indent=4)
 
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
@@ -347,8 +354,10 @@ class Orchestrator:
                                'Details': self._generate_summary(stats[0])})
 
         fragments.append(Reporter.create_html_table(table_data))
-        front_page_html = Reporter.build_front_page_html(fragments, tenant_info)
-        report_path.write_text(front_page_html, encoding = 'utf-8')
+        front_page_html = Reporter.build_front_page_html(fragments,
+                                                         tenant_info,
+                                                         report_uuid)
+        report_path.write_text(front_page_html, encoding='utf-8')
 
         # suppress opening the report in the browser
         if args.quiet:
