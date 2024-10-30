@@ -11,6 +11,7 @@ from pathlib import Path
 from datetime import datetime
 from tqdm import tqdm
 from googleapiclient.discovery import build
+import uuid
 
 from scubagoggles.auth import gws_auth
 from scubagoggles.provider import Provider
@@ -270,7 +271,7 @@ class Orchestrator:
 
         timestamp_utc = datetime.utcnow()
         timestamp_zulu = timestamp_utc.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-
+        report_uuid = str(uuid.uuid4())
         report_metadata = {
             "TenantId":  None,
             "DisplayName":  None,
@@ -280,7 +281,8 @@ class Orchestrator:
             "ProductAbbreviationMapping": product_abbreviation_mapping,
             "Tool":  "ScubaGoggles",
             "ToolVersion":  "0.3.0",
-            "TimeStampZulu": timestamp_zulu
+            "TimeStampZulu": timestamp_zulu, 
+            "ReportUUID": report_uuid
         }
 
         total_output.update({"MetaData": report_metadata})
@@ -338,7 +340,7 @@ class Orchestrator:
 
         fragments.append(Reporter.create_html_table(table_data))
         with open(f"{report_path}", mode='w', encoding='UTF-8') as file:
-            file.write(Reporter.build_front_page_html(fragments, tenant_info))
+            file.write(Reporter.build_front_page_html(fragments, tenant_info, report_uuid))
 
         # suppress opening the report in the browser
         if args.quiet:

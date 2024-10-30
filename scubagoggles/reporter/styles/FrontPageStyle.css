@@ -54,3 +54,10 @@ table.tenantdata tr:first-child {
     background-color: #deb8b8; 
     color: #d10000;
 }
+
+.alignRight {
+    text-align: right;
+    color: grey;
+    font-size: 80%;
+    
+}
