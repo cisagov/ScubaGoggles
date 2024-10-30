@@ -784,6 +784,19 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
+#### GWS.COMMONCONTROLS.10.5v0.3
+Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
+
+- _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
+- _Last modified:_ July 10, 2023
+
+- MITRE ATT&CK TTP Mapping
+  - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
+    - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
+    - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
+    - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 ### Resources
 
@@ -827,6 +840,13 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
 2.  Select **Unconfigured third-party apps** and select **Don't allow users to access any third-party apps**
 3.  Select **SAVE.**
 
+#### GWS.COMMONCONTROLS.10.5v0.3 Instructions
+1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+2.  Select **Security** -\> **Overview**.
+3.  Select **Less Secure Apps**.
+4.  Select **Disable access to less secure apps (Recommended)**.
+5.  Click **Save** to commit this configuration change.
+
 It should be noted that admins will have to manually approve each trusted app. The implementation steps for this activity are outlined in Google's [documentation on controlling which third-party & internal apps access GWS data](https://support.google.com/a/answer/7281227) (also listed under Resources).
 
 
@@ -850,19 +870,6 @@ Only approved Google Workspace Marketplace applications SHALL be allowed for ins
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
     - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
 
-#### GWS.COMMONCONTROLS.11.2v0.3
-Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
-
-- _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
-- _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
-    - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
-    - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
-    - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
-  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
-    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 ### Resources
 
@@ -890,13 +897,6 @@ To add an app to the allowlist:
     or
 
 3.  Click **Allowlisted Apps** to manage the allow list.
-
-#### GWS.COMMONCONTROLS.11.2v0.3 Instructions
-1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.  Select **Security** -\> **Overview**.
-3.  Select **Less Secure Apps**.
-4.  Select **Disable access to less secure apps (Recommended)**.
-5.  Click **Save** to commit this configuration change.
 
 ## 12. Google Takeout Services for Users
 
