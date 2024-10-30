@@ -1787,22 +1787,72 @@ tests contains {
 }
 #--
 
+
 #
 # Baseline GWS.COMMONCONTROLS.15.2v0.3
 #--
-# TODO access actual API capabilities for 15.2, the following check is a placeholder.
+NonCompliantOUs15_2 contains {
+    "Name": OU,
+    "Value": "Data processing in the region selected for data at rest is set to OFF"
+} if {
+    some OU in utils.OUsWithEvents
+    SettingName := "DataProcessingRequirementsProto limit_to_storage_location"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "true"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+NonCompliantGroups15_2 contains {
+    "Name": Group,
+    "Value": "Data processing in the region selected for data at rest is set to OFF"
+} if {
+    some Group in utils.GroupsWithEvents
+    SettingName := "DataProcessingRequirementsProto limit_to_storage_location"
+    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
+    # Ignore groups without any events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "true"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.15.2v0.3",
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
-#--
+if {
+    # TODO: Confirm default value
+    DefaultSafe := true
+    SettingName := "DataProcessingRequirementsProto limit_to_storage_location"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+}
 
-#
-# Baseline GWS.COMMONCONTROLS.15.3v0.3
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.15.2v0.3",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs15_2, NonCompliantGroups15_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_2, "NonCompliantGroups": NonCompliantGroups15_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    SettingName := "DataProcessingRequirementsProto limit_to_storage_location"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) > 0
+
+    Conditions := {
+        count(NonCompliantOUs15_2) == 0,
+        count(NonCompliantGroups15_2) == 0
+    }
+    Status := (false in Conditions) == false
+}
 #--
 
 #

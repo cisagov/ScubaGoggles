@@ -389,7 +389,8 @@ class Provider:
                 'Timeline - Location History',
                 'YouTube',
                 'Google Cloud Platform Sharing Options',
-                'Multi Party Approval'
+                'Multi Party Approval',
+                'Data regions'
             ],
             'drive': ['Drive and Docs'],
             'gmail': ['Gmail'],
