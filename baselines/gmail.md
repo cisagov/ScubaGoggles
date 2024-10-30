@@ -936,9 +936,6 @@ To configure the settings for Email Allowlists:
 4.  Under the **Enter the IP addresses for your email allowlist** field, ensure **no IP addresses** are listed.
 5.  Select **Save**.
 
-#### GWS.GMAIL.14.2v0.3 Instructions
-1.  There is no implementation steps for this policy
-
 
 ## 15. Enhanced Pre-Delivery Message Scanning
 
