@@ -1827,8 +1827,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    # TODO: Confirm default value
-    DefaultSafe := true
+    DefaultSafe := false
     SettingName := "DataProcessingRequirementsProto limit_to_storage_location"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) == 0
