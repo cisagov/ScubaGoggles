@@ -1377,6 +1377,73 @@ if {
 }
 #--
 
+#
+# Baseline GWS.COMMONCONTROLS.10.5v0.3
+#--
+NonCompliantOUs10_5 contains {
+    "Name": OU,
+    "Value": "Allow users to manage their access to less secure apps is ON"
+} if {
+    some OU in utils.OUsWithEvents
+    Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "DENIED"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+# NOTE: When WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED for a child OU
+# is set to inherit from parent, apparently NO EVENT IS PRODUCED IN
+# THE ADMIN LOGS. When you later override the setting, it shows
+# "INHERIT_FROM_PARENT" as the "OLD_VALUE", so I'm putting that above
+# for completeness, but this appears to be a case where we won't be
+# able to detect setting inheritance, as least for now.
+
+NonCompliantGroups10_5 contains {
+    "Name": Group,
+    "Value": "Allow users to manage their access to less secure apps is ON"
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := FilterEventsGroup("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", Group)
+    # Ignore groups without any events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "DENIED"
+    LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.10.5v0.3",
+    "Criticality": "Should",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    DefaultSafe := true
+    Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.10.5v0.3",
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_5, NonCompliantGroups10_5),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_5, "NonCompliantGroups": NonCompliantGroups10_5},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
+    count(Events) > 0
+    Conditions := {count(NonCompliantOUs10_5) == 0, count(NonCompliantGroups10_5) == 0}
+    Status := (false in Conditions) == false
+}
+#--
+
 #########################
 # GWS.COMMONCONTROLS.11 #
 #########################
@@ -1484,73 +1551,6 @@ tests contains {
 if {
     NoSuchEvent11_1 == false
     Conditions := {count(NonCompliantOUs11_1) == 0, count(NonCompliantGroups11_1) == 0}
-    Status := (false in Conditions) == false
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.11.2v0.3
-#--
-NonCompliantOUs11_2 contains {
-    "Name": OU,
-    "Value": "Allow users to manage their access to less secure apps is ON"
-} if {
-    some OU in utils.OUsWithEvents
-    Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "DENIED"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
-}
-# NOTE: When WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED for a child OU
-# is set to inherit from parent, apparently NO EVENT IS PRODUCED IN
-# THE ADMIN LOGS. When you later override the setting, it shows
-# "INHERIT_FROM_PARENT" as the "OLD_VALUE", so I'm putting that above
-# for completeness, but this appears to be a case where we won't be
-# able to detect setting inheritance, as least for now.
-
-NonCompliantGroups11_2 contains {
-    "Name": Group,
-    "Value": "Allow users to manage their access to less secure apps is ON"
-} if {
-    some Group in utils.GroupsWithEvents
-    Events := FilterEventsGroup("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", Group)
-    # Ignore groups without any events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "DENIED"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
-}
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.3",
-    "Criticality": "Should",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := true
-    Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": "GWS.COMMONCONTROLS.11.2v0.3",
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs11_2, NonCompliantGroups11_2),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_2, "NonCompliantGroups": NonCompliantGroups11_2},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Events := FilterEventsOU("WEAK_PROGRAMMATIC_LOGIN_SETTINGS_CHANGED", utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs11_2) == 0, count(NonCompliantGroups11_2) == 0}
     Status := (false in Conditions) == false
 }
 #--
