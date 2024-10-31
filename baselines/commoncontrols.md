@@ -807,7 +807,6 @@ Access to Google Workspace applications by less secure apps that do not meet sec
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
 -   [GWS Admin Help \| Control access to less secure apps](https://support.google.com/a/answer/6260879?hl=en)
 
-
 ### Prerequisites
 
 -   None
@@ -871,7 +870,6 @@ Only approved Google Workspace Marketplace applications SHALL be allowed for ins
 - MITRE ATT&CK TTP Mapping
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
     - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
-
 
 ### Resources
 
