@@ -506,7 +506,7 @@ NonCompliantOUs3_1 contains {
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.3.1v0.3",
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -520,7 +520,7 @@ if {
 
 tests contains {
     "PolicyId": "GWS.COMMONCONTROLS.3.1v0.3",
-    "Criticality": "Shall",
+    "Criticality": "Should",
     # Empty list on the next line as this setting can't be set at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
