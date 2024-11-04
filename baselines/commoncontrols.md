@@ -308,7 +308,7 @@ Login challenges are additional security measures used to verify a user's identi
 ### Policies
 
 #### GWS.COMMONCONTROLS.3.1v0.3
-Login Challenges SHALL be enabled when third party SAML SSO is in use.
+Login challenges SHOULD be enabled when third party SAML SSO is in use.
 
 - _Rationale:_ Without enabling Post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling Post-SSO verification will apply 2SV verification policies.
 - _Last modified:_ July 10, 2023
