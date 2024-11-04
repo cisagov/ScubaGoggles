@@ -16,7 +16,6 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Group Creation](#4-group-creation)
 -   [Default Permissions for Viewing Conversations](#5-default-permissions-for-viewing-conversations)
 -   [Ability to Hide Groups from the Directory](#6-ability-to-hide-groups-from-the-directory)
--   [New Groups](#7-new-groups)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
@@ -260,42 +259,3 @@ To configure the settings for Sharing options:
 4.  **Uncheck** the **Group owners can hide groups from the directory** checkbox.
 5.  **Ensure** that the **hide newly created groups from the directory** checkbox is not selected.
 6.  Select **Save**.
-
-## 7. New Groups
-
-This section covers the access type setting for new groups that are created.
-
-### Policies
-
-#### GWS.GROUPS.7.1v0.3
-New Groups SHOULD be created with an Access type of Restricted unless necessary for agency mission fulfillment.
-
-- _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace organization. Restricting access to group members reduces the risk of data loss.
-- _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1069: Permission Groups Discovery](https://attack.mitre.org/techniques/T1069/)
-    - [T1069:003: Permission Groups Discovery: Cloud Groups](https://attack.mitre.org/techniques/T1069/003/)
-
-### Resources
-
-- [Google Workspace Admin Help: Create a group in your organization](https://support.google.com/a/answer/9400082?hl=en&fl=1&sjid=14580240338213574276-NC)
-
-### Prerequisites
-
-- This control only applies to agencies with Google Groups for Business enabled.
-
-### Implementation
-
-#### GWS.GROUPS.7.1v0.3 Instructions
-To configure Access type for a Google Group:
-
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Directory** -\> **Groups.**
-3.  Select **Create group.**
-4.  Fill in the details for the new group and click **Next.**
-5.  In the **Access type** section, select the **Restricted** radio button.
-6.  If the group needs to receive messages from non-members, select the appropriate checkboxes in the **Who can post** row.
-7.  Select **Next.**
-8.  Select **Create Group.**
