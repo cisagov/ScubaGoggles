@@ -554,7 +554,8 @@ A minimum of **two** and maximum of **eight** separate and distinct super admin 
 ### Implementation
 
 #### GWS.COMMONCONTROLS.6.1v0.3 Instructions
-1.  The implementation process for this can be located [here](https://support.google.com/a/answer/9807615).
+1.  Determine how to track highly privileged accounts. For example, create an OU or group containing all highly privileged accounts.
+2.  Follow the instructions on [Set up SSO for your organization](https://support.google.com/a/answer/12032922?hl=en), under "Decide which users should use SSO." For all OUs or groups with highly privileged users, set the **SSO profile assignment** to **None**.
 
 #### GWS.COMMONCONTROLS.6.2v0.3 Instructions
 To obtain a list of all GWS Super Admins:
