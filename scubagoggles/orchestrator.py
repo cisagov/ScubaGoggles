@@ -5,6 +5,7 @@ provider, rego, and report modules of the SCuBA tool
 import argparse
 import shutil
 import os
+import copy
 import json
 import webbrowser
 from pathlib import Path
@@ -67,7 +68,8 @@ class Orchestrator:
         """
 
         self._args = args
-
+        self.input_args = copy.deepcopy(args)
+        
     @classmethod
     def gws_products(cls) -> dict:
         """
@@ -308,6 +310,12 @@ class Orchestrator:
             total_output.update({"Summary": summary})
             total_output.update({"Results": results})
 
+        args_dict = vars(self.input_args) 
+        param_out_path = args.outputpath + "/args_param.json"
+        
+        with open(param_out_path, mode="w", encoding='UTF-8') as parm_file:
+              json.dump( args_dict, parm_file, indent=4) 
+
         # Create the ScubaResults files
         with open(f'{out_folder}/{args.outputproviderfilename}.json', encoding='UTF-8') as file:
             raw_data = json.load(file)
@@ -315,14 +323,14 @@ class Orchestrator:
         report = json.dumps(total_output, indent = 4)
         with open(f"{out_folder}/{out_jsonfile}.json", mode='w', encoding='UTF-8') as results_file:
             results_file.write(report)
-
+        
         # Delete the ProviderOutput file as it's now encapsulated in the ScubaResults file
         os.remove(f"{out_folder}/{args.outputproviderfilename}.json")
 
         # Make the report front page
         report_path = out_folder + "/" + f'{args.outputreportfilename}.html'
         abs_report_path = os.path.abspath(report_path)
-
+        
         fragments = []
         table_data = []
         for product, stats in stats_and_data.items():
@@ -380,6 +388,11 @@ class Orchestrator:
             with open(f'{args.outputpath}/{args.outputproviderfilename}.json', 'w',
                     encoding='UTF-8') as provider_file:
                 json.dump(provider_output, provider_file)
+            args_dict = vars(self.input_args) 
+            param_out_path = args.outputpath + "/args_param.json"
+            with open(param_out_path, mode="w", encoding='UTF-8') as parm_file:
+                json.dump( args_dict, parm_file, indent=4) 
+
         self._rego_eval()
         self._run_reporter()
 
@@ -427,7 +440,6 @@ class Orchestrator:
             services['reports'] = build('admin', 'reports_v1', credentials=creds)
             services['directory'] = build('admin', 'directory_v1', credentials=creds)
             services['groups'] = build('groupssettings', 'v1', credentials=creds)
-
             self._run_gws_providers(services)
             self._rego_eval()
             self._run_reporter()
