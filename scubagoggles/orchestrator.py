@@ -345,6 +345,12 @@ class Orchestrator:
             total_output.update({'Summary': summary})
             total_output.update({'Results': results})
 
+        args_dict = vars(args)
+        param_out_path = out_folder / 'args_param.json'
+
+        with param_out_path.open(mode='w', encoding='UTF-8') as parm_file:
+            json.dump(args_dict, parm_file, indent=4)
+
         # Create the ScubaResults files
         scuba_results_file = out_folder / f'{args.outputproviderfilename}.json'
         with scuba_results_file.open(encoding='UTF-8') as file:
@@ -416,6 +422,10 @@ class Orchestrator:
             # created the output. If the provider output doesn't exist as a
             # standalone file, create it from the scuba results file so the
             # other functions can execute as normal.
+            args_dict = vars(args)
+            param_out_path = os.path.join(args.outputpath, 'args_param.json')
+            with open(param_out_path, mode='w', encoding='UTF-8') as parm_file:
+                json.dump( args_dict, parm_file, indent=4)
 
             # find all files that match the outjsonfilename_guid.json convention
             results_file_pattern = os.path.join(
