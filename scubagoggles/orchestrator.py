@@ -6,12 +6,12 @@ import argparse
 import shutil
 import os
 import json
+import uuid
 import webbrowser
 from pathlib import Path
 from datetime import datetime
 from tqdm import tqdm
 from googleapiclient.discovery import build
-import uuid
 
 from scubagoggles.auth import gws_auth
 from scubagoggles.provider import Provider
