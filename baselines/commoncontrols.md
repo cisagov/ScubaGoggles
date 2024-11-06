@@ -11,7 +11,7 @@ The information in this document is being provided "as is" for INFORMATIONAL PUR
 This baseline is based on Google documentation and addresses the following:
 - [Phishing-Resistant Multi-Factor Authentication](#1-phishing-resistant-multi-factor-authentication)
 - [Context Aware Access](#2-context-aware-access)
-- [Post-SSO Verification](#3-post-sso-verification)
+- [Login Challenges](#3-login-challenges)
 - [User Session Duration](#4-user-session-duration)
 - [Secure Passwords](#5-secure-passwords)
 - [Highly Privileged Accounts](#6-highly-privileged-accounts)
@@ -301,15 +301,19 @@ Note that the implementation details of context-aware access use cases will vary
 -   Allow or disallow access from specific locations
 -   Use nested access levels instead of selecting multiple access levels during assignment
 
-## 3. Post-SSO Verification
+## 3. Login Challenges
+Login challenges are additional security measures used to verify a user's identity, including post-SSO verification.
+
 Post-SSO verification controls what additional checks are performed (e.g., Google 2SV) after a user succesfully authenticates through a third-party identity provider.
+SSO is managed through profiles, which can be assigned org-wide or to specific org units/groups.
+Google Workspace handles post-SSO verification for profiles assigned org-wide as a separate case, allowing users more granual control of when post-SSO verification requirements apply.
 
 ### Policies
 
 #### GWS.COMMONCONTROLS.3.1v0.3
 Post-SSO verification SHOULD be enabled for users signing in using the SSO profile for your organization.
 
-- _Rationale:_ Without enabling Post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling Post-SSO verification will apply 2SV verification policies.
+- _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
 - _Last modified:_ November 4, 2024
 
 - MITRE ATT&CK TTP Mapping
@@ -321,7 +325,7 @@ Post-SSO verification SHOULD be enabled for users signing in using the SSO profi
 #### GWS.COMMONCONTROLS.3.2v0.3
 Post-SSO verification SHOULD be enabled for users signing in using other SSO profiles.
 
-- _Rationale:_ Without enabling Post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling Post-SSO verification will apply 2SV verification policies.
+- _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
 - _Last modified:_ November 4, 2024
 
 - MITRE ATT&CK TTP Mapping
