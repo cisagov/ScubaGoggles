@@ -348,12 +348,12 @@ Post-SSO verification SHOULD be enabled for users signing in using other SSO pro
 4.  Click **Post-SSO verification**.
 
 #### GWS.COMMONCONTROLS.3.1v0.3 Instructions
-1.  For **Settings for users signing in using the SSO profile for your organization**, select **Ask users for additional verifications from Google if a sign-in looks suspicious, and always apply 2-Step Verification policies (if configured)**.
-2.  Click **SAVE**.
+1. For **Settings for users signing in using the SSO profile for your organization**, select **Ask users for additional verifications from Google if a sign-in looks suspicious, and always apply 2-Step Verification policies (if configured)**.
+2. Click **SAVE**.
 
 #### GWS.COMMONCONTROLS.3.2v0.3 Instructions
-1.  For **Settings for users signing in using other SSO profiles**, select **Ask users for additional verifications from Google if a sign-in looks suspicious, and always apply 2-Step Verification policies (if configured)**.
-2.  Click **SAVE**.
+1. For **Settings for users signing in using other SSO profiles**, select **Ask users for additional verifications from Google if a sign-in looks suspicious, and always apply 2-Step Verification policies (if configured)**.
+2. Click **SAVE**.
 
 ## 4. User Session Duration
 
