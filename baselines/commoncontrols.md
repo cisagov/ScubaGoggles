@@ -302,16 +302,31 @@ Note that the implementation details of context-aware access use cases will vary
 -   Use nested access levels instead of selecting multiple access levels during assignment
 
 ## 3. Login Challenges
+Login challenges are additional security measures used to verify a user's identity, including post-SSO verification.
 
-Login challenges are additional security measures used to verify a user's identity. For example, Google might ask the user to confirm their recovery email before logging in as part of a challenge.
+Post-SSO verification controls what additional checks are performed (e.g., Google 2SV) after a user succesfully authenticates through a third-party identity provider.
+SSO is managed through profiles, which can be assigned org-wide or to specific org units/groups.
+Google Workspace handles post-SSO verification for profiles assigned org-wide as a separate case, allowing users more granual control of when post-SSO verification requirements apply.
 
 ### Policies
 
 #### GWS.COMMONCONTROLS.3.1v0.3
-Login challenges SHOULD be enabled when third party SAML SSO is in use.
+Post-SSO verification SHOULD be enabled for users signing in using the SSO profile for your organization.
 
-- _Rationale:_ Without enabling Post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling Post-SSO verification will apply 2SV verification policies.
-- _Last modified:_ July 10, 2023
+- _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
+- _Last modified:_ November 4, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
+    - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
+    - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
+    - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
+
+#### GWS.COMMONCONTROLS.3.2v0.3
+Post-SSO verification SHOULD be enabled for users signing in using other SSO profiles.
+
+- _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
+- _Last modified:_ November 4, 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -326,19 +341,23 @@ Login challenges SHOULD be enabled when third party SAML SSO is in use.
 
 ### Prerequisites
 
--   When using Employee ID challenge, the Employee ID must be uploaded to Google Workspace through the Agency's Identity Management infrastructure (e.g., via GCDS).
+-   None
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.3.1v0.3 Instructions
+#### Policy Group 3 Common Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com) as an administrator.
-2.  Select **Security**-\>**Authentication**-\>**Login challenges.**
+2.  Select **Security**-\>**Authentication**-\>**Login challenges**.
 3.  Under **Organizational units**, ensure that the name for the entire organization is selected.
-4.  Click **Post-SSO verification**, then select **Ask users for additional verifications from Google if a sign-in looks suspicious, and always apply 2-Step Verification policies (if configured)**. Click **SAVE**.
-5.  Optionally, if employee IDs are known to agency employees (or accessible to the employee outside of Google Workspace), they may be used.
-6.  Click **Login challenges**.
-7.  Select the **Use employee ID to keep my users more secure** checkbox.
-8.  Click **SAVE**.
+4.  Click **Post-SSO verification**.
+
+#### GWS.COMMONCONTROLS.3.1v0.3 Instructions
+1. For **Settings for users signing in using the SSO profile for your organization**, select **Ask users for additional verifications from Google if a sign-in looks suspicious, and always apply 2-Step Verification policies (if configured)**.
+2. Click **SAVE**.
+
+#### GWS.COMMONCONTROLS.3.2v0.3 Instructions
+1. For **Settings for users signing in using other SSO profiles**, select **Ask users for additional verifications from Google if a sign-in looks suspicious, and always apply 2-Step Verification policies (if configured)**.
+2. Click **SAVE**.
 
 ## 4. User Session Duration
 

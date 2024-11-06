@@ -534,6 +534,21 @@ if {
 }
 #--
 
+#
+# Baseline GWS.COMMONCONTROLS.3.2v0.3
+#--
+# TODO replace the following placeholder with actual implementation
+# SsoPolicyProto sso_profile_challenge_selection_behavior appears to the appropriate log event
+tests contains {
+    "PolicyId": "GWS.COMMONCONTROLS.3.2v0.3",
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
 ########################
 # GWS.COMMONCONTROLS.4 #
 ########################
