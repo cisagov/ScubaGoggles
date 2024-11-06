@@ -554,7 +554,8 @@ A minimum of **two** and maximum of **eight** separate and distinct super admin 
 ### Implementation
 
 #### GWS.COMMONCONTROLS.6.1v0.3 Instructions
-1.  The implementation process for this can be located [here](https://support.google.com/a/answer/9807615).
+1.  Determine how to track highly privileged accounts. For example, create an OU or group containing all highly privileged accounts.
+2.  Follow the instructions on [Set up SSO for your organization](https://support.google.com/a/answer/12032922?hl=en), under "Decide which users should use SSO." For all OUs or groups with highly privileged users, set the **SSO profile assignment** to **None**.
 
 #### GWS.COMMONCONTROLS.6.2v0.3 Instructions
 To obtain a list of all GWS Super Admins:
@@ -1325,7 +1326,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 3. In the **Apps** section, under **Google Drive**, choose the trigger for **Drive files**, then click **Continue**.
 4. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Indentification Number**. Select the remaining condition properties according to agency need. 
+    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
     3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
@@ -1338,7 +1339,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 3. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
 4. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Indentification Number**. Select the remaining condition properties according to agency need. 
+    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need. 
     3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block**. Under **Select when this action should apply**, select **External Conversations**, **Spaces**, **Group chats**, and **1:1 chats** (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
@@ -1351,7 +1352,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 3. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
 4. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Indentification Number**. Select the remaining condition properties according to agency need. 
+    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need. 
     3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block message**. Under **Select when this action should apply**, check **Messages sent to external recipients** (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
