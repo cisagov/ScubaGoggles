@@ -1024,7 +1024,7 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
 7.  A list of system defined rules displays. For each of the rules listed above, edit the configuration:
     1.  Select the rule by clicking the table row for the rule.
     2.  Select **Actions**.
-    3.  From the Actions page, configure the **Severity** for the alert to High, Medium, or Low, and select **Send to alert center** if available, if not available or supported select **Send email notifications** and specify recipients for those notifications.
+    3.  From the Actions page, configure the **Severity** for the alert to High, Medium, or Low, and select **Send to alert center** if available. If alerts are not available or supported, select **Send email notifications** and specify recipients for those notifications.
     4.  Click **Next: Review**.
     5.  Review the updated rule details, and then click **Update Rule**.
 
