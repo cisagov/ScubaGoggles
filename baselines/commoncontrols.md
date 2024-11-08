@@ -1023,11 +1023,10 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
 6.  Click **Apply**.
 7.  A list of system defined rules displays. For each of the rules listed above, edit the configuration:
     1.  Select the rule by clicking the table row for the rule.
-    2.  Click **Next: View Conditions**.
-    3.  Click **Next: Add Actions**.
-    4.  From the Actions page, you can change the severity for the alert to High, Medium, or Low, send an alert to the alert center if the rule's conditions are met, set up admin email notifications, and specify recipients for those notifications.
-    5.  Click **Next: Review**.
-    6.  Review the updated rule details, and then click **Update Rule**.
+    2.  Select **Actions**.
+    3.  From the Actions page, configure the **Severity** for the alert to High, Medium, or Low, and select **Send to alert center** if available. If alerts are not available or supported, select **Send email notifications** and specify recipients for those notifications.
+    4.  Click **Next: Review**.
+    5.  Review the updated rule details, and then click **Update Rule**.
 
 ## 14. Google Workspace Logs
 
