@@ -1,12 +1,17 @@
 package commoncontrols
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestGroupNonCompliant
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.COMMONCONTROLS.8.1v0.3
+# GWS.COMMONCONTROLS.8.1
 #--
 test_SelfRecovery_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.8.1v0.3"
+    PolicyId := CommonControlsId8_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -29,16 +34,12 @@ test_SelfRecovery_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_SelfRecovery_Correct_V2 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.8.1v0.3"
+    PolicyId := CommonControlsId8_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -75,16 +76,12 @@ test_SelfRecovery_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_SelfRecovery_Correct_V3 if {
     # Test inheritance
-    PolicyId := "GWS.COMMONCONTROLS.8.1v0.3"
+    PolicyId := CommonControlsId8_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -135,16 +132,12 @@ test_SelfRecovery_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_SelfRecovery_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.8.1v0.3"
+    PolicyId := CommonControlsId8_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -167,20 +160,14 @@ test_SelfRecovery_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Allow super admins to recover their account is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Allow super admins to recover their account is ON"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_SelfRecovery_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.8.1v0.3"
+    PolicyId := CommonControlsId8_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -217,20 +204,14 @@ test_SelfRecovery_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Allow super admins to recover their account is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Allow super admins to recover their account is ON"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_SelfRecovery_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.8.1v0.3"
+    PolicyId := CommonControlsId8_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -240,20 +221,12 @@ test_SelfRecovery_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_SelfRecovery_Incorrect_V4 if {
     # Test no relevant events in the top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.8.1v0.3"
+    PolicyId := CommonControlsId8_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -276,20 +249,12 @@ test_SelfRecovery_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_SelfRecovery_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.8.1v0.3"
+    PolicyId := CommonControlsId8_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -326,21 +291,16 @@ test_SelfRecovery_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Second-Level OU: Allow super admins to recover their account is ON</li>",
-        "<li>Test Top-Level OU: Allow super admins to recover their account is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Second-Level OU",
+                 "Value": "Allow super admins to recover their account is ON"},
+                 {"Name": "Test Top-Level OU",
+                 "Value": "Allow super admins to recover their account is ON"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_SelfRecovery_Incorrect_V6 if {
     # Test group
-    PolicyId := "GWS.COMMONCONTROLS.8.1v0.3"
+    PolicyId := CommonControlsId8_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -378,14 +338,8 @@ test_SelfRecovery_Incorrect_V6 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following groups are non-compliant:<ul>",
-        "<li>test@test: Allow super admins to recover their account is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "test@test",
+                 "Value": "Allow super admins to recover their account is ON"}]
+    FailTestGroupNonCompliant(PolicyId, Output, failedOU)
 }
 #--

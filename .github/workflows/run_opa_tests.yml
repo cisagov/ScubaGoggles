@@ -28,15 +28,15 @@ jobs:
         version: latest
 
     - name: Run OPA Check
-      run: opa check rego Testing/RegoTests --strict
+      run: opa check scubagoggles/rego scubagoggles/Testing/RegoTests --strict
 
     - name: Run OPA Tests
-      run: opa test rego/*.rego Testing/RegoTests/**/*.rego -v
+      run: opa test scubagoggles/rego/*.rego scubagoggles/Testing/RegoTests/**/*.rego -v
 
     - name: Setup Regal
-      uses: StyraInc/setup-regal@v0.2.0
+      uses: StyraInc/setup-regal@v1
       with:
-        version: v0.15.0
+        version: 0.27.0
 
     - name: Run Regal Lint
-      run: regal lint --format github rego Testing
+      run: regal lint --format github scubagoggles/rego scubagoggles/Testing/RegoTests

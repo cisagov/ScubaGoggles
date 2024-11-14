@@ -1,49 +1,66 @@
 package drive
 
-import data.utils
 import future.keywords
+import data.utils
+import data.utils.GetFriendlyEnabledValue
+import data.utils.PolicyApiInUse
 
 LogEvents := utils.GetEvents("drive_logs")
+
+DriveEnabled(orgunit) := utils.AppEnabled(input.policies, "drive_and_docs", orgunit)
 
 ###################
 # GWS.DRIVEDOCS.1 #
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.1.1v0.3
+# Baseline GWS.DRIVEDOCS.1.1
 #--
 
-GetFriendlyValue1_1(Value) := concat("",
-    ["Files owned by users or shared drives ",
-    "can be shared with Google accounts in ",
-    "compatible allowlisted domains"]) if {
-    startswith(Value, "TRUSTED_DOMAINS")
+DriveId1_1 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.1")
+
+LogMessage1_1 := "SHARING_OUTSIDE_DOMAIN"
+
+Check1_1_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage1_1, utils.TopLevelOU)
+    count(events) > 0
 }
-else := concat("", ["Files owned by users or shared drives can ",
-    "be shared outside of the organization"]) if {
-    startswith(Value, "SHARING_ALLOWED")
+
+Check1_1_OK if {PolicyApiInUse}
+
+GetFriendlyValue1_1(Value) := "with Google accounts in compatible allowlisted domains" if {
+    Value in {"TRUSTED_DOMAINS", "ALLOWLISTED_DOMAINS"}
+} else := "outside of the organization" if {
+    Value in {"SHARING_ALLOWED", "ALLOWED"}
 } else := Value
+
+NonComplianceMessage1_1(value) := sprintf("Files owned by users or shared drives can be shared %s",
+                                          [value])
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
-    } if {
+    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage1_1, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     AcceptableValues := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT",
     "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES"}
     not LastEvent.NewValue in AcceptableValues
 }
-
 
 NonCompliantGroups1_1 contains {
     "Name": Group,
-    "Value": GetFriendlyValue1_1(LastEvent.NewValue)
-    } if {
+    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage1_1, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     AcceptableValues := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT",
@@ -51,8 +68,33 @@ NonCompliantGroups1_1 contains {
     not LastEvent.NewValue in AcceptableValues
 }
 
+# There are subsequent baselines that apply only if external sharing is
+# allowed.  For a given OU, sharing is enabled if either it's enabled in
+# the top-level OU or it has been enabled explicitly in the OU.  First,
+# we have to determine if the setting is even present in the OU.  If it
+# is not present, the top-level OU setting is checked; otherwise the
+# OU setting takes precedence.
+
+ExternalSharingAllowed(OU) := true if {
+    externalSharing := utils.GetApiSettingValue("drive_and_docs_external_sharing",
+                                                "externalSharingMode",
+                                                OU)
+    externalSharing != "DISALLOWED"
+}
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(externalSharing))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    externalSharing := settings.drive_and_docs_external_sharing.externalSharingMode
+    externalSharing != "DISALLOWED"
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.1v0.3",
+    "PolicyId": DriveId1_1,
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -60,13 +102,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_1_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.1v0.3",
+    "PolicyId": DriveId1_1,
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
@@ -74,33 +116,46 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEvents(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
-    count(Events) > 0
+    Check1_1_OK
     Conditions := {count(NonCompliantOUs1_1) == 0, count(NonCompliantGroups1_1) == 0 }
     Status := (false in Conditions) == false
 }
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.2v0.3
+# Baseline GWS.DRIVEDOCS.1.2
 #--
 
+DriveId1_2 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.2")
 
-GetFriendlyValue1_2(Value) := "Users cannot recieve files outside the domain" if {
-    contains("SHARING_NOT_ALLOWED INHERIT_FROM_PARENT", Value) == true
+LogMessage1_2 := "SHARING_OUTSIDE_DOMAIN"
+
+Check1_2_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage1_2, utils.TopLevelOU)
+    count(events) > 0
 }
-else := "Users can recieve files outside the domain"
+
+Check1_2_OK if {PolicyApiInUse}
+
+GetFriendlyValue1_2(Value) := "cannot" if {
+    Value in {"SHARING_NOT_ALLOWED INHERIT_FROM_PARENT", false}
+} else := "can"
+
+NonComplianceMessage1_2(value) := sprintf("Users %s receive files outside the domain",
+                                          [value])
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": GetFriendlyValue1_2(LastEvent.NewValue)
-    }
-    if {
+    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage1_2, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    AcceptableValues = {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT", 
+    AcceptableValues = {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT",
         "TRUSTED_DOMAINS_ALLOWED", "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING"}
     not LastEvent.NewValue in AcceptableValues
 }
@@ -108,19 +163,32 @@ NonCompliantOUs1_2 contains {
 NonCompliantGroups1_2 contains {
     "Name": Group,
     "Value": GetFriendlyValue1_2(LastEvent.NewValue)
-    }
-    if {
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage1_2, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    AcceptableValues = {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT", 
+    AcceptableValues = {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT",
         "TRUSTED_DOMAINS_ALLOWED", "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING"}
     not LastEvent.NewValue in AcceptableValues
     }
 
+NonCompliantOUs1_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(receiveExternal))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    not ExternalSharingAllowed(OU)
+    receiveExternal := settings.drive_and_docs_external_sharing.allowReceivingExternalFiles
+    receiveExternal != false
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.2v0.3",
+    "PolicyId": DriveId1_2,
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -128,13 +196,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_2_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.2v0.3",
+    "PolicyId": DriveId1_2,
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, NonCompliantGroups1_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2,
@@ -143,55 +211,82 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
-    count(Events) > 0
+    Check1_2_OK
     Conditions := {count(NonCompliantOUs1_2) == 0, count(NonCompliantGroups1_2) == 0 }
     Status := (false in Conditions) == false
 }
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.3v0.3
+# Baseline GWS.DRIVEDOCS.1.3
 #--
 
-GetFriendlyValue1_3(Value, AcceptableValues) := "External Sharing Warning is Enabled" if {
-    Value in AcceptableValues == true
-}
-else := "External Sharing Warning is Disabled"
+DriveId1_3 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.3")
 
+LogMessage1_3 := "SHARING_OUTSIDE_DOMAIN"
+
+Check1_3_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage1_3, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check1_3_OK if {PolicyApiInUse}
+
+AcceptableValues1_3 := {"SHARING_ALLOWED_WITH_WARNING",
+                        "SHARING_NOT_ALLOWED",
+                        "INHERIT_FROM_PARENT",
+                        "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES",
+                        "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING",
+                        "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING_MAY_RECEIVE_FILES_FROM_ANYONE"}
+
+GetFriendlyValue1_3(Value) := "enabled" if {
+    Value in AcceptableValues1_3 == true
+} else := "disabled"
+
+NonComplianceMessage1_3(value) := sprintf("External Sharing Warning is %s",
+                                          [value])
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": GetFriendlyValue1_3(LastEvent.NewValue, AcceptableValues)
-    } if {
+    "Value": NonComplianceMessage1_3(GetFriendlyValue1_3(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage1_3, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    AcceptableValues := {"SHARING_ALLOWED_WITH_WARNING", "SHARING_NOT_ALLOWED",
-    "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES",
-    "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING", 
-    "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING_MAY_RECEIVE_FILES_FROM_ANYONE"}
-    not LastEvent.NewValue in AcceptableValues
+    not LastEvent.NewValue in AcceptableValues1_3
 }
 
 NonCompliantGroups1_3 contains {
     "Name": Group,
-    "Value": GetFriendlyValue1_3(LastEvent.NewValue, AcceptableValues)
-    } if {
+    "Value": NonComplianceMessage1_3(GetFriendlyValue1_3(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage1_3, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    AcceptableValues := {"SHARING_ALLOWED_WITH_WARNING", "SHARING_NOT_ALLOWED",
-    "INHERIT_FROM_PARENT", "SHARING_NOT_ALLOWED_BUT_MAY_RECEIVE_FILES",
-    "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING", 
-    "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING_MAY_RECEIVE_FILES_FROM_ANYONE"}
-    not LastEvent.NewValue in AcceptableValues
+    not LastEvent.NewValue in AcceptableValues1_3
+}
+
+NonCompliantOUs1_3 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_3(GetFriendlyEnabledValue(warnExternal))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    ExternalSharingAllowed(OU)
+    warnExternal := settings.drive_and_docs_external_sharing.warnForExternalSharing
+    warnExternal != true
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.3v0.3",
+    "PolicyId": DriveId1_3,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -199,13 +294,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := true
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_3_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.3v0.3",
+    "PolicyId": DriveId1_3,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_3, NonCompliantGroups1_3),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_3,
@@ -214,81 +309,109 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs1_3) == 0, count(NonCompliantGroups1_3) == 0 }
+    Check1_3_OK
+    Conditions := {count(NonCompliantOUs1_3) == 0, count(NonCompliantGroups1_3) == 0}
     Status := (false in Conditions) == false
 }
 
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.4v0.3
+# Baseline GWS.DRIVEDOCS.1.4
 #--
+
+DriveId1_4 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.4")
+
+LogMessage1_4_A := "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS"
+
+LogMessage1_4_B := "SHARING_OUTSIDE_DOMAIN"
+
+default NoSuchEvent1_4(_) := false
+
 NoSuchEvent1_4(TopLevelOU) := true if {
-    SettingName := "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS"
-    Events_A := utils.FilterEvents(LogEvents, SettingName, TopLevelOU)
+    Events_A := utils.FilterEvents(LogEvents, LogMessage1_4_A, TopLevelOU)
     count(Events_A) == 0
 }
 
 NoSuchEvent1_4(TopLevelOU) := true if {
-    SettingName := "SHARING_OUTSIDE_DOMAIN"
-    Events_B := utils.FilterEvents(LogEvents, SettingName, TopLevelOU)
+    Events_B := utils.FilterEvents(LogEvents, LogMessage1_4_B, TopLevelOU)
     count(Events_B) == 0
 }
 
-default NoSuchEvent1_4(_) := false
+Check1_4_OK if {
+    not PolicyApiInUse
+    not NoSuchEvent1_4(utils.TopLevelOU)
+}
 
-GetFriendlyValue1_4(Value_A, Value_B, AcceptableValues_A, AcceptableValues_B) :=
-"External Sharing is Disabled" if {
-    Value_B in AcceptableValues_B
-} else := concat("", ["External sharing is enabled ",
-    "but sharing items to non-google accounts is disabled"]) if {
-    Value_A in AcceptableValues_A
-} else := "External sharing is enabled and items can be shared to non-google accounts"
+Check1_4_OK if {PolicyApiInUse}
+
+AcceptableValues1_4_A := {"NOT_ALLOWED", "INHERIT_FROM_PARENT", true}
+
+AcceptableValues1_4_B := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT"}
+
+GetFriendlyValue1_4(Value_A, Value_B) := "disabled" if {
+    Value_B in AcceptableValues1_4_B
+} else := "enabled but sharing items to non-google accounts is disabled" if {
+    Value_A in AcceptableValues1_4_A
+} else := "enabled and items can be shared to non-google accounts"
+
+NonComplianceMessage1_4(value) := sprintf("External Sharing is %s",
+                                          [value])
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": GetFriendlyValue1_4(LastEvent_A.NewValue,
-        LastEvent_B.NewValue, AcceptableValues_A, AcceptableValues_B)
-    } if {
+    "Value": NonComplianceMessage1_4(GetFriendlyValue1_4(LastEvent_A.NewValue,
+                                                         LastEvent_B.NewValue))
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events_A := utils.FilterEventsOU(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", OU)
+    Events_A := utils.FilterEventsOU(LogEvents, LogMessage1_4_A, OU)
     count(Events_A) > 0
     LastEvent_A := utils.GetLastEvent(Events_A)
 
-    Events_B := utils.FilterEventsOU(LogEvents, "SHARING_OUTSIDE_DOMAIN", OU)
+    Events_B := utils.FilterEventsOU(LogEvents, LogMessage1_4_B, OU)
     count(Events_B) > 0
     LastEvent_B := utils.GetLastEvent(Events_B)
 
-    AcceptableValues_A := {"NOT_ALLOWED", "INHERIT_FROM_PARENT"}
-    not LastEvent_A.NewValue in AcceptableValues_A
-    AcceptableValues_B := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT"}
-    not LastEvent_B.NewValue in AcceptableValues_B
+    not LastEvent_A.NewValue in AcceptableValues1_4_A
+    not LastEvent_B.NewValue in AcceptableValues1_4_B
 }
 
 NonCompliantGroups1_4 contains {
     "Name": Group,
-    "Value": GetFriendlyValue1_4(LastEvent_A.NewValue, LastEvent_B.NewValue,
-        AcceptableValues_A, AcceptableValues_B)
-    } if {
+    "Value": NonComplianceMessage1_4(GetFriendlyValue1_4(LastEvent_A.NewValue,
+                                                         LastEvent_B.NewValue))
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events_A := utils.FilterEventsGroup(LogEvents, "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS", Group)
+    Events_A := utils.FilterEventsGroup(LogEvents, LogMessage1_4_A, Group)
     count(Events_A) > 0
     LastEvent_A := utils.GetLastEvent(Events_A)
 
-    Events_B := utils.FilterEventsGroup(LogEvents, "SHARING_OUTSIDE_DOMAIN", Group)
+    Events_B := utils.FilterEventsGroup(LogEvents, LogMessage1_4_B, Group)
     count(Events_B) > 0
     LastEvent_B := utils.GetLastEvent(Events_B)
 
-    AcceptableValues_A := {"NOT_ALLOWED", "INHERIT_FROM_PARENT"}
-    not LastEvent_A.NewValue in AcceptableValues_A
-    AcceptableValues_B := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT"}
-    not LastEvent_B.NewValue in AcceptableValues_B
+    not LastEvent_A.NewValue in AcceptableValues1_4_A
+    not LastEvent_B.NewValue in AcceptableValues1_4_B
+}
+
+NonCompliantOUs1_4 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_4(GetFriendlyValue1_4(nonGoogle, ""))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    ExternalSharingAllowed(OU)
+    nonGoogle := settings.drive_and_docs_external_sharing.allowNonGoogleInvites
+    nonGoogle != false
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.4v0.3",
+    "PolicyId": DriveId1_4,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -296,12 +419,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    NoSuchEvent1_4(utils.TopLevelOU)
+    not Check1_4_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.4v0.3",
+    "PolicyId": DriveId1_4,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_4, NonCompliantGroups1_4),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4,
@@ -310,23 +434,39 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent1_4(utils.TopLevelOU)
-    Conditions := {count(NonCompliantOUs1_4) == 0, count(NonCompliantGroups1_4) == 0 }
+    Check1_4_OK
+    Conditions := {count(NonCompliantOUs1_4) == 0, count(NonCompliantGroups1_4) == 0}
     Status := (false in Conditions) == false
 }
 
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.5v0.3
+# Baseline GWS.DRIVEDOCS.1.5
 #--
+
+DriveId1_5 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.5")
+
+LogMessage1_5 := "PUBLISHING_TO_WEB"
+
+Check1_5_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage1_5, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check1_5_OK if {PolicyApiInUse}
+
+NonComplianceMessage1_5 := "Published web content can be made visible to anyone with a link"
 
 NonCompliantOUs1_5 contains {
     "Name": OU,
-    "Value": "Published web content can be made visible to anyone with a link"
-    } if {
+    "Value": NonComplianceMessage1_5
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "PUBLISHING_TO_WEB", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage1_5, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("ALLOWED", LastEvent.NewValue) == true
@@ -334,18 +474,30 @@ NonCompliantOUs1_5 contains {
 
 NonCompliantGroups1_5 contains {
     "Name": Group,
-    "Value": "Published web content can be made visible to anyone with a link"
-    } if {
+    "Value": NonComplianceMessage1_5
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "PUBLISHING_TO_WEB", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage1_5, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("ALLOWED", LastEvent.NewValue) == true
 }
 
+NonCompliantOUs1_5 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_5
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    allowPublish := settings.drive_and_docs_external_sharing.allowPublishingFiles
+    allowPublish != false
+}
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.5v0.3",
+    "PolicyId": DriveId1_5,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -353,13 +505,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "PUBLISHING_TO_WEB", utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_5_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.5v0.3",
+    "PolicyId": DriveId1_5,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_5, NonCompliantGroups1_5),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_5,
@@ -368,31 +520,46 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "PUBLISHING_TO_WEB", utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs1_5) == 0, count(NonCompliantGroups1_5) == 0 }
+    Check1_5_OK
+    Conditions := {count(NonCompliantOUs1_5) == 0, count(NonCompliantGroups1_5) == 0}
     Status := (false in Conditions) == false
 }
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.6v0.3
+# Baseline GWS.DRIVEDOCS.1.6
 #--
 
+DriveId1_6 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.6")
+
+LogMessage1_6 := "SHARING_ACCESS_CHECKER_OPTIONS"
+
+Check1_6_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage1_6, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check1_6_OK if {PolicyApiInUse}
+
+NonComplianceMessage1_6(value) := sprintf("Access Checker allows users to share files to %s",
+                                          [value])
+
 GetFriendlyValue1_6(Value) :=
-"Recipients only, suggested target audience, or public (no Google account required)" if {
-    Value == "ALL"
-} else := "Recipients only, or suggested target audience" if {
-    Value == "DOMAIN_OR_NAMED_PARTIES"
+"recipients only, suggested target audience, or public (no Google account required)" if {
+    Value in {"ALL", "RECIPIENTS_OR_AUDIENCE_OR_PUBLIC"}
+} else := "recipients only, or suggested target audience" if {
+    Value in {"DOMAIN_OR_NAMED_PARTIES", "RECIPIENTS_OR_AUDIENCE"}
 } else := Value
 
 NonCompliantOUs1_6 contains {
     "Name": OU,
-    "Value": concat("", ["Access Checker allows users to share files to ",
-        GetFriendlyValue1_6(LastEvent.NewValue)])
-    } if {
+    "Value": NonComplianceMessage1_6(GetFriendlyValue1_6(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage1_6, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     AcceptableValues := {"NAMED_PARTIES_ONLY", "INHERIT_FROM_PARENT"}
@@ -401,19 +568,31 @@ NonCompliantOUs1_6 contains {
 
 NonCompliantGroups1_6 contains {
     "Name":Group,
-    "Value": concat("", ["Access Checker allows users to share files to ",
-        GetFriendlyValue1_6(LastEvent.NewValue)])
-    } if {
+    "Value": NonComplianceMessage1_6(GetFriendlyValue1_6(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage1_6, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     AcceptableValues := {"NAMED_PARTIES_ONLY", "INHERIT_FROM_PARENT"}
     not LastEvent.NewValue in AcceptableValues
 }
 
+NonCompliantOUs1_6 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_6(GetFriendlyValue1_6(accessCheck))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    accessCheck := settings.drive_and_docs_external_sharing.accessCheckerSuggestions
+    accessCheck != "RECIPIENTS_ONLY"
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.6v0.3",
+    "PolicyId": DriveId1_6,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -421,13 +600,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS",utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_6_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.6v0.3",
+    "PolicyId": DriveId1_6,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_6, NonCompliantGroups1_6),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_6,
@@ -436,30 +615,47 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_ACCESS_CHECKER_OPTIONS", utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs1_6) == 0, count(NonCompliantGroups1_6) == 0 }
+    Check1_6_OK
+    Conditions := {count(NonCompliantOUs1_6) == 0, count(NonCompliantGroups1_6) == 0}
     Status := (false in Conditions) == false
 }
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.7v0.3
+# Baseline GWS.DRIVEDOCS.1.7
 #--
+
+DriveId1_7 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.7")
+
+LogMessage1_7 := "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS"
+
+Check1_7_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage1_7, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check1_7_OK if {PolicyApiInUse}
+
+NonComplianceMessage1_7(value) := sprintf("%s can distribute content outside of the organization",
+                                          [value])
+
 GetFriendlyValue1_7(Value):= "Setting is compliant." if {
-    Value == "CROSS_DOMAIN_MOVES_BLOCKED"
-} else := "Only users inside the organization can distribute content outside of the organization" if {
-    Value == "CROSS_DOMAIN_FROM_INTERNAL_ONLY"
-} else := "Anyone can distribute content in the organization to outside the organization" if {
-    Value == "CROSS_DOMAIN_FROM_INTERNAL_OR_EXTERNAL"
+    Value in {"CROSS_DOMAIN_MOVES_BLOCKED", "NONE"}
+} else := "Only users inside the organization" if {
+    Value in {"CROSS_DOMAIN_FROM_INTERNAL_ONLY", "ELIGIBLE_INTERNAL_USERS"}
+} else := "Anyone" if {
+    Value in {"CROSS_DOMAIN_FROM_INTERNAL_OR_EXTERNAL", "ALL_ELIGIBLE_USERS"}
 } else := Value
 
 NonCompliantOUs1_7 contains {
     "Name": OU,
-    "Value": GetFriendlyValue1_7(LastEvent.NewValue)
-    } if {
+    "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage1_7, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     SettingValue := "CROSS_DOMAIN_MOVES_BLOCKED INHERIT_FROM_PARENT"
@@ -469,17 +665,30 @@ NonCompliantOUs1_7 contains {
 NonCompliantGroups1_7 contains {
     "Name": Group,
     "Value": GetFriendlyValue1_7(LastEvent.NewValue)
-    } if {
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage1_7, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     SettingValue := "CROSS_DOMAIN_MOVES_BLOCKED INHERIT_FROM_PARENT"
     contains(SettingValue, LastEvent.NewValue) == false
 }
 
+NonCompliantOUs1_7 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(moveContent))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    moveContent := settings.drive_and_docs_external_sharing.allowedPartiesForDistributingContent
+    moveContent != "NONE"
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.7v0.3",
+    "PolicyId": DriveId1_7,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -487,13 +696,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_7_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.7v0.3",
+    "PolicyId": DriveId1_7,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_7, NonCompliantGroups1_7),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_7, "NonCompliantGroups": NonCompliantGroups1_7},
@@ -501,55 +710,80 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "SHARING_TEAM_DRIVE_CROSS_DOMAIN_OPTIONS", utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs1_7) == 0, count(NonCompliantGroups1_7) == 0 }
+    Check1_7_OK
+    Conditions := {count(NonCompliantOUs1_7) == 0, count(NonCompliantGroups1_7) == 0}
     Status := (false in Conditions) == false
 }
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.1.8v0.3
+# Baseline GWS.DRIVEDOCS.1.8
 #--
 
-GetFriendlyValue1_8(Value):= "private to the owner." if {
-    Value == "PRIVATE"
-} else := "The primary target audience can access the item if they have the link" if {
-    Value == "PEOPLE_WITH_LINK"
-} else := "The primary target audience can search and find the item." if {
-    Value == "PUBLIC"
-} else := Value
+DriveId1_8 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.8")
 
+LogMessage1_8 := "DEFAULT_LINK_SHARING_FOR_NEW_DOCS"
+
+Check1_8_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage1_8, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check1_8_OK if {PolicyApiInUse}
+
+NonComplianceMessage1_8(value) := sprintf("When users create items, the default access is set to: %s",
+                                          [value])
+
+GetFriendlyValue1_8(Value):= "private to the owner." if {
+    Value in {"PRIVATE", "PRIVATE_TO_OWNER"}
+} else := "the primary target audience can access the item if they have the link" if {
+    Value in {"PEOPLE_WITH_LINK", "PRIMARY_AUDIENCE_WITH_LINK"}
+} else := "the primary target audience can search and find the item." if {
+    Value in {"PUBLIC", "PRIMARY_AUDIENCE_WITH_LINK_OR_SEARCH"}
+} else := Value
 
 NonCompliantOUs1_8 contains {
     "Name": OU,
-    "Value": concat("", ["When users create items, the default access is set to: ",
-        GetFriendlyValue1_8(LastEvent.NewValue)])
-} if {
+    "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "DEFAULT_LINK_SHARING_FOR_NEW_DOCS", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage1_8, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "PRIVATE"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
-
 
 NonCompliantGroups1_8 contains {
     "Name": Group,
-    "Value": concat("", ["When users create items, the default access is set to: ",
-        GetFriendlyValue1_8(LastEvent.NewValue)])
-} if {
+    "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(LastEvent.NewValue))
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "DEFAULT_LINK_SHARING_FOR_NEW_DOCS", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage1_8, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "PRIVATE"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
 
+NonCompliantOUs1_8 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(defaultAccess))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    defaultAccess := settings.drive_and_docs_general_access_default.defaultFileAccess
+    defaultAccess != "PRIVATE_TO_OWNER"
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.8v0.3",
+    "PolicyId": DriveId1_8,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -557,13 +791,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := true
-    Events := utils.FilterEventsOU(LogEvents, "DEFAULT_LINK_SHARING_FOR_NEW_DOCS", utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_8_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.1.8v0.3",
+    "PolicyId": DriveId1_8,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_8, NonCompliantGroups1_8),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_8, "NonCompliantGroups": NonCompliantGroups1_8},
@@ -571,9 +805,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "DEFAULT_LINK_SHARING_FOR_NEW_DOCS", utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs1_8) == 0, count(NonCompliantGroups1_8) == 0 }
+    Check1_8_OK
+    Conditions := {count(NonCompliantOUs1_8) == 0, count(NonCompliantGroups1_8) == 0}
     Status := (false in Conditions) == false
 }
 #--
@@ -583,14 +816,31 @@ if {
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.2.1v0.3
+# Baseline GWS.DRIVEDOCS.2.1
 #--
+
+DriveId2_1 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.2.1")
+
+LogMessage2_1 := "Shared Drive Creation new_team_drive_admin_only"
+
+Check2_1_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage2_1, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check2_1_OK if {PolicyApiInUse}
+
+NonComplianceMessage2_1 := "Members with manager access can override shared drive settings."
+
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": "Members with manager access can override shared drive settings."
-    } if {
+    "Value": NonComplianceMessage2_1
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_admin_only", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage2_1, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -599,18 +849,31 @@ NonCompliantOUs2_1 contains {
 
 NonCompliantGroups2_1 contains {
     "Name": Group,
-    "Value": "Members with manager access can override shared drive settings."
-    } if {
+    "Value": NonComplianceMessage2_1
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "Shared Drive Creation new_team_drive_admin_only", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage2_1, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
+NonCompliantOUs2_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage2_1
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    managerOverride := settings.drive_and_docs_shared_drive_creation.allowManagersToOverrideSettings
+    managerOverride != false
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.1v0.3",
+    "PolicyId": DriveId2_1,
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -618,13 +881,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
-    count(Events) == 0
+    not Check2_1_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.1v0.3",
+    "PolicyId": DriveId2_1,
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, NonCompliantGroups2_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1, "NonCompliantGroups": NonCompliantGroups2_1},
@@ -632,23 +895,38 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "Shared Drive Creation new_team_drive_admin_only", utils.TopLevelOU)
-    count(Events) > 0
+    Check2_1_OK
     Conditions := {count(NonCompliantOUs2_1) == 0, count(NonCompliantGroups2_1) == 0 }
     Status := (false in Conditions) == false
 }
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.2.2v0.3
+# Baseline GWS.DRIVEDOCS.2.2
 #--
+
+DriveId2_2 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.2.2")
+
+LogMessage2_2 := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
+
+Check2_2_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage2_2, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check2_2_OK if {PolicyApiInUse}
+
+NonComplianceMessage2_2 := "Users outside the organization can access files in shared drives."
+
 NonCompliantOUs2_2 contains {
     "Name": OU,
-    "Value": "Users outside the organization can access files in shared drives"
-    } if {
+    "Value": NonComplianceMessage2_2
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents,
-        "Shared Drive Creation new_team_drive_restricts_cross_domain_access", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage2_2, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -657,19 +935,31 @@ NonCompliantOUs2_2 contains {
 
 NonCompliantGroups2_2 contains {
     "Name": Group,
-    "Value": "Users outside the organization can access files in shared drives"
-    } if {
+    "Value": NonComplianceMessage2_2
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents,
-        "Shared Drive Creation new_team_drive_restricts_cross_domain_access", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage2_2, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
+NonCompliantOUs2_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage2_2
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    externalAccess := settings.drive_and_docs_shared_drive_creation.allowExternalUserAccess
+    externalAccess != false
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.2v0.3",
+    "PolicyId": DriveId2_2,
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -677,14 +967,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
+    not Check2_2_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.2v0.3",
+    "PolicyId": DriveId2_2,
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_2, NonCompliantGroups2_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_2, "NonCompliantGroups": NonCompliantGroups2_2},
@@ -692,24 +981,38 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    SettingName := "Shared Drive Creation new_team_drive_restricts_cross_domain_access"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) > 0
+    Check2_2_OK
     Conditions := {count(NonCompliantOUs2_2) == 0, count(NonCompliantGroups2_2) == 0 }
     Status := (false in Conditions) == false
 }
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.2.3v0.3
+# Baseline GWS.DRIVEDOCS.2.3
 #--
+
+DriveId2_3 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.2.3")
+
+LogMessage2_3 := "Shared Drive Creation new_team_drive_restricts_direct_access"
+
+Check2_3_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage2_3, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check2_3_OK if {PolicyApiInUse}
+
+NonComplianceMessage2_3 := "Users who aren't shared drive members are not allowed to be added to files."
+
 NonCompliantOUs2_3 contains {
     "Name": OU,
-    "Value": "People who aren't shared drive members can be added to files"
-    } if {
+    "Value": NonComplianceMessage2_3
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents,
-        "Shared Drive Creation new_team_drive_restricts_direct_access", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage2_3, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
@@ -717,20 +1020,31 @@ NonCompliantOUs2_3 contains {
 }
 NonCompliantGroups2_3 contains {
     "Name": Group,
-    "Value": "People who aren't shared drive members can be added to files"
-    } if {
+    "Value": NonComplianceMessage2_3
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents,
-        "Shared Drive Creation new_team_drive_restricts_direct_access", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage2_3, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("true", LastEvent.NewValue) == false
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
+NonCompliantOUs2_3 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage2_3
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    nonMemberAccess := settings.drive_and_docs_shared_drive_creation.allowNonMemberAccess
+    nonMemberAccess != true
+}
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.3v0.3",
+    "PolicyId": DriveId2_3,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -738,14 +1052,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := true
-    SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
+    not Check2_3_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.3v0.3",
+    "PolicyId": DriveId2_3,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_3, NonCompliantGroups2_3),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_3,
@@ -754,24 +1067,38 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    SettingName := "Shared Drive Creation new_team_drive_restricts_direct_access"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) > 0
-     Conditions := {count(NonCompliantOUs2_3) == 0, count(NonCompliantGroups2_3) == 0 }
+    Check2_3_OK
+    Conditions := {count(NonCompliantOUs2_3) == 0, count(NonCompliantGroups2_3) == 0 }
     Status := (false in Conditions) == false
 }
 #--
 
 #
-# Baseline GWS.DRIVEDOCS.2.4v0.3
+# Baseline GWS.DRIVEDOCS.2.4
 #--
+
+DriveId2_4 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.2.4")
+
+LogMessage2_4 := "Shared Drive Creation new_team_drive_restricts_download"
+
+Check2_4_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage2_4, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check2_4_OK if {PolicyApiInUse}
+
+NonComplianceMessage2_4 := "Viewers and commenters are allowed to download, print, and copy files."
+
 NonCompliantOUs2_4 contains {
     "Name": OU,
-    "Value": "Viewers and commenters are allowed to download, print, and copy files"
-    } if {
+    "Value": NonComplianceMessage2_4
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents,
-        "Shared Drive Creation new_team_drive_restricts_download", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage2_4, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("false", LastEvent.NewValue) == true
@@ -780,19 +1107,31 @@ NonCompliantOUs2_4 contains {
 
 NonCompliantGroups2_4 contains {
     "Name": Group,
-    "Value": "Viewers and commenters are allowed to download, print, and copy files"
-    } if {
+    "Value": NonComplianceMessage2_4
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents,
-        "Shared Drive Creation new_team_drive_restricts_download", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage2_4, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     contains("false", LastEvent.NewValue) == true
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
+NonCompliantOUs2_4 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage2_4
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    allowPrint := settings.drive_and_docs_shared_drive_creation.allowedPartiesForDownloadPrintCopy
+    allowPrint != "EDITORS_ONLY"
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.4v0.3",
+    "PolicyId": DriveId2_4,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -800,14 +1139,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := true
-    Events := utils.FilterEventsOU(LogEvents,
-        "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
-    count(Events) == 0
+    not Check2_4_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.2.4v0.3",
+    "PolicyId": DriveId2_4,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_4, NonCompliantGroups2_4),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_4,
@@ -816,57 +1154,63 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents,
-        "Shared Drive Creation new_team_drive_restricts_download", utils.TopLevelOU)
-    count(Events) > 0
+    Check2_4_OK
     Conditions := {count(NonCompliantOUs2_4) == 0, count(NonCompliantGroups2_4) == 0 }
     Status := (false in Conditions) == false
 }
 #--
-
 
 ###################
 # GWS.DRIVEDOCS.3 #
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.3.1v0.3
+# Baseline GWS.DRIVEDOCS.3.1
 #--
+
+DriveId3_1 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.3.1")
+
+LogMessage3_1a := "Link Security Update Settings allow_less_secure_link_user_restore"
+LogMessage3_1b := "Link Security Update Settings less_secure_link_option"
+
+default NoSuchEvent3_1(_) := false
+
 NoSuchEvent3_1(TopLevelOU) := true if {
-    # No such event...
-    SettingName := "Link Security Update Settings allow_less_secure_link_user_restore"
-    Events_A := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
+    Events_A := utils.FilterEventsOU(LogEvents, LogMessage3_1a, TopLevelOU)
     count(Events_A) == 0
 }
 
 NoSuchEvent3_1(TopLevelOU) := true if {
-    # No such event...
-    Events := utils.FilterEventsOU(LogEvents,
-        "Link Security Update Settings less_secure_link_option", TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage3_1b, TopLevelOU)
     count(Events) == 0
 }
 
-default NoSuchEvent3_1(_) := false
+Check3_1_OK if {
+    not PolicyApiInUse
+    not NoSuchEvent3_1(utils.TopLevelOU)
+}
 
-GetFriendlyValue3_1(Value_B, Value_A) :=
-"The security update is removed from all impacted files" if {
-    Value_B == "REQUIRE_LESS_SECURE_LINKS"
+Check3_1_OK if {PolicyApiInUse}
+
+NonComplianceMessage3_1(securityUpdate, userUpdate) := "The security update is removed from all impacted files." if {
+    securityUpdate in {"REQUIRE_LESS_SECURE_LINKS", "REMOVE_FROM_IMPACTED_FILES"}
 }
-else := "Users are allowed to remove/apply the security update for files they own or manage" if {
-    Value_A == "true"
+else := "Users are allowed to remove/apply the security update for files they own or manage." if {
+    userUpdate in {"true", true}
 }
+
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue3_1(LastEvent_B.NewValue, LastEvent_A.NewValue)
-    } if {
+    "Value": NonComplianceMessage3_1(LastEvent_B.NewValue, LastEvent_A.NewValue)
+}
+if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events_A := utils.FilterEventsOU(LogEvents,
-        "Link Security Update Settings allow_less_secure_link_user_restore", OU)
+    Events_A := utils.FilterEventsOU(LogEvents, LogMessage3_1a, OU)
     count(Events_A) > 0
     LastEvent_A := utils.GetLastEvent(Events_A)
 
-    Events_B := utils.FilterEventsOU(LogEvents,
-        "Link Security Update Settings less_secure_link_option", OU)
+    Events_B := utils.FilterEventsOU(LogEvents, LogMessage3_1b, OU)
     count(Events_B) > 0
     LastEvent_B := utils.GetLastEvent(Events_B)
 
@@ -876,8 +1220,24 @@ NonCompliantOUs3_1 contains {
     }
 }
 
+NonCompliantOUs3_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage3_1(securityUpdate, userUpdate)
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    userUpdate := settings.drive_and_docs_file_security_update.allowUsersToManageUpdate
+    securityUpdate := settings.drive_and_docs_file_security_update.securityUpdate
+
+    true in {
+        userUpdate != false,
+        securityUpdate != "APPLY_TO_IMPACTED_FILES"
+    }
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.3.1v0.3",
+    "PolicyId": DriveId3_1,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -885,12 +1245,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := true
-    NoSuchEvent3_1(utils.TopLevelOU)
+    not Check3_1_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.3.1v0.3",
+    "PolicyId": DriveId3_1,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue" : {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -898,7 +1259,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent3_1(utils.TopLevelOU)
+    Check3_1_OK
     Status := count(NonCompliantOUs3_1) == 0
 }
 #--
@@ -908,15 +1269,31 @@ if {
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.4.1v0.3
+# Baseline GWS.DRIVEDOCS.4.1
 #--
+
+DriveId4_1 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.4.1")
+
+LogMessage4_1 := "ENABLE_DRIVE_APPS"
+
+Check4_1_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage4_1, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check4_1_OK if {PolicyApiInUse}
+
+NonComplianceMessage4_1 := "Drive SDK is enabled."
+
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": "Drive SDK is enabled"
+    "Value": NonComplianceMessage4_1
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DRIVE_APPS", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage4_1, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
@@ -924,17 +1301,31 @@ if {
 }
 NonCompliantGroups4_1 contains {
     "Name": Group,
-    "Value": "Drive SDK is enabled"
-} if {
+    "Value": NonComplianceMessage4_1
+}
+if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "ENABLE_DRIVE_APPS", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage4_1, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
+
+NonCompliantOUs4_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage4_1
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    sdkAccess := settings.drive_and_docs_drive_sdk.enableDriveSdkApiAccess
+    sdkAccess != false
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.4.1v0.3",
+    "PolicyId": DriveId4_1,
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -942,14 +1333,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DRIVE_APPS", utils.TopLevelOU)
-    count(Events) == 0
-
+    not Check4_1_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.4.1v0.3",
+    "PolicyId": DriveId4_1,
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, NonCompliantGroups4_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1, "NonCompliantGroups": NonCompliantGroups4_1},
@@ -957,28 +1347,43 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DRIVE_APPS", utils.TopLevelOU)
-    count(Events) > 0
+    Check4_1_OK
     Conditions := {count(NonCompliantOUs4_1) == 0, count(NonCompliantGroups4_1) == 0}
     Status := (false in Conditions) == false
 }
 
 #--
 
-
 ###################
 # GWS.DRIVEDOCS.5 #
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.5.1v0.3
+# Baseline GWS.DRIVEDOCS.5.1
 #--
+
+DriveId5_1 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.5.1")
+
+LogMessage5_1 := "ENABLE_DOCS_ADD_ONS"
+
+Check5_1_OK if {
+    # not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage5_1, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check5_1_OK if {PolicyApiInUse}
+
+NonComplianceMessage5_1 := "Users can install Google Docs add-ons from add-ons store."
+
 NonCompliantOUs5_1 contains {
     "Name": OU,
-    "Value": "Users can install Google Docs add-ons from add-ons store."
-    } if {
+    "Value": NonComplianceMessage5_1
+}
+if {
+    # not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DOCS_ADD_ONS", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage5_1, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
@@ -987,17 +1392,32 @@ NonCompliantOUs5_1 contains {
 
 NonCompliantGroups5_1 contains {
     "Name": Group,
-    "Value": "Users can install Google Docs add-ons from add-ons store."
-    } if {
+    "Value": NonComplianceMessage5_1
+}
+if {
+    # not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, "ENABLE_DOCS_ADD_ONS", Group)
+    Events := utils.FilterEventsGroup(LogEvents, LogMessage5_1, Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "false"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
+
+# NOT yet implemented in policy API
+#NonCompliantOUs5_1 contains {
+#    "Name": OU,
+#    "Value": NonComplianceMessage5_1
+#}
+#if {
+#    some OU, settings in input.policies
+#    DriveEnabled(OU)
+#    addOns := settings.drive_and_docs_drive_sdk.enableDriveSdkApiAccess
+#    addOns != false
+#}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.5.1v0.3",
+    "PolicyId": DriveId5_1,
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1005,14 +1425,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    # not PolicyApiInUse
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
-    count(Events) == 0
-
+    not Check5_1_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.5.1v0.3",
+    "PolicyId": DriveId5_1,
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1,
@@ -1021,9 +1440,8 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_DOCS_ADD_ONS", utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs5_1) == 0, count(NonCompliantGroups5_1) == 0 }
+    Check5_1_OK
+    Conditions := {count(NonCompliantOUs5_1) == 0, count(NonCompliantGroups5_1) == 0}
     Status := (false in Conditions) == false
 }
 #--
@@ -1033,50 +1451,64 @@ if {
 ###################
 
 #
-# Baseline GWS.DRIVEDOCS.6.1v0.3
+# Baseline GWS.DRIVEDOCS.6.1
 #--
 
-GetFriendlyValue6_1(CompanyOnly, DesktopEnabled) :=
-    "Drive for Desktop is enabled and can be used on any device." if {
-        CompanyOnly == "false"
-        DesktopEnabled == "true"
-    }
-    else := "Drive for Desktop is disabled" if {
-        DesktopEnabled == "false"
-    }
-    else := "Drive for Desktop is enabled but only on approved devices." if {
-        CompanyOnly == "true"
-        DesktopEnabled == "true"
-    }
+DriveId6_1 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.6.1")
+
+LogMessage6_1 := "ENABLE_DOCS_ADD_ONS"
+
+LogMessage6_1a := "DriveFsSettingsProto drive_fs_enabled"
+LogMessage6_1b := "DriveFsSettingsProto company_owned_only_enabled"
 
 default NoSuchEvent6_1(_) := true
 
 NoSuchEvent6_1(TopLevelOU) := false if {
-    Events := utils.FilterEventsOU(LogEvents,
-        "DriveFsSettingsProto drive_fs_enabled", TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage6_1a, TopLevelOU)
     count(Events) != 0
 }
 
 NoSuchEvent6_1(TopLevelOU) := false if {
-    Events := utils.FilterEventsOU(LogEvents,
-        "DriveFsSettingsProto company_owned_only_enabled", TopLevelOU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage6_1b, TopLevelOU)
     count(Events) != 0
 }
 
+Check6_1_OK if {
+    not PolicyApiInUse
+    not NoSuchEvent6_1(utils.TopLevelOU)
+}
+
+Check6_1_OK if {PolicyApiInUse}
+
+NonComplianceMessage6_1(Value) := sprintf("Drive for Desktop is %s.", [Value])
+
+GetFriendlyValue6_1(CompanyOnly, DesktopEnabled) := "enabled and can be used on any device" if {
+        CompanyOnly in {"false", false}
+        DesktopEnabled in {"true", true}
+    }
+    else := "disabled" if {
+        DesktopEnabled in {"false", false}
+    }
+    else := "enabled but only on approved devices" if {
+        CompanyOnly in {"true", true}
+        DesktopEnabled in {"true", true}
+    }
+
 NonCompliantOUs6_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue6_1(LastCompanyOnlyEvent.NewValue, LastDriveEnabledEvent.NewValue)
-    } if {
+    "Value": NonComplianceMessage6_1(GetFriendlyValue6_1(LastCompanyOnlyEvent.NewValue,
+                                                         LastDriveEnabledEvent.NewValue))
+}
+if {
+        not PolicyApiInUse
         some OU in utils.OUsWithEvents
 
-        DriveEnabledEvents := utils.FilterEventsOU(LogEvents,
-            "DriveFsSettingsProto drive_fs_enabled", OU)
+        DriveEnabledEvents := utils.FilterEventsOU(LogEvents, LogMessage6_1a, OU)
         count(DriveEnabledEvents) > 0
         LastDriveEnabledEvent := utils.GetLastEvent(DriveEnabledEvents)
         LastDriveEnabledEvent.NewValue != "DELETE_APPLICATION_SETTING"
 
-        CompanyOnlyEvents := utils.FilterEventsOU(LogEvents,
-            "DriveFsSettingsProto company_owned_only_enabled", OU)
+        CompanyOnlyEvents := utils.FilterEventsOU(LogEvents, LogMessage6_1b, OU)
         count(CompanyOnlyEvents) > 0
         LastCompanyOnlyEvent := utils.GetLastEvent(CompanyOnlyEvents)
         LastCompanyOnlyEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -1087,18 +1519,19 @@ NonCompliantOUs6_1 contains {
 
 NonCompliantGroups6_1 contains {
     "Name": Group,
-    "Value": GetFriendlyValue6_1(LastCompanyOnlyEvent.NewValue, LastDriveEnabledEvent.NewValue)
-    } if {
+    "Value": NonComplianceMessage6_1(GetFriendlyValue6_1(LastCompanyOnlyEvent.NewValue,
+                                                         LastDriveEnabledEvent.NewValue))
+}
+if {
+        not PolicyApiInUse
         some Group in utils.GroupsWithEvents
 
-        DriveEnabledEvents := utils.FilterEventsGroup(LogEvents,
-            "DriveFsSettingsProto drive_fs_enabled", Group)
+        DriveEnabledEvents := utils.FilterEventsGroup(LogEvents, LogMessage6_1a, Group)
         count(DriveEnabledEvents) > 0
         LastDriveEnabledEvent := utils.GetLastEvent(DriveEnabledEvents)
         LastDriveEnabledEvent.NewValue != "DELETE_APPLICATION_SETTING"
 
-        CompanyOnlyEvents := utils.FilterEventsGroup(LogEvents,
-            "DriveFsSettingsProto company_owned_only_enabled", Group)
+        CompanyOnlyEvents := utils.FilterEventsGroup(LogEvents, LogMessage6_1b, Group)
         count(CompanyOnlyEvents) > 0
         LastCompanyOnlyEvent := utils.GetLastEvent(CompanyOnlyEvents)
         LastCompanyOnlyEvent.NewValue != "DELETE_APPLICATION_SETTING"
@@ -1107,8 +1540,26 @@ NonCompliantGroups6_1 contains {
         LastCompanyOnlyEvent.NewValue != "true"
     }
 
+NonCompliantOUs6_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage6_1(GetFriendlyValue6_1(allowAuthorized,
+                                                         desktopEnabled))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    desktopEnabled := utils.GetApiSettingValue("drive_and_docs_drive_for_desktop",
+                                               "allowDriveForDesktop",
+                                               OU)
+    allowAuthorized := utils.GetApiSettingValue("drive_and_docs_drive_for_desktop",
+                                                "restrictToAuthorizedDevices",
+                                                OU)
+    desktopEnabled
+    not allowAuthorized
+}
+
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.6.1v0.3",
+    "PolicyId": DriveId6_1,
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1116,12 +1567,13 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    NoSuchEvent6_1(utils.TopLevelOU)
+    not Check6_1_OK
 }
 
 tests contains {
-    "PolicyId": "GWS.DRIVEDOCS.6.1v0.3",
+    "PolicyId": DriveId6_1,
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, NonCompliantGroups6_1),
     "ActualValue" : {"NonCompliantOUs": NonCompliantOUs6_1, "NonCompliantGroups": NonCompliantGroups6_1},
@@ -1129,7 +1581,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent6_1(utils.TopLevelOU)
+    Check6_1_OK
     Conditions := {count(NonCompliantOUs6_1) == 0, count(NonCompliantGroups6_1) == 0}
     Status := (false in Conditions) == false
 }

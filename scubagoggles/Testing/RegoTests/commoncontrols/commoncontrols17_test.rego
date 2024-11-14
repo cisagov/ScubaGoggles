@@ -2,11 +2,11 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.17.1v0.3
+# GWS.COMMONCONTROLS.17.1
 #--
 test_MPA_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.17.1v0.3"
+    PolicyId := CommonControlsId17_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -38,7 +38,7 @@ test_MPA_Correct_V1 if {
 
 test_MPA_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.17.1v0.3"
+    PolicyId := CommonControlsId17_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -74,7 +74,7 @@ test_MPA_Incorrect_V1 if {
 
 test_MPA_Incorrect_V2 if {
     # Test no relevent events
-    PolicyId := "GWS.COMMONCONTROLS.17.1v0.3"
+    PolicyId := CommonControlsId17_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 

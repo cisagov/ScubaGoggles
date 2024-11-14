@@ -1,13 +1,17 @@
 package commoncontrols
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.COMMONCONTROLS.10.1v0.3
+# GWS.COMMONCONTROLS.10.1
 #--
 test_AccessControl_Correct_V1 if {
     # Test restricted when there is no _HIGH_RISK event present
     # (not all services have a risk version, just Drive and Gmail)
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
+    PolicyId := CommonControlsId10_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -35,7 +39,7 @@ test_AccessControl_Correct_V1 if {
 
 test_AccessControl_Correct_V2 if {
     # Test allowed with not high risk allowed
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
+    PolicyId := CommonControlsId10_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -73,7 +77,7 @@ test_AccessControl_Correct_V2 if {
 
 test_AccessControl_Correct_V3 if {
     # Test restricted with not high risk disallowed
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
+    PolicyId := CommonControlsId10_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -111,7 +115,7 @@ test_AccessControl_Correct_V3 if {
 
 test_AccessControl_Correct_V4 if {
     # Test multiple services
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
+    PolicyId := CommonControlsId10_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -159,7 +163,7 @@ test_AccessControl_Correct_V4 if {
 
 test_AccessControl_Correct_V5 if {
     # Test multiple services, multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
+    PolicyId := CommonControlsId10_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -228,7 +232,7 @@ test_AccessControl_Correct_V5 if {
 test_AccessControl_Incorrect_V1 if {
     # Test unrestricted when there is no _HIGH_RISK event present
     # (not all services have a risk version, just Drive and Gmail)
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
+    PolicyId := CommonControlsId10_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -256,7 +260,7 @@ test_AccessControl_Incorrect_V1 if {
 
 test_AccessControl_Incorrect_V2 if {
     # Test unrestricted with not high risk disallowed
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
+    PolicyId := CommonControlsId10_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -294,7 +298,7 @@ test_AccessControl_Incorrect_V2 if {
 
 test_AccessControl_Incorrect_V3 if {
     # Test unrestricted with no high risk version
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
+    PolicyId := CommonControlsId10_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -322,7 +326,7 @@ test_AccessControl_Incorrect_V3 if {
 
 test_AccessControl_Incorrect_V4 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.10.1v0.3"
+    PolicyId := CommonControlsId10_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -345,11 +349,11 @@ test_AccessControl_Incorrect_V4 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.10.2v0.3
+# GWS.COMMONCONTROLS.10.2
 #--
 test_Consent_Correct_V1 if {
     # Test disallow with no high risk version
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
+    PolicyId := CommonControlsId10_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -377,7 +381,7 @@ test_Consent_Correct_V1 if {
 
 test_Consent_Correct_V2 if {
     # Test disallow with high risk version
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
+    PolicyId := CommonControlsId10_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -415,7 +419,7 @@ test_Consent_Correct_V2 if {
 
 test_Consent_Incorrect_V1 if {
     # Test allow with no high risk version
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
+    PolicyId := CommonControlsId10_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -443,7 +447,7 @@ test_Consent_Incorrect_V1 if {
 
 test_Consent_Incorrect_V2 if {
     # Test allow with high risk version allowed
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
+    PolicyId := CommonControlsId10_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -481,7 +485,7 @@ test_Consent_Incorrect_V2 if {
 
 test_Consent_Incorrect_V3 if {
     # Test allow with high risk version blocked
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
+    PolicyId := CommonControlsId10_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -519,7 +523,7 @@ test_Consent_Incorrect_V3 if {
 
 test_Consent_Incorrect_V4 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.10.2v0.3"
+    PolicyId := CommonControlsId10_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -542,11 +546,11 @@ test_Consent_Incorrect_V4 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.10.3v0.3
+# GWS.COMMONCONTROLS.10.3
 #--
 test_Internal_Correct_V1 if {
     # Test basic
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
+    PolicyId := CommonControlsId10_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -564,16 +568,12 @@ test_Internal_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Internal_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
+    PolicyId := CommonControlsId10_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -600,16 +600,12 @@ test_Internal_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Internal_Incorrect_V1 if {
     # Test basic
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
+    PolicyId := CommonControlsId10_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -627,20 +623,14 @@ test_Internal_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Trust internal apps is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": "Trust internal apps is ON"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Internal_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
+    PolicyId := CommonControlsId10_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -667,20 +657,14 @@ test_Internal_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Trust internal apps is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": "Trust internal apps is ON"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Internal_Incorrect_V3 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.10.3v0.3"
+    PolicyId := CommonControlsId10_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -690,24 +674,16 @@ test_Internal_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 #--
 
 #
-# GWS.COMMONCONTROLS.10.4v0.3
+# GWS.COMMONCONTROLS.10.4
 #--
 test_Unconfigured_Correct_V1 if {
     # Test basic
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
+    PolicyId := CommonControlsId10_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -725,16 +701,12 @@ test_Unconfigured_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Unconfigured_Correct_V2 if {
     # Test basic multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
+    PolicyId := CommonControlsId10_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -761,16 +733,12 @@ test_Unconfigured_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Unconfigured_Incorrect_V1 if {
     # Test unblock
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
+    PolicyId := CommonControlsId10_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -788,21 +756,16 @@ test_Unconfigured_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Unconfigured third-party app access is set to ",
-        "Allow users to access any third-party apps</li>",
-        "</ul>"
-    ])
+    msg := sprintf("Unconfigured third-party app access is set to %s",
+                   ["Allow users to access any third-party apps"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": msg}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Unconfigured_Incorrect_V2 if {
     # Test signin only
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
+    PolicyId := CommonControlsId10_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -820,21 +783,17 @@ test_Unconfigured_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Unconfigured third-party app access is set to ",
-        "Allow users to access third-party apps that only request basic info needed for Sign in with Google.</li>",
-        "</ul>"
-    ])
+    msg := sprintf("Unconfigured third-party app access is set to %s %s",
+                   ["Allow users to access third-party apps that only",
+                    "request basic info needed for Sign in with Google."])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": msg}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Unconfigured_Incorrect_V3 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.10.4v0.3"
+    PolicyId := CommonControlsId10_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -844,25 +803,17 @@ test_Unconfigured_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 #--
-
 
 #
-# GWS.COMMONCONTROLS.10.5v0.3
+# GWS.COMMONCONTROLS.10.5
 #--
+
 test_Access_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.10.5v0.3"
+    PolicyId := CommonControlsId10_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -881,16 +832,12 @@ test_Access_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Access_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.5v0.3"
+    PolicyId := CommonControlsId10_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -919,16 +866,12 @@ test_Access_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Access_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.10.5v0.3"
+    PolicyId := CommonControlsId10_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -947,20 +890,14 @@ test_Access_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Allow users to manage their access to less secure apps is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage10_5}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Access_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.10.5v0.3"
+    PolicyId := CommonControlsId10_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -989,20 +926,14 @@ test_Access_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Allow users to manage their access to less secure apps is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage10_5}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Access_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.10.5v0.3"
+    PolicyId := CommonControlsId10_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -1012,20 +943,12 @@ test_Access_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
+}
 
 test_Access_Incorrect_V4 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.10.5v0.3"
+    PolicyId := CommonControlsId10_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1044,20 +967,12 @@ test_Access_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
+}
 
 test_Access_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.10.5v0.3"
+    PolicyId := CommonControlsId10_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1086,14 +1001,8 @@ test_Access_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Second-Level OU: Allow users to manage their access to less secure apps is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Second-Level OU",
+                  "Value": NonComplianceMessage10_5}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

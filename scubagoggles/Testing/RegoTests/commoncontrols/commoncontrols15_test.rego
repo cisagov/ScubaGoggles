@@ -2,11 +2,11 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.15.1v0.3
+# GWS.COMMONCONTROLS.15.1
 #--
 test_AccessControl_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.COMMONCONTROLS.15.1v0.3"
+    PolicyId := CommonControlsId15_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -26,11 +26,11 @@ test_AccessControl_Correct_V1 if {
 
 
 #
-# GWS.COMMONCONTROLS.15.2v0.3
+# GWS.COMMONCONTROLS.15.2
 #--
 test_DataProcessing_OUs_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := CommonControlsId15_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -59,7 +59,7 @@ test_DataProcessing_OUs_Correct_V1 if {
 
 test_DataProcessing_OUs_Correct_V2 if {
     # Test inheritance with root and sub OUs
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := CommonControlsId15_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -99,7 +99,7 @@ test_DataProcessing_OUs_Correct_V2 if {
 
 test_DataProcessing_OUs_Incorrect_V1 if {
     # Test incorrect root OU
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := CommonControlsId15_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -132,7 +132,7 @@ test_DataProcessing_OUs_Incorrect_V1 if {
 
 test_DataProcessing_OUs_Incorrect_V2 if {
     # Test incorrect second-level OU
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := CommonControlsId15_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -176,7 +176,7 @@ test_DataProcessing_OUs_Incorrect_V2 if {
 
 test_DataProcessing_OUs_Groups_Incorrect_V1 if {
     # Test for correct root OU but with an incorrect group event
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := CommonControlsId15_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -220,7 +220,7 @@ test_DataProcessing_OUs_Groups_Incorrect_V1 if {
 
 test_DataProcessing_OUs_Groups_Incorrect_V2 if {
     # Test for correct root OU but with incorrect group events
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := CommonControlsId15_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -276,7 +276,7 @@ test_DataProcessing_OUs_Groups_Incorrect_V2 if {
 
 test_DataProcessing_OUs_Groups_Incorrect_V3 if {
     # Test for both incorrect OUs and group events
-    PolicyId := "GWS.COMMONCONTROLS.15.2v0.3"
+    PolicyId := CommonControlsId15_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -336,11 +336,11 @@ test_DataProcessing_OUs_Groups_Incorrect_V3 if {
 
 
 #
-# GWS.COMMONCONTROLS.15.3v0.3
+# GWS.COMMONCONTROLS.15.3
 #--
 test_Logs_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
+    PolicyId := CommonControlsId15_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -368,7 +368,7 @@ test_Logs_Correct_V1 if {
 
 test_Logs_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
+    PolicyId := CommonControlsId15_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -406,7 +406,7 @@ test_Logs_Correct_V2 if {
 
 test_Logs_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
+    PolicyId := CommonControlsId15_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -438,7 +438,7 @@ test_Logs_Incorrect_V1 if {
 
 test_Logs_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
+    PolicyId := CommonControlsId15_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -480,7 +480,7 @@ test_Logs_Incorrect_V2 if {
 
 test_Logs_Incorrect_V3 if {
     # Test no relevent events
-    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
+    PolicyId := CommonControlsId15_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -504,7 +504,7 @@ test_Logs_Incorrect_V3 if {
 
 test_Logs_Incorrect_V4 if {
     # Test multiple ous
-    PolicyId := "GWS.COMMONCONTROLS.15.3v0.3"
+    PolicyId := CommonControlsId15_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {

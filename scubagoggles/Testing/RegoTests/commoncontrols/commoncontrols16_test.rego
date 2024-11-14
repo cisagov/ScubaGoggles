@@ -2,12 +2,12 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.16.1v0.3
+# GWS.COMMONCONTROLS.16.1
 #--
 
 test_Unlisted_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.16.1v0.3"
+    PolicyId := CommonControlsId16_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -36,7 +36,7 @@ test_Unlisted_Correct_V1 if {
 
 test_Unlisted_Correct_V2 if {
     # Test inheritance
-    PolicyId := "GWS.COMMONCONTROLS.16.1v0.3"
+    PolicyId := CommonControlsId16_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -75,7 +75,7 @@ test_Unlisted_Correct_V2 if {
 }
 
 test_Unlisted_Incorrect_V1 if {
-    PolicyId := "GWS.COMMONCONTROLS.16.1v0.3"
+    PolicyId := CommonControlsId16_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -108,7 +108,7 @@ test_Unlisted_Incorrect_V1 if {
 
 test_Unlisted_Incorrect_V2 if {
     # Test no events
-    PolicyId := "GWS.COMMONCONTROLS.16.1v0.3"
+    PolicyId := CommonControlsId16_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -131,12 +131,12 @@ test_Unlisted_Incorrect_V2 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.16.2v0.3
+# GWS.COMMONCONTROLS.16.2
 #--
 
 test_EarlyAccessApps_OUs_Correct_V1 if {
     # Test 1 correct event
-    PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
+    PolicyId := CommonControlsId16_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -165,7 +165,7 @@ test_EarlyAccessApps_OUs_Correct_V1 if {
 
 test_EarlyAccessApps_OUs_Correct_V2 if {
     # Test inheritance with root and sub OUs
-    PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
+    PolicyId := CommonControlsId16_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -205,7 +205,7 @@ test_EarlyAccessApps_OUs_Correct_V2 if {
 
 test_EarlyAccessApps_OUs_Incorrect_V1 if {
     # Test incorrect root OU
-    PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
+    PolicyId := CommonControlsId16_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -238,7 +238,7 @@ test_EarlyAccessApps_OUs_Incorrect_V1 if {
 
 test_EarlyAccessApps_OUs_Incorrect_V2 if {
     # Test incorrect second-level OU
-    PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
+    PolicyId := CommonControlsId16_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -282,7 +282,7 @@ test_EarlyAccessApps_OUs_Incorrect_V2 if {
 
 test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V1 if {
     # Test for correct root OU but with an incorrect group event
-    PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
+    PolicyId := CommonControlsId16_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -326,7 +326,7 @@ test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V1 if {
 
 test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V2 if {
     # Test for correct root OU but with incorrect group events
-    PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
+    PolicyId := CommonControlsId16_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -382,7 +382,7 @@ test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V2 if {
 
 test_EarlyAccessApps_OUs_Groups_Incorrect_V1 if {
     # Test for both incorrect OUs and group events
-    PolicyId := "GWS.COMMONCONTROLS.16.2v0.3"
+    PolicyId := CommonControlsId16_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {

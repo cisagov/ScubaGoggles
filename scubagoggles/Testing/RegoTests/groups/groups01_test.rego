@@ -1,13 +1,16 @@
 package groups
-import future.keywords
 
+import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
 # Policy 1
 #--
 test_GroupAccess_Correct_V1 if {
     # Test group access when there's only one event
-    PolicyId := "GWS.GROUPS.1.1v0.3"
+    PolicyId := GroupsId1_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -26,16 +29,12 @@ test_GroupAccess_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_GroupAccess_Correct_V2 if {
     # Test group access when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.GROUPS.1.1v0.3"
+    PolicyId := GroupsId1_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -64,16 +63,12 @@ test_GroupAccess_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_GroupsAccess_Incorrect_V1 if {
     # Test group access when there are no relevant events
-    PolicyId := "GWS.GROUPS.1.1v0.3"
+    PolicyId := GroupsId1_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -92,21 +87,13 @@ test_GroupsAccess_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 #TODO
 test_GroupAccess_Incorrect_V2 if {
     # Test group access when there's only one event and it's wrong
-    PolicyId := "GWS.GROUPS.1.1v0.3"
+    PolicyId := GroupsId1_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -125,17 +112,14 @@ test_GroupAccess_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Group access from outside the organization is enabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_1("Any user")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #TODO
 test_GroupAccess_Incorrect_V3 if {
     # Test group access when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.1.1v0.3"
+    PolicyId := GroupsId1_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -164,11 +148,8 @@ test_GroupAccess_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Group access from outside the organization is enabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_1("Any user")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

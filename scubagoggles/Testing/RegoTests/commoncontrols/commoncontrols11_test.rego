@@ -1,13 +1,18 @@
 package commoncontrols
-import future.keywords
 
+import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestGroupNonCompliant
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.COMMONCONTROLS.11.1v0.3
+# GWS.COMMONCONTROLS.11.1
 #--
+
 test_Installation_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -42,16 +47,12 @@ test_Installation_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Installation_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -95,16 +96,12 @@ test_Installation_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Installation_Correct_V3 if {
     # Test inheritance
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -159,16 +156,12 @@ test_Installation_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Installation_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -201,20 +194,14 @@ test_Installation_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Users can install and run any app from the Marketplace</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage11_1(true)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Installation_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -258,20 +245,14 @@ test_Installation_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Users can install and run any app from the Marketplace</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage11_1(true)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Installation_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -281,21 +262,12 @@ test_Installation_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_Installation_Incorrect_V4 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -315,21 +287,12 @@ test_Installation_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_Installation_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -386,20 +349,14 @@ test_Installation_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Second-Level OU: Users can install and run any app from the Marketplace</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Second-Level OU",
+                  "Value": NonComplianceMessage11_1(true)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Installation_Incorrect_V6 if {
     # Test internal allowed
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -432,20 +389,14 @@ test_Installation_Incorrect_V6 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Users can install and run any internal app, even if it's not allowlisted</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage11_1(false)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Installation_Incorrect_V7 if {
     # Test group
-    PolicyId := "GWS.COMMONCONTROLS.11.1v0.3"
+    PolicyId := CommonControlsId11_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -492,14 +443,8 @@ test_Installation_Incorrect_V7 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following groups are non-compliant:<ul>",
-        "<li>test@test: Users can install and run any internal app, even if it's not allowlisted</li>",
-        "</ul>"
-    ])
+    failedGroup := [{"Name": "test@test",
+                     "Value": NonComplianceMessage11_1(false)}]
+    FailTestGroupNonCompliant(PolicyId, Output, failedGroup)
 }
 #--

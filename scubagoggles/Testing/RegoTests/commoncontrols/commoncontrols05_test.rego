@@ -1,13 +1,17 @@
 package commoncontrols
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.COMMONCONTROLS.5.1v0.3
+# GWS.COMMONCONTROLS.5.1
 #--
 
 test_Strength_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
+    PolicyId := CommonControlsId5_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -27,16 +31,12 @@ test_Strength_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Strength_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
+    PolicyId := CommonControlsId5_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -67,16 +67,12 @@ test_Strength_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Strength_Correct_V3 if {
     # Test inheritance
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
+    PolicyId := CommonControlsId5_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -118,16 +114,12 @@ test_Strength_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Strength_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
+    PolicyId := CommonControlsId5_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -147,20 +139,14 @@ test_Strength_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Enforce strong password is OFF</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Enforce strong password is OFF"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Strength_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
+    PolicyId := CommonControlsId5_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -191,20 +177,14 @@ test_Strength_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Enforce strong password is OFF</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Enforce strong password is OFF"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Strength_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
+    PolicyId := CommonControlsId5_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -214,20 +194,12 @@ test_Strength_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
+}
 
 test_Strength_Incorrect_V4 if {
     # Test no relevant events for top-level ou
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
+    PolicyId := CommonControlsId5_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -247,20 +219,12 @@ test_Strength_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
+}
 
 test_Strength_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.1v0.3"
+    PolicyId := CommonControlsId5_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -291,25 +255,18 @@ test_Strength_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Second-Level OU: Enforce strong password is OFF</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Second-Level OU",
+                 "Value": "Enforce strong password is OFF"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
-
 #
-# GWS.COMMONCONTROLS.5.2v0.3
+# GWS.COMMONCONTROLS.5.2
 #--
 test_Length_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
+    PolicyId := CommonControlsId5_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -329,16 +286,12 @@ test_Length_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Length_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
+    PolicyId := CommonControlsId5_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -369,16 +322,12 @@ test_Length_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Length_Correct_V3 if {
     # Test longer than needed
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
+    PolicyId := CommonControlsId5_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -398,16 +347,12 @@ test_Length_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Length_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
+    PolicyId := CommonControlsId5_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -427,20 +372,14 @@ test_Length_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Minimum password length is set to 8</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_2(8)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Length_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
+    PolicyId := CommonControlsId5_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -471,20 +410,14 @@ test_Length_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Minimum password length is set to 8</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_2(8)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Length_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
+    PolicyId := CommonControlsId5_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -494,20 +427,12 @@ test_Length_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_Length_Incorrect_V4 if {
     # Test no relevant events in top-level ou
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
+    PolicyId := CommonControlsId5_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -527,20 +452,12 @@ test_Length_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_Length_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.2v0.3"
+    PolicyId := CommonControlsId5_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -571,24 +488,19 @@ test_Length_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Minimum password length is set to 10</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_2(10)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 #
-# GWS.COMMONCONTROLS.5.3v0.3
+# GWS.COMMONCONTROLS.5.3
 #--
+
 test_Length15_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := CommonControlsId5_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -608,16 +520,12 @@ test_Length15_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Length15_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := CommonControlsId5_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -648,16 +556,12 @@ test_Length15_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Length15_Correct_V3 if {
     # Test longer than needed
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := CommonControlsId5_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -677,16 +581,12 @@ test_Length15_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Length15_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := CommonControlsId5_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -706,20 +606,14 @@ test_Length15_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Minimum password length is set to 12</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_3(12)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Length15_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := CommonControlsId5_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -750,20 +644,14 @@ test_Length15_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Minimum password length is set to 12</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_3(12)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Length15_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := CommonControlsId5_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -773,20 +661,12 @@ test_Length15_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_Length15_Incorrect_V4 if {
     # Test no relevant events in top-level ou
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := CommonControlsId5_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -806,20 +686,12 @@ test_Length15_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_Length15_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.3v0.3"
+    PolicyId := CommonControlsId5_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -850,25 +722,18 @@ test_Length15_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Minimum password length is set to 12</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_3(12)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
-
 #
-# GWS.COMMONCONTROLS.5.4v0.3
+# GWS.COMMONCONTROLS.5.4
 #--
 test_Enforce_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := CommonControlsId5_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -891,16 +756,12 @@ test_Enforce_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Enforce_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := CommonControlsId5_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -937,16 +798,12 @@ test_Enforce_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Enforce_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := CommonControlsId5_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -969,20 +826,14 @@ test_Enforce_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Enforce password policy at next sign-in is OFF</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Enforce password policy at next sign-in is OFF"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Enforce_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := CommonControlsId5_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1019,20 +870,14 @@ test_Enforce_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Enforce password policy at next sign-in is OFF</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Enforce password policy at next sign-in is OFF"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Enforce_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := CommonControlsId5_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -1042,20 +887,12 @@ test_Enforce_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_Enforce_Incorrect_V4 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := CommonControlsId5_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1078,20 +915,12 @@ test_Enforce_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_Enforce_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.4v0.3"
+    PolicyId := CommonControlsId5_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1128,25 +957,21 @@ test_Enforce_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Second-Level OU: Enforce password policy at next sign-in is OFF</li>",
-        "<li>Test Top-Level OU: Enforce password policy at next sign-in is OFF</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Second-Level OU",
+                 "Value": "Enforce password policy at next sign-in is OFF"},
+                 {"Name": "Test Top-Level OU",
+                 "Value": "Enforce password policy at next sign-in is OFF"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 #
-# GWS.COMMONCONTROLS.5.5v0.3
+# GWS.COMMONCONTROLS.5.5
 #--
+
 test_Reuse_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := CommonControlsId5_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1166,16 +991,12 @@ test_Reuse_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Reuse_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := CommonControlsId5_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1206,16 +1027,12 @@ test_Reuse_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Reuse_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := CommonControlsId5_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1235,20 +1052,14 @@ test_Reuse_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Allow password reuse is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Allow password reuse is ON"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Reuse_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := CommonControlsId5_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1279,20 +1090,14 @@ test_Reuse_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Allow password reuse is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Allow password reuse is ON"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Reuse_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := CommonControlsId5_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -1302,20 +1107,12 @@ test_Reuse_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
+}
 
 test_Reuse_Incorrect_V4 if {
     # Test no relevant events for top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := CommonControlsId5_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1335,20 +1132,12 @@ test_Reuse_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
+}
 
 test_Reuse_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.5v0.3"
+    PolicyId := CommonControlsId5_5
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1379,25 +1168,19 @@ test_Reuse_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Second-Level OU: Allow password reuse is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Second-Level OU",
+                 "Value": "Allow password reuse is ON"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 #
-# GWS.COMMONCONTROLS.5.6v0.3
+# GWS.COMMONCONTROLS.5.6
 #--
 
 test_Expire_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
+    PolicyId := CommonControlsId5_6
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1417,16 +1200,12 @@ test_Expire_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Expire_Correct_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
+    PolicyId := CommonControlsId5_6
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1457,16 +1236,12 @@ test_Expire_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Expire_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
+    PolicyId := CommonControlsId5_6
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1486,20 +1261,14 @@ test_Expire_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Password reset frequency is 1 days</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Password reset frequency is 1 days"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Expire_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
+    PolicyId := CommonControlsId5_6
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1530,20 +1299,14 @@ test_Expire_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Password reset frequency is 1 days</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Password reset frequency is 1 days"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Expire_Incorrect_V3 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
+    PolicyId := CommonControlsId5_6
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
 
@@ -1553,20 +1316,12 @@ test_Expire_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
+}
 
 test_Expire_Incorrect_V4 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
+    PolicyId := CommonControlsId5_6
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1586,20 +1341,12 @@ test_Expire_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
+}
 
 test_Expire_Incorrect_V5 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.5.6v0.3"
+    PolicyId := CommonControlsId5_6
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1630,15 +1377,8 @@ test_Expire_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Password reset frequency is 1 days</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Password reset frequency is 1 days"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
-

@@ -1,13 +1,12 @@
 package gmail
 import future.keywords
 
-
 #
-# GWS.GMAIL.18.1v0.3
+# GWS.GMAIL.18.1
 #--
 test_AdvanvedEmailContentFitlering_Correct_V1 if {
     # Test Advanced Email Content Filtering when there's only one event
-    PolicyId := "GWS.GMAIL.18.1v0.3"
+    PolicyId := GmailId18_1
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},
@@ -25,11 +24,11 @@ test_AdvanvedEmailContentFitlering_Correct_V1 if {
 #--
 
 #
-# GWS.GMAIL.18.2v0.3
+# GWS.GMAIL.18.2
 #--
 test_Other_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.GMAIL.18.2v0.3"
+    PolicyId := GmailId18_2
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},
@@ -47,11 +46,11 @@ test_Other_Correct_V1 if {
 #--
 
 #
-# GWS.GMAIL.18.3v0.3
+# GWS.GMAIL.18.3
 #--
 test_PII_Correct_V1 if {
     # Test not implemented
-    PolicyId := "GWS.GMAIL.18.3v0.3"
+    PolicyId := GmailId18_3
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},

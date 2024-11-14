@@ -1,6 +1,26 @@
 package utils
 import future.keywords
 
+# This is for use in versioning the baseline policy identifiers.  Because all
+# policy identifiers have the same baseline version suffix, it makes sense
+# to define the version once here, so it only has to be changed once.  The
+# policy identifiers are created with the PolicyIdWithSuffix() function.
+#
+# The baseline version suffix value is included by the Orchestrator in the
+# input data for normal policy evaluation.  For testing, the version suffix
+# is not required in the input data, as the default will be used and the
+# results are only processed by OPA (and not the Reporter, which WILL look
+# for matches between policy IDs in the Markdown and OPA results).
+
+default BaseVersionSuffix := "vM.m"
+
+BaseVersionSuffix := input.baseline_suffix if {
+    "baseline_suffix" in object.keys(input)}
+
+PolicyIdWithSuffix(PolicyIdPrefix) := sprintf("%s%s",
+                                              [PolicyIdPrefix,
+                                               BaseVersionSuffix])
+
 NoSuchEventDetails(DefaultSafe, TopLevelOU) := Message if {
     DefaultSafe == true
     Message := concat("", [
@@ -47,39 +67,18 @@ ReportDetailsBoolean(true) := "Requirement met."
 
 ReportDetailsBoolean(false) := "Requirement not met."
 
-ReportDetailsDetailedOU(_, NonCompOUs) := "Requirement met in all OUs." if {
-    count(NonCompOUs) == 0
+EnumOUSettings(NonCompOUs) := NonCompliantMessage("OUs", NonCompOUs)
+
+EnumGroupSettings(NonCompGroups) := NonCompliantMessage("groups", NonCompGroups)
+
+# Create a html formatted list detailing the settings for each OU/group
+# - Listing: a set of dicts, each with a "Name" and "Value" fields
+NonCompliantMessage(GroupsOrOU, Listing) := message if {
+    items := [concat("", ["<li>", item.Name, ": ", item.Value, "</li>"])
+              | some item in Listing]
+    message := sprintf("The following %s are non-compliant:<ul>%s</ul>",
+                       [GroupsOrOU, concat("", items)])
 }
-
-# Create a html formatted list detailing the settings for each OU
-# - NonCompOUs: a set of dicts, each with a "Name" and "Value" fields
-EnumOUSettings(NonCompOUs) := concat("", [
-    "The following OUs are non-compliant:",
-    "<ul>",
-    concat("", [concat("", [
-        "<li>",
-        OU.Name,
-        ": ",
-        OU.Value,
-        "</li>"
-    ]) | some OU in NonCompOUs]),
-    "</ul>"
-])
-
-# Create a html formatted list detailing the settings for each group
-# - NonCompGroups: a set of dicts, each with a "Name" and "Value" fields
-EnumGroupSettings(NonCompGroups) := concat("", [
-    "The following groups are non-compliant:",
-    "<ul>",
-    concat("", [concat("", [
-        "<li>",
-        Group.Name,
-        ": ",
-        Group.Value,
-        "</li>"
-    ]) | some Group in NonCompGroups]),
-    "</ul>"
-])
 
 ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) > 0
@@ -102,10 +101,12 @@ ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     Description := EnumGroupSettings(NonCompGroups)
 }
 
+RequirementsMetMessage := "Requirement met in all OUs and groups."
+
 ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) == 0
     count(NonCompGroups) == 0
-    Description := "Requirement met in all OUs and groups."
+    Description := RequirementsMetMessage
 }
 
 OUsWithEvents contains OrgUnit if {
@@ -417,3 +418,149 @@ GetEvents(LogName) := Events if {
 # Returns all conditions that match passed value (true/false)
 # Commonly used for OR/Any conditions
 FilterArray(Conditions, Boolean) := [Condition | some Condition in Conditions; Condition == Boolean]
+
+# Use GetApiSettingValue() when you need to determine for a "sub" orgunit
+# (not the top-level orgunit) the current setting value.  It may be set
+# explicitly in the orgunit, but it may be inherited from the top-level
+# orgunit.  This function handles both cases.  The ApiSettingExists() is
+# a helper function that indicates whether a setting is present in the given
+# orgunit.  All settings MUST be present in the top-level orgunit.
+
+ApiSettingExists(Section, Setting, OU) := true if {
+    OUSettings := input.policies[OU]
+    Section in object.keys(OUSettings)
+    Setting in object.keys(OUSettings[Section])
+}
+
+GetApiSettingValue(Section, Setting, OU) := Value if {
+    not ApiSettingExists(Section, Setting, OU)
+    topOUSettings := input.policies[TopLevelOU]
+    Value := topOUSettings[Section][Setting]
+}
+
+GetApiSettingValue(Section, Setting, OU) := Value if {
+    OUSettings := input.policies[OU]
+    Value := OUSettings[Section][Setting]
+}
+
+# The following functions are intended for use in testing the Scubagoggles
+# Rego modules.
+
+PassTestResult(PolicyId, Output) := TestResult(PolicyId,
+                                               Output,
+                                               RequirementsMetMessage,
+                                               true)
+
+PassTestResultWithMessage(PolicyId, Output, Message) := TestResult(PolicyId,
+                                                                   Output,
+                                                                   Message,
+                                                                   true)
+
+FailTestResult(PolicyId, Output, FailMessage) := TestResult(PolicyId,
+                                                            Output,
+                                                            FailMessage,
+                                                            false)
+
+FailTestNoEvent(PolicyId, Output, TopOU, defaultOK) := true if {
+    RuleOutput := FindTestOutput(PolicyId, Output)
+    RuleOutput.RequirementMet == defaultOK
+    RuleOutput.NoSuchEvent
+    RuleOutput.ReportDetails == NoSuchEventDetails(defaultOK, TopOU)
+} else := false
+
+FailTestGroupNonCompliant(PolicyId, Output, Listing) if {
+    RuleOutput := FindTestOutput(PolicyId, Output)
+    not RuleOutput.RequirementMet
+    not RuleOutput.NoSuchEvent
+    RuleOutput.ReportDetails == EnumGroupSettings(Listing)
+} else := false
+
+FailTestOUNonCompliant(PolicyId, Output, Listing) if {
+    RuleOutput := FindTestOutput(PolicyId, Output)
+    not RuleOutput.RequirementMet
+    not RuleOutput.NoSuchEvent
+    RuleOutput.ReportDetails == EnumOUSettings(Listing)
+} else := false
+
+FailTestNonCompliant(PolicyId, Output, Message) if {
+    RuleOutput := FindTestOutput(PolicyId, Output)
+    not RuleOutput.RequirementMet
+    not RuleOutput.NoSuchEvent
+    RuleOutput.ReportDetails == Message
+} else := false
+
+FailTestBothNonCompliant(PolicyId, Output, OUListing, GroupListing) if {
+    RuleOutput := FindTestOutput(PolicyId, Output)
+    not RuleOutput.RequirementMet
+    not RuleOutput.NoSuchEvent
+    RuleOutput.ReportDetails == sprintf("%s<br>%s",
+                                        [EnumOUSettings(OUListing),
+                                         EnumGroupSettings(GroupListing)])
+} else := false
+
+TestResult(PolicyId, Output, ReportDetailString, RequirementMet) := true if {
+    RuleOutput := FindTestOutput(PolicyId, Output)
+    RuleOutput.RequirementMet == RequirementMet
+    EventsOK(RuleOutput)
+    RuleOutput.ReportDetails == ReportDetailString
+} else := false
+
+FindTestOutput(PolicyId, Output) := RuleOutput if {
+    RulesOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RulesOutput) == 1
+    RuleOutput := RulesOutput[0]
+}
+
+EventsOK(RuleOutput) if {
+    PolicyApiInUse
+} else if {
+    not RuleOutput.NoSuchEvent
+} else := false
+
+default PolicyApiInUse := false
+
+PolicyApiInUse if {"policies" in object.keys(input)}
+
+# The function you should use to determine the enabled state is AppEnabled().
+# AppDisabled() only checks whether the orgunit has an explicit disabled
+# state - if it doesn't have an explicit state setting, it'll inherit
+# the setting from the top orgunit.  Use AppEnabled() and NOT AppDisabled()!
+# Use it like this, for example (with Chat):
+#
+#   ChatEnabled(orgunit) := utils.AppEnabled(input.policies, "chat", orgunit)
+#
+# (you have to make sure the service status name is "chat_service_status" in
+# the policies input data).
+
+AppDisabled(policies, serviceStatusName, orgunit) if {
+    appState := policies[orgunit][serviceStatusName].serviceState
+    upper(appState) == "DISABLED"
+}
+
+default AppEnabled(_, _, _) := false
+
+AppServiceStatusName(appName) := sprintf("%s_service_status", [appName])
+
+AppEnabled(policies, appName, orgunit) if {
+    serviceStatusName := AppServiceStatusName(appName)
+    appState := policies[orgunit][serviceStatusName].serviceState
+    upper(appState) == "ENABLED"
+}
+
+AppEnabled(policies, appName, orgunit) if {
+    serviceStatusName := AppServiceStatusName(appName)
+    not AppDisabled(policies, serviceStatusName, orgunit)
+    appState := policies[TopLevelOU][serviceStatusName].serviceState
+    upper(appState) == "ENABLED"
+}
+
+# There are a lot of policies that have enabled/disabled states.  The states
+# (values) in the log events are strings ("true", "false), while the states
+# in the Policy API are booleans (true, false).  This is a common function
+# to translate the states to "enabled"/"disabled".
+
+GetFriendlyEnabledValue(Value) := "enabled" if {
+    Value in {true, "true"}
+} else := "disabled" if {
+    Value in {false, "false"}
+} else := Value

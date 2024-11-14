@@ -1,13 +1,12 @@
 package gmail
 import future.keywords
 
-
 #
-# GWS.GMAIL.3.1v0.3
+# GWS.GMAIL.3.1
 #--
 test_SPF_Correct_V1 if {
     # Test SPF when there's only one domain
-    PolicyId := "GWS.GMAIL.3.1v0.3"
+    PolicyId := GmailId3_1
     Output := tests with input as {
         "spf_records": [
             {
@@ -27,7 +26,7 @@ test_SPF_Correct_V1 if {
 
 test_SPF_Correct_V2 if {
     # Test SPF when there's multiple domains
-    PolicyId := "GWS.GMAIL.3.1v0.3"
+    PolicyId := GmailId3_1
     Output := tests with input as {
         "spf_records": [
             {
@@ -51,7 +50,7 @@ test_SPF_Correct_V2 if {
 
 test_SPF_Correct_V3 if {
     # Test SPF redirect
-    PolicyId := "GWS.GMAIL.3.1v0.3"
+    PolicyId := GmailId3_1
     Output := tests with input as {
         "spf_records": [
             {
@@ -71,7 +70,7 @@ test_SPF_Correct_V3 if {
 
 test_SPF_Incorrect_V1 if {
     # Test SPF when there's multiple domains and only one is correct
-    PolicyId := "GWS.GMAIL.3.1v0.3"
+    PolicyId := GmailId3_1
     Output := tests with input as {
         "spf_records": [
             {
@@ -95,7 +94,7 @@ test_SPF_Incorrect_V1 if {
 
 test_SPF_Incorrect_V2 if {
     # Test SPF when there's only one domain and it's wrong
-    PolicyId := "GWS.GMAIL.3.1v0.3"
+    PolicyId := GmailId3_1
     Output := tests with input as {
         "spf_records": [
             {
@@ -116,7 +115,7 @@ test_SPF_Incorrect_V2 if {
 
 test_SPF_Incorrect_V3 if {
     # Test softfail
-    PolicyId := "GWS.GMAIL.3.1v0.3"
+    PolicyId := GmailId3_1
     Output := tests with input as {
         "spf_records": [
             {
@@ -136,7 +135,7 @@ test_SPF_Incorrect_V3 if {
 
 test_SPF_Incorrect_V4 if {
     # Test no "all" mechanism
-    PolicyId := "GWS.GMAIL.3.1v0.3"
+    PolicyId := GmailId3_1
     Output := tests with input as {
         "spf_records": [
             {

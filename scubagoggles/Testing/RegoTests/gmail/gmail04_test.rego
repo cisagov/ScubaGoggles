@@ -1,13 +1,12 @@
 package gmail
 import future.keywords
 
-
 #
-# GWS.GMAIL.4.1v0.3
+# GWS.GMAIL.4.1
 #--
 test_DMARC_Correct_V1 if {
     # Test DMARC when there's only one domain
-    PolicyId := "GWS.GMAIL.4.1v0.3"
+    PolicyId := GmailId4_1
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -29,7 +28,7 @@ test_DMARC_Correct_V1 if {
 
 test_DMARC_Correct_V2 if {
     # Test DMARC when there's multiple domains
-    PolicyId := "GWS.GMAIL.4.1v0.3"
+    PolicyId := GmailId4_1
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -57,7 +56,7 @@ test_DMARC_Correct_V2 if {
 
 test_DMARC_Incorrect_V1 if {
     # Test DMARC when there's multiple domains and only one is correct
-    PolicyId := "GWS.GMAIL.4.1v0.3"
+    PolicyId := GmailId4_1
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -83,7 +82,7 @@ test_DMARC_Incorrect_V1 if {
 
 test_DMARC_Incorrect_V2 if {
     # Test DMARC when there's only one domain and it's wrong
-    PolicyId := "GWS.GMAIL.4.1v0.3"
+    PolicyId := GmailId4_1
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -102,12 +101,12 @@ test_DMARC_Incorrect_V2 if {
 }
 
 #
-# GWS.GMAIL.4.2v0.3
+# GWS.GMAIL.4.2
 #--
 
 test_DMARCMessageReject_Correct_V1 if {
     # Test DMARC when there's only one domain
-    PolicyId := "GWS.GMAIL.4.2v0.3"
+    PolicyId := GmailId4_2
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -129,7 +128,7 @@ test_DMARCMessageReject_Correct_V1 if {
 
 test_DMARCMessageReject_Correct_V2 if {
     # Test DMARC when there's multiple domains
-    PolicyId := "GWS.GMAIL.4.2v0.3"
+    PolicyId := GmailId4_2
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -157,7 +156,7 @@ test_DMARCMessageReject_Correct_V2 if {
 
 test_DMARCMessageReject_Incorrect_V1 if {
     # Test DMARC when there's multiple domains and only one is correct
-    PolicyId := "GWS.GMAIL.4.2v0.3"
+    PolicyId := GmailId4_2
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -183,7 +182,7 @@ test_DMARCMessageReject_Incorrect_V1 if {
 
 test_DMARCMessageReject_Incorrect_V2 if {
     # Test DMARC when there's only one domain and it's wrong
-    PolicyId := "GWS.GMAIL.4.2v0.3"
+    PolicyId := GmailId4_2
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -202,12 +201,12 @@ test_DMARCMessageReject_Incorrect_V2 if {
 }
 
 #
-# GWS.GMAIL.4.3v0.3
+# GWS.GMAIL.4.3
 #--
 
 test_DMARCAggregateReports_Correct_V1 if {
     # Test DMARC when there's only one domain
-    PolicyId := "GWS.GMAIL.4.3v0.3"
+    PolicyId := GmailId4_3
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -229,7 +228,7 @@ test_DMARCAggregateReports_Correct_V1 if {
 
 test_DMARCAggregateReports_Correct_V2 if {
     # Test DMARC when there's multiple domains
-    PolicyId := "GWS.GMAIL.4.3v0.3"
+    PolicyId := GmailId4_3
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -257,7 +256,7 @@ test_DMARCAggregateReports_Correct_V2 if {
 
 test_DMARCAggregateReports_Incorrect_V1 if {
     # Test DMARC when there's multiple domains and only one is correct
-    PolicyId := "GWS.GMAIL.4.3v0.3"
+    PolicyId := GmailId4_3
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -283,7 +282,7 @@ test_DMARCAggregateReports_Incorrect_V1 if {
 
 test_DMARCAggregateReports_Incorrect_V2 if {
     # Test DMARC when there's only one domain and it's wrong
-    PolicyId := "GWS.GMAIL.4.3v0.3"
+    PolicyId := GmailId4_3
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -302,12 +301,12 @@ test_DMARCAggregateReports_Incorrect_V2 if {
 }
 
 #
-# GWS.GMAIL.4.4v0.3
+# GWS.GMAIL.4.4
 #--
 
 test_DMARCAgencyPOC_Correct_V1 if {
     # Test DMARC when there's only one domain
-    PolicyId := "GWS.GMAIL.4.4v0.3"
+    PolicyId := GmailId4_4
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -329,7 +328,7 @@ test_DMARCAgencyPOC_Correct_V1 if {
 
 test_DMARCAgencyPOC_Correct_V2 if {
     # Test DMARC when there's multiple domains
-    PolicyId := "GWS.GMAIL.4.4v0.3"
+    PolicyId := GmailId4_4
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -357,7 +356,7 @@ test_DMARCAgencyPOC_Correct_V2 if {
 
 test_DMARCAgencyPOC_Incorrect_V1 if {
     # Test DMARC when there's multiple domains and only one is correct
-    PolicyId := "GWS.GMAIL.4.4v0.3"
+    PolicyId := GmailId4_4
     Output := tests with input as {
         "dmarc_records": [
             {
@@ -383,7 +382,7 @@ test_DMARCAgencyPOC_Incorrect_V1 if {
 
 test_DMARCAgencyPOC_Incorrect_V2 if {
     # Test DMARC when there's only one domain and it's wrong
-    PolicyId := "GWS.GMAIL.4.4v0.3"
+    PolicyId := GmailId4_4
     Output := tests with input as {
         "dmarc_records": [
             {

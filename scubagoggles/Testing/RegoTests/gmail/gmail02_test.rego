@@ -1,13 +1,12 @@
 package gmail
 import future.keywords
 
-
 #
-# GWS.GMAIL.2.1v0.3
+# GWS.GMAIL.2.1
 #--
 test_DKIM_Correct_V1 if {
     # Test DKIM when there's only one domain
-    PolicyId := "GWS.GMAIL.2.1v0.3"
+    PolicyId := GmailId2_1
     Output := tests with input as {
         "dkim_records": [
             {
@@ -27,7 +26,7 @@ test_DKIM_Correct_V1 if {
 
 test_DKIM_Correct_V2 if {
     # Test DKIM when there's multiple domains
-    PolicyId := "GWS.GMAIL.2.1v0.3"
+    PolicyId := GmailId2_1
     Output := tests with input as {
         "dkim_records": [
             {
@@ -51,7 +50,7 @@ test_DKIM_Correct_V2 if {
 
 test_DKIM_Incorrect_V1 if {
     # Test DKIM when there's multiple domains and only one is correct
-    PolicyId := "GWS.GMAIL.2.1v0.3"
+    PolicyId := GmailId2_1
     Output := tests with input as {
         "dkim_records": [
             {
@@ -75,7 +74,7 @@ test_DKIM_Incorrect_V1 if {
 
 test_DKIM_Incorrect_V2 if {
     # Test DKIM when there's only one domain and it's wrong
-    PolicyId := "GWS.GMAIL.2.1v0.3"
+    PolicyId := GmailId2_1
     Output := tests with input as {
         "dkim_records": [
             {

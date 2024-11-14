@@ -1,13 +1,17 @@
 package gmail
-import future.keywords
 
+import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestNonCompliant
+import data.utils.PassTestResultWithMessage
 
 #
-# GWS.GMAIL.14.1v0.3
+# GWS.GMAIL.14.1
 #--
+
 test_EmailAllowlist_Correct_V1 if {
     # Test Email Allowlists when there's only one event
-    PolicyId := "GWS.GMAIL.14.1v0.3"
+    PolicyId := GmailId14_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -26,19 +30,14 @@ test_EmailAllowlist_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>Email allowlists are not enabled </span> in ",
-        "Test Top-Level Domain."
-    ])
+    Message := NonComplianceMessage14_1(GetFriendlyValue14_1("true"),
+                                        "Test Top-Level Domain")
+    PassTestResultWithMessage(PolicyId, Output, Message)
 }
 
 test_EmailAllowlist_Correct_V2 if {
     # Test Email Allowlists when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.14.1v0.3"
+    PolicyId := GmailId14_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -67,18 +66,14 @@ test_EmailAllowlist_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "<span class=setting>Email allowlists are not enabled </span> in ",
-        "Test Top-Level Domain."
-    ])}
+    Message := NonComplianceMessage14_1(GetFriendlyValue14_1("true"),
+                                        "Test Top-Level Domain")
+    PassTestResultWithMessage(PolicyId, Output, Message)
+}
 
 test_EmailAllowlist_Incorrect_V1 if {
     # Test Email Allowlists when there are no relevant events
-    PolicyId := "GWS.GMAIL.14.1v0.3"
+    PolicyId := GmailId14_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -97,20 +92,12 @@ test_EmailAllowlist_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs. ",
-        "While we are unable to determine the state from the logs, ",
-        "the default setting is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level Domain", true)
 }
 
 test_EmailAllowlist_Incorrect_V2 if {
     # Test Email Allowlists when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.14.1v0.3"
+    PolicyId := GmailId14_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -129,16 +116,15 @@ test_EmailAllowlist_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "<span class=setting>Email allowlists are enabled </span> in Test Top-Level Domain."
+    FailTestNonCompliant(PolicyId,
+                         Output,
+                         NonComplianceMessage14_1(GetFriendlyValue14_1("false"),
+                                                  "Test Top-Level Domain"))
 }
 
 test_EmailAllowlist_Incorrect_V3 if {
     # Test Email Allowlists when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.14.1v0.3"
+    PolicyId := GmailId14_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -167,10 +153,9 @@ test_EmailAllowlist_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "<span class=setting>Email allowlists are enabled </span> in Test Top-Level Domain."
+    FailTestNonCompliant(PolicyId,
+                         Output,
+                         NonComplianceMessage14_1(GetFriendlyValue14_1("false"),
+                                                  "Test Top-Level Domain"))
 }
 #--

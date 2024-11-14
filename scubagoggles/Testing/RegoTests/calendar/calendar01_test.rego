@@ -1,12 +1,19 @@
 package calendar
+
 import future.keywords
+import data.utils.FailTestBothNonCompliant
+import data.utils.FailTestGroupNonCompliant
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.CALENDAR.1.1v0.3
+# GWS.CALENDAR.1.1
 #--
+
 test_ExtSharingPrimaryCal_Correct_V1 if {
     # Test external sharing for primary calendars when there's only one event
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -26,16 +33,12 @@ test_ExtSharingPrimaryCal_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_ExtSharingPrimaryCal_Correct_V2 if {
     # Test external sharing for primary calendars when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -66,16 +69,12 @@ test_ExtSharingPrimaryCal_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_ExtSharingPrimaryCal_Correct_V3 if {
     # Test external sharing for primary calendars when there's multiple OUs
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -106,16 +105,12 @@ test_ExtSharingPrimaryCal_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_ExtSharingPrimaryCal_Correct_V4 if {
     # Test external sharing for primary calendars when there's multiple OUs, and an older event is non-compliant
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -157,16 +152,12 @@ test_ExtSharingPrimaryCal_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_ExtSharingPrimaryCal_Correct_V5 if {
     # Test external sharing for primary, inherit from parent
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -208,16 +199,12 @@ test_ExtSharingPrimaryCal_Correct_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_ExtSharingPrimaryCal_Correct_V6 if {
     # Test group
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -249,16 +236,12 @@ test_ExtSharingPrimaryCal_Correct_V6 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_ExtSharingPrimaryCal_Incorrect_V1 if {
     # Test external sharing for primary calendars when there are no relevant events
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -278,20 +261,12 @@ test_ExtSharingPrimaryCal_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_ExtSharingPrimaryCal_Incorrect_V2 if {
     # Test external sharing for primary calendars when there's only one event and it's wrong
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -311,18 +286,14 @@ test_ExtSharingPrimaryCal_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "External sharing options for primary calendars is set to ",
-        "Share all information, but outsiders cannot change calendars</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_1("Share all information, but outsiders cannot change calendars")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ExtSharingPrimaryCal_Incorrect_V3 if {
     # Test external sharing for primary calendars when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -353,19 +324,15 @@ test_ExtSharingPrimaryCal_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "External sharing options for primary calendars is set to ",
-        "Share all information, but outsiders cannot change calendars</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_1("Share all information, but outsiders cannot change calendars")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ExtSharingPrimaryCal_Incorrect_V4 if {
     # Test external sharing for primary calendars when there is no event for the Top-level OU
     # but there is one for a different OU
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -385,21 +352,13 @@ test_ExtSharingPrimaryCal_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_ExtSharingPrimaryCal_Incorrect_V5 if {
     # Test external sharing for primary calendars when the Top-Level OU is compliant,
     # but a secondary OU is non-compliant
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -430,18 +389,14 @@ test_ExtSharingPrimaryCal_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "External sharing options for primary calendars is set to ",
-        "Share all information, but outsiders cannot change calendars</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage1_1("Share all information, but outsiders cannot change calendars")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ExtSharingPrimaryCal_Incorrect_V6 if {
     # Test: top-level OU is compliant but a group is non-compliant
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -473,18 +428,15 @@ test_ExtSharingPrimaryCal_Incorrect_V6 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following groups are non-compliant:<ul><li>group1@example.com: ",
-        "External sharing options for primary calendars is set to ",
-        "Share all information, but outsiders cannot change calendars</li></ul>"])
+    Value := "Share all information, but outsiders cannot change calendars"
+    failedGroup := [{"Name": "group1@example.com",
+                     "Value": NonComplianceMessage1_1(Value)}]
+    FailTestGroupNonCompliant(PolicyId, Output, failedGroup)
 }
 
 test_ExtSharingPrimaryCal_Incorrect_V if {
     # Test: top-level OU and a group are non-compliant
-    PolicyId := "GWS.CALENDAR.1.1v0.3"
+    PolicyId := CalendarId1_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -516,25 +468,22 @@ test_ExtSharingPrimaryCal_Incorrect_V if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "External sharing options for primary calendars is set to ",
-        "Share all information, but outsiders cannot change calendars</li></ul><br>",
-        "The following groups are non-compliant:<ul><li>group1@example.com: ",
-        "External sharing options for primary calendars is set to ",
-        "Share all information, but outsiders cannot change calendars</li></ul>"])
+    Value := "Share all information, but outsiders cannot change calendars"
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_1(Value)}]
+    failedGroup := [{"Name": "group1@example.com",
+                     "Value": NonComplianceMessage1_1(Value)}]
+    FailTestBothNonCompliant(PolicyId, Output, failedOU, failedGroup)
 }
 #--
 
 #
-# GWS.CALENDAR.1.2v0.3
+# GWS.CALENDAR.1.2
 #--
+
 test_ExtSharingSecondaryCal_Correct_V1 if {
  # Test external sharing for secondary calendars when there's only one event
-    PolicyId := "GWS.CALENDAR.1.2v0.3"
+    PolicyId := CalendarId1_2
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -554,19 +503,12 @@ test_ExtSharingSecondaryCal_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "Requirement met.<br>",
-        "Highest Level of Sharing: Only free/busy information (hide event details)."
-    ])
+    PassTestResult(PolicyId, Output)
 }
 
 test_ExtSharingSecondaryCal_Correct_V2 if {
     # Test external sharing for secondary calendars when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.CALENDAR.1.2v0.3"
+    PolicyId := CalendarId1_2
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -597,19 +539,12 @@ test_ExtSharingSecondaryCal_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "Requirement met.<br>",
-        "Highest Level of Sharing: Only free/busy information (hide event details)."
-    ])
+    PassTestResult(PolicyId, Output)
 }
 
 test_ExtSharingSecondaryCal_Incorrect_V1 if {
     # Test external sharing for secondary calendars when there are no relevant events
-    PolicyId := "GWS.CALENDAR.1.2v0.3"
+    PolicyId := CalendarId1_2
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -629,20 +564,12 @@ test_ExtSharingSecondaryCal_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_ExtSharingSecondaryCal_Incorrect_V2 if {
     # Test external sharing for secondary calendars when there's only one event and it's wrong
-    PolicyId := "GWS.CALENDAR.1.2v0.3"
+    PolicyId := CalendarId1_2
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -662,20 +589,14 @@ test_ExtSharingSecondaryCal_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "Requirement not met.<br>",
-        "Highest Level of Sharing: Secondary Calendars Share all information,",
-        " but outsiders cannot change calendars."
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_2("Share all information, but outsiders cannot change calendars")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ExtSharingSecondaryCal_Incorrect_V3 if {
     # Test external sharing for secondary calendars when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CALENDAR.1.2v0.3"
+    PolicyId := CalendarId1_2
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -706,15 +627,8 @@ test_ExtSharingSecondaryCal_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "Requirement not met.<br>",
-        "Highest Level of Sharing: Secondary Calendars Share all information,",
-        " but outsiders cannot change calendars."
-    ])
-
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_2("Share all information, but outsiders cannot change calendars")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

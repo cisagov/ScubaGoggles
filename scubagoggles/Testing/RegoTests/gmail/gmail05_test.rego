@@ -1,13 +1,17 @@
 package gmail
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.GMAIL.5.1v0.3
+# GWS.GMAIL.5.1
 #--
 
 test_Encrypted_Correct_V1 if {
     # Test inheritance
-    PolicyId := "GWS.GMAIL.5.1v0.3"
+    PolicyId := GmailId5_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -58,17 +62,13 @@ test_Encrypted_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 
 test_Encrypted_Incorrect_V1 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.1v0.3"
+    PolicyId := GmailId5_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -91,17 +91,14 @@ test_Encrypted_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Protection against encrypted attachments from untrusted senders is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage5_1("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Encrypted_Incorrect_V2 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.1v0.3"
+    PolicyId := GmailId5_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -138,21 +135,18 @@ test_Encrypted_Incorrect_V2 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Protection against encrypted attachments from untrusted senders is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_1("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 #
-# GWS.GMAIL.5.2v0.3
+# GWS.GMAIL.5.2
 #--
 test_Scripts_Correct_V1 if {
     # Test Attachment Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.2v0.3"
+    PolicyId := GmailId5_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -177,16 +171,12 @@ test_Scripts_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Scripts_Correct_V2 if {
     # Test Attachment Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.5.2v0.3"
+    PolicyId := GmailId5_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -227,16 +217,12 @@ test_Scripts_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Scripts_Correct_V3 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.2v0.3"
+    PolicyId := GmailId5_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -277,16 +263,12 @@ test_Scripts_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Scripts_Incorrect_V1 if {
     # Test Attachment Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.5.2v0.3"
+    PolicyId := GmailId5_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -305,20 +287,12 @@ test_Scripts_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_Scripts_Incorrect_V2 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.2v0.3"
+    PolicyId := GmailId5_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -343,17 +317,14 @@ test_Scripts_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Protection against encrypted attachments with scripts from untrusted senders is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_2("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Scripts_Incorrect_V3 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.2v0.3"
+    PolicyId := GmailId5_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -394,21 +365,18 @@ test_Scripts_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Protection against encrypted attachments with scripts from untrusted senders is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_2("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 #
-# GWS.GMAIL.5.3v0.3
+# GWS.GMAIL.5.3
 #--
 test_AttachmentProtectionAnomalousAttachment_Correct_V1 if {
     # Test Attachment Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.3v0.3"
+    PolicyId := GmailId5_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -430,16 +398,12 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AttachmentProtectionAnomalousAttachment_Correct_V2 if {
     # Test Attachment Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.5.3v0.3"
+    PolicyId := GmailId5_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -474,16 +438,12 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AttachmentProtectionAnomalousAttachment_Correct_V3 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.3v0.3"
+    PolicyId := GmailId5_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -518,16 +478,12 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AttachmentProtectionAnomalousAttachment_Correct_V4 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.3v0.3"
+    PolicyId := GmailId5_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -562,16 +518,12 @@ test_AttachmentProtectionAnomalousAttachment_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V1 if {
     # Test Attachment Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.5.3v0.3"
+    PolicyId := GmailId5_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -590,20 +542,12 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V2 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.3v0.3"
+    PolicyId := GmailId5_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -625,17 +569,14 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Protection against anomalous attachment types in emails is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_3("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V3 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.3v0.3"
+    PolicyId := GmailId5_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -670,17 +611,14 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Protection against anomalous attachment types in emails is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_3("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V4 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.3v0.3"
+    PolicyId := GmailId5_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -702,17 +640,14 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Protection against anomalous attachment types in emails is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage5_3("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AttachmentProtectionAnomalousAttachment_Incorrect_V5 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.3v0.3"
+    PolicyId := GmailId5_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -747,21 +682,18 @@ test_AttachmentProtectionAnomalousAttachment_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Protection against anomalous attachment types in emails is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage5_3("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 
 #
-# GWS.GMAIL.5.4v0.3
+# GWS.GMAIL.5.4
 #--
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V1 if {
     # Test Attachment Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.4v0.3"
+    PolicyId := GmailId5_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -783,16 +715,12 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V2 if {
     # Test Attachment Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.5.4v0.3"
+    PolicyId := GmailId5_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -827,16 +755,12 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V3 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.4v0.3"
+    PolicyId := GmailId5_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -871,16 +795,12 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Correct_V4 if {
     # Test Attachment Protections when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.5.4v0.3"
+    PolicyId := GmailId5_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -915,16 +835,12 @@ test_AttachmentProtectionFutureRecommendedSettings_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V1 if {
     # Test Attachment Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.5.4v0.3"
+    PolicyId := GmailId5_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -943,20 +859,12 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V2 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.4v0.3"
+    PolicyId := GmailId5_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -978,17 +886,14 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Automatically enables all future added settings is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_4("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V3 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.4v0.3"
+    PolicyId := GmailId5_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1023,17 +928,14 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Automatically enables all future added settings is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_4("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V4 if {
     # Test Attachment Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.5.4v0.3"
+    PolicyId := GmailId5_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1055,17 +957,14 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Automatically enables all future added settings is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage5_4("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V5 if {
     # Test Attachment Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.5.4v0.3"
+    PolicyId := GmailId5_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1100,20 +999,17 @@ test_AttachmentProtectionFutureRecommendedSettings_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Automatically enables all future added settings is set to disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage5_4("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 #
-# GWS.GMAIL.5.5v0.3
+# GWS.GMAIL.5.5
 #--
 test_AttachmentSafety_Correct_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.5v0.3"
+    PolicyId := GmailId5_5
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1161,16 +1057,12 @@ test_AttachmentSafety_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AttachmentSafety_InCorrect_V1 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.5v0.3"
+    PolicyId := GmailId5_5
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1218,24 +1110,14 @@ test_AttachmentSafety_InCorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        concat("", [
-        "The following email types are kept in the inbox:",
-        "<ul>",
-        concat("", [concat("", [
-            "<li>",
-            "Emails with attachments, with scripts from untrusted senders",
-            "</li></ul>"]),]),
-            "</li></ul>"])])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": GetFriendlyValue5_5("", "Show warning", "")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AttachmentSafety_InCorrect_V2 if {
     # Test Spoofing and Authentication Protections when there's only one event
-    PolicyId := "GWS.GMAIL.5.5v0.3"
+    PolicyId := GmailId5_5
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1283,24 +1165,14 @@ test_AttachmentSafety_InCorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        concat("", [
-        "The following email types are kept in the inbox:",
-        "<ul>",
-        concat("", [concat("", [
-            "<li>",
-            "Encrypted attachments from untrusted senders",
-            "</li></ul>"]),]),
-            "</li></ul>"])])
+    failedOU := [{"Name": "Secondary OU",
+                  "Value": GetFriendlyValue5_5("Show warning", "", "")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
-test_AttachmentSafety_Inorrect_V3 if {
+test_AttachmentSafety_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when one setting is missing events
-    PolicyId := "GWS.GMAIL.5.5v0.3"
+    PolicyId := GmailId5_5
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1336,21 +1208,13 @@ test_AttachmentSafety_Inorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 
 test_AttachmentSafety_Incorrect_V4 if {
     # Test Spoofing and Authentication Protections when all settings have no events
-    PolicyId := "GWS.GMAIL.5.5v0.3"
+    PolicyId := GmailId5_5
     Output := tests with input as {
         "gmail_logs": {"items": [
 
@@ -1360,20 +1224,12 @@ test_AttachmentSafety_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_AttachmentSafety_InCorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events
-    PolicyId := "GWS.GMAIL.5.5v0.3"
+    PolicyId := GmailId5_5
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1421,20 +1277,7 @@ test_AttachmentSafety_InCorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        concat("", [
-        "The following email types are kept in the inbox:",
-        "<ul>",
-        concat("", [concat("", [
-            "<li>",
-            "Encrypted attachments from untrusted senders",
-            "</li>",
-            "<li>",
-            "Emails with attachments, with scripts from untrusted senders",
-            "</li></ul>"]),]),
-            "</li></ul>"])])
+    failedOU := [{"Name": "Secondary OU",
+                  "Value": GetFriendlyValue5_5("Show warning", "Show warning", "")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

@@ -1,13 +1,16 @@
 package gmail
-import future.keywords
 
+import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.GMAIL.6.1v0.3
+# GWS.GMAIL.6.1
 #--
 test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V1 if {
     # Test Links and External Images Protections when there's only one event
-    PolicyId := "GWS.GMAIL.6.1v0.3"
+    PolicyId := GmailId6_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -29,16 +32,12 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V2 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.1v0.3"
+    PolicyId := GmailId6_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -73,16 +72,12 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V3 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.1v0.3"
+    PolicyId := GmailId6_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -117,16 +112,12 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V4 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.1v0.3"
+    PolicyId := GmailId6_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -161,16 +152,12 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V1 if {
     # Test Links and External Images Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.6.1v0.3"
+    PolicyId := GmailId6_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -189,20 +176,12 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V2 if {
     # Test Links and External Images Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.6.1v0.3"
+    PolicyId := GmailId6_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -224,17 +203,14 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Identify links behind shortened URLs is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_1("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V3 if {
     # Test Links and External Images Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.6.1v0.3"
+    PolicyId := GmailId6_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -269,17 +245,14 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Identify links behind shortened URLs is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_1("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V4 if {
     # Test Links and External Images Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.6.1v0.3"
+    PolicyId := GmailId6_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -301,17 +274,14 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Identify links behind shortened URLs is disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage6_1("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V5 if {
     # Test Links and External Images Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.6.1v0.3"
+    PolicyId := GmailId6_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -346,22 +316,19 @@ test_LinksExternalImagesProtectionIdentifyLinksURL_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Identify links behind shortened URLs is disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage6_1("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 #
-# GWS.GMAIL.6.2v0.3
+# GWS.GMAIL.6.2
 #--
 
 test_LinksExternalImagesProtectionScanLinkedImages_Correct_V1 if {
     # Test Links and External Images Protections when there's only one event and it's correct
-    PolicyId := "GWS.GMAIL.6.2v0.3"
+    PolicyId := GmailId6_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -383,16 +350,12 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionScanLinkedImages_Correct_V2 if {
     # Test Links and External Images Protections when there are multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.2v0.3"
+    PolicyId := GmailId6_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -427,16 +390,12 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V2 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionScanLinkedImages_Correct_V3 if {
     # Test Links and External Images Protections when there are multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.2v0.3"
+    PolicyId := GmailId6_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -471,16 +430,12 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionScanLinkedImages_Correct_V4 if {
     # Test Links and External Images Protections when there are multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.2v0.3"
+    PolicyId := GmailId6_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -515,16 +470,12 @@ test_LinksExternalImagesProtectionScanLinkedImages_Correct_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V1 if {
     # Test Links and External Images Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.6.2v0.3"
+    PolicyId := GmailId6_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -543,20 +494,12 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V2 if {
     # Test Links and External Images Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.6.2v0.3"
+    PolicyId := GmailId6_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -578,17 +521,14 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Scan linked images is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_2("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V3 if {
     # Test Links and External Images Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.6.2v0.3"
+    PolicyId := GmailId6_2
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -624,21 +564,18 @@ test_LinksExternalImagesProtectionScanLinkedImages_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Scan linked images is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_2("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 #
-# GWS.GMAIL.6.3v0.3
+# GWS.GMAIL.6.3
 #--
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V1 if {
     # Test Links and External Images Protections when there's only one event
-    PolicyId := "GWS.GMAIL.6.3v0.3"
+    PolicyId := GmailId6_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -663,16 +600,12 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.3v0.3"
+    PolicyId := GmailId6_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -713,16 +646,12 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V3 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.3v0.3"
+    PolicyId := GmailId6_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -763,16 +692,12 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V1 if {
     # Test Links and External Images Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.6.3v0.3"
+    PolicyId := GmailId6_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -791,20 +716,12 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V2 if {
     # Test Links and External Images Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.6.3v0.3"
+    PolicyId := GmailId6_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -829,17 +746,14 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Show warning prompt for click on links to untrusted domains is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_3("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
     # Test Links and External Images Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.6.3v0.3"
+    PolicyId := GmailId6_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -878,17 +792,14 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Show warning prompt for click on links to untrusted domains is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_3("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
     # Test Links and External Images Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.6.3v0.3"
+    PolicyId := GmailId6_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -911,17 +822,14 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Show warning prompt for click on links to untrusted domains is disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage6_3("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
     # Test Links and External Images Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.6.3v0.3"
+    PolicyId := GmailId6_3
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -960,21 +868,18 @@ test_LinksExternalImagesProtectionWarningLinksUntrustedDomains_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Show warning prompt for click on links to untrusted domains is disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage6_3("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 #
-# GWS.GMAIL.6.4v0.3
+# GWS.GMAIL.6.4
 #--
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V1 if {
     # Test Links and External Images Protections when there's only one event
-    PolicyId := "GWS.GMAIL.6.4v0.3"
+    PolicyId := GmailId6_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -999,16 +904,12 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V2 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.4v0.3"
+    PolicyId := GmailId6_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1049,16 +950,12 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V3 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.4v0.3"
+    PolicyId := GmailId6_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1099,16 +996,12 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V4 if {
     # Test Links and External Images Protections when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.6.4v0.3"
+    PolicyId := GmailId6_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1149,16 +1042,12 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V1 if {
     # Test Links and External Images Protections when there are no relevant events
-    PolicyId := "GWS.GMAIL.6.4v0.3"
+    PolicyId := GmailId6_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1177,20 +1066,12 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V2 if {
     # Test Links and External Images Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.6.4v0.3"
+    PolicyId := GmailId6_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1215,17 +1096,14 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Apply future recommended settings automatically is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_4("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V3 if {
     # Test Links and External Images Protections when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.6.4v0.3"
+    PolicyId := GmailId6_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1250,17 +1128,14 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Apply future recommended settings automatically is disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage6_4("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V4 if {
     # Test Links and External Images Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.6.4v0.3"
+    PolicyId := GmailId6_4
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -1301,10 +1176,7 @@ test_LinksExternalImagesProtectionFutureRecommendedSettings_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Apply future recommended settings automatically is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_4("disabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

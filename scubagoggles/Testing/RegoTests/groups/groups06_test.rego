@@ -1,5 +1,9 @@
 package groups
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 
 #
@@ -7,7 +11,7 @@ import future.keywords
 #--
 test_GroupOwnersHideGroups_Correct_V1 if {
     # Test group owners' ability to hide groups when there's only one event
-    PolicyId := "GWS.GROUPS.6.1v0.3"
+    PolicyId := GroupsId6_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -26,16 +30,12 @@ test_GroupOwnersHideGroups_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_GroupOwnersHideGroups_Correct_V2 if {
     # Test group owners' ability to hide groups when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.GROUPS.6.1v0.3"
+    PolicyId := GroupsId6_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -64,16 +64,12 @@ test_GroupOwnersHideGroups_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_GroupOwnersHideGroups_Incorrect_V1 if {
     # Test group owners' ability to hide groups when there are no relevant events
-    PolicyId := "GWS.GROUPS.6.1v0.3"
+    PolicyId := GroupsId6_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -92,20 +88,12 @@ test_GroupOwnersHideGroups_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_GroupOwnersHideGroups_Incorrect_V2 if {
     # Test group owners' ability to hide groups when there's only one event and it's wrong
-    PolicyId := "GWS.GROUPS.6.1v0.3"
+    PolicyId := GroupsId6_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -124,17 +112,14 @@ test_GroupOwnersHideGroups_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Groups can be hidden from the directory</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_1("Yes")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_GroupOwnersHideGroups_Incorrect_V3 if {
     # Test group owners' ability to hide groups when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.6.1v0.3"
+    PolicyId := GroupsId6_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -163,16 +148,13 @@ test_GroupOwnersHideGroups_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Groups can be hidden from the directory</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_1("Yes")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_GroupOwnersHideGroups_Incorrect_V4 if {
-    PolicyId := "GWS.GROUPS.6.1v0.3"
+    PolicyId := GroupsId6_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -201,11 +183,8 @@ test_GroupOwnersHideGroups_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Groups can be hidden from the directory</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage6_1("Yes")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

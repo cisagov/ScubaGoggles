@@ -1,21 +1,28 @@
 """
-Helper methods for running the functional smoke tests. 
+Helper methods for running the functional smoke tests.
 """
 
 import os
 import json
+
+from operator import itemgetter
+from pathlib import Path
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from scubagoggles.orchestrator import Orchestrator
-from scubagoggles.utils import get_package_version
+from scubagoggles.config import UserConfig
+from scubagoggles.user_setup import default_file_names
+from scubagoggles.version import Version
 
-OUTPUT_DIRECTORY = "GWSBaselineConformance"
-BASELINE_REPORT_H1 = "SCuBA GWS Secure Configuration Baseline Reports"
-CISA_GOV_URL = "https://www.cisa.gov/scuba"
-SCUBAGOGGLES_BASELINES_URL = "https://github.com/cisagov/ScubaGoggles/tree/main/baselines"
+OUTPUT_DIRECTORY = 'GWSBaselineConformance'
+BASELINE_REPORT_H1 = 'SCuBA GWS Secure Configuration Baseline Reports'
+CISA_GOV_URL = 'https://www.cisa.gov/scuba'
+SCUBAGOGGLES_BASELINES_URL = 'https://github.com/cisagov/ScubaGoggles/tree/main/baselines'
 
-def get_output_path() -> str:
+
+def get_output_path() -> Path:
     """
     Get the latest output directory created by `scubagoggles gws`.
     The default name is "GWSBaselineConformance_<timestamp>.
@@ -23,12 +30,17 @@ def get_output_path() -> str:
     Returns:
         str: The path to the latest output directory
     """
-    directories: list = [
-        d for d in os.listdir()
-        if os.path.isdir(d) and d.startswith(OUTPUT_DIRECTORY)
-    ]
-    directories.sort(key=os.path.getctime, reverse=True)
-    return os.path.join(os.getcwd(), directories[0])
+
+    config = UserConfig()
+    output_dir = config.output_dir
+    dir_pattern = f'{default_file_names.output_folder_name}*'
+
+    directories = [(d, d.stat().st_ctime)
+                   for d in output_dir.glob(dir_pattern)]
+    directories.sort(key = itemgetter(1), reverse = True)
+
+    return directories[0][0]
+
 
 def prepend_file_protocol(path: str) -> str:
     """
@@ -37,45 +49,80 @@ def prepend_file_protocol(path: str) -> str:
     Returns:
         str: Path to a file with the local filesystem prepended
     """
-    if not path.startswith("file://"):
-        path = "file://" + path
+    if not path.startswith('file://'):
+        path = 'file://' + path
     return path
 
-def verify_output_type(output_path: str, output: list) -> list:
+
+def verify_output_type(output_path: Path, output: list) -> list:
     """
     Checks if the output generated from `scubagoggles` creates the correct output.
-    Validate files/directories and catch invalid json. 
+    Validate files/directories and catch invalid json.
 
     Args:
         output_path: The output path, i.e. "GWSBaselineConformance_<timestamp>"
         output: Initialized as an empty list
-        
+
     Returns:
         list: All output file and directory names
     """
-    entries: list = os.listdir(output_path)
-    for entry in entries:
+    for entry in output_path.iterdir():
         output.append(entry)
 
         # Check if entry is a valid directory or file
         # If a valid directory, then recurse
-        child_path: str = os.path.join(output_path, entry)
-        if os.path.isdir(child_path):
+        if entry.is_dir():
             assert True
-            verify_output_type(child_path, output)
-        elif os.path.isfile(child_path):
+            verify_output_type(entry, output)
+        elif os.path.isfile(entry):
 
             # Check for valid json
-            if child_path.endswith(".json"):
+            if entry.suffix.lower() == '.json':
                 try:
-                    with open(child_path, encoding="utf-8") as jsonfile:
+                    with entry.open(encoding = 'utf-8') as jsonfile:
                         json.load(jsonfile)
                 except ValueError as e:
-                    raise ValueError(f"{child_path} contains invalid json") from e
+                    raise ValueError(f'{entry} contains invalid json') from e
             assert True
         else:
-            raise OSError("Entry is not a directory or file (symlink, etc.)")
+            raise OSError('Entry is not a directory or file (symlink, etc.)')
     return output
+
+
+def sample_report_dir() -> Path:
+
+    """Returns the location of the ScubaGoggles sample report directory.  It's
+    assumed that this directory located up the directory hierarchy where this
+    script is located.
+
+    :return: Path pointing to the sample report directory.
+    """
+
+    current_dir = Path(__file__).parent
+    while current_dir.anchor != str(current_dir):
+
+        report_path = current_dir / 'sample-report'
+        if report_path.is_dir():
+            return report_path
+
+        current_dir = current_dir.parent
+
+    raise NotADirectoryError('? sample report directory missing')
+
+
+def top_report_url(output_path: Path) -> str:
+
+    """Returns the URL for the top-level HTML ScubaGoggles baseline report,
+    given the output directory from a conformance run.
+
+    :param Path output_path: ScubaGoggles output directory
+    :return: local (file://) URL for the top-level HTML report.
+    """
+
+    report_path = output_path / f'{default_file_names.report_output_name}.html'
+
+    return prepend_file_protocol(str(report_path))
+
 
 def get_required_entries(sample_report, required_entries) -> list:
     """
@@ -86,16 +133,17 @@ def get_required_entries(sample_report, required_entries) -> list:
     Args:
         sample_report: Path where "sample-report" is located in the project
         required_entries: Initialized as an empty list
-        
+
     Returns:
         list: All required file and directory names
     """
-    with os.scandir(sample_report) as entries:
-        for entry in entries:
-            required_entries.append(entry.name)
-            if entry.is_dir():
-                get_required_entries(entry.path, required_entries)
+    for entry in sample_report.iterdir():
+        required_entries.append(entry.name)
+        if entry.is_dir():
+            get_required_entries(entry, required_entries)
+
     return required_entries
+
 
 def verify_all_outputs_exist(output: list, required_entries: list):
     """
@@ -105,25 +153,32 @@ def verify_all_outputs_exist(output: list, required_entries: list):
         output: a list of all files and directories generated by `scubagoggles gws`
         required_entries: a list of all required file and directory names
     """
+    output_names = {entry.name for entry in output}
     for required_entry in required_entries:
-        if required_entry in output:
+        if required_entry in output_names:
             assert True
         else:
-            raise ValueError(f"{required_entry} was not found in the generated report")
+            raise ValueError(f'{required_entry} was not found in the generated report')
 
-def verify_scubaresults(jsonfile):
+
+def verify_scubaresults(output_path: Path):
     """
     Verify "ScubaResults.json" is valid, and check if any errors
     are displayed in the reports.
 
     Args:
-        jsonfile: Path to a json file
+        output_path: ScubaGoggles output directory containing the results JSON
+            file.
     """
-    scubaresults = json.load(jsonfile)
-    summaries = scubaresults["Summary"]
+    results_path = output_path / f'{default_file_names.json_output_name}.json'
+    with results_path.open(encoding = 'utf-8') as jsonfile:
+        scubaresults = json.load(jsonfile)
+
+    summaries = scubaresults['Summary']
     for product, summary in summaries.items():
-        if summary["Errors"] != 0:
-            raise ValueError(f"{product} contains errors in the report")
+        if summary['Errors'] != 0:
+            raise ValueError(f'{product} contains errors in the report')
+
 
 def run_selenium(browser, customerdomain):
     """
@@ -134,13 +189,13 @@ def run_selenium(browser, customerdomain):
         customerdomain: The customer domain
     """
     verify_navigation_links(browser)
-    h1 = browser.find_element(By.TAG_NAME, "h1").text
+    h1 = browser.find_element(By.TAG_NAME, 'h1').text
     assert h1 == BASELINE_REPORT_H1
 
     gws_products = Orchestrator.gws_products()
     products = {
-        product: { "title": f"{product} Baseline Report" }
-        for product in gws_products["prod_to_fullname"].values()
+        product: { 'title': f'{product} Baseline Report' }
+        for product in gws_products['prod_to_fullname'].values()
     }
 
     # Before entering loop check that we actually display 10 rows in table
@@ -154,61 +209,62 @@ def run_selenium(browser, customerdomain):
             verify_tenant_table(browser, customerdomain, True)
 
             reports_table = get_reports_table(browser)[i]
-            baseline_report = reports_table.find_elements(By.TAG_NAME, "td")[0]
+            baseline_report = reports_table.find_elements(By.TAG_NAME, 'td')[0]
             product = baseline_report.text
             assert product in products
 
-            individual_report_anchor = baseline_report.find_element(By.TAG_NAME, "a")
-            individual_report_anchor_href = individual_report_anchor.get_attribute("href")
+            individual_report_anchor = baseline_report.find_element(By.TAG_NAME, 'a')
+            individual_report_anchor_href = individual_report_anchor.get_attribute('href')
             individual_report_anchor.click()
             current_url = browser.current_url()
             assert individual_report_anchor_href == current_url
 
             # Check at the individual report level
             verify_navigation_links(browser)
-            h1 = browser.find_element(By.TAG_NAME, "h1").text
-            assert h1 == products[product]["title"]
+            h1 = browser.find_element(By.TAG_NAME, 'h1').text
+            assert h1 == products[product]['title']
 
             # Check if customerdomain and tool version are present in individual report
             verify_tenant_table(browser, customerdomain, False)
 
-            policy_tables = browser.find_elements(By.TAG_NAME, "table")
+            policy_tables = browser.find_elements(By.TAG_NAME, 'table')
             for table in policy_tables[1:]:
 
                 # Verify policy table headers are correct
                 headers = (
-                    table.find_element(By.TAG_NAME, "thead")
-                    .find_elements(By.TAG_NAME, "tr")[0]
-                    .find_elements(By.TAG_NAME, "th")
+                    table.find_element(By.TAG_NAME, 'thead')
+                    .find_elements(By.TAG_NAME, 'tr')[0]
+                    .find_elements(By.TAG_NAME, 'th')
                 )
                 assert len(headers) == 5
-                assert headers[0].text == "Control ID"
-                assert headers[1].text in "Requirements" or headers[1].text in "Rule Name"
-                assert headers[2].text == "Result"
-                assert headers[3].text == "Criticality"
-                assert headers[4].text in "Details" or headers[4].text in "Rule Description"
+                assert headers[0].text == 'Control ID'
+                assert headers[1].text in 'Requirements' or headers[1].text in 'Rule Name'
+                assert headers[2].text == 'Result'
+                assert headers[3].text == 'Criticality'
+                assert headers[4].text in 'Details' or headers[4].text in 'Rule Description'
 
                 # Verify policy table rows are populated
-                tbody = table.find_element(By.TAG_NAME, "tbody")
-                rows = tbody.find_elements(By.TAG_NAME, "tr")
+                tbody = table.find_element(By.TAG_NAME, 'tbody')
+                rows = tbody.find_elements(By.TAG_NAME, 'tr')
                 assert len(rows) > 0
 
             parent_report_anchor = (
-                browser.find_element(By.TAG_NAME, "header")
-                .find_element(By.TAG_NAME, "a")
+                browser.find_element(By.TAG_NAME, 'header')
+                .find_element(By.TAG_NAME, 'a')
             )
-            parent_report_anchor_href = parent_report_anchor.get_attribute("href")
+            parent_report_anchor_href = parent_report_anchor.get_attribute('href')
             parent_report_anchor.click()
             current_url = browser.current_url()
             assert parent_report_anchor_href == current_url
 
             WebDriverWait(browser, 10).until(
                 expected_conditions.presence_of_element_located(
-                    (By.TAG_NAME, "body")
+                    (By.TAG_NAME, 'body')
                 )
             )
     else:
-        raise ValueError("Expected the reports table to have a length of 10")
+        raise ValueError('Expected the reports table to have a length of 10')
+
 
 def verify_navigation_links(browser):
     """
@@ -218,12 +274,13 @@ def verify_navigation_links(browser):
         browser: A Selenium WebDriver instance
     """
     links = (
-        browser.find_element(By.CLASS_NAME, "links")
-        .find_elements(By.TAG_NAME, "a")
+        browser.find_element(By.CLASS_NAME, 'links')
+        .find_elements(By.TAG_NAME, 'a')
     )
     if len(links) == 2:
-        assert links[0].get_attribute("href") == CISA_GOV_URL
-        assert links[1].get_attribute("href") == SCUBAGOGGLES_BASELINES_URL
+        assert links[0].get_attribute('href') == CISA_GOV_URL
+        assert links[1].get_attribute('href') == SCUBAGOGGLES_BASELINES_URL
+
 
 def get_reports_table(browser):
     """
@@ -234,9 +291,9 @@ def get_reports_table(browser):
         browser: A Selenium WebDriver instance
     """
     return (
-        browser.find_elements(By.TAG_NAME, "table")[1]
-        .find_element(By.TAG_NAME, "tbody")
-        .find_elements(By.TAG_NAME, "tr")
+        browser.find_elements(By.TAG_NAME, 'table')[1]
+        .find_element(By.TAG_NAME, 'tbody')
+        .find_elements(By.TAG_NAME, 'tr')
     )
 
 def verify_tenant_table(browser, customerdomain, parent):
@@ -250,19 +307,18 @@ def verify_tenant_table(browser, customerdomain, parent):
         parent: boolean to determine parent/individual reports
     """
     tenant_table_rows = (
-        browser.find_element(By.TAG_NAME, "table")
-        .find_element(By.TAG_NAME, "tbody")
-        .find_elements(By.TAG_NAME, "tr")
+        browser.find_element(By.TAG_NAME, 'table')
+        .find_element(By.TAG_NAME, 'tbody')
+        .find_elements(By.TAG_NAME, 'tr')
     )
     assert len(tenant_table_rows) == 2
-    domain = tenant_table_rows[1].find_elements(By.TAG_NAME, "td")[0].text
+    domain = tenant_table_rows[1].find_elements(By.TAG_NAME, 'td')[0].text
     assert domain == customerdomain
 
     if not parent:
         # Check for correct tool version, e.g. 0.2.0
-        version = get_package_version("scubagoggles")
-        tool_version = tenant_table_rows[1].find_elements(By.TAG_NAME, "td")[3].text
-        assert version == tool_version
+        tool_version = tenant_table_rows[1].find_elements(By.TAG_NAME, 'td')[3].text
+        assert tool_version == Version.current
 
         # Baseline version should also be checked in this method
         # Add as an additional todo

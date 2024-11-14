@@ -1,13 +1,14 @@
 package sites
-import future.keywords
 
-#
-# Baseline GWS.SITES.1.1v0.3
-#--
+import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestGroupNonCompliant
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 test_Sites_Disabled_Correct_V1 if {
     # Test ensure Sites is disabled
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -27,16 +28,12 @@ test_Sites_Disabled_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sites_Disabled_Correct_V2 if {
     # Test ensure sites is disabled when there's multiple events and the most recent is correct
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -67,16 +64,12 @@ test_Sites_Disabled_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sites_Disabled_Correct_V3 if {
     # Test ensure sites is disabled when there are multiple OU's
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -107,16 +100,12 @@ test_Sites_Disabled_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sites_Disabled_Correct_V4 if {
     # Test sites is disabled when there are multiple OU's and an older event is non-complaint
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -158,16 +147,12 @@ test_Sites_Disabled_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sites_Disabled_Correct_V5 if {
     # Test Sites inheritance
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -209,16 +194,12 @@ test_Sites_Disabled_Correct_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sites_Disabled_Incorrect_V1 if {
     # Test sites is disabled when there is an event for a different service
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -249,17 +230,14 @@ test_Sites_Disabled_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails ==
-        "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Service status for Sites is ON.</li></ul>"
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Service status for Sites is ON."}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sites_Disabled_Incorrect_V2 if {
     # Test Sites is disabled when there's only one event and it's wrong
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -279,17 +257,14 @@ test_Sites_Disabled_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails ==
-        "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Service status for Sites is ON.</li></ul>"
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Service status for Sites is ON."}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sites_Disabled_Incorrect_V3 if {
     # Test sites is disabled when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -320,17 +295,14 @@ test_Sites_Disabled_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails ==
-        "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Service status for Sites is ON.</li></ul>"
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Service status for Sites is ON."}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sites_Disabled_Incorrect_V4 if {
     # Test sites is disabled when the Top-level OU is compliant but a secondary OU is non-compliant
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -361,17 +333,14 @@ test_Sites_Disabled_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails ==
-        "The following OUs are non-compliant:<ul><li>Secondary OU: Service status for Sites is ON.</li></ul>"
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": "Service status for Sites is ON."}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sites_Disabled_Incorrect_V5 if {
     # Test sites is disabled when there's only one event and it's wrong
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -391,17 +360,14 @@ test_Sites_Disabled_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails ==
-        "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Service status for Sites is ON.</li></ul>"
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Service status for Sites is ON."}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sites_Disabled_Incorrect_V6 if {
     # Test sites is disabled when there are no relevant events
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -421,20 +387,12 @@ test_Sites_Disabled_Incorrect_V6 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_Sites_Disabled_Incorrect_V7 if {
     # Test Sites enabled in a group
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {
@@ -465,17 +423,14 @@ test_Sites_Disabled_Incorrect_V7 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails ==
-        "The following groups are non-compliant:<ul><li>group@example.com: Service status for Sites is ON.</li></ul>"
+    failedGroup := [{"Name": "group@example.com",
+                     "Value": "Service status for Sites is ON."}]
+    FailTestGroupNonCompliant(PolicyId, Output, failedGroup)
 }
 
 test_Sites_Disabled_Incorrect_V8 if {
     # Test Sites enabled in a group and an ou
-    PolicyId := "GWS.SITES.1.1v0.3"
+    PolicyId := SitesId1_1
     Output := tests with input as {
         "sites_logs": {"items": [
             {

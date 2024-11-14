@@ -5,6 +5,7 @@
 import pytest
 from SmokeTests.selenium_browser import Browser
 
+
 def pytest_addoption(parser):
     """
         Add custom cli arguments when running `pytest`.
@@ -14,6 +15,7 @@ def pytest_addoption(parser):
     """
     parser.addoption("--subjectemail", action="store")
     parser.addoption("--customerdomain", action="store")
+
 
 @pytest.fixture
 def subjectemail(pytestconfig):
@@ -25,6 +27,7 @@ def subjectemail(pytestconfig):
     """
     return pytestconfig.getoption("subjectemail")
 
+
 @pytest.fixture
 def customerdomain(pytestconfig):
     """
@@ -34,6 +37,7 @@ def customerdomain(pytestconfig):
             pytestconfig: Provides access to the "Config" object for a current test session
     """
     return pytestconfig.getoption("customerdomain")
+
 
 @pytest.fixture
 def browser():

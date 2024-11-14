@@ -403,5 +403,3 @@ To limit Google Drive for Desktop to authorized devices:
 6.  Select Save.
 
 Alternatively, [Context-Aware access policies](https://support.google.com/a/answer/9275380?hl=en) can be configured for more granular controls around authorized devices. The access level applied to Google Drive must have the "Apply to Google desktop and mobile apps" enabled to meet this requirement. For additional guidance, see the *Common Controls Minimum Viable Secure Baseline*, section "Context-Aware Access for All Devices that Connect to GWS SHOULD be Implemented."
-
-

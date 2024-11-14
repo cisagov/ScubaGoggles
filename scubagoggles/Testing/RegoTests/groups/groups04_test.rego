@@ -1,13 +1,16 @@
 package groups
-import future.keywords
 
+import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
 # Policy 1
 #--
 test_GroupCreation_Correct_V1 if {
     # Test group creation restrictions when there's only one event
-    PolicyId := "GWS.GROUPS.4.1v0.3"
+    PolicyId := GroupsId4_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -26,15 +29,12 @@ test_GroupCreation_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
+
 test_GroupCreation_Correct_V2 if {
     # Test group creation restrictions when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.GROUPS.4.1v0.3"
+    PolicyId := GroupsId4_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -63,16 +63,12 @@ test_GroupCreation_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_GroupCreation_Incorrect_V1 if {
     # Test group creation restrictions when there are no relevant events
-    PolicyId := "GWS.GROUPS.4.1v0.3"
+    PolicyId := GroupsId4_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -91,20 +87,12 @@ test_GroupCreation_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_GroupCreation_Incorrect_V2 if {
     # Test group creation restrictions when there's only one event and it's wrong
-    PolicyId := "GWS.GROUPS.4.1v0.3"
+    PolicyId := GroupsId4_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -123,18 +111,14 @@ test_GroupCreation_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-        "<ul><li>Test Top-Level OU: ",
-        "Anyone in the organization can create groups</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage4_1("Users in your domain only")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_GroupCreation_Incorrect_V3 if {
     # Test group creation restrictions when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.4.1v0.3"
+    PolicyId := GroupsId4_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -163,19 +147,15 @@ test_GroupCreation_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-        "<ul><li>Test Top-Level OU: ",
-        "Anyone in the organization can create groups</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage4_1("Users in your domain only")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 test_GroupCreation_Incorrect_V4 if {
     # Test group creation restrictions when there's only one event and it's wrong
-    PolicyId := "GWS.GROUPS.4.1v0.3"
+    PolicyId := GroupsId4_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -194,18 +174,14 @@ test_GroupCreation_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-        "<ul><li>Test Top-Level OU: ",
-        "Anyone on the internet can create groups</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage4_1("Any user")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_GroupCreation_Incorrect_V5 if {
     # Test group creation restrictions when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GROUPS.4.1v0.3"
+    PolicyId := GroupsId4_1
     Output := tests with input as {
         "groups_logs": {"items": [
             {
@@ -234,12 +210,8 @@ test_GroupCreation_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-        "<ul><li>Test Top-Level OU: ",
-        "Anyone on the internet can create groups</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage4_1("Any user")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

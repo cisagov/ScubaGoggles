@@ -1,13 +1,12 @@
 package gmail
 import future.keywords
 
-
 #
-# GWS.GMAIL.17.1v0.3
+# GWS.GMAIL.17.1
 #--
 test_ComprehensiveMailStorage_Correct_V1 if {
     # Test Comprehensive Mail Storage when there's only one event
-    PolicyId := "GWS.GMAIL.17.1v0.3"
+    PolicyId := GmailId17_1
     Output := tests with input as {
         "gmail_logs": {"items": [
         ]},

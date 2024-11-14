@@ -32,7 +32,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 This section covers whether users are able to access Google Sites.
 
-### Policy
+### Policies
 
 #### GWS.SITES.1.1v0.3
 Sites Service SHOULD be disabled for all users.
@@ -57,7 +57,7 @@ Sites Service SHOULD be disabled for all users.
 
 To configure the settings for Site creation and editing:
 
-#### GWS.SITES.1.1v0.2 Instructions
+#### GWS.SITES.1.1v0.3 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Sites**.
 3.  Select **Service Status**

@@ -2,11 +2,11 @@ package commoncontrols
 import future.keywords
 
 #
-# GWS.COMMONCONTROLS.1.1v0.3
+# GWS.COMMONCONTROLS.1.1
 #--
 test_EnforceMFA_Correct_V1 if {
     # Test enforcing MFA when there's only one event
-    PolicyId := "GWS.COMMONCONTROLS.1.1v0.3"
+    PolicyId := CommonControlsId1_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -55,7 +55,7 @@ test_EnforceMFA_Correct_V1 if {
 test_EnforceMFA_Correct_V2 if {
     # Test enforcing MFA when there's multiple events, with the chronological latest
     # correct but not last in json list
-    PolicyId := "GWS.COMMONCONTROLS.1.1v0.3"
+    PolicyId := CommonControlsId1_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -113,7 +113,7 @@ test_EnforceMFA_Correct_V2 if {
 
 test_EnforceMFA_Incorrect_V1 if {
     # Test enforcing MFA when there's only one event and it's wrong
-    PolicyId := "GWS.COMMONCONTROLS.1.1v0.3"
+    PolicyId := CommonControlsId1_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -166,7 +166,7 @@ test_EnforceMFA_Incorrect_V1 if {
 test_EnforceMFA_Incorrect_V2 if {
     # Test enforcing MFA when there's multiple events, with the chronological latest
     # incorrect but not last in json list
-    PolicyId := "GWS.COMMONCONTROLS.1.1v0.3"
+    PolicyId := CommonControlsId1_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -229,7 +229,7 @@ test_EnforceMFA_Incorrect_V2 if {
 
 test_EnforceMFA_Incorrect_V3 if {
     # Test enforcing MFA when there's no enforce mfa event
-    PolicyId := "GWS.COMMONCONTROLS.1.1v0.3"
+    PolicyId := CommonControlsId1_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -261,7 +261,7 @@ test_EnforceMFA_Incorrect_V3 if {
 
 test_EnforceMFA_Incorrect_V4 if {
     # Test enforcing MFA when there's no change methods event
-    PolicyId := "GWS.COMMONCONTROLS.1.1v0.3"
+    PolicyId := CommonControlsId1_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -294,7 +294,7 @@ test_EnforceMFA_Incorrect_V4 if {
 
 test_EnforceMFA_Incorrect_V5 if {
     # Test, mfa not allowed
-    PolicyId := "GWS.COMMONCONTROLS.1.1v0.3"
+    PolicyId := CommonControlsId1_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -346,7 +346,7 @@ test_EnforceMFA_Incorrect_V5 if {
 
 test_EnforceMFA_Incorrect_V6 if {
     # Test, mfa not phishing resistant
-    PolicyId := "GWS.COMMONCONTROLS.1.1v0.3"
+    PolicyId := CommonControlsId1_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -401,7 +401,7 @@ test_EnforceMFA_Incorrect_V6 if {
 
 test_EnforceMFA_Incorrect_V7 if {
     # Test, mfa not phishing resistant
-    PolicyId := "GWS.COMMONCONTROLS.1.1v0.3"
+    PolicyId := CommonControlsId1_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -468,17 +468,17 @@ test_EnforceMFA_Incorrect_V7 if {
         "<br>",
         "The following groups are non-compliant:<ul>",
         "<li>test@test.com: Allowed methods is set to Any except verification codes via text, phone call</li>",
-        "</ul>",     
+        "</ul>",
     ])
 }
 #--
 
 #
-# GWS.COMMONCONTROLS.1.2v0.3
+# GWS.COMMONCONTROLS.1.2
 #--
 test_Enforcement_Correct_V1 if {
     # Test enforcing MFA when there's only one event
-    PolicyId := "GWS.COMMONCONTROLS.1.2v0.3"
+    PolicyId := CommonControlsId1_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -507,7 +507,7 @@ test_Enforcement_Correct_V1 if {
 test_Enforcement_Correct_V2 if {
     # Test enforcing MFA when there's multiple events, with the chronological latest
     # correct but not last in json list
-    PolicyId := "GWS.COMMONCONTROLS.1.2v0.3"
+    PolicyId := CommonControlsId1_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -545,7 +545,7 @@ test_Enforcement_Correct_V2 if {
 
 test_Enforcement_Correct_V3 if {
     # Test enforcing MFA inheritance
-    PolicyId := "GWS.COMMONCONTROLS.1.2v0.3"
+    PolicyId := CommonControlsId1_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -593,7 +593,7 @@ test_Enforcement_Correct_V3 if {
 
 test_Enforcement_Incorrect_V1 if {
     # Test enforcing MFA when there's only one event and it's wrong
-    PolicyId := "GWS.COMMONCONTROLS.1.2v0.3"
+    PolicyId := CommonControlsId1_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -626,7 +626,7 @@ test_Enforcement_Incorrect_V1 if {
 test_Enforcement_Incorrect_V2 if {
     # Test enforcing MFA when there's multiple events, with the chronological latest
     # incorrect but not last in json list
-    PolicyId := "GWS.COMMONCONTROLS.1.2v0.3"
+    PolicyId := CommonControlsId1_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -669,7 +669,7 @@ test_Enforcement_Incorrect_V2 if {
 
 test_Enforcement_Incorrect_V3 if {
     # Test enforcing MFA when there no applicable event
-    PolicyId := "GWS.COMMONCONTROLS.1.2v0.3"
+    PolicyId := CommonControlsId1_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -701,11 +701,12 @@ test_Enforcement_Incorrect_V3 if {
 }
 
 #
-# GWS.COMMONCONTROLS.1.4v0.3
+# GWS.COMMONCONTROLS.1.3
 #--
+
 test_Disable_Trusted_Device_Correct_V1 if {
     # Test disable trusted device when there's only one event
-    PolicyId := "GWS.COMMONCONTROLS.1.3v0.3"
+    PolicyId := CommonControlsId1_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -734,7 +735,7 @@ test_Disable_Trusted_Device_Correct_V1 if {
 test_Disable_Trusted_Device_Correct_V2 if {
     # Test disabled trusted device when there's multiple events, with the chronological latest
     # correct but not last in json list
-    PolicyId := "GWS.COMMONCONTROLS.1.3v0.3"
+    PolicyId := CommonControlsId1_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -772,7 +773,7 @@ test_Disable_Trusted_Device_Correct_V2 if {
 
 test_Disable_Trusted_Device_Incorrect_V1 if {
     # Test disable trusted device when there's only one event and it's wrong
-    PolicyId := "GWS.COMMONCONTROLS.1.3v0.3"
+    PolicyId := CommonControlsId1_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -805,7 +806,7 @@ test_Disable_Trusted_Device_Incorrect_V1 if {
 test_Disable_Trusted_Device_Incorrect_V2 if {
     # Test disabled trusted device when there's multiple events, with the chronological latest
     # incorrect but not last in json list
-    PolicyId := "GWS.COMMONCONTROLS.1.3v0.3"
+    PolicyId := CommonControlsId1_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -848,7 +849,7 @@ test_Disable_Trusted_Device_Incorrect_V2 if {
 
 test_Disable_Trusted_Device_Incorrect_V3 if {
     # Test disabled trusted device when there no applicable event
-    PolicyId := "GWS.COMMONCONTROLS.1.3v0.3"
+    PolicyId := CommonControlsId1_3
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -881,12 +882,12 @@ test_Disable_Trusted_Device_Incorrect_V3 if {
 #--
 
 #
-# GWS.COMMONCONTROLS.1.4v0.3
+# GWS.COMMONCONTROLS.1.4
 #--
 
 test_NotPhone_Correct_V1 if {
     # Test enforcing MFA when there's only one event set to only key
-    PolicyId := "GWS.COMMONCONTROLS.1.4v0.3"
+    PolicyId := CommonControlsId1_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -914,7 +915,7 @@ test_NotPhone_Correct_V1 if {
 
 test_NotPhone_Correct_V2 if {
     # Test enforcing MFA when there's only one event set to any except phone
-    PolicyId := "GWS.COMMONCONTROLS.1.4v0.3"
+    PolicyId := CommonControlsId1_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -942,7 +943,7 @@ test_NotPhone_Correct_V2 if {
 
 test_NotPhone_Correct_V3 if {
     # Test enforcing MFA when there are multiple events
-    PolicyId := "GWS.COMMONCONTROLS.1.4v0.3"
+    PolicyId := CommonControlsId1_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -980,7 +981,7 @@ test_NotPhone_Correct_V3 if {
 
 test_NotPhone_Incorrect_V1 if {
     # Test enforcing MFA when there's only one event set to any
-    PolicyId := "GWS.COMMONCONTROLS.1.4v0.3"
+    PolicyId := CommonControlsId1_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1012,7 +1013,7 @@ test_NotPhone_Incorrect_V1 if {
 
 test_NotPhone_Incorrect_V2 if {
     # Test enforcing MFA when there's multiple events
-    PolicyId := "GWS.COMMONCONTROLS.1.4v0.3"
+    PolicyId := CommonControlsId1_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1054,7 +1055,7 @@ test_NotPhone_Incorrect_V2 if {
 
 test_NotPhone_Incorrect_V3 if {
     # Test enforcing MFA when there are no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.1.4v0.3"
+    PolicyId := CommonControlsId1_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
         ]},
@@ -1077,7 +1078,7 @@ test_NotPhone_Incorrect_V3 if {
 
 test_NotPhone_Incorrect_V4 if {
     # Test enforcing MFA when there are no relevant events for the top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.1.4v0.3"
+    PolicyId := CommonControlsId1_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -1109,7 +1110,7 @@ test_NotPhone_Incorrect_V4 if {
 
 test_NotPhone_Correct_V5 if {
     # Test enforcing MFA when there are multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.1.4v0.3"
+    PolicyId := CommonControlsId1_4
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {

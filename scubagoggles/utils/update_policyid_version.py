@@ -10,9 +10,9 @@ import os
 import re
 
 CURRENT_VERSION = 'v0.1'
-REPLACEMENT_VERSION ='v0.3'
+REPLACEMENT_VERSION ='v0.2'
 
-PATH_TO_FILES = '../'
+PATH_TO_FILES = os.path.dirname(os.path.dirname(__file__))
 FILES_TO_PROCESS = ['.md','rego','.csv']
 
 def replace_last_n_chars(match):

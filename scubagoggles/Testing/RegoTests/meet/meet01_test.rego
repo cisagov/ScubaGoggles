@@ -1,13 +1,18 @@
 package meet
-import future.keywords
 
+import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestGroupNonCompliant
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.MEET.1.1v0.3
+# GWS.MEET.1.1
 #--
+
 test_Access_Correct_V1 if {
     # Test meeting access when there's only one event
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -26,16 +31,12 @@ test_Access_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Access_Correct_V2 if {
     # Test meeting access when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -64,16 +65,12 @@ test_Access_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Access_Correct_V3 if {
     # Test meeting access when there are events in multiple OUs
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -102,16 +99,12 @@ test_Access_Correct_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Access_Correct_V4 if {
     # Test history setting when set to inherit from parent
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -150,16 +143,12 @@ test_Access_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Access_Incorrect_V1 if {
     # Test meeting access when there are no relevant events
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -178,20 +167,12 @@ test_Access_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_Access_Incorrect_V2 if {
     # Test meeting access when there's only one event and it's wrong
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -210,17 +191,14 @@ test_Access_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALL"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Access_Incorrect_V3 if {
     # Test meeting access when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -249,17 +227,14 @@ test_Access_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALL"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Access_Incorrect_V4 if {
     # Test allow user to change history setting when there are multiple OU and a secondary OU is wrong
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -288,18 +263,15 @@ test_Access_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ",
-    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALL"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 test_Access_Incorrect_V5 if {
     # Test allow user to change history setting when the primary OU is missing but a different one is present
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -318,19 +290,12 @@ test_Access_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_Access_Incorrect_V6 if {
     # Test meeting access when there's only one event and it's wrong
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -349,17 +314,14 @@ test_Access_Incorrect_V6 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALL"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Access_Incorrect_V7 if {
     # Test meeting access when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -388,17 +350,14 @@ test_Access_Incorrect_V7 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALL"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Access_Incorrect_V8 if {
     # Test allow user to change history setting when there are multiple OU and a secondary OU is wrong
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -427,18 +386,15 @@ test_Access_Incorrect_V8 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Secondary OU: ",
-    "Who can join meetings is set to all users (including users not signed in with a Google account)</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALL"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 test_Access_Incorrect_V9 if {
     # Test allow user to change history setting when the primary OU is missing but a different one is present
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -457,20 +413,13 @@ test_Access_Incorrect_V9 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 #--
 
 test_Access_Incorrect_V10 if {
     # Test group wrong
-    PolicyId := "GWS.MEET.1.1v0.3"
+    PolicyId := MeetId1_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -505,14 +454,7 @@ test_Access_Incorrect_V10 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following groups are non-compliant:<ul>",
-        "<li>group@example.com: Who can join meetings is set to all users ",
-        "(including users not signed in with a Google account)</li>",
-        "</ul>"
-    ])
+    failedGroup := [{"Name": "group@example.com",
+                     "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALL"))}]
+    FailTestGroupNonCompliant(PolicyId, Output, failedGroup)
 }

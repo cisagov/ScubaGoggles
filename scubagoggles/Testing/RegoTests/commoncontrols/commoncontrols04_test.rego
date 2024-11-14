@@ -1,12 +1,16 @@
 package commoncontrols
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.COMMONCONTROLS.4.1v0.3
+# GWS.COMMONCONTROLS.4.1
 #--
 test_Limit_Correct_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -26,16 +30,12 @@ test_Limit_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Limit_Correct_V2 if {
     # Test 1 event, smaller limit than needed
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -55,16 +55,12 @@ test_Limit_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Limit_Correct_V3 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -95,16 +91,12 @@ test_Limit_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Limit_Correct_V4 if {
     # Test 1 event, tenant_info["topLevelOU"] empty
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -130,16 +122,12 @@ test_Limit_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Limit_Correct_V5 if {
     # Test inheritance
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -181,16 +169,12 @@ test_Limit_Correct_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Limit_Incorrect_V1 if {
     # Test 1 event
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -210,20 +194,14 @@ test_Limit_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Web session duration is set to 24 hours</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Web session duration is set to 24 hours"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Limit_Incorrect_V2 if {
     # Test multiple events
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -254,19 +232,14 @@ test_Limit_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Web session duration is set to 24 hours</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Web session duration is set to 24 hours"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Limit_Incorrect_V3 if {
     # Test multiple OUs
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -297,20 +270,14 @@ test_Limit_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Web session duration is set to 24 hours</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Web session duration is set to 24 hours"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Limit_Incorrect_V4 if {
     # Test no relevant events
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
         ]},
@@ -319,20 +286,12 @@ test_Limit_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 
 test_Limit_Incorrect_V5 if {
     # Test no relevant events in top-level OU
-    PolicyId := "GWS.COMMONCONTROLS.4.1v0.3"
+    PolicyId := CommonControlsId4_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -352,14 +311,6 @@ test_Limit_Incorrect_V5 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, ",
-        "Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])}
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+}
 #--

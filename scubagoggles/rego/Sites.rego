@@ -1,7 +1,10 @@
 package sites
 
-import data.utils
 import future.keywords
+import data.utils
+import data.utils.PolicyApiInUse
+
+SitesEnabled(orgunit) := utils.AppEnabled(input.policies, "sites", orgunit)
 
 FilterEventsOU(OrgUnit) := FilteredEvents if {
     # If there exists at least the root OU and 1 more OU
@@ -70,12 +73,15 @@ if {
 ###############
 
 #
-# Baseline GWS.SITES.1.1v0.3
+# Baseline GWS.SITES.1.1
 #--
+ServiceStatusOnMessage := "Service status for Sites is ON."
+
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": "Service status for Sites is ON."
+    "Value": ServiceStatusOnMessage
 } if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
     Events := FilterEventsOU(OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -89,8 +95,9 @@ NonCompliantOUs1_1 contains {
 
 NonCompliantGroups1_1 contains {
     "Name": Group,
-    "Value": "Service status for Sites is ON."
+    "Value": ServiceStatusOnMessage
 } if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
     Events := FilterEventsGroup(Group)
     # Ignore Groups without any events.
@@ -100,8 +107,29 @@ NonCompliantGroups1_1 contains {
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
 }
 
+NonCompliantOUs1_1  contains {
+    "Name": OU,
+    "Value": ServiceStatusOnMessage
+} if {
+    some OU, settings in input.policies
+    SitesEnabled(OU)
+}
+
+# This check is done a few times below.  It's True if either the policy API
+# is in use or there is at least one event returned for the top-level orgunit.
+
+CheckOK if {
+    not PolicyApiInUse
+    events := FilterEventsOU(utils.TopLevelOU)
+    count(events) > 0
+}
+
+CheckOK if {PolicyApiInUse}
+
+SitesId1_1 := utils.PolicyIdWithSuffix("GWS.SITES.1.1")
+
 tests contains {
-    "PolicyId": "GWS.SITES.1.1v0.3",
+    "PolicyId": SitesId1_1,
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -109,23 +137,25 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := FilterEventsOU(utils.TopLevelOU)
-    count(Events) == 0
+    not CheckOK
 }
 
 tests contains {
-    "PolicyId": "GWS.SITES.1.1v0.3",
+    "PolicyId": SitesId1_1,
     "Criticality": "Should",
-    "ReportDetails":utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
+    "ReportDetails":utils.ReportDetails(NonCompliantOUs1_1,
+                                        NonCompliantGroups1_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1,
+                    "NonCompliantGroups": NonCompliantGroups1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU(utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs1_1) == 0, count(NonCompliantGroups1_1) == 0}
+    CheckOK
+    Conditions := {count(NonCompliantOUs1_1) == 0,
+                   count(NonCompliantGroups1_1) == 0}
     Status := (false in Conditions) == false
 }
 #--

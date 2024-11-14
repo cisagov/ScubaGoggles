@@ -139,7 +139,7 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
 
 - _Rationale:_ Adversaries could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - _Last modified:_ February 14, 2024
-- _Note:_ SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`). 
+- _Note:_ SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`).
 
 - MITRE ATT&CK TTP Mapping
   - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
@@ -183,7 +183,7 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 #### GWS.GMAIL.4.1v0.3
 A DMARC policy SHALL be published for every second-level domain.
 
-- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every second-level domain further reduces the risk posed by authentication failures. 
+- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every second-level domain further reduces the risk posed by authentication failures.
 - _Last modified:_ November 13, 2023
 
 - MITRE ATT&CK TTP Mapping
@@ -235,6 +235,9 @@ An agency point of contact SHOULD be included for aggregate and failure reports.
 
 ### Implementation
 
+[//]: # (Keep the version suffix out of the anchor.)
+[//]: # (https://stackoverflow.com/questions/5319754/cross-reference-named-anchor-in-markdown)
+<a name="gmail41-instructions"></a>
 #### GWS.GMAIL.4.1v0.3 Instructions
 DMARC is not configured through the Google Admin Console, but rather via DNS records hosted by the agency's domain(s). As such, implementation varies depending on how an agency manages its DNS records. See [Add your DMARC record](https://support.google.com/a/answer/2466563) for Google guidance.
 
@@ -249,13 +252,13 @@ dig _dmarc.example.com txt
 If DMARC is configured, a response resembling `v=DMARC1; p=reject; pct=100; rua=mailto:reports@dmarc.cyber.dhs.gov, mailto:reports@example.com; ruf=mailto:reports@example.com` will be returned, though by necessity, the contents of the record will vary by agency. In this example, the policy indicates all emails failing the SPF/DKIM checks are to be rejected and aggregate reports sent to reports@dmarc.cyber.dhs.gov and reports@example.com. Failure reports will be sent to reports@example.com.
 
 #### GWS.GMAIL.4.2v0.3 Instructions
-See [GWS.GMAIL.4.1v0.3](#gwsgmail41v03-instructions) instructions for an overview of how to publish and check a DMARC record. Ensure the record published includes `p=reject`.
+See [GWS.GMAIL.4.1 instructions](#gmail41-instructions) for an overview of how to publish and check a DMARC record. Ensure the record published includes `p=reject`.
 
 #### GWS.GMAIL.4.3v0.3 Instructions
-See [GWS.GMAIL.4.1v0.3](#gwsgmail41v03-instructions) instructions for an overview of how to publish and check a DMARC record. Ensure the record published includes reports@dmarc.cyber.dhs.gov as one of the emails for the `rua` field.
+See [GWS.GMAIL.4.1 instructions](#gmail41-instructions) for an overview of how to publish and check a DMARC record. Ensure the record published includes reports@dmarc.cyber.dhs.gov as one of the emails for the `rua` field.
 
 #### GWS.GMAIL.4.4v0.3 Instructions
-See [GWS.GMAIL.4.1v0.3](#gwsgmail41v03-instructions) instructions for an overview of how to publish and check a DMARC record. Ensure the record published includes a point of contact specific to your agency, in addition to reports@dmarc.cyber.dhs.gov, as one of the emails for the `rua` field and one or more agency-defined points of contact for the `ruf` field.
+See [GWS.GMAIL.4.1 instructions](#gmail41-instructions) for an overview of how to publish and check a DMARC record. Ensure the record published includes a point of contact specific to your agency, in addition to reports@dmarc.cyber.dhs.gov, as one of the emails for the `rua` field and one or more agency-defined points of contact for the `ruf` field.
 
 ## 5. Attachment Protections
 
@@ -1211,21 +1214,21 @@ To configure the settings for spam filtering:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
 3.  Select **Spam, Phishing, and Malware**.
- 
+
 #### GWS.GMAIL.19.1v0.3 Instructions
 For each rule listed under **Spam**:
 1. Ensure that either:
     * **Bypass spam filters for messages from senders or domains in selected lists** is not selected, or
     * None of the lists shown under **Bypass spam filters for messages from senders or domains in selected lists** contain an entire domain. For example, the entire domain "example.com" is not acceptable, but the specific address, john.doe@example.com, would be.
 2. Modify the rule or lists associated with the rule as needed, then select **Save.**
- 
+
 #### GWS.GMAIL.19.2v0.3 Instructions
 For each rule listed under **Spam**:
 1. Ensure that either:
     * **Bypass spam filters and hide warnings for messages from senders or domains in selected lists** is not selected, or
     * None of the lists shown under **Bypass spam filters and hide warnings for messages from senders or domains in selected lists** contain an entire domain. For example, the entire domain "example.com" is not acceptable, but the specific address, john.doe@example.com, would be.
 2. Modify the rule or lists associated with the rule as needed, then select **Save.**
- 
+
 #### GWS.GMAIL.19.3v0.3 Instructions
 For each rule listed under **Spam**:
 1. Ensure that **Bypass spam filters and hide warnings for all messages from internal and external sender* is not selected.

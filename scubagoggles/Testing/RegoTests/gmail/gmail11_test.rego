@@ -1,13 +1,17 @@
 package gmail
-import future.keywords
 
+import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.GetFriendlyEnabledValue
+import data.utils.PassTestResult
 
 #
-# GWS.GMAIL.11.1v0.3
+# GWS.GMAIL.11.1
 #--
 test_AutomaticForwarding_Correct_V1 if {
     # Test Automatic Forwarding when there's only one event
-    PolicyId := "GWS.GMAIL.11.1v0.3"
+    PolicyId := GmailId11_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -26,16 +30,12 @@ test_AutomaticForwarding_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AutomaticForwarding_Correct_V2 if {
     # Test Automatic Forwarding when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.11.1v0.3"
+    PolicyId := GmailId11_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -64,16 +64,12 @@ test_AutomaticForwarding_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AutomaticForwarding_Correct_V3 if {
     # Test Automatic Forwarding when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.11.1v0.3"
+    PolicyId := GmailId11_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -102,16 +98,12 @@ test_AutomaticForwarding_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AutomaticForwarding_Correct_V4 if {
     # Test Automatic Forwarding when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.11.1v0.3"
+    PolicyId := GmailId11_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -140,16 +132,12 @@ test_AutomaticForwarding_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_AutomaticForwarding_Incorrect_V1 if {
     # Test Automatic Forwarding when there are no relevant events
-    PolicyId := "GWS.GMAIL.11.1v0.3"
+    PolicyId := GmailId11_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -168,20 +156,12 @@ test_AutomaticForwarding_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_AutomaticForwarding_Incorrect_V2 if {
     # Test Automatic Forwarding when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.11.1v0.3"
+    PolicyId := GmailId11_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -200,17 +180,14 @@ test_AutomaticForwarding_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Automatically enable email autoforwarding is set to enabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage11_1(GetFriendlyEnabledValue(true))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AutomaticForwarding_Incorrect_V3 if {
     # Test Automatic Forwarding when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.11.1v0.3"
+    PolicyId := GmailId11_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -239,17 +216,14 @@ test_AutomaticForwarding_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Automatically enable email autoforwarding is set to enabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage11_1(GetFriendlyEnabledValue(true))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AutomaticForwarding_Incorrect_V4 if {
     # Test Automatic Forwarding when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.11.1v0.3"
+    PolicyId := GmailId11_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -268,17 +242,14 @@ test_AutomaticForwarding_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Automatically enable email autoforwarding is set to enabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                  "Value": NonComplianceMessage11_1(GetFriendlyEnabledValue(true))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_AutomaticForwarding_Incorrect_V5 if {
     # Test Automatic Forwarding when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.11.1v0.3"
+    PolicyId := GmailId11_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -307,12 +278,9 @@ test_AutomaticForwarding_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Automatically enable email autoforwarding is set to enabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                  "Value": NonComplianceMessage11_1(GetFriendlyEnabledValue(true))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 #--

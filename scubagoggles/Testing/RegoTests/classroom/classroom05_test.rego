@@ -1,13 +1,16 @@
 package classroom
 import future.keywords
+import data.utils.FailTestOUNonCompliant
+import data.utils.FailTestNoEvent
+import data.utils.PassTestResult
 
 #
-# GWS.CLASSROOM.5.1v0.3
+# GWS.CLASSROOM.5.1
 #--
 
 test_ClassroomCreation_Correct_V1 if {
     # Test only teachers can unenroll students when there's only one event
-    PolicyId := "GWS.CLASSROOM.5.1v0.3"
+    PolicyId := ClassroomId5_1
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -27,17 +30,13 @@ test_ClassroomCreation_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_ClassroomCreation_Correct_V2 if {
     # Test when there's multiple events, with the chronological latest
     # correct but not last in json list
-    PolicyId := "GWS.CLASSROOM.5.1v0.3"
+    PolicyId := ClassroomId5_1
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -68,18 +67,14 @@ test_ClassroomCreation_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 # No tests for multiple OUs, inheritance, groups, etc as this setting can't be controlled at the OU or group level
 
 test_ClassroomCreation_Incorrect_V1 if {
     # Test when there's only one event and it's wrong
-    PolicyId := "GWS.CLASSROOM.5.1v0.3"
+    PolicyId := ClassroomId5_1
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -99,20 +94,15 @@ test_ClassroomCreation_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Who can create classes is set to anyone in this domain</li></ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_1("anyone in this domain")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ClassroomCreation_Incorrect_V2 if {
     # Test when there's multiple events, with the chronological latest
     # incorrect but not last in json list
-    PolicyId := "GWS.CLASSROOM.5.1v0.3"
+    PolicyId := ClassroomId5_1
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -143,20 +133,14 @@ test_ClassroomCreation_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Who can create classes is set to all pending and verified teachers</li></ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage5_1("all pending and verified teachers")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
-
 
 test_ClassroomCreation_Incorrect_V3 if {
     # Test when there no applicable event
-    PolicyId := "GWS.CLASSROOM.5.1v0.3"
+    PolicyId := ClassroomId5_1
     Output := tests with input as {
         "classroom_logs": {"items": [
             {
@@ -176,13 +160,5 @@ test_ClassroomCreation_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }

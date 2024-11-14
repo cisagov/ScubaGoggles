@@ -1,12 +1,17 @@
 package commoncontrols
+
 import future.keywords
+import data.utils.FailTestGroupNonCompliant
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.COMMONCONTROLS.12.1v0.3
+# GWS.COMMONCONTROLS.12.1
 #--
+
 test_Takeout_Correct_V1 if {
     # Test basic correct
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.3"
+    PolicyId := CommonControlsId12_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -37,16 +42,12 @@ test_Takeout_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Takeout_Incorrect_V1 if {
     # Test specifc apps allowed, ou
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.3"
+    PolicyId := CommonControlsId12_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -88,21 +89,14 @@ test_Takeout_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: The following apps with individual admin control have Takeout enabled: ",
-        "Blogger, Google Maps</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage12_1(["Blogger", "Google Maps"])}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Takeout_Incorrect_V2 if {
     # Test nonspecific apps allowed, ou
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.3"
+    PolicyId := CommonControlsId12_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -133,20 +127,14 @@ test_Takeout_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Takeout is enabled for services without an individual admin control</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage12_1a}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Takeout_Incorrect_V3 if {
     # Test nonspecific apps and specific apps allowed, ou
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.3"
+    PolicyId := CommonControlsId12_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -177,21 +165,16 @@ test_Takeout_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Takeout is enabled for services without an individual admin control</li>",
-        "<li>Test Top-Level OU: The following apps with individual admin control have Takeout enabled: Blogger</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage12_1a},
+                 {"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage12_1(["Blogger"])}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Takeout_Incorrect_V4 if {
     # Test nonspecific apps allowed, group
-    PolicyId := "GWS.COMMONCONTROLS.12.1v0.3"
+    PolicyId := CommonControlsId12_1
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
             {
@@ -234,14 +217,8 @@ test_Takeout_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following groups are non-compliant:<ul>",
-        "<li>test@test: Takeout is enabled for services without an individual admin control</li>",
-        "</ul>"
-    ])
+    failedGroup := [{"Name": "test@test",
+                     "Value": NonComplianceMessage12_1a}]
+    FailTestGroupNonCompliant(PolicyId, Output, failedGroup)
 }
 #--

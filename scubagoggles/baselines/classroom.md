@@ -36,7 +36,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 This section covers who has the ability to join classes and what classes the users in your domain can join.
 
-### Policy
+### Policies
 
 #### GWS.CLASSROOM.1.1v0.3
 Who can join classes in your domain SHALL be set to Users in your domain only.
@@ -86,7 +86,7 @@ To configure the settings for Class Membership:
 
 This section covers policies related to the Google Classroom API.
 
-### Policy
+### Policies
 
 #### GWS.CLASSROOM.2.1v0.3
 Users SHALL NOT be able to authorize apps to access their Google Classroom data.
@@ -121,7 +121,7 @@ To configure the settings for Classroom API:
 
 This section covers policies related to importing rosters from Clever.
 
-### Policy
+### Policies
 
 #### GWS.CLASSROOM.3.1v0.3
 Roster import with Clever SHOULD be turned off.
@@ -154,7 +154,7 @@ To configure the settings for Roster Import:
 
 This section covers policies related to unenrolling a student from a class.
 
-### Policy
+### Policies
 
 #### GWS.CLASSROOM.4.1v0.3
 Only teachers SHALL be allowed to unenroll students from classes.
@@ -187,7 +187,7 @@ To configure the settings for Student Unenrollment:
 
 The first time users sign in to Classroom, they self-identify as either a student or teacher. Users who identify as teachers will be marked as a pending teacher until an administrator verifies them. Google Classroom allows administrators to restrict class creation to only verified teachers.
 
-### Policy
+### Policies
 
 #### GWS.CLASSROOM.5.1v0.3
 Class creation SHALL be restricted to verified teachers only.

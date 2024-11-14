@@ -2,11 +2,11 @@ package meet
 import future.keywords
 
 #
-# GWS.MEET.5.1v0.3
+# GWS.MEET.5.1
 #--
 test_Incoming_Correct_V1 if {
     # Test restricted to contacts
-    PolicyId := "GWS.MEET.5.1v0.3"
+    PolicyId := MeetId5_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -37,7 +37,7 @@ test_Incoming_Correct_V1 if {
 
 test_Incoming_Correct_V2 if {
     # Test disabled
-    PolicyId := "GWS.MEET.5.1v0.3"
+    PolicyId := MeetId5_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -68,7 +68,7 @@ test_Incoming_Correct_V2 if {
 
 test_Incoming_Correct_V3 if {
     # Test inheritance
-    PolicyId := "GWS.MEET.5.1v0.3"
+    PolicyId := MeetId5_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -122,7 +122,7 @@ test_Incoming_Correct_V3 if {
 
 test_Incoming_Incorrect_V1 if {
     # Test top-level OU wrong
-    PolicyId := "GWS.MEET.5.1v0.3"
+    PolicyId := MeetId5_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -157,7 +157,7 @@ test_Incoming_Incorrect_V1 if {
 
 test_Incoming_Incorrect_V2 if {
     # Test child OU wrong
-    PolicyId := "GWS.MEET.5.1v0.3"
+    PolicyId := MeetId5_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -205,7 +205,7 @@ test_Incoming_Incorrect_V2 if {
 
 test_Incoming_Incorrect_V3 if {
     # Test group wrong
-    PolicyId := "GWS.MEET.5.1v0.3"
+    PolicyId := MeetId5_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {
@@ -253,7 +253,7 @@ test_Incoming_Incorrect_V3 if {
 
 test_Incoming_Incorrect_V4 if {
     # Test no events
-    PolicyId := "GWS.MEET.5.1v0.3"
+    PolicyId := MeetId5_1
     Output := tests with input as {
         "meet_logs": {"items": [
             {

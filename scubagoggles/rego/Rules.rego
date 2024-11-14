@@ -1,5 +1,6 @@
 package rules
 import future.keywords
+import data.utils
 
 FilterAlertsEvents(RuleName) := FilteredEvents if
 {
@@ -344,9 +345,12 @@ EmailOnlyRules := {
 #
 # This pair of tests handles all of the above rules with alert center actions
 #--
+
+CommonControlsId13_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.13.1")
+
 tests contains {
     "Requirement": Rule.RuleName,
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.3",
+    "PolicyId": CommonControlsId13_1,
     "Criticality": Rule.Criticality,
     "ReportDetails": Rule.Details,
     "ActualValue": Events,
@@ -361,7 +365,7 @@ if {
 
 tests contains {
     "Requirement": Rule.RuleName,
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.3",
+    "PolicyId": CommonControlsId13_1,
     "Criticality": Rule.Criticality,
     "ReportDetails": Rule.Details,
     "ActualValue": Events,
@@ -382,7 +386,7 @@ if {
 #--
 tests contains {
     "Requirement": Rule.RuleName,
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.3",
+    "PolicyId": CommonControlsId13_1,
     "Criticality": Rule.Criticality,
     "ReportDetails": Rule.Details,
     "ActualValue": Events,
@@ -397,7 +401,7 @@ if {
 
 tests contains {
     "Requirement": Rule.RuleName,
-    "PolicyId": "GWS.COMMONCONTROLS.13.1v0.3",
+    "PolicyId": CommonControlsId13_1,
     "Criticality": Rule.Criticality,
     "ReportDetails": Rule.Details,
     "ActualValue": Events,

@@ -1,12 +1,16 @@
 package drive
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.DRIVEDOCS.1.1v0.3
+# GWS.DRIVEDOCS.1.1
 #--
 test_Sharing_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.1.1v0.3"
+    PolicyId := DriveId1_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -25,16 +29,12 @@ test_Sharing_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sharing_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.1.1v0.3"
+    PolicyId := DriveId1_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -63,16 +63,12 @@ test_Sharing_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sharing_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.1.1v0.3"
+    PolicyId := DriveId1_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -101,16 +97,12 @@ test_Sharing_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sharing_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.1.1v0.3"
+    PolicyId := DriveId1_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -129,20 +121,12 @@ test_Sharing_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_Sharing_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.1.1v0.3"
+    PolicyId := DriveId1_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -161,19 +145,14 @@ test_Sharing_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "Files owned by users or shared drives can ",
-    "be shared outside of the organization</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sharing_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.1.1v0.3"
+    PolicyId := DriveId1_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -202,19 +181,14 @@ test_Sharing_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "Files owned by users or shared drives can ",
-    "be shared outside of the organization</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sharing_Incorrect_V4 if {
     # Test sharing setting when there are multiple OUs and secondary is wrong
-    PolicyId := "GWS.DRIVEDOCS.1.1v0.3"
+    PolicyId := DriveId1_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -243,19 +217,14 @@ test_Sharing_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: ",
-    "Files owned by users or shared drives can ",
-    "be shared outside of the organization</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sharing_Incorrect_V5 if {
     # Test sharing setting when the top OU is not present but there is another
-    PolicyId := "GWS.DRIVEDOCS.1.1v0.3"
+    PolicyId := DriveId1_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -274,24 +243,16 @@ test_Sharing_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 #--
 
 #
-# GWS.DRIVEDOCS.1.2v0.3
+# GWS.DRIVEDOCS.1.2
 #--
 test_Receiving_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.1.2v0.3"
+    PolicyId := DriveId1_2
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -310,16 +271,12 @@ test_Receiving_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Receiving_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.1.2v0.3"
+    PolicyId := DriveId1_2
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -348,16 +305,12 @@ test_Receiving_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Receiving_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.1.2v0.3"
+    PolicyId := DriveId1_2
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -386,16 +339,12 @@ test_Receiving_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Receiving_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.1.2v0.3"
+    PolicyId := DriveId1_2
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -414,20 +363,12 @@ test_Receiving_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_Receiving_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.1.2v0.3"
+    PolicyId := DriveId1_2
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -446,17 +387,14 @@ test_Receiving_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Users can recieve files outside the domain</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_2(GetFriendlyValue1_2("SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Receiving_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.1.2v0.3"
+    PolicyId := DriveId1_2
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -485,18 +423,14 @@ test_Receiving_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Users can recieve files outside the domain</li></ul>"])
-
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_2(GetFriendlyValue1_2("SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Receiving_Incorrect_V4 if {
     # Test sharing setting when there are multiple OUs, top OU is compliant but secondary isn't
-    PolicyId := "GWS.DRIVEDOCS.1.2v0.3"
+    PolicyId := DriveId1_2
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -525,17 +459,14 @@ test_Receiving_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: Users can recieve files outside the domain</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_2(GetFriendlyValue1_2("SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Receiving_Incorrect_V5 if {
     # Test sharing setting when top level OU is not present
-    PolicyId := "GWS.DRIVEDOCS.1.2v0.3"
+    PolicyId := DriveId1_2
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -554,23 +485,16 @@ test_Receiving_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 #
-# GWS.DRIVEDOCS.1.3v0.3
+# GWS.DRIVEDOCS.1.3
 #--
+
 test_Warnings_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.1.3v0.3"
+    PolicyId := DriveId1_3
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -589,16 +513,12 @@ test_Warnings_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Warnings_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.1.3v0.3"
+    PolicyId := DriveId1_3
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -627,16 +547,12 @@ test_Warnings_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Warnings_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.1.3v0.3"
+    PolicyId := DriveId1_3
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -665,16 +581,12 @@ test_Warnings_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Warnings_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.1.3v0.3"
+    PolicyId := DriveId1_3
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -693,20 +605,12 @@ test_Warnings_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_Warnings_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.1.3v0.3"
+    PolicyId := DriveId1_3
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -725,17 +629,14 @@ test_Warnings_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: External Sharing Warning is Disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_3(GetFriendlyValue1_3("SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
-test_Warningsr_Incorrect_V3 if {
+test_Warnings_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.1.3v0.3"
+    PolicyId := DriveId1_3
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -764,17 +665,14 @@ test_Warningsr_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: External Sharing Warning is Disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_3(GetFriendlyValue1_3("SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Warnings_Incorrect_V4 if {
     # Test sharing setting when Top OU is correct but not secondary OU
-    PolicyId := "GWS.DRIVEDOCS.1.3v0.3"
+    PolicyId := DriveId1_3
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -803,17 +701,14 @@ test_Warnings_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: External Sharing Warning is Disabled</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_3(GetFriendlyValue1_3("SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Warnings_Incorrect_V5 if {
     # Test sharing setting when Top OU is not present
-    PolicyId := "GWS.DRIVEDOCS.1.3v0.3"
+    PolicyId := DriveId1_3
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -832,23 +727,16 @@ test_Warnings_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 #
-# GWS.DRIVEDOCS.1.4v0.3
+# GWS.DRIVEDOCS.1.4
 #--
+
 test_NonGoogle_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.1.4v0.3"
+    PolicyId := DriveId1_4
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -877,16 +765,12 @@ test_NonGoogle_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_NonGoogle_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.1.4v0.3"
+    PolicyId := DriveId1_4
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -925,16 +809,12 @@ test_NonGoogle_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_NonGoogle_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.1.4v0.3"
+    PolicyId := DriveId1_4
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -983,16 +863,12 @@ test_NonGoogle_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_NonGoogle_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.1.4v0.3"
+    PolicyId := DriveId1_4
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1011,20 +887,12 @@ test_NonGoogle_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_NonGoogle_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.1.4v0.3"
+    PolicyId := DriveId1_4
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1053,19 +921,15 @@ test_NonGoogle_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "External sharing is enabled and ",
-    "items can be shared to non-google accounts</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_4(GetFriendlyValue1_4("ANONYMOUS_PREVIEW",
+                                                                      "SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_NonGoogle_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.1.4v0.3"
+    PolicyId := DriveId1_4
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1089,7 +953,7 @@ test_NonGoogle_Incorrect_V3 if {
                 }]
             },
             {
-                "id": {"time": "2021-13-23T00:02:28.672Z"},
+                "id": {"time": "2021-13-23T00:02:28.672Z"}, # incorrect timestamp??
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_INVITES_TO_NON_GOOGLE_ACCOUNTS"},
@@ -1099,7 +963,7 @@ test_NonGoogle_Incorrect_V3 if {
                 }]
             },
             {
-                "id": {"time": "2022-14-24T00:02:28.672Z"},
+                "id": {"time": "2022-14-24T00:02:28.672Z"}, # incorrect timestamp??
                 "events": [{
                     "parameters": [
                         {"name": "SETTING_NAME", "value": "SHARING_OUTSIDE_DOMAIN"},
@@ -1114,19 +978,15 @@ test_NonGoogle_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "External sharing is enabled and ",
-    "items can be shared to non-google accounts</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_4(GetFriendlyValue1_4("ANONYMOUS_PREVIEW",
+                                                                      "SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_NonGoogle_Incorrect_V4 if {
     # Test sharing setting when Top OU is correct but not secondary OU
-    PolicyId := "GWS.DRIVEDOCS.1.4v0.3"
+    PolicyId := DriveId1_4
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1175,19 +1035,15 @@ test_NonGoogle_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: ",
-    "External sharing is enabled and ",
-    "items can be shared to non-google accounts</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_4(GetFriendlyValue1_4("ALLOWED",
+                                                                      "SHARING_ALLOWED"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_NonGoogle_Incorrect_V5 if {
     # Test sharing setting when Top OU is not present
-    PolicyId := "GWS.DRIVEDOCS.1.4v0.3"
+    PolicyId := DriveId1_4
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1218,11 +1074,12 @@ test_NonGoogle_Incorrect_V5 if {
 }
 
 #
-# GWS.DRIVEDOCS.1.5v0.3
+# GWS.DRIVEDOCS.1.5
 #--
+
 test_Link_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.1.5v0.3"
+    PolicyId := DriveId1_5
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1241,16 +1098,12 @@ test_Link_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Link_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.1.5v0.3"
+    PolicyId := DriveId1_5
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1279,16 +1132,12 @@ test_Link_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Link_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.1.5v0.3"
+    PolicyId := DriveId1_5
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1317,16 +1166,12 @@ test_Link_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Link_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.1.5v0.3"
+    PolicyId := DriveId1_5
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1345,20 +1190,12 @@ test_Link_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_Link_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.1.5v0.3"
+    PolicyId := DriveId1_5
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1377,16 +1214,14 @@ test_Link_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Published web content can be made visible to anyone with a link</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage1_5}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
+
 test_Link_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.1.5v0.3"
+    PolicyId := DriveId1_5
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1415,17 +1250,14 @@ test_Link_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Published web content can be made visible to anyone with a link</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage1_5}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Link_Incorrect_V4 if {
     # Test sharing setting when Top OU is correct but not secondary OU
-    PolicyId := "GWS.DRIVEDOCS.1.5v0.3"
+    PolicyId := DriveId1_5
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1454,17 +1286,14 @@ test_Link_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: Published web content can be made visible to anyone with a link</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                  "Value": NonComplianceMessage1_5}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Link_Incorrect_V5 if {
     # Test sharing setting when Top OU is not present
-    PolicyId := "GWS.DRIVEDOCS.1.5v0.3"
+    PolicyId := DriveId1_5
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1483,24 +1312,16 @@ test_Link_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 #--
 
 #
-# GWS.DRIVEDOCS.1.6v0.3
+# GWS.DRIVEDOCS.1.6
 #--
 test_SharingChecker_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.1.6v0.3"
+    PolicyId := DriveId1_6
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1519,16 +1340,12 @@ test_SharingChecker_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_SharingChecker_Correct_V2 if {
     # Test setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.1.6v0.3"
+    PolicyId := DriveId1_6
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1557,16 +1374,12 @@ test_SharingChecker_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_SharingChecker_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.1.6v0.3"
+    PolicyId := DriveId1_6
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1595,16 +1408,12 @@ test_SharingChecker_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_SharingChecker_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.1.6v0.3"
+    PolicyId := DriveId1_6
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1623,20 +1432,12 @@ test_SharingChecker_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_SharingChecker_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.1.6v0.3"
+    PolicyId := DriveId1_6
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1655,19 +1456,14 @@ test_SharingChecker_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "Access Checker allows users to share ",
-    "files to Recipients only, suggested target audience, or public (no Google account required)</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_6(GetFriendlyValue1_6("ALL"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_SharingChecker_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.1.6v0.3"
+    PolicyId := DriveId1_6
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1696,19 +1492,14 @@ test_SharingChecker_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "Access Checker allows users to share ",
-    "files to Recipients only, suggested target audience, or public (no Google account required)</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_6(GetFriendlyValue1_6("ALL"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_SharingChecker_Incorrect_V4 if {
     # Test sharing setting when Top OU is correct but not secondary OU
-    PolicyId := "GWS.DRIVEDOCS.1.6v0.3"
+    PolicyId := DriveId1_6
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1737,19 +1528,14 @@ test_SharingChecker_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: ",
-    "Access Checker allows users to share ",
-    "files to Recipients only, or suggested target audience</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_6(GetFriendlyValue1_6("DOMAIN_OR_NAMED_PARTIES"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_SharingChecker_Incorrect_V5 if {
     # Test sharing setting when Top OU is not present
-    PolicyId := "GWS.DRIVEDOCS.1.6v0.3"
+    PolicyId := DriveId1_6
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1768,23 +1554,16 @@ test_SharingChecker_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 #
-# GWS.DRIVEDOCS.1.7v0.3
+# GWS.DRIVEDOCS.1.7
 #--
+
 test_CrossDomain_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.1.7v0.3"
+    PolicyId := DriveId1_7
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1803,16 +1582,12 @@ test_CrossDomain_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_CrossDomain_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.1.7v0.3"
+    PolicyId := DriveId1_7
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1841,16 +1616,12 @@ test_CrossDomain_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_CrossDomain_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.1.7v0.3"
+    PolicyId := DriveId1_7
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1879,16 +1650,12 @@ test_CrossDomain_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_CrossDomain_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.1.7v0.3"
+    PolicyId := DriveId1_7
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1907,20 +1674,12 @@ test_CrossDomain_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_CrossDomain_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.1.7v0.3"
+    PolicyId := DriveId1_7
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1939,19 +1698,15 @@ test_CrossDomain_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [  "The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "Anyone can distribute content in the organization to outside the organization</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_7("Anyone")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_CrossDomain_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and
-    # the most recent is wrong, set to anyone can distribute content. 
-    PolicyId := "GWS.DRIVEDOCS.1.7v0.3"
+    # the most recent is wrong, set to anyone can distribute content.
+    PolicyId := DriveId1_7
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -1980,19 +1735,15 @@ test_CrossDomain_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [  "The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "Anyone can distribute content in the organization to outside the organization</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_7("Anyone")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_CrossDomain_Incorrect_V4 if {
     # Test sharing setting when Top OU is correct but not secondary OU,
     # which is set to Anyone in the Organization
-    PolicyId := "GWS.DRIVEDOCS.1.7v0.3"
+    PolicyId := DriveId1_7
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2021,19 +1772,14 @@ test_CrossDomain_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: ",
-    "Anyone can distribute content in the organization to outside the organization</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_7("Anyone")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
-
 
 test_CrossDomain_Incorrect_V5 if {
     # Test sharing setting when Top OU is not present
-    PolicyId := "GWS.DRIVEDOCS.1.7v0.3"
+    PolicyId := DriveId1_7
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2052,21 +1798,13 @@ test_CrossDomain_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_CrossDomain_Incorrect_V6 if {
     # Test sharing setting when there are multiple events and
     # the most recent event is wrong, set to only users in the organization
-    PolicyId := "GWS.DRIVEDOCS.1.7v0.3"
+    PolicyId := DriveId1_7
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2095,22 +1833,19 @@ test_CrossDomain_Incorrect_V6 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "Only users inside the organization can distribute content outside of the organization</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_7("Only users inside the organization")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
 
 #
-# GWS.DRIVEDOCS.1.8v0.3
+# GWS.DRIVEDOCS.1.8
 #--
+
 test_Default_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.1.8v0.3"
+    PolicyId := DriveId1_8
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2129,16 +1864,12 @@ test_Default_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Default_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.1.8v0.3"
+    PolicyId := DriveId1_8
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2167,16 +1898,12 @@ test_Default_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Default_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.1.8v0.3"
+    PolicyId := DriveId1_8
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2205,16 +1932,12 @@ test_Default_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Default_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.1.8v0.3"
+    PolicyId := DriveId1_8
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2233,20 +1956,12 @@ test_Default_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_Default_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.1.8v0.3"
+    PolicyId := DriveId1_8
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2265,21 +1980,14 @@ test_Default_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ul><li>Test Top-Level OU: When users create items, the default access is set to: ",
-        "The primary target audience can search and find the item.</li></ul>"
-
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_8(GetFriendlyValue1_8("PUBLIC"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Default_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.1.8v0.3"
+    PolicyId := DriveId1_8
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2308,20 +2016,14 @@ test_Default_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ul><li>Test Top-Level OU: When users create items, the default access is set to: ",
-        "The primary target audience can search and find the item.</li></ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage1_8(GetFriendlyValue1_8("PUBLIC"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Default_Incorrect_V4 if {
     # Test sharing setting when Top OU is correct but not secondary OU
-    PolicyId := "GWS.DRIVEDOCS.1.8v0.3"
+    PolicyId := DriveId1_8
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2350,21 +2052,14 @@ test_Default_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ul><li>Test Secondary OU: When users create items, the default access is set to: ",
-        "The primary target audience can search and find the item.</li></ul>"
-
-    ])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_8(GetFriendlyValue1_8("PUBLIC"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Default_Incorrect_V5 if {
     # Test sharing setting when Top OU is not present
-    PolicyId := "GWS.DRIVEDOCS.1.8v0.3"
+    PolicyId := DriveId1_8
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2383,20 +2078,12 @@ test_Default_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_Default_Incorrect_V6 if {
     # Test sharing setting when Top OU is correct but not secondary OU
-    PolicyId := "GWS.DRIVEDOCS.1.8v0.3"
+    PolicyId := DriveId1_8
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -2425,15 +2112,7 @@ test_Default_Incorrect_V6 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ul><li>Test Secondary OU: When users create items,",
-        " the default access is set to: ",
-        "The primary target audience can access the item if they have the link</li></ul>"
-
-    ])
+    failedOU := [{"Name": "Test Secondary OU",
+                 "Value": NonComplianceMessage1_8(GetFriendlyValue1_8("PEOPLE_WITH_LINK"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

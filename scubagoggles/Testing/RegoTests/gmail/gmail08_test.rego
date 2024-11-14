@@ -1,13 +1,12 @@
 package gmail
 import future.keywords
 
-
 #
-# GWS.GMAIL.8.1v0.3
+# GWS.GMAIL.8.1
 #--
 test_UserEmailUploads_Correct_V1 if {
     # Test User Email Uploads when there's only one event
-    PolicyId := "GWS.GMAIL.8.1v0.3"
+    PolicyId := GmailId8_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -35,7 +34,7 @@ test_UserEmailUploads_Correct_V1 if {
 
 test_UserEmailUploads_Correct_V2 if {
     # Test User Email Uploads when there's multiple events and the most recent is correct
-    PolicyId := "GWS.GMAIL.8.1v0.3"
+    PolicyId := GmailId8_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -73,7 +72,7 @@ test_UserEmailUploads_Correct_V2 if {
 
 test_UserEmailUploads_Correct_V3 if {
     # Test User Email Uploads when there's correct events in multiple OUs
-    PolicyId := "GWS.GMAIL.8.1v0.3"
+    PolicyId := GmailId8_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -111,7 +110,7 @@ test_UserEmailUploads_Correct_V3 if {
 
 test_UserEmailUploads_Incorrect_V1 if {
     # Test User Email Uploads when there are no relevant events
-    PolicyId := "GWS.GMAIL.8.1v0.3"
+    PolicyId := GmailId8_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -143,7 +142,7 @@ test_UserEmailUploads_Incorrect_V1 if {
 
 test_UserEmailUploads_Incorrect_V2 if {
     # Test User Email Uploads when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.8.1v0.3"
+    PolicyId := GmailId8_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -172,7 +171,7 @@ test_UserEmailUploads_Incorrect_V2 if {
 
 test_UserEmailUploads_Incorrect_V3 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.8.1v0.3"
+    PolicyId := GmailId8_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -211,7 +210,7 @@ test_UserEmailUploads_Incorrect_V3 if {
 
 test_UserEmailUploads_Incorrect_V4 if {
     # Test User Email Uploads when there's only one event and it's wrong
-    PolicyId := "GWS.GMAIL.8.1v0.3"
+    PolicyId := GmailId8_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {
@@ -240,7 +239,7 @@ test_UserEmailUploads_Incorrect_V4 if {
 
 test_UserEmailUploads_Incorrect_V5 if {
     # Test Spoofing and Authentication Protections when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.GMAIL.8.1v0.3"
+    PolicyId := GmailId8_1
     Output := tests with input as {
         "gmail_logs": {"items": [
             {

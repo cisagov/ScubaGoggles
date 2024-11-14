@@ -38,7 +38,7 @@ This control determines whether users outside of an agency's organization can vi
 
 Note: Even with this setting configured, group owners can still explicitly add external POCs to a group ([Adding External Members](#2-adding-external-members)), or explicitly allow posting to a group by an external POC who has not been added to said group ([Allowing Posting by External Members](#3-allowing-posting-by-external-members)).
 
-### Baseline Policies
+### Policies
 
 #### GWS.GROUPS.1.1v0.3
 Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.

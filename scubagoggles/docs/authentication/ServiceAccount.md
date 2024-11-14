@@ -1,5 +1,5 @@
 # Using a Service Account
-Only complete this section if not authenticating via [OAuth](/docs/authentication/OAuth.md). See [Authentication Methods](/docs/authentication/AuthenticationMethods.md) for more details.
+Only complete this section if not authenticating via [OAuth](OAuth.md). See [Authentication Methods](AuthenticationMethods.md) for more details.
 
 > [!Important]
 > ScubaGoggles requires the service account to have [domain-wide delegation of authority](https://support.google.com/a/answer/162106?hl=en) to function.
@@ -13,7 +13,7 @@ Only complete this section if not authenticating via [OAuth](/docs/authenticatio
 1. Select **MANAGE DOMAIN WIDE DELEGATION**
 1. Select **Add new**
 1. Enter the `client_id` from the downloaded credentials (also visible after clicking on the created Service account under Details -> Unique ID)
-1. Enter each OAuth scope as listed in [Permissions](/docs/prerequisites/Prerequisites.md#permissions)
+1. Enter each OAuth scope as listed in [Permissions](../prerequisites/Prerequisites.md#permissions)
 1. Select **AUTHORIZE**
 1. Finally, run ScubaGoggles with the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
 
@@ -22,5 +22,5 @@ Only complete this section if not authenticating via [OAuth](/docs/authenticatio
 > To do so, specify the `--customerid` argument with the customer ID of the target organization (found in [admin.google.com](https://admin.google.com/) under **Account** -> **Account settings**)
 
 ## Navigation
-- Continue to [Usage: Parameters](/docs/usage/Parameters.md)
+- Continue to [Usage: Parameters](../usage/Parameters.md)
 - Return to [Documentation Home](/README.md)

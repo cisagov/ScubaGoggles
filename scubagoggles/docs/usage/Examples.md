@@ -1,6 +1,6 @@
 
 # Usage: Examples
-> [!Note]
+> [!Note] (This is intended for developers ONLY)
 > If you chose not install the `scubagoggles` package in a venv but do have the dependencies installed from `requirements.txt`, you may execute the tool using the `scuba.py` script located in the root directory of this repository. Replace any `scubagoggles` directions with `python scuba.py`
 
 ## Example 1: Run an assessment against all GWS products
@@ -45,5 +45,5 @@ scubagoggles gws --config sample-config-files/basic_config.yaml
 > In all the above examples, the html report should open automatically. If not, navigate to the output folder and open the `*.html` file using a browser of your choice. The json output will also be located in this folder.
 
 ## Navigation
-- Continue to [Reviewing Output](/docs/usage/ReviewOutput.md)
+- Continue to [Reviewing Output](ReviewOutput.md)
 - Return to [Documentation Home](/README.md)

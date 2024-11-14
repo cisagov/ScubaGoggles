@@ -57,7 +57,7 @@ The following graphic illustrates the spectrum of MFA options and their relative
 Please note there is a distinction between Google 2 Step Verification (2SV) and MFA as a general term. While FIDO Security Key and Phone as a Security Key are acceptable forms of Phishing-Resistant MFA which rely on Google 2SV as the underlying mechanism, the other forms listed in the "strongest" column do not use Google
 2SV but are still acceptable forms of Phishing-Resistant MFA.
 
-<img src="/baselines/images/MFA.PNG">
+<img src="images/MFA.PNG">
 
 ### Policies
 
@@ -1032,7 +1032,7 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
 
 Configure GWS to send critical logs to the agency's centralized Security Information and Event Management (SIEM) so that they can be audited and queried. Configure GWS to send logs to a storage account and retain them for when incident response is needed.
 
-### Policy
+### Policies
 
 #### GWS.COMMONCONTROLS.14.1v0.3
 The following critical logs SHALL be sent to the agency's centralized SIEM.
@@ -1097,7 +1097,7 @@ Google Workspace administrators can choose to store data in a specific geographi
 
 At the time of writing, data region policies cannot be applied to data types not specifically listed in documentation linked in the resources section. Notably, this includes logs and cached content.
 
-### Policy
+### Policies
 
 #### GWS.COMMONCONTROLS.15.1v0.3
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
@@ -1174,7 +1174,7 @@ To configure Supplemental Data Storage per the policy:
 
 Google Workspace considers some of its services "core services," including Gmail, Calendar, and Drive. Services outside of this core offering are controlled within the "Additional Google services" portion of the admin console. This section outlines requirements relating to those services.
 
-### Policy
+### Policies
 
 #### GWS.COMMONCONTROLS.16.1v0.3
 Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.
@@ -1223,7 +1223,7 @@ User access to Early Access Apps SHOULD be disabled.
 3. Click **Save**.
 
 #### GWS.COMMONCONTROLS.16.2v0.3 Instructions
-1. In the list of all services, scroll to and click on the **Early Access Apps** service. 
+1. In the list of all services, scroll to and click on the **Early Access Apps** service.
 2. Click on **Service status**.
 3. Ensure **OFF for everyone** is checked.
 4. Click **Save**.
@@ -1231,7 +1231,7 @@ User access to Early Access Apps SHOULD be disabled.
 ## 17. Multi-Party Approval
 This section covers whether multiple super admins need to approve changes to specific admin console settings.
 
-### Policy
+### Policies
 
 #### GWS.COMMONCONTROLS.17.1v0.3
 Require multi party approval for sensitive admin actions SHALL be enabled.
@@ -1266,7 +1266,7 @@ DLP rules can use predefined content detectors to match PII (e.g., SSN), credent
 
 There are several commercial DLP solutions available that document support for Google Workspace. Google itself offers DLP services. Agencies may select any service that fits their needs and meets the baseline requirements outlined in this policy group. The DLP solution selected by an agency should offer services comparable to those offered by Google.
 
-Though use of Google's DLP solution is not strictly required, guidance for configuring Google's DLP solution can be found in the instructions of this policy section. 
+Though use of Google's DLP solution is not strictly required, guidance for configuring Google's DLP solution can be found in the instructions of this policy section.
 
 ### Policies
 #### GWS.COMMONCONTROLS.18.1v0.3
@@ -1335,7 +1335,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 #### GWS COMMONCONTROLS 18 Common Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu -\> Security -\> Access and data control -\> Data protection**.
-3.  Under **Data protection rules and detectors** click **Manage Rules**. 
+3.  Under **Data protection rules and detectors** click **Manage Rules**.
 4.  Click **Add rule** -\> **New rule**.
 
 #### GWS.COMMONCONTROLS.18.1v0.3 Instructions
@@ -1345,7 +1345,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 4. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
     2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
-    3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
+    3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
@@ -1353,12 +1353,12 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 
 #### GWS.COMMONCONTROLS.18.2v0.3 Instructions
 1. In the **Name** section, add the name and description of the rule.
-2. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
+2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 3. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
 4. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need. 
-    3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
+    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
+    3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block**. Under **Select when this action should apply**, select **External Conversations**, **Spaces**, **Group chats**, and **1:1 chats** (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
@@ -1366,12 +1366,12 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 
 #### GWS.COMMONCONTROLS.18.3v0.3 Instructions
 1. In the **Name** section, add the name and description of the rule.
-2. In the **Scope** section, apply this rule to the entire domain and click **Continue**. 
+2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 3. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
 4. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need. 
-    3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need. 
+    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
+    3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block message**. Under **Select when this action should apply**, check **Messages sent to external recipients** (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.

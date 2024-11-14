@@ -1,12 +1,16 @@
 package chat
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.CHAT.3.1v0.3
+# GWS.CHAT.3.1
 #--
 test_Space_History_Setting_Correct_V1 if {
     # Test space history setting when there's only one event - use case #1
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -25,16 +29,12 @@ test_Space_History_Setting_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Space_History_Setting_Correct_V2 if {
     # Test space history setting when there's only one event - use case #2
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -53,16 +53,12 @@ test_Space_History_Setting_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Space_History_Setting_Correct_V3 if {
     # Test space history setting when there's multiple events and the most most recent is correct - use case #1
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -91,16 +87,12 @@ test_Space_History_Setting_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Space_History_Setting_Correct_V4 if {
     # Test space history setting when there's multiple events and the most most recent is correct - use case #2
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -129,16 +121,12 @@ test_Space_History_Setting_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Space_History_Setting_Incorrect_V1 if {
     # Test space history setting when there are no relevant events
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -157,20 +145,12 @@ test_Space_History_Setting_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_Space_History_Setting_Incorrect_V2 if {
     # Test space history setting when there's only one event and it's wrong - use case #1
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -189,17 +169,14 @@ test_Space_History_Setting_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Conversation history settings for spaces is set to History is ALWAYS OFF</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage3_1("ALWAYS OFF")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Space_History_Setting_Incorrect_V3 if {
     # Test space history setting when there's only one event and it's wrong - use case #2
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -218,17 +195,14 @@ test_Space_History_Setting_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Conversation history settings for spaces is set to History is OFF by default</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage3_1("OFF by default")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Space_History_Setting_Incorrect_V4 if {
     # Test space history setting when there are multiple events and the most recent is wrong - use case #1
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -257,17 +231,14 @@ test_Space_History_Setting_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Conversation history settings for spaces is set to History is OFF by default</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage3_1("OFF by default")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Space_History_Setting_Incorrect_V5 if {
     # Test space history setting when there are multiple events and the most recent is wrong - use case #2
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -296,17 +267,14 @@ test_Space_History_Setting_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Conversation history settings for spaces is set to History is ALWAYS OFF</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage3_1("ALWAYS OFF")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Space_History_Setting_Incorrect_V6 if {
     # Test there's an event for a secondary OU but not the top-level OU
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -325,20 +293,12 @@ test_Space_History_Setting_Incorrect_V6 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_Space_History_Setting_Incorrect_V7 if {
     # Test multiple OUs
-    PolicyId := "GWS.CHAT.3.1v0.3"
+    PolicyId := ChatId3_1
     Output := tests with input as {
         "chat_logs": {"items": [
             {
@@ -367,14 +327,10 @@ test_Space_History_Setting_Incorrect_V7 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul>",
-        "<li>Some other OU: Conversation history settings for spaces is set to History is ALWAYS OFF</li>",
-        "<li>Test Top-Level OU: Conversation history settings for spaces is set to History is ALWAYS OFF</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Some other OU",
+                 "Value": NonComplianceMessage3_1("ALWAYS OFF")},
+                 {"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage3_1("ALWAYS OFF")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

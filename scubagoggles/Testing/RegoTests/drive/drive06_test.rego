@@ -1,12 +1,16 @@
 package drive
+
 import future.keywords
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.DRIVE.6.1v0.3
+# GWS.DRIVE.6.1
 #--
+
 test_DriveFs_Setting_Correct_V1 if {
     # Test Drive setting when there's OU inhertitence setting
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.3"
+    PolicyId := DriveId6_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -55,16 +59,12 @@ test_DriveFs_Setting_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_DriveFs_Setting_Correct_V2 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.3"
+    PolicyId := DriveId6_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -103,16 +103,12 @@ test_DriveFs_Setting_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_DriveFs_Setting_Correct_V3 if {
     # Test Drive setting when there's multiple events and inherited OU setting
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.3"
+    PolicyId := DriveId6_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -171,16 +167,12 @@ test_DriveFs_Setting_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_DriveFs_Setting_Correct_V4 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.3"
+    PolicyId := DriveId6_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -209,16 +201,12 @@ test_DriveFs_Setting_Correct_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_DriveFs_Setting_InCorrect_V1 if {
     # Test Drive setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.3"
+    PolicyId := DriveId6_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -247,17 +235,14 @@ test_DriveFs_Setting_InCorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled and can be used on any device.</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage6_1(GetFriendlyValue6_1("false", "true"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_DriveFs_Setting_InCorrect_V2 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.3"
+    PolicyId := DriveId6_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -306,17 +291,14 @@ test_DriveFs_Setting_InCorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled and can be used on any device.</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage6_1(GetFriendlyValue6_1("false", "true"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_DriveFs_Setting_InCorrect_V3 if {
     # Test Drive setting when there's multiple events
-    PolicyId := "GWS.DRIVEDOCS.6.1v0.3"
+    PolicyId := DriveId6_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -385,10 +367,7 @@ test_DriveFs_Setting_InCorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: Drive for Desktop is enabled and can be used on any device.</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage6_1(GetFriendlyValue6_1("false", "true"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

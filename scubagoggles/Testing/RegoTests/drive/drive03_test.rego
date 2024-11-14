@@ -1,12 +1,17 @@
 package drive
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.DRIVEDOCS.3.1v0.3
+# GWS.DRIVEDOCS.3.1
 #--
+
 test_Sharing_Correct_V1 if {
     # Test sharing setting when there's only one event
-    PolicyId := "GWS.DRIVEDOCS.3.1v0.3"
+    PolicyId := DriveId3_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -38,16 +43,12 @@ test_Sharing_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sharing_Correct_V2 if {
     # Test sharing setting when there's multiple events and the most most recent is correct
-    PolicyId := "GWS.DRIVEDOCS.3.1v0.3"
+    PolicyId := DriveId3_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -92,16 +93,12 @@ test_Sharing_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sharing_Correct_V3 if {
     # Test sharing setting when there's multiple OUs
-    PolicyId := "GWS.DRIVEDOCS.3.1v0.3"
+    PolicyId := DriveId3_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -156,16 +153,12 @@ test_Sharing_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Sharing_Incorrect_V1 if {
     # Test sharing setting when there are no relevant events
-    PolicyId := "GWS.DRIVEDOCS.3.1v0.3"
+    PolicyId := DriveId3_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -184,20 +177,12 @@ test_Sharing_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_Sharing_Incorrect_V2 if {
     # Test sharing setting when there's only one event and it's wrong
-    PolicyId := "GWS.DRIVEDOCS.3.1v0.3"
+    PolicyId := DriveId3_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -230,18 +215,14 @@ test_Sharing_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "Users are allowed to remove/apply the security update for files they own or manage</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage3_1("", "true")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sharing_Incorrect_V3 if {
     # Test sharing setting when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.DRIVEDOCS.3.1v0.3"
+    PolicyId := DriveId3_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -286,18 +267,14 @@ test_Sharing_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Top-Level OU: ",
-    "Users are allowed to remove/apply the security update for files they own or manage</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage3_1("", "true")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sharing_Incorrect_V4 if {
     # Test sharing setting when top level ou is correct but secondary isn't
-    PolicyId := "GWS.DRIVEDOCS.3.1v0.3"
+    PolicyId := DriveId3_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -352,18 +329,14 @@ test_Sharing_Incorrect_V4 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:",
-    "<ul><li>Test Secondary OU: ",
-    "Users are allowed to remove/apply the security update for files they own or manage</li></ul>"])
+    failedOU := [{"Name": "Test Secondary OU",
+                  "Value": NonComplianceMessage3_1("", "true")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Sharing_Incorrect_V5 if {
     # Test sharing setting when top level ou is missing
-    PolicyId := "GWS.DRIVEDOCS.3.1v0.3"
+    PolicyId := DriveId3_1
     Output := tests with input as {
         "drive_logs": {"items": [
             {
@@ -395,13 +368,5 @@ test_Sharing_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }

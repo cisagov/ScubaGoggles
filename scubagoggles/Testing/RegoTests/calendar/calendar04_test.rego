@@ -1,12 +1,16 @@
 package calendar
+
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
-# GWS.CALENDAR.4.1v0.3
+# GWS.CALENDAR.4.1
 #--
 test_CalendarAppointmentSlot_Correct_V1 if {
     # Test Calendar Appointment Slot when there's only one event
-    PolicyId := "GWS.CALENDAR.4.1v0.3"
+    PolicyId := CalendarId4_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -25,16 +29,12 @@ test_CalendarAppointmentSlot_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_CalendarAppointmentSlot_Correct_V2 if {
     # Test Calendar Appointment Slot when there's multiple events and the most recent is correct
-    PolicyId := "GWS.CALENDAR.4.1v0.3"
+    PolicyId := CalendarId4_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -63,16 +63,12 @@ test_CalendarAppointmentSlot_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_CalendarAppointmentSlot_Correct_V3 if {
     # Test Calendar Appointment Slot when there's correct events in multiple OUs
-    PolicyId := "GWS.CALENDAR.4.1v0.3"
+    PolicyId := CalendarId4_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -101,16 +97,12 @@ test_CalendarAppointmentSlot_Correct_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_CalendarAppointmentSlot_Incorrect_V1 if {
     # Test Calendar Appointment Slot when there are no relevant events
-    PolicyId := "GWS.CALENDAR.4.1v0.3"
+    PolicyId := CalendarId4_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -129,20 +121,12 @@ test_CalendarAppointmentSlot_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting ",
-        "is compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_CalendarAppointmentSlot_Incorrect_V2 if {
     # Test Calendar Appointment Slot when there's only one event and it's wrong
-    PolicyId := "GWS.CALENDAR.4.1v0.3"
+    PolicyId := CalendarId4_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -161,17 +145,14 @@ test_CalendarAppointmentSlot_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ", 
-    "Paid calendar appointments are enabled.</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage4_1("enabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_CalendarAppointmentSlot_Incorrect_V3 if {
     # Test Calendar Appointment Slot when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CALENDAR.4.1v0.3"
+    PolicyId := CalendarId4_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -200,17 +181,14 @@ test_CalendarAppointmentSlot_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-    "Paid calendar appointments are enabled.</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": NonComplianceMessage4_1("enabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_CalendarAppointmentSlot_Incorrect_V4 if {
     # Test Calendar Appointment Slot when there's only one event and it's wrong
-    PolicyId := "GWS.CALENDAR.4.1v0.3"
+    PolicyId := CalendarId4_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -229,17 +207,14 @@ test_CalendarAppointmentSlot_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-    "Paid calendar appointments are enabled.</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage4_1("enabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_CalendarAppointmentSlot_Incorrect_V5 if {
     # Test Calendar Appointment Slot when there are multiple events and the most recent is wrong
-    PolicyId := "GWS.CALENDAR.4.1v0.3"
+    PolicyId := CalendarId4_1
     Output := tests with input as {
         "calendar_logs": {"items": [
             {
@@ -268,11 +243,8 @@ test_CalendarAppointmentSlot_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-    "Paid calendar appointments are enabled.</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": NonComplianceMessage4_1("enabled")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scubagoggles"
+dynamic = ["version"]
+classifiers = ["Development Status :: 4 - Beta",
+               "Intended Audience :: Information Technology",
+               "Topic :: Security",
+               "Programming Language :: Python :: 3.9",
+               "Programming Language :: Python :: 3.10",
+               "Programming Language :: Python :: 3.11",
+               "Programming Language :: Python :: 3.12",
+               "Programming Language :: Python :: 3.13"]
+dependencies = ["dnspython>=2.6.1",
+                "google-api-python-client>=2.142.0",
+                "google-auth-httplib2>=0.2.0",
+                "google-auth-oauthlib>=1.2.1",
+                "MarkupSafe>=2.1.5",
+                "pyyaml>=6.0.2",
+                "requests>=2.32.3",
+                "tqdm>=4.66.5"]
+requires-python = ">= 3.9"
+description='SCuBA security baseline assessment tool'
+authors = [{name = "CISA"}]
+license = {file = "LICENSE"}
+readme = "README.md"
+
+[project.scripts]
+scubagoggles = "scubagoggles.main:dive"
+
+[tool.setuptools.dynamic]
+version = {attr = "scubagoggles.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["."]

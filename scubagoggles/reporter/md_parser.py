@@ -1,90 +1,358 @@
-"""
-This modules contains functions petaining to the baseline markdown documents.
-
+"""Markdown document parsing.
 """
 
 import re
-import pathlib
-from html import escape
 
-def read_baseline_docs(baseline_path:pathlib.Path, prod_to_fullname:dict):
+from collections import defaultdict
+from pathlib import Path
+from typing import Iterable, Union
+
+from scubagoggles.version import Version
+
+
+class MarkdownParserError(RuntimeError):
+
+    """An exception related to Markdown processing errors.  This can be used
+    to catch the exception for omitting the traceback, which really isn't
+    much use in this case.
     """
-    This function parses the secure baseline via each product markdown
-    document to align policy with the software baseline.
 
+
+class MarkdownParser:
+
+    """The MarkdownParser is responsible for parsing the baseline Markdown
+    files to extract the policy baseline information.
     """
 
-    baseline_md = [
-        filename.stem for filename in baseline_path.glob('*.md')
-    ]
+    # Regular expressions used in parsing the Markdown text.  Note that these
+    # are intended to be used with match() and NOT search() (for search, the
+    # expressions need the start of string (^)).
 
-    # map baseline short name i.e gmail to markdown file name
-    # assumes the product fullname is in the markdown file name
-    prod_to_baselinemd = {}
-    for product in prod_to_fullname.keys():
-        for baseline in baseline_md:
-            if product in baseline:
-                prod_to_baselinemd[product] = baseline
+    _above4_re = re.compile(r'#{1,3}[^#]')
 
-    # create a dict containing Policy Group and Individual policies
-    baseline_output = {}
-    for product, baselinemd in prod_to_baselinemd.items():
-        baseline_output[product] = []
-        baselinemd_path = baseline_path / f"{baselinemd}.md"
-        with baselinemd_path.open(mode='r',encoding='UTF-8') as baseline_f:
-            md_lines = baseline_f.readlines()
+    _group_re = re.compile(r'##\s*(?P<id>\d+)\.?\s+(?P<name>.+)$')
 
-        # Select the policy group number via "## Number." regex
-        # example line this would match on: ## 1. PolicyGroup
-        line_numbers = [
-            i
-            for i, line in enumerate(md_lines)
-            if re.search(r"^## [0-9]+\.", line)
-        ]
-        groups = [md_lines[line_number] for line_number in line_numbers]
+    _level2_re = re.compile(r'##[^#]')
 
-        for group_name in groups:
-            group = {}
-            group_number = group_name.split(".")[0][3:]
-            group_name = group_name.split(".")[1].strip()
-            group["GroupNumber"] = group_number
-            group["GroupName"] = group_name
-            group["Controls"] = []
+    _policies_re = re.compile(r'(?i)###\s*Policies$')
 
-            # Search for the line number of all individual Policy Group Ids
-            # There is an assumption here that Policy id is the uppercase version
-            # of the product short name i.e meet => MEET
-            product_upper = 'DRIVEDOCS' if product == 'drive' else product.upper()
+    _baseline_re = re.compile(r'####\s*(?P<baseline>GWS\.(?P<product>[^.]+)'
+                              r'\.(?P<id>\d+)\.(?P<item>\d+)'
+                              r'(?P<version>v\d+\.\d+))$')
 
-            id_regex = rf"#### [A-Za-z]+\.{product_upper}\.{group_number}\.\d+v\d+\.*\d*\s*$"
-            line_numbers = [
-            i
-            for i, line in enumerate(md_lines)
-            if re.search(id_regex, line)
-            ]
+    _baseline_id_map = {'drive': 'drivedocs'}
 
-            # Read all lines of the individual policy
-            for line_number in line_numbers:
-                line_advance = 1
-                value = md_lines[line_number + line_advance].strip()
+    def __init__(self, baseline_dir: Union[Path, str]):
 
-                # We're done getting the policy text as soon as we encounter
-                # a blank line.
-                while md_lines[line_number + line_advance + 1].strip():
-                    line_advance += 1
-                    value += " " + md_lines[line_number + line_advance].strip()
+        """Initializer for the MarkdownParser class.
 
-                value = escape(value)
-                line = md_lines[line_number].strip()[5:]
+        :param baseline_dir: directory containing the baseline Markdown
+            files.
+        :type baseline_dir: Path or str
+        """
 
-                # Check if policy has been deleted
-                deleted = False
-                if line.endswith("X"):
-                    deleted = True
-                    line = line[:-1]
-                    value = "[DELETED] " + value
+        self._baseline_dir = Path(baseline_dir)
+        if not self._baseline_dir.is_dir():
+            raise NotADirectoryError(f'{self._baseline_dir}')
 
-                group["Controls"].append({"Id": line, "Value": value, "Deleted": deleted})
+        # This handles the single exception case where the combined drive
+        # and docs product has a product name of "drive", but the baseline
+        # identifiers are "drivedocs" (e.g., GWS.DRIVEDOCS.1.8). Arggh.
 
-            baseline_output[product].append(group)
-    return baseline_output
+        self._baseline_id_map = {'drive': 'drivedocs'}
+
+    @classmethod
+    def baseline_identifier(cls, product: str) -> str:
+
+        """Return the identifier string used in the baselines for the
+        given product.
+
+        :param str product: product name.
+        :return: the baseline identifier, in only lowercase characters.
+        """
+
+        return cls._baseline_id_map.get(product, product).lower()
+
+    def parse_baselines(self, products: Iterable[str]) -> dict:
+
+        """Given a list of baseline product names (e.g., "gmail", "meet"),
+        this method parses the corresponding Markdown files and returns
+        the baseline data.
+
+        :param Iterable[str] products: list of baseline product names.
+        :return: dictionary of baseline data, where the keys are the given
+            product names and the values are the product data.  See the
+            _parse() method for the format of the returned data.
+        """
+
+        result = {}
+
+        for product in products:
+            product_result = self._parse(product)
+            result.update(product_result)
+
+        return result
+
+    def _parse(self, file_name: str, product: str = None) -> dict:
+
+        """Parse the given Markdown file and return a dictionary containing
+        baseline policy information.
+
+        The dictionary returned has the following format:
+
+        { <product>: [<baseline-group>, ...] }
+
+        where <product> is the product name (e.g., "gmail"), and
+        <baseline-group> is a dictionary:
+
+        { 'GroupName': <name>,
+          'GroupNumber': <id>,
+          'Controls': [<control>, ...] }
+
+        where <name> is a description of the group, <number> is the group
+        identifier, and <control> is a dictionary for each baseline:
+
+        { 'Id': <identifier>, 'Value': <description> }
+
+        where <identifier> is the baseline identifier (e.g., 'GWS.GMAIL.1.1'),
+        and <description> is the description of the baseline requirement.
+
+        :param str file_name: name of the Markdown file.  It's also used as
+            the product name, unless one is explicitly given.
+        :param str product: name of the GWS product.  This is used instead of
+            the file name (in the normal case, the file name is the same as
+            the product name).
+        :return: baseline data parsed from the Markdown file
+        :rtype: dict
+        """
+
+        result = defaultdict(list)
+
+        eof_message = 'unexpected end of file encountered'
+        product = product if product else file_name
+        baseline_id = self.baseline_identifier(product)
+        md_file = self._baseline_dir / f'{file_name}.md'
+
+        content = [line.strip() for line
+                   in md_file.read_text(encoding = 'utf-8').splitlines()]
+
+        total_lines = len(content)
+        skip_lines = 0
+
+        # This is the main loop of the parser.  It locates the start of a
+        # policy group.  Once found, the inner loops read the section
+        # related to the current policy group, first looking for the
+        # "Policies" section, and then the individual policies.  These
+        # inner loops keep track of the additional lines processed using
+        # the 'skip_lines' count.  When a policy group has been completely
+        # parsed, the outer loop regains control and will advance to the
+        # next unprocessed line based on this count.
+
+        for line_number, line in enumerate(content, start = 1):
+
+            if skip_lines:
+                skip_lines -= 1
+                continue
+
+            if not line:
+                continue
+
+            # Find the next policy group.
+
+            match = self._group_re.match(line)
+
+            if not match:
+                continue
+
+            group_id = match['id']
+            group_name = match['name']
+
+            group = {'GroupNumber': group_id,
+                     'GroupName': group_name,
+                     'Controls': []}
+
+            if line_number == total_lines:
+                self._parser_error(md_file, eof_message, group_id, group_name)
+
+            # We're in the start of the policy group, so next look for the
+            # "Policies" section, which contains the baseline definitions.
+
+            for next_line in content[line_number:]:
+
+                skip_lines += 1
+
+                match = self._policies_re.match(next_line)
+                if match or self._level2_re.match(next_line):
+                    break
+
+            if not match:
+                message = '"Policies" section missing'
+                self._parser_error(md_file, message, group_id, group_name)
+
+            if (line_number + skip_lines) == total_lines:
+                self._parser_error(md_file, eof_message, group_id, group_name)
+
+            baseline_content = content[line_number + skip_lines:]
+            skip_lines += self._parse_baselines(baseline_content,
+                                                md_file,
+                                                baseline_id,
+                                                group)
+
+            # All baseline items in the current group have been parsed.
+            # The group is added to the result dictionary.
+
+            result[product].append(group)
+
+        return result
+
+    def _parse_baselines(self,
+                         baseline_content: list,
+                         md_file: Path,
+                         baseline_id: str,
+                         group: dict) -> int:
+
+        """This method parses the "Policies" sections of the baseline
+        Markdown files.
+
+        The "controls" section of the given group is filled in, with each
+        element in the list containing information about one baseline.
+
+        :param list baseline_content: lines from the Markdown content following
+            the "Policies" section.
+        :param Path md_file: file specification of the Markdown file for
+            error reporting.
+        :param str baseline_id: baseline identifier for the current file
+            (e.g., "gmail").
+        :param dict group: group data that will contain the controls parsed in
+            this method.  NOTE that the group is passed by reference, so all
+            additions made to it are essentially passed back to the caller.
+        :return:
+        """
+
+        group_id = group['GroupNumber']
+        group_name = group['GroupName']
+
+        # We're in the section where the baselines are defined.  The
+        # following two loops parse the baseline sections.  The outer
+        # loop handles the transition from one baseline section to the
+        # next, while the inner loop locates the next baseline and
+        # parses it.
+
+        next_line = ''
+        prev_item = 0
+        lines_seen = 0
+        total_lines = len(baseline_content)
+
+        while (lines_seen < total_lines
+               and not self._above4_re.match(next_line)):
+
+            for next_line in baseline_content[lines_seen:]:
+
+                if self._above4_re.match(next_line):
+                    break
+
+                lines_seen += 1
+
+                # Find the next baseline section.
+
+                match = self._baseline_re.match(next_line)
+                if not match:
+                    continue
+
+                # We've found a baseline section.  Check the baseline
+                # identifier to make sure it's expected (this is mainly
+                # to catch cut/paste errors and unintentional omissions).
+
+                current_baseline_id = match['product'].lower()
+
+                if current_baseline_id != baseline_id:
+                    message = ('different product encountered '
+                               f'{current_baseline_id} != {baseline_id}')
+                    self._parser_error(md_file,
+                                       message,
+                                       group_id,
+                                       group_name)
+
+                baseline = match['baseline']
+                ident = match['id']
+                item = int(match['item'])
+                version = match['version']
+
+                if ident != group_id:
+                    message = f'mismatching group number ({ident})'
+                    self._parser_error(md_file,
+                                       message,
+                                       group_id,
+                                       group_name)
+
+                if version != Version.suffix:
+                    message = f'invalid baseline version ({version})'
+                    self._parser_error(md_file,
+                                       message,
+                                       group_id,
+                                       group_name)
+
+                if item != (prev_item + 1):
+                    message = (f'expected baseline item {prev_item + 1}, '
+                               f'got item {item}')
+                    self._parser_error(md_file,
+                                       message,
+                                       group_id,
+                                       group_name)
+
+                prev_item = item
+                value_lines = []
+
+                for value_line in baseline_content[lines_seen:]:
+
+                    lines_seen += 1
+
+                    if not value_line:
+                        if not value_lines:
+                            continue
+                        break
+
+                    value_lines.append(value_line)
+
+                value = ' '.join(value_lines)
+
+                if not value:
+                    message = ('missing description for baseline item '
+                               f'{item}')
+                    self._parser_error(md_file,
+                                       message,
+                                       group_id,
+                                       group_name)
+
+                control = {'Id': baseline, 'Value': value}
+                group['Controls'].append(control)
+
+                # Break out of this inner loop, and as long as we're not
+                # at the end of the file, the outer loop will re-enter
+                # the inner loop to locate the next baseline section.
+
+                break
+
+        return lines_seen
+
+    @staticmethod
+    def _parser_error(md_file: Path,
+                      message: str,
+                      group_id: str = None,
+                      group_name: str = None):
+
+        """Constructs an error message and raises a MarkdownParserError
+        exception.
+
+        :param Path md_file: Markdown file specification.
+        :param str message: error-specific message.
+        :param str group_id: [optional] identifier of the group - if this is
+            given, the group_name is also required.
+        :param str group_name: [optional] name of the policy group.
+        """
+
+        message = f'{md_file}: {message}'
+        if group_id:
+            message += f' for group id {group_id} ({group_name})'
+
+        raise MarkdownParserError(message)
