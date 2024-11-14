@@ -26,7 +26,7 @@ options:
 scubagoggles getopa -v v0.60.0 -c
 ```
 
-If you have run the [ScubaGoggles setup utility](DownloadAndInstall.md#Running-ScubaGoggles-Setup-Utility),
+If you have run the [ScubaGoggles setup utility](DownloadAndInstall.md#ScubaGoggles-Setup-Utility),
 you will have specified the location of the OPA executable.  This location is
 used by `getopa` when downloading the OPA executable.
 

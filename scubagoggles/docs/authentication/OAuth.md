@@ -37,7 +37,7 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 1. Click **OK**
 1. Move the downloaded file (begins with `client_secret*.json`) to the
    location and name you specified when you ran the
-   [ScubaGoggles setup utility](../installation/DownloadAndInstall.md#Running-ScubaGoggles-Setup-Utility).
+   [ScubaGoggles setup utility](../installation/DownloadAndInstall.md#ScubaGoggles-Setup-Utility).
    If you have not yet run the setup utility, you will specify this file as the
    credentials file when prompted by the setup utility.  You'll make it easier
    on yourself if you rename the file to something simple, like
