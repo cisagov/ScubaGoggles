@@ -34,7 +34,7 @@ def get_output_path() -> Path:
     config = UserConfig()
     output_dir = config.output_dir
     dir_pattern = f'{default_file_names.output_folder_name}*'
-
+    print(f'output directory: {output_dir}')
     directories = [(d, d.stat().st_ctime)
                    for d in output_dir.glob(dir_pattern)]
     directories.sort(key = itemgetter(1), reverse = True)
