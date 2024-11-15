@@ -40,6 +40,8 @@ class SmokeTest:
         """
         try:
             command: str = f"scubagoggles gws --subjectemail {subjectemail} --quiet"
+
+            # pylint: disable-next=subprocess-run-check
             cp = subprocess.run(command,
                                 shell=True,
                                 capture_output = True,
