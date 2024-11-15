@@ -30,5 +30,6 @@ runs:
     - name: Download OPA executable
       shell: powershell
       run: |
+        mkdir ~/scubagoggles
         scubagoggles setup -d ~/scubagoggles -r ~/scubagoggles -c ./credentials.json
         scubagoggles getopa -c -v ${{ inputs.opa-version }}
