@@ -39,17 +39,17 @@ class SmokeTest:
             subjectemail: The email address of a user for the service account
         """
         try:
-            command: str = f"scubagoggles gws --subjectemail {subjectemail} --quiet"
+            command: str = f"scubagoggles -l d gws --subjectemail {subjectemail} --quiet"
 
             # pylint: disable-next=subprocess-run-check
             cp = subprocess.run(command,
                                 shell=True,
                                 capture_output = True,
                                 encoding = 'utf-8')
+            print(f'command is {command}')
+            print(f'failure return code {cp.returncode}')
+            print(cp.stdout)
             if cp.returncode:
-                print(f'command is {command}')
-                print(f'failure return code {cp.returncode}')
-                print(cp.stdout)
                 print(cp.stderr)
                 return
             output_path = get_output_path()
