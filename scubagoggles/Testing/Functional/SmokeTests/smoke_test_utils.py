@@ -38,7 +38,7 @@ def get_output_path() -> Path:
     directories = [(d, d.stat().st_ctime)
                    for d in output_dir.glob(dir_pattern)]
     directories.sort(key = itemgetter(1), reverse = True)
-
+    print(f'directories: {directories}')
     return directories[0][0]
 
 
