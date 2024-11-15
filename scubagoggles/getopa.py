@@ -11,6 +11,7 @@ import subprocess
 from hashlib import sha256
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from urllib.error import HTTPError
 from urllib.parse import urljoin, urlsplit
 from urllib.request import Request, urlcleanup, urlopen, urlretrieve
 
@@ -74,7 +75,10 @@ def download_opa(opa_dir: Path,
         by OPA does not look like a version (vM.m.b).
     """
 
+    # pylint: disable=too-many-branches
+
     opa_base_url = 'https://github.com/open-policy-agent/opa/releases/'
+    version_re = re.compile(r'v\d+(?:\.\d+){2}')
 
     if not version:
         latest_version_url = urljoin(opa_base_url, 'latest')
@@ -85,9 +89,12 @@ def download_opa(opa_dir: Path,
             version = urlsplit(response.url).path.split('/')[-1]
         log.debug('  Version returned: %s', version)
 
-        if not re.match(r'v\d+(?:\.\d+){2}', version):
+        if not version_re.match(version):
             raise RuntimeError(f'? "{version}" - unrecognized version string '
                                'returned as "latest" OPA version')
+    elif not version_re.match(version):
+        raise UserRuntimeError(f'? "{version}" - unrecognized version string - '
+                               'expected "v<X>.<Y>.<Z>"')
 
     os_type = platform.system().lower()
 
@@ -117,8 +124,23 @@ def download_opa(opa_dir: Path,
         log.debug('Overwriting existing file: %s', str(output_file))
         output_file.unlink()
 
-    urlretrieve(download_url, output_file)
-    urlcleanup()
+    log.debug('Download URL: %s', download_url)
+
+    try:
+        urlretrieve(download_url, output_file)
+    except HTTPError as http_error:
+        log.error('HTTP error %d returned trying to access %s',
+                  http_error.code,
+                  download_url)
+        if http_error.code == 404:
+            # I want the error I'm raising in this instance ONLY.
+            # pylint: disable-next=raise-missing-from
+            raise UserRuntimeError('Unable to download OPA executable for '
+                                   f'version {version} - check version')
+        raise UserRuntimeError('Failure downloading OPA executable') \
+            from http_error
+    finally:
+        urlcleanup()
 
     mode = output_file.stat().st_mode
     new_mode = mode | stat.S_IXUSR | stat.S_IRUSR
@@ -183,9 +205,19 @@ def verify_opa(download_url: str, opa_exe_file: Path):
         hash_file_name = opa_exe_file.name + hash_suffix
         hash_file = Path(temp_dir, hash_file_name)
 
-        log.debug('Downloading %s to %s', hash_file_name, temp_dir)
-        urlretrieve(hash_file_url, hash_file)
-        urlcleanup()
+        log.debug('  Downloading %s to %s', hash_file_name, temp_dir)
+        log.debug('  Download URL: %s', download_url)
+
+        try:
+            urlretrieve(hash_file_url, hash_file)
+        except HTTPError as http_error:
+            log.error('HTTP error %d returned trying to access %s',
+                      http_error.code,
+                      download_url)
+            raise UserRuntimeError('Failure downloading OPA hash file') \
+                from http_error
+        finally:
+            urlcleanup()
 
         contents = hash_file.read_text(encoding = 'utf-8')
 
