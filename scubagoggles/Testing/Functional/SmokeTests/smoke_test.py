@@ -47,6 +47,8 @@ class SmokeTest:
                                 capture_output = True,
                                 encoding = 'utf-8')
             if cp.returncode:
+                print(f'command is {command}')
+                print(f'failure return code {cp.returncode}')
                 print(cp.stdout)
                 print(cp.stderr)
                 return
