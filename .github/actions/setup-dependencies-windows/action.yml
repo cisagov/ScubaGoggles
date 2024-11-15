@@ -29,4 +29,6 @@ runs:
 
     - name: Download OPA executable
       shell: powershell
-      run: python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
+      run: |
+        scubagoggles setup -d ~/scubagoggles -r ~/scubagoggles -c ./credentials.json
+        scubagoggles getopa -c -v ${{ inputs.opa-version }}
