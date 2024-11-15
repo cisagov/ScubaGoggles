@@ -90,7 +90,7 @@ def user_directory(arguments: argparse.Namespace):
         if not user_dir.exists():
             answer = prompt_boolean(f'Create directory {user_dir}')
 
-            if strtobool(answer):
+            if answer:
                 user_dir.mkdir(exist_ok = True)
         else:
             print(f'  specified directory: {user_dir}')

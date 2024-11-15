@@ -31,5 +31,6 @@ runs:
       shell: powershell
       run: |
         mkdir ~/scubagoggles
+        echo "temp" > ./credentials.json
         scubagoggles setup -d ~/scubagoggles -r ~/scubagoggles -c ./credentials.json
         scubagoggles getopa -c -v ${{ inputs.opa-version }}
