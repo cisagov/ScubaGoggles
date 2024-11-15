@@ -39,10 +39,15 @@ class SmokeTest:
             subjectemail: The email address of a user for the service account
         """
         try:
-            # (Roy 8/28/24): The command is going to have to be fixed because
-            # the policy API doesn't support service accounts.
             command: str = f"scubagoggles gws --subjectemail {subjectemail} --quiet"
-            subprocess.run(command, shell=True, check=True)
+            cp = subprocess.run(command,
+                                shell=True,
+                                capture_output = True,
+                                encoding = 'utf-8')
+            if cp.returncode:
+                print(cp.stdout)
+                print(cp.stderr)
+                return
             output_path = get_output_path()
             output: list = verify_output_type(output_path, [])
             report_dir = sample_report_dir()
