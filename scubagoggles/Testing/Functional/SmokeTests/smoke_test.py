@@ -50,8 +50,7 @@ class SmokeTest:
             print(f'failure return code {cp.returncode}')
             print(cp.stdout)
             if cp.returncode:
-                print(cp.stderr)
-                return
+                pytest.fail(f'An error occurred, {cp.stderr}')
             output_path = get_output_path()
             output: list = verify_output_type(output_path, [])
             report_dir = sample_report_dir()

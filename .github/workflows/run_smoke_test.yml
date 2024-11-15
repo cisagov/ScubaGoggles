@@ -106,4 +106,4 @@ jobs:
           json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
       - name: Run ScubaGoggles and check for correct output
-        run: pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+        run: pytest -r P ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
