@@ -228,3 +228,26 @@ Incoming calls SHALL be restricted to contacts and other users in the organizati
 4.  Click **Incoming call restrictions**.
 5.  Ensure **Users receive calls only from contacts and other users in the organization** or **Users can't receive calls** is selected.
 6.  Click **Save**.
+
+## 6. Gemini Settings
+
+This section covers whether meetings should be automatically recorded or not
+
+### Policies
+
+#### GWS.MEET.6.1v0.3
+Automatic Note-Takking SHOULD be disabled.
+
+- _Rationale:_ By enabling this setting it creates the risk of gemini recording/taking notes on sensitive data. By disabling the setting it makes the meeting owner to make the decision to use the feature.
+- _Last modified:_ November 18, 2024
+
+- MITRE ATT&CK TTP Mapping
+  - Pending
+
+#### GWS.MEET.6.1v0.3 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
+3.  Click **Gemini Settings**.
+4.  Click **Automatic note-taking**.
+5.  Ensure **Gemini takes notes by default** is unchecked.
+6.  Click **Save**.
