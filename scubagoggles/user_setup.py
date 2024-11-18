@@ -76,7 +76,8 @@ def user_directory(arguments: argparse.Namespace):
     print('Setup: output directory')
 
     config = arguments.user_config
-
+    create_dir = arguments.mkdir
+    prompt = not arguments.noprompt
     user_dir = arguments.work_directory
 
     if user_dir:
@@ -88,9 +89,11 @@ def user_directory(arguments: argparse.Namespace):
         user_dir = user_dir.resolve()
 
         if not user_dir.exists():
-            answer = prompt_boolean(f'Create directory {user_dir}')
+            answer = (create_dir or (prompt
+                      and prompt_boolean(f'Create directory {user_dir}')))
 
             if answer:
+                print(f'  creating: {user_dir}')
                 user_dir.mkdir(exist_ok = True)
         else:
             print(f'  specified directory: {user_dir}')
@@ -116,7 +119,8 @@ def user_directory(arguments: argparse.Namespace):
         # Confirm with the user that this is the output directory they want
         # to use.  The user is also asked whether the directory should be
         # created if it doesn't exist.  We don't exit the loop until we
-        # have a valid directory.
+        # have a valid directory.  Because the user hasn't entered any
+        # directory, we're forced to prompt (ignoring --noprompt).
 
         verified = False
 
@@ -129,8 +133,10 @@ def user_directory(arguments: argparse.Namespace):
             user_dir = Path(os.path.expandvars(answer)).expanduser()
 
             if not user_dir.exists():
-                answer = prompt_boolean(f'Create directory {user_dir}')
+                answer = (create_dir
+                          or prompt_boolean(f'Create directory {user_dir}'))
                 if answer:
+                    print(f'  creating: {user_dir}')
                     user_dir.mkdir(exist_ok = True)
 
             verified = user_dir.is_dir()
@@ -155,8 +161,9 @@ def user_directory(arguments: argparse.Namespace):
     user_dir = config.output_dir
 
     if not user_dir.exists():
-        answer = prompt_boolean(f'Create directory {user_dir}')
+        answer = create_dir or prompt_boolean(f'Create directory {user_dir}')
         if answer:
+            print(f'  creating: {user_dir}')
             user_dir.mkdir(exist_ok = True)
     else:
         print(f'  {user_dir}')
@@ -179,8 +186,9 @@ def opa_directory(arguments: argparse.Namespace):
 
     print('Setup: OPA executable directory')
 
+    check = not arguments.nocheck
     config = arguments.user_config
-
+    create_dir = arguments.mkdir
     opa_dir = arguments.opa_directory
 
     if opa_dir:
@@ -189,7 +197,14 @@ def opa_directory(arguments: argparse.Namespace):
         # We only need to check whether the OPA executable is indeed in that
         # location.
 
-        validate_opa_dir(opa_dir)
+        if not opa_dir.exists() and create_dir:
+            print(f'  creating: {opa_dir}')
+            opa_dir.mkdir(exist_ok = True)
+
+        if check:
+            validate_opa_dir(opa_dir)
+        else:
+            print(f'  {opa_dir}')
 
         config.opa_dir = opa_dir.resolve()
 
@@ -201,7 +216,10 @@ def opa_directory(arguments: argparse.Namespace):
         # executable directory.  We just validate the directory and don't
         # change anything.
 
-        validate_opa_dir(config.opa_dir)
+        if check:
+            validate_opa_dir(config.opa_dir)
+        else:
+            print(f'  {config.opa_dir}')
 
         return False
 
@@ -213,8 +231,9 @@ def opa_directory(arguments: argparse.Namespace):
         return False
 
     # There's no OPA executable directory defined, and we haven't found the
-    # executable in the User's PATH, so we have to ask for the location.
-    # Suggest the output directory as the default location.
+    # executable in the User's PATH, so we have to ask for the location. Suggest
+    # the output directory as the default location. Because the user hasn't
+    # entered any directory, we're forced to prompt (ignoring --noprompt).
 
     default_dir = config.output_dir
     while not opa_dir:
@@ -224,6 +243,10 @@ def opa_directory(arguments: argparse.Namespace):
             continue
 
         answer = Path(os.path.expandvars(answer)).expanduser().absolute()
+
+        if not answer.exists() and create_dir:
+            print(f'  creating: {answer}')
+            answer.mkdir(exist_ok = True)
 
         if validate_opa_dir(answer) or answer.is_dir():
             opa_dir = answer
@@ -277,16 +300,17 @@ def credentials_file(arguments: argparse.Namespace):
 
     print('Setup: Google API credentials file')
 
+    check = not arguments.nocheck
     config = arguments.user_config
-
     credentials = arguments.credentials
+    prompt = not arguments.noprompt
 
     if credentials:
 
         # The user has explicitly specified the credentials file.  We only
         # need to check whether the file exists.
 
-        if not credentials.is_file():
+        if check and not credentials.is_file():
             raise FileNotFoundError(f'? {credentials} - credentials not found')
 
         print(f'  specified file: {credentials}')
@@ -308,12 +332,14 @@ def credentials_file(arguments: argparse.Namespace):
             config.credentials_file = legacy_credentials
             return True
 
-    elif config.credentials_file.is_file():
+    elif config.credentials_file.is_file() or not check:
         print(f'  {config.credentials_file}')
         return False
     else:
         log.error('? %s - Google credential files missing',
                   config.credentials_file)
+        if not prompt:
+            return False
 
     # There's no configuration file found, so we have to ask for the location.
 

@@ -109,18 +109,23 @@ def find_opa(opa_path: Path = None):
 
     opa_filenames = []
 
-    system_type = platform.system().lower()
+    os_type = platform.system().lower()
 
     architectures = [platform.machine().lower()]
     if architectures[0] == 'x64_64':
         architectures.append('amd64')
 
+    # An ARM-based Mac can supposedly run the AMD64 version
+    # of OPA.
+    if os_type == 'darwin' and 'amd64' not in architectures:
+        architectures.append('amd64')
+
     for architecture in architectures:
-        opa_filename = f'opa_{system_type}_{architecture}'
+        opa_filename = f'opa_{os_type}_{architecture}'
         opa_filenames.append(opa_filename)
         opa_filenames.append(f'{opa_filename}_static')
 
-    extension = '.exe' if system_type == 'windows' else ''
+    extension = '.exe' if os_type == 'windows' else ''
 
     # The user may have renamed the "long" OPA executable name to shorten it,
     # or may have followed the instructions for downloading OPA, which includes

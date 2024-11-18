@@ -263,6 +263,24 @@ def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         type = path_parser,
                         help = 'OAuth2 credentials file for Google APIs')
 
+    parser.add_argument('--mkdir',
+                        '-m',
+                        default = False,
+                        action = 'store_true',
+                        help = 'Create directory(ies), if needed')
+
+    parser.add_argument('--nocheck',
+                        '-nc',
+                        default = False,
+                        action = 'store_true',
+                        help = 'Do not check for directory or file existence')
+
+    parser.add_argument('--noprompt',
+                        '-np',
+                        default = False,
+                        action = 'store_true',
+                        help = 'Do not prompt for missing items')
+
     parser.add_argument('--opa_directory',
                         '-r',
                         metavar = '<directory>',
