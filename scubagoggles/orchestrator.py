@@ -95,7 +95,9 @@ class Orchestrator:
         args = self._args
         products = args.baselines
 
-        with Provider(args.customerid, args.credentials) as provider:
+        with Provider(args.customerid,
+                      args.credentials,
+                      args.subjectemail) as provider:
             provider_dict = provider.call_gws_providers(products, args.quiet)
             provider_dict['baseline_suffix'] = Version.suffix
             provider_dict['successful_calls'] = list(provider.successful_calls)

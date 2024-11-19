@@ -107,16 +107,21 @@ class Provider:
     Class for making the GWS api calls and tracking the results.
     """
 
-    def __init__(self, customer_id: str, credentials_file: Path):
-        """
-        Initialize the Provider.
+    def __init__(self,
+                 customer_id: str,
+                 credentials_file: Path,
+                 svc_account_email: str = None):
+
+        """Initialize the Provider.
 
         :param customer_id: the ID of the customer to run against.
         :param credentials_file: file specification of Google JSON-format
-            credentials
+            credentials.
+        :param svc_account_email: (optional) email address for the service
+            account.
         """
 
-        self._gws_auth = GwsAuth(credentials_file)
+        self._gws_auth = GwsAuth(credentials_file, svc_account_email)
         self._credentials = self._gws_auth.credentials
         self._services = {}
         self._customer_id = customer_id
