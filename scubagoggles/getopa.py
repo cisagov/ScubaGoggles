@@ -49,7 +49,7 @@ def getopa(arguments: argparse.Namespace):
         config.opa_dir = arguments.opa_directory
         config.write()
 
-    verify = arguments.check
+    verify = not arguments.nocheck
     force = arguments.force
     version = arguments.version
 

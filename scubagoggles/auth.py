@@ -57,8 +57,6 @@ class GwsAuth:
         credentials_dir = credentials_path.parent
         self._credentials_path = credentials_path
 
-        # This service account method is a special case - not sure if it's
-        # currently being used.
         self._svc_account_email = svc_account_email
         if svc_account_email:
             get_credentials = SvcCredentials.from_service_account_file

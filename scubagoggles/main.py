@@ -217,11 +217,11 @@ def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
 
     parser.set_defaults(user_config = user_config)
 
-    parser.add_argument('--check',
-                        '-c',
+    parser.add_argument('--nocheck',
+                        '-nc',
                         default = False,
                         action = 'store_true',
-                        help = 'Check hash code after download')
+                        help = 'Do not check hash code after download')
 
     parser.add_argument('--force',
                         '-f',

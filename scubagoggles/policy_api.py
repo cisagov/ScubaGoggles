@@ -25,7 +25,7 @@ class PolicyAPI:
     closed when it's no longer needed.
     """
 
-    # LAMBDAS!  The're VOODOO to some, just like the "goto".  The following
+    # LAMBDAS!  They're VOODOO to some, just like the "goto".  The following
     # are short functions that evaluate whether the Google API setting value
     # is exactly or roughly what's expected.  Using lambdas encapsulates the
     # functionality within the class without the bother of making them
