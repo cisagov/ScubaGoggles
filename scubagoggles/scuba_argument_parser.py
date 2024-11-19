@@ -6,6 +6,8 @@ import argparse
 import re
 import warnings
 
+from pathlib import Path
+
 import yaml
 
 from scubagoggles.reporter.md_parser import MarkdownParser
@@ -130,9 +132,12 @@ class ScubaArgumentParser:
     def validate_config(args : argparse.Namespace) -> None:
         """
         Check for an logical errors in the advanced ScubaGoggles configuration
-        options. NOTE: "omitpolicy" is the only such option for now; more to
-        come.
+        options.
         """
+
+        if 'credentials' in args and not isinstance(args.credentials, Path):
+            args.credentials = Path(args.credentials)
+
         if 'omitpolicy' in args:
             ScubaArgumentParser.validate_omissions(args)
 

@@ -10,5 +10,5 @@ outputpath: example_output
 # example, "baselines: [gmail]" is correct but "baselines: gmail" is not.
 baselines: [gmail, calendar, groups, chat, drive, meet, sites, commoncontrols]
 
-# Example specifying a boolean paramter
+# Example specifying a boolean parameter
 quiet: false
