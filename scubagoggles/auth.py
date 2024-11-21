@@ -92,11 +92,13 @@ class GwsAuth:
     def credentials(self) -> Credentials:
 
         """Returns the Google credentials, after a possible refresh if needed.
+        Token refresh doesn't apply to service accounts.
 
         :return: valid Google credentials
         """
 
-        self._refresh_token()
+        if not self._svc_account_email:
+            self._refresh_token()
 
         return self._token
 

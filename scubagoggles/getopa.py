@@ -51,7 +51,7 @@ def getopa(arguments: argparse.Namespace):
 
     verify = not arguments.nocheck
     force = arguments.force
-    version = arguments.version
+    version = arguments.version.lower() if arguments.version else None
 
     download_opa(opa_dir, version, verify, force)
 
@@ -93,8 +93,10 @@ def download_opa(opa_dir: Path,
             raise RuntimeError(f'? "{version}" - unrecognized version string '
                                'returned as "latest" OPA version')
     elif not version_re.match(version):
-        raise UserRuntimeError(f'? "{version}" - unrecognized version string - '
-                               'expected "v<X>.<Y>.<Z>"')
+        if not version_re.match(f'v{version}'):
+            raise UserRuntimeError(f'? "{version}" - unrecognized version '
+                                   'string - expected "v<X>.<Y>.<Z>"')
+        version = f'v{version}'
 
     os_type = platform.system().lower()
 

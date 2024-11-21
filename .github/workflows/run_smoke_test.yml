@@ -32,7 +32,7 @@ on:
         description: "Choose OPA version"
         required: true
         type: string
-        default: "0.60.0"
+        default: "v0.60.0"
 
 jobs:
   configuration:
