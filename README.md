@@ -1,5 +1,5 @@
 
-![CISA Logo](scubagoggles/docs/images/cisa.png)
+![CISA Logo](docs/images/cisa.png)
 <div align='center' style="margin:0;" id="user-content-toc">
   <ul>
     <h1 style="display: inline-block;">ScubaGoggles</h1>
@@ -38,39 +38,39 @@ The majority of the conformance checks done by ScubaGoggles rely on
 baseline policy, ScubaGoggles will indicate that the setting currently can not
 be checked on its HTML report output. In this situation, we recommend you
 manually review your GWS security configurations with the SCuBA secure
-baselines. See [Limitations](scubagoggles/docs/usage/Limitations.md) for more
+baselines. See [Limitations](docs/usage/Limitations.md) for more
 details.
 
 ## Table of Contents
 
 ### Installation
 
-- [Download and Python Install](scubagoggles/docs/installation/DownloadAndInstall.md)
-- [Download the OPA Executable](scubagoggles/docs/installation/OPA.md)
+- [Download and Python Install](docs/installation/DownloadAndInstall.md)
+- [Download the OPA Executable](docs/installation/OPA.md)
 
 ### Prerequisites
 
-- [Permissions](scubagoggles/docs/prerequisites/Prerequisites.md#permissions)
-- [Create a Project](scubagoggles/docs/prerequisites/Prerequisites.md#create-a-project)
+- [Permissions](docs/prerequisites/Prerequisites.md#permissions)
+- [Create a Project](docs/prerequisites/Prerequisites.md#create-a-project)
 
 ### Authentication
-- [Authentication Methods](scubagoggles/docs/authentication/AuthenticationMethods.md)
-- [Using OAuth](scubagoggles/docs/authentication/OAuth.md)
-- [Using a Service Account](scubagoggles/docs/authentication/ServiceAccount.md)
+- [Authentication Methods](docs/authentication/AuthenticationMethods.md)
+- [Using OAuth](docs/authentication/OAuth.md)
+- [Using a Service Account](docs/authentication/ServiceAccount.md)
 
 ### Usage
 
-- [Usage: Parameters](scubagoggles/docs/usage/Parameters.md)
-- [Usage: Config File](scubagoggles/docs/usage/Config.md)
-- [Usage: Examples](scubagoggles/docs/usage/Examples.md)
-- [Reviewing Output](scubagoggles/docs/usage/ReviewOutput.md)
-- [Limitations](scubagoggles/docs/usage/Limitations.md)
+- [Usage: Parameters](docs/usage/Parameters.md)
+- [Usage: Config File](docs/usage/Config.md)
+- [Usage: Examples](docs/usage/Examples.md)
+- [Reviewing Output](docs/usage/ReviewOutput.md)
+- [Limitations](docs/usage/Limitations.md)
 
 ### Troubleshooting
-- [Lots of Manual Checks](scubagoggles/docs/troubleshooting/Troubleshooting.md#lots-of-manual-checks)
-- [Not Authorized to Access This Resource](scubagoggles/docs/troubleshooting/Troubleshooting.md#not-authorized-to-access-this-resource)
-- [scubagoggles Not Found](scubagoggles/docs/troubleshooting/Troubleshooting.md#scubagoggles-not-found)
-- [Unable to view HTML report due to environment limitations](scubagoggles/docs/troubleshooting/Troubleshooting.md#unable-to-view-html-report-due-to-environment-limitations)
+- [Lots of Manual Checks](docs/troubleshooting/Troubleshooting.md#lots-of-manual-checks)
+- [Not Authorized to Access This Resource](docs/troubleshooting/Troubleshooting.md#not-authorized-to-access-this-resource)
+- [scubagoggles Not Found](docs/troubleshooting/Troubleshooting.md#scubagoggles-not-found)
+- [Unable to view HTML report due to environment limitations](docs/troubleshooting/Troubleshooting.md#unable-to-view-html-report-due-to-environment-limitations)
 
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative

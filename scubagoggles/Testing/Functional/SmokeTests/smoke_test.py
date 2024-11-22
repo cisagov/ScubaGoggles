@@ -30,18 +30,22 @@ class SmokeTest:
     """
 
     @staticmethod
-    def test_scubagoggles_output(subjectemail):
+    def test_scubagoggles_output(subjectemail: str = None):
         """
         Test if the `scubagoggles gws` command generates correct output for
         all baselines.
 
         Args:
-            subjectemail: The email address of a user for the service account
+            subjectemail: (optional) The email address of a user for the
+            service account.  If not specified, the user's OAuth credentials
+            are used instead.
         """
+
+        svc_account_option = (f' --subjectemail {subjectemail}' if subjectemail
+                              else '')
+        command = f'scubagoggles gws{svc_account_option} --quiet'
+
         try:
-            # (Roy 8/28/24): The command is going to have to be fixed because
-            # the policy API doesn't support service accounts.
-            command: str = f"scubagoggles gws --subjectemail {subjectemail} --quiet"
             subprocess.run(command, shell=True, check=True)
             output_path = get_output_path()
             output: list = verify_output_type(output_path, [])

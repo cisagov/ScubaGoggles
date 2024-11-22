@@ -6,14 +6,14 @@ All ScubaGoggles [parameters](Parameters.md) can be placed into a configuration 
 > If a parameter is specified both on the command-line and in a configuration file, the command-line parameter has precedence over the config file.
 
 ## Sample Configuration Files
-[Sample config files](../../sample-config-files) are available in the
+[Sample config files](../../scubagoggles/sample-config-files) are available in the
 repo and are discussed below. When executing ScubaGoggles, only a single config
 file can be read in; we recommend looking through the following examples and
 constructing a config file that best suits your use case.
 
 ### Basic Usage
 
-The [basic use](../../sample-config-files/basic_config.yaml) example
+The [basic use](../../scubagoggles/sample-config-files/basic_config.yaml) example
 config file specifies the `outpath`, `baselines`, and `quiet` parameters.
 
 ScubaGoggles can be invoked with this config file:
@@ -33,7 +33,7 @@ In some cases, it may be appropriate to omit specific policies from ScubaGoggles
 - When a policy is not applicable to your organization (e.g., policy GWS.GMAIL.4.3, which is only applicable to federal, executive branch, departments and agencies).
 
 The `omitpolicy` top-level key, shown in this [example ScubaGoggles
-configuration file](../../sample-config-files/omit_policies.yaml),
+configuration file](../../scubagoggles/sample-config-files/omit_policies.yaml),
 allows the user to specify the policies that should be omitted from the
 ScubaGoggles report. Omitted policies will show up as "Omitted" in the HTML
 report and will be colored gray. Omitting policies must only be done if the

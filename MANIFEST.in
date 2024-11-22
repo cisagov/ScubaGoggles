@@ -3,7 +3,6 @@
 # contents) are included:
 
 graft scubagoggles/baselines
-graft scubagoggles/docs
 graft scubagoggles/rego
 graft scubagoggles/reporter
 graft scubagoggles/sample-report

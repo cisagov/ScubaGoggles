@@ -18,7 +18,7 @@ as the admin logs are only retained for 6 months
 (see [Data retention and lag times](https://support.google.com/a/answer/7061566)).
 However, if you wish to generate a log event for testing ScubaGoggles'
 capabilities, follow the implementation instructions in the
-[SCuBA GWS baseline documents](/baselines/README.md) to change your GWS
+[SCuBA GWS baseline documents](../../scubagoggles/baselines/README.md) to change your GWS
 configuration settings. Toggling certain settings, off and on will be enough to
 generate a log event. Other settings will require implementing more substantive
 configuration changes.

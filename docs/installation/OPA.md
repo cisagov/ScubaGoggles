@@ -7,19 +7,18 @@ with the `scubagoggles getopa` command.
 
 ```
 scubagoggles getopa --help
-usage: scubagoggles getopa [-h] [--check] [--force] [--version <OPA-version>] [--opa_directory <directory>]
+usage: scubagoggles getopa [-h] [--nocheck] [--force] [--version <OPA-version>] [--opa_directory <directory>]
 
 Download OPA executable
 
 options:
   -h, --help            show this help message and exit
-  --check, -c           Check hash code after download
+  --nocheck, -nc        Do not check hash code after download
   --force, -f           Overwrite existing OPA executable
   --version <OPA-version>, -v <OPA-version>
                         Version of OPA to download (default: latest version)
   --opa_directory <directory>, -r <directory>
-                        Directory containing OPA executable
-                        (default: location established by setup)
+                        Directory containing OPA executable (default: location established by setup
 ```
 ```
 # example

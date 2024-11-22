@@ -85,7 +85,7 @@ To download ScubaGoggles, click [here](https://github.com/cisagov/ScubaGoggles/r
 to display the download site in a browser.  For installing ScubaGoggles as a
 user (and not a developer), you should download the file with the name ending
 in `.whl` (known as a Python "wheel" file), for example
-`scubagoggles-0.1.0-py3-none-any.whl`.
+`scubagoggles-1.0.0-py3-none-any.whl`.
 
 If you are a developer, you may alternatively download the "gzipped tar" file
 (file ending with `.tar.gz`), or zip file (file ending with `.zip`).  You may
@@ -101,9 +101,9 @@ environment, make sure your current session has activated the virtual
 environment.  Normally, the command you use is `pip` or `pip3`.
 
 ```
-pip install scubagoggles-0.1.0-py3-none-any.whl
+pip install scubagoggles-1.0.0-py3-none-any.whl
 ```
-where you will replace `scubagoggles-0.1.0-py3-none-any.whl` in the above
+where you will replace `scubagoggles-1.0.0-py3-none-any.whl` in the above
 command with the location and/or name of the ScubaGoggles wheel file you
 downloaded.
 
@@ -159,7 +159,7 @@ is still created.
 
 ### Windows Example
 
-```shell
+```lang-none
 > scubagoggles setup
 Setup: output directory
 Scubagoggles output directory [C:\Users\userID\scubagoggles]?
@@ -176,7 +176,7 @@ Google credentials (JSON) file [C:\Users\userID\scubagoggles\credentials.json]?
 
 ### Linux Example
 
-```shell
+```lang-none
 $ scubagoggles setup
 Setup: output directory
 Scubagoggles output directory [/home/userID/scubagoggles]?
