@@ -36,14 +36,15 @@ scubaGogglesGit='git@github.com:mitre/CISA-SCuBA-GWS-SCB.git'
 
 usage()
 {
-  printf "script usage: %s [options]\n\n" "$(basename "$0")" >&2
-  printf "    -h: display usage and exit\n"
-  printf "    -o <dir>: create package files in this directory\n"
+  printf 'script usage: %s [options]\n\n' "$(basename "$0")" >&2
+  printf '    -h: display usage and exit\n'
+  printf '    -o <dir>: create package files in this directory\n'
+  printf '              (creates directory if non-existent)\n'
   printf '              defaults to %s\n' "$outDir"
-  printf "    -r <git-repo>: ScubaGoggles Git repository specification\n"
+  printf '    -r <git-repo>: ScubaGoggles Git repository specification\n'
   printf '              defaults to %s\n' "$scubaGogglesGit"
-  printf "    -t <git-tag-or-branch>: checkout tag or branch for build\n"
-  printf "                            defaults to top of main branch\n"
+  printf '    -t <git-tag-or-branch>: checkout tag or branch for build\n'
+  printf '                            defaults to top of main branch\n'
 }
 
 while getopts ':ho:r:t:' option
@@ -55,6 +56,7 @@ do
       ;;
     o)
       outDir=$(realpath "$OPTARG")
+      mkdir -p "$outDir"
       ;;
     r)
       scubaGogglesGit="$OPTARG"
@@ -141,5 +143,5 @@ tarFile=$(realpath dist/scubagoggles-*.tar.gz)
 for file in "$wheelFile" "$tarFile"
 do
   echo "$buildPfx Copying $file to $outDir"
-  cp "$file" "$outDir"
+  cp "$file" "$outDir/$(basename "$file")"
 done
