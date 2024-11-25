@@ -159,7 +159,7 @@ is still created.
 
 ### Windows Example
 
-```lang-none
+```
 > scubagoggles setup
 Setup: output directory
 Scubagoggles output directory [C:\Users\userID\scubagoggles]?
@@ -176,7 +176,7 @@ Google credentials (JSON) file [C:\Users\userID\scubagoggles\credentials.json]?
 
 ### Linux Example
 
-```lang-none
+```
 $ scubagoggles setup
 Setup: output directory
 Scubagoggles output directory [/home/userID/scubagoggles]?

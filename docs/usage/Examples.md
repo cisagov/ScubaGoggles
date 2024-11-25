@@ -42,9 +42,12 @@ scubagoggles gws --config sample-config-files/basic_config.yaml
 > [!NOTE]
 > In all the above examples, the html report should open automatically. If not, navigate to the output folder and open the `*.html` file using a browser of your choice. The json output will also be located in this folder.
 
-> [!NOTE] - The following is intended for developers **ONLY**:
-> If you chose not install the `scubagoggles` package in a venv but do have the dependencies installed from `requirements.txt`, you may execute the tool using the `scuba.py` script located in the root directory of this repository. Replace any `scubagoggles` directions with `python scuba.py`
-
+> [!NOTE]
+> The following is intended for developers **ONLY**:
+> If you chose not install the `scubagoggles` package in a venv but do have the
+> dependencies installed from `requirements.txt`, you may execute the tool using
+> the `scuba.py` script located in the root directory of this repository.
+> Replace any `scubagoggles` directions with `python scuba.py`
 
 ## Navigation
 - Continue to [Reviewing Output](ReviewOutput.md)
