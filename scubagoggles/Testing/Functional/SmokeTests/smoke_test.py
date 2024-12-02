@@ -30,15 +30,15 @@ class SmokeTest:
     """
 
     @staticmethod
-    def test_scubagoggles_output(subjectemail: str = None):
+    def test_scubagoggles_output(subjectemail: str):
         """
         Test if the `scubagoggles gws` command generates correct output for
         all baselines.
 
         Args:
-            subjectemail: (optional) The email address of a user for the
-            service account.  If not specified, the user's OAuth credentials
-            are used instead.
+            subjectemail: The email address of a user for the service account.
+            If None (or the empty string), the user's OAuth credentials are
+            used instead.
         """
 
         svc_account_option = (f' --subjectemail {subjectemail}' if subjectemail
