@@ -13,6 +13,6 @@ jobs:
         ref: main
     - name: Get OPA Hash
       run: |
-           cd ./repo/utils
+           cd ./repo/scubagoggles/utils
            chmod +x checkOPAHash.sh
            ./checkOPAHash.sh

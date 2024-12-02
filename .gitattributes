@@ -1,0 +1,23 @@
+# If you know it's a text file, don't use "=auto" because with that you're
+# letting Git decide whether it's text (and YOU already know it IS).
+
+*.css text
+*.csv text
+*.html text
+*.jpg binary
+*.js text
+*.json text
+*.md text
+*.pdf binary
+*.png binary
+*.py text
+*.rego text
+*.sh text eol=lf
+*.svg text
+*.txt text
+*.yaml text
+*.yml text
+.gitattributes text
+.gitignore text
+LICENSE text
+MANIFEST.in text

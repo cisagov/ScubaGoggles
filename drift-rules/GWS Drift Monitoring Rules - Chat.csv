@@ -5,7 +5,7 @@ GWS.CHAT.2.1v0.3,External file sharing SHALL be disabled to protect sensitive in
 GWS.CHAT.3.1v0.3,Space history SHOULD be enabled for traceability of information.,Admin Log Event,Change Application Setting,RoomOtrSettingsProto otr_state,"ALWAYS_ON_THE_RECORD
 OR
 DEFAULT_ON_THE_RECORD",rules/00gjdgxs13kc3ei,JK 08-01-23 @ 11:58
-GWS.CHAT.4.1v0.3(a),"External Chat messaging SHALL be restricted to allowlisted domains only.",Admin Log Event,Change Application Setting,RestrictChatProto restrictChatToOrganization,false,rules/00gjdgxs3vz76ij,JK 08-01-23 @ 13:17
+GWS.CHAT.4.1v0.3(a),External Chat messaging SHALL be restricted to allowlisted domains only.,Admin Log Event,Change Application Setting,RestrictChatProto restrictChatToOrganization,false,rules/00gjdgxs3vz76ij,JK 08-01-23 @ 13:17
 GWS.CHAT.4.1v0.3(b),External Chat messaging SHALL be restricted to allowlisted domains only.,Admin Log Event,Change Application Setting,RestrictChatProto externalChatRestriction,TRUSTED_DOMAINS,rules/00gjdgxs3exvv2u,JK 08-01-23 @ 13:27
-GWS.CHAT.5.1v0.3,"Chat content reporting SHALL be enabled for all conversation types.",Admin Log Event,Create Application Setting,ContentReportingProto group_chat_reporting,CONTENT_REPORTING_STATE_ENABLED,N/A, MD @ 10-15-24 @ 16:47  
+GWS.CHAT.5.1v0.3,"Chat content reporting SHALL be enabled for all conversation types.",Admin Log Event,Create Application Setting,ContentReportingProto group_chat_reporting,CONTENT_REPORTING_STATE_ENABLED,N/A, MD @ 10-15-24 @ 16:47
 GWS.CHAT.5.2v0.3,"All reporting message categories SHOULD be selected.",N/A,N/A,N/A,N/A,N/A,Not Alertable due to no specfic log event

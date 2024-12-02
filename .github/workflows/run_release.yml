@@ -1,4 +1,4 @@
-on: 
+on:
   workflow_dispatch:
     inputs:
       releaseName:
@@ -14,33 +14,42 @@ name: Build Release
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env:
+      PYTHON_VERSION: "3.12"
       RELEASE_VERSION: ${{ inputs.version }}
     permissions:
       contents: write
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        path: repo
-        ref: main
-    - name: Package Repo for release
-      shell: pwsh
-      run: |
-        $PackageName = "scubagoggles"
-        Remove-Item -Recurse -Force repo -Include .git*
-        Move-Item -Path repo -Destination "${PackageName}-${env:RELEASE_VERSION}" -Force
-        Compress-Archive -Path "${PackageName}-${env:RELEASE_VERSION}" -DestinationPath "${PackageName}-${env:RELEASE_VERSION}.zip"
-        Get-ChildItem -Path . | Write-Output
-    - name: release
-      uses: softprops/action-gh-release@v1
-      id: create_release
-      with:
-        draft: true
-        prerelease: false
-        name: v${{ inputs.releaseName }}
-        tag_name: v${{ inputs.version }}
-        files: scubagoggles-${{ inputs.version }}.zip
-        generate_release_notes: true
-        fail_on_unmatched_files: true
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      - name: Package Repo for release
+        shell: bash
+        run: |
+          reqv="${{ inputs.version }}"
+          reqv="${reqv//[[:space:]]/}"
+          [[ ! "$reqv" =~ ^[0-9]{1,2}(\.[0-9]{1,2}){2}$ ]] \
+            && echo "invalid request version: $reqv" && exit 1
+          sgv=$(grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' scubagoggles/__init__.py)
+          [[ "$reqv" == "$sgv" ]] \
+            || (echo "version mismatch - current: $sgv" && exit 1)
+          ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
+      - name: release
+        uses: softprops/action-gh-release@v1
+        id: create_release
+        with:
+          draft: true
+          prerelease: false
+          name: v${{ inputs.releaseName }}
+          tag_name: v${{ inputs.version }}
+          files: |
+            scubagoggles-*-py3-none-any.whl
+            scubagoggles-*.tar.gz
+          generate_release_notes: true
+          fail_on_unmatched_files: true
