@@ -19,6 +19,10 @@ Running ScubaGoggles requires Python 3.9 or higher.  If Python is not installed
 in your environment, please visit the [Python website](https://www.python.org/)
 for instructions on how to download and install Python.
 
+A 64-bit operating system is required.  While Python will run in a 32-bit
+environment, the Open Policy Agent (OPA) required for ScubaGoggles is only
+available on 64-bit platforms.
+
 Depending on the operating system, the command to invoke Python from the command
 line is either `python` (Windows) or `python3` (linux & macOS, for backward
 compatibilty with Python version 2).  You will need access to a command line,
@@ -146,16 +150,17 @@ scubagoggles setup
 ```
 
 You will be prompted to enter the output directory, location of the OPA
-executable, and the location and name of the Google credentials file.  You
-do not have to download the OPA executable, and you do not have to create the
-Google credentials file before running setup.  If either do not exist, you
-will see a warning indicating one or both is missing.  You will need to have
-both the OPA executable and credentials files before running the conformance
-assessment.
+executable, and the location and name of the Google credentials file.  By
+default, the OPA executable will be downloaded into the directory you specify.
+You do not have to create the Google credentials file before running setup.  If
+the credentials file doesn't exist, you will see a warning indicating that it is
+missing.  You will need to have the credentials file before running the
+conformance assessment.  See the [instructions for creating a credentials
+file](../authentication/AuthenticationMethods.md).
 
-These are sample outputs from running the setup utility before the required files
-are available.  Warnings are shown, but the `.scubagoggles` configuration file
-is still created.
+These are sample outputs from running the setup utility before the required
+files are available.  Warnings are shown, but the `.scubagoggles` configuration
+file is still created.
 
 ### Windows Example
 
@@ -164,11 +169,13 @@ is still created.
 Setup: output directory
 Scubagoggles output directory [C:\Users\userID\scubagoggles]?
 Create directory C:\Users\userID\scubagoggles [Yes/no]?
+  creating: C:\Users\userID\scubagoggles
   C:\Users\userID\scubagoggles
 Setup: OPA executable directory
 (WARNING): OPA executable not found in PATH
 Location of OPA executable [C:\Users\userID\scubagoggles]?
-(WARNING): OPA executable not found in C:\Users\userID\scubagoggles
+  downloading: opa_windows_amd64.exe
+  OPA executable: C:\Users\userID\scubagoggles\opa_windows_amd64.exe
 Setup: Google API credentials file
 Google credentials (JSON) file [C:\Users\userID\scubagoggles\credentials.json]?
 (WARNING): Google credentials file not found in C:\Users\userID\scubagoggles\credentials.json
@@ -180,11 +187,14 @@ Google credentials (JSON) file [C:\Users\userID\scubagoggles\credentials.json]?
 $ scubagoggles setup
 Setup: output directory
 Scubagoggles output directory [/home/userID/scubagoggles]?
+Create directory /home/userID/scubagoggles [Yes/no]?
+  creating: /home/userID/scubagoggles
   /home/userID/scubagoggles
 Setup: OPA executable directory
 (WARNING): OPA executable not found in PATH
 Location of OPA executable [/home/userID/scubagoggles]?
-(WARNING): OPA executable not found in /home/userID/scubagoggles
+  downloading: opa_linux_amd64_static
+  OPA executable: /home/userID/scubagoggles/opa_linux_amd64_static
 Setup: Google API credentials file
 Google credentials (JSON) file [/home/userID/scubagoggles/credentials.json]?
 (WARNING): Google credentials file not found in /home/userID/scubagoggles/credentials.json

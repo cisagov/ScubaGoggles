@@ -18,11 +18,11 @@ options:
   --version <OPA-version>, -v <OPA-version>
                         Version of OPA to download (default: latest version)
   --opa_directory <directory>, -r <directory>
-                        Directory containing OPA executable (default: location established by setup
+                        Directory containing OPA executable (default: location established by setup)
 ```
 ```
 # example
-scubagoggles getopa -v v0.60.0 -c
+scubagoggles getopa -v v0.60.0
 ```
 
 If you have run the [ScubaGoggles setup utility](DownloadAndInstall.md#ScubaGoggles-Setup-Utility),

@@ -12,7 +12,9 @@ import os
 from collections import namedtuple
 from pathlib import Path
 
+from scubagoggles.getopa import download_opa, opa_filespec
 from scubagoggles.run_rego import find_opa
+from scubagoggles.utils import prompt_boolean, prompt_string
 
 log = logging.getLogger(__name__)
 
@@ -189,6 +191,7 @@ def opa_directory(arguments: argparse.Namespace):
     check = not arguments.nocheck
     config = arguments.user_config
     create_dir = arguments.mkdir
+    download = not arguments.nodownload and check
     opa_dir = arguments.opa_directory
 
     if opa_dir:
@@ -197,9 +200,7 @@ def opa_directory(arguments: argparse.Namespace):
         # We only need to check whether the OPA executable is indeed in that
         # location.
 
-        if not opa_dir.exists() and create_dir:
-            print(f'  creating: {opa_dir}')
-            opa_dir.mkdir(exist_ok = True)
+        create_dir_download_opa(opa_dir, create_dir, download)
 
         if check:
             validate_opa_dir(opa_dir)
@@ -215,6 +216,8 @@ def opa_directory(arguments: argparse.Namespace):
         # The user has established a configuration file and includes the OPA
         # executable directory.  We just validate the directory and don't
         # change anything.
+
+        create_dir_download_opa(config.opa_dir, create_dir, download)
 
         if check:
             validate_opa_dir(config.opa_dir)
@@ -244,9 +247,10 @@ def opa_directory(arguments: argparse.Namespace):
 
         answer = Path(os.path.expandvars(answer)).expanduser().absolute()
 
-        if not answer.exists() and create_dir:
-            print(f'  creating: {answer}')
-            answer.mkdir(exist_ok = True)
+        if not answer.exists():
+            create_dir |= prompt_boolean(f'Create directory {answer}')
+
+        create_dir_download_opa(answer, create_dir, download)
 
         if validate_opa_dir(answer) or answer.is_dir():
             opa_dir = answer
@@ -254,6 +258,35 @@ def opa_directory(arguments: argparse.Namespace):
     config.opa_dir = opa_dir.resolve()
 
     return True
+
+
+def create_dir_download_opa(opa_dir: Path, create_dir: bool, download: bool):
+
+    """Helper function that checks the given OPA executable directory,
+    and creates it if it doesn't exist (and the user hasn't suppressed it).
+    The OPA executable is downloaded to this directory, also if it doesn't
+    exist and the user hasn't suppressed it.
+
+    :param opa_dir: OPA executable directory.
+    :param create_dir: create OPA directory (if needed) if True.
+    :param download: if True, download the OPA executable if the directory
+        exists and the OPA executable is missing.
+    """
+
+    if not opa_dir.exists() and create_dir:
+        print(f'  creating: {opa_dir}')
+        opa_dir.mkdir(exist_ok = True)
+
+    if opa_dir.exists() and download:
+
+        # The OPA directory exists and the user hasn't suppressed the
+        # download (e.g., no internet).  Get the OPA executable if it's
+        # not already there.
+
+        opa = opa_filespec(opa_dir)
+        if not opa.exists():
+            print(f'  downloading: {opa.name}')
+            download_opa(opa_dir, verify = True)
 
 
 def validate_opa_dir(opa_dir: Path = None):
@@ -409,81 +442,3 @@ def find_legacy_dir(config):
                 break
 
     return legacy_dir
-
-
-def prompt_boolean(prompt: str, default: bool = True):
-
-    """Asks the user for a Yes/No answer to a given prompt.
-
-    :param str prompt: the question/confirmation to ask the user.
-
-    :param bool default: [optional] the default response if the user presses
-        "enter" ("return").  It defaults to Yes (True).
-
-    :return: True if user responds Yes; False otherwise.
-    """
-
-    suffix = '[Yes/no]? ' if default else '[yes/No]? '
-
-    # This handles when the user enters EOF (which is ^Z in Windows or ^D
-    # in other OS environments).  It's assumed that this response is
-    # equivalent to ^C (user abort).
-
-    try:
-        answer = input(f'{prompt} {suffix}').strip()
-
-    except EOFError as e:
-        raise KeyboardInterrupt() from e
-
-    return (not answer and default) or (answer and strtobool(answer))
-
-
-def prompt_string(prompt: str, default: str = None):
-
-    """Asks the user to enter a string to a given prompt.
-
-    :param str prompt: the question/confirmation to ask the user.
-
-    :param str default: [optional] the default string response to return
-        if the user presses "enter" ("return").  It defaults to None.
-
-    :return: entered string or default.
-    """
-
-    suffix = f' [{default}]' if default else ''
-
-    # This handles when the user enters EOF (which is ^Z in Windows or ^D
-    # in other OS environments).  It's assumed that this response is
-    # equivalent to ^C (user abort).
-
-    try:
-        answer = input(f'{prompt}{suffix}? ').strip()
-
-    except EOFError as e:
-        raise KeyboardInterrupt() from e
-
-    return answer if answer else default
-
-
-def strtobool(value: str):
-
-    """Convert a string representation of truth to a boolean (True/False).
-
-    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
-    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
-    'value' is anything else.
-
-    :param str value: string representing a boolean value.
-
-    :return: True if string indicates "true"; False if string indicates
-        "false".
-    """
-
-    value = value.strip().lower()
-
-    if value in {'y', 'yes', 't', 'true', 'on', '1'}:
-        return True
-    if value in {'n', 'no', 'f', 'false', 'off', '0'}:
-        return False
-
-    raise ValueError(f'strtobool("{value}"): invalid truth value')

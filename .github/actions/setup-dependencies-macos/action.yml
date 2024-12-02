@@ -29,5 +29,5 @@ runs:
     - name: Download OPA executable
       shell: bash
       run: |
-        scubagoggles setup -m -nc -d ~/scubagoggles -r ~/scubagoggles -c credentials.json
+        scubagoggles setup -m -nc -nd -d ~/scubagoggles -r ~/scubagoggles -c credentials.json
         scubagoggles getopa -v ${{ inputs.opa-version }}

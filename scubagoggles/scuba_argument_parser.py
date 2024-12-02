@@ -11,6 +11,7 @@ from pathlib import Path
 import yaml
 
 from scubagoggles.reporter.md_parser import MarkdownParser
+from scubagoggles.utils import path_parser
 from scubagoggles.version import Version
 
 
@@ -135,8 +136,21 @@ class ScubaArgumentParser:
         options.
         """
 
-        if 'credentials' in args and not isinstance(args.credentials, Path):
-            args.credentials = Path(args.credentials)
+        # Options read in from the configuration file must be converted to the
+        # same data type that's defined in the corresponding command parser
+        # definition (see the main module).  The following option values are
+        # read as strings but are converted to Path.
+
+        path_value_options = ('credentials',
+                              'documentpath',
+                              'opapath',
+                              'outputpath',
+                              'regopath')
+
+        for option_name in path_value_options:
+            if (option_name in args
+                and not isinstance(getattr(args, option_name), Path)):
+                setattr(args, option_name, path_parser(args.credentials))
 
         if 'omitpolicy' in args:
             ScubaArgumentParser.validate_omissions(args)

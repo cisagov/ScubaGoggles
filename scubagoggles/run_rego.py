@@ -112,7 +112,7 @@ def find_opa(opa_path: Path = None):
     os_type = platform.system().lower()
 
     architectures = [platform.machine().lower()]
-    if architectures[0] == 'x64_64':
+    if architectures[0] == 'x86_64':
         architectures.append('amd64')
 
     # An ARM-based Mac can supposedly run the AMD64 version

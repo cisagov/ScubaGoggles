@@ -7,7 +7,6 @@ rego, and report creation stages for the automated SCuBA conformance assessment
 
 import argparse
 import logging
-import os
 import sys
 
 from pathlib import Path
@@ -20,6 +19,7 @@ from scubagoggles.reporter.md_parser import MarkdownParserError
 from scubagoggles.scuba_argument_parser import ScubaArgumentParser
 from scubagoggles.user_setup import default_file_names, find_legacy_dir, \
     user_setup
+from scubagoggles.utils import path_parser
 from scubagoggles.version import Version
 
 EXIT_FAILURE = 1
@@ -275,6 +275,13 @@ def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         action = 'store_true',
                         help = 'Do not check for directory or file existence')
 
+    parser.add_argument('--nodownload',
+                        '-nd',
+                        default = False,
+                        action = 'store_true',
+                        help = 'Do not download OPA executable when it does '
+                               'not exist')
+
     parser.add_argument('--noprompt',
                         '-np',
                         default = False,
@@ -375,22 +382,6 @@ def log_level(level):
         return_level = match_level[0]
 
     return return_level
-
-
-def path_parser(value):
-
-    """Given a string value, this function returns an absolute Path.  The
-    value may contain a leading "~" to indicate the user's home directory,
-    and may use environment variables (e.g., $HOME).
-
-    :param str value: directory or file specification
-
-    :return: absolute Path
-    """
-
-    path_value = Path(os.path.expandvars(value)).expanduser().absolute()
-
-    return path_value
 
 
 def dive():

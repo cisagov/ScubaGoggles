@@ -17,8 +17,7 @@ https://www.googleapis.com/auth/cloud-identity.policies.readonly
 When running ScubaGoggles for the first time you will be prompted to consent to
 these API scopes. Users with the Super Admin role automatically have the
 privilege to consent to these scopes. When running ScubaGoggles for the first
-time you will be prompted to consent to these API scopes. Users with the Super
-Admin role automatically have the privilege to consent to these scopes.
+time you will be prompted to consent to these API scopes.
 
 ## Create a Project
 1. If you already have a Google Cloud Project that you want to utilize skip to [Authentication Methods](../authentication/AuthenticationMethods.md)

@@ -12,6 +12,23 @@ Ensure that you consented to the following API scopes as a user with the proper
 [permissions to consent](../prerequisites/Prerequisites.md#permissions) and have
 enabled the required [APIs and Services](../authentication/OAuth.md).
 
+## Windows:  WinError 10013: Permission Error
+
+When ScubaGoggles is run and it needs to re-authorize you using your Google
+credentials, it makes a connection using port 8080.  If you receive a permission
+error with the text `An attempt was made to access a socket in a way forbidden
+by its access permissions`, it is likely that another process on your system is
+using that port.
+
+The following PowerShell command, when run as an Adminstrator, may help to
+locate the process using the port.  Once you've determined how the port is
+being used, you can evaluate whether something may be done to temporarily
+relinquish the port for ScubaGoggles use or whether you might need to try
+running ScubaGoggles on a system where the port is available.
+
+```
+Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess
+```
 
 ## Unable to view HTML report due to environment limitations
 

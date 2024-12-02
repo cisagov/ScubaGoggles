@@ -420,12 +420,12 @@ class Orchestrator:
         try:
             find_opa(args.opapath)
         except FileNotFoundError as fnf:
-            raise UserRuntimeError('OPA executable missing - '
-                                   f'{see_docs}') from fnf
+            raise UserRuntimeError(f'? "{args.opapath}" - OPA executable '
+                                   f'missing - {see_docs}') from fnf
 
         if not args.credentials.exists():
-            raise UserRuntimeError('Google credentials file missing - '
-                                   f'{see_docs}')
+            raise UserRuntimeError(f'? "{args.credentials}" - Google '
+                                   f'credentials file missing - {see_docs}')
 
         # add any additional variables to args
         gws_params = self.gws_products()

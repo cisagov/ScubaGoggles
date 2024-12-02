@@ -7,6 +7,7 @@ import platform
 import re
 import stat
 import subprocess
+import sys
 
 from hashlib import sha256
 from pathlib import Path
@@ -16,7 +17,7 @@ from urllib.parse import urljoin, urlsplit
 from urllib.request import Request, urlcleanup, urlopen, urlretrieve
 
 from scubagoggles.orchestrator import UserRuntimeError
-from scubagoggles.user_setup import prompt_boolean
+from scubagoggles.utils import prompt_boolean
 
 log = logging.getLogger(__name__)
 
@@ -55,6 +56,7 @@ def getopa(arguments: argparse.Namespace):
 
     download_opa(opa_dir, version, verify, force)
 
+
 def download_opa(opa_dir: Path,
                  version: str = None,
                  verify: bool = False,
@@ -77,6 +79,9 @@ def download_opa(opa_dir: Path,
 
     # pylint: disable=too-many-branches
 
+    if sys.maxsize <= 2 ** 32:
+        raise UserRuntimeError('64-bit operating environment required for OPA')
+
     opa_base_url = 'https://github.com/open-policy-agent/opa/releases/'
     version_re = re.compile(r'v\d+(?:\.\d+){2}')
 
@@ -98,18 +103,7 @@ def download_opa(opa_dir: Path,
                                    'string - expected "v<X>.<Y>.<Z>"')
         version = f'v{version}'
 
-    os_type = platform.system().lower()
-
-    arch = platform.machine().lower()
-
-    if arch == 'x86_64':
-        arch = 'amd64'
-    elif arch.startswith('arm'):
-        arch = 'arm64'
-
-    file_name = f'opa_{os_type}_{arch}'
-
-    file_name += '.exe' if os_type == 'windows' else '_static'
+    file_name = opa_filespec()
 
     log.debug('Downloading %s to %s', file_name, str(opa_dir))
 
@@ -158,6 +152,40 @@ def download_opa(opa_dir: Path,
                       'match expected value')
 
     test_opa(output_file)
+
+
+def opa_filespec(opa_dir: Path = None):
+
+    """Returns the file name for the OPA executable that is EXPECTED to be
+    the default for the current operating environment.  For example, on a
+    macOS system with the ARM architecture, the default executable should
+    be "opa_darwin_arm64_static", but the user may rename this to be
+    simply "opa" or download the AMD architecture executable, which will
+    run even in an ARM-based macOS environment.  This function simply
+    returns the name of the expected executable.
+
+    :param opa_dir: [optional] expected location of the OPA executable.
+    :return: complete file specification (as a Path), if the OPA directory
+        is provided; otherwise, the expected OPA file name (as a str) for
+        the current environment.
+    :rtype: Path or str
+    """
+
+    os_type = platform.system().lower()
+
+    arch = platform.machine().lower()
+
+    if arch == 'x86_64':
+        arch = 'amd64'
+    elif arch.startswith('arm'):
+        arch = 'arm64'
+
+    file_name = f'opa_{os_type}_{arch}'
+
+    file_name += '.exe' if os_type == 'windows' else '_static'
+
+    return opa_dir / file_name if opa_dir else file_name
+
 
 def test_opa(opa_exe_file: Path):
 

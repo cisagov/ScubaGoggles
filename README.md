@@ -32,15 +32,6 @@ We use a three-step process:
 2. **Verify**. Compare the exported settings from the previous step with the configuration prescribed in the baselines. We do this using [OPA Rego](https://www.openpolicyagent.org/docs/latest/policy-language/#what-is-rego), a declarative query language for defining policy.
 3. **Report**. Package the results as HTML and JSON.
 
-## Limitations of the tool
-The majority of the conformance checks done by ScubaGoggles rely on
-[GWS Admin log events](https://support.google.com/a/answer/4579579?hl=en). If there is no log event corresponding to a SCuBA
-baseline policy, ScubaGoggles will indicate that the setting currently can not
-be checked on its HTML report output. In this situation, we recommend you
-manually review your GWS security configurations with the SCuBA secure
-baselines. See [Limitations](docs/usage/Limitations.md) for more
-details.
-
 ## Table of Contents
 
 ### Installation
