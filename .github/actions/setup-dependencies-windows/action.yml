@@ -15,6 +15,7 @@ runs:
     - name: Setup virtualenv
       shell: powershell
       run: |
+        pip install virtualenv
         python -m venv .venv
         .venv\Scripts\activate.ps1
 
