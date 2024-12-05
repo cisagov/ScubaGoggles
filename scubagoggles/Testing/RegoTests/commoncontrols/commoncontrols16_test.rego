@@ -1,5 +1,11 @@
 package commoncontrols
+
 import future.keywords
+import data.utils.FailTestBothNonCompliant
+import data.utils.FailTestGroupNonCompliant
+import data.utils.FailTestNoEvent
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
 # GWS.COMMONCONTROLS.16.1
@@ -27,11 +33,7 @@ test_Unlisted_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Unlisted_Correct_V2 if {
@@ -67,11 +69,7 @@ test_Unlisted_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Unlisted_Incorrect_V1 if {
@@ -95,15 +93,9 @@ test_Unlisted_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Access to additional services without individual control is turned on</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage16_1}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Unlisted_Incorrect_V2 if {
@@ -118,15 +110,7 @@ test_Unlisted_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable ",
-        "to determine the state from the logs, the default setting ",
-        "is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 #--
 
@@ -156,11 +140,7 @@ test_EarlyAccessApps_OUs_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_EarlyAccessApps_OUs_Correct_V2 if {
@@ -196,11 +176,7 @@ test_EarlyAccessApps_OUs_Correct_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_EarlyAccessApps_OUs_Incorrect_V1 if {
@@ -225,15 +201,9 @@ test_EarlyAccessApps_OUs_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Service status is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage16_2}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_EarlyAccessApps_OUs_Incorrect_V2 if {
@@ -269,15 +239,9 @@ test_EarlyAccessApps_OUs_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Second-Level OU: Service status is ON</li>",
-        "</ul>"
-    ])
+    failedOU := [{"Name": "Test Second-Level OU",
+                  "Value": NonComplianceMessage16_2}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V1 if {
@@ -313,15 +277,9 @@ test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following groups are non-compliant:<ul>",
-        "<li>Test Group 1: Service status is ON</li>",
-        "</ul>"
-    ])
+    failedGroup := [{"Name": "Test Group 1",
+                     "Value": NonComplianceMessage16_2}]
+    FailTestGroupNonCompliant(PolicyId, Output, failedGroup)
 }
 
 test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V2 if {
@@ -368,16 +326,11 @@ test_EarlyAccessApps_OUs_Correct_Groups_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following groups are non-compliant:<ul>",
-        "<li>Test Group 1: Service status is ON</li>",
-        "<li>Test Group 2: Service status is ON</li>",
-        "</ul>"
-    ])
+    failedGroup := [{"Name": "Test Group 1",
+                     "Value": NonComplianceMessage16_2},
+                    {"Name": "Test Group 2",
+                     "Value": NonComplianceMessage16_2}]
+    FailTestGroupNonCompliant(PolicyId, Output, failedGroup)
 }
 
 test_EarlyAccessApps_OUs_Groups_Incorrect_V1 if {
@@ -424,18 +377,13 @@ test_EarlyAccessApps_OUs_Groups_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Service status is ON</li>",
-        "</ul><br>",
-        "The following groups are non-compliant:<ul>",
-        "<li>Test Group 1: Service status is ON</li>",
-        "<li>Test Group 2: Service status is ON</li>",
-        "</ul>"
-    ])
+
+    failedGroup := [{"Name": "Test Group 1",
+                     "Value": NonComplianceMessage16_2},
+                    {"Name": "Test Group 2",
+                     "Value": NonComplianceMessage16_2}]
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": NonComplianceMessage16_2}]
+    FailTestBothNonCompliant(PolicyId, Output, failedOU, failedGroup)
 }
 #--

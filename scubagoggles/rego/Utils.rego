@@ -564,3 +564,20 @@ GetFriendlyEnabledValue(Value) := "enabled" if {
 } else := "disabled" if {
     Value in {false, "false"}
 } else := Value
+
+# This function will convert a "duration string" (e.g., "18m" for 18 minutes)
+# to an integer representing the time in seconds.  This may be used for
+# comparing string durations.  Typically, Google's Policy API returns duration
+# values in seconds.  See CC 1.2 & CC 4.1 for examples of usage.
+
+DurationToSeconds(duration) := durationSeconds if {
+    multipliers := {"s": 1, "m": 60, "h": 3600, "d": 86400}
+    result := regex.find_all_string_submatch_n(`(?i)^(\d+)([dhms])$`,
+                                            duration,
+                                            1)
+    firstMatch := result[0]
+    value := to_number(firstMatch[1])
+    unit := firstMatch[2]
+    multiplier := multipliers[lower(unit)]
+    durationSeconds := value * multiplier
+}

@@ -29,7 +29,7 @@ GoodCaseInputApi04 := {
     }
 }
 
-BaseCaseInputApi04 := {
+BadCaseInputApi04 := {
     "policies": {
         "topOU": {
             "security_session_controls": {
@@ -56,7 +56,7 @@ test_CCAPI_ReAuth_Comply_1 if {
 
 test_CCAPI_ReAuth_NonComply_1 if {
     PolicyId := CommonControlsId4_1
-    Output := tests with input as BaseCaseInputApi04
+    Output := tests with input as BadCaseInputApi04
 
     failedOU := [{"Name": "nextOU",
                  "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(800 * 60))}]

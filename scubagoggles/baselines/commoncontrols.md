@@ -1306,6 +1306,8 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
     - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
   - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
+[//]: # (Keep the version suffix out of the anchor.)
+<a name="commoncontrols184"></a>
 #### GWS.COMMONCONTROLS.18.4v0.3
 The action for the above DLP policies SHOULD be set to block external sharing.
 
@@ -1347,7 +1349,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
     2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
     3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-5. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
+5. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
@@ -1360,7 +1362,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
     2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
     3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-5. In the **Actions** section, select **Block**. Under **Select when this action should apply**, select **External Conversations**, **Spaces**, **Group chats**, and **1:1 chats** (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
+5. In the **Actions** section, select **Block**. Under **Select when this action should apply**, select **External Conversations**, **Spaces**, **Group chats**, and **1:1 chats** (See [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
@@ -1373,7 +1375,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
     2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
     3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-5. In the **Actions** section, select **Block message**. Under **Select when this action should apply**, check **Messages sent to external recipients** (See [GWS.COMMONCONTROLS.18.4v0.3](#gwscommoncontrols184v03)).
+5. In the **Actions** section, select **Block message**. Under **Select when this action should apply**, check **Messages sent to external recipients** (See [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
