@@ -32,6 +32,11 @@ BadGroupsApi04 := {
                 "createGroupsAccessLevel": "USERS_IN_DOMAIN"
             },
             "groups_for_business_service_status": {"serviceState": "ENABLED"}
+        },
+        "nextOU": {
+            "groups_for_business_groups_sharing": {
+                "createGroupsAccessLevel": "ANYONE_CAN_CREATE"
+            }
         }
     },
     "tenant_info": {
@@ -50,7 +55,9 @@ test_GroupsAPI_Creator_Incorrect_1 if {
     PolicyId := GroupsId4_1
     Output := tests with input as BadGroupsApi04
 
-    failedOU := [{"Name": "topOU",
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage4_1("Any user")},
+                 {"Name": "topOU",
                  "Value": NonComplianceMessage4_1("Users in your domain only")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

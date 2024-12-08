@@ -276,7 +276,7 @@ GetFriendlyValue4_1(Value) := "Administrators only" if {
 } else := "Users in your domain only" if {
     Value == "USERS_IN_DOMAIN"
 } else := "Any user" if {
-    Value == "WORLD"
+    Value in {"ANYONE_CAN_CREATE", "WORLD"}
 } else := Value
 
 NonComplianceMessage4_1(value) := sprintf("Groups can be created by: %s", [value])
@@ -363,7 +363,7 @@ GetFriendlyValue5_1(Value) := "Owners" if {
 } else := "Users in your domain only" if {
     Value == "DOMAIN_USERS"
 } else := "Any user" if {
-    Value == "PUBLIC"
+    Value in {"ANYONE_CAN_VIEW_TOPICS", "PUBLIC"}
 } else := Value
 
 NonComplianceMessage5_1(value) := sprintf("Group conversations can be viewed by: %s", [value])

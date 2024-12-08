@@ -32,6 +32,11 @@ BadGroupsApi05 := {
                 "viewTopicsDefaultAccessLevel": "MANAGERS"
             },
             "groups_for_business_service_status": {"serviceState": "ENABLED"}
+        },
+        "nextOU": {
+            "groups_for_business_groups_sharing": {
+                "viewTopicsDefaultAccessLevel": "ANYONE_CAN_VIEW_TOPICS"
+            }
         }
     },
     "tenant_info": {
@@ -50,7 +55,9 @@ test_GroupsAPI_ViewTopics_Incorrect_1 if {
     PolicyId := GroupsId5_1
     Output := tests with input as BadGroupsApi05
 
-    failedOU := [{"Name": "topOU",
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage5_1("Any user")},
+                 {"Name": "topOU",
                  "Value": NonComplianceMessage5_1("Managers")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

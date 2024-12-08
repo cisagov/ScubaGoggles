@@ -430,7 +430,7 @@ ApiSettingExists(Section, Setting, OU) := true if {
     OUSettings := input.policies[OU]
     Section in object.keys(OUSettings)
     Setting in object.keys(OUSettings[Section])
-}
+} else := false
 
 GetApiSettingValue(Section, Setting, OU) := Value if {
     not ApiSettingExists(Section, Setting, OU)

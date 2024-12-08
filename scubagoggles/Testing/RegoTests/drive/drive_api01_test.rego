@@ -30,11 +30,6 @@ GoodDriveApi01 := {
                 "allowNonGoogleInvites": true,
                 "allowReceivingExternalFiles": false
             }
-        },
-        "thirdOU": {
-            "security_session_controls": {
-                "webSessionDuration": "700m"
-            }
         }
     },
     "tenant_info": {
@@ -62,7 +57,20 @@ BadDriveApi01 := {
             },
                 "drive_and_docs_service_status": {"serviceState": "ENABLED"
             }
-        }
+        },
+         "nextOU": {
+            "drive_and_docs_external_sharing": {
+                "externalSharingMode": "ALLOWLISTED_DOMAINS",
+                "warnForSharingOutsideAllowlistedDomains": false,
+                "allowNonGoogleInvitesInAllowlistedDomains": true
+            }
+        },
+         "thirdOU": {
+            "drive_and_docs_external_sharing": {
+                "warnForExternalSharing": true
+            }
+        },
+         "fourthOU": {"empty intentional?": "yes"}
     },
     "tenant_info": {
         "topLevelOU": "topOU"
@@ -91,12 +99,12 @@ BadDriveApi01a := {
             "drive_and_docs_external_sharing": {
                 "accessCheckerSuggestions": "RECIPIENTS_OR_AUDIENCE",
                 "allowNonGoogleInvites": true,
-                "allowNonGoogleInvitesInAllowlistedDomains": false,
+                "allowNonGoogleInvitesInAllowlistedDomains": true,
                 "allowPublishingFiles": true,
                 "allowReceivingExternalFiles": false,
                 "allowReceivingFilesOutsideAllowlistedDomains": true,
                 "allowedPartiesForDistributingContent": "ELIGIBLE_INTERNAL_USERS",
-                "externalSharingMode": "ALLOWED",
+                "externalSharingMode": "ALLOWLISTED_DOMAINS",
                 "warnForExternalSharing": false,
                 "warnForSharingOutsideAllowlistedDomains": true
                 },
@@ -126,7 +134,9 @@ test_ExtSharing_Incorrect_1 if {
     PolicyId := DriveId1_1
     Output := tests with input as BadDriveApi01
 
-    failedOU := [{"Name": "topOU",
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWLISTED_DOMAINS"))},
+                 {"Name": "topOU",
                  "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
@@ -136,7 +146,7 @@ test_ExtSharing_Incorrect_2 if {
     Output := tests with input as BadDriveApi01a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWED"))}]
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWLISTED_DOMAINS"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -151,8 +161,10 @@ test_ReceiveExt_Incorrect_1 if {
     PolicyId := DriveId1_2
     Output := tests with input as BadDriveApi01a
 
-    failedOU := [{"Name": "thirdOU",
-                 "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(true))}]
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage1_2(GetSharingValue("ALLOWLISTED_DOMAINS"))},
+                 {"Name": "thirdOU",
+                 "Value": NonComplianceMessage1_2(GetSharingValue("DISALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -167,8 +179,10 @@ test_UserExtSharing_Incorrect_1 if {
     PolicyId := DriveId1_3
     Output := tests with input as BadDriveApi01
 
-    failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_3("disabled")}]
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage1_3(GetSharingValue("ALLOWLISTED_DOMAINS"))},
+                 {"Name": "topOU",
+                 "Value": NonComplianceMessage1_3(GetSharingValue("ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -183,8 +197,10 @@ test_NonGoogle_Incorrect_1 if {
     PolicyId := DriveId1_4
     Output := tests with input as BadDriveApi01
 
-    failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_4(GetFriendlyValue1_4(true, ""))}]
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage1_4(GetSharingValue("ALLOWLISTED_DOMAINS"))},
+                 {"Name": "topOU",
+                 "Value": NonComplianceMessage1_4(GetSharingValue("ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -193,7 +209,7 @@ test_NonGoogle_Incorrect_2 if {
     Output := tests with input as BadDriveApi01a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_4(GetFriendlyValue1_4(true, ""))}]
+                 "Value": NonComplianceMessage1_4(GetSharingValue("ALLOWLISTED_DOMAINS"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -208,7 +224,9 @@ test_AllowPublish_Incorrect_1 if {
     PolicyId := DriveId1_5
     Output := tests with input as BadDriveApi01
 
-    failedOU := [{"Name": "topOU",
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage1_5},
+                 {"Name": "topOU",
                  "Value": NonComplianceMessage1_5}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
@@ -261,7 +279,9 @@ test_MoveContent_Incorrect_1 if {
     Output := tests with input as BadDriveApi01
 
     value := "ALL_ELIGIBLE_USERS"
-    failedOU := [{"Name": "topOU",
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(value))},
+                 {"Name": "topOU",
                  "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(value))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

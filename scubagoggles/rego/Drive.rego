@@ -138,16 +138,27 @@ Check1_2_OK if {
 
 Check1_2_OK if {PolicyApiInUse}
 
-GetFriendlyValue1_2(Value) := "cannot" if {
+EventGetFriendlyValue1_2(Value) := "cannot" if {
     Value in {"SHARING_NOT_ALLOWED INHERIT_FROM_PARENT", false}
 } else := "can"
 
-NonComplianceMessage1_2(value) := sprintf("Users %s receive files outside the domain",
+EventNonComplianceMessage1_2(value) := sprintf("Users %s receive files outside the domain",
                                           [value])
+
+GetSharingValue(ShareSetting) := "allowlisted" if {
+    ShareSetting == "ALLOWLISTED_DOMAINS"
+} else := "any" if {
+    ShareSetting == "ALLOWED"
+} else := "no" if {
+    ShareSetting == "DISALLOWED"
+} else := ShareSetting
+
+NonComplianceMessage1_2(Value) := sprintf("File sharing with %s domains, %s",
+                                          [Value, "receiving files permitted."])
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(LastEvent.NewValue))
+    "Value": EventNonComplianceMessage1_2(EventGetFriendlyValue1_2(LastEvent.NewValue))
 }
 if {
     not PolicyApiInUse
@@ -162,7 +173,7 @@ if {
 
 NonCompliantGroups1_2 contains {
     "Name": Group,
-    "Value": GetFriendlyValue1_2(LastEvent.NewValue)
+    "Value": EventNonComplianceMessage1_2(EventGetFriendlyValue1_2(LastEvent.NewValue))
 }
 if {
     not PolicyApiInUse
@@ -177,7 +188,7 @@ if {
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(receiveExternal))
+    "Value": NonComplianceMessage1_2(GetSharingValue("DISALLOWED"))
 }
 if {
     some OU, settings in input.policies
@@ -185,6 +196,25 @@ if {
     not ExternalSharingAllowed(OU)
     receiveExternal := settings.drive_and_docs_external_sharing.allowReceivingExternalFiles
     receiveExternal != false
+}
+
+NonCompliantOUs1_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_2(GetSharingValue(extShare))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    section := "drive_and_docs_external_sharing"
+    shareSetting := "externalSharingMode"
+    extShare := utils.GetApiSettingValue(section, shareSetting, OU)
+    extShare == "ALLOWLISTED_DOMAINS"
+    extShareSet := utils.ApiSettingExists(section, shareSetting, OU)
+    receiveSetting := "allowReceivingFilesOutsideAllowlistedDomains"
+    receiveExternal := utils.GetApiSettingValue(section, receiveSetting, OU)
+    receiveExternal != false
+    receiveExternalSet := utils.ApiSettingExists(section, receiveSetting, OU)
+    true in {extShareSet, receiveExternalSet}
 }
 
 tests contains {
@@ -240,16 +270,19 @@ AcceptableValues1_3 := {"SHARING_ALLOWED_WITH_WARNING",
                         "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING",
                         "TRUSTED_DOMAINS_ALLOWED_WITH_WARNING_MAY_RECEIVE_FILES_FROM_ANYONE"}
 
-GetFriendlyValue1_3(Value) := "enabled" if {
+EventGetFriendlyValue1_3(Value) := "enabled" if {
     Value in AcceptableValues1_3 == true
 } else := "disabled"
 
-NonComplianceMessage1_3(value) := sprintf("External Sharing Warning is %s",
+EventNonComplianceMessage1_3(value) := sprintf("External Sharing Warning is %s",
                                           [value])
+
+NonComplianceMessage1_3(Value) := sprintf("File sharing with %s domains, %s",
+                                          [Value, "without warnings."])
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3(GetFriendlyValue1_3(LastEvent.NewValue))
+    "Value": EventNonComplianceMessage1_3(EventGetFriendlyValue1_3(LastEvent.NewValue))
 }
 if {
     not PolicyApiInUse
@@ -262,7 +295,7 @@ if {
 
 NonCompliantGroups1_3 contains {
     "Name": Group,
-    "Value": NonComplianceMessage1_3(GetFriendlyValue1_3(LastEvent.NewValue))
+    "Value": EventNonComplianceMessage1_3(EventGetFriendlyValue1_3(LastEvent.NewValue))
 }
 if {
     not PolicyApiInUse
@@ -275,14 +308,40 @@ if {
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3(GetFriendlyEnabledValue(warnExternal))
+    "Value": NonComplianceMessage1_3(GetSharingValue(extShare))
 }
 if {
     some OU, settings in input.policies
     DriveEnabled(OU)
-    ExternalSharingAllowed(OU)
-    warnExternal := settings.drive_and_docs_external_sharing.warnForExternalSharing
-    warnExternal != true
+    section := "drive_and_docs_external_sharing"
+    shareSetting := "externalSharingMode"
+    extShare := utils.GetApiSettingValue(section, shareSetting, OU)
+    extShare == "ALLOWLISTED_DOMAINS"
+    extShareSet := utils.ApiSettingExists(section, shareSetting, OU)
+    warnSetting := "warnForSharingOutsideAllowlistedDomains"
+    warnShared := utils.GetApiSettingValue(section, warnSetting, OU)
+    warnShared != true
+    warnSharedSet := utils.ApiSettingExists(section, warnSetting, OU)
+    true in {extShareSet, warnSharedSet}
+}
+
+NonCompliantOUs1_3 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_3(GetSharingValue(extShare))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    section := "drive_and_docs_external_sharing"
+    shareSetting := "externalSharingMode"
+    extShare := utils.GetApiSettingValue(section, shareSetting, OU)
+    extShare == "ALLOWED"
+    extShareSet := utils.ApiSettingExists(section, shareSetting, OU)
+    warnSetting := "warnForExternalSharing"
+    warnShared := utils.GetApiSettingValue(section, warnSetting, OU)
+    warnShared != true
+    warnSharedSet := utils.ApiSettingExists(section, warnSetting, OU)
+    true in {extShareSet, warnSharedSet}
 }
 
 tests contains {
@@ -349,19 +408,22 @@ AcceptableValues1_4_A := {"NOT_ALLOWED", "INHERIT_FROM_PARENT", true}
 
 AcceptableValues1_4_B := {"SHARING_NOT_ALLOWED", "INHERIT_FROM_PARENT"}
 
-GetFriendlyValue1_4(Value_A, Value_B) := "disabled" if {
+EventGetFriendlyValue1_4(Value_A, Value_B) := "disabled" if {
     Value_B in AcceptableValues1_4_B
 } else := "enabled but sharing items to non-google accounts is disabled" if {
     Value_A in AcceptableValues1_4_A
 } else := "enabled and items can be shared to non-google accounts"
 
-NonComplianceMessage1_4(value) := sprintf("External Sharing is %s",
+EventNonComplianceMessage1_4(value) := sprintf("External Sharing is %s",
                                           [value])
+
+NonComplianceMessage1_4(Value) := sprintf("File sharing with %s domains, %s",
+                                          [Value, "with non-Google users."])
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_4(GetFriendlyValue1_4(LastEvent_A.NewValue,
-                                                         LastEvent_B.NewValue))
+    "Value": EventNonComplianceMessage1_4(EventGetFriendlyValue1_4(LastEvent_A.NewValue,
+                                                                   LastEvent_B.NewValue))
 }
 if {
     not PolicyApiInUse
@@ -380,8 +442,8 @@ if {
 
 NonCompliantGroups1_4 contains {
     "Name": Group,
-    "Value": NonComplianceMessage1_4(GetFriendlyValue1_4(LastEvent_A.NewValue,
-                                                         LastEvent_B.NewValue))
+    "Value": EventNonComplianceMessage1_4(EventGetFriendlyValue1_4(LastEvent_A.NewValue,
+                                                                   LastEvent_B.NewValue))
 }
 if {
     not PolicyApiInUse
@@ -400,14 +462,40 @@ if {
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_4(GetFriendlyValue1_4(nonGoogle, ""))
+    "Value": NonComplianceMessage1_4(GetSharingValue(extShare))
 }
 if {
     some OU, settings in input.policies
     DriveEnabled(OU)
-    ExternalSharingAllowed(OU)
-    nonGoogle := settings.drive_and_docs_external_sharing.allowNonGoogleInvites
+    section := "drive_and_docs_external_sharing"
+    shareSetting := "externalSharingMode"
+    extShare := utils.GetApiSettingValue(section, shareSetting, OU)
+    extShare == "ALLOWLISTED_DOMAINS"
+    extShareSet := utils.ApiSettingExists(section, shareSetting, OU)
+    nonGoogleSetting := "allowNonGoogleInvitesInAllowlistedDomains"
+    nonGoogle := utils.GetApiSettingValue(section, nonGoogleSetting, OU)
     nonGoogle != false
+    nonGoogleSet := utils.ApiSettingExists(section, nonGoogleSetting, OU)
+    true in {extShareSet, nonGoogleSet}
+}
+
+NonCompliantOUs1_4 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_4(GetSharingValue(extShare))
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    section := "drive_and_docs_external_sharing"
+    shareSetting := "externalSharingMode"
+    extShare := utils.GetApiSettingValue(section, shareSetting, OU)
+    extShare == "ALLOWED"
+    extShareSet := utils.ApiSettingExists(section, shareSetting, OU)
+    nonGoogleSetting := "allowNonGoogleInvites"
+    nonGoogle := utils.GetApiSettingValue(section, nonGoogleSetting, OU)
+    nonGoogle != false
+    nonGoogleSet := utils.ApiSettingExists(section, nonGoogleSetting, OU)
+    true in {extShareSet, nonGoogleSet}
 }
 
 tests contains {
@@ -492,8 +580,16 @@ NonCompliantOUs1_5 contains {
 if {
     some OU, settings in input.policies
     DriveEnabled(OU)
-    allowPublish := settings.drive_and_docs_external_sharing.allowPublishingFiles
+    section := "drive_and_docs_external_sharing"
+    shareSetting := "externalSharingMode"
+    extShare := utils.GetApiSettingValue(section, shareSetting, OU)
+    extShare != "DISALLOWED"
+    extShareSet := utils.ApiSettingExists(section, shareSetting, OU)
+    allowPublishSetting := "allowPublishingFiles"
+    allowPublish := utils.GetApiSettingValue(section, allowPublishSetting, OU)
     allowPublish != false
+    allowPublishSet := utils.ApiSettingExists(section, allowPublishSetting, OU)
+    true in {extShareSet, allowPublishSet}
 }
 
 tests contains {
@@ -683,8 +779,16 @@ NonCompliantOUs1_7 contains {
 if {
     some OU, settings in input.policies
     DriveEnabled(OU)
-    moveContent := settings.drive_and_docs_external_sharing.allowedPartiesForDistributingContent
+    section := "drive_and_docs_external_sharing"
+    shareSetting := "externalSharingMode"
+    extShare := utils.GetApiSettingValue(section, shareSetting, OU)
+    extShare != "DISALLOWED"
+    extShareSet := utils.ApiSettingExists(section, shareSetting, OU)
+    moveContentSetting := "allowedPartiesForDistributingContent"
+    moveContent := utils.GetApiSettingValue(section, moveContentSetting, OU)
     moveContent != "NONE"
+    moveContentSet := utils.ApiSettingExists(section, moveContentSetting, OU)
+    true in {extShareSet, moveContentSet}
 }
 
 tests contains {
@@ -1372,7 +1476,7 @@ Check5_1_OK if {
     count(events) > 0
 }
 
-Check5_1_OK if {PolicyApiInUse}
+# Check5_1_OK if {PolicyApiInUse}
 
 NonComplianceMessage5_1 := "Users can install Google Docs add-ons from add-ons store."
 

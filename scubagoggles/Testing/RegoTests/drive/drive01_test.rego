@@ -388,7 +388,7 @@ test_Receiving_Incorrect_V2 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage1_2(GetFriendlyValue1_2("SHARING_ALLOWED"))}]
+                 "Value": EventNonComplianceMessage1_2(EventGetFriendlyValue1_2("SHARING_ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -424,7 +424,7 @@ test_Receiving_Incorrect_V3 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage1_2(GetFriendlyValue1_2("SHARING_ALLOWED"))}]
+                 "Value": EventNonComplianceMessage1_2(EventGetFriendlyValue1_2("SHARING_ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -460,7 +460,7 @@ test_Receiving_Incorrect_V4 if {
     }
 
     failedOU := [{"Name": "Test Secondary OU",
-                 "Value": NonComplianceMessage1_2(GetFriendlyValue1_2("SHARING_ALLOWED"))}]
+                 "Value": EventNonComplianceMessage1_2(EventGetFriendlyValue1_2("SHARING_ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -630,7 +630,7 @@ test_Warnings_Incorrect_V2 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage1_3(GetFriendlyValue1_3("SHARING_ALLOWED"))}]
+                 "Value": EventNonComplianceMessage1_3(EventGetFriendlyValue1_3("SHARING_ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -666,7 +666,7 @@ test_Warnings_Incorrect_V3 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage1_3(GetFriendlyValue1_3("SHARING_ALLOWED"))}]
+                 "Value": EventNonComplianceMessage1_3(EventGetFriendlyValue1_3("SHARING_ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -702,7 +702,7 @@ test_Warnings_Incorrect_V4 if {
     }
 
     failedOU := [{"Name": "Test Secondary OU",
-                 "Value": NonComplianceMessage1_3(GetFriendlyValue1_3("SHARING_ALLOWED"))}]
+                 "Value": EventNonComplianceMessage1_3(EventGetFriendlyValue1_3("SHARING_ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -922,8 +922,8 @@ test_NonGoogle_Incorrect_V2 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage1_4(GetFriendlyValue1_4("ANONYMOUS_PREVIEW",
-                                                                      "SHARING_ALLOWED"))}]
+                 "Value": EventNonComplianceMessage1_4(EventGetFriendlyValue1_4("ANONYMOUS_PREVIEW",
+                                                                                "SHARING_ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -979,8 +979,8 @@ test_NonGoogle_Incorrect_V3 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage1_4(GetFriendlyValue1_4("ANONYMOUS_PREVIEW",
-                                                                      "SHARING_ALLOWED"))}]
+                 "Value": EventNonComplianceMessage1_4(EventGetFriendlyValue1_4("ANONYMOUS_PREVIEW",
+                                                                                "SHARING_ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -1036,8 +1036,8 @@ test_NonGoogle_Incorrect_V4 if {
     }
 
     failedOU := [{"Name": "Test Secondary OU",
-                 "Value": NonComplianceMessage1_4(GetFriendlyValue1_4("ALLOWED",
-                                                                      "SHARING_ALLOWED"))}]
+                 "Value": EventNonComplianceMessage1_4(EventGetFriendlyValue1_4("ALLOWED",
+                                                                                "SHARING_ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
