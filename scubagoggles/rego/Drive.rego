@@ -2,7 +2,6 @@ package drive
 
 import future.keywords
 import data.utils
-import data.utils.GetFriendlyEnabledValue
 import data.utils.PolicyApiInUse
 
 LogEvents := utils.GetEvents("drive_logs")
