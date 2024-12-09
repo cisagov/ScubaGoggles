@@ -186,7 +186,7 @@ class RobustDNSClient:
                             log_entries.append({
                                 "query_name": qname,
                                 "query_method": "DoH",
-                                "query_result": "Query returned 0 txt records"})                  
+                                "query_result": "Query returned 0 txt records"})
                         success = True
                         break
                     if response['Status'] == 3:
