@@ -1317,21 +1317,6 @@ if {
 
 CommonControlsId9_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.9.1")
 
-NonComplianceSuffix9 := "enrolled in the GWS Advanced Protection Program."
-NonComplianceMessage9_1 := sprintf("%s %s",
-                                   ["Highly privileged accounts can't be",
-                                    NonComplianceSuffix9])
-
-NonCompliantOUs9_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage9_1
-}
-if {
-    some OU, settings in input.policies
-    appEnable := settings.security_advanced_protection_program.enableAdvancedProtectionSelfEnrollment
-    appEnable != true
-}
-
 tests contains {
     "PolicyId": CommonControlsId9_1,
     "Criticality": "Shall/Not-Implemented",
@@ -1339,22 +1324,6 @@ tests contains {
     "ActualValue": "",
     "RequirementMet": false,
     "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-}
-
-tests contains {
-    "PolicyId": CommonControlsId9_1,
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    PolicyApiInUse
-    Status := count(NonCompliantOUs9_1) == 0
 }
 #--
 
@@ -1364,20 +1333,6 @@ if {
 
 CommonControlsId9_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.9.2")
 
-NonComplianceMessage9_2 := sprintf("%s %s",
-                                   ["Sensitive user accounts",
-                                    NonComplianceSuffix9])
-
-NonCompliantOUs9_2 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage9_2
-}
-if {
-    some OU, settings in input.policies
-    appEnable := settings.security_advanced_protection_program.enableAdvancedProtectionSelfEnrollment
-    appEnable != true
-}
-
 tests contains {
     "PolicyId": CommonControlsId9_2,
     "Criticality": "Should/Not-Implemented",
@@ -1385,22 +1340,6 @@ tests contains {
     "ActualValue": "",
     "RequirementMet": false,
     "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-}
-
-tests contains {
-    "PolicyId": CommonControlsId9_2,
-    "Criticality": "Should",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_2, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_2},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    PolicyApiInUse
-    Status := count(NonCompliantOUs9_2) == 0
 }
 #--
 
