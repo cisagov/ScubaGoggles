@@ -7,6 +7,7 @@ import data.utils.PassTestResult
 GoodCaseInputApi12 := {
     "policies": {
         "topOU": {
+            "takeout_service_status": {"serviceState": "ENABLED"},
             "blogger_user_takeout": {"takeoutStatus": "DISABLED"},
             "books_user_takeout": {"takeoutStatus": "DISABLED"},
             "location_history_user_takeout": {"takeoutStatus": "DISABLED"},
@@ -16,6 +17,10 @@ GoodCaseInputApi12 := {
             "play_console_user_takeout": {"takeoutStatus": "DISABLED"},
             "play_user_takeout": {"takeoutStatus": "DISABLED"},
             "youtube_user_takeout": {"takeoutStatus": "DISABLED"}
+        },
+        "nextOU": {
+            "takeout_service_status": {"serviceState": "DISABLED"},
+            "blogger_user_takeout": {"takeoutStatus": "ENABLED"}
         }
     },
     "tenant_info": {
@@ -26,6 +31,7 @@ GoodCaseInputApi12 := {
 BadCaseInputApi12 := {
     "policies": {
         "topOU": {
+            "takeout_service_status": {"serviceState": "ENABLED"},
             "blogger_user_takeout": {"takeoutStatus": "ENABLED"},
             "books_user_takeout": {"takeoutStatus": "ENABLED"},
             "location_history_user_takeout": {"takeoutStatus": "ENABLED"},
@@ -45,6 +51,7 @@ BadCaseInputApi12 := {
 BadCaseInputApi12a := {
     "policies": {
         "topOU": {
+            "takeout_service_status": {"serviceState": "ENABLED"},
             "blogger_user_takeout": {"takeoutStatus": "DISABLED"},
             "books_user_takeout": {"takeoutStatus": "DISABLED"},
             "location_history_user_takeout": {"takeoutStatus": "DISABLED"},

@@ -2100,6 +2100,7 @@ NonCompliantOUs12_1 contains {
 }
 if {
     some OU, settings in input.policies
+    utils.AppEnabled(input.policies, "takeout", OU)
     EnabledApps :=[value
 		           | some key, value in Takeout
                      section := sprintf("%s_user_takeout", [key])
