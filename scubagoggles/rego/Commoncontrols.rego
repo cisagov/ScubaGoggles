@@ -515,12 +515,9 @@ CommonControlsId3_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.3.1")
 LogMessage3_1 := "SsoPolicyProto challenge_selection_behavior"
 
 Check3_1_OK if {
-    not PolicyApiInUse
     events := utils.FilterEventsOU(LogEvents, LogMessage3_1, utils.TopLevelOU)
     count(events) > 0
 }
-
-Check3_1_OK if {PolicyApiInUse}
 
 NonComplianceMessage3_1 := "Post Single Sign-on (SSO) verification is disabled."
 
@@ -531,7 +528,6 @@ NonCompliantOUs3_1 contains {
     "Value": NonComplianceMessage3_1
 }
 if {
-    not PolicyApiInUse
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, LogMessage3_1, OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -543,16 +539,6 @@ if {
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
-NonCompliantOUs3_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage3_1
-}
-if {
-    some OU, settings in input.policies
-    enableChallenge := settings.security_login_challenges.enableEmployeeIdChallenge
-    enableChallenge != true
-}
-
 tests contains {
     "PolicyId": CommonControlsId3_1,
     "Criticality": "Should",
@@ -562,7 +548,6 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    not PolicyApiInUse
     DefaultSafe := false
     not Check3_1_OK
 }
@@ -633,23 +618,26 @@ IsGoodLimit(ActualLim) := false if {
     count({GoodLim | some GoodLim in GoodLimits; GoodLim == ActualLim}) == 0
 }
 
+NonComplianceMessage4_1(Value) := sprintf("Web session duration: %s",
+                                          [Value])
+
 GetFriendlyValue4_1(Value) := "Session never expires" if {
-    Value == "63072000"
+    Value == 63072000
 } else := "30 days" if {
-    Value == "2592000"
+    Value == 2592000
 } else := "14 days" if {
-    Value == "1209600"
+    Value == 1209600
 } else := "7 days" if {
-    Value == "604800"
+    Value == 604800
 } else := "24 hours" if {
-    Value == "86400"
+    Value == 86400
 } else := "20 hours" if {
-    Value == "72000"
-} else := concat(" ", [Value, "seconds"])
+    Value == 72000
+} else := sprintf("%d seconds", [Value])
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": concat("", ["Web session duration is set to ", GetFriendlyValue4_1(LastEvent.NewValue)])
+    "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(to_number(LastEvent.NewValue)))
 }
 if {
     not PolicyApiInUse
@@ -664,16 +652,9 @@ if {
     not IsGoodLimit(LastEvent.NewValue)
 }
 
-# The following checks for web session duration less than or equal to 12 hours.
-# Not sure whether this really fits with 4.1 requirement.  The 12 hours is
-# mentioned, but the requirement deals with forced re-authentication after the
-# session expiration - is this automatic with session expiration?  If so, then
-# this check is probably appropriate.  It seems to fit with the event log
-# method above.
-
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": sprintf("Web session duration: %s", [duration])
+    "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(durationSeconds))
 }
 if {
     multipliers := {"s": 1, "m": 60, "h": 3600}

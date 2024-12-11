@@ -59,6 +59,6 @@ test_CCAPI_ReAuth_NonComply_1 if {
     Output := tests with input as BaseCaseInputApi04
 
     failedOU := [{"Name": "nextOU",
-                 "Value": "Web session duration: 800m"}]
+                 "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(800 * 60))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

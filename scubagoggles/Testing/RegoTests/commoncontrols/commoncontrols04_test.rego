@@ -195,7 +195,7 @@ test_Limit_Incorrect_V1 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": "Web session duration is set to 24 hours"}]
+                 "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(86400))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -233,7 +233,7 @@ test_Limit_Incorrect_V2 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": "Web session duration is set to 24 hours"}]
+                 "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(86400))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -271,7 +271,7 @@ test_Limit_Incorrect_V3 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": "Web session duration is set to 24 hours"}]
+                 "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(86400))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
