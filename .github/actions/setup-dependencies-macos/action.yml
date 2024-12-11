@@ -5,7 +5,7 @@ inputs:
     default: "macos"
   opa-version:
     required: true
-    default: "0.60.0"
+    default: "v0.60.0"
   python-version:
     required: true
 
@@ -15,10 +15,9 @@ runs:
     - name: Setup virtualenv
       shell: bash
       run: |
-        pip install virtualenv
-        virtualenv -p python .venv
+        python -m venv .venv
         source .venv/bin/activate
-    
+
     - name: Install dependencies
       shell: bash
       run: |
@@ -30,5 +29,5 @@ runs:
     - name: Download OPA executable
       shell: bash
       run: |
-        python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
-        chmod +x opa_darwin_amd64
+        scubagoggles setup -m -nc -nd -d ~/scubagoggles -r ~/scubagoggles -c credentials.json
+        scubagoggles getopa -v ${{ inputs.opa-version }}

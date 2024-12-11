@@ -1,9 +1,10 @@
 # Using OAuth
-Only complete this section if not authenticating via [Service Account](/docs/authentication/ServiceAccount.md). See [Authentication Methods](/docs/authentication/AuthenticationMethods.md) for more details.
+Only complete this section if not authenticating via [Service Account](ServiceAccount.md). See [Authentication Methods](AuthenticationMethods.md) for more details.
 
 ## Create an OAuth credential
-1. Be signed into http://console.cloud.google.com/.
-1. From the hamburger menu on the left, select **APIs & Services** -> **OAuth consent screen**
+1. Sign in to your account at http://console.cloud.google.com/.
+1. Click the "hamburger" menu on the left (three horizontal
+bars on top of each other), and select **APIs & Services** -> **OAuth consent screen**
 1. Select **Internal** for **User Type**
 1. Click **Create**
 1. Fill in your **App name** and **User support email**
@@ -18,20 +19,31 @@ Only complete this section if not authenticating via [Service Account](/docs/aut
 1. Select **Oauth client ID**
 1. Select **Web application** for **Application type**
 1. Give name as appropriate
-1. Under **Authorized redirect URIs**, click "ADD URI." Add `http://localhost` and `http://localhost:8080/`
+1. Under **Authorized redirect URIs**, click "ADD URI." Add `http://localhost`
+   and `http://localhost:8080/`. **NOTE** the ending slash (`/`) in the *second*
+   URL is **necessary**.  If the slash is missing, you will eventually get an
+   error when running ScubaGoggles (It will be an "access blocked" error on the
+   Google authentication webpage.  You'll also see `Error 400:
+   redirect_uri_mismatch`).
 1. Click **CREATE**
 1. Click **DOWNLOAD JSON** from the resulting **OAuth client created** page
 1. Click **OK**
-1. Move the downloaded file (begins with `client_secret*.json`) to the root directory folder of this repo, rename to `credentials.json`
+1. Move the downloaded file (begins with `client_secret*.json`) to the
+   location and name you specified when you ran the
+   [ScubaGoggles setup utility](../installation/DownloadAndInstall.md#ScubaGoggles-Setup-Utility).
+   If you have not yet run the setup utility, you will specify this file as the
+   credentials file when prompted by the setup utility.  You'll make it easier
+   on yourself if you rename the file to something simple, like
+   `credentials.json`.
 1. Go back the menu on the left and click **Enabled API Services**
-1. In the center screen click **Enable APIS AND Services**
+1. In the center screen click **Enabled APIs & Services**
 1. Search for and enable the **Admin SDK API**
 1. Search for and enable the **Groups Settings API**
 1. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
 with an account with the necessary privileges and click allow.
 
 ## Add the Oauth App to the allowlist
-If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](/baselines/commoncontrols.md#10-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
+If you've limited application access to Google's APIs in your organization, the [Common Controls: App Access to Google APIs](../../scubagoggles/baselines/commoncontrols.md#10-app-access-to-google-apis) baseline covers this topic, follow the directions below to allowlist the OAuth app.
 
 1. Login to https://console.cloud.google.com
 2. Navigate to the appropriate project
@@ -46,5 +58,5 @@ If you've limited application access to Google's APIs in your organization, the 
 11. Select **Trusted**
 
 ## Navigation
-- Continue to [Usage: Parameters](/docs/usage/Parameters.md)
+- Continue to [Usage: Parameters](../usage/Parameters.md)
 - Return to [Documentation Home](/README.md)
