@@ -599,9 +599,9 @@ class Provider:
                 f'outputs will be incorrect: {exc}', RuntimeWarning)
             self._unsuccessful_calls.add(ApiReference.LIST_ACTIVITIES.value)
 
-        with PolicyAPI(self._gws_auth) as policy_api:
+        with PolicyAPI(self._gws_auth, self._top_ou) as policy_api:
             policies = policy_api.get_policies()
-            policy_api.verify(self._top_ou, policies)
+            policy_api.verify(policies)
 
         product_to_items['policies'] = policies
 

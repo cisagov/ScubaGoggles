@@ -1651,14 +1651,16 @@ NonCompliantOUs6_1 contains {
 if {
     some OU, settings in input.policies
     DriveEnabled(OU)
-    desktopEnabled := utils.GetApiSettingValue("drive_and_docs_drive_for_desktop",
-                                               "allowDriveForDesktop",
-                                               OU)
-    allowAuthorized := utils.GetApiSettingValue("drive_and_docs_drive_for_desktop",
-                                                "restrictToAuthorizedDevices",
-                                                OU)
+    section := "drive_and_docs_drive_for_desktop"
+    desktopSetting := "allowDriveForDesktop"
+    desktopEnabled := utils.GetApiSettingValue(section, desktopSetting, OU)
     desktopEnabled
+    desktopSet := utils.ApiSettingExists(section, desktopSetting, OU)
+    authDevicesSetting := "restrictToAuthorizedDevices"
+    allowAuthorized := utils.GetApiSettingValue(section, authDevicesSetting, OU)
     not allowAuthorized
+    authDevicesSet := utils.ApiSettingExists(section, authDevicesSetting, OU)
+    true in {desktopSet, authDevicesSet}
 }
 
 tests contains {

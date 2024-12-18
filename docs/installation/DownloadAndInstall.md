@@ -1,17 +1,19 @@
 # Getting started
 
 > [!IMPORTANT]
-> Use of this tool requires access to an internet browser for initial setup and to view the html report output.
+> Use of this tool requires access to an internet browser for initial setup
+> and to view the html report output.
 
 Setting up to run ScubaGoggles for the first time involves the following steps:
 
 1. Install [Python 3](https://www.python.org/) on your system.
 2. (Optional) Create and activate a Python virtual environment.
 3. Install ScubaGoggles and dependencies into the Python environment.
-4. Run ScubaGoggles setup to specify the output directory, the location of the
-   OPA executable, and the credentials file.
-5. Download the Open Policy Agent (OPA) executable.
-6. Create a Google OAuth credential file, unless you'll be using a Google
+4. Run `scubagoggles setup` to specify the output directory, the location of the
+   OPA executable, and the credentials file.  By default, the setup will
+   download the Open Policy Agent (OPA)
+   executable.
+5. Create a Google OAuth credential file, unless you'll be using a Google
    service account.
 
 ## Install Python 3
@@ -127,7 +129,8 @@ location of the output directory.
 The ScubaGoggles setup utility lets you configure the data directory location,
 as well as the locations of the OPA executable and the Google credentials file.
 It is perfectly fine to locate the OPA executable and credentials files in the
-output directory you create.
+output directory you create.  Unless you specify otherwise, the OPA executable
+will be downloaded to the location you specify.
 
 When you run the setup utility, it will create a configuration file in your
 top-level user directory called `.scubagoggles` (**Note** the leading dot (.)

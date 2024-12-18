@@ -148,9 +148,10 @@ class ScubaArgumentParser:
                               'regopath')
 
         for option_name in path_value_options:
-            if (option_name in args
-                and not isinstance(getattr(args, option_name), Path)):
-                setattr(args, option_name, path_parser(args.credentials))
+            if option_name in args:
+                option_value = getattr(args, option_name)
+                if not isinstance(option_value, Path):
+                    setattr(args, option_name, path_parser(option_value))
 
         if 'omitpolicy' in args:
             ScubaArgumentParser.validate_omissions(args)
