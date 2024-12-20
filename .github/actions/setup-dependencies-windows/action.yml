@@ -5,7 +5,7 @@ inputs:
     default: "windows"
   opa-version:
     required: true
-    default: "0.60.0"
+    default: "v0.60.0"
   python-version:
     required: true
 
@@ -15,9 +15,8 @@ runs:
     - name: Setup virtualenv
       shell: powershell
       run: |
-        pip install virtualenv
         python -m venv .venv
-        .venv\Scripts\activate
+        .venv\Scripts\activate.ps1
 
     - name: Install dependencies
       shell: powershell
@@ -29,4 +28,6 @@ runs:
 
     - name: Download OPA executable
       shell: powershell
-      run: python download_opa.py -v ${{ inputs.opa-version }} -os ${{ inputs.operating-system }}
+      run: |
+        scubagoggles setup -m -nc -nd -d ~/scubagoggles -r ~/scubagoggles -c credentials.json
+        scubagoggles getopa -v ${{ inputs.opa-version }}

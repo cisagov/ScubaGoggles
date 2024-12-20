@@ -1,0 +1,10 @@
+# This manifest is used to ensure that certain non-Python files are included
+# in the ScubaGoggles distribution.  The following subdirectories (and their
+# contents) are included:
+
+graft scubagoggles/baselines
+graft scubagoggles/rego
+graft scubagoggles/reporter
+graft scubagoggles/sample-report
+graft scubagoggles/Testing
+graft scubagoggles/utils

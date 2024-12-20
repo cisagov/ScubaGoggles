@@ -18,6 +18,7 @@
     --toggle-height: 25px;
     --toggle-width: 46px;
     --toggle-radius: 18px;
+    --unvisited-link-color: #0000EE;
 }
 
 body {

@@ -1,9 +1,25 @@
-google-api-python-client==2.142.0
-google-auth-httplib2==0.2.0
-google-auth-oauthlib==1.2.1
-MarkupSafe==2.1.5
-dnspython==2.6.1
-pandas==2.2.0
-tqdm==4.66.5
-requests==2.32.3
-pyyaml==6.0.2
+# This package is used for software development and is not needed by
+# the Scubagoggles users:
+build
+
+# There are many Python versions for users to install for ScubaGoggles, and
+# because of this, it is too restrictive to limit versions of the dependent
+# packages to an exact version (using ==).  One package version might not be
+# available in a version of Python, but a subsequent package version is
+# and will work just fine.  We have already run into user support issues
+# because of this.  By requiring a minimum version (using >=), we
+# are requiring a version that we support and any subsequent version - this
+# gives users much more flexibility in their Python environments.
+#
+# Any changes to this package dependency list MUST also be reflected in the
+# pyproject.toml file.
+#
+# These packages are the minimum required versions for running Scubagoggles:
+dnspython>=2.6.1
+google-api-python-client>=2.142.0
+google-auth-httplib2>=0.2.0
+google-auth-oauthlib>=1.2.1
+MarkupSafe>=2.1.5
+pyyaml>=6.0.2
+requests>=2.32.3
+tqdm>=4.66.5

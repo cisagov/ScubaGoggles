@@ -3,16 +3,35 @@ run_rego.py takes the opa executable and runs the provider JSON against the rego
 
 This module will differentiate between windows and mac OPA executables when running.
 """
-from sys import platform, stderr
-import subprocess
 import json
 import logging
+import os
+import platform
+import re
+import subprocess
 
-def opa_eval(
-    product_name:str, input_file:str, opa_path:str, rego_path:str,
-    omit_sudo:bool, debug:bool):
-    """
-    Runs the rego scripts and outputs a json to out_path
+from pathlib import Path
+
+log = logging.getLogger(__name__)
+
+# This will contain the OPA executable file specification.  It's global because
+# it's only used by opa_eval() and once the executable is found, it's the only
+# one used to run OPA.
+# pylint: disable=global-statement
+OPA_EXE = None
+
+# This is used to parse the output of the OPA version command to get the
+# version number of OPA being used in the run.
+opa_version_re = re.compile(r'(?i)Version:\s+\d+(?:\.\d+)*')
+
+
+def opa_eval(product_name: str,
+             input_file: str,
+             opa_path: Path,
+             rego_path: Path,
+             debug: bool):
+
+    """Runs the rego scripts and outputs a json to out_path
 
     :param product_name: which product to run
     :param input_file: which file to look at
@@ -21,48 +40,134 @@ def opa_eval(
     :param debug: to print debug statements or not
     """
 
-    opa_exe = ""
-    rego_file = product_name.capitalize()
-    command = []
-    windows_os = False
+    global OPA_EXE
 
-    if platform == 'win32':
-        opa_exe = (opa_path / "./opa_windows_amd64.exe").resolve()
-        windows_os = True
-    elif platform == 'darwin':
-        opa_exe = (opa_path / "./opa_darwin_amd64").resolve()
-    elif platform in ('linux', 'linux2'):
-        opa_exe = (opa_path / "./opa_linux_amd64_static").resolve()
-    else:
-        opa_exe = (opa_path / "./opa").resolve()
+    if OPA_EXE is None:
+        OPA_EXE = find_opa(opa_path)
 
-    if windows_os or omit_sudo:
-        command.extend([f"{opa_exe}"])
-    else:
-        command.extend(["sudo", f"{opa_exe}"])
+    rego_file = rego_path / f'{product_name.capitalize()}.rego'
+    utils_rego = rego_path / 'Utils.rego'
 
-    rego_file = (rego_path / f"./{rego_file}.rego").resolve()
-    utils_rego = (rego_path / "./Utils.rego").resolve()
-    command.extend(
-        ["eval",
-        "-i", input_file,
-        "-d", rego_file,
-        "-d", utils_rego,
-        f"data.{product_name}.tests",
-        "-f", "values"
-        ])
+    command = [str(OPA_EXE),
+               'eval',
+               f'data.{product_name}.tests',
+               '-i', str(input_file),
+               '-d', str(rego_file),
+               '-d', str(utils_rego),
+               '--format=values']
+
+    if debug:
+        # This "explain" option seems to do nothing...
+        command.append('--explain=full')
+
     try:
+        log.debug('Running OPA: %s', ' '.join(command))
+
         output = subprocess.run(command, capture_output=True, check=True)
-        if debug:
-            logging.basicConfig(stream=stderr, level=logging.DEBUG)
-            opa_err = "\n--- Rego debug output ---\n" + output.stderr.decode()
-            logging.debug(opa_err)
         str_output = output.stdout.decode()
+        if debug:
+            log.debug('Rego output:\n%s', output.stdout.decode('utf-8'))
+            stderr_text = output.stderr.decode('utf-8')
+            if stderr_text:
+                log.debug('Rego error:\n%s', stderr_text)
         ret_tests = json.loads(str_output)
         return ret_tests
     except subprocess.CalledProcessError as cpe:
-        logging.error("\n--- OPA failed to execute from process error ---\n %s", cpe.output)
-        return {"opa_error": "process_error"}
+        logging.error('\n--- OPA failed to execute from process error ---\n %s',
+                      cpe.output)
+        return {'opa_error': 'process_error'}
     except Exception as exc:
-        logging.error("\n--- OPA failed to execute from unknown error ---\n %s",exc)
-        return {"opa_error": "general_error"}
+        logging.error('\n--- OPA failed to execute from unknown error ---\n %s',
+                      exc)
+        return {'opa_error': 'general_error'}
+
+
+def find_opa(opa_path: Path = None):
+
+    """Finds the OPA executable using the given directory (if supplied) and
+    the directories in the user's PATH.
+
+    Locating the OPA executable should work in any operating environment.  The
+    file name of the executable will differ depending on the OS.  For example,
+    on Windows, it's downloaded from the OPA site as opa_windows_amd64.exe,
+    but on Linux it may be opa_linux_amd64_static.  The user may also rename
+    this to be simply opa.  On Windows, it's assumed to have an extension
+    (aka file type) of .exe.
+
+    If no valid OPA executable is found, an exception is raised because this
+    executable is required for ScubaGoggles to run correctly.
+
+    :param Path opa_path: [optional] directory where the OPA executable is
+        located.
+
+    :return: file specification of the OPA executable.
+    :rtype: Path
+    """
+
+    path_dirs = [Path(opa_path)] if opa_path else []
+    path_dirs.extend(Path(d) for d in os.environ['PATH'].split(os.pathsep))
+
+    opa_filenames = []
+
+    os_type = platform.system().lower()
+
+    architectures = [platform.machine().lower()]
+    if architectures[0] == 'x86_64':
+        architectures.append('amd64')
+
+    # An ARM-based Mac can supposedly run the AMD64 version
+    # of OPA.
+    if os_type == 'darwin' and 'amd64' not in architectures:
+        architectures.append('amd64')
+
+    for architecture in architectures:
+        opa_filename = f'opa_{os_type}_{architecture}'
+        opa_filenames.append(opa_filename)
+        opa_filenames.append(f'{opa_filename}_static')
+
+    extension = '.exe' if os_type == 'windows' else ''
+
+    # The user may have renamed the "long" OPA executable name to shorten it,
+    # or may have followed the instructions for downloading OPA, which includes
+    # renaming it.  We'll look for the longer name first, but the search will
+    # look for the shortened name, too.
+    opa_filenames.append('opa')
+
+    opa_exe = None
+
+    log.debug('Searching for OPA executable:')
+
+    for filename in opa_filenames:
+        filename += extension
+
+        for path_dir in path_dirs:
+            current_exe = Path(path_dir) / filename
+            log.debug('  Trying %s', current_exe)
+            if current_exe.exists():
+                if os.access(current_exe, os.X_OK):
+                    opa_exe = current_exe
+                    log.debug('    Valid executable')
+                    break
+                log.debug('    NO execute access')
+
+        if opa_exe:
+            break
+
+    if opa_exe is None:
+        raise FileNotFoundError('OPA executable not found in PATH')
+    try:
+        process = subprocess.run((opa_exe, 'version'),
+                                 capture_output = True,
+                                 check = True)
+    except subprocess.CalledProcessError as cpe:
+        if cpe.stderr:
+            log.error('Error during OPA version check:\n%s',
+                      cpe.stderr.decode('utf-8'))
+        raise RuntimeError('Error occurred during OPA version check - '
+                           f'return code: {cpe.returncode}') from cpe
+
+    match = opa_version_re.search(process.stdout.decode('utf-8'))
+    if match:
+        log.info('OPA %s', match[0])
+
+    return opa_exe
