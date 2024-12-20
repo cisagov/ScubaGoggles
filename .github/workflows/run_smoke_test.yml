@@ -53,7 +53,7 @@ jobs:
 
           # Default values for other events
           else
-            operatingsystem_val="['windows-latest', 'macos-latest']"
+            operatingsystem_val="['macos-latest']"
             pythonversion_val="['3.10']"
             opaversion_val="0.60.0"
           fi
