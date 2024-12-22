@@ -558,12 +558,13 @@ AppEnabled(policies, appName, orgunit) if {
 # been explicitly set in the given orgunit or group.  The above functions will
 # tell you whether the app is enabled, but its state may be due to inheriting
 # the state from the top-level orgunit.  In some cases, you need to know
-# whether the state has been explicitly set (not inherited).
+# whether the state has been explicitly set (not inherited).  This function
+# returns "ENABLED", "DISABLED" if explicitly set; it's undefined otherwise.
 
 AppExplicitStatus(policies, appName, orgunit) := appState if {
     serviceStatusName := AppServiceStatusName(appName)
     appState := upper(policies[orgunit][serviceStatusName].serviceState)
-} else := ""
+}
 
 # There are a lot of policies that have enabled/disabled states.  The states
 # (values) in the log events are strings ("true", "false), while the states
