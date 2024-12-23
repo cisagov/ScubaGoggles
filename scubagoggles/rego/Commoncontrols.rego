@@ -337,10 +337,10 @@ Check1_2_OK if {
 
 Check1_2_OK if {PolicyApiInUse}
 
-NonComplianceMessage1_2(value, expected) := sprintf("New user enrollment period (%ds) %s (%ds)",
-                                                    [value,
+NonComplianceMessage1_2(value, expected) := sprintf("New user enrollment period (%s) %s (%s)",
+                                                    [utils.GetFriendlyDuration(value),
                                                     "doesn't match expected",
-                                                    expected])
+                                                    utils.GetFriendlyDuration(expected)])
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
@@ -740,17 +740,7 @@ NonComplianceMessage4_1(Value) := sprintf("Web session duration: %s",
 
 GetFriendlyValue4_1(Value) := "Session never expires" if {
     Value == 63072000
-} else := "30 days" if {
-    Value == 2592000
-} else := "14 days" if {
-    Value == 1209600
-} else := "7 days" if {
-    Value == 604800
-} else := "24 hours" if {
-    Value == 86400
-} else := "20 hours" if {
-    Value == 72000
-} else := sprintf("%d seconds", [Value])
+} else := utils.GetFriendlyDuration(Value)
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
@@ -2583,8 +2573,8 @@ NonCompliantOUs16_2 contains {
 }
 if {
     some OU, settings in input.policies
-    appsEnabled := utils.AppEnabled(input.policies, "early_access_apps", OU)
-    appsEnabled
+    appState := utils.AppExplicitStatus(input.policies, "early_access_apps", OU)
+    appState == "ENABLED"
 }
 
 tests contains {
