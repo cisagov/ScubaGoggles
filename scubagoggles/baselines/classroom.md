@@ -52,7 +52,7 @@ Who can join classes in your domain SHALL be set to Users in your domain only.
 Which classes users in your domain can join SHALL be set to Classes in your domain only.
 
 - _Rationale:_ Allowing users to join a class from outside your domain could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
-- _Last modified:_ September 27, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

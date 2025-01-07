@@ -314,7 +314,7 @@ Google Workspace handles post-SSO verification for profiles assigned org-wide as
 Post-SSO verification SHOULD be enabled for users signing in using the SSO profile for your organization.
 
 - _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
-- _Last modified:_ November 4, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -433,7 +433,7 @@ User password length SHALL be at least 12 characters.
 User password length SHOULD be at least 15 characters.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -534,7 +534,7 @@ Pre-Built GWS Admin Roles considered highly privileged:
 All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -808,7 +808,7 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
 Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
 - _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -927,7 +927,7 @@ This section prevents users from downloading a copy of the Google Takeout servic
 Google Takeout services SHALL be disabled.
 
 - _Rationale:_ Google Takeout is a service that allows you to download a copy of your data stored within 40+ Google products and services, including data from Gmail, Drive, Photos, and Calendar. While there may be a valid use case for individuals to back up their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -996,7 +996,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
 - _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 - _Note:_ Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 
 - MITRE ATT&CK TTP Mapping
@@ -1103,7 +1103,7 @@ At the time of writing, data region policies cannot be applied to data types not
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
 - _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential foreign adversaries to compromise the data.
-- _Last modified:_ October 30, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
@@ -1115,7 +1115,7 @@ The data storage region SHALL be set to be the United States for all users in th
 Data SHALL be processed in the region selected for data at rest.
 
 - _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy allows for data sovereignty over organizational data.
-- _Last modified:_ September 20, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
@@ -1180,7 +1180,7 @@ Google Workspace considers some of its services "core services," including Gmail
 Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.
 
 - _Rationale_: Allowing access to additional google services without a need may create unnecessary vulnerabilities within the Google Workspace environment. By turning these services off, it mitigates the risk by not allowing access.
-- _Last modified:_ June 11, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1194,7 +1194,7 @@ Service status for Google services that do not have an individual control SHOULD
 User access to Early Access Apps SHOULD be disabled.
 
 - _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure the latest security standards are met.
-- _Last modified:_ August 7, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
@@ -1273,7 +1273,7 @@ Though use of Google's DLP solution is not strictly required, guidance for confi
 A custom policy SHALL be configured for Google Drive to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ October 25, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1286,7 +1286,7 @@ A custom policy SHALL be configured for Google Drive to protect PII and sensitiv
 A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ October 25, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1298,7 +1298,7 @@ A custom policy SHALL be configured for Google Chat to protect PII and sensitive
 A custom policy SHALL be configured for Gmail to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ October 25, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1312,7 +1312,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 The action for the above DLP policies SHOULD be set to block external sharing.
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ October 25, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1328,7 +1328,7 @@ The action for the above DLP policies SHOULD be set to block external sharing.
 - [GWS Admin Help \| Prevent data leaks in email & attachments](https://support.google.com/a/answer/14767988?fl=1&sjid=4620103790740920406-NA)
 
 ### Prerequisites
-If using Google's DLP solution, the following editions of Google Workspace include Workspace DLP: Frontline Standard; Enterprise Standard and Enterprise Plus; Education Fundamentals, Education Standard, Teaching and Learning Upgrade, and Education Plus; Enterprise Essentials Plus.
+If using Google's DLP solution, the following editions of Google Workspace include Workspace DLP; Frontline Standard; Enterprise Standard and Enterprise Plus; Education Fundamentals, Education Standard, Teaching and Learning Upgrade, and Education Plus; Enterprise Essentials Plus.
 
 Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Google Workspace license. For Drive DLP, the license must include the Drive log events.
 
