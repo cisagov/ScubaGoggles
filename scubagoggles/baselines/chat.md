@@ -78,8 +78,9 @@ To configure the settings for History for chats:
 #### GWS.CHAT.1.2v0.3 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
-3.  Uncheck the **Allow users to change their history setting** checkbox.
-4.  Select **Save**.
+3.  Select **History for chats**.
+4.  Uncheck the **Allow users to change their history setting** checkbox.
+5.  Select **Save**.
 
 ## 2. External File Sharing
 
