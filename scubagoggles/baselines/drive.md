@@ -389,18 +389,21 @@ Google Drive for Desktop SHOULD be enabled only for authorized devices.
 To Disable Google Drive for Desktop:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs-\>Google Drive for Desktop-\>Enable Drive for Desktop**.
-3.  Uncheck the **Allow Google Drive for desktop in your organization box** checkbox
-4.  Select **Save.**
+2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs**.
+3.  Select **Google Drive for Desktop**.
+4.  Select **Enable Drive for Desktop**.
+5.  Uncheck the **Allow Google Drive for desktop in your organization box** checkbox
+6.  Select **Save.**
 
 To limit Google Drive for Desktop to authorized devices:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs**.
 3.  Select **Google Drive for Desktop**.
-3.  Check the **Allow Google Drive for desktop in your organization box** checkbox.
-4.  Check the **Only allow Google Drive for desktop on authorized devices checkbox**.
-5.  Ensure authorized devices are added to [company-owned inventory](https://support.google.com/a/answer/7129612?hl=en).
-6.  Select Save.
+4.  Select **Enable Drive for Desktop**.
+5.  Check the **Allow Google Drive for desktop in your organization box** checkbox.
+6.  Check the **Only allow Google Drive for desktop on authorized devices checkbox**.
+7.  Ensure authorized devices are added to [company-owned inventory](https://support.google.com/a/answer/7129612?hl=en).
+8.  Select Save.
 
 Alternatively, [Context-Aware access policies](https://support.google.com/a/answer/9275380?hl=en) can be configured for more granular controls around authorized devices. The access level applied to Google Drive must have the "Apply to Google desktop and mobile apps" enabled to meet this requirement. For additional guidance, see the *Common Controls Minimum Viable Secure Baseline*, section "Context-Aware Access for All Devices that Connect to GWS SHOULD be Implemented."
