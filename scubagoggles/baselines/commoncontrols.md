@@ -604,10 +604,10 @@ By changing the email address, the user resolves the conflict by ensuring that t
 ### Policies
 
 #### GWS.COMMONCONTROLS.7.1v0.3
-Account conflict management SHALL be configured to replace conflicting unmanaged accounts with managed ones.
+Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed ones.
 
 - _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by workspace admins. By resolving conflicting accounts, you ensure all users in your workspace are using managed accounts.
-- _Last modified:_ September 14, 2023
+- _Last modified:_ January 8, 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1136: Create Account](https://attack.mitre.org/techniques/T1136/)
@@ -1243,7 +1243,7 @@ Require multi party approval for sensitive admin actions SHALL be enabled.
   - No TTP Mappings
 
 ### Resources
--	[GWS Admin Help \| Multi-party approval for sensitive actions](https://apps.google.com/supportwidget/articlehome?hl=en&article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13790448%3Fhl%3Den&assistant_id=generic-unu&product_context=13790448&product_name=UnuFlow&trigger_context=a)
+-	[GWS Admin Help \| Multi-party approval for sensitive actions](https://support.google.com/a/answer/13790448?hl=en-Link)
 
 ### Prerequisites
 
