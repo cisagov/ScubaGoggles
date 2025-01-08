@@ -607,7 +607,7 @@ By changing the email address, the user resolves the conflict by ensuring that t
 Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed ones.
 
 - _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by workspace admins. By resolving conflicting accounts, you ensure all users in your workspace are using managed accounts.
-- _Last modified:_ January 8, 2025
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1136: Create Account](https://attack.mitre.org/techniques/T1136/)
