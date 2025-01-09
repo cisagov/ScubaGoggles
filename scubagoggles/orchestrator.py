@@ -11,6 +11,7 @@ import platform
 import shutil
 import webbrowser
 
+from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
 from tqdm import tqdm
@@ -30,6 +31,44 @@ class UserRuntimeError(RuntimeError):
     user) for which a traceback might not be appropriate (error has nothing
     to do with the code).
     """
+
+
+class ArgumentsEncoder(json.JSONEncoder):
+
+    """Custom JSON encoder for the ScubaGoggles command line arguments data
+    structure.
+    """
+
+    def default(self, o):
+
+        """Handles special encoding for certain fields in the arguments
+        data structure.
+
+        For example, there are some fields in the arguments for internal
+        use, such as the dispatch function.  This is not serializable with
+        the default encoder.
+
+        The Path values are converted to strings.
+
+        Any data types not handled by this method are processed by the base
+        class method.
+
+        :param o: data (arbitrary type) to be serialized.
+
+        :return: a serializable version of the given object.
+        """
+
+        # The "dispatch" value is a function and does not need to be
+        # serialized.
+
+        if isinstance(o, Callable):
+            return None
+
+        if isinstance(o, Path):
+            return str(o)
+
+        return super().default(o)
+
 
 class Orchestrator:
 
@@ -316,7 +355,7 @@ class Orchestrator:
         param_out_path = out_folder / 'args_param.json'
 
         with param_out_path.open(mode='w', encoding='UTF-8') as parm_file:
-            json.dump(args_dict, parm_file, indent=4)
+            json.dump(args_dict, parm_file, indent=4, cls=ArgumentsEncoder)
 
         # Create the ScubaResults files
         scuba_results_file = out_folder / f'{args.outputproviderfilename}.json'
@@ -398,7 +437,7 @@ class Orchestrator:
             args_dict = vars(args)
             param_out_path = os.path.join(args.outputpath, 'args_param.json')
             with open(param_out_path, mode='w', encoding='UTF-8') as parm_file:
-                json.dump( args_dict, parm_file, indent=4)
+                json.dump(args_dict, parm_file, indent=4, cls=ArgumentsEncoder)
 
         self._rego_eval()
         self._run_reporter()
