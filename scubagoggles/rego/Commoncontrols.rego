@@ -1302,7 +1302,7 @@ CommonControlsId7_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.7.1")
 
 tests contains {
     "PolicyId": CommonControlsId7_1,
-    "Criticality": "Shall/Not-Implemented",
+    "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
