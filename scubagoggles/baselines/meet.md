@@ -228,3 +228,57 @@ Incoming calls SHALL be restricted to contacts and other users in the organizati
 4.  Click **Incoming call restrictions**.
 5.  Ensure **Users receive calls only from contacts and other users in the organization** or **Users can't receive calls** is selected.
 6.  Click **Save**.
+
+## 6. Automatic Meeting Recording and Transcripts
+
+This section covers automatic recording and transcripts for Google Meet.
+
+### Policies
+
+#### GWS.MEET.6.1v0.3
+Automatic recordings for Google Meet SHALL be disabled.
+
+- _Rationale:_ Automatic recordings could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
+- _Last modified:_ January 2024
+
+- MITRE ATT&CK TTP Mapping
+  - 
+
+### Resources
+- [Choose automatic meeting artifact settings for your organization](https://support.google.com/a/answer/15496523?p=automaticmeetingrecords)
+
+### Prerequisites
+-   None
+
+#### GWS.MEET.6.2v0.3
+Automatic transcripts for Google Meet SHALL be disabled.
+
+- _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
+- _Last modified:_ January 2024
+
+- MITRE ATT&CK TTP Mapping
+  - 
+
+### Resources
+- [Choose automatic meeting artifact settings for your organization](https://support.google.com/a/answer/15496523?p=automaticmeetingrecords)
+
+### Prerequisites
+-   None
+
+### Implementation
+
+#### GWS.MEET.6.1v0.3 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
+3.  Click **Meet video settings**.
+4.  Click **Automatic recording**.
+5.  Ensure **Meetings are recorded by default** is unselected.
+6.  Click **Save**.
+
+#### GWS.MEET.6.2v0.3 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
+3.  Click **Meet video settings**.
+4.  Click **Automatic transcription**.
+5.  Ensure **Meetings are transcribed by default** is unselected.
+6.  Click **Save**. 
