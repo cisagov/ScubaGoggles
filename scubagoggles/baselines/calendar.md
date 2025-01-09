@@ -171,7 +171,7 @@ To configure the settings for Calendar Interop:
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
 3.  Select **Calendar Interop management**.
 4.  Select **Exchange availability in Calendar**. 
-5.  Uncheck the **Enable Interoperability for Calendar** checkbox.
+5.  Uncheck the **Allow Google Calendar to display Exchange users availability** checkbox.
 6.  Select **Save**.
 
 #### GWS.CALENDAR.3.2v0.3 Instructions
@@ -218,4 +218,4 @@ Appointment Schedule with Payments SHALL be disabled.
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
 3.  Select **Advanced Settings -\> Appointment schedules with payments**
 4.  Ensure the **Allow appointment schedule users to require payments for booked appointments through their own payment provider accounts** checkbox is unchecked. 
-5.  Select **Save**
+5.  Select **Save**.
