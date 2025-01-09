@@ -170,8 +170,9 @@ To configure the settings for Calendar Interop:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
 3.  Select **Calendar Interop management**.
-4.  Uncheck the **Enable Interoperability for Calendar** checkbox.
-5.  Select **Save**.
+4.  Select **Exchange availability in Calendar**. 
+5.  Uncheck the **Allow Google Calendar to display Exchange users availability** checkbox.
+6.  Select **Save**.
 
 #### GWS.CALENDAR.3.2v0.3 Instructions
 
@@ -180,8 +181,10 @@ To configure the settings for Calendar Interop:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
 3.  Select **Calendar Interop management**.
-4.  Select **OAuth 2.0 client credentials**
-5.  Select **Save**.
+4.  Select **Exchange availability in Calendar**. 
+5.  Select **Allow Google Calendar to display Exchange users availability**.  
+6.  Select **OAuth 2.0 client credentials**
+7.  Select **Save**.
 
 ## 4. Paid Appointments
 
@@ -201,7 +204,7 @@ Appointment Schedule with Payments SHALL be disabled.
 
 ### Resources
 
--   [Google Workspace Help: Allow paid appointment schedules in Calendar](https://apps.google.com/supportwidget/articlehome?article_url=https%3A%2F%2Fsupport.google.com%2Fa%2Fanswer%2F13765946&assistant_id=generic-unu&product_context=13765946&product_name=UnuFlow&trigger_context=a)
+-   [Google Workspace Help: Allow paid appointment schedules in Calendar](https://support.google.com/a/answer/13765946?hl=en)
 
 ### Prerequisites
 
@@ -214,5 +217,5 @@ Appointment Schedule with Payments SHALL be disabled.
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
 3.  Select **Advanced Settings -\> Appointment schedules with payments**
-4.  Select **OFF- Blocks users' from adding required payments to their Calendar appointment schedules**
-5.  Select **Save**
+4.  Ensure the **Allow appointment schedule users to require payments for booked appointments through their own payment provider accounts** checkbox is unchecked. 
+5.  Select **Save**.
