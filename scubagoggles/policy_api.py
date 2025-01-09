@@ -314,7 +314,7 @@ class PolicyAPI:
     }
 
     # This is the URL to the Policies API.
-    _baseURL = 'https://cloudidentity.googleapis.com/v1beta1/policies'
+    _baseURL = 'https://cloudidentity.googleapis.com/v1/policies'
     _too_many_requests = 429
 
     def __init__(self, gws_auth: GwsAuth, top_orgunit: str):
