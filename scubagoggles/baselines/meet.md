@@ -36,7 +36,7 @@ This control limits safe meeting access to users with a Google Account or Dialin
 
 ### Policies
 
-#### GWS.MEET.1.1v0.3
+#### GWS.MEET.1.1v0.4
 Meeting access SHOULD be restricted to users signed in with a Google Account or Dialing in using a phone.
 
 - _Rationale:_ Allowing users not signed-in to join meetings diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring all users to sign-in.
@@ -62,7 +62,7 @@ Meeting access SHOULD be restricted to users signed in with a Google Account or 
 
 To configure the settings for Domain Meet safety settings:
 
-#### GWS.MEET.1.1v0.3 Instructions
+#### GWS.MEET.1.1v0.4 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Domain**.
@@ -76,7 +76,7 @@ This control determines which meetings users within the agency's organization ca
 
 ### Policies
 
-#### GWS.MEET.2.1v0.3
+#### GWS.MEET.2.1v0.4
 Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace tenant or organization.
 
 - _Rationale:_ Contact with unmanaged users can pose the risk of data leakage and other security threats. This policy reduces such contact by not allowing agency users to join meetings created by users' personal accounts.
@@ -101,7 +101,7 @@ Meeting access SHALL be disabled for meetings created by users who are not membe
 
 To configure the settings for Access within Meet safety settings:
 
-#### GWS.MEET.2.1v0.3 Instructions
+#### GWS.MEET.2.1v0.4 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Access**.
@@ -116,7 +116,7 @@ Note: When this feature is not enabled, any attendee that is a member of the hos
 
 ### Policies
 
-#### GWS.MEET.3.1v0.3
+#### GWS.MEET.3.1v0.4
 Host Management meeting features SHALL be enabled.
 
 - _Rationale:_ With host management disabled, any internal participant is able to take control of meetings, performing actions such as recording the meeting, disabling or enabling the chat, and ending the meeting. When enabled, these options are only available to meeting hosts.
@@ -143,7 +143,7 @@ Host Management meeting features SHALL be enabled.
 
 To enable Host Management meeting features:
 
-#### GWS.MEET.3.1v0.3 Instructions
+#### GWS.MEET.3.1v0.4 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Host management**.
@@ -156,7 +156,7 @@ This control provides a warning label for any participating a meeting who is not
 
 ### Policies
 
-#### GWS.MEET.4.1v0.3
+#### GWS.MEET.4.1v0.4
 Warn for external participants SHALL be enabled.
 
 - _Rationale:_ Users may inadvertently include external users or not be aware that external users are present. When enabled, external or unidentified participants in a meeting are given a label. This increases situational awareness amongst meeting participants and can help prevent inadvertent data leakage.
@@ -184,7 +184,7 @@ Warn for external participants SHALL be enabled.
 
 To enable Host Management meeting features:
 
-#### GWS.MEET.4.1v0.3 Instructions
+#### GWS.MEET.4.1v0.4 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Warn for external participants**.
@@ -197,7 +197,7 @@ This section covers who domain users are allowed to receive a 1:1 call from.
 
 ### Policies
 
-#### GWS.MEET.5.1v0.3
+#### GWS.MEET.5.1v0.4
 Incoming calls SHALL be restricted to contacts and other users in the organization.
 
 - _Rationale:_ Calls could potentially be used to pass sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
@@ -221,7 +221,7 @@ Incoming calls SHALL be restricted to contacts and other users in the organizati
 
 ### Implementation
 
-#### GWS.MEET.5.1v0.3 Instructions
+#### GWS.MEET.5.1v0.4 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Meet safety settings**.
