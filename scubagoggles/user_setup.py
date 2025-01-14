@@ -75,7 +75,7 @@ def user_directory(arguments: argparse.Namespace):
     # Gimme a break...
     # pylint: disable=too-many-branches
 
-    print('Setup: output directory')
+    log.debug('Setup: output directory')
 
     config = arguments.user_config
     create_dir = arguments.mkdir
@@ -186,7 +186,7 @@ def opa_directory(arguments: argparse.Namespace):
         configuration; False otherwise.
     """
 
-    print('Setup: OPA executable directory')
+    log.debug('Setup: OPA executable directory')
 
     check = not arguments.nocheck
     config = arguments.user_config
@@ -295,7 +295,7 @@ def validate_opa_dir(opa_dir: Path = None):
 
     if not opa_exe:
         where = opa_dir or 'PATH'
-        log.warning('OPA executable not found in %s', where)
+        log.info('OPA executable not found in %s', where)
 
     return opa_exe is not None
 
@@ -310,71 +310,25 @@ def credentials_file(arguments: argparse.Namespace):
         configuration; False otherwise.
     """
 
-    print('Setup: Google API credentials file')
+    log.debug('Setup: Google API credentials file')
 
     check = not arguments.nocheck
     config = arguments.user_config
     credentials = arguments.credentials
     prompt = not arguments.noprompt
-
     if credentials:
-
         # The user has explicitly specified the credentials file.  We only
         # need to check whether the file exists.
 
         if check and not credentials.is_file():
-            raise FileNotFoundError(f'? {credentials} - credentials not found')
+            raise FileNotFoundError(f'? {credentials} - file not found')
 
-        print(f'  specified file: {credentials}')
+        log.debug(f'  specified file: %s', credentials)
 
         config.credentials_file = credentials.resolve()
 
         return True
-
-    if not config.file_exists:
-
-        # The user has no configuration file, so they're starting from scratch.
-        # If the credentials file exists, it may be in the output directory
-        # because of a "legacy" setup.
-
-        legacy_credentials = config.output_dir / 'credentials.json'
-
-        if legacy_credentials.is_file():
-            print(f'  found: {legacy_credentials}')
-            config.credentials_file = legacy_credentials
-            return True
-
-    elif config.credentials_file.is_file() or not check:
-        print(f'  {config.credentials_file}')
-        return False
-    else:
-        log.error('? %s - Google credential files missing',
-                  config.credentials_file)
-        if not prompt:
-            return False
-
-    # There's no configuration file found, so we have to ask for the location.
-
-    while not credentials:
-        answer = prompt_string('Google credentials (JSON) file',
-                               config.credentials_file)
-
-        if not answer:
-            continue
-
-        answer = Path(os.path.expandvars(answer)).expanduser().absolute()
-
-        if not answer.exists():
-            log.warning('Google credentials file not found in %s', answer)
-        else:
-            print(f'  {config.credentials_file}')
-
-        credentials = answer
-
-    config.credentials_file = credentials.resolve()
-
-    return True
-
+    return False
 
 def find_legacy_dir(config):
 

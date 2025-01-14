@@ -34,8 +34,7 @@ class UserConfig:
 
     _main = _defaults['scubagoggles']
 
-    _defaults['scubagoggles']['credentials'] = (f'{_main["output_dir"]}/'
-                                                'credentials.json')
+    _defaults['scubagoggles']['credentials'] = (f'./credentials.json')
 
     _default_config_file = Path('~/.scubagoggles/userdefaults.yaml').expanduser()
 
@@ -45,7 +44,7 @@ class UserConfig:
         configuration stored in the class.
 
         :param Path config_file: [optional] user configuration file.  By
-            default, this is ~/.scubagoggles
+            default, this is ~/.scubagoggles/userdefaults.yaml
         """
 
         self._config_file = (Path(os.path.expandvars(config_file))
@@ -101,10 +100,6 @@ class UserConfig:
         """
 
         credentials = self._get_path_config('credentials')
-
-        if self._check and credentials and (not credentials.exists()
-                                            or not credentials.is_file()):
-            raise FileNotFoundError(f'? {credentials} - credentials not found')
 
         return credentials
 

@@ -82,15 +82,12 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar='<output-JSON-file>',
                         help=help_msg)
 
-    try:
-        default_credentials = user_config.credentials_file
-    except FileNotFoundError:
-        default_credentials = str(user_dir / 'credentials.json')
     help_msg = ('The location and name of the OAuth / service account '
-                f'credentials json file.  Defaults to "{default_credentials}".')
+                'credentials json file.  Defaults to '
+                f'"{user_config.credentials_file}".')
     parser.add_argument('--credentials',
                         '-c',
-                        default=Path(default_credentials),
+                        default=Path(user_config.credentials_file),
                         metavar='<credentials-JSON-file>',
                         type=path_parser,
                         help=help_msg)
