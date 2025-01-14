@@ -25,7 +25,7 @@ class UserConfig:
     # the configuration file is named stored at ~/.scubagoggles/scubadefaults.yaml.
 
     _defaults = {'scubagoggles': {'opa_dir': '~/.scubagoggles',
-                                  'output_dir': '~/scubagoggles'}}
+                                  'output_dir': '.'}}
 
     # This is the main key (TOML: table) in the configuration, and is used to
     # continue defining the defaults.  For example, we want the default

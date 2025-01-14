@@ -17,8 +17,7 @@ from scubagoggles.orchestrator import Orchestrator, UserRuntimeError
 from scubagoggles.purge import purge_reports
 from scubagoggles.reporter.md_parser import MarkdownParserError
 from scubagoggles.scuba_argument_parser import ScubaArgumentParser
-from scubagoggles.user_setup import default_file_names, find_legacy_dir, \
-    user_setup
+from scubagoggles.user_setup import default_file_names, user_setup
 from scubagoggles.utils import path_parser
 from scubagoggles.version import Version
 from scubagoggles.scuba_constants import NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES
@@ -35,16 +34,9 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     :param UserConfig user_config: user configuration object
     """
 
-    # This module is located in the scubagoggles subdirectory.  The parent
-    # directory is where the rego and baselines subdirectories are also
-    # located - these are the default for the rego and baseline files,
-    # respectively.  The instructions typically instruct the user to place
-    # both the OPA executable and the credentials JSON file in this
-    # directory.
-
     scuba_path = Path(__file__).parent
-    user_dir = find_legacy_dir(user_config) or user_config.output_dir
-    opa_dir = user_config.opa_dir or user_dir
+    user_dir = user_config.output_dir
+    opa_dir = user_config.opa_dir
 
     gws = Orchestrator.gws_products()
     gws_baselines = tuple(sorted(gws['gws_baselines']))
@@ -66,7 +58,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         help=help_msg)
 
     help_msg = ('The folder path where both the output JSON & HTML report will '
-                f'be created. Defaults to {user_dir}.')
+                f'be created. Defaults to "{user_dir}".')
     parser.add_argument('--outputpath',
                         '-o',
                         default=user_dir,

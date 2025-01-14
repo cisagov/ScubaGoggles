@@ -14,7 +14,6 @@ from pathlib import Path
 
 from scubagoggles.getopa import download_opa, opa_filespec
 from scubagoggles.run_rego import find_opa
-from scubagoggles.utils import prompt_boolean, prompt_string
 
 log = logging.getLogger(__name__)
 
@@ -72,106 +71,26 @@ def user_directory(arguments: argparse.Namespace):
         configuration; False otherwise.
     """
 
-    # Gimme a break...
-    # pylint: disable=too-many-branches
-
     log.debug('Setup: output directory')
 
     config = arguments.user_config
-    create_dir = arguments.mkdir
-    prompt = not arguments.noprompt
-    user_dir = arguments.work_directory
 
-    if user_dir:
-
+    config_changed = False
+    if arguments.work_directory:
         # The user has explicitly specified an output directory to be used.
-        # We only need to check whether the directory already exists, and
-        # confirm with the user to create it if it doesn't.
+        # We only need to check whether the directory already exists and
+        # save to config
+        print(f"Updating the default output location to {arguments.work_directory}")
+        arguments.work_directory = arguments.work_directory.resolve()
+        config.output_dir = arguments.work_directory
+        config_changed = True
 
-        user_dir = user_dir.resolve()
+    # Check to ensure the directory specified in the config exists
+    if not config.output_dir.exists():
+        config.output_dir.mkdir(exist_ok = True)
+        log.debug('Creating output directory %s', config.output_dir)
 
-        if not user_dir.exists():
-            answer = (create_dir or (prompt
-                      and prompt_boolean(f'Create directory {user_dir}')))
-
-            if answer:
-                print(f'  creating: {user_dir}')
-                user_dir.mkdir(exist_ok = True)
-        else:
-            print(f'  specified directory: {user_dir}')
-
-        config.output_dir = user_dir
-
-        return True
-
-    if not config.file_exists:
-
-        # The user has no configuration file, so they're starting from scratch.
-        # First, determine if this may be a "legacy" setup, where the user
-        # has the Scubagoggles installation in their own directory (as opposed
-        # to the Python "site packages" directory) and the output data and
-        # credentials are mixed in with the code hierarchy.  If the user has
-        # their environment set up this way, we don't want to force them into
-        # a different configuration unless we can't find their "legacy" files.
-
-        legacy_dir = find_legacy_dir(config)
-
-        user_dir = legacy_dir or config.output_dir
-
-        # Confirm with the user that this is the output directory they want
-        # to use.  The user is also asked whether the directory should be
-        # created if it doesn't exist.  We don't exit the loop until we
-        # have a valid directory.  Because the user hasn't entered any
-        # directory, we're forced to prompt (ignoring --noprompt).
-
-        verified = False
-
-        while not verified:
-            answer = prompt_string('Scubagoggles output directory', user_dir)
-
-            if not answer:
-                continue
-
-            user_dir = Path(os.path.expandvars(answer)).expanduser()
-
-            if not user_dir.exists():
-                answer = (create_dir
-                          or prompt_boolean(f'Create directory {user_dir}'))
-                if answer:
-                    print(f'  creating: {user_dir}')
-                    user_dir.mkdir(exist_ok = True)
-
-            verified = user_dir.is_dir()
-
-        user_dir = user_dir.resolve()
-
-        print(f'  {user_dir}')
-
-        if (not config.output_dir.exists()
-           or not user_dir.samefile(config.output_dir)):
-            config.output_dir = user_dir
-
-            return True
-
-        return False
-
-    # At this point, the user has an existing Scubagoggles configuration
-    # file.  We don't need to do anything other than ask to create the
-    # directory if it doesn't exist, but we don't change the directory set
-    # in the configuration file.
-
-    user_dir = config.output_dir
-
-    if not user_dir.exists():
-        answer = create_dir or prompt_boolean(f'Create directory {user_dir}')
-        if answer:
-            print(f'  creating: {user_dir}')
-            user_dir.mkdir(exist_ok = True)
-    else:
-        print(f'  {user_dir}')
-
-    return False
-
+    return config_changed
 
 def opa_directory(arguments: argparse.Namespace):
 
@@ -199,6 +118,7 @@ def opa_directory(arguments: argparse.Namespace):
         # We only need to check whether the OPA executable is indeed in that
         # location.
 
+        print(f"Updating the default OPA location to {opa_dir}")
         create_dir_download_opa(opa_dir, download)
 
         if check:
@@ -221,7 +141,7 @@ def opa_directory(arguments: argparse.Namespace):
         if check:
             validate_opa_dir(config.opa_dir)
         else:
-            print(f'  {config.opa_dir}')
+            log.debug('  %s', config.opa_dir)
 
         return False
 
@@ -264,9 +184,8 @@ def create_dir_download_opa(opa_dir: Path, download: bool):
 
         opa = opa_filespec(opa_dir)
         if not opa.exists():
-            print(f'  downloading: {opa.name}')
+            print(f'OPA executable not present, downloading: {opa.name}')
             download_opa(opa_dir, verify = True)
-
 
 def validate_opa_dir(opa_dir: Path = None):
 
@@ -288,7 +207,7 @@ def validate_opa_dir(opa_dir: Path = None):
         if opa_exe:
             where = ('' if opa_dir and opa_dir.samefile(opa_exe.parent)
                      else ' from PATH')
-            print(f'  OPA executable: {opa_exe}{where}')
+            log.info('  OPA executable: %s%s', opa_exe, where)
 
     except FileNotFoundError:
         opa_exe = None
@@ -319,7 +238,7 @@ def credentials_file(arguments: argparse.Namespace):
     if credentials:
         # The user has explicitly specified the credentials file.  We only
         # need to check whether the file exists.
-
+        print(f"Updating the default credentials file to {credentials}")
         if check and not credentials.is_file():
             raise FileNotFoundError(f'? {credentials} - file not found')
 
@@ -329,49 +248,3 @@ def credentials_file(arguments: argparse.Namespace):
 
         return True
     return False
-
-def find_legacy_dir(config):
-
-    """Looks for a "legacy" setup directory and returns it, if found.
-    Otherwise, None is returned.
-
-    The initial setup for users was to have them unpack the Scubagoggles
-    code into their own directory, where the credentials file, OPA executable,
-    and output directories would also be located.  Users may now install
-    Scubagoggles into the Python "site packages" directory, which is
-    preferable because it separates the code from the user's data.
-
-    This function attempts to find a legacy setup to avoid having to force
-    the user to move to the newer configuration - Scubagoggles should just
-    work with a legacy setup.
-
-    :param UserConfig config: the user's configuration data.
-
-    :return: a legacy directory (containing the credentials and/or
-        Scubagoggles output files) or None if the directory wasn't found.
-    """
-
-    legacy_dir = None
-
-    if not config.file_exists:
-
-        log.debug('  no config file, checking for "legacy" output directory')
-
-        baseline_dir_pattern = f'{default_file_names.output_folder_name}*'
-        patterns = ('credentials.json', baseline_dir_pattern)
-
-        # A legacy directory is either the user's current working directory
-        # (because they were instructed to run Scubagoggles from the current
-        # directory) or the Scubagoggles top directory.  If any of the typical
-        # user files are found in the directory, assume it's a legacy directory.
-
-        for curr_dir in (Path.cwd(), Path(__file__).parent.parent):
-
-            is_legacy = any(len(list(curr_dir.glob(p))) for p in patterns)
-
-            if is_legacy:
-                log.debug('  found %s', curr_dir)
-                legacy_dir = curr_dir
-                break
-
-    return legacy_dir

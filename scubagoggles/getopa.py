@@ -39,11 +39,6 @@ def getopa(arguments: argparse.Namespace):
                                'run "setup" first (see documentation)')
 
     if not opa_dir.is_dir():
-        answer = prompt_boolean(f'Create directory {opa_dir}')
-        if not answer:
-            log.error('OPA directory required')
-            return
-
         opa_dir.mkdir(exist_ok = True)
 
     if arguments.opa_directory and not config.opa_dir:
