@@ -7,7 +7,6 @@ location, etc.).
 
 import argparse
 import logging
-import os
 
 from collections import namedtuple
 from pathlib import Path
@@ -241,7 +240,7 @@ def credentials_file(arguments: argparse.Namespace):
         if check and not credentials.is_file():
             raise FileNotFoundError(f'? {credentials} - file not found')
 
-        log.debug(f'  specified file: %s', credentials)
+        log.debug('  specified file: %s', credentials)
 
         config.credentials_file = credentials.resolve()
 

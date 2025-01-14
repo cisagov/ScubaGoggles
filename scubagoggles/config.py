@@ -34,7 +34,7 @@ class UserConfig:
 
     _main = _defaults['scubagoggles']
 
-    _defaults['scubagoggles']['credentials'] = (f'./credentials.json')
+    _defaults['scubagoggles']['credentials'] = './credentials.json'
 
     _default_config_file = Path('~/.scubagoggles/userdefaults.yaml').expanduser()
 
