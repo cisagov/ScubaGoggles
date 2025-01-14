@@ -76,13 +76,13 @@ def user_directory(arguments: argparse.Namespace):
     config = arguments.user_config
 
     config_changed = False
-    if arguments.work_directory:
+    if arguments.outputpath:
         # The user has explicitly specified an output directory to be used.
         # We only need to check whether the directory already exists and
         # save to config
-        print(f"Updating the default output location to {arguments.work_directory}")
-        arguments.work_directory = arguments.work_directory.resolve()
-        config.output_dir = arguments.work_directory
+        print(f"Updating the default output location to {arguments.outputpath}")
+        arguments.outputpath = arguments.outputpath.resolve()
+        config.output_dir = arguments.outputpath
         config_changed = True
 
     # Check to ensure the directory specified in the config exists
@@ -110,7 +110,7 @@ def opa_directory(arguments: argparse.Namespace):
     check = not arguments.nocheck
     config = arguments.user_config
     download = not arguments.nodownload and check
-    opa_dir = arguments.opa_directory
+    opa_dir = arguments.opapath
 
     if opa_dir:
 
@@ -124,7 +124,7 @@ def opa_directory(arguments: argparse.Namespace):
         if check:
             validate_opa_dir(opa_dir)
         else:
-            print(f'  {opa_dir}')
+            log.debug('  %s', opa_dir)
 
         config.opa_dir = opa_dir.resolve()
 
@@ -234,7 +234,6 @@ def credentials_file(arguments: argparse.Namespace):
     check = not arguments.nocheck
     config = arguments.user_config
     credentials = arguments.credentials
-    prompt = not arguments.noprompt
     if credentials:
         # The user has explicitly specified the credentials file.  We only
         # need to check whether the file exists.
