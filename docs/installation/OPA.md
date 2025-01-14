@@ -1,11 +1,10 @@
 
 # Download the OPA executable
 
-The tool makes use of [Open Policy Agent's Rego Policy language]
-(https://www.openpolicyagent.org/docs/latest/policy-language/). There
+The tool makes use of [Open Policy Agent's Rego Policy language](https://www.openpolicyagent.org/docs/latest/policy-language/). There
 are three ways users can obtain the OPA executable:
 1. Using the provided setup utility
-2. Using the provided `getopa` utility
+2. Using the provided getopa utility
 3. Manually downloading the OPA executable.
 
 ## ScubaGoggles Setup Utility

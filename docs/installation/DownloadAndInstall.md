@@ -50,7 +50,8 @@ the `venv` Python module.
 2. Use the `cd` (change directory) command to navigate to the location where you want
 to create the virtual environment directory.
 
-3. Create the virtual environment. In this example, the directory that will be
+3. Create the virtual environment using the appropriate command from the following table.
+In this example, the directory that will be
 created is called `scuba-env`, but you may use a different name.
 
 | OS | Command |
@@ -58,7 +59,7 @@ created is called `scuba-env`, but you may use a different name.
 | Windows | `python -m venv scuba-env` |
 | Linux and macOS | `python3 -m venv scuba-env` |
 
-4. Activate the virtual environment.
+4. Activate the virtual environment using the appropriate command from the following table:
 
 | Environment | Command |
 | ---- | ---- |
