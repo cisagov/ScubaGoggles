@@ -22,7 +22,7 @@ class UserConfig:
     # FWIW, this was originally implemented using TOML (Tom's Obvious Minimal
     # Language) (hence the reference to "_doc"), but was converted to use YAML
     # for compatibilty with the other user configuration.  For ScubaGoggles,
-    # the configuration file is named stored at ~/.scubagoggles/scubadefaults.yaml.
+    # the configuration file is named stored at ~/.scubagoggles/userdefaults.yaml.
 
     _defaults = {'scubagoggles': {'opa_dir': '~/.scubagoggles',
                                   'output_dir': '.'}}
