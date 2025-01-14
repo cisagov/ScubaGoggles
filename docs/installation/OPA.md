@@ -55,8 +55,7 @@ you may have specified the location of the OPA executable. `getupa` will save th
 ## Downloading the OPA Executable from the OPA Website
 
 1. If the above options can not execute for any reason or you would prefer to
-   download OPA manually, go to the [Open Policy Agent website]
-   (https://www.openpolicyagent.org/docs/latest/#running-opa)
+   download OPA manually, go to the [Open Policy Agent website](https://www.openpolicyagent.org/docs/latest/#running-opa)
 2. Check the website for a compatible OPA version (Currently v0.45.0 and above)
    for ScubaGoggles and select the corresponding version on top left of the
    website.
