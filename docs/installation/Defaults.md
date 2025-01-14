@@ -5,13 +5,13 @@ There are several options that users can configure ScubaGoggles to use by defaul
 - The location for saving ScubaGoggles output
 - The location of the user's credentials file
 
-The provided `setup` utility is the mechanism of specifying these default values.
+The provided `setup` utility is the mechanism of specifying these default values. None of the steps listed on this page are mandatory,
+but should make executing ScubaGoggles easier.
 
 ## OPA location
-See [Download the OPA Executable](/docs/installation/OPA.md) for instructions on obtaining the OPA executable. If the
-user used the `setup` utility for the initial OPA download, no further configuration is necessary. If the user
-downloaded the executable manually or for whatever reason desires to change the default OPA path, use the following
-command:
+If the user used the `setup` utility for the initial OPA download, ScubaGoggles is already configured with the OPA location;
+no further configuration is necessary. However, if the user downloaded the executable manually or for whatever reason
+desires to change the default OPA path, use the following command:
 ```
 scubagoggles setup --opapath [path to executable]
 ```
@@ -25,7 +25,7 @@ scubagoggles setup --outputpath [path to output directory]
 
 ## User Credentials
 ScubaGoggles leverages credentials stored in a JSON file to authenticate to Google's APIs. After creating this JSON file
-(see [Prerequisites](../prerequisites/Prerequisites.md) and [Authentication Methods](/docs/authentication/AuthenticationMethods.md)), the `setup` utility can be used to indicate the credentials file the should be used by default:
+(see [Prerequisites](../prerequisites/Prerequisites.md) and [Authentication Methods](/docs/authentication/AuthenticationMethods.md)), the `setup` utility can be used to indicate the credentials file that should be used by default:
 ```
 scubagoggles setup --credentials [path to JSON credentials file]
 ```
