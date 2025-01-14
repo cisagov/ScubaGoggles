@@ -234,33 +234,13 @@ def opa_directory(arguments: argparse.Namespace):
         return False
 
     # There's no OPA executable directory defined, and we haven't found the
-    # executable in the User's PATH, so we have to ask for the location. Suggest
-    # the output directory as the default location. Because the user hasn't
-    # entered any directory, we're forced to prompt (ignoring --noprompt).
-
-    default_dir = config.opa_dir
-    while not opa_dir:
-        answer = prompt_string('Location of OPA executable', default_dir)
-
-        if not answer:
-            continue
-
-        answer = Path(os.path.expandvars(answer)).expanduser().absolute()
-
-        if not answer.exists():
-            create_dir |= prompt_boolean(f'Create directory {answer}')
-
-        create_dir_download_opa(answer, create_dir, download)
-
-        if validate_opa_dir(answer) or answer.is_dir():
-            opa_dir = answer
-
-    config.opa_dir = opa_dir.resolve()
-
+    # executable in the User's PATH, so we use the default location defined
+    # in config.py
+    create_dir_download_opa(config.opa_dir, download)
     return True
 
 
-def create_dir_download_opa(opa_dir: Path, create_dir: bool, download: bool):
+def create_dir_download_opa(opa_dir: Path, download: bool):
 
     """Helper function that checks the given OPA executable directory,
     and creates it if it doesn't exist (and the user hasn't suppressed it).
@@ -273,8 +253,8 @@ def create_dir_download_opa(opa_dir: Path, create_dir: bool, download: bool):
         exists and the OPA executable is missing.
     """
 
-    if not opa_dir.exists() and create_dir:
-        print(f'  creating: {opa_dir}')
+    if not opa_dir.exists():
+        log.debug(f'  creating: {opa_dir}')
         opa_dir.mkdir(exist_ok = True)
 
     if opa_dir.exists() and download:
