@@ -190,7 +190,6 @@ def opa_directory(arguments: argparse.Namespace):
 
     check = not arguments.nocheck
     config = arguments.user_config
-    create_dir = arguments.mkdir
     download = not arguments.nodownload and check
     opa_dir = arguments.opa_directory
 
@@ -200,7 +199,7 @@ def opa_directory(arguments: argparse.Namespace):
         # We only need to check whether the OPA executable is indeed in that
         # location.
 
-        create_dir_download_opa(opa_dir, create_dir, download)
+        create_dir_download_opa(opa_dir, download)
 
         if check:
             validate_opa_dir(opa_dir)
@@ -217,7 +216,7 @@ def opa_directory(arguments: argparse.Namespace):
         # executable directory.  We just validate the directory and don't
         # change anything.
 
-        create_dir_download_opa(config.opa_dir, create_dir, download)
+        create_dir_download_opa(config.opa_dir, download)
 
         if check:
             validate_opa_dir(config.opa_dir)
@@ -254,7 +253,7 @@ def create_dir_download_opa(opa_dir: Path, download: bool):
     """
 
     if not opa_dir.exists():
-        log.debug(f'  creating: {opa_dir}')
+        log.debug('  creating: %s', opa_dir)
         opa_dir.mkdir(exist_ok = True)
 
     if opa_dir.exists() and download:
