@@ -8,7 +8,7 @@ Only complete this section if not authenticating via [OAuth](OAuth.md). See [Aut
 1. From the hamburger menu, select **IAM & Admin** -> **Service Accounts**
 1. Select **CREATE SERVICE ACCOUNT**. Fill out the id field and then select **DONE**
 1. Click on the newly created service account then click **KEYS** -> **ADD KEY** -> **Create new key** -> **JSON** -> **CREATE**
-1. Move the downloaded file (begins with `<service account>*.json`) to the root directory folder of this repo, rename to `credentials.json`
+1. Optionally run the following command to configure ScubaGoggles to use those credentials by default: `scubagoggles setup --credentials [path to JSON credentials file]`. If you skip this step, the credentials path can be indicated at run time using the `credentials` parameter (see [Parameters](/docs/usage/Parameters.md)).
 1. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and data control** -> **API controls**
 1. Select **MANAGE DOMAIN WIDE DELEGATION**
 1. Select **Add new**

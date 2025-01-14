@@ -28,13 +28,7 @@ bars on top of each other), and select **APIs & Services** -> **OAuth consent sc
 1. Click **CREATE**
 1. Click **DOWNLOAD JSON** from the resulting **OAuth client created** page
 1. Click **OK**
-1. Move the downloaded file (begins with `client_secret*.json`) to the
-   location and name you specified when you ran the
-   [ScubaGoggles setup utility](../installation/DownloadAndInstall.md#ScubaGoggles-Setup-Utility).
-   If you have not yet run the setup utility, you will specify this file as the
-   credentials file when prompted by the setup utility.  You'll make it easier
-   on yourself if you rename the file to something simple, like
-   `credentials.json`.
+1. Optionally run the following command to configure ScubaGoggles to use those credentials by default: `scubagoggles setup --credentials [path to JSON credentials file]`. If you skip this step, the credentials path can be indicated at run time using the `credentials` parameter (see [Parameters](/docs/usage/Parameters.md)).
 1. Go back the menu on the left and click **Enabled API Services**
 1. In the center screen click **Enabled APIs & Services**
 1. Search for and enable the **Admin SDK API**

@@ -2,8 +2,26 @@
 # Download the OPA executable
 
 The tool makes use of [Open Policy Agent's Rego Policy language]
-(https://www.openpolicyagent.org/docs/latest/policy-language/).  By default,
-the `scubagoggles setup` command downloads the OPA executable.  You will only
+(https://www.openpolicyagent.org/docs/latest/policy-language/). There
+are three ways users can obtain the OPA executable:
+1. Using the provided setup utility
+2. Using the provided `getopa` utility
+3. Manually downloading the OPA executable.
+
+## ScubaGoggles Setup Utility
+The ScubaGoggles setup utility performs the initial configuration of ScubaGoggles,
+including downloading OPA if needed. Execute it using the following command:
+```shell
+scubagoggles setup
+```
+
+> [!NOTE]
+> There are several advanced configuration options for setup that allow users to indicate serveral default parameters
+for ScubaGoggles. Advanced users may use these options now if desired, but these defaults can be configured at any time.
+See [Configuring Defaults](../installation/Defaults.md) for more details.
+
+## Getopa Utility
+You will only
 need to download the OPA executable separately if you need a **specific**
 version.  Otherwise, you may skip this step and continue to
 [Prerequisites](../prerequisites/Prerequisites.md).
@@ -39,7 +57,7 @@ download the executable to a location that is in the PATH environment variable.
 
 ## Downloading the OPA Executable from the OPA Website
 
-1. If the above script can not execute for any reason or you would prefer to
+1. If the above options can not execute for any reason or you would prefer to
    download OPA manually, go to the [Open Policy Agent website]
    (https://www.openpolicyagent.org/docs/latest/#running-opa)
 2. Check the website for a compatible OPA version (Currently v0.45.0 and above)
@@ -49,6 +67,7 @@ download the executable to a location that is in the PATH environment variable.
    `Introduction -> Running OPA -> Download OPA`
 4. Follow the instructions for downloading the respective OPA executable for
    your OS.
+5. Run `scubagoggles setup --opa_directory [path to executable]` to configure ScubaGoggles to use the newly dowloaded executable as the default OPA location.
 
 > [!NOTE]
 > For linux and macOS, you must make sure the OPA executable has execute
@@ -62,5 +81,5 @@ chmod u+x opa
 ```
 
 ## Navigation
-- Continue to [Prerequisites](../prerequisites/Prerequisites.md)
+- Continue to [Configuring Defaults](../installation/Defaults.md)
 - Return to [Documentation Home](/README.md)
