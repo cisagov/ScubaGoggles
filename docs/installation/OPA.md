@@ -31,7 +31,7 @@ command:
 
 ```
 scubagoggles getopa --help
-usage: scubagoggles getopa [-h] [--nocheck] [--force] [--version <OPA-version>] [--opa_directory <directory>]
+usage: scubagoggles getopa [-h] [--nocheck] [--force] [--version <OPA-version>] [--opapath <directory>]
 
 Download OPA executable
 
@@ -41,7 +41,7 @@ options:
   --force, -f           Overwrite existing OPA executable
   --version <OPA-version>, -v <OPA-version>
                         Version of OPA to download (default: latest version)
-  --opa_directory <directory>, -r <directory>
+  --opapath <directory>, -r <directory>
                         Directory containing OPA executable (default: location established by setup)
 ```
 ```bash
@@ -50,9 +50,7 @@ scubagoggles getopa -v v0.60.0
 ```
 
 If you have run the [ScubaGoggles setup utility](DownloadAndInstall.md#ScubaGoggles-Setup-Utility),
-you will have specified the location of the OPA executable.  This location is
-used by `getopa` when downloading the OPA executable.  Optionally, you may
-download the executable to a location that is in the PATH environment variable.
+you may have specified the location of the OPA executable. `getupa` will save the OPA executable to this location.  Optionally, you may specify an alternate location for the executable, such as a location that is in the PATH environment variable.
 
 ## Downloading the OPA Executable from the OPA Website
 
