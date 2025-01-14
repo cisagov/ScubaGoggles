@@ -238,7 +238,7 @@ def opa_directory(arguments: argparse.Namespace):
     # the output directory as the default location. Because the user hasn't
     # entered any directory, we're forced to prompt (ignoring --noprompt).
 
-    default_dir = config.output_dir
+    default_dir = config.opa_dir
     while not opa_dir:
         answer = prompt_string('Location of OPA executable', default_dir)
 
