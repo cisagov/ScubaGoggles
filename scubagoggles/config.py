@@ -22,8 +22,7 @@ class UserConfig:
     # FWIW, this was originally implemented using TOML (Tom's Obvious Minimal
     # Language) (hence the reference to "_doc"), but was converted to use YAML
     # for compatibilty with the other user configuration.  For ScubaGoggles,
-    # the configuration file is named .scubagoggles (note the leading dot),
-    # located in the user's home directory.
+    # the configuration file is named stored at ~/.scubagoggles/scubadefaults.yaml.
 
     _defaults = {'scubagoggles': {'opa_dir': None,
                                   'output_dir': '~/scubagoggles'}}
@@ -38,7 +37,7 @@ class UserConfig:
     _defaults['scubagoggles']['credentials'] = (f'{_main["output_dir"]}/'
                                                 'credentials.json')
 
-    _default_config_file = Path('~/.scubagoggles').expanduser()
+    _default_config_file = Path('~/.scubagoggles/userdefaults.yaml').expanduser()
 
     def __init__(self, config_file: Union[str, os.PathLike] = None):
 
@@ -190,6 +189,12 @@ class UserConfig:
 
         """Writes the configuration document in YAML format.
         """
+
+        # Since the default location for the config is
+        # ~/.scubagoggles/scubadefaults.yaml, the .scubagoggles
+        # folder may need to be created first
+        if not self._config_file.parent.exists():
+            self._config_file.parent.mkdir()
 
         with self._config_file.open('w', encoding = 'utf-8') as out_stream:
             dump(self._doc, out_stream, Dumper)
