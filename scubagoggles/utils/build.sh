@@ -32,7 +32,7 @@ shopt -s expand_aliases
 
 gitTag=
 outDir="$PWD"
-scubaGogglesGit='git@github.com:mitre/CISA-SCuBA-GWS-SCB.git'
+scubaGogglesGit='git@github.com:cisagov/ScubaGoggles.git'
 
 usage()
 {
