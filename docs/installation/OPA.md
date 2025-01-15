@@ -15,7 +15,7 @@ scubagoggles setup
 ```
 
 > [!NOTE]
-> There are several advanced configuration options for setup that allow users to indicate serveral default parameters
+> There are several advanced configuration options for setup that allow users to indicate several default parameters
 for ScubaGoggles. Advanced users may use these options now if desired, but these defaults can be configured at any time.
 See [Configuring Defaults](../installation/Defaults.md) for more details.
 
