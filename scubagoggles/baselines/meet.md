@@ -242,7 +242,9 @@ Automatic recordings for Google Meet SHALL be disabled.
 - _Last modified:_ January 2024
 
 - MITRE ATT&CK TTP Mapping
-  - 
+  - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+  - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
 
 ### Resources
 - [Choose automatic meeting artifact settings for your organization](https://support.google.com/a/answer/15496523?p=automaticmeetingrecords)
@@ -257,7 +259,10 @@ Automatic transcripts for Google Meet SHALL be disabled.
 - _Last modified:_ January 2024
 
 - MITRE ATT&CK TTP Mapping
-  - 
+  - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+  - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
+
 
 ### Resources
 - [Choose automatic meeting artifact settings for your organization](https://support.google.com/a/answer/15496523?p=automaticmeetingrecords)
