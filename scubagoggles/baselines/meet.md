@@ -14,6 +14,8 @@ This baseline is based on Google documentation available at [Google Meet setting
 -   [Internal Access to External Meetings](#2-internal-access-to-external-meetings)
 -   [Host Management Meeting Features](#3-host-management-meeting-features)
 -   [External Participants](#4-external-participants)
+-   [Incoming Calls](#5-incoming-calls)
+-   [Video Meeting Settings](#6-video-meeting-settings)
 
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
@@ -229,7 +231,7 @@ Incoming calls SHALL be restricted to contacts and other users in the organizati
 5.  Ensure **Users receive calls only from contacts and other users in the organization** or **Users can't receive calls** is selected.
 6.  Click **Save**.
 
-## 6. Automatic Meeting Recording and Transcripts
+## 6. Video Meeting Settings
 
 This section covers automatic recording and transcripts for Google Meet.
 
