@@ -248,6 +248,7 @@ Automatic recordings for Google Meet SHALL be disabled.
   - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
   - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
+  
 #### GWS.MEET.6.2v0.3
 Automatic transcripts for Google Meet SHALL be disabled.
 
