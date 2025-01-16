@@ -233,7 +233,7 @@ Incoming calls SHALL be restricted to contacts and other users in the organizati
 
 ## 6. Video Meeting Settings
 
-This section covers automatic recording and transcripts for Google Meet.
+This section covers Google Meet video settings such as automatic video recording and automatic transcription.
 
 ### Policies
 
@@ -242,23 +242,18 @@ Automatic recordings for Google Meet SHALL be disabled.
 
 - _Rationale:_ Automatic recordings could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024
+- _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
 
 - MITRE ATT&CK TTP Mapping
   - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
   - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
-
-### Resources
-- [Choose automatic meeting artifact settings for your organization](https://support.google.com/a/answer/15496523?p=automaticmeetingrecords)
-
-### Prerequisites
--   None
-
 #### GWS.MEET.6.2v0.3
 Automatic transcripts for Google Meet SHALL be disabled.
 
 - _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024
+- _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
 
 - MITRE ATT&CK TTP Mapping
   - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)
