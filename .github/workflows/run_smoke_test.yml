@@ -32,7 +32,7 @@ on:
         description: "Choose OPA version"
         required: true
         type: string
-        default: "v0.60.0"
+        default: "v1.0.0"
 
 jobs:
   configuration:
@@ -53,9 +53,9 @@ jobs:
 
           # Default values for other events
           else
-            operatingsystem_val="['macos-latest']"
+            operatingsystem_val="['windows-latest', 'macos-latest']"
             pythonversion_val="['3.10']"
-            opaversion_val="0.60.0"
+            opaversion_val="v1.0.0"
           fi
           echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
           echo "python-version=$pythonversion_val" >> "$GITHUB_OUTPUT"
@@ -106,4 +106,6 @@ jobs:
           json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
       - name: Run ScubaGoggles and check for correct output
-        run: pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+        run: |
+          ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
+          pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"

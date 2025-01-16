@@ -12,15 +12,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup virtualenv
+    - name: Virtual Environment Activation Definition - macOS or linux
+      shell: bash
+      run: >
+        echo "SCUBAGOGGLES_ACTIVATE_VENV=. .venv/bin/activate"
+        >> "$GITHUB_ENV"
+
+    - name: Setup virtual environment and install dependencies
       shell: bash
       run: |
         python -m venv .venv
-        source .venv/bin/activate
-
-    - name: Install dependencies
-      shell: bash
-      run: |
+        ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
         python -m pip install .
         pip install -r requirements.txt
         pip install pytest
@@ -29,5 +31,6 @@ runs:
     - name: Download OPA executable
       shell: bash
       run: |
+        ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
         scubagoggles setup -m -nc -nd -d ~/scubagoggles -r ~/scubagoggles -c credentials.json
         scubagoggles getopa -v ${{ inputs.opa-version }}
