@@ -944,7 +944,7 @@ Google Takeout services SHALL be disabled.
 ### Implementation
 
 #### GWS.COMMONCONTROLS.12.1v0.4 Instructions
-1.  Sign in to https://admin.google.com as an administrator.
+1.  Sign in to [Google Admin console](https://admin.google.com).
 2.  Select **Data** -\> **Data import & export** -\> **Google Takeout**.
 3.  Select **User access to Takeout for Google services**.
 4.  For services without an individual admin control, select **Services without an individual admin control** then **Edit**.
@@ -1260,7 +1260,7 @@ To configure additional services per the policy:
 
 ## 18. Data Loss Prevention
 
-Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP helps you control what users can share and helps prevent unintended exposure of sensitive information.
+Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP helps to prevent unintended exposure of sensitive information.
 
 DLP rules can use predefined content detectors to match PII (e.g., SSN), credentials (e.g., API keys), or specific document types (e.g., source code). Custom rules can also be applied based upon regex match or document labels.
 
@@ -1379,8 +1379,13 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
+<<<<<<< HEAD
 #### GWS.COMMONCONTROLS.18.4v0.4 Instructions
 1.  For each rule in the **Actions** section follow steps depending on application:
+=======
+#### GWS.COMMONCONTROLS.18.4v0.3 Instructions
+1.  For each rule in the **Actions** section follow these steps depending on application:
+>>>>>>> bf04dc6 (Most recent round of feedback)
     1. For Google Drive policies select **Block external sharing**.
     2. For Chat policies rules select **Block message** and select **External Conversations** and **Spaces**, **Group chats**, and **1:1 chats**.
     3. For Gmail policies select **Block message** and select **Messages sent to external recipients**.
