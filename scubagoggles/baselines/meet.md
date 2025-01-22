@@ -14,6 +14,8 @@ This baseline is based on Google documentation available at [Google Meet setting
 -   [Internal Access to External Meetings](#2-internal-access-to-external-meetings)
 -   [Host Management Meeting Features](#3-host-management-meeting-features)
 -   [External Participants](#4-external-participants)
+-   [Incoming Calls](#5-incoming-calls)
+-   [Video Meeting Settings](#6-video-meeting-settings)
 
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
@@ -228,3 +230,58 @@ Incoming calls SHALL be restricted to contacts and other users in the organizati
 4.  Click **Incoming call restrictions**.
 5.  Ensure **Users receive calls only from contacts and other users in the organization** or **Users can't receive calls** is selected.
 6.  Click **Save**.
+
+## 6. Video Meeting Settings
+
+This section covers Google Meet video settings such as automatic video recording and automatic transcription.
+
+### Policies
+
+#### GWS.MEET.6.1v0.3
+Automatic recordings for Google Meet SHALL be disabled.
+
+- _Rationale:_ Automatic recordings could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
+- _Last modified:_ January 2024
+- _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
+
+- MITRE ATT&CK TTP Mapping
+  - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+  - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
+  
+#### GWS.MEET.6.2v0.3
+Automatic transcripts for Google Meet SHALL be disabled.
+
+- _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
+- _Last modified:_ January 2024
+- _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
+
+- MITRE ATT&CK TTP Mapping
+  - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+  - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
+
+
+### Resources
+- [Choose automatic meeting artifact settings for your organization](https://support.google.com/a/answer/15496523?p=automaticmeetingrecords)
+
+### Prerequisites
+-   None
+
+### Implementation
+
+#### GWS.MEET.6.1v0.3 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
+3.  Click **Meet video settings**.
+4.  Click **Automatic recording**.
+5.  Ensure **Meetings are recorded by default** is unselected.
+6.  Click **Save**.
+
+#### GWS.MEET.6.2v0.3 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
+3.  Click **Meet video settings**.
+4.  Click **Automatic transcription**.
+5.  Ensure **Meetings are transcribed by default** is unselected.
+6.  Click **Save**. 
