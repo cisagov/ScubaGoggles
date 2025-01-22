@@ -51,5 +51,6 @@ jobs:
           files: |
             scubagoggles-*-py3-none-any.whl
             scubagoggles-*.tar.gz
+            scubagoggles-*.zip
           generate_release_notes: true
           fail_on_unmatched_files: true
