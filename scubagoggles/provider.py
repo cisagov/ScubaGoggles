@@ -416,17 +416,18 @@ class Provider:
         """
         Gets the high-level tenant info using the directory API
         """
-        tenantID = ''
-        try: 
-            response = self._services['directory'].customers().get(customerKey = self._customer_id).execute()
-            tenant_ID = response.get('id')
+        tenant_id = ''
+        try:
+            response = self._services['directory'].customers().get(
+                            customerKey = self._customer_id).execute()
+            tenant_id = response.get('id')
 
             primary_domain = 'Error Retrieving'
             for domain in self.list_domains():
                 if domain['isPrimary']:
                     primary_domain = domain['domainName']
             return {
-                'ID' : tenant_ID,
+                'ID' : tenant_id,
                 'domain': primary_domain,
                 'topLevelOU': self._top_ou
             }

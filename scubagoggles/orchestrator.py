@@ -232,7 +232,7 @@ class Orchestrator:
             settings_data = json.load(file)
         tenant_info = settings_data['tenant_info']
         tenant_domain = tenant_info['domain']
-        tenant_ID = tenant_info['ID']
+        tenant_id = tenant_info['ID']
         tenant_name = tenant_info['topLevelOU']
         successful_calls = set(settings_data['successful_calls'])
         unsuccessful_calls = set(settings_data['unsuccessful_calls'])
@@ -277,7 +277,7 @@ class Orchestrator:
         timestamp_zulu = timestamp_utc.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
 
         report_metadata = {
-            'TenantId':  tenant_ID,
+            'TenantId':  tenant_id,
             'DisplayName':  tenant_name,
             'DomainName':  tenant_domain,
             'ProductSuite':  'GWS',
@@ -296,7 +296,7 @@ class Orchestrator:
             products_bar.set_description('Creating the HTML and JSON Report '
                                          f'for {product}...')
             reporter = Reporter(product,
-                                tenant_ID,
+                                tenant_id,
                                 tenant_name,
                                 tenant_domain,
                                 main_report_name,
