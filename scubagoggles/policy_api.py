@@ -479,7 +479,7 @@ class PolicyAPI:
 
             response = self._get(url, params)
 
-            for group_data in response['groups']:
+            for group_data in response.get('groups', ()):
                 group_id = group_data['id']
                 group_id_map[group_id] = group_data['name']
 
