@@ -615,7 +615,14 @@ class PolicyAPI:
             if 'group' in policy['policyQuery']:
                 group_id = policy['policyQuery']['group']
                 group_id = group_id.removeprefix('groups/')
-                group_name = self._group_id_map[group_id]
+                # NOTE: the get() handles the case where Google returns
+                # something that doesn't conform to their documented format
+                # (i.e., 'groups/<group-id>').  For example, Google will
+                # return "WORKSPACE_ALL_ADMIN_GROUP" as a value in some
+                # cases.  If the group id value doesn't conform to the
+                # expected format, the value is kept as received as the
+                # group name.
+                group_name = self._group_id_map.get(group_id, group_id)
                 orgunit_name += f' (group "{group_name}")'
 
             # The setting has two layers in the policies dictionary.  Depending
