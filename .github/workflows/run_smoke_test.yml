@@ -32,7 +32,7 @@ on:
         description: "Choose OPA version"
         required: true
         type: string
-        default: "v1.0.0"
+        default: latest
 
 jobs:
   configuration:
@@ -55,7 +55,7 @@ jobs:
           else
             operatingsystem_val="['windows-latest', 'macos-latest']"
             pythonversion_val="['3.10']"
-            opaversion_val="v1.0.0"
+            opaversion_val="latest"
           fi
           echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
           echo "python-version=$pythonversion_val" >> "$GITHUB_OUTPUT"
