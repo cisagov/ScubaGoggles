@@ -269,7 +269,7 @@ Agencies SHALL enable the security update for Drive files.
 
 ### Resources
 
--   [Google Workspace Admin Help: Security update for Google Drive](https://support.google.com/a/answer/10685032?hl=en-EN&fl=1&sjid=14749870194899350730-NA)
+-   [Google Workspace Admin Help: Manage the link-sharing security update for files](https://support.google.com/a/answer/10685032?hl=en-EN&fl=1&sjid=14749870194899350730-NA)
 
 ### Prerequisites
 
@@ -388,14 +388,14 @@ Google Drive for Desktop SHOULD be enabled only for authorized devices.
 #### GWS.DRIVEDOCS.6.1v0.4 Instructions
 To Disable Google Drive for Desktop:
 
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs-\>Google Drive for Desktop**.
 3.  Uncheck the **Allow Google Drive for desktop in your organization box** checkbox
 4.  Select **Save.**
 
 To limit Google Drive for Desktop to authorized devices:
 
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs-\>Google Drive for Desktop**.
 3.  Check the **Allow Google Drive for desktop in your organization box** checkbox.
 4.  Check the **Only allow Google Drive for desktop on authorized devices checkbox**.
