@@ -748,7 +748,7 @@ Google Workspace Sync SHOULD be disabled.
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
 
 #### GWS.GMAIL.10.2v0.3
-Google Workspace Sync MAY be enabled on a per-user basis as needed.
+Google Workspace Sync SHOULD be enabled on a per-user basis as needed.
 
 - _Rationale:_ Enabling Google Workspace Sync indiscriminately could potentially expose sensitive agency or organization data to unauthorized access or loss, posing a security risk. By only allowing Google Workspace Sync on a per-user basis as needed, this risk can be reduced, ensuring the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
