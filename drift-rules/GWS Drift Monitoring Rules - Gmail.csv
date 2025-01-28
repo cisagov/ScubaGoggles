@@ -37,7 +37,7 @@ GWS.GMAIL.8.1v0.3,User email uploads SHALL be disabled to protect against unauth
 GWS.GMAIL.9.1v0.3(a),POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.,Admin Log Event,Change Email Setting,IMAP_ACCESS,DISABLED,rules/00gjdgxs3ynriy0,JK 07-31-23 @ 11:07
 GWS.GMAIL.9.1v0.3(b),POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.,Admin Log Event,Change Email Setting,ENABLE_POP_ACCESS,false,rules/00gjdgxs16dhzcn,JK 07-31-23 @ 11:07
 GWS.GMAIL.10.1v0.3,Google Workspace Sync SHOULD be disabled.,Admin Log Event,Change Email Setting,ENABLE_OUTLOOK_SYNC,false,rules/00gjdgxs2caikn5,JK 07-31-23 @ 11:39
-GWS.GMAIL.10.2v0.3,Google Workspace Sync MAY be enabled on a per-user basis as needed.,N/A,N/A,N/A,N/A,N/A,Not Alertable
+GWS.GMAIL.10.2v0.3,Google Workspace Sync SHOULD be enabled on a per-user basis as needed.,N/A,N/A,N/A,N/A,N/A,Not Alertable
 GWS.GMAIL.11.1v0.3,"Automatic forwarding SHOULD be disabled, especially to external domains.",Admin Log Event,Change Email Setting,ENABLE_EMAIL_AUTOFORWARDING,false,rules/00gjdgxs3bfgdir,JK 07-31-23 @ 11:50
 GWS.GMAIL.12.1v0.3,Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers SHALL be disabled.,Admin Log Event,Change Email Setting,OUTBOUND_RELAY_ENABLED,false,rules/00gjdgxs0wkcpwf,JK 07-31-23 @ 11:38
 GWS.GMAIL.13.1v0.3,Unintended external reply warnings SHALL be enabled,Admin Log Event,Change Application Setting,OutOfDomainWarningProto disable_untrusted_recipient_warning,true,rules/00gjdgxs0o6v2pe,JK 07-31-23 @ 13:56
