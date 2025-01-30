@@ -1061,6 +1061,7 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 
 - _Rationale:_ Audit logs may be unavailable when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
 - _Last modified:_ January 30, 2024
+- _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets, for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies are free to use the tool that best fits their individual circumstances.
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -1074,6 +1075,8 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 -   [Google Cloud Operations Suite \| Aggregate and store your organization's logs](https://cloud.google.com/logging/docs/central-log-storage)
 -   [Google Cloud Architecture Center \| Google Logging export scenarios](https://cloud.google.com/architecture/design-patterns-for-exporting-stackdriver-logging?hl=en#logging_export_scenarios)
 -   [GWS Admin Help \| Data sources for GWS Audit and investigation page](https://support.google.com/a/answer/9725452)
+-   [GWS Admin Help \| Set up service log exports to BigQuery](https://support.google.com/a/answer/9079365)
+-   [GWS Admin Help \| Export your organization’s Drive inventory](https://support.google.com/a/answer/15141054)
 -   [Google Cloud Operations Suite \| Configure and Manage sinks – Google Cloud](https://cloud.google.com/logging/docs/export/configure_export_v2)
 -   [OMB M-21-31 \| Office of Management and Budget](https://www.whitehouse.gov/wp-content/uploads/2021/08/M-21-31-Improving-the-Federal-Governments-Investigative-and-Remediation-Capabilities-Related-to-Cybersecurity-Incidents.pdf)
 
