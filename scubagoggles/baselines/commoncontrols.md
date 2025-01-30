@@ -1061,8 +1061,7 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 
 - _Rationale:_ Audit logs may be unavailable when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
 - _Last modified:_ January 30, 2024
-- Notes
-  - Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets, for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies are free to use the tool that best fits their individual circumstances.
+- _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets, for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies are free to use the tool that best fits their individual circumstances.
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
