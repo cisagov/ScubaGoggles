@@ -738,20 +738,7 @@ Google Workspace Sync SHOULD be disabled.
 
 - _Rationale:_ Enabling Google Workspace Sync could potentially expose sensitive agency or organization data to unauthorized access or loss, posing a security risk. By disabling Google Workspace Sync, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:001: Exfiltration Over Alternative Protocol: Exfiltration Over Symmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/001/)
-    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
-    - [T1048:003: Exfiltration Over Alternative Protocol: Exfiltration Over Unencrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/003/)
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
-
-#### GWS.GMAIL.10.2v0.4
-Google Workspace Sync MAY be enabled on a per-user basis as needed.
-
-- _Rationale:_ Enabling Google Workspace Sync indiscriminately could potentially expose sensitive agency or organization data to unauthorized access or loss, posing a security risk. By only allowing Google Workspace Sync on a per-user basis as needed, this risk can be reduced, ensuring the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Note:_ Google Workspace Sync MAY be enabled on a per-user basis as needed.
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -773,18 +760,12 @@ Google Workspace Sync MAY be enabled on a per-user basis as needed.
 
 To configure the settings for Google Workspace Sync:
 
-#### Policy Group 10 Common Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
+#### GWS.GMAIL.10.1v0.4 Instructions
+1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
 3.  Select **End User Access -\> Google Workspace Sync**.
-
-#### GWS.GMAIL.10.1v0.4 Instructions
-1.  Uncheck the **Enable Google Workspace Sync for Microsoft Outlook for my users** checkbox.
-2.  Select **Save**.
-
-#### GWS.GMAIL.10.2v0.4 Instructions
-1.  There is no implementation steps for this policy.
-2.  Select **Save**.
+4.  Uncheck the **Enable Google Workspace Sync for Microsoft Outlook for my users** checkbox.
+5.  Select **Save**.
 
 
 ## 11. Automatic Forwarding
