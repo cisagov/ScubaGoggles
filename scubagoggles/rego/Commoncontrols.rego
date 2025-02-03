@@ -337,10 +337,14 @@ Check1_2_OK if {
 
 Check1_2_OK if {PolicyApiInUse}
 
-NonComplianceMessage1_2(value, expected) := sprintf("New user enrollment period (%s) %s (%s)",
-                                                    [utils.GetFriendlyDuration(value),
-                                                    "doesn't match expected",
-                                                    utils.GetFriendlyDuration(expected)])
+Prefix1_2 := "New user enrollment period"
+NonComplianceMessage1_2(value,
+                        expected) := sprintf("%s is NONE", [Prefix1_2]) if {
+                            value == 0
+                        } else := sprintf("%s %s (longer than %s)",
+                                          [Prefix1_2,
+                                           utils.GetFriendlyDuration(value),
+                                           utils.GetFriendlyDuration(expected)])
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
@@ -383,7 +387,10 @@ if {
     some OU, settings in input.policies
     enrollPeriod := settings.security_two_step_verification_grace_period.enrollmentGracePeriod
     enrollSeconds := utils.DurationToSeconds(enrollPeriod)
-    enrollSeconds != expectedPeriod
+    true in {
+        enrollSeconds == 0,
+        enrollSeconds > expectedPeriod
+    }
 }
 
 tests contains {

@@ -598,7 +598,11 @@ DurationToSeconds(duration) := durationSeconds if {
 # will convert the given seconds to a duration other than seconds that will
 # (hopefully) make more sense to the user.
 
-GetFriendlyDuration(Seconds) := "30 days" if {
+GetFriendlyDuration(Seconds) := "180 days" if {
+    Seconds == 15552000
+} else := "90 days" if {
+    Seconds == 7776000
+} else := "30 days" if {
     Seconds == 2592000
 } else := "14 days" if {
     Seconds == 1209600

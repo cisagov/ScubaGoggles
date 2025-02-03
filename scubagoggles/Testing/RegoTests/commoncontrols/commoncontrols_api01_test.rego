@@ -26,6 +26,10 @@ GoodCaseInputApi01 := {
         "nextOU": {
             "security_two_step_verification_grace_period": {
                 "enrollmentGracePeriod": "604800s"}
+        },
+        "thirdOU": {
+            "security_two_step_verification_grace_period": {
+                "enrollmentGracePeriod": "86400s"}
         }
     },
     "tenant_info": {
@@ -49,7 +53,7 @@ BadCaseInputApi01 := {
                 "allowEnrollment": false
             },
             "security_two_step_verification_grace_period": {
-                "enrollmentGracePeriod": "0s"}
+                "enrollmentGracePeriod": "1209600s"}
         },
         "nextOU": {
             "security_two_step_verification_enforcement": {
@@ -89,6 +93,9 @@ BadCaseInputApi01a := {
          "nextOU": {
             "security_login_challenges": {
                 "enableEmployeeIdChallenge": false
+            },
+            "security_two_step_verification_grace_period": {
+                "enrollmentGracePeriod": "0s"
             }
         }
     },
@@ -129,6 +136,16 @@ test_EnrollPeriod_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi01
 
     failedOU := [{"Name": "topOU",
+                  "Value": NonComplianceMessage1_2(1209600,
+                                                   utils.DurationToSeconds("7d"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_EnrollPeriod_Incorrect_2 if {
+    PolicyId := CommonControlsId1_2
+    Output := tests with input as BadCaseInputApi01a
+
+    failedOU := [{"Name": "nextOU",
                   "Value": NonComplianceMessage1_2(0,
                                                    utils.DurationToSeconds("7d"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
