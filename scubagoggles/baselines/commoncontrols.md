@@ -822,7 +822,7 @@ Access to Google Workspace applications by less secure apps that do not meet sec
 
 -   [RFC 6819](https://datatracker.ietf.org/doc/html/rfc6819)
 -   [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
--   [OMB M-22-09](https://www.whitehouse.gov/wp-content/uploads/2022/01/M-22-09.pdf)
+-   [OMB M-22-09](https://bidenwhitehouse.archives.gov/wp-content/uploads/2022/01/M-22-09.pdf)
 -   [GWS Admin Help \| Control which third-party & internal apps access GWS data](https://support.google.com/a/answer/7281227#zippy=%2Cstep-control-api-access%2Cstep-restrict-or-unrestrict-google-services%2Cbefore-you-begin-review-authorized-third-party-apps%2Cstep-manage-third-party-app-access-to-google-services-add-apps)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
 -   [GWS Admin Help \| Control access to less secure apps](https://support.google.com/a/answer/6260879?hl=en)
