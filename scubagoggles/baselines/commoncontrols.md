@@ -98,7 +98,7 @@ Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 
 - _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
 - _Last modified:_ August 17, 2023
 - _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
-		on Google 2SV. Setting the new user enrollment period to none will also lock
+		on Google 2SV.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -193,7 +193,7 @@ To enforce Phishing-Resistant 2-Step Verification (MFA) for all users, use the G
 5.  Select **Save**
 
 #### GWS.COMMONCONTROLS.1.2v0.3 Instructions
-1.  Set **New user enrollment** period to at most **1 Week**.
+1.  Set **New user enrollment** period to at least **1 Day** or at most **1 Week**.
 2.  Select **Save**
 
 #### GWS.COMMONCONTROLS.1.3v0.3 Instructions
