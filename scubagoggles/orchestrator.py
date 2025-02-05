@@ -352,15 +352,12 @@ class Orchestrator:
             total_output.update({'Results': results})
 
         args_dict = vars(args)
-        param_out_path = out_folder / 'args_param.json'
-
-        with param_out_path.open(mode='w', encoding='UTF-8') as parm_file:
-            json.dump(args_dict, parm_file, indent=4, cls=ArgumentsEncoder)
-
+        
         # Create the ScubaResults files
         scuba_results_file = out_folder / f'{args.outputproviderfilename}.json'
         with scuba_results_file.open(encoding='UTF-8') as file:
             raw_data = json.load(file)
+            raw_data.update({"scuba_config":args_dict})
         total_output.update({'Raw': raw_data})
 
         report_file = out_folder / f'{out_jsonfile}.json'
