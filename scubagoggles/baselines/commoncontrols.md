@@ -518,9 +518,9 @@ To configure a strong password policy is configured, use the Google Workspace Ad
 
 ## 6. Highly Privileged Accounts
 
-Highly privileged accounts represent significant risk to an agency if compromised or if insiders use them in an unauthorized way. Highly privileged accounts share the same risk factors related to the catastrophic impacts on GWS services, user community and agency data, if compromised. This section supports the definition of highly privileged accounts and the controls necessary to protect them.
+Highly privileged accounts represent significant risk to an agency if compromised or if insiders use them in an unauthorized way. Highly privileged accounts share the same risk factors related to the catastrophic impacts on GWS services, user community and agency data, if compromised. This section supports the definition of highly privileged accounts based on permissions an account has and the controls necessary to protect them.
 
-Pre-Built GWS Admin Roles considered highly privileged:
+Some examples of privileged accounts included the pre-built GWS Admin Roles:
 
 -   Super Admin: This role possesses critical control over the entire GWS structure. It has access to all features in the Admin Console and Admin API and can manage every aspect of agency GWS accounts.
 -   User Management Admin: This account has rights to add, remove, and delete normal users in addition to managing all user passwords, security settings, and other management tasks that make it potentially crucial if compromised.
