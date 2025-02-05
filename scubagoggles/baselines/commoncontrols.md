@@ -603,11 +603,7 @@ By changing the email address, the user resolves the conflict by ensuring that t
 
 ### Policies
 
-<<<<<<< HEAD
 #### GWS.COMMONCONTROLS.7.1v0.4
-=======
-#### GWS.COMMONCONTROLS.7.1v0.3
->>>>>>> 44461f3 (Change Common Controls 7.1 to SHOULD and update Common Controls Policy Group 17 resource link (#558))
 Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed ones.
 
 - _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by workspace admins. By resolving conflicting accounts, you ensure all users in your workspace are using managed accounts.
