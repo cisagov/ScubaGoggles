@@ -1,5 +1,8 @@
 package gmail
+
 import future.keywords
+import data.utils.FailTestOUNonCompliant
+import data.utils.PassTestResult
 
 #
 # GWS.GMAIL.9.1
@@ -36,11 +39,7 @@ test_ImapAccess_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_ImapAccess_Incorrect_V1 if {
@@ -74,12 +73,9 @@ test_ImapAccess_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "POP and IMAP access are enabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": GetFriendlyValue9_1(true, true)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ImapAccess_Incorrect_V2 if {
@@ -113,12 +109,9 @@ test_ImapAccess_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "POP and IMAP access are enabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": GetFriendlyValue9_1(true, true)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ImapAccess_Incorrect_V3 if {
@@ -172,11 +165,8 @@ test_ImapAccess_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "IMAP access is enabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                 "Value": GetFriendlyValue9_1(true, false)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

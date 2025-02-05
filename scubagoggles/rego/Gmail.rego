@@ -37,21 +37,42 @@ LogEvents := utils.GetEvents("gmail_logs")
 
 GmailId1_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.1.1")
 
+LogMessage1_1 := "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN"
+
+Check1_1_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage1_1, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check1_1_OK if {PolicyApiInUse}
+
+NonComplianceMessage1_1(value) := sprintf("Mail delegation is %s", [value])
+
 # Cannot be controlled at group level
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": concat(" ", [
-        "Mail delegation is set to",
-        GetFriendlyEnabledValue(LastEvent.NewValue)
-    ])
+    "Value": NonComplianceMessage1_1(GetFriendlyEnabledValue(LastEvent.NewValue))
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage1_1, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
+}
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_1(GetFriendlyEnabledValue(mailDelegation))
+}
+if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    mailDelegation := settings.gmail_mail_delegation.enableMailDelegation
+    mailDelegation
 }
 
 tests contains {
@@ -63,9 +84,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := true
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_1_OK
 }
 
 tests contains {
@@ -77,8 +98,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN", utils.TopLevelOU)
-    count(Events) > 0
+    Check1_1_OK
     Status := count(NonCompliantOUs1_1) == 0
 }
 #--
@@ -318,7 +338,8 @@ if {
 NonCompliantOUs5_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage5_1(GetFriendlyEnabledValue(noEncrypt))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     noEncrypt := settings.gmail_email_attachment_safety.enableEncryptedAttachmentProtection
@@ -332,7 +353,8 @@ tests contains {
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
-} if {
+}
+if {
     not PolicyApiInUse
     DefaultSafe := true
     not Check5_1_OK
@@ -389,7 +411,8 @@ if {
 NonCompliantOUs5_2 contains {
     "Name": OU,
     "Value": NonComplianceMessage5_2(GetFriendlyEnabledValue(noEncrypt))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     noEncrypt := settings.gmail_email_attachment_safety.enableAttachmentWithScriptsProtection
@@ -462,7 +485,8 @@ if {
 NonCompliantOUs5_3 contains {
     "Name": OU,
     "Value": NonComplianceMessage5_3(GetFriendlyEnabledValue(protectAtt))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     protectAtt := settings.gmail_email_attachment_safety.enableAnomalousAttachmentProtection
@@ -534,7 +558,8 @@ if {
 NonCompliantOUs5_4 contains {
     "Name": OU,
     "Value": NonComplianceMessage5_4(GetFriendlyEnabledValue(futureAtt))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     futureAtt := settings.gmail_email_attachment_safety.applyFutureRecommendedSettingsAutomatically
@@ -647,7 +672,8 @@ NonCompliantOUs5_5 contains {
     "Value": GetFriendlyValue5_5(LastEventEncryptedAttachment.NewValue,
         LastEventAttachmentWithScripts.NewValue,
         LastEventAnomalousAttachment.NewValue)
-} if {
+}
+if {
     not PolicyApiInUse
     some OU in utils.OUsWithEvents
     EncryptedAttachmentEvents := utils.FilterEventsOU(LogEvents,
@@ -685,7 +711,8 @@ AttachConfigs := [
 NonCompliantOUs5_5 contains {
     "Name": OU,
     "Value": NonComplianceMessage5_5(types)
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     types := [config.type |
@@ -769,7 +796,8 @@ NonComplianceMessage6_1(value) := sprintf("Identify links behind shortened URLs 
 NonCompliantOUs6_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage6_1(GetFriendlyEnabledValue(LastEvent.NewValue))
-} if {
+}
+if {
     not PolicyApiInUse
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, LogMessage6_1, OU)
@@ -782,7 +810,8 @@ NonCompliantOUs6_1 contains {
 NonCompliantOUs6_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage6_1(GetFriendlyEnabledValue(shortLinks))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     shortLinks := settings.gmail_links_and_external_images.enableShortenerScanning
@@ -853,7 +882,8 @@ if {
 NonCompliantOUs6_2 contains {
     "Name": OU,
     "Value": NonComplianceMessage6_2(GetFriendlyEnabledValue(scanImages))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     scanImages := settings.gmail_links_and_external_images.enableExternalImageScanning
@@ -927,7 +957,8 @@ if {
 NonCompliantOUs6_3 contains {
     "Name": OU,
     "Value": NonComplianceMessage6_3(GetFriendlyEnabledValue(warnEnabled))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     warnEnabled := settings.gmail_links_and_external_images.enableAggressiveWarningsOnUntrustedLinks
@@ -1000,7 +1031,8 @@ if {
 NonCompliantOUs6_4 contains {
     "Name": OU,
     "Value": NonComplianceMessage6_4(GetFriendlyEnabledValue(applyFuture))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     applyFuture := settings.gmail_links_and_external_images.applyFutureSettingsAutomatically
@@ -1095,7 +1127,8 @@ if {
 NonCompliantOUs7_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage7_1(GetFriendlyEnabledValue(spoofProtect))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     spoofProtect := settings.gmail_spoofing_and_authentication.detectDomainNameSpoofing
@@ -1168,7 +1201,8 @@ if {
 NonCompliantOUs7_2 contains {
     "Name": OU,
     "Value": NonComplianceMessage7_2(GetFriendlyEnabledValue(spoofProtect))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     spoofProtect := settings.gmail_spoofing_and_authentication.detectEmployeeNameSpoofing
@@ -1241,7 +1275,8 @@ if {
 NonCompliantOUs7_3 contains {
     "Name": OU,
     "Value": NonComplianceMessage7_3(GetFriendlyEnabledValue(spoofProtect))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     spoofProtect := settings.gmail_spoofing_and_authentication.detectDomainSpoofingFromUnauthenticatedSenders
@@ -1314,7 +1349,8 @@ if {
 NonCompliantOUs7_4 contains {
     "Name": OU,
     "Value": NonComplianceMessage7_4(GetFriendlyEnabledValue(unauthEmail))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     unauthEmail := settings.gmail_spoofing_and_authentication.detectUnauthenticatedEmails
@@ -1387,7 +1423,8 @@ if {
 NonCompliantOUs7_5 contains {
     "Name": OU,
     "Value": NonComplianceMessage7_5(GetFriendlyEnabledValue(detectSpoof))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     detectSpoof := settings.gmail_spoofing_and_authentication.detectDomainSpoofingFromUnauthenticatedSenders
@@ -1515,7 +1552,8 @@ NonCompliantOUs7_6 contains {
     "Value": GetFriendlyValue7_6(LastEventDomainNames.NewValue, LastEventEmployeeNames.NewValue,
         LastEventInboundEmails.NewValue, LastEventUnauthenticatedEmails.NewValue,
         LastEventGroupEmails.NewValue)
-} if {
+}
+if {
     not PolicyApiInUse
     some OU in utils.OUsWithEvents
 
@@ -1570,7 +1608,8 @@ SpoofConfigs := [
 NonCompliantOUs7_6 contains {
     "Name": OU,
     "Value": NonComplianceMessage7_6(types)
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     types := [config.type |
@@ -1647,7 +1686,8 @@ if {
 NonCompliantOUs7_7 contains {
     "Name": OU,
     "Value": NonComplianceMessage7_7(GetFriendlyEnabledValue(applyFuture))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     applyFuture := settings.gmail_spoofing_and_authentication.applyFutureSettingsAutomatically
@@ -1710,19 +1750,40 @@ tests contains {
 
 GmailId8_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.8.1")
 
+LogMessage8_1 := "ENABLE_EMAIL_USER_IMPORT"
+
+Check8_1_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage8_1, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check8_1_OK if {PolicyApiInUse}
+
+NonComplianceMessage8_1(value) := sprintf("User email uploads is %s", [value])
+
 NonCompliantOUs8_1 contains {
     "Name": OU,
-    "Value": concat(" ", [
-        "User email uploads is set to",
-        GetFriendlyEnabledValue(LastEvent.NewValue)
-    ])
+    "Value": NonComplianceMessage8_1(GetFriendlyEnabledValue(LastEvent.NewValue))
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_EMAIL_USER_IMPORT", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage8_1, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
+}
+
+NonCompliantOUs8_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage8_1(GetFriendlyEnabledValue(emailUploads))
+}
+if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    emailUploads := settings.gmail_user_email_uploads.enableMailAndContactsImport
+    emailUploads
 }
 
 tests contains {
@@ -1734,9 +1795,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := true
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_EMAIL_USER_IMPORT", utils.TopLevelOU)
-    count(Events) == 0
+    not Check8_1_OK
 }
 
 tests contains {
@@ -1748,8 +1809,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_EMAIL_USER_IMPORT", utils.TopLevelOU)
-    count(Events) > 0
+    Check8_1_OK
     Status := count(NonCompliantOUs8_1) == 0
 }
 #--
@@ -1763,6 +1823,12 @@ if {
 #--
 
 GmailId9_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.9.1")
+
+Check9_1_OK if {
+    not NoSuchEvent9_1(utils.TopLevelOU)
+}
+
+Check9_1_OK if {PolicyApiInUse}
 
 default NoSuchEvent9_1(_) := false
 
@@ -1779,7 +1845,7 @@ NoSuchEvent9_1(TopLevelOU) := true if {
 GetFriendlyValue9_1(ImapEnabled, PopEnabled) := Description if {
     ImapEnabled == true
     PopEnabled == true
-    Description := "POP and IMAP access are enabled"
+    Description := "IMAP and POP access are enabled"
 } else := Description if {
     ImapEnabled == true
     PopEnabled == false
@@ -1788,7 +1854,7 @@ GetFriendlyValue9_1(ImapEnabled, PopEnabled) := Description if {
     ImapEnabled == false
     PopEnabled == true
     Description := "POP access is enabled"
-} else := "Both POP and IMAP access are disabled"
+} else := "Both IMAP and POP access are disabled"
 
 
 NonCompliantOUs9_1 contains {
@@ -1796,6 +1862,7 @@ NonCompliantOUs9_1 contains {
     "Value": GetFriendlyValue9_1(ImapEnabled, PopEnabled)
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
 
     ImapEvents := utils.FilterEventsOU(LogEvents, "IMAP_ACCESS", OU)
@@ -1819,6 +1886,7 @@ NonCompliantGroups9_1 contains {
     "Value": GetFriendlyValue9_1(ImapEnabled, PopEnabled)
 }
 if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
 
     ImapEvents := utils.FilterEventsGroup(LogEvents, "IMAP_ACCESS", Group)
@@ -1837,6 +1905,25 @@ if {
     }
 }
 
+NonCompliantOUs9_1 contains {
+    "Name": OU,
+    "Value": GetFriendlyValue9_1(imapEnable, popEnable)
+}
+if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    imapSection := "gmail_imap_access"
+    imapSetting := "enableImapAccess"
+    popSection := "gmail_pop_access"
+    popSetting := "enablePopAccess"
+    imapSet := utils.ApiSettingExists(imapSection, imapSetting, OU)
+    popSet := utils.ApiSettingExists(popSection, popSetting, OU)
+    true in {imapSet, popSet}
+    imapEnable := utils.GetApiSettingValue(imapSection, imapSetting, OU)
+    popEnable := utils.GetApiSettingValue(popSection, popSetting, OU)
+    true in {imapEnable, popEnable}
+}
+
 tests contains {
     "PolicyId": GmailId9_1,
     "Criticality": "Shall",
@@ -1846,8 +1933,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    NoSuchEvent9_1(utils.TopLevelOU)
+    not Check9_1_OK
 }
 
 tests contains {
@@ -1859,8 +1947,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent9_1(utils.TopLevelOU)
-
+    Check9_1_OK
     Conditions := {count(NonCompliantOUs9_1) == 0, count(NonCompliantGroups9_1) == 0}
     Status := (false in Conditions) == false
 }
@@ -1876,20 +1963,42 @@ if {
 
 GmailId10_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.10.1")
 
+LogMessage10_1 := "ENABLE_OUTLOOK_SYNC"
+
+Check10_1_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage10_1, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check10_1_OK if {PolicyApiInUse}
+
+NonComplianceMessage10_1(value) := sprintf("Google Workspace Sync is %s",
+                                          [value])
+
 NonCompliantOUs10_1 contains {
     "Name": OU,
-    "Value": concat(" ", [
-        "Automatically enable outlook sync is set to",
-        GetFriendlyEnabledValue(LastEvent.NewValue)
-    ])
+    "Value": NonComplianceMessage10_1(GetFriendlyEnabledValue(LastEvent.NewValue))
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_OUTLOOK_SYNC", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage10_1, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
+NonCompliantOUs10_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage10_1(GetFriendlyEnabledValue(syncEnable))
+}
+if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    syncEnable := settings.gmail_workspace_sync_for_outlook.enableGoogleWorkspaceSyncForMicrosoftOutlook
+    syncEnable
 }
 
 tests contains {
@@ -1901,9 +2010,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_OUTLOOK_SYNC", utils.TopLevelOU)
-    count(Events) == 0
+    not Check10_1_OK
 }
 
 tests contains {
@@ -1915,8 +2024,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "ENABLE_OUTLOOK_SYNC", utils.TopLevelOU)
-    count(Events) > 0
+    Check10_1_OK
     Status := count(NonCompliantOUs10_1) == 0
 }
 #--
@@ -2014,7 +2122,6 @@ if {
 }
 #--
 
-
 ################
 # GWS.GMAIL.12 #
 ################
@@ -2025,19 +2132,41 @@ if {
 
 GmailId12_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.12.1")
 
+LogMessage12_1 := "OUTBOUND_RELAY_ENABLED"
+
+Check12_1_OK if {
+    not PolicyApiInUse
+    events := utils.FilterEventsOU(LogEvents, LogMessage12_1, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check12_1_OK if {PolicyApiInUse}
+
+NonComplianceMessage12_1(value) := sprintf("Per-user Outbound Gateways are %s",
+                                           [value])
+
 NonCompliantOUs12_1 contains {
     "Name": OU,
-    "Value": concat(" ", [
-        "Allow per-user outbound gateways is set to",
-        GetFriendlyEnabledValue(LastEvent.NewValue)
-    ])
+    "Value": NonComplianceMessage12_1(GetFriendlyEnabledValue(LastEvent.NewValue))
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "OUTBOUND_RELAY_ENABLED", OU)
+    Events := utils.FilterEventsOU(LogEvents, LogMessage12_1, OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
+}
+
+NonCompliantOUs12_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage12_1(GetFriendlyEnabledValue(outGatewayEnable))
+}
+if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    outGatewayEnable := settings.gmail_per_user_outbound_gateway.allowUsersToUseExternalSmtpServers
+    outGatewayEnable
 }
 
 tests contains {
@@ -2049,9 +2178,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := true
-    Events := utils.FilterEventsOU(LogEvents, "OUTBOUND_RELAY_ENABLED", utils.TopLevelOU)
-    count(Events) == 0
+    not Check12_1_OK
 }
 
 tests contains {
@@ -2063,12 +2192,10 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, "OUTBOUND_RELAY_ENABLED", utils.TopLevelOU)
-    count(Events) > 0
+    Check12_1_OK
     Status := count(NonCompliantOUs12_1) == 0
 }
 #--
-
 
 ################
 # GWS.GMAIL.13 #
@@ -2132,7 +2259,6 @@ if {
     Status := count(NonCompliantOUs13_1) == 0
 }
 #--
-
 
 ################
 # GWS.GMAIL.14 #
@@ -2269,7 +2395,8 @@ if {
 NonCompliantOUs15_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage15_1(GetFriendlyValue15_1(preScanning))
-} if {
+}
+if {
     some OU, settings in input.policies
     GmailEnabled(OU)
     preDelivery := settings.gmail_enhanced_pre_delivery_message_scanning

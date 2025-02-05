@@ -57,6 +57,11 @@ class PolicyAPI:
 
     isDuration = lambda x: isinstance(x, str) and re.match(r'(?i)^\d+[hms]$', x)
 
+    isTimestamp = lambda x: (isinstance(x, str)
+                             and re.match(r'(?i)^\d{4}(?:-\d{2}){2}T\d{2}'
+                                          r'(?::\d{2}){2}(?:\.\d+)?z$',
+                                          x))
+
     # There may be duplicate policies returned for an orgunit/group and
     # section.  The policies must be "reduced" to single settings using
     # a method.  The default "reducer" method is to select the policy with the
@@ -178,11 +183,14 @@ class PolicyAPI:
             'allowedIpAddresses': isListStrings}},
         'gmail_enhanced_pre_delivery_message_scanning': {'settings': {
             'enableImprovedSuspiciousContentDetection': isBool}},
+        'gmail_imap_access': {'settings': {'enableImapAccess': isBool}},
         'gmail_links_and_external_images': {'settings': {
             'applyFutureSettingsAutomatically': isBool,
             'enableAggressiveWarningsOnUntrustedLinks': isBool,
             'enableExternalImageScanning': isBool,
             'enableShortenerScanning': isBool}},
+        'gmail_mail_delegation': {'settings': {'enableMailDelegation': isBool}},
+        'gmail_pop_access': {'settings': {'enablePopAccess': isBool}},
         'gmail_service_status': {'settings': {'serviceState': isState}},
         'gmail_spoofing_and_authentication': {'settings': {
             'applyFutureSettingsAutomatically': isBool,
@@ -196,6 +204,10 @@ class PolicyAPI:
             'employeeNameSpoofingConsequence': isEnum,
             'groupsSpoofingConsequence': isEnum,
             'unauthenticatedEmailConsequence': isEnum}},
+        'gmail_user_email_uploads': {'settings': {
+            'enableMailAndContactsImport': isBool}},
+        'gmail_workspace_sync_for_outlook': {'settings': {
+            'enableGoogleWorkspaceSyncForMicrosoftOutlook': isBool}},
         'groups_for_business_groups_sharing': {'reducer': _merge_reducer,
                                                'settings': {
             'collaborationCapability': isEnum,
@@ -245,6 +257,16 @@ class PolicyAPI:
         'security_super_admin_account_recovery': {'reducer': _merge_reducer,
                                                   'settings': {
             'enableAccountRecovery': isBool}},
+        'security_two_step_verification_device_trust': {'settings': {
+            'allowTrustingDevice': isBool}},
+        'security_two_step_verification_enforcement': {'settings': {
+            'enforcedFrom': isTimestamp}},
+        'security_two_step_verification_enforcement_factor': {'settings': {
+            'allowedSignInFactorSet': isEnum}},
+        'security_two_step_verification_enrollment': {'settings': {
+            'allowEnrollment': isBool}},
+        'security_two_step_verification_grace_period': {'settings': {
+            'enrollmentGracePeriod': isDuration}},
         'security_user_account_recovery': {'reducer': _merge_reducer,
                                            'settings': {
             'enableAccountRecovery': isBool}},

@@ -554,6 +554,17 @@ AppEnabled(policies, appName, orgunit) if {
     upper(appState) == "ENABLED"
 }
 
+# Use the following function if you need to know if the app enable state has
+# been explicitly set in the given orgunit or group.  The above functions will
+# tell you whether the app is enabled, but its state may be due to inheriting
+# the state from the top-level orgunit.  In some cases, you need to know
+# whether the state has been explicitly set (not inherited).
+
+AppExplicitStatus(policies, appName, orgunit) := appState if {
+    serviceStatusName := AppServiceStatusName(appName)
+    appState := upper(policies[orgunit][serviceStatusName].serviceState)
+} else := ""
+
 # There are a lot of policies that have enabled/disabled states.  The states
 # (values) in the log events are strings ("true", "false), while the states
 # in the Policy API are booleans (true, false).  This is a common function
@@ -564,3 +575,37 @@ GetFriendlyEnabledValue(Value) := "enabled" if {
 } else := "disabled" if {
     Value in {false, "false"}
 } else := Value
+
+# This function will convert a "duration string" (e.g., "18m" for 18 minutes)
+# to an integer representing the time in seconds.  This may be used for
+# comparing string durations.  Typically, Google's Policy API returns duration
+# values in seconds.  See CC 1.2 & CC 4.1 for examples of usage.
+
+DurationToSeconds(duration) := durationSeconds if {
+    multipliers := {"s": 1, "m": 60, "h": 3600, "d": 86400}
+    result := regex.find_all_string_submatch_n(`(?i)^(\d+)([dhms])$`,
+                                            duration,
+                                            1)
+    firstMatch := result[0]
+    value := to_number(firstMatch[1])
+    unit := firstMatch[2]
+    multiplier := multipliers[lower(unit)]
+    durationSeconds := value * multiplier
+}
+
+# Google will often return durations in seconds, but the values correspond to
+# a "common" duration (that is usually a choice in the UI).  This function
+# will convert the given seconds to a duration other than seconds that will
+# (hopefully) make more sense to the user.
+
+GetFriendlyDuration(Seconds) := "30 days" if {
+    Seconds == 2592000
+} else := "14 days" if {
+    Seconds == 1209600
+} else := "7 days" if {
+    Seconds == 604800
+} else := "24 hours" if {
+    Seconds == 86400
+} else := "20 hours" if {
+    Seconds == 72000
+} else := sprintf("%d seconds", [Seconds])

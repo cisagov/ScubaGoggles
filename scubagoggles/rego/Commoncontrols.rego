@@ -131,21 +131,36 @@ NoSuchEvent1_1 := true if {
     count(Events) == 0
 }
 
+Check1_1_OK if {
+    not PolicyApiInUse
+    not NoSuchEvent1_1
+}
+
+Check1_1_OK if {PolicyApiInUse}
+
 GetFriendlyMethods(Value) := "Any" if {
-    Value == "ANY"
+    Value in {"ALL", "ANY"}
 } else := "Any except verification codes via text, phone call" if {
     Value == "NO_TELEPHONY"
 } else := "Only security key and allow security codes without remote access" if {
-    Value == "SECURITY_KEY_AND_IP_BOUND_SECURITY_CODE"
+    Value in {"PASSKEY_PLUS_IP_BOUND_SECURITY_CODE", "SECURITY_KEY_AND_IP_BOUND_SECURITY_CODE"}
 } else := "Only security key and allow security codes with remote access" if {
-    Value == "SECURITY_KEY_AND_SECURITY_CODE"
+    Value in {"PASSKEY_PLUS_SECURITY_CODE", "SECURITY_KEY_AND_SECURITY_CODE"}
 } else := Value
+
+NonComplianceMessage1_1a := "Users cannot enable 2-step verification (2SV)."
+
+NonComplianceMessage1_1b(value) := sprintf("Allowed methods is set to %s",
+                                          [value])
+
+NonComplianceMessage1_1c := "2-step verification (2SV) is not enforced."
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
     "Value": "Allow users to turn on 2-Step Verification is OFF"
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
     Events := FilterEventsOU("ALLOW_STRONG_AUTHENTICATION", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -161,6 +176,7 @@ NonCompliantOUs1_1 contains {
     "Value": "2-Step Verification Enforcement is OFF"
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
     Events := FilterEventsOU("ENFORCE_STRONG_AUTHENTICATION", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -173,9 +189,10 @@ if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": concat("", ["Allowed methods is set to ", GetFriendlyMethods(LastEvent.NewValue)])
+    "Value": NonComplianceMessage1_1b(GetFriendlyMethods(LastEvent.NewValue))
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
     Events := FilterEventsOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -192,6 +209,7 @@ NonCompliantGroups1_1 contains {
     "Value": "Allow users to turn on 2-Step Verification is Off"
 }
 if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
     Events := FilterEventsGroup("ALLOW_STRONG_AUTHENTICATION", Group)
     # Ignore Groups without any events.
@@ -205,6 +223,7 @@ NonCompliantGroups1_1 contains {
     "Value": "2-Step Verification Enforcement is Off"
 }
 if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
     Events := FilterEventsGroup("ENFORCE_STRONG_AUTHENTICATION", Group)
     # Ignore Groups without any events.
@@ -215,9 +234,10 @@ if {
 
 NonCompliantGroups1_1 contains {
     "Name": Group,
-    "Value": concat("", ["Allowed methods is set to ", GetFriendlyMethods(LastEvent.NewValue)])
+    "Value": NonComplianceMessage1_1b(GetFriendlyMethods(LastEvent.NewValue))
 }
 if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
     Events := FilterEventsGroup("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", Group)
     # Ignore Groups without any events.
@@ -225,6 +245,51 @@ if {
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "ONLY_SECURITY_KEY"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
+# There are 3 items to check for this baseline.  First, users must be allowed to
+# enroll in 2SV.  If they have been enrolled, then the passkey (aka security
+# key) is the only allowed 2SV method.  If the method is also OK, 2SV
+# enforcement must be enabled, and this is determined by ensuring the date
+# of enforcement is in the past (before today).
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_1a
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := settings.security_two_step_verification_enrollment.allowEnrollment
+    not enable2SV
+}
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_1b(GetFriendlyMethods(enforceMethod))
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := settings.security_two_step_verification_enrollment.allowEnrollment
+    enable2SV
+    enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
+    enforceMethod != "PASSKEY_ONLY"
+}
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_1c
+}
+if {
+    today := time.now_ns()
+    RFC3339 := "2006-01-02T15:04:05Z07:00"
+    some OU, settings in input.policies
+    enable2SV := settings.security_two_step_verification_enrollment.allowEnrollment
+    enable2SV
+    enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
+    enforceMethod == "PASSKEY_ONLY"
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    enforceValue := time.parse_ns(RFC3339, enforce2SV)
+    enforceValue > today
 }
 
 tests contains {
@@ -236,8 +301,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    NoSuchEvent1_1 == true
+    not Check1_1_OK
 }
 
 tests contains {
@@ -249,7 +315,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    NoSuchEvent1_1 == false
+    Check1_1_OK
     Conditions := {count(NonCompliantOUs1_1) == 0, count(NonCompliantGroups1_1) == 0}
     Status := (false in Conditions) == false
 }
@@ -261,13 +327,29 @@ if {
 
 CommonControlsId1_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.1.2")
 
+LogMessage1_2 := "CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION"
+
+Check1_2_OK if {
+    not PolicyApiInUse
+    events := FilterEventsOU(LogMessage1_2, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check1_2_OK if {PolicyApiInUse}
+
+NonComplianceMessage1_2(value, expected) := sprintf("New user enrollment period (%s) %s (%s)",
+                                                    [utils.GetFriendlyDuration(value),
+                                                    "doesn't match expected",
+                                                    utils.GetFriendlyDuration(expected)])
+
 NonCompliantOUs1_2 contains {
     "Name": OU,
     "Value": concat("", ["New user enrollment period is set to ", LastEvent.NewValue])
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
-    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", OU)
+    Events := FilterEventsOU(LogMessage1_2, OU)
     # Ignore OUs without any events. We're already asserting that the
     # top-level OU has at least one event; for all other OUs we assume
     # they inherit from a parent OU if they have no events.
@@ -282,13 +364,26 @@ NonCompliantGroups1_2 contains {
     "Value": concat("", ["New user enrollment period is set to ", LastEvent.NewValue])
 }
 if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := FilterEventsGroup("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", Group)
+    Events := FilterEventsGroup(LogMessage1_2, Group)
     # Ignore groups without any events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "1 week"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
+NonCompliantOUs1_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_2(enrollSeconds, expectedPeriod)
+}
+if {
+    expectedPeriod := utils.DurationToSeconds("7d")
+    some OU, settings in input.policies
+    enrollPeriod := settings.security_two_step_verification_grace_period.enrollmentGracePeriod
+    enrollSeconds := utils.DurationToSeconds(enrollPeriod)
+    enrollSeconds != expectedPeriod
 }
 
 tests contains {
@@ -300,9 +395,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_2_OK
 }
 
 tests contains {
@@ -314,8 +409,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_ENROLLMENT_PERIOD_DURATION", utils.TopLevelOU)
-    count(Events) > 0
+    Check1_2_OK
     Conditions := {count(NonCompliantOUs1_2) == 0, count(NonCompliantGroups1_2) == 0}
     Status := (false in Conditions) == false
 }
@@ -327,6 +421,18 @@ if {
 
 CommonControlsId1_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.1.3")
 
+LogMessage1_3 := "CHANGE_TWO_STEP_VERIFICATION_FREQUENCY"
+
+Check1_3_OK if {
+    not PolicyApiInUse
+    events := FilterEventsOU(LogMessage1_3, utils.TopLevelOU)
+    count(events) > 0
+}
+
+Check1_3_OK if {PolicyApiInUse}
+
+NonComplianceMessage1_3 := "User is allowed to trust device."
+
 GetFriendlyValue1_3(Value) := "ON" if {
     Value == "ENABLE_USERS_TO_TRUST_DEVICE"
 } else := Value
@@ -336,6 +442,7 @@ NonCompliantOUs1_3 contains {
     "Value": concat("", ["Allow user to trust the device is ", GetFriendlyValue1_3(LastEvent.NewValue)])
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
     Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", OU)
     # Ignore OUs without any events. We're already asserting that the
@@ -352,13 +459,24 @@ NonCompliantGroups1_3 contains {
     "Value": concat("", ["Allow user to trust the device is ", GetFriendlyValue1_3(LastEvent.NewValue)])
 }
 if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
-    Events := FilterEventsGroup("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", Group)
+    Events := FilterEventsGroup(LogMessage1_3, Group)
     # Ignore groups without any events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "DISABLE_USERS_TO_TRUST_DEVICE"
     LastEvent.NewValue != "INHERIT_FROM_PARENT"
+}
+
+NonCompliantOUs1_3 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_3
+}
+if {
+    some OU, settings in input.policies
+    trustDevice := settings.security_two_step_verification_device_trust.allowTrustingDevice
+    trustDevice
 }
 
 tests contains {
@@ -370,9 +488,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", utils.TopLevelOU)
-    count(Events) == 0
+    not Check1_3_OK
 }
 
 tests contains {
@@ -384,8 +502,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("CHANGE_TWO_STEP_VERIFICATION_FREQUENCY", utils.TopLevelOU)
-    count(Events) > 0
+    Check1_3_OK
     Conditions := {count(NonCompliantOUs1_3) == 0, count(NonCompliantGroups1_3) == 0}
     Status := (false in Conditions) == false
 }
@@ -623,17 +740,7 @@ NonComplianceMessage4_1(Value) := sprintf("Web session duration: %s",
 
 GetFriendlyValue4_1(Value) := "Session never expires" if {
     Value == 63072000
-} else := "30 days" if {
-    Value == 2592000
-} else := "14 days" if {
-    Value == 1209600
-} else := "7 days" if {
-    Value == 604800
-} else := "24 hours" if {
-    Value == 86400
-} else := "20 hours" if {
-    Value == 72000
-} else := sprintf("%d seconds", [Value])
+} else := utils.GetFriendlyDuration(Value)
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
@@ -657,19 +764,11 @@ NonCompliantOUs4_1 contains {
     "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(durationSeconds))
 }
 if {
-    multipliers := {"s": 1, "m": 60, "h": 3600}
     # This is the requirement limit for session duration:
-    webSessionMax := 12 * multipliers["h"]
+    webSessionMax := utils.DurationToSeconds("12h")
     some OU, settings in input.policies
     duration := settings.security_session_controls.webSessionDuration
-    result := regex.find_all_string_submatch_n(`(?i)^(\d+)([hms])$`,
-                                               duration,
-                                               1)
-    firstMatch := result[0]
-    value := to_number(firstMatch[1])
-    unit := firstMatch[2]
-    multiplier := multipliers[lower(unit)]
-    durationSeconds := value * multiplier
+    durationSeconds := utils.DurationToSeconds(duration)
     durationSeconds > webSessionMax
 }
 
@@ -1113,11 +1212,7 @@ NonCompliantOUs5_6 contains {
 if {
     some OU, settings in input.policies
     passwordExpiration := settings.security_password.expirationDuration
-    result := regex.find_all_string_submatch_n(`(?i)^(\d+)[hms]$`,
-                                               passwordExpiration,
-                                               -1)
-    firstMatch := result[0]
-    expirationValue := to_number(firstMatch[1])
+    expirationValue := utils.DurationToSeconds(passwordExpiration)
     expirationValue != 0
 }
 
@@ -2344,11 +2439,13 @@ if {
 
 CommonControlsId16_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.16.1")
 
+NonComplianceMessage16_1 := "Access to additional services without individual control is turned on"
+
 # NOTE: This setting cannot be controlled at the group level
 
 NonCompliantOUs16_1 contains {
     "Name": OU,
-    "Value": "Access to additional services without individual control is turned on"
+    "Value": NonComplianceMessage16_1
 }
 if {
     some OU in utils.OUsWithEvents
@@ -2412,11 +2509,26 @@ if {
 
 CommonControlsId16_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.16.2")
 
+NonComplianceMessage16_2 := "Early access apps are ENABLED"
+
+Check16_2_OK if {
+    not PolicyApiInUse
+    Events := {
+        Event | some Event in ToggleServiceEvents;
+        Event.OrgUnit == utils.TopLevelOU;
+        Event.ServiceName == "Early Access Apps"
+    }
+    count(Events) > 0
+}
+
+Check16_2_OK if {PolicyApiInUse}
+
 NonCompliantOUs16_2 contains {
     "Name": OU,
-    "Value": "Service status is ON"
+    "Value": NonComplianceMessage16_2
 }
 if {
+    not PolicyApiInUse
     some OU in utils.OUsWithEvents
     # Note that this setting requires the custom ToggleServiceEvents rule.
     # Filter based on the service name of the event, otherwise all events are returned.
@@ -2438,9 +2550,10 @@ if {
 
 NonCompliantGroups16_2 contains {
     "Name": Group,
-    "Value": "Service status is ON"
+    "Value": NonComplianceMessage16_2
 }
 if {
+    not PolicyApiInUse
     some Group in utils.GroupsWithEvents
     # Note that this setting requires the custom ToggleServiceEvents rule.
     Events := {
@@ -2454,6 +2567,16 @@ if {
     LastEvent.NewValue == "true"
 }
 
+NonCompliantOUs16_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage16_2
+}
+if {
+    some OU, settings in input.policies
+    appState := utils.AppExplicitStatus(input.policies, "early_access_apps", OU)
+    appState == "ENABLED"
+}
+
 tests contains {
     "PolicyId": CommonControlsId16_2,
     "Criticality": "Should",
@@ -2463,14 +2586,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
+    not PolicyApiInUse
     DefaultSafe := false
-    # Filter based on the service name of the event, otherwise all events are returned.
-    Events := {
-        Event | some Event in ToggleServiceEvents;
-        Event.OrgUnit == utils.TopLevelOU;
-        Event.ServiceName == "Early Access Apps"
-    }
-    count(Events) == 0
+    not Check16_2_OK
 }
 
 tests contains {
@@ -2482,14 +2600,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    # This rule should execute only when log events exist
-    Events := {
-        Event | some Event in ToggleServiceEvents;
-        Event.OrgUnit == utils.TopLevelOU;
-        Event.ServiceName == "Early Access Apps"
-    }
-    count(Events) > 0
-
+    Check16_2_OK
     Conditions := {
         count(NonCompliantOUs16_2) == 0,
         count(NonCompliantGroups16_2) == 0
