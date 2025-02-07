@@ -12,6 +12,42 @@ Ensure that you consented to the following API scopes as a user with the proper
 [permissions to consent](../prerequisites/Prerequisites.md#permissions) and have
 enabled the required [APIs and Services](../authentication/OAuth.md).
 
+## macOS: Certificate Verification Error
+
+If you are installing ScubaGoggles on a system running macOS, you may
+encounter a "certificate verification error" while ScubaGoggles is attempting
+to download the OPA executable (either via the `setup` or `getopa` commands).
+The **secure** HTTP protocol (https) is used when downloading the OPA
+executable.  If the certificate provided by `openpolicyagent.org` can't be
+verified on your local system, you will encounter this error.
+
+This issue may be due to Python on macOS providing its own copy of OpenSSL.
+Because of this, the trust certificates typically used for certificate
+verification on your system are not used by Python.
+
+The following steps may help you to resolve this issue.
+
+* Instead of using ScubaGoggles to download the OPA executable, you may
+download OPA using a browser.  Remember to locate the executable where
+ScubaGoggles expects to find it and make sure the file has *execute*
+permission ([see installation instructions](
+    ../installation/OPA.md#download-the-opa-executable)).
+
+* Depending on the method you used to install Python, the installation may be
+located in `/Applications/Python <version>`, for example
+`/Applications/Python 3.13`.  If that directory exists, you should find a
+file named `install_certificates.command`.  Running this file will install
+the trust certificates and should fix the issue.
+
+* If the file mentioned in the step above does not exist on your system,
+you may find this file at the [cPython GitHub site](
+    https://github.com/python/cpython).  You will find the script in the
+[`Mac/BuildScript/resources`](
+    https://github.com/python/cpython/tree/main/Mac/BuildScript/resources)
+folder.  The [`ReadMe.rtf`](
+    https://github.com/python/cpython/tree/main/Mac/BuildScript/resources/ReadMe.rtf) file will provide more information about getting
+certificate verification to work correctly on your macOS system.
+
 ## Windows:  WinError 10013: Permission Error
 
 When ScubaGoggles is run and it needs to re-authorize you using your Google
