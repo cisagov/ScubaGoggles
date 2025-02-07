@@ -14,7 +14,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Login Challenges](#3-login-challenges)
 - [User Session Duration](#4-user-session-duration)
 - [Secure Passwords](#5-secure-passwords)
-- [Highly Privileged Accounts](#6-highly-privileged-accounts)
+- [Admin Privileged Accounts](#6-highly-privileged-accounts)
 - [Conflicting Account Management](#7-conflicting-account-management)
 - [Catastrophic Recovery Options](#8-catastrophic-recovery-options-for-super-admins)
 - [GWS Advanced Protection Program](#9-gws-advanced-protection-program)
@@ -516,11 +516,11 @@ To configure a strong password policy is configured, use the Google Workspace Ad
 #### GWS.COMMONCONTROLS.5.6v0.4 Instructions
 1.  Under **Expiration**, select **Never Expires.**
 
-## 6. Highly Privileged Accounts
+## 6. Admin Privileged Accounts
 
-Highly privileged accounts represent significant risk to an agency if compromised or if insiders use them in an unauthorized way. Highly privileged accounts share the same risk factors related to the catastrophic impacts on GWS services, user community and agency data, if compromised. This section supports the definition of highly privileged accounts based on permissions an account has and the controls necessary to protect them.
+Admin privileged accounts represent significant risk to an agency if compromised or if insiders use them in an unauthorized way. Admin privileged accounts share the same risk factors related to the catastrophic impacts on GWS services, user community and agency data, if compromised. This section defines admin privileged accounts as both pre-build and custom admin accounts, based on the permissions of an account.
 
-Some examples of privileged accounts include the pre-built GWS Admin Roles:
+Some examples of these privileged accounts include the pre-built GWS Admin Roles:
 
 -   Super Admin: This role possesses critical control over the entire GWS structure. It has access to all features in the Admin Console and Admin API and can manage every aspect of agency GWS accounts.
 -   User Management Admin: This account has rights to add, remove, and delete normal users in addition to managing all user passwords, security settings, and other management tasks that make it potentially crucial if compromised.
