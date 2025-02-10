@@ -738,11 +738,7 @@ Google Workspace Sync SHOULD be disabled.
 
 - _Rationale:_ Enabling Google Workspace Sync could potentially expose sensitive agency or organization data to unauthorized access or loss, posing a security risk. By disabling Google Workspace Sync, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 10, 2023
-<<<<<<< HEAD
 - _Note:_ Google Workspace Sync MAY be enabled on a per-user basis as needed.
-=======
-- _Note:_ Google Workspace Sync May be enabled on a per-user basis as needed.
->>>>>>> 772e181 (Adding Gmail 10.2 MAY Policy as a note to 10.1 (#580))
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -764,13 +760,8 @@ Google Workspace Sync SHOULD be disabled.
 
 To configure the settings for Google Workspace Sync:
 
-<<<<<<< HEAD
 #### GWS.GMAIL.10.1v0.4 Instructions
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-=======
-#### GWS.GMAIL.10.1v0.3 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
->>>>>>> 772e181 (Adding Gmail 10.2 MAY Policy as a note to 10.1 (#580))
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
 3.  Select **End User Access -\> Google Workspace Sync**.
 4.  Uncheck the **Enable Google Workspace Sync for Microsoft Outlook for my users** checkbox.
