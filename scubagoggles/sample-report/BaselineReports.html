@@ -22,6 +22,7 @@
     --toggle-height: 25px;
     --toggle-width: 46px;
     --toggle-radius: 18px;
+    --unvisited-link-color: #0000EE;
 }
 
 body {
@@ -152,7 +153,8 @@ a.control_group:active {
     font-family: Arial, Helvetica, sans-serif;
     color: var(--link-color);
     text-decoration: none;
-}</style>
+}
+</style>
         <style>main {
     height: 115vh;
     padding-bottom: 0px;
@@ -221,8 +223,8 @@ table.tenantdata tr:first-child {
                 </div>
             </header>
             <h1>SCuBA GWS Secure Configuration Baseline Reports</h1>
-                        <table style = "text-align:center;">                 <colgroup><col/><col/><col/><col/></colgroup>                 <tr><th>Customer Domain</th><th>Report Date</th></tr>                 <tr><td>example.org</td><td>10/11/2024 14:01:09 Pacific Daylight Time</td></tr>             </table>
-            <br> <br/>
+            <table style = "text-align:center;"><tr><th>Customer Domain</th><th>Report Date</th></tr><tr><td>example.org</td><td>02/10/2025 09:39:58 Pacific Daylight Time</td></tr></table>
+            <br><br>
             <table>
   <thead>
     <tr>
@@ -233,11 +235,11 @@ table.tenantdata tr:first-child {
   <tbody>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/CalendarReport.html>Google Calendar</a></td>
-      <td><div class='summary pass'>4 passes</div><div class='summary'></div><div class='summary failure'>1 failure</div><div class='summary manual'>1 manual check</div><div class='summary'></div><div class='summary'></div></td>
+      <td><div class='summary pass'>5 passes</div><div class='summary'></div><div class='summary'></div><div class='summary manual'>1 manual check</div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/ChatReport.html>Google Chat</a></td>
-      <td><div class='summary pass'>7 passes</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary manual'>1 omitted</div><div class='summary'></div></td>
+      <td><div class='summary pass'>5 passes</div><div class='summary warning'>1 warning</div><div class='summary failure'>1 failure</div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/ClassroomReport.html>Google Classroom</a></td>
@@ -245,23 +247,23 @@ table.tenantdata tr:first-child {
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/CommoncontrolsReport.html>Common Controls</a></td>
-      <td><div class='summary pass'>12 passes</div><div class='summary'></div><div class='summary failure'>6 failures</div><div class='summary manual'>14 manual checks</div><div class='summary'></div><div class='summary'></div></td>
+      <td><div class='summary pass'>6 passes</div><div class='summary warning'>2 warnings</div><div class='summary failure'>16 failures</div><div class='summary manual'>16 manual checks</div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/DriveReport.html>Google Drive and Docs</a></td>
-      <td><div class='summary pass'>10 passes</div><div class='summary warning'>3 warnings</div><div class='summary failure'>3 failures</div><div class='summary'></div><div class='summary manual'>1 omitted</div><div class='summary'></div></td>
+      <td><div class='summary pass'>11 passes</div><div class='summary warning'>2 warnings</div><div class='summary failure'>3 failures</div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/GmailReport.html>Gmail</a></td>
-      <td><div class='summary pass'>25 passes</div><div class='summary warning'>2 warnings</div><div class='summary failure'>5 failures</div><div class='summary manual'>13 manual checks</div><div class='summary'></div><div class='summary'></div></td>
+      <td><div class='summary pass'>20 passes</div><div class='summary warning'>4 warnings</div><div class='summary failure'>8 failures</div><div class='summary manual'>13 manual checks</div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/GroupsReport.html>Groups for Business</a></td>
-      <td><div class='summary pass'>6 passes</div><div class='summary warning'>1 warning</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
+      <td><div class='summary pass'>4 passes</div><div class='summary warning'>2 warnings</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/MeetReport.html>Google Meet</a></td>
-      <td><div class='summary pass'>5 passes</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
+      <td><div class='summary pass'>4 passes</div><div class='summary warning'>1 warning</div><div class='summary'></div><div class='summary'></div><div class='summary'></div><div class='summary'></div></td>
     </tr>
     <tr>
       <td><a class="individual_reports" href=./IndividualReports/RulesReport.html>Rules</a></td>
@@ -273,9 +275,8 @@ table.tenantdata tr:first-child {
     </tr>
   </tbody>
 </table>
-            <br> <br/>
             <footer>
-                Report generated with <a class="individual_reports" href="https://github.com/cisagov/ScubaGoggles">CISA's ScubaGoggles</a>  tool v0.3.0
+                Report generated with <a class="individual_reports" href="https://github.com/cisagov/ScubaGoggles">CISA's ScubaGoggles</a> tool v0.4.0
             </footer>
         </main>
    </body>

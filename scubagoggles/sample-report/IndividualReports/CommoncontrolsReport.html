@@ -22,6 +22,7 @@
     --toggle-height: 25px;
     --toggle-width: 46px;
     --toggle-radius: 18px;
+    --unvisited-link-color: #0000EE;
 }
 
 body {
@@ -152,7 +153,8 @@ a.control_group:active {
     font-family: Arial, Helvetica, sans-serif;
     color: var(--link-color);
     text-decoration: none;
-}</style>
+}
+</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
  */
@@ -204,7 +206,6 @@ const colorRows = () => {
 window.addEventListener('DOMContentLoaded', (event) => {
     colorRows();
 });</script>
-        </script>
     </head>
     <body>
         <main>
@@ -217,9 +218,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 </div>
             </header>
             <h1>Common Controls Baseline Report</h1>
-            <h4><p><br/></p></h4>
-                        <table style = "text-align:center;">                 <colgroup><col/><col/><col/></colgroup>                 <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>                 <tr><td>example.org</td><td>10/11/2024 14:01:08 Pacific Daylight Time</td><td>0.3</td><td>0.3.0</td></tr>             </table>
-            <h2>COMMONCONTROLS-1             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#1-Phishing-Resistant-Multi-Factor-Authentication" target="_blank"\>Phishing-Resistant Multi-Factor Authentication</a></h2><table>
+            
+            <table style = "text-align:center;"><tr><th>Customer Domain</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>example.org</td><td>02/10/2025 09:39:56 Pacific Daylight Time</td><td>v0.4</td><td>v0.4.0</td></tr></table>
+            <h2>COMMONCONTROLS-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#1-Phishing-Resistant-Multi-Factor-Authentication" target="_blank">Phishing-Resistant Multi-Factor Authentication</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -231,35 +232,35 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.1.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.1.1v0.4</td>
       <td>Phishing-Resistant MFA SHALL be required for all users.</td>
-      <td>No events found</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                            width='15'                            height='15'>                            </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td>The following OUs are non-compliant:<ul><li>Nichole Erickson: Allowed methods is set to Any</li><li>Org Name: Allowed methods is set to Any except verification codes via text, phone call</li><li>Org Name (group "Kimberly Mathews"): Allowed methods is set to Any</li><li>Beth Moses: 2-step verification (2SV) is not enforced.</li><li>Norma Hayes: Allowed methods is set to Any</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.1.2v0.3</td>
+      <td>GWS.COMMONCONTROLS.1.2v0.4</td>
       <td>Google 2SV new user enrollment period SHALL be set to 1 week.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: New user enrollment period is set to 6 months</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Nichole Erickson: New user enrollment period (0 seconds) doesn't match expected (7 days)</li><li>Org Name (group "Kimberly Mathews"): New user enrollment period (0 seconds) doesn't match expected (7 days)</li><li>Beth Moses: New user enrollment period (15552000 seconds) doesn't match expected (7 days)</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.1.3v0.3</td>
+      <td>GWS.COMMONCONTROLS.1.3v0.4</td>
       <td>Allow users to trust the device SHALL be disabled.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following groups are non-compliant:<ul><li>kimbarnes@example.org: Allow user to trust the device is ON</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Nichole Erickson: User is allowed to trust device.</li><li>Org Name: User is allowed to trust device.</li><li>Org Name (group "Kimberly Mathews"): User is allowed to trust device.</li><li>Norma Hayes: User is allowed to trust device.</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.1.4v0.3</td>
+      <td>GWS.COMMONCONTROLS.1.4v0.4</td>
       <td>If phishing-resistant MFA is not yet tenable, an MFA method from the following list SHALL be used in the interim.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Nichole Erickson: Allowed methods is set to Any</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-2             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#2-Context-aware-Access" target="_blank"\>Context-aware Access</a></h2><table>
+</table><h2>COMMONCONTROLS-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#2-Context-aware-Access" target="_blank">Context-aware Access</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -271,14 +272,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.2.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.2.1v0.4</td>
       <td>Policies restricting access to GWS based on signals about enterprise devices SHOULD be implemented.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-3             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#3-Login-Challenges" target="_blank"\>Login Challenges</a></h2><table>
+</table><h2>COMMONCONTROLS-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#3-Login-Challenges" target="_blank">Login Challenges</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -290,14 +291,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.3.1v0.3</td>
-      <td>Login Challenges SHALL be enabled when third party SAML SSO is in use.</td>
+      <td>GWS.COMMONCONTROLS.3.1v0.4</td>
+      <td>Post-SSO verification SHOULD be enabled for users signing in using the SSO profile for your organization.</td>
       <td>Pass</td>
-      <td>Shall</td>
+      <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.3.2v0.4</td>
+      <td>Post-SSO verification SHOULD be enabled for users signing in using other SSO profiles.</td>
+      <td>N/A</td>
+      <td>Should/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-4             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#4-User-Session-Duration" target="_blank"\>User Session Duration</a></h2><table>
+</table><h2>COMMONCONTROLS-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#4-User-Session-Duration" target="_blank">User Session Duration</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -309,14 +317,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.4.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.4.1v0.4</td>
       <td>Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Org Name: Web session duration: 20 hours</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-5             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#5-Secure-Passwords" target="_blank"\>Secure Passwords</a></h2><table>
+</table><h2>COMMONCONTROLS-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#5-Secure-Passwords" target="_blank">Secure Passwords</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -328,42 +336,49 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.5.1v0.4</td>
       <td>User password strength SHALL be enforced.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Tiffany Brewer: Password strength is WEAK, not STRONG</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.2v0.3</td>
+      <td>GWS.COMMONCONTROLS.5.2v0.4</td>
       <td>User password length SHALL be at least 12 characters.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Tiffany Brewer: Minimum password length: 8, less than 12</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.3v0.3</td>
+      <td>GWS.COMMONCONTROLS.5.3v0.4</td>
+      <td>User password length SHOULD be at least 15 characters.</td>
+      <td>Warning</td>
+      <td>Should</td>
+      <td>The following OUs are non-compliant:<ul><li>Tiffany Brewer: Minimum password length: 8, recommended is at least 15</li><li>Norma Hayes: Minimum password length: 12, recommended is at least 15</li></ul></td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.5.4v0.4</td>
       <td>Password policy SHALL be enforced at next sign-in.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Enforce password policy at next sign-in is OFF</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Org Name: Enforce password policy at next sign-in is OFF</li><li>Mitchel test OU: Enforce password policy at next sign-in is OFF</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.4v0.3</td>
+      <td>GWS.COMMONCONTROLS.5.5v0.4</td>
       <td>User passwords SHALL NOT be reused.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Tiffany Brewer: Allow password reuse is ON</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.5v0.3</td>
+      <td>GWS.COMMONCONTROLS.5.6v0.4</td>
       <td>User passwords SHALL NOT expire.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Tiffany Brewer: Password reset frequency is 2592000s</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-6             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#6-Highly-Privileged-Accounts" target="_blank"\>Highly Privileged Accounts</a></h2><table>
+</table><h2>COMMONCONTROLS-6 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#6-Highly-Privileged-Accounts" target="_blank">Highly Privileged Accounts</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -375,21 +390,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.6.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.6.1v0.4</td>
       <td>All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency&#x27;s authoritative on-premises or federated identity system.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.6.2v0.3</td>
+      <td>GWS.COMMONCONTROLS.6.2v0.4</td>
       <td>A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following super admins are configured: kimbarnes1@example.org, kimbarnes2@example.org, kimbarnes3@example.org, kimbarnes4@example.org, kimbarnes5@example.org, kimbarnes6@example.org, kimbarnes7@example.org, kimbarnes8@example.org, kimbarnes9@example.org, kimbarnes10@example.org, kimbarnes11@example.org. <i>Note: Exceptions are allowed for "break glass" super admin accounts, though we are not able to account for this automatically.</i></td>
+      <td>The following super admins are configured: admin1@example.com, admin2@example.com, admin3@example.com, admin4@example.com, admin5@example.com, admin6@example.com, admin7@example.com, admin8@example.com, admin9@example.com, admin10@example.com. <i>Note: Exceptions are allowed for "break glass" super admin accounts, though we are not able to account for this automatically.</i></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-7             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#7-Conflicting-Account-Management" target="_blank"\>Conflicting Account Management</a></h2><table>
+</table><h2>COMMONCONTROLS-7 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#7-Conflicting-Account-Management" target="_blank">Conflicting Account Management</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -401,14 +416,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.7.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.7.1v0.4</td>
       <td>Account conflict management SHALL be configured to replace conflicting unmanaged accounts with managed ones.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-8             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#8-Catastrophic-Recovery-Options-for-Super-Admins" target="_blank"\>Catastrophic Recovery Options for Super Admins</a></h2><table>
+</table><h2>COMMONCONTROLS-8 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#8-Catastrophic-Recovery-Options-for-Super-Admins" target="_blank">Catastrophic Recovery Options for Super Admins</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -420,14 +435,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.8.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.8.1v0.4</td>
       <td>Account self-recovery for Super Admins SHALL be disabled</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Tiffany Brewer: Allow super admins to recover their account is ON</li><li>Org Name: Allow super admins to recover their account is ON</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-9             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#9-GWS-Advanced-Protection-Program" target="_blank"\>GWS Advanced Protection Program</a></h2><table>
+</table><h2>COMMONCONTROLS-9 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#9-GWS-Advanced-Protection-Program" target="_blank">GWS Advanced Protection Program</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -439,21 +454,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.9.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.9.1v0.4</td>
       <td>Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Program.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.9.2v0.3</td>
+      <td>GWS.COMMONCONTROLS.9.2v0.4</td>
       <td>All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-10             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#10-App-Access-to-Google-APIs" target="_blank"\>App Access to Google APIs</a></h2><table>
+</table><h2>COMMONCONTROLS-10 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#10-App-Access-to-Google-APIs" target="_blank">App Access to Google APIs</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -465,35 +480,42 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.10.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.10.1v0.4</td>
       <td>Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met.</td>
+      <td>The following services allow access: GSUITE_ADMIN.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.10.2v0.3</td>
+      <td>GWS.COMMONCONTROLS.10.2v0.4</td>
       <td>Agencies SHALL NOT allow users to consent to access to low-risk scopes.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met.</td>
+      <td>The following services allow access: GSUITE_ADMIN.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.10.3v0.3</td>
+      <td>GWS.COMMONCONTROLS.10.3v0.4</td>
       <td>Agencies SHALL NOT trust unconfigured internal apps.</td>
       <td>No events found</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                            width='15'                            height='15'>                            </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td><object data="./images/triangle-exclamation-solid.svg" width="15" height="15"></object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.10.4v0.3</td>
+      <td>GWS.COMMONCONTROLS.10.4v0.4</td>
       <td>Agencies SHALL NOT allow users to access unconfigured third-party apps.</td>
       <td>No events found</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                            width='15'                            height='15'>                            </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td><object data="./images/triangle-exclamation-solid.svg" width="15" height="15"></object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.10.5v0.4</td>
+      <td>Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-11             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#11-Authorized-Google-Marketplace-Apps" target="_blank"\>Authorized Google Marketplace Apps</a></h2><table>
+</table><h2>COMMONCONTROLS-11 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#11-Authorized-Google-Marketplace-Apps" target="_blank">Authorized Google Marketplace Apps</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -505,21 +527,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.11.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.11.1v0.4</td>
       <td>Only approved Google Workspace Marketplace applications SHALL be allowed for installation.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Users can install and run any internal app, even if it's not allowlisted</li></ul></td>
-    </tr>
-    <tr>
-      <td>GWS.COMMONCONTROLS.11.2v0.3</td>
-      <td>Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.</td>
-      <td>No events found</td>
-      <td>Should</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                            width='15'                            height='15'>                            </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is compliant; manual check recommended.</td>
+      <td>The following OUs are non-compliant:<ul><li>Org Name: Users can install and run any internal app, even if it's not allowlisted.</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-12             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#12-Google-Takeout-Services-for-Users" target="_blank"\>Google Takeout Services for Users</a></h2><table>
+</table><h2>COMMONCONTROLS-12 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#12-Google-Takeout-Services-for-Users" target="_blank">Google Takeout Services for Users</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -531,14 +546,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.12.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.12.1v0.4</td>
       <td>Google Takeout services SHALL be disabled.</td>
-      <td>No events found</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                            width='15'                            height='15'>                            </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-13             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#13-System-defined-Rules" target="_blank"\>System-defined Rules</a></h2><table>
+</table><h2>COMMONCONTROLS-13 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#13-System-defined-Rules" target="_blank">System-defined Rules</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -550,14 +565,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.13.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.13.1v0.4</td>
       <td>Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Results for GWS.COMMONCONTROLS.13 are listed in the <a href='../IndividualReports/RulesReport.html'>Rules Report</a>.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-14             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#14-Google-Workspace-Logs" target="_blank"\>Google Workspace Logs</a></h2><table>
+</table><h2>COMMONCONTROLS-14 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#14-Google-Workspace-Logs" target="_blank">Google Workspace Logs</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -569,21 +584,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.14.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.14.1v0.4</td>
       <td>The following critical logs SHALL be sent to the agency&#x27;s centralized SIEM.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.14.2v0.3</td>
+      <td>GWS.COMMONCONTROLS.14.2v0.4</td>
       <td>Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-15             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#15-Data-Regions-and-Storage" target="_blank"\>Data Regions and Storage</a></h2><table>
+</table><h2>COMMONCONTROLS-15 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#15-Data-Regions-and-Storage" target="_blank">Data Regions and Storage</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -595,21 +610,28 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.15.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.15.1v0.4</td>
       <td>The data storage region SHALL be set to be the United States for all users in the agency&#x27;s GWS environment.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.15.2v0.3</td>
+      <td>GWS.COMMONCONTROLS.15.2v0.4</td>
+      <td>Data SHALL be processed in the region selected for data at rest.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs and groups.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.15.3v0.4</td>
       <td>The supplemental data storage region SHALL NOT be set to &#x27;Russian Federation&#x27;.</td>
       <td>No events found</td>
       <td>Shall</td>
-      <td><object data='./images/triangle-exclamation-solid.svg'                            width='15'                            height='15'>                            </object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is compliant; manual check recommended.</td>
+      <td><object data="./images/triangle-exclamation-solid.svg" width="15" height="15"></object> No relevant event in the current logs for the top-level OU, Org Name. While we are unable to determine the state from the logs, the default setting is compliant; manual check recommended.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-16             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#16-Additional-Google-Services" target="_blank"\>Additional Google Services</a></h2><table>
+</table><h2>COMMONCONTROLS-16 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#16-Additional-Google-Services" target="_blank">Additional Google Services</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -621,14 +643,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.16.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.16.1v0.4</td>
       <td>Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.16.2v0.4</td>
+      <td>User access to Early Access Apps SHOULD be disabled.</td>
+      <td>Warning</td>
+      <td>Should</td>
+      <td>The following OUs are non-compliant:<ul><li>Org Name: Early access apps are ENABLED</li></ul></td>
+    </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-17             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/commoncontrols.md#17-Multi-Party-Approval" target="_blank"\>Multi-Party Approval</a></h2><table>
+</table><h2>COMMONCONTROLS-17 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#17-Multi-Party-Approval" target="_blank">Multi-Party Approval</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -640,11 +669,51 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.17.1v0.3</td>
+      <td>GWS.COMMONCONTROLS.17.1v0.4</td>
       <td>Require multi party approval for sensitive admin actions SHALL be enabled.</td>
       <td>Fail</td>
       <td>Shall</td>
       <td>The following OUs are non-compliant:<ul><li>Org Name: Require multi party approval for sensitive admin actions is DISABLED</li></ul></td>
+    </tr>
+  </tbody>
+</table><h2>COMMONCONTROLS-18 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/commoncontrols.md#18-Data-Loss-Prevention" target="_blank">Data Loss Prevention</a></h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.COMMONCONTROLS.18.1v0.4</td>
+      <td>A custom policy SHALL be configured for Google Drive to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.18.2v0.4</td>
+      <td>A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.18.3v0.4</td>
+      <td>A custom policy SHALL be configured for Gmail to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).</td>
+      <td>N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.18.4v0.4</td>
+      <td>The action for the above DLP policies SHOULD be set to block external sharing.</td>
+      <td>N/A</td>
+      <td>Should/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
 </table>
