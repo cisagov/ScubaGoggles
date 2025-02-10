@@ -4,7 +4,7 @@ The Google Workspace (GWS) Admin console is the primary configuration hub for co
 
 The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
-The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance with the knowledge that every organization has different threat models and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks.
+The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
 For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
@@ -314,7 +314,7 @@ Google Workspace handles post-SSO verification for profiles assigned org-wide as
 Post-SSO verification SHOULD be enabled for users signing in using the SSO profile for your organization.
 
 - _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
-- _Last modified:_ November 4, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -433,7 +433,7 @@ User password length SHALL be at least 12 characters.
 User password length SHOULD be at least 15 characters.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -534,7 +534,7 @@ Pre-Built GWS Admin Roles considered highly privileged:
 All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -808,7 +808,7 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
 Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
 - _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -822,7 +822,7 @@ Access to Google Workspace applications by less secure apps that do not meet sec
 
 -   [RFC 6819](https://datatracker.ietf.org/doc/html/rfc6819)
 -   [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
--   [OMB M-22-09](https://www.whitehouse.gov/wp-content/uploads/2022/01/M-22-09.pdf)
+-   [OMB M-22-09](https://bidenwhitehouse.archives.gov/wp-content/uploads/2022/01/M-22-09.pdf)
 -   [GWS Admin Help \| Control which third-party & internal apps access GWS data](https://support.google.com/a/answer/7281227#zippy=%2Cstep-control-api-access%2Cstep-restrict-or-unrestrict-google-services%2Cbefore-you-begin-review-authorized-third-party-apps%2Cstep-manage-third-party-app-access-to-google-services-add-apps)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
 -   [GWS Admin Help \| Control access to less secure apps](https://support.google.com/a/answer/6260879?hl=en)
@@ -927,7 +927,7 @@ This section prevents users from downloading a copy of the Google Takeout servic
 Google Takeout services SHALL be disabled.
 
 - _Rationale:_ Google Takeout is a service that allows you to download a copy of your data stored within 40+ Google products and services, including data from Gmail, Drive, Photos, and Calendar. While there may be a valid use case for individuals to back up their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -944,13 +944,13 @@ Google Takeout services SHALL be disabled.
 ### Implementation
 
 #### GWS.COMMONCONTROLS.12.1v0.4 Instructions
-1.  Sign in to https://admin.google.com as an administrator.
+1.  Sign in to [Google Admin console](https://admin.google.com).
 2.  Select **Data** -\> **Data import & export** -\> **Google Takeout**.
 3.  Select **User access to Takeout for Google services**.
 4.  For services without an individual admin control, select **Services without an individual admin control** then **Edit**.
 5.  Select **Don't allow for everyone**.
 6.  Click **Save**.
-7.  For services with an individual admin control, under **apps** select the checkbox next to **Service name** and select **Don't allow**.
+7.  For services with an individual admin control, under **Apps** select the checkbox next to **Service name** and select **Don't allow**.
 
 ## 13. System-defined Rules
 
@@ -996,7 +996,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
 - _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ January 2025
 - _Note:_ Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 
 - MITRE ATT&CK TTP Mapping
@@ -1015,7 +1015,7 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
 ### Implementation
 
 #### GWS.COMMONCONTROLS.13.1v0.4 Instructions
-1.  Sign in to [Google Admin console](https://admin.google.com).
+1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Click **Rules**.
 3.  From the Rules page, click **Add a filter**.
 4.  From the drop-down menu, select **Type**.
@@ -1075,7 +1075,7 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 -   [Google Cloud Architecture Center \| Google Logging export scenarios](https://cloud.google.com/architecture/design-patterns-for-exporting-stackdriver-logging?hl=en#logging_export_scenarios)
 -   [GWS Admin Help \| Data sources for GWS Audit and investigation page](https://support.google.com/a/answer/9725452)
 -   [Google Cloud Operations Suite \| Configure and Manage sinks – Google Cloud](https://cloud.google.com/logging/docs/export/configure_export_v2)
--   [OMB M-21-31 \| Office of Management and Budget](https://www.whitehouse.gov/wp-content/uploads/2021/08/M-21-31-Improving-the-Federal-Governments-Investigative-and-Remediation-Capabilities-Related-to-Cybersecurity-Incidents.pdf)
+-   [OMB M-21-31 \| Office of Management and Budget](https://bidenwhitehouse.archives.gov/wp-content/uploads/2021/08/M-21-31-Improving-the-Federal-Governments-Investigative-and-Remediation-Capabilities-Related-to-Cybersecurity-Incidents.pdf)
 
 ### Prerequisites
 
@@ -1103,7 +1103,7 @@ At the time of writing, data region policies cannot be applied to data types not
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
 - _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential foreign adversaries to compromise the data.
-- _Last modified:_ October 30, 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
@@ -1114,8 +1114,8 @@ The data storage region SHALL be set to be the United States for all users in th
 #### GWS.COMMONCONTROLS.15.2v0.4
 Data SHALL be processed in the region selected for data at rest.
 
-- _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy allows for data sovereignty over organizational data.
-- _Last modified:_ September 20, 2024
+- _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
@@ -1180,7 +1180,7 @@ Google Workspace considers some of its services "core services," including Gmail
 Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.
 
 - _Rationale_: Allowing access to additional google services without a need may create unnecessary vulnerabilities within the Google Workspace environment. By turning these services off, it mitigates the risk by not allowing access.
-- _Last modified:_ June 11, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1191,10 +1191,10 @@ Service status for Google services that do not have an individual control SHOULD
     - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.COMMONCONTROLS.16.2v0.4
-User access to Early Access Apps SHOULD be disabled.
+User access to Early Access apps SHOULD be disabled.
 
-- _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure the latest security standards are met.
-- _Last modified:_ August 7, 2024
+- _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
@@ -1260,7 +1260,7 @@ To configure additional services per the policy:
 
 ## 18. Data Loss Prevention
 
-Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization. DLP helps you control what users can share and helps prevent unintended exposure of sensitive information.
+Using data loss prevention (DLP), organizations can create and apply rules to control the content that users can share in files outside the organization, which helps prevent unintended exposure of sensitive information.
 
 DLP rules can use predefined content detectors to match PII (e.g., SSN), credentials (e.g., API keys), or specific document types (e.g., source code). Custom rules can also be applied based upon regex match or document labels.
 
@@ -1273,7 +1273,7 @@ Though use of Google's DLP solution is not strictly required, guidance for confi
 A custom policy SHALL be configured for Google Drive to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ October 25, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1286,7 +1286,7 @@ A custom policy SHALL be configured for Google Drive to protect PII and sensitiv
 A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ October 25, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1298,7 +1298,7 @@ A custom policy SHALL be configured for Google Chat to protect PII and sensitive
 A custom policy SHALL be configured for Gmail to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ October 25, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1312,7 +1312,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 The action for the above DLP policies SHOULD be set to block external sharing.
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ October 25, 2024
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1328,7 +1328,7 @@ The action for the above DLP policies SHOULD be set to block external sharing.
 - [GWS Admin Help \| Prevent data leaks in email & attachments](https://support.google.com/a/answer/14767988?fl=1&sjid=4620103790740920406-NA)
 
 ### Prerequisites
-If using Google's DLP solution, the following editions of Google Workspace include Workspace DLP: Frontline Standard; Enterprise Standard and Enterprise Plus; Education Fundamentals, Education Standard, Teaching and Learning Upgrade, and Education Plus; Enterprise Essentials Plus.
+Google DLP is available to users of the following GWS editions: Frontline Standard; Enterprise Standard and Enterprise Plus; Education Fundamentals, Education Standard, Teaching and Learning Upgrade, and Education Plus; and Enterprise Essentials Plus.
 
 Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Google Workspace license. For Drive DLP, the license must include the Drive log events.
 
@@ -1345,9 +1345,9 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 3. In the **Apps** section, under **Google Drive**, choose the trigger for **Drive files**, then click **Continue**.
 4. In the **Conditions** section:
-    1. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
-    3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
+    1. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **Global - Credit card number**. Select the remaining condition properties according to agency need.
+    2. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
+    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
@@ -1358,9 +1358,9 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 3. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
 4. In the **Conditions** section:
-    1. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
-    3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
+    1. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **Global - Credit card number**. Select the remaining condition properties according to agency need.
+    2. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
+    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block**. Under **Select when this action should apply**, select **External Conversations**, **Spaces**, **Group chats**, and **1:1 chats** (See [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
@@ -1371,17 +1371,17 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 3. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
 4. In the **Conditions** section:
-    1. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
-    3. Click **Add Condition**. For **Content type to scan** select **All content**. For **What to scan for** select **Matches predefined data type**. For **Select data type** select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
+    1. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **Global - Credit card number**. Select the remaining condition properties according to agency need.
+    2. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
+    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block message**. Under **Select when this action should apply**, check **Messages sent to external recipients** (See [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 #### GWS.COMMONCONTROLS.18.4v0.4 Instructions
-1.  For each rule in the **Actions** section follow steps depending on application:
+1.  For each rule in the **Actions** section follow these steps depending on application:
     1. For Google Drive policies select **Block external sharing**.
     2. For Chat policies rules select **Block message** and select **External Conversations** and **Spaces**, **Group chats**, and **1:1 chats**.
-    3. For Gmail policies select **Block message** and select **Messages sent to external recipients**.
+    3. For Gmail policies select **Block message**, and then select **Messages sent to external recipients**.
 2. Click **Continue**.
