@@ -14,7 +14,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Login Challenges](#3-login-challenges)
 - [User Session Duration](#4-user-session-duration)
 - [Secure Passwords](#5-secure-passwords)
-- [Admin Privileged Accounts](#6-highly-privileged-accounts)
+- [Admin Privileged Accounts](#6-admin-privileged-accounts)
 - [Conflicting Account Management](#7-conflicting-account-management)
 - [Catastrophic Recovery Options](#8-catastrophic-recovery-options-for-super-admins)
 - [GWS Advanced Protection Program](#9-gws-advanced-protection-program)
@@ -531,7 +531,7 @@ Some examples of these privileged accounts include the pre-built GWS Admin Roles
 ### Policies
 
 #### GWS.COMMONCONTROLS.6.1v0.4
-All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
+All admin privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last modified:_ January 2025
