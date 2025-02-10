@@ -79,15 +79,14 @@ def user_directory(arguments: argparse.Namespace):
         # The user has explicitly specified an output directory to be used.
         # We only need to check whether the directory already exists and
         # save to config
+        if not arguments.nocheck and not arguments.outputpath.exists():
+            log.debug('Creating output directory %s', config.output_dir)
+            arguments.outputpath.mkdir(exist_ok = True)
+
         print(f"Updating the default output location to {arguments.outputpath}")
         arguments.outputpath = arguments.outputpath.resolve()
         config.output_dir = arguments.outputpath
         config_changed = True
-
-    # Check to ensure the directory specified in the config exists
-    if not arguments.nocheck and not config.output_dir.exists():
-        config.output_dir.mkdir(exist_ok = True)
-        log.debug('Creating output directory %s', config.output_dir)
 
     return config_changed
 
