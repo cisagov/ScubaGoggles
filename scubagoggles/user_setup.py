@@ -85,7 +85,7 @@ def user_directory(arguments: argparse.Namespace):
         config_changed = True
 
     # Check to ensure the directory specified in the config exists
-    if not config.output_dir.exists():
+    if not arguments.nocheck and not config.output_dir.exists():
         config.output_dir.mkdir(exist_ok = True)
         log.debug('Creating output directory %s', config.output_dir)
 

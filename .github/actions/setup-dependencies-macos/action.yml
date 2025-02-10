@@ -33,6 +33,5 @@ runs:
         opa_version: ${{ inputs.opa-version == 'latest' && ' '
           || format('-v {0}', inputs.opa-version) }}
       run: |
-        ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
-        scubagoggles setup -m -nc -nd -d ~/scubagoggles -r ~/scubagoggles -c credentials.json
-        scubagoggles -l d getopa ${{ env.opa_version }}
+        scubagoggles -l d setup -nd -d ~/scubagoggles -c credentials.json
+        scubagoggles getopa -v ${{ inputs.opa-version }}
