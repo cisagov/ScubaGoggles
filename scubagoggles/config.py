@@ -131,9 +131,6 @@ class UserConfig:
 
         opa_path = Path(os.path.expandvars(value)).expanduser()
 
-        if not opa_path.exists() or not opa_path.is_dir():
-            raise NotADirectoryError(f'? {opa_path} - directory not found')
-
         # Purposely storing this as the given value, so it's stored in the
         # file as given.  For example, if '~/opa' is given, we check it above
         # in expanded form, but still store it unexpanded.

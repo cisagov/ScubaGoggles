@@ -80,8 +80,11 @@ def user_directory(arguments: argparse.Namespace):
         # We only need to check whether the directory already exists and
         # save to config
         if not arguments.nocheck and not arguments.outputpath.exists():
-            log.debug('Creating output directory %s', config.output_dir)
+            log.debug('Creating output directory %s', arguments.outputpath)
             arguments.outputpath.mkdir(exist_ok = True)
+
+        if not arguments.nocheck and not arguments.outputpath.is_dir():
+            raise NotADirectoryError(f'? {arguments.outputpath} is not a directory.')
 
         print(f"Updating the default output location to {arguments.outputpath}")
         arguments.outputpath = arguments.outputpath.resolve()
