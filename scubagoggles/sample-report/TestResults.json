@@ -416,11 +416,11 @@
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}, {\"Name\": \"Mitchel test OU\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Org Name\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}, {\"Name\": \"Carolyn Aguirre\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
     "PolicyId": "\"GWS.COMMONCONTROLS.5.4v0.4\"",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Enforce password policy at next sign-in is OFF</li><li>Mitchel test OU: Enforce password policy at next sign-in is OFF</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Org Name: Enforce password policy at next sign-in is OFF</li><li>Carolyn Aguirre: Enforce password policy at next sign-in is OFF</li></ul>\"",
     "RequirementMet": "false"
   },
   {
