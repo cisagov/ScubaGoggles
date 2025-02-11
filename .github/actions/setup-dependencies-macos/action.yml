@@ -33,5 +33,5 @@ runs:
         opa_version: ${{ inputs.opa-version == 'latest' && ' '
           || format('-v {0}', inputs.opa-version) }}
       run: |
-        scubagoggles -l d setup -nd -d ~/scubagoggles -c credentials.json
+        scubagoggles -l d setup -nd -o ~/scubagoggles -c credentials.json
         scubagoggles getopa -v ${{ inputs.opa-version }}

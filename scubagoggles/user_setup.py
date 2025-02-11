@@ -120,7 +120,7 @@ def opa_directory(arguments: argparse.Namespace):
         # location.
 
         print(f"Updating the default OPA location to {opa_dir}")
-        create_dir_download_opa(opa_dir, download)
+        create_dir_download_opa(opa_dir, check, download)
 
         if check:
             validate_opa_dir(opa_dir)
@@ -131,13 +131,13 @@ def opa_directory(arguments: argparse.Namespace):
 
         return True
 
-    if config.file_exists and config.opa_dir:
+    if config.opa_dir:
 
         # The user has established a configuration file and includes the OPA
         # executable directory.  We just validate the directory and don't
         # change anything.
 
-        create_dir_download_opa(config.opa_dir, download)
+        create_dir_download_opa(config.opa_dir, check, download)
 
         if check:
             validate_opa_dir(config.opa_dir)
@@ -156,11 +156,11 @@ def opa_directory(arguments: argparse.Namespace):
     # There's no OPA executable directory defined, and we haven't found the
     # executable in the User's PATH, so we use the default location defined
     # in config.py
-    create_dir_download_opa(config.opa_dir, download)
+    create_dir_download_opa(config.opa_dir, check, download)
     return True
 
 
-def create_dir_download_opa(opa_dir: Path, download: bool):
+def create_dir_download_opa(opa_dir: Path, create_dir: bool, download: bool):
 
     """Helper function that checks the given OPA executable directory,
     and creates it if it doesn't exist (and the user hasn't suppressed it).
@@ -173,12 +173,22 @@ def create_dir_download_opa(opa_dir: Path, download: bool):
         exists and the OPA executable is missing.
     """
 
-    if not opa_dir.exists():
-        log.debug('  creating: %s', opa_dir)
-        opa_dir.mkdir(exist_ok = True)
+    if create_dir:
+        if not opa_dir.exists():
+            log.debug('  creating: %s', opa_dir)
+            opa_dir.mkdir(exist_ok = True)
+        if not opa_dir.is_dir():
+            raise NotADirectoryError("The specified location for the OPA "
+                f"executable, {opa_dir}, exists but is not a directory.")
+    else:
+        if not opa_dir.exists():
+            log.debug("OPA directory does not exist but create_dir is false, "\
+                "OPA will not be downloaded.")
+        if not opa_dir.is_dir():
+            log.warning("The specified location for the OPA executable,"
+                f"{opa_dir}, exists but is not a directory.")
 
-    if opa_dir.exists() and download:
-
+    if opa_dir.exists() and opa_dir.is_dir() and download:
         # The OPA directory exists and the user hasn't suppressed the
         # download (e.g., no internet).  Get the OPA executable if it's
         # not already there.
@@ -199,7 +209,7 @@ def validate_opa_dir(opa_dir: Path = None):
     """
 
     if opa_dir and not opa_dir.is_dir():
-        log.warning('? %s - OPA directory not found', opa_dir)
+        log.warning('? %s - specified OPA path exists but is not a directory', opa_dir)
         return False
 
     try:

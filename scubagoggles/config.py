@@ -1,6 +1,6 @@
 """ScubaGoggles User Configuration - The UserConfig class implementation
-manages the creation, modification, and use of the ScubaGoggles user
-configuration file.
+manages the default values for the output location, the credentials file
+location, and the OPA executable location.
 """
 
 import os
@@ -9,32 +9,26 @@ from typing import Iterable, Union
 from pathlib import Path
 
 from yaml import dump, Dumper, load, Loader
-
+import logging
 
 class UserConfig:
 
     """Implementation of user configuration for ScubaGoggles.  Certain
-    settings, such as the directory for ScubaGoggles output, location of the
-    Google API credentials file, and the location of the OPA executable,
-    are managed by this class.
+    settings, specifically the directory for ScubaGoggles output,
+    location of the Google API credentials file, and the location of
+    the OPA executable, are managed by this class.
     """
 
     # FWIW, this was originally implemented using TOML (Tom's Obvious Minimal
     # Language) (hence the reference to "_doc"), but was converted to use YAML
     # for compatibilty with the other user configuration.  For ScubaGoggles,
-    # the configuration file is named stored at ~/.scubagoggles/userdefaults.yaml.
+    # the configuration file is stored at ~/.scubagoggles/userdefaults.yaml.
 
     _defaults = {'scubagoggles': {'opa_dir': '~/.scubagoggles',
-                                  'output_dir': '.'}}
+                                    'output_dir': './'}}
 
-    # This is the main key (TOML: table) in the configuration, and is used to
-    # continue defining the defaults.  For example, we want the default
-    # credentials file default after the initial defaults dictionary has been
-    # defined (so we can access the output directory).
-
+    # This is the main key (TOML: table) in the configuration
     _main = _defaults['scubagoggles']
-
-    _defaults['scubagoggles']['credentials'] = './credentials.json'
 
     _default_config_file = Path('~/.scubagoggles/userdefaults.yaml').expanduser()
 
@@ -54,7 +48,7 @@ class UserConfig:
 
         self._check = True
 
-        if self._config_file.exists():
+        if self._config_file.exists() and self._config_file.is_file():
             with self._config_file.open(encoding = 'utf-8') as in_stream:
                 self._doc = load(in_stream, Loader)
             self._validate()
@@ -66,11 +60,9 @@ class UserConfig:
     @property
     def file_exists(self) -> bool:
 
-        """Returns True if the user's configuration file existed at the time
-        this instance was created.  False is returned otherwise, including
-        if the file does exist but was written after this instance was
-        created.  This property is being used to determine if a user's
-        "legacy" setup area should be looked for.
+        """Returns True if the user's defaults file exists, False otherwise.
+        This property is being used to determine if a user has used the setup
+        utility.
         """
 
         return self._file_exists
@@ -85,6 +77,8 @@ class UserConfig:
         :return: configuration value as a Path.
         """
 
+        # Return None if the variable wasn't defined in the user defaults
+        # file
         value = (self._doc['scubagoggles'][name]
                  if name in self._doc['scubagoggles'] else None)
 
@@ -101,6 +95,12 @@ class UserConfig:
 
         credentials = self._get_path_config('credentials')
 
+        # If we're in check mode and the credentials path was defined in
+        # user defaults file, raise an exception if the creds path doesn't
+        # exist or isn't a file.
+        if self._check and credentials and (not credentials.exists()
+                                            or not credentials.is_file()):
+            raise FileNotFoundError(f'? {credentials} - credentials not found')
         return credentials
 
     @credentials_file.setter
@@ -119,7 +119,16 @@ class UserConfig:
         """Returns the directory containing the OPA executable file.
         """
 
-        return self._get_path_config('opa_dir')
+        directory = self._get_path_config('opa_dir')
+
+        # If we're in check mode and the OPA path was defined in the user
+        # defaults file, raise an exception if the OPA path doesn't exist,
+        # or isn't a folder.
+        if self._check and directory and not directory.exists():
+            raise FileNotFoundError(f'? {directory} - OPA directory not found')
+        if self._check and directory and not directory.is_dir():
+            raise NotADirectoryError(f'? {directory} - is not a folder')
+        return directory
 
     @opa_dir.setter
     def opa_dir(self, value: Union[str, os.PathLike]):
@@ -129,12 +138,6 @@ class UserConfig:
         :param value: location of the OPA executable file.
         """
 
-        opa_path = Path(os.path.expandvars(value)).expanduser()
-
-        # Purposely storing this as the given value, so it's stored in the
-        # file as given.  For example, if '~/opa' is given, we check it above
-        # in expanded form, but still store it unexpanded.
-
         self._doc['scubagoggles']['opa_dir'] = str(value)
 
     @property
@@ -142,6 +145,16 @@ class UserConfig:
 
         """Returns the user's directory used for ScubaGoggles output.
         """
+
+        directory = self._get_path_config('output_dir')
+
+        # If we're in check mode and the output path was defined in the user
+        # defaults file, raise an exception if it doesn't exist or isn't a
+        # folder.
+        if self._check and directory and not directory.exists():
+            raise FileNotFoundError(f'? {directory} - directory not found')
+        if self._check and directory and not directory.is_dir():
+            raise NotADirectoryError(f'? {directory} - is not a folder')
 
         return self._get_path_config('output_dir')
 
@@ -152,15 +165,6 @@ class UserConfig:
 
         :param value: location of the output directory.
         """
-
-        output_dir = Path(os.path.expandvars(value)).expanduser()
-
-        if not output_dir.exists() or not output_dir.is_dir():
-            raise NotADirectoryError(f'? {output_dir} - directory not found')
-
-        # Purposely storing this as the given value, so it's stored in the
-        # file as given.  For example, if '~/scubagoggles' is given, we check
-        # it above in expanded form, but still store it unexpanded.
 
         self._doc['scubagoggles']['output_dir'] = str(value)
 
@@ -188,8 +192,19 @@ class UserConfig:
         if not self._config_file.parent.exists():
             self._config_file.parent.mkdir()
 
+        # ScubaGoggles v0.4 stored the config file in text file called
+        # ~/.scubagoggles. ~/.scubagoggles is now expected to be a folder.
+        # Users who have .scubagoggles as text file instead of a folder
+        # will need to move that file first.
+        if not self._config_file.parent.is_dir():
+            raise NotADirectoryError(f"Cannot save user defaults to {self._config_file} "\
+                f"because {self._config_file.parent} is not a directory. Please move "\
+                    f"the existing {self._config_file.parent} file then try again.")
+
         with self._config_file.open('w', encoding = 'utf-8') as out_stream:
             dump(self._doc, out_stream, Dumper)
+
+        self._file_exists = True
 
     def _validate(self, keys: Iterable = None) -> Union[list, None]:
 

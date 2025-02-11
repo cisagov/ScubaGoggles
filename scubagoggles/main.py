@@ -35,8 +35,14 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     """
 
     scuba_path = Path(__file__).parent
-    user_dir = user_config.output_dir
-    opa_dir = user_config.opa_dir
+    user_config.path_check = False
+
+    # If the credentials path was not defined in the user defaults file,
+    # fall back to "credentials.json" in the current directory
+    credentials = './credentials.json' if not user_config.credentials_file else user_config.credentials_file
+
+    # If the user hasn't run the setup util, fall back to the current directory
+    opa_dir = './' if not user_config.file_exists else user_config.opa_dir
 
     gws = Orchestrator.gws_products()
     gws_baselines = tuple(sorted(gws['gws_baselines']))
@@ -58,10 +64,10 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         help=help_msg)
 
     help_msg = ('The folder path where both the output JSON & HTML report will '
-                f'be created. Defaults to "{user_dir}".')
+                f'be created. Defaults to "{user_config.output_dir}".')
     parser.add_argument('--outputpath',
                         '-o',
-                        default=user_dir,
+                        default=user_config.output_dir,
                         metavar='<directory>',
                         type=path_parser,
                         help=help_msg)
@@ -76,7 +82,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
 
     help_msg = ('The location and name of the OAuth / service account '
                 'credentials json file.  Defaults to '
-                f'"{user_config.credentials_file}".')
+                f'"{credentials}".')
     parser.add_argument('--credentials',
                         '-c',
                         default=Path(user_config.credentials_file),
@@ -235,14 +241,11 @@ def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         help='Version of OPA to download (default: latest '
                         'version)')
 
-    help_msg = 'Directory containing OPA executable'
-    if user_config.opa_dir:
-        help_msg += f' (default: {user_config.opa_dir})'
     parser.add_argument('--opa_directory',
                         '-r',
                         metavar='<directory>',
                         type=path_parser,
-                        help=help_msg)
+                        help='Directory containing OPA executable')
 
 
 def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
@@ -282,7 +285,7 @@ def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         help='Directory containing OPA executable')
 
     parser.add_argument('--outputpath',
-                        '-d',
+                        '-o',
                         metavar='<directory>',
                         type=path_parser,
                         help='Scubagoggles output directory')
