@@ -10,6 +10,30 @@ body:
     options:
     - label: This issue has an informative and human-readable title.
       required: true
+- type: dropdown
+  attributes:
+    label: Operating System
+    description: Which operating system are you using?
+    options:
+      - Windows
+      - macOS
+      - Linux
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Python Version
+    description: Which Python version are you using?
+    placeholder: Enter your Python version (e.g., 3.10, 3.12)
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: PowerShell Version (optional)
+    description: Which PowerShell version are you using?
+    placeholder: Enter PowerShell version (e.g., 5.1, 7.0)
+  validations:
+    required: false
 - type: textarea
   attributes:
     label: "\U0001F41B Summary"
