@@ -1,13 +1,21 @@
-name: "Submit an Idea"
-description: 'Describe an idea, todo, feature, task, improvement, issue, epic, or story'
-title: "[IDEA] <title>"
-labels: ["enhancement", "improvement"]
+name: Submit an Idea
+description: Describe an idea, todo, feature, task, improvement, issue, epic, or story
+labels:
+  - enhancement
 
-body: 
+body:
+- type: checkboxes
+  attributes:
+    label: Prerequisites
+    options:
+    - label: This issue has an informative and human-readable title.
+      required: true
 - type: textarea
   attributes:
     label: Summary
-    description: What is the work, as a high-level summary? 
+    description: What is the work, as a high-level summary?
+    placeholder: |
+      The purpose of this issue is to accomplish x task for y reason...
   validations:
     required: true 
 - type: textarea
