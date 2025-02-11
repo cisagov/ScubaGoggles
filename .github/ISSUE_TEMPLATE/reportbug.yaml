@@ -1,16 +1,23 @@
-name: "Bug report"
-description: 'Describe a bug, error, unexpected behavior, or other problem'
-title: "[BUG] <title>"
-labels: ["Bug"]
+name: Bug report
+description: Describe a bug, error, unexpected behavior, or other problem
+labels:
+- bug
 
-body: 
+body:
+- type: checkboxes
+  attributes:
+    label: Prerequisites
+    options:
+    - label: This issue has an informative and human-readable title.
+      required: true
 - type: textarea
   attributes:
     label: Summary
-    description: What's wrong? Please be specific. 
+    description: What's wrong? Please be specific.
+    placeholder: x bug is resulting in an unexpected result in the reports...
   validations:
     required: true 
-- type: textareag
+- type: textarea
   attributes:
     label: Expected Behavior
     description: What did you expect to happen that didn't? 
@@ -24,9 +31,8 @@ body:
       1. In this environment...
       2. With this config...
       3. Run '...'
-      4. See error...
   validations:
-    required: false
+    required: true
 - type: textarea
   attributes:
     label: Any helpful log output or screenshots?
