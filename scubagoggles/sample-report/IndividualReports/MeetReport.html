@@ -22,6 +22,7 @@
     --toggle-height: 25px;
     --toggle-width: 46px;
     --toggle-radius: 18px;
+    --unvisited-link-color: #0000EE;
 }
 
 body {
@@ -152,7 +153,8 @@ a.control_group:active {
     font-family: Arial, Helvetica, sans-serif;
     color: var(--link-color);
     text-decoration: none;
-}</style>
+}
+</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
  */
@@ -204,7 +206,6 @@ const colorRows = () => {
 window.addEventListener('DOMContentLoaded', (event) => {
     colorRows();
 });</script>
-        </script>
     </head>
     <body>
         <main>
@@ -217,9 +218,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 </div>
             </header>
             <h1>Google Meet Baseline Report</h1>
-            <h4><p><br/></p></h4>
-                        <table style = "text-align:center;">                 <colgroup><col/><col/><col/></colgroup>                 <tr><th>Customer Domain </th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr>                 <tr><td>example.org</td><td>10/11/2024 14:01:08 Pacific Daylight Time</td><td>0.3</td><td>0.3.0</td></tr>             </table>
-            <h2>MEET-1             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/meet.md#1-Meeting-Access" target="_blank"\>Meeting Access</a></h2><table>
+            
+            <table style = "text-align:center;"><tr><th>Customer Domain</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>example.org</td><td>02/10/2025 09:39:56 Pacific Daylight Time</td><td>v0.4</td><td>v0.4.0</td></tr></table>
+            <h2>MEET-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/meet.md#1-Meeting-Access" target="_blank">Meeting Access</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -231,14 +232,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.MEET.1.1v0.3</td>
+      <td>GWS.MEET.1.1v0.4</td>
       <td>Meeting access SHOULD be restricted to users signed in with a Google Account or Dialing in using a phone.</td>
-      <td>Pass</td>
+      <td>Warning</td>
       <td>Should</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Org Name: Who can join meetings is set to: all users (including users not signed in with a Google account)</li></ul></td>
     </tr>
   </tbody>
-</table><h2>MEET-2             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/meet.md#2-Internal-Access-to-External-Meetings" target="_blank"\>Internal Access to External Meetings</a></h2><table>
+</table><h2>MEET-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/meet.md#2-Internal-Access-to-External-Meetings" target="_blank">Internal Access to External Meetings</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -250,14 +251,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.MEET.2.1v0.3</td>
+      <td>GWS.MEET.2.1v0.4</td>
       <td>Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace tenant or organization.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>MEET-3             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/meet.md#3-Host-Management-Meeting-Features" target="_blank"\>Host Management Meeting Features</a></h2><table>
+</table><h2>MEET-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/meet.md#3-Host-Management-Meeting-Features" target="_blank">Host Management Meeting Features</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -269,14 +270,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.MEET.3.1v0.3</td>
+      <td>GWS.MEET.3.1v0.4</td>
       <td>Host Management meeting features SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>MEET-4             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/meet.md#4-External-Participants" target="_blank"\>External Participants</a></h2><table>
+</table><h2>MEET-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/meet.md#4-External-Participants" target="_blank">External Participants</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -288,14 +289,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.MEET.4.1v0.3</td>
+      <td>GWS.MEET.4.1v0.4</td>
       <td>Warn for external participants SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>MEET-5             <a href="https://github.com/cisagov/scubagoggles/blob/v0.3.0/baselines/meet.md#5-Incoming-Calls" target="_blank"\>Incoming Calls</a></h2><table>
+</table><h2>MEET-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/meet.md#5-Incoming-Calls" target="_blank">Incoming Calls</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -307,7 +308,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.MEET.5.1v0.3</td>
+      <td>GWS.MEET.5.1v0.4</td>
       <td>Incoming calls SHALL be restricted to contacts and other users in the organization.</td>
       <td>Pass</td>
       <td>Shall</td>
