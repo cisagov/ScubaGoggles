@@ -12,7 +12,7 @@ body:
       required: true
 - type: textarea
   attributes:
-    label: Summary
+    label: "\U0001F4A1 Summary"
     description: What is the work, as a high-level summary?
     placeholder: |
       The purpose of this issue is to accomplish x task for y reason...
@@ -25,23 +25,25 @@ body:
     placeholder: |
      This would be useful because...
   validations:
-    required: false
+    required: true
 - type: textarea
   attributes:
     label: Implementation notes
     description: Please provide details for implementation. 
     placeholder: |
-      1. An example for how this would be used...
+      1. An example for how this would be used
       2. What would this look like?
-      3. How this would act...
-      4. Any related work, including links to related issues...
+      3. How this would act?
+      4. Any related work, including links to related issues
   validations:
-    required: false
+    required: true
 - type: textarea
   attributes:
-    label: Acceptance Criteria
+    label: Acceptance criteria (optional)
     description: How do we know when this work is done?
     placeholder: |
-      - [ ] Criterion
+      - [ ] The new feature is fully implemented based on x, y, z criteria
+      - [ ] Additional unit test coverage is added
+      - [ ] Any other criteria
   validations:
     required: false
