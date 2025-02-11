@@ -2022,6 +2022,12 @@ if {
 # GWS.COMMONCONTROLS.12 #
 #########################
 
+#
+# Baseline GWS.COMMONCONTROLS.12.1
+#--
+
+CommonControlsId12_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.12.1")
+
 LogMessage12_1 := "UserTakeoutSettingsProto User Takeout "
 
 Msg12_1 := "The following apps with individual admin control have Takeout enabled: %s"
@@ -2153,10 +2159,6 @@ if {
     count(EnabledApps) > 0
 }
 
-#
-# Baseline GWS.COMMONCONTROLS.12.1
-#--
-
 default NoSuchEvent12_1 := false
 
 NoSuchEvent12_1 := true if {
@@ -2169,14 +2171,23 @@ NoSuchEvent12_1 := true if {
     count(Events) == 0
 }
 
-CommonControlsId12_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.12.1")
-
 Check12_1_OK if {
     not PolicyApiInUse
     not NoSuchEvent12_1
 }
 
 Check12_1_OK if {PolicyApiInUse}
+
+NonCompliantOUs12_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage12_1a
+
+}
+if {
+    some OU, _ in input.policies
+    takeoutStatus := utils.AppExplicitStatus(input.policies, "takeout", OU)
+    takeoutStatus != "DISABLED"
+}
 
 Takeout := {"blogger": "Blogger",
             "books": "Google Books",
@@ -2195,7 +2206,6 @@ NonCompliantOUs12_1 contains {
 }
 if {
     some OU, settings in input.policies
-    utils.AppEnabled(input.policies, "takeout", OU)
     EnabledApps :=[value
 		           | some key, value in Takeout
                      section := sprintf("%s_user_takeout", [key])

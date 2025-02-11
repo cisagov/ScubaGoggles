@@ -7,7 +7,7 @@ import data.utils.PassTestResult
 GoodCaseInputApi12 := {
     "policies": {
         "topOU": {
-            "takeout_service_status": {"serviceState": "ENABLED"},
+            "takeout_service_status": {"serviceState": "DISABLED"},
             "blogger_user_takeout": {"takeoutStatus": "DISABLED"},
             "books_user_takeout": {"takeoutStatus": "DISABLED"},
             "location_history_user_takeout": {"takeoutStatus": "DISABLED"},
@@ -20,7 +20,7 @@ GoodCaseInputApi12 := {
         },
         "nextOU": {
             "takeout_service_status": {"serviceState": "DISABLED"},
-            "blogger_user_takeout": {"takeoutStatus": "ENABLED"}
+            "blogger_user_takeout": {"takeoutStatus": "DISABLED"}
         }
     },
     "tenant_info": {
@@ -63,11 +63,12 @@ BadCaseInputApi12a := {
             "youtube_user_takeout": {"takeoutStatus": "DISABLED"}
         },
         "nextOU": {
-            "location_history_user_takeout": {"takeoutStatus": "ENABLED"},
+            "takeout_service_status": {"serviceState": "DISABLED"},
             "play_console_user_takeout": {"takeoutStatus": "ENABLED"},
             "youtube_user_takeout": {"takeoutStatus": "ENABLED"}
         },
         "thirdOU": {
+            "takeout_service_status": {"serviceState": "ENABLED"},
             "blogger_user_takeout": {"takeoutStatus": "ENABLED"},
             "maps_user_takeout": {"takeoutStatus": "ENABLED"},
             "play_user_takeout": {"takeoutStatus": "ENABLED"},
@@ -102,6 +103,8 @@ test_Takeout_Incorrect_1 if {
                     "play",
                     "youtube"]
     failedOU := [{"Name": "topOU",
+                 "Value": NonComplianceMessage12_1a},
+                 {"Name": "topOU",
                  "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
@@ -110,11 +113,13 @@ test_Takeout_Incorrect_2 if {
     PolicyId := CommonControlsId12_1
     Output := tests with input as BadCaseInputApi12a
 
-    EnabledApps1 := ["location_history", "play_console", "youtube"]
+    EnabledApps1 := ["play_console", "youtube"]
     EnabledApps2 := ["blogger", "maps", "play"]
     failedOU := [{"Name": "nextOU",
                  "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps1))},
+                 {"Name": "thirdOU", "Value": NonComplianceMessage12_1a},
                  {"Name": "thirdOU",
-                 "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps2))}]
+                 "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps2))},
+                 {"Name": "topOU", "Value": NonComplianceMessage12_1a}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
