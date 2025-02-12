@@ -46,7 +46,7 @@ A new release triggers the transition back to normal operations. At this time, t
 
 ## Branching Structure
 
-See [Branching Structure Diagram](BranchingStructure.md) for a visual representation of the branch structure, both during a code freeze and otherwise.
+See [Branching Structure Diagram](BRANCHINGSTRUCTURE.md) for a visual representation of the branch structure, both during a code freeze and otherwise.
 
 ## Creating Issues
 
