@@ -131,7 +131,7 @@ def opa_directory(arguments: argparse.Namespace):
 
         return True
 
-    if config.opa_dir:
+    if config.file_exists and config.opa_dir:
 
         # The user has established a configuration file and includes the OPA
         # executable directory.  We just validate the directory and don't

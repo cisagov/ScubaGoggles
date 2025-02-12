@@ -143,7 +143,7 @@ def download_opa(opa_dir: Path,
     if verify:
         download_ok = verify_opa(download_url, output_file)
         if not download_ok:
-            log.error('Hash generated from downloaded file does NOT '
+            raise RuntimeError('Hash generated from downloaded file does NOT '
                       'match expected value')
 
     test_opa(output_file)
