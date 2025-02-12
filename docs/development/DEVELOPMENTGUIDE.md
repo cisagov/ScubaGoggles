@@ -6,14 +6,14 @@ The Development Guide establishes conventions that regular contributors are expe
 
 Setting up your development environment to contribute to ScubaGoggles involves many of the same steps that are outlined in the [Download and Install Guide](../installation/DownloadAndInstall.md). The steps diverage in the stages of downloading the latest ScubaGoggles release, installing ScubaGoggles and its dependencies and running `scubagoggles setup` steps. Replace steps 3, 4 and 5 in the Download and Install Guide with the following steps:
 
-1. Install [Git](https://git-scm.com/downloads) on your system
-2. Clone the ScubaGoggles repository
-3. Run ScubaGoggles using one of two methods:
-   1. Installing ScubaGoggles using `python -m pip install .`
+1. **Install [Git](https://git-scm.com/downloads) on your system**
+2. **Clone the ScubaGoggles repository**
+3. **Run ScubaGoggles using one of two methods:**
+   1. **Installing ScubaGoggles using `python -m pip install .`**
       This method is similar to the installation method used by ScubaGoggles users but rather than installing the latest ScubaGoggles version that has been packaged into a Python binary "wheel" file, this method installs ScubaGoggles directly from the latest source code. After installation you can run any ScubaGoggles commands as usual: for example, `scubagoggles setup` or `scubagoggles gws`. Note that if you choose this method, you will need to re-run`python -m pip install .` to apply any code changes.
-   2. Running ScubaGoggles without Installation.
+   2. **Running ScubaGoggles without Installation.**
       Alternatively, contributors can run ScubaGoggles without installation using `python scuba.py` followed by any regular ScubaGoggles commands: for example, `python scuba.py setup` or `python scuba.py gws`.
-4. ScubaGoggles Setup Utility
+4. **ScubaGoggles Setup Utility**
    Using your chosen method above, run either `scubagoggles setup` or `python scuba.py setup`. The Setup Utility creates a `.scubagoggles` directory in your home directory and populates it with an OPA executable and a `userdefaults.yaml` configuration file. This configuration file specifies the location of your credentials file (to be created later), OPA executable and output directory. It can edited manually or using the commands documented in [Defaults](../installation/Defaults.md). If you encounter any issues downloading OPA using the Setup Utility, see [OPA](../installation/OPA.md) for instructions to manually download and configure the OPA executable.
 
 After these steps, continue with step 6 as described in the [Download and Install Guide](../installation/DownloadAndInstall.md).
