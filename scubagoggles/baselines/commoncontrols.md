@@ -14,7 +14,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Login Challenges](#3-login-challenges)
 - [User Session Duration](#4-user-session-duration)
 - [Secure Passwords](#5-secure-passwords)
-- [Highly Privileged Accounts](#6-highly-privileged-accounts)
+- [Privileged Accounts](#6-privileged-accounts)
 - [Conflicting Account Management](#7-conflicting-account-management)
 - [Catastrophic Recovery Options](#8-catastrophic-recovery-options-for-super-admins)
 - [GWS Advanced Protection Program](#9-gws-advanced-protection-program)
@@ -516,11 +516,11 @@ To configure a strong password policy is configured, use the Google Workspace Ad
 #### GWS.COMMONCONTROLS.5.6v0.4 Instructions
 1.  Under **Expiration**, select **Never Expires.**
 
-## 6. Highly Privileged Accounts
+## 6. Privileged Accounts
 
-Highly privileged accounts represent significant risk to an agency if compromised or if insiders use them in an unauthorized way. Highly privileged accounts share the same risk factors related to the catastrophic impacts on GWS services, user community and agency data, if compromised. This section supports the definition of highly privileged accounts and the controls necessary to protect them.
+Administrative or admin accounts are privileged accounts in Google Workspace that can manage settings, access sensitive data, and perform critical functions. The compromise of an admin account could have catastrophic impacts on the workspace organization. This section defines privileged accounts as both pre-built and custom admin accounts.
 
-Pre-Built GWS Admin Roles considered highly privileged:
+Some examples of these privileged accounts include the pre-built GWS Admin Roles:
 
 -   Super Admin: This role possesses critical control over the entire GWS structure. It has access to all features in the Admin Console and Admin API and can manage every aspect of agency GWS accounts.
 -   User Management Admin: This account has rights to add, remove, and delete normal users in addition to managing all user passwords, security settings, and other management tasks that make it potentially crucial if compromised.
@@ -531,7 +531,7 @@ Pre-Built GWS Admin Roles considered highly privileged:
 ### Policies
 
 #### GWS.COMMONCONTROLS.6.1v0.4
-All highly privileged accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
+All administrative accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last modified:_ January 2025
