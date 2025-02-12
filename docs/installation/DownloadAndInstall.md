@@ -4,7 +4,7 @@
 > Use of this tool requires access to an internet browser for initial setup
 > and to view the html report output.
 
-Setting up to run ScubaGoggles as a user for the first time involves the following steps. If you are a developer looking to contribute to ScubaGoggles, see the [Development Guide](DEVELOPMENTGUIDE.md) for instructions on setting up ScubaGoggles for development.
+Setting up to run ScubaGoggles as a user for the first time involves the following steps. If you are a developer looking to contribute to ScubaGoggles, see the [Development Guide](DevelopmentGuide.md) for instructions on setting up ScubaGoggles for development.
 
 1. Installing [Python 3](https://www.python.org/) on your system.
 2. (Optional) Creating and activating a Python virtual environment.
