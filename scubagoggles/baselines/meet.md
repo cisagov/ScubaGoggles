@@ -237,7 +237,7 @@ This section covers Google Meet video settings such as automatic video recording
 
 ### Policies
 
-#### GWS.MEET.6.1v0.3
+#### GWS.MEET.6.1v0.4
 Automatic recordings for Google Meet SHALL be disabled.
 
 - _Rationale:_ Automatic recordings could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
@@ -248,8 +248,8 @@ Automatic recordings for Google Meet SHALL be disabled.
   - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
   - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
-  
-#### GWS.MEET.6.2v0.3
+
+#### GWS.MEET.6.2v0.4
 Automatic transcripts for Google Meet SHALL be disabled.
 
 - _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
@@ -270,7 +270,7 @@ Automatic transcripts for Google Meet SHALL be disabled.
 
 ### Implementation
 
-#### GWS.MEET.6.1v0.3 Instructions
+#### GWS.MEET.6.1v0.4 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Meet video settings**.
@@ -278,10 +278,10 @@ Automatic transcripts for Google Meet SHALL be disabled.
 5.  Ensure **Meetings are recorded by default** is unselected.
 6.  Click **Save**.
 
-#### GWS.MEET.6.2v0.3 Instructions
+#### GWS.MEET.6.2v0.4 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Meet video settings**.
 4.  Click **Automatic transcription**.
 5.  Ensure **Meetings are transcribed by default** is unselected.
-6.  Click **Save**. 
+6.  Click **Save**.
