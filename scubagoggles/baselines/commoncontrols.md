@@ -93,12 +93,21 @@ Phishing-Resistant MFA SHALL be required for all users.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
 #### GWS.COMMONCONTROLS.1.2v0.4
-Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.
+If phishing-resistant MFA is not yet tenable, an MFA method from the following list SHALL be used in the interim.
 
-- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
-- _Last modified:_ August 17, 2023
-- _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
-		on Google 2SV.
+> Google prompt
+
+> Google Authenticator
+
+> Backup Codes
+
+> Software Tokens One-Time Password (OTP): This option is commonly implemented using mobile phone authenticator apps
+
+> Hardware Tokens OTP
+
+- _Rationale:_ This is a stopgap security policy to help protect the organization if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk. Additionally, this list excludes SMS and voice call, the weakest authentication methods, forcing users to use stronger MFA methods.
+- _Last modified:_ February 2025
+- _Note:_ ONLY to be enforced if Policy 1.1 is not possible for the agency. SMS or Voice as the MFA method SHALL NOT be used.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -112,10 +121,10 @@ Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
 #### GWS.COMMONCONTROLS.1.3v0.4
-Allow users to trust the device SHALL be disabled.
+Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.
 
-- _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
-- _Last modified:_ August 17, 2023
+- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
+- _Last modified:_ February 2025
 - _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
 		on Google 2SV.
 
@@ -131,21 +140,12 @@ Allow users to trust the device SHALL be disabled.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
 #### GWS.COMMONCONTROLS.1.4v0.4
-If phishing-resistant MFA is not yet tenable, an MFA method from the following list SHALL be used in the interim.
+Allow users to trust the device SHALL be disabled.
 
-> Google prompt
-
-> Google Authenticator
-
-> Backup Codes
-
-> Software Tokens One-Time Password (OTP): This option is commonly implemented using mobile phone authenticator apps
-
-> Hardware Tokens OTP
-
-- _Rationale:_ This is a stopgap security policy to help protect the organization if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk. Additionally, this list excludes SMS and voice call, the weakest authentication methods, forcing users to use stronger MFA methods.
-- _Last modified:_ August 17, 2023
-- _Note:_ ONLY to be enforced if Policy 1.1 is not possible for the agency. SMS or Voice as the MFA method SHALL NOT be used.
+- _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
+- _Last modified:_ February 2025
+- _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
+		on Google 2SV.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -157,6 +157,7 @@ If phishing-resistant MFA is not yet tenable, an MFA method from the following l
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
+
 
 ### Resources
 
@@ -193,14 +194,6 @@ To enforce Phishing-Resistant 2-Step Verification (MFA) for all users, use the G
 5.  Select **Save**
 
 #### GWS.COMMONCONTROLS.1.2v0.4 Instructions
-1.  Set **New user enrollment** period to at least **1 Day** or at most **1 Week**.
-2.  Select **Save**
-
-#### GWS.COMMONCONTROLS.1.3v0.4 Instructions
-1.  Under Frequency, deselect the **Allow user to trust device** checkbox.
-2.  Select **Save**
-
-#### GWS.COMMONCONTROLS.1.4v0.4 Instructions
 
 If using security keys:
 1.  Under **Methods**, select **Only security Key**. Next, select **Don't allow users to select security codes**.
@@ -216,6 +209,14 @@ If using Passkeys, use the Google Workspace Admin Console:
 3.  Select **Skip passwords.**
 4.  Select the **Allow users to skip passwords at sign-in by using passkeys** box.
 5.  Select **Save.**
+
+#### GWS.COMMONCONTROLS.1.3v0.4 Instructions
+1.  Set **New user enrollment** period to at least **1 Day** or at most **1 Week**.
+2.  Select **Save**
+
+#### GWS.COMMONCONTROLS.1.4v0.4 Instructions
+1.  Under Frequency, deselect the **Allow user to trust device** checkbox.
+2.  Select **Save**
 
 ## 2. Context-aware Access
 
