@@ -5,7 +5,7 @@ location, and the OPA executable location.
 
 import os
 
-from typing import Iterable, Union
+from typing import Union
 from pathlib import Path
 
 from yaml import dump, Dumper, load, Loader
