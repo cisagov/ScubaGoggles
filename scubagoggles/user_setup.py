@@ -48,7 +48,14 @@ def user_setup(arguments: argparse.Namespace):
 
     config = arguments.user_config
 
-    config.path_check = False
+    # ScubaGoggles v0.4 stored the config file in text file called
+    # ~/.scubagoggles. ~/.scubagoggles is now expected to be a folder.
+    # Users who have .scubagoggles as text file instead of a folder
+    # will need to move that file first.
+    if config.config_path.parent.exists() and not config.config_path.parent.is_dir():
+        raise NotADirectoryError(f"Cannot save user defaults to {config.config_path} "\
+            f"because {config.config_path.parent} is not a directory. Please move "\
+            f"the existing {config.config_path.parent} file then try again.")
 
     modified = user_directory(arguments)
 
@@ -58,6 +65,8 @@ def user_setup(arguments: argparse.Namespace):
 
     if modified:
         config.write()
+    else:
+        logging.info("No changes made.")
 
 
 def user_directory(arguments: argparse.Namespace):
@@ -177,16 +186,16 @@ def create_dir_download_opa(opa_dir: Path, create_dir: bool, download: bool):
         if not opa_dir.exists():
             log.debug('  creating: %s', opa_dir)
             opa_dir.mkdir(exist_ok = True)
-        if not opa_dir.is_dir():
+        elif not opa_dir.is_dir():
             raise NotADirectoryError("The specified location for the OPA "
                 f"executable, {opa_dir}, exists but is not a directory.")
     else:
         if not opa_dir.exists():
             log.debug("OPA directory does not exist but create_dir is false, "\
                 "OPA will not be downloaded.")
-        if not opa_dir.is_dir():
+        elif not opa_dir.is_dir():
             log.warning("The specified location for the OPA executable,"
-                f"{opa_dir}, exists but is not a directory.")
+                "%s, exists but is not a directory.", opa_dir)
 
     if opa_dir.exists() and opa_dir.is_dir() and download:
         # The OPA directory exists and the user hasn't suppressed the
@@ -208,7 +217,7 @@ def validate_opa_dir(opa_dir: Path = None):
     :return: True if the OPA executable exists; False otherwise.
     """
 
-    if opa_dir and not opa_dir.is_dir():
+    if opa_dir and opa_dir.exist() and not opa_dir.is_dir():
         log.warning('? %s - specified OPA path exists but is not a directory', opa_dir)
         return False
 

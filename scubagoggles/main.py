@@ -35,14 +35,6 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     """
 
     scuba_path = Path(__file__).parent
-    user_config.path_check = False
-
-    # If the credentials path was not defined in the user defaults file,
-    # fall back to "credentials.json" in the current directory
-    credentials = './credentials.json' if not user_config.credentials_file else user_config.credentials_file
-
-    # If the user hasn't run the setup util, fall back to the current directory
-    opa_dir = './' if not user_config.file_exists else user_config.opa_dir
 
     gws = Orchestrator.gws_products()
     gws_baselines = tuple(sorted(gws['gws_baselines']))
@@ -82,7 +74,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
 
     help_msg = ('The location and name of the OAuth / service account '
                 'credentials json file.  Defaults to '
-                f'"{credentials}".')
+                f'"{user_config.credentials_file}".')
     parser.add_argument('--credentials',
                         '-c',
                         default=Path(user_config.credentials_file),
@@ -116,6 +108,10 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar='<customer-id>',
                         help=help_msg)
 
+    # If the user defaults file does not exist, assume the setup util hasn't
+    # been run. As the setup util creates the ~/.scubagoggles directory,
+    # fallback to the backup default (the current directory).
+    opa_dir = "./" if not user_config.file_exists else user_config.opa_dir
     help_msg = ('The directory containing the OPA executable. '
                 f'Defaults to {opa_dir}.')
     parser.add_argument('--opapath',
