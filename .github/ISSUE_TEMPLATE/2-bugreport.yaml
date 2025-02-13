@@ -10,14 +10,15 @@ body:
       options:
         - label: This issue has an informative and human-readable title.
           required: true
-  - type: dropdown
+  - type: input
     attributes:
       label: Operating System
       description: Which operating system are you using?
-      options:
-        - Windows
-        - macOS
-        - Linux
+      placeholder: |
+        Enter your operating system and specific version (OS and specific version)
+        - Windows 10, Windows Server 2022
+        - Ubuntu 24.04 LTS, Kali 2024.4
+        - MacOS Big Sur, MacOS Monterey
     validations:
       required: true
   - type: input
@@ -27,13 +28,6 @@ body:
       placeholder: Enter your Python version (e.g., 3.10, 3.12)
     validations:
       required: true
-  - type: input
-    attributes:
-      label: PowerShell Version (optional)
-      description: Which PowerShell version are you using?
-      placeholder: Enter PowerShell version (e.g., 5.1, 7.0)
-    validations:
-      required: false
   - type: textarea
     attributes:
       label: "\U0001F41B Summary"
