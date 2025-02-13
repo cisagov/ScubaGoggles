@@ -173,7 +173,7 @@ Allow users to trust the device SHALL be disabled.
 
 ### Prerequisites
 
--   FIDO2-compliant security keys
+-   Common Controls 1 may require FIDO2-compliant security keys
 
 ### Implementation
 
