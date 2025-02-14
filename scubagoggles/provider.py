@@ -570,7 +570,10 @@ class Provider:
             ou_ids.add(self._top_ou)
             # get all organizational unit data
             product_to_items['organizational_units'] = self.get_ous()
-            for orgunit in product_to_items['organizational_units']['organizationUnits']:
+            orgunits = product_to_items['organizational_units']
+            sub_orgunits = orgunits.get('organizationUnits', ())
+
+            for orgunit in sub_orgunits:
                 ou_ids.add(orgunit['name'])
             # add just organizational unit names to a field]
             product_to_items['organizational_unit_names'] = list(ou_ids)
