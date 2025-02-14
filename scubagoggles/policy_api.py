@@ -608,9 +608,17 @@ class PolicyAPI:
             # For the current policy setting, use the returned org unit id
             # to get the org unit name, which is used as the key for the
             # result dictionary.
-            orgunit_id = policy['policyQuery']['orgUnit']
-            orgunit_id = orgunit_id.removeprefix('orgUnits/')
-            orgunit_name = self._orgunit_id_map[orgunit_id]['name']
+
+            if 'orgUnit' in policy['policyQuery']:
+                orgunit_id = policy['policyQuery']['orgUnit']
+                orgunit_id = orgunit_id.removeprefix('orgUnits/')
+                orgunit_name = self._orgunit_id_map[orgunit_id]['name']
+            else:
+                # NOTE: a policy setting should always be associated with
+                # an org unit.  In rare cases, an org unit is not provided,
+                # and in this case the policy is associated with the top-level
+                # org unit.
+                orgunit_name = self._top_orgunit
 
             if 'group' in policy['policyQuery']:
                 group_id = policy['policyQuery']['group']
