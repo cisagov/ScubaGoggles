@@ -604,16 +604,22 @@ class PolicyAPI:
         policies.sort(key = self._sort_order, reverse = True)
 
         for policy in policies:
-            if 'orgUnit' not in policy['policyQuery']:
-                log.debug('Org unit data missing for %s, skipping.', policy['setting']['type'])
-                continue
 
             # For the current policy setting, use the returned org unit id
             # to get the org unit name, which is used as the key for the
             # result dictionary.
-            orgunit_id = policy['policyQuery']['orgUnit']
-            orgunit_id = orgunit_id.removeprefix('orgUnits/')
-            orgunit_name = self._orgunit_id_map[orgunit_id]['name']
+
+            if 'orgUnit' in policy['policyQuery']:
+                orgunit_id = policy['policyQuery']['orgUnit']
+                orgunit_id = orgunit_id.removeprefix('orgUnits/')
+                orgunit_name = self._orgunit_id_map[orgunit_id]['name']
+            else:
+                # NOTE: a policy setting should always be associated with
+                # an org unit.  In rare cases, an org unit is not provided,
+                # and in this case the policy is associated with the top-level
+                # org unit.
+                log.debug('Org unit data missing for %s, assuming top-level OU.', policy['setting']['type'])
+                orgunit_name = self._top_orgunit
 
             if 'group' in policy['policyQuery']:
                 group_id = policy['policyQuery']['group']
