@@ -604,6 +604,9 @@ class PolicyAPI:
         policies.sort(key = self._sort_order, reverse = True)
 
         for policy in policies:
+            if 'orgUnit' not in policy['policyQuery']:
+                log.warning('Org unit data missing for %s, skipping.', policy['setting']['type'])
+                continue
 
             # For the current policy setting, use the returned org unit id
             # to get the org unit name, which is used as the key for the
