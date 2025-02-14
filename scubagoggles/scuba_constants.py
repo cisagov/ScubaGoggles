@@ -15,6 +15,7 @@ class ApiReference(Enum):
     LIST_OUS = 'directory/v1/orgunits/list'
     LIST_DOMAINS = 'directory/v1/domains/list'
     LIST_GROUPS = 'directory/v1/groups/list'
+    LIST_CUSTOMERS = 'directory/v1/customer/get'
     LIST_ACTIVITIES = 'reports/v1/activities/list'
     GET_GROUP = 'groups-settings/v1/groups/get'
 
@@ -26,6 +27,7 @@ class ApiUrl(Enum):
     LIST_OUS = f'{BASE_URL}/directory/reference/rest/v1/orgunits/list'
     LIST_DOMAINS = f'{BASE_URL}/directory/reference/rest/v1/domains/list'
     LIST_GROUPS = f'{BASE_URL}/directory/reference/rest/v1/groups/list'
+    LIST_CUSTOMERS = f'{BASE_URL}/directory/v1/customer/get'
     LIST_ACTIVITIES = f'{BASE_URL}/reports/reference/rest/v1/activities/list'
     GET_GROUP = f'{BASE_URL}/groups-settings/v1/reference/groups/get'
 

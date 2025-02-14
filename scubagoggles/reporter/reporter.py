@@ -32,6 +32,8 @@ class Reporter:
     # pylint: disable-next=too-many-positional-arguments
     def __init__(self,
                  product: str,
+                 tenant_ID: str,
+                 tenant_name: str,
                  tenant_domain: str,
                  main_report_name: str,
                  prod_to_fullname: dict,
@@ -44,6 +46,8 @@ class Reporter:
         """Reporter class initialization
 
         :param product: name of product being tested
+        :param tenant_ID: Unique ID of GWS Customer
+        :param tenant_name: Customer name
         :param tenant_domain: The primary domain of the GWS org
         :param main_report_name: Name of the main report HTML file.
         :param prod_to_fullname: mapping of the product full names
@@ -59,6 +63,8 @@ class Reporter:
         """
 
         self._product = product
+        self._tenant_ID = tenant_ID
+        self._tenant_name = tenant_name
         self._tenant_domain = tenant_domain
         self._main_report_name = main_report_name
         self._product_policies = product_policies
@@ -180,8 +186,8 @@ class Reporter:
                        + ' ' + time.tzname[time.daylight])
 
         meta_data = ('<table style = "text-align:center;">'
-                     '<tr><th>Customer Domain</th><th>Report Date</th></tr>'
-                     f'<tr><td>{tenant_info["domain"]}</td><td>{report_date}'
+                     '<tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th></tr>'
+                     f'<tr><td>{tenant_info["topLevelOU"]}</td><td>{tenant_info["domain"]}</td><td>{tenant_info["ID"]}</td><td>{report_date}'
                      '</td></tr></table>')
 
         html = html.replace('{{TENANT_DETAILS}}', meta_data)
@@ -305,9 +311,9 @@ class Reporter:
         report_date = (now.strftime('%m/%d/%Y %H:%M:%S')
                        + ' ' + time.tzname[time.daylight])
         meta_data = (f'<table style = "text-align:center;">'
-                     '<tr><th>Customer Domain</th><th>Report Date</th>'
+                     '<tr><th>Customer Name</th><th>Customer Domain</th><th>Cusomter ID</th><th>Report Date</th>'
                      '<th>Baseline Version</th><th>Tool Version</th></tr>'
-                     f'<tr><td>{self._tenant_domain}</td><td>{report_date}</td>'
+                     f'<tr><td>{self._tenant_name}</td><td>{self._tenant_domain}</td><td>{self._tenant_ID}</td><td>{report_date}</td>'
                      f'<td>{Version.suffix}</td><td>{Version.current}</td></tr>'
                      '</table>')
 
