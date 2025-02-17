@@ -618,6 +618,9 @@ class PolicyAPI:
                 # an org unit.  In rare cases, an org unit is not provided,
                 # and in this case the policy is associated with the top-level
                 # org unit.
+                log.debug('Org unit data missing for "%s", '
+                          'assuming top-level OU.',
+                          policy['setting']['type'])
                 orgunit_name = self._top_orgunit
 
             if 'group' in policy['policyQuery']:
