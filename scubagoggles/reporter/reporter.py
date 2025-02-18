@@ -46,7 +46,7 @@ class Reporter:
         """Reporter class initialization
 
         :param product: name of product being tested
-        :param tenant_ID: Unique ID of GWS Customer
+        :param tenant_id: Unique ID of GWS Customer
         :param tenant_name: Customer name
         :param tenant_domain: The primary domain of the GWS org
         :param main_report_name: Name of the main report HTML file.
@@ -63,7 +63,7 @@ class Reporter:
         """
 
         self._product = product
-        self._tenant_ID = tenant_id
+        self._tenant_id = tenant_id
         self._tenant_name = tenant_name
         self._tenant_domain = tenant_domain
         self._main_report_name = main_report_name
@@ -186,7 +186,8 @@ class Reporter:
                        + ' ' + time.tzname[time.daylight])
 
         meta_data = ('<table style = "text-align:center;">'
-                      '<tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th></tr>'
+                      '<tr><th>Customer Name</th><th>Customer Domain</th>'
+                      '<th>Customer ID</th><th>Report Date</th></tr>'
                      f'<tr><td>{tenant_info["topLevelOU"]}</td><td>{tenant_info["domain"]}</td>'
                      f'<td>{tenant_info["ID"]}</td><td>{report_date}'
                      '</td></tr></table>')
@@ -316,7 +317,7 @@ class Reporter:
                      '<th>Cusomter ID</th><th>Report Date</th>'
                      '<th>Baseline Version</th><th>Tool Version</th></tr>'
                      f'<tr><td>{self._tenant_name}</td><td>{self._tenant_domain}</td>'
-                     f'<td>{self._tenant_ID}</td><td>{report_date}</td>'
+                     f'<td>{self._tenant_id}</td><td>{report_date}</td>'
                      f'<td>{Version.suffix}</td><td>{Version.current}</td></tr>'
                      '</table>')
 

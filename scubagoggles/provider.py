@@ -417,7 +417,7 @@ class Provider:
         Gets the high-level tenant info using the directory API
         """
         tenant_id = ''
-        try: 
+        try:
             response = self._services['directory'].customers().get(
                             customerKey = self._customer_id).execute()
             tenant_id = response.get('id')
