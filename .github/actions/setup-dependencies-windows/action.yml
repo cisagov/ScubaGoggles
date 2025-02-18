@@ -5,22 +5,23 @@ inputs:
     default: "windows"
   opa-version:
     required: true
-    default: "v0.60.0"
   python-version:
     required: true
 
 runs:
   using: "composite"
   steps:
-    - name: Setup virtualenv
+    - name: Virtual Environment Activation Definition - Windows
+      shell: powershell
+      run: >
+        echo "SCUBAGOGGLES_ACTIVATE_VENV=.venv\Scripts\activate.ps1"
+        >> "$Env:GITHUB_ENV"
+
+    - name: Setup virtual environment and install dependencies
       shell: powershell
       run: |
         python -m venv .venv
-        .venv\Scripts\activate.ps1
-
-    - name: Install dependencies
-      shell: powershell
-      run: |
+        ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
         python -m pip install .
         pip install -r requirements.txt
         pip install pytest
@@ -28,6 +29,10 @@ runs:
 
     - name: Download OPA executable
       shell: powershell
+      env:
+        opa_version: ${{ inputs.opa-version == 'latest' && ' '
+          || format('-v {0}', inputs.opa-version) }}
       run: |
+        ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
         scubagoggles setup -m -nc -nd -d ~/scubagoggles -r ~/scubagoggles -c credentials.json
-        scubagoggles getopa -v ${{ inputs.opa-version }}
+        scubagoggles -l d getopa ${{ env.opa_version }}
