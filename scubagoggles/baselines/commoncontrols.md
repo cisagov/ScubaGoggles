@@ -79,7 +79,6 @@ Phishing-Resistant MFA SHALL be required for all users.
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
 - _Last modified:_ August 2023
-- _Note:_ Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.5 applies.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
