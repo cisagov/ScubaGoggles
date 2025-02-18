@@ -97,7 +97,6 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
 
 - _Rationale:_ This is a stopgap security policy to help protect the tenant if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk.
 - _Last modified:_ February 2025
-- _Note:_ ONLY to be enforced if Policy 1.1 is not possible for the agency. SMS or Voice as the MFA method SHALL NOT be used.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -180,7 +179,7 @@ Allow users to trust the device SHALL be disabled.
 
 ### Prerequisites
 
--   Common Controls 1 may require FIDO2-compliant security keys
+-   GWS.COMMONCONTROLS.1.1v0.4 may require FIDO2-compliant security keys
 
 ### Implementation
 
