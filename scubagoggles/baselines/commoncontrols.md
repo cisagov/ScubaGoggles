@@ -78,8 +78,8 @@ Phishing-Resistant MFA SHALL be required for all users.
             - Google Passkeys
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
-- _Last modified:_ August 17, 2023
-- _Note:_ Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.4 applies.
+- _Last modified:_ August 2023
+- _Note:_ Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.5 applies.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -131,8 +131,6 @@ Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 
 
 - _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
 - _Last modified:_ February 2025
-- _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
-		on Google 2SV.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -150,8 +148,6 @@ Allow users to trust the device SHALL be disabled.
 
 - _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
 - _Last modified:_ February 2025
-- _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
-		on Google 2SV.
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
