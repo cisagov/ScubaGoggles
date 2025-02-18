@@ -169,12 +169,8 @@ Allow users to trust the device SHALL be disabled.
 
 -  [GWS Admin Help \| Set up 2-Step Verification (Deploy)](https://support.google.com/a/answer/9176657?hl=en&ref_topic=2759193&fl=1#zippy=%2Cchoose-a--step-verification-method-to-enforce%2Cturn-on-enforcement)
 -   [GWS Admin Help \| Set up 2-Step Verification (Protect your business)](https://support.google.com/a/answer/175197#zippy=%2Csecurity-keys%2Cconsider-using-security-keys-in-your-business)
--   [GWS Admin Help \| Set up SSO via a third-party Identity provider](https://support.google.com/a/topic/7579248?hl=en&ref_topic=7556686)
--   [Google Cloud Architecture Center \| Federating Google Cloud with Active Directory](https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction)
--   [Google Cloud Architecture Center \| Federating Google Cloud with Azure Active Directory](https://cloud.google.com/architecture/identity/federating-gcp-with-azure-active-directory)
 -   [Google Workspace Updates \| Simplify and Strengthen Sign-In by Enabling Passkeys for Your Users](https://workspaceupdates.googleblog.com/2023/06/passkey-open-beta.html)
 -   [Google Security Blog \| So Long Passwords, Thanks for all the Phish](https://security.googleblog.com/2023/05/so-long-passwords-thanks-for-all-phish.html)
--   [Allow Users to Skip Passwords at Sign-In (Beta)](https://support.google.com/a/answer/13529161)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
 
 ### Prerequisites
@@ -183,11 +179,7 @@ Allow users to trust the device SHALL be disabled.
 
 ### Implementation
 
-Note: If using a third-party IdP with GWS, refer to Google documentation on [setting up third-party single sign-on](https://support.google.com/a/topic/7579248?hl=en&ref_topic=7556686) (SSO). If using GWS as the IdP, refer to [Google documentation on setting up SSO](https://support.google.com/a/answer/12032922?hl=en).
-
-To enforce Phishing-Resistant 2-Step Verification (MFA) for all users, use the Google Workspace Admin Console:
-
-#### Policy 1 common Instructions
+#### Policy 1 Common Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com/) as an administrator.
 2.  Select **Security** -\> **Authentication.**
 3.  Select **2-Step Verification.**
