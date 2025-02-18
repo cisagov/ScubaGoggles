@@ -15,17 +15,14 @@ body:
       label: Operating System
       description: Which operating system are you using?
       placeholder: |
-        Enter your operating system and specific version (OS and specific version)
-        - Windows 10, Windows Server 2022
-        - Ubuntu 24.04 LTS, Kali 2024.4
-        - MacOS Big Sur, MacOS Monterey
+        Enter your operating system and version (e.g., Windows 10, Ubuntu 24.04 LTS, MacOS Big Sur)
     validations:
       required: true
   - type: input
     attributes:
       label: Python Version
       description: Which Python version are you using?
-      placeholder: Enter your Python version (e.g., 3.10, 3.12)
+      placeholder: Enter your Python version (e.g., v3.10, v3.12)
     validations:
       required: true
   - type: textarea
