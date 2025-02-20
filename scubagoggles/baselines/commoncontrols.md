@@ -49,7 +49,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## 1. Phishing-Resistant Multi-Factor Authentication
 
-Multi-factor authentication (MFA), particularly phishing-resistant MFA, is a critical security control against attacks such as password spraying, password theft, and phishing. Adopting phishing-resistant MFA may take time, especially on mobile devices. Organizations must upgrade to a phishing-resistant MFA method as soon as possible to be compliant with OMB M-22-09 and this policy to address the critical security threat posed by modern phishing attacks. In the intermediate period before phishing-resistant MFA is fully adopted, organizations should adopt an MFA method from the list in GWS.COMMONCONTROLS.1.4v0.4 below.
+Multi-factor authentication (MFA), particularly phishing-resistant MFA, is a critical security control against attacks such as password spraying, password theft, and phishing. Adopting phishing-resistant MFA may take time, especially on mobile devices. Organizations must upgrade to a phishing-resistant MFA method as soon as possible to be compliant with OMB M-22-09 and this policy to address the critical security threat posed by modern phishing attacks.
 
 This control recognizes federation as a viable option for phishing-resistant MFA and includes architectural considerations around on-premises and cloud-native identity federation in established Federal Civilian Executive Branch (FCEB) environments. Federation for GWS can be implemented via a cloud-native identity provider (IdP). Google's documentation acknowledges that on-premises Active Directory implementations may be predominant in environments that adopt GWS and provides guidance on the use of Google Cloud Directory Sync (GCDS) to synchronize Google Account data with an established Microsoft Active Directory or LDAP server.
 
@@ -78,8 +78,7 @@ Phishing-Resistant MFA SHALL be required for all users.
             - Google Passkeys
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
-- _Last modified:_ August 17, 2023
-- _Note:_ Policy 1.1 applies if Phishing-Resistant MFA is available. Otherwise, Policy 1.4 applies.
+- _Last modified:_ August 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -93,12 +92,10 @@ Phishing-Resistant MFA SHALL be required for all users.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
 #### GWS.COMMONCONTROLS.1.2v0.4
-Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.
+If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL be enforced for all users.
 
-- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
-- _Last modified:_ August 17, 2023
-- _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
-		on Google 2SV.
+- _Rationale:_ This is a stopgap security policy to help protect the tenant if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk.
+- _Last modified:_ February 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -112,12 +109,10 @@ Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
 #### GWS.COMMONCONTROLS.1.3v0.4
-Allow users to trust the device SHALL be disabled.
+SMS or Voice as the MFA method SHALL NOT be used.
 
-- _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
-- _Last modified:_ August 17, 2023
-- _Note:_ This setting and policy only applies when the means of Phishing-Resistant MFA in use relies
-		on Google 2SV.
+- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
+- _Last modified:_ February 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -131,21 +126,27 @@ Allow users to trust the device SHALL be disabled.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
 #### GWS.COMMONCONTROLS.1.4v0.4
-If phishing-resistant MFA is not yet tenable, an MFA method from the following list SHALL be used in the interim.
+Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.
 
-> Google prompt
+- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
+- _Last modified:_ February 2025
 
-> Google Authenticator
+- MITRE ATT&CK TTP Mapping
+  - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
+  - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
+    - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
+    - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
+    - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
+  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
+    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
-> Backup Codes
+#### GWS.COMMONCONTROLS.1.5v0.4
+Allow users to trust the device SHALL be disabled.
 
-> Software Tokens One-Time Password (OTP): This option is commonly implemented using mobile phone authenticator apps
-
-> Hardware Tokens OTP
-
-- _Rationale:_ This is a stopgap security policy to help protect the organization if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk. Additionally, this list excludes SMS and voice call, the weakest authentication methods, forcing users to use stronger MFA methods.
-- _Last modified:_ August 17, 2023
-- _Note:_ ONLY to be enforced if Policy 1.1 is not possible for the agency. SMS or Voice as the MFA method SHALL NOT be used.
+- _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
+- _Last modified:_ February 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -162,60 +163,43 @@ If phishing-resistant MFA is not yet tenable, an MFA method from the following l
 
 -  [GWS Admin Help \| Set up 2-Step Verification (Deploy)](https://support.google.com/a/answer/9176657?hl=en&ref_topic=2759193&fl=1#zippy=%2Cchoose-a--step-verification-method-to-enforce%2Cturn-on-enforcement)
 -   [GWS Admin Help \| Set up 2-Step Verification (Protect your business)](https://support.google.com/a/answer/175197#zippy=%2Csecurity-keys%2Cconsider-using-security-keys-in-your-business)
--   [GWS Admin Help \| Set up SSO via a third-party Identity provider](https://support.google.com/a/topic/7579248?hl=en&ref_topic=7556686)
--   [Google Cloud Architecture Center \| Federating Google Cloud with Active Directory](https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction)
--   [Google Cloud Architecture Center \| Federating Google Cloud with Azure Active Directory](https://cloud.google.com/architecture/identity/federating-gcp-with-azure-active-directory)
 -   [Google Workspace Updates \| Simplify and Strengthen Sign-In by Enabling Passkeys for Your Users](https://workspaceupdates.googleblog.com/2023/06/passkey-open-beta.html)
 -   [Google Security Blog \| So Long Passwords, Thanks for all the Phish](https://security.googleblog.com/2023/05/so-long-passwords-thanks-for-all-phish.html)
--   [Allow Users to Skip Passwords at Sign-In (Beta)](https://support.google.com/a/answer/13529161)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
 
 ### Prerequisites
 
--   FIDO2-compliant security keys
+-   GWS.COMMONCONTROLS.1.1v0.4 may require FIDO2-compliant security keys
 
 ### Implementation
 
-Note: If using a third-party IdP with GWS, refer to Google documentation on [setting up third-party single sign-on](https://support.google.com/a/topic/7579248?hl=en&ref_topic=7556686) (SSO). If using GWS as the IdP, refer to [Google documentation on setting up SSO](https://support.google.com/a/answer/12032922?hl=en).
-
-To enforce Phishing-Resistant 2-Step Verification (MFA) for all users, use the Google Workspace Admin Console:
-
-#### Policy 1 common Instructions
+#### Policy 1 Common Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com/) as an administrator.
-2.  Select **Security** -\> **Authentication.**
-3.  Select **2-Step Verification.**
+2.  Select **Security** -\> **Authentication**.
+3.  Select **2-Step Verification**.
 
 #### GWS.COMMONCONTROLS.1.1v0.4 Instructions
 1.  Under **Authentication**, ensure that **Allow users to turn on 2-Step Verification** is checked.
 2.  Set **Enforcement** to **On.**
 3.  Under **Methods** select **Only security key.**
 4.  Under **Security codes** select **Don't allow users to select security codes.**
-5.  Select **Save**
+5.  Select **Save**.
 
 #### GWS.COMMONCONTROLS.1.2v0.4 Instructions
-1.  Set **New user enrollment** period to at least **1 Day** or at most **1 Week**.
-2.  Select **Save**
+1.  Under **Authentication**, ensure that **Allow users to turn on 2-Step Verification is checked**.
+2.  Set **Enforcement** to **On**.
 
 #### GWS.COMMONCONTROLS.1.3v0.4 Instructions
-1.  Under Frequency, deselect the **Allow user to trust device** checkbox.
-2.  Select **Save**
+1.  Under **Methods**, select **Any except verification codes via text, phone call**.
+2.  Select **Save**.
 
 #### GWS.COMMONCONTROLS.1.4v0.4 Instructions
+1.  Set **New user enrollment** period to at least **1 Day** or at most **1 Week**.
+2.  Select **Save**.
 
-If using security keys:
-1.  Under **Methods**, select **Only security Key**. Next, select **Don't allow users to select security codes**.
-2.  Select **Save**
-
-If security keys are not yet available for your organization:
-1.  Under **Methods**, select **Any except verification codes via text, phone call**.
-2.  Select **Save**
-
-If using Passkeys, use the Google Workspace Admin Console:
-1.  Sign in to [Google Admin console](https://admin.google.com/) as an administrator.
-2.  Select **Security** -\> **Authentication** -\> **Passwordless.**
-3.  Select **Skip passwords.**
-4.  Select the **Allow users to skip passwords at sign-in by using passkeys** box.
-5.  Select **Save.**
+#### GWS.COMMONCONTROLS.1.5v0.4 Instructions
+1.  Under Frequency, deselect the **Allow user to trust device** checkbox.
+2.  Select **Save**.
 
 ## 2. Context-aware Access
 
