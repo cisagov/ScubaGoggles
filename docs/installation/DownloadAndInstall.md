@@ -78,7 +78,7 @@ running ScubaGoggles.
 To download ScubaGoggles, click [here](https://github.com/cisagov/ScubaGoggles/releases)
 to display the download site in a browser.  Download the file with the name ending
 in `.whl` (known as a Python "wheel" file), for example
-`scubagoggles-1.0.0-py3-none-any.whl`.
+`scubagoggles-<version>-py3-none-any.whl`.
 
 ### Installing ScubaGoggles
 
@@ -90,11 +90,11 @@ environment, make sure your current session has activated the virtual
 environment.  Normally, the command you use is `pip` or `pip3`.
 
 ```
-pip install scubagoggles-1.0.0-py3-none-any.whl
+pip install scubagoggles-<version>-py3-none-any.whl
 ```
 
-where you will replace `scubagoggles-1.0.0-py3-none-any.whl` in the above
-command with the location and/or name of the ScubaGoggles wheel file you
+where you will replace `scubagoggles-<version>-py3-none-any.whl` in the above
+command with the location and version of the ScubaGoggles wheel file you
 downloaded.
 
 This command will install ScubaGoggles and all its dependencies.  The system on
