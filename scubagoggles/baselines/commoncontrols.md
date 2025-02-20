@@ -678,7 +678,7 @@ To disable Super Admin account self-recovery:
 4.  Click **Recovery Information**.
 4.  To apply the setting to all your users, leave the top OU selected. Otherwise, select a child OU or a configuration group.
 5.  Deselect the **Allow admins and users to add recovery email information to their account** checkbox.
-5.  Deselect the **Allow admins and users to add recovery phone information to their account** checkbox.
+6.  Deselect the **Allow admins and users to add recovery phone information to their account** checkbox.
 7.  Click **Save**.
 
 ## 9. GWS Advanced Protection Program
