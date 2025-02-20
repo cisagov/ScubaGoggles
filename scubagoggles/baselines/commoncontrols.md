@@ -159,7 +159,6 @@ Allow users to trust the device SHALL be disabled.
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
-
 ### Resources
 
 -  [GWS Admin Help \| Set up 2-Step Verification (Deploy)](https://support.google.com/a/answer/9176657?hl=en&ref_topic=2759193&fl=1#zippy=%2Cchoose-a--step-verification-method-to-enforce%2Cturn-on-enforcement)
@@ -176,15 +175,15 @@ Allow users to trust the device SHALL be disabled.
 
 #### Policy 1 Common Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com/) as an administrator.
-2.  Select **Security** -\> **Authentication.**
-3.  Select **2-Step Verification.**
+2.  Select **Security** -\> **Authentication**.
+3.  Select **2-Step Verification**.
 
 #### GWS.COMMONCONTROLS.1.1v0.4 Instructions
 1.  Under **Authentication**, ensure that **Allow users to turn on 2-Step Verification** is checked.
 2.  Set **Enforcement** to **On.**
 3.  Under **Methods** select **Only security key.**
 4.  Under **Security codes** select **Don't allow users to select security codes.**
-5.  Select **Save**
+5.  Select **Save**.
 
 #### GWS.COMMONCONTROLS.1.2v0.4 Instructions
 1.  Under **Authentication**, ensure that **Allow users to turn on 2-Step Verification is checked**.
@@ -192,15 +191,15 @@ Allow users to trust the device SHALL be disabled.
 
 #### GWS.COMMONCONTROLS.1.3v0.4 Instructions
 1.  Under **Methods**, select **Any except verification codes via text, phone call**.
-2.  Select **Save**
+2.  Select **Save**.
 
 #### GWS.COMMONCONTROLS.1.4v0.4 Instructions
 1.  Set **New user enrollment** period to at least **1 Day** or at most **1 Week**.
-2.  Select **Save**
+2.  Select **Save**.
 
 #### GWS.COMMONCONTROLS.1.5v0.4 Instructions
 1.  Under Frequency, deselect the **Allow user to trust device** checkbox.
-2.  Select **Save**
+2.  Select **Save**.
 
 ## 2. Context-aware Access
 
