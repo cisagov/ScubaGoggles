@@ -16,7 +16,7 @@ This baseline is based on Google documentation and addresses the following:
 - [Secure Passwords](#5-secure-passwords)
 - [Privileged Accounts](#6-privileged-accounts)
 - [Conflicting Account Management](#7-conflicting-account-management)
-- [Catastrophic Recovery Options](#8-catastrophic-recovery-options-for-super-admins)
+- [Account Recovery Options](#8-account-recovery-options)
 - [GWS Advanced Protection Program](#9-gws-advanced-protection-program)
 - [App Access to Google APIs](#10-app-access-to-google-apis)
 - [Authorized Marketplace Apps](#11-authorized-google-marketplace-apps)
@@ -623,9 +623,9 @@ To configure account conflict management per the policy:
 4.	Select the radio button option: **"Replace conflicting unmanaged accounts with managed ones."**
 5.	Click **Save.**
 
-## 8. Catastrophic Recovery Options for Super Admins
+## 8. Account Recovery Options
 
-This section covers the admin self-recovery setting that is in Google Admin console.
+This section covers the admin self-recovery setting that is in Google Admin console as well as user added account recovery infomration.
 
 ### Policies
 
@@ -639,6 +639,15 @@ Account self-recovery for Super Admins SHALL be disabled
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
+#### GWS.COMMONCONTROLS.8.2v0.4
+Ability to add recovery information SHALL be disabled.
+
+- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through offical channels, making it more difficult for a potential adversary to compromise an account.
+- _Last modified:_ February 2025
+
+- MITRE ATT&CK TTP Mapping
+  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 ### Resources
 
 -   [GWS Admin Help \| Allow super administrators to recover their password](https://support.google.com/a/answer/9436964?fl=1)
@@ -661,6 +670,16 @@ To disable Super Admin account self-recovery:
 6.  Deselect the **Allow Super Admins to recover their account** checkbox.
 7.  Click **Save**.
 8.  Ask your Super Admins to set up a recovery phone number or email address for receiving password recovery instructions.
+
+#### GWS.COMMONCONTROLS.8.2v0.4 Instructions
+1.  Sign in to https://admin.google.com as an administrator.
+2.  Select **Security** -\> **Authentication.**
+3.  Select **Account Recovery**. 
+4.  Click **Recovery Information**.
+4.  To apply the setting to all your users, leave the top OU selected. Otherwise, select a child OU or a configuration group.
+5.  Deselect the **Allow admins and users to add recovery email information to their account** checkbox.
+5.  Deselect the **Allow admins and users to add recovery phone information to their account** checkbox.
+7.  Click **Save**.
 
 ## 9. GWS Advanced Protection Program
 
