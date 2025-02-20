@@ -1,25 +1,33 @@
-
 # Download the OPA executable
 
 The tool makes use of [Open Policy Agent's Rego Policy language](https://www.openpolicyagent.org/docs/latest/policy-language/). There
 are three ways users can obtain the OPA executable:
+
 1. Using the provided setup utility
 2. Using the provided getopa utility
 3. Manually downloading the OPA executable.
 
 ## ScubaGoggles Setup Utility
+
 The ScubaGoggles setup utility performs the initial configuration of ScubaGoggles,
 including downloading OPA if needed. Execute it using the following command:
+
 ```shell
 scubagoggles setup
 ```
 
 > [!NOTE]
-> There are several advanced configuration options for setup that allow users to indicate several default parameters
-for ScubaGoggles. Advanced users may use these options now if desired, but these defaults can be configured at any time.
-See [Configuring Defaults](../installation/Defaults.md) for more details.
+> The ScubaGoggles setup utility only needs to be performed **once**. It creates a `.scubagoggles` directory in your home directory and
+> populates it with an OPA executable and a `userdefaults.yaml` configuration file. This configuration file specifies the location
+> of your credentials file (to be created later), OPA executable and output directory. If needed this configuration file can edited manually.
 
-## Getopa Utility
+> [!NOTE]
+> There are several advanced configuration options for setup that allow users to indicate several default parameters
+> for ScubaGoggles. Advanced users may use these options now if desired, but these defaults can be configured at any time.
+> See [Configuring Defaults](../installation/Defaults.md) for more details.
+
+## OPTIONAL: Getopa Utility
+
 You will only
 need to download the OPA executable separately if you need a **specific**
 version.  Otherwise, you may skip this step and continue to
@@ -44,6 +52,7 @@ options:
   --opapath <directory>, -r <directory>
                         Directory containing OPA executable (default: location established by setup)
 ```
+
 ```bash
 # example
 scubagoggles getopa -v v0.60.0
@@ -52,7 +61,7 @@ scubagoggles getopa -v v0.60.0
 If you have run the [ScubaGoggles setup utility](DownloadAndInstall.md#ScubaGoggles-Setup-Utility),
 you may have specified the location of the OPA executable. `getupa` will save the OPA executable to this location.  Optionally, you may specify an alternate location for the executable, such as a location that is in the PATH environment variable.
 
-## Downloading the OPA Executable from the OPA Website
+## OPTIONAL: Downloading the OPA Executable from the OPA Website
 
 1. If the above options can not execute for any reason or you would prefer to
    download OPA manually, go to the [Open Policy Agent website](https://www.openpolicyagent.org/docs/latest/#running-opa)
@@ -77,5 +86,6 @@ chmod u+x opa
 ```
 
 ## Navigation
+
 - Continue to [Configuring Defaults](../installation/Defaults.md)
 - Return to [Documentation Home](/README.md)
