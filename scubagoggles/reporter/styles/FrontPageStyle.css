@@ -39,7 +39,7 @@ a.individual_reports:active {
     font-family: Arial, Helvetica, sans-serif;
     color: #85B065;
     text-decoration: none;
-} 
+}
 
 table.tenantdata tr:first-child {
     color: black;
@@ -51,6 +51,13 @@ table.tenantdata tr:first-child {
 .manual { background-color: var(--test-other); }
 
 .error {
-    background-color: #deb8b8; 
+    background-color: #deb8b8;
     color: #d10000;
+}
+
+.alignRight {
+    text-align: right;
+    color: grey;
+    font-size: 80%;
+
 }

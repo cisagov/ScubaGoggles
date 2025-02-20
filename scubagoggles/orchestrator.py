@@ -9,6 +9,7 @@ import logging
 import os
 import platform
 import shutil
+import uuid
 import webbrowser
 
 from datetime import datetime, timezone
@@ -273,7 +274,7 @@ class Orchestrator:
 
         timestamp_utc = datetime.now(timezone.utc)
         timestamp_zulu = timestamp_utc.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-
+        report_uuid = str(uuid.uuid4())
         report_metadata = {
             'TenantId':  None,
             'DisplayName':  None,
@@ -283,7 +284,8 @@ class Orchestrator:
             'ProductAbbreviationMapping': product_abbreviation_mapping,
             'Tool':  'ScubaGoggles',
             'ToolVersion':  Version.number,
-            'TimeStampZulu': timestamp_zulu
+            'TimeStampZulu': timestamp_zulu,
+            'ReportUUID': report_uuid
         }
 
         total_output.update({'MetaData': report_metadata})
@@ -341,7 +343,9 @@ class Orchestrator:
                                'Details': self._generate_summary(stats[0])})
 
         fragments.append(Reporter.create_html_table(table_data))
-        front_page_html = Reporter.build_front_page_html(fragments, tenant_info)
+        front_page_html = Reporter.build_front_page_html(fragments,
+                                                         tenant_info,
+                                                         report_uuid)
         report_path.write_text(front_page_html, encoding = 'utf-8')
 
         # suppress opening the report in the browser
