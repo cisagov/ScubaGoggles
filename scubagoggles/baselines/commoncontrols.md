@@ -625,7 +625,7 @@ To configure account conflict management per the policy:
 
 ## 8. Account Recovery Options
 
-This section covers the admin self-recovery setting that is in Google Admin console as well as user added account recovery infomration.
+This section covers the admin self-recovery setting that is in Google Admin console as well as user added account recovery information.
 
 ### Policies
 
