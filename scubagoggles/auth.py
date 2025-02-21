@@ -31,6 +31,7 @@ class GwsAuth:
                f'{_base_auth_url}/admin.directory.orgunit.readonly',
                f'{_base_auth_url}/admin.directory.user.readonly',
                f'{_base_auth_url}/admin.directory.group.readonly',
+               f'{_base_auth_url}/admin.directory.customer.readonly',
                f'{_base_auth_url}/apps.groups.settings',
                f'{_base_auth_url}/cloud-identity.policies.readonly')
 
