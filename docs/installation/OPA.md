@@ -17,13 +17,11 @@ scubagoggles setup
 ```
 
 > [!NOTE]
-> The ScubaGoggles setup utility only needs to be performed **once**. It creates a `.scubagoggles` directory in your home directory and
-> populates it with an OPA executable and a `userdefaults.yaml` configuration file. This configuration file specifies the location
-> of your credentials file (to be created later), OPA executable and output directory. If needed this configuration file can edited manually.
-
-> [!NOTE]
-> There are several advanced configuration options for setup that allow users to indicate several default parameters
-> for ScubaGoggles. Advanced users may use these options now if desired, but these defaults can be configured at any time.
+> The ScubaGoggles setup utility only need be run once, for the initial instalation of ScubaGoggles, but may be run as many times as needed.
+> It creates a `.scubagoggles` directory in your home directory and
+> populates it with an OPA executable and a config file controling several default ScubaGoggles parameters.
+> There are several advanced configuration options for setup that allow users to indicate what values should be used for those defaults;
+> advanced users may use these options now if desired, but those defaults can be configured at any time.
 > See [Configuring Defaults](../installation/Defaults.md) for more details.
 
 ## OPTIONAL: Getopa Utility
