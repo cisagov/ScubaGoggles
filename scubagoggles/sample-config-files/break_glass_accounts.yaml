@@ -1,0 +1,6 @@
+# YAML configuration demonstrating specifiying break glass accounts to be
+# exempt from from an admin count.
+
+baselines: [commoncontrols]
+
+breakglassaccounts: [admin@example.org, admin2@example.org]
