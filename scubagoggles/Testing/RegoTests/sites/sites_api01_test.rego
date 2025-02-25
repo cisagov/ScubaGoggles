@@ -50,9 +50,9 @@ test_SitesAPI_NonComply_1 if {
     }
 
     failedOU := [{"Name": "nextOU",
-                 "Value": "Service status for Sites is ON."},
+                 "Value": NonComplianceMessage1_1},
                  {"Name": "topOU",
-                 "Value": "Service status for Sites is ON."}]
+                 "Value": NonComplianceMessage1_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -77,8 +77,8 @@ test_SitesAPI_NonComply_2 if {
     }
 
     failedOU := [{"Name": "topOU",
-                 "Value": "Service status for Sites is ON."},
+                 "Value": NonComplianceMessage1_1},
                  {"Name": "topOU (group \"Even More Secret Group\")",
-                 "Value": "Service status for Sites is ON."}]
+                 "Value": NonComplianceMessage1_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
