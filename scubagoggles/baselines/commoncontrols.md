@@ -630,7 +630,7 @@ This section covers the admin self-recovery setting that is in Google Admin cons
 ### Policies
 
 #### GWS.COMMONCONTROLS.8.1v0.4
-Account self-recovery for Super Admins SHALL be disabled.
+Account self-recovery for super admins SHALL be disabled.
 
 - _Rationale:_ If enabled, an adversary could attempt to gain access to a super admin account through the account recovery method. Disabling this feature forces super admins to contact another super admin to recover their account, making it more difficult for a potential adversary to compromise their account.
 - _Last modified:_ July 10, 2023
@@ -640,7 +640,7 @@ Account self-recovery for Super Admins SHALL be disabled.
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
 #### GWS.COMMONCONTROLS.8.2v0.4
-Account self-recovery for User and Non-Super Admins SHALL be disabled.
+Account self-recovery for users and non-super admins SHALL be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential adversary to compromise an account.
 - _Last modified:_ February 2025
@@ -652,7 +652,7 @@ Account self-recovery for User and Non-Super Admins SHALL be disabled.
 #### GWS.COMMONCONTROLS.8.3v0.4
 Ability to add recovery information SHOULD be disabled.
 
-- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding PII to their organizational account, making it more difficult for a potential adversary to compromise an account.
+- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding PII to their organizational account, making it more difficult for a potential adversary to steal PII in the event of a compromise.
 - _Last modified:_ February 2025
 
 - MITRE ATT&CK TTP Mapping
@@ -688,16 +688,14 @@ To disable User account self-recovery:
 2.  Select **Security** -\> **Authentication.**
 3.  Select **Account Recovery**.
 4.  Click **User account recovery**.
-5.  To apply the setting to all your users, leave the top OU selected. Otherwise, select a child OU or a configuration group.
-6.  Deselect the **Allow users and all non-super Admins to recover their account** checkbox.
-7.  Click **Save**.
+5.  Deselect the **Allow users and all non-super admins to recover their account** checkbox.
+6.  Click **Save**.
 
 #### GWS.COMMONCONTROLS.8.3v0.4 Instructions
 1.  Sign in to https://admin.google.com as an administrator.
 2.  Select **Security** -\> **Authentication.**
 3.  Select **Account Recovery**. 
 4.  Click **Recovery Information**.
-4.  To apply the setting to all your users, leave the top OU selected. Otherwise, select a child OU or a configuration group.
 5.  Deselect the **Allow admins and users to add recovery email information to their account** checkbox.
 6.  Deselect the **Allow admins and users to add recovery phone information to their account** checkbox.
 7.  Click **Save**.
