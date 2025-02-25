@@ -625,7 +625,7 @@ To configure account conflict management per the policy:
 
 ## 8. Account Recovery Options
 
-This section covers the admin self-recovery setting that is in Google Admin console as well as user added account recovery information.
+This section covers self-recovery setting for users and super admins in the Google Admin console as well as user added account recovery information.
 
 ### Policies
 
@@ -676,10 +676,9 @@ To disable Super Admin account self-recovery:
 2.  Select **Security** -\> **Authentication.**
 3.  Select **Account Recovery**.
 4.  Click **Super admin account recovery**.
-5.  To apply the setting to all your Super Admins, leave the top OU selected. Otherwise, select a child OU or a configuration group.
-6.  Deselect the **Allow Super Admins to recover their account** checkbox.
-7.  Click **Save**.
-8.  Ask your Super Admins to set up a recovery phone number or email address for receiving password recovery instructions.
+5.  Deselect the **Allow Super Admins to recover their account** checkbox.
+6.  Click **Save**.
+7.  Ask your Super Admins to set up a recovery phone number or email address for receiving password recovery instructions.
 
 #### GWS.COMMONCONTROLS.8.2v0.4 Instructions
 To disable User account self-recovery:
