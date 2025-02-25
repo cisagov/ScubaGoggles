@@ -1,6 +1,7 @@
 package calendar
 
 import future.keywords
+import data.utils.FailTestNonCompliant
 import data.utils.FailTestOUNonCompliant
 import data.utils.PassTestResult
 
@@ -47,3 +48,23 @@ test_CalendarAPI_Interoperability_Incorrect_1 if {
                  "Value": NonComplianceMessage3_1("enabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
+
+#
+# GWS.CALENDAR.3.2
+#--
+
+test_OAuth_Correct_V1 if {
+    # Not-Implemented
+    PolicyId := CalendarId3_2
+    Output := tests with input as {
+        "calendar_logs": {"items": [
+        ]},
+        "tenant_info": {
+            "topLevelOU": "Test Top-Level OU"
+        }
+    }
+
+    Message := "Currently not able to be tested automatically; please manually check."
+    FailTestNonCompliant(PolicyId, Output, Message)
+}
+#--
