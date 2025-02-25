@@ -2,6 +2,7 @@ package gmail
 
 import future.keywords
 import data.utils.FailTestNonCompliant
+import data.utils.GetFriendlyEnabledValue
 import data.utils.PassTestResultWithMessage
 
 GoodGmailApi14 := {
@@ -33,7 +34,7 @@ test_Allowlist_Correct_1 if {
     PolicyId := GmailId14_1
     Output := tests with input as GoodGmailApi14
 
-    Message := NonComplianceMessage14_1(GetFriendlyValue14_1(false), "topOU")
+    Message := NonComplianceMessage14_1(GetFriendlyEnabledValue(false), "topOU")
     PassTestResultWithMessage(PolicyId, Output, Message)
 }
 
@@ -43,6 +44,6 @@ test_Allowlist_Incorrect_1 if {
 
     FailTestNonCompliant(PolicyId,
                          Output,
-                         NonComplianceMessage14_1(GetFriendlyValue14_1(true),
+                         NonComplianceMessage14_1(GetFriendlyEnabledValue(true),
                                                   "topOU"))
 }

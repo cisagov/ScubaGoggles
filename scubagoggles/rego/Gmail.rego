@@ -3,7 +3,6 @@ package gmail
 import future.keywords
 import data.utils
 import data.utils.GetFriendlyEnabledValue
-import data.utils.PolicyApiInUse
 
 GmailEnabled(orgunit) := utils.AppEnabled(input.policies, "gmail", orgunit)
 
@@ -37,32 +36,7 @@ LogEvents := utils.GetEvents("gmail_logs")
 
 GmailId1_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.1.1")
 
-LogMessage1_1 := "ENABLE_MAIL_DELEGATION_WITHIN_DOMAIN"
-
-Check1_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage1_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check1_1_OK if {PolicyApiInUse}
-
 NonComplianceMessage1_1(value) := sprintf("Mail delegation is %s", [value])
-
-# Cannot be controlled at group level
-
-NonCompliantOUs1_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage1_1(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage1_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
@@ -78,27 +52,12 @@ if {
 tests contains {
     "PolicyId": GmailId1_1,
     "Criticality": "Should",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check1_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId1_1,
-    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check1_1_OK
     Status := count(NonCompliantOUs1_1) == 0
 }
 #--
@@ -134,7 +93,6 @@ if {
     Status := count(DomainsWithoutDkim) == 0
 }
 #--
-
 
 ###############
 # GWS.GMAIL.3 #
@@ -290,7 +248,6 @@ if {
 }
 #--
 
-
 ###############
 # GWS.GMAIL.5 #
 ###############
@@ -299,41 +256,13 @@ if {
 # Baseline GWS.GMAIL.5.1
 #--
 
-# Cannot be controlled at group level
-
 GmailId5_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.5.1")
-
-LogMessage5_1 := "Attachment safety Enable: protect against encrypted attachments from untrusted senders"
-
-Check5_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage5_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check5_1_OK if {PolicyApiInUse}
 
 # The following prefix applies to the next 2 baselines and is used to keep
 # string length from getting too long.
 ProtectionEncryptAttPrefix := "Protection against encrypted attachments"
 NonComplianceMessage5_1(value) := sprintf("%s from untrusted senders is set to: %s",
                                           [ProtectionEncryptAttPrefix, value])
-
-NonCompliantOUs5_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage5_1(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents,
-                concat("", ["Attachment safety Enable: ",
-                    "protect against encrypted attachments from untrusted senders"]), OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs5_1 contains {
     "Name": OU,
@@ -349,29 +278,15 @@ if {
 tests contains {
     "PolicyId": GmailId5_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check5_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId5_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check5_1_OK
     Status := count(NonCompliantOUs5_1) == 0
 }
+#--
 
 #
 # Baseline GWS.GMAIL.5.2
@@ -379,34 +294,8 @@ if {
 
 GmailId5_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.5.2")
 
-LogMessage5_2 := "Attachment safety Enable: protect against attachments with scripts from untrusted senders"
-
-Check5_2_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage5_2, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check5_2_OK if {PolicyApiInUse}
-
 NonComplianceMessage5_2(value) := sprintf("%s with scripts from untrusted senders is set to: %s",
                                           [ProtectionEncryptAttPrefix, value])
-
-NonCompliantOUs5_2 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage5_2(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents,
-                concat("", ["Attachment safety Enable: ",
-                    "protect against attachments with scripts from untrusted senders"]), OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs5_2 contains {
     "Name": OU,
@@ -422,30 +311,14 @@ if {
 tests contains {
     "PolicyId": GmailId5_2,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check5_2_OK
-}
-
-tests contains {
-    "PolicyId": GmailId5_2,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check5_2_OK
     Status := count(NonCompliantOUs5_2) == 0
 }
-
 #--
 
 #
@@ -454,33 +327,8 @@ if {
 
 GmailId5_3 := utils.PolicyIdWithSuffix("GWS.GMAIL.5.3")
 
-LogMessage5_3 := "Attachment safety Enable: Protect against anomalous attachment types in emails"
-
-Check5_3_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage5_3, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check5_3_OK if {PolicyApiInUse}
-
 NonComplianceMessage5_3(value) := sprintf("Protection against anomalous attachment types in emails is set to: %s",
                                           [value])
-
-NonCompliantOUs5_3 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage5_3(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents,
-                concat("", ["Attachment safety Enable: Protect against anomalous attachment types in emails"]), OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs5_3 contains {
     "Name": OU,
@@ -496,27 +344,12 @@ if {
 tests contains {
     "PolicyId": GmailId5_3,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check5_3_OK
-}
-
-tests contains {
-    "PolicyId": GmailId5_3,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check5_3_OK
     Status := count(NonCompliantOUs5_3) == 0
 }
 #--
@@ -527,33 +360,8 @@ if {
 
 GmailId5_4 := utils.PolicyIdWithSuffix("GWS.GMAIL.5.4")
 
-LogMessage5_4 := "Attachment safety Enable: automatically enables all future added settings"
-
-Check5_4_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage5_4, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check5_4_OK if {PolicyApiInUse}
-
 NonComplianceMessage5_4(value) := sprintf("Automatically enables all future added settings is set to: %s",
                                           [value])
-
-NonCompliantOUs5_4 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage5_4(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, concat("", ["Attachment safety Enable: ",
-                                                "automatically enables all future added settings"]), OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs5_4 contains {
     "Name": OU,
@@ -569,27 +377,12 @@ if {
 tests contains {
     "PolicyId": GmailId5_4,
     "Criticality": "Should",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check5_4_OK
-}
-
-tests contains {
-    "PolicyId": GmailId5_4,
-    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check5_4_OK
     Status := count(NonCompliantOUs5_4) == 0
 }
 #--
@@ -602,24 +395,6 @@ GmailId5_5 := utils.PolicyIdWithSuffix("GWS.GMAIL.5.5")
 
 NonComplianceMessage5_5(types) := sprintf("%s attachment emails not removed from inbox",
                                           [concat(", ", sort(types))])
-
-default NoSuchEvent5_5 := false
-
-NoSuchEvent5_5 := false if {
-    PolicyApiInUse
-} else := true if {
-    SettingName := "Attachment safety Encrypted attachment protection setting action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-} else := true if {
-    SettingName := "Attachment safety Attachment with scripts protection action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-} else := true if {
-    SettingName := "Attachment safety Anomalous attachment protection setting action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-}
 
 EncryptedAttachmentMessage(NewValueEncryptedAttachment)
     := "Encrypted attachments from untrusted senders"
@@ -667,38 +442,6 @@ GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScri
     "</ul>"
 ])
 
-NonCompliantOUs5_5 contains {
-    "Name": OU,
-    "Value": GetFriendlyValue5_5(LastEventEncryptedAttachment.NewValue,
-        LastEventAttachmentWithScripts.NewValue,
-        LastEventAnomalousAttachment.NewValue)
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    EncryptedAttachmentEvents := utils.FilterEventsOU(LogEvents,
-        "Attachment safety Encrypted attachment protection setting action", OU)
-    count(EncryptedAttachmentEvents) > 0
-    LastEventEncryptedAttachment := utils.GetLastEvent(EncryptedAttachmentEvents)
-
-    AttachmentWithScriptsEvents := utils.FilterEventsOU(LogEvents,
-        "Attachment safety Attachment with scripts protection action", OU)
-    count(AttachmentWithScriptsEvents) > 0
-    LastEventAttachmentWithScripts := utils.GetLastEvent(AttachmentWithScriptsEvents)
-
-    AnomalousAttachmentEvents := utils.FilterEventsOU(LogEvents,
-        "Attachment safety Anomalous attachment protection setting action", OU)
-    count(AnomalousAttachmentEvents) > 0
-    LastEventAnomalousAttachment := utils.GetLastEvent(AnomalousAttachmentEvents)
-
-    # OU is non-compliant if any of the following are true
-    true in [
-        LastEventEncryptedAttachment.NewValue == "Show warning",
-        LastEventAttachmentWithScripts.NewValue == "Show warning",
-        LastEventAnomalousAttachment.NewValue == "Show warning"
-    ]
-}
-
 AttachConfigs := [
 	{"type": "anomalous type",
 	 "setting": "anomalousAttachmentProtectionConsequence"},
@@ -726,27 +469,12 @@ if {
 tests contains {
     "PolicyId": GmailId5_5,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    NoSuchEvent5_5
-}
-
-tests contains {
-    "PolicyId": GmailId5_5,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent5_5
     Status := count(NonCompliantOUs5_5) == 0
 }
 #--
@@ -772,40 +500,14 @@ tests contains {
 # GWS.GMAIL.6 #
 ###############
 
-# Cannot be controlled at Group level
-
 #
 # Baseline GWS.GMAIL.6.1
 #--
 
 GmailId6_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.6.1")
 
-LogMessage6_1 := "Links and external images safety Enable: identify links behind shortened URLs"
-
-Check6_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage6_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check6_1_OK if {PolicyApiInUse}
-
 NonComplianceMessage6_1(value) := sprintf("Identify links behind shortened URLs is: %s",
                                           [value])
-
-NonCompliantOUs6_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage6_1(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage6_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs6_1 contains {
     "Name": OU,
@@ -821,27 +523,12 @@ if {
 tests contains {
     "PolicyId": GmailId6_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check6_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId6_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check6_1_OK
     Status := count(NonCompliantOUs6_1) == 0
 }
 #--
@@ -852,32 +539,8 @@ if {
 
 GmailId6_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.6.2")
 
-LogMessage6_2 := "Links and external images safety Enable: scan linked images"
-
-Check6_2_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage6_2, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check6_2_OK if {PolicyApiInUse}
-
 NonComplianceMessage6_2(value) := sprintf("Scan linked images is: %s",
                                           [value])
-
-NonCompliantOUs6_2 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage6_2(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage6_2, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs6_2 contains {
     "Name": OU,
@@ -893,27 +556,12 @@ if {
 tests contains {
     "PolicyId": GmailId6_2,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check6_2_OK
-}
-
-tests contains {
-    "PolicyId": GmailId6_2,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check6_2_OK
     Status := count(NonCompliantOUs6_2) == 0
 }
 #--
@@ -924,35 +572,8 @@ if {
 
 GmailId6_3 := utils.PolicyIdWithSuffix("GWS.GMAIL.6.3")
 
-# NOTE: "unstrusted" really is the spelling the API uses:
-LogMessage6_3 := sprintf("%s %s %s", ["Links and external images safety Enable:",
-                                      "show warning prompt for click on links",
-                                      "to unstrusted domains"])
-
-Check6_3_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage6_3, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check6_3_OK if {PolicyApiInUse}
-
 NonComplianceMessage6_3(value) := sprintf("Show warning prompt for click on links to untrusted domains is: %s",
                                           [value])
-
-NonCompliantOUs6_3 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage6_3(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage6_3, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs6_3 contains {
     "Name": OU,
@@ -968,27 +589,12 @@ if {
 tests contains {
     "PolicyId": GmailId6_3,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check6_3_OK
-}
-
-tests contains {
-    "PolicyId": GmailId6_3,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check6_3_OK
     Status := count(NonCompliantOUs6_3) == 0
 }
 #--
@@ -999,34 +605,8 @@ if {
 
 GmailId6_4 := utils.PolicyIdWithSuffix("GWS.GMAIL.6.4")
 
-LogMessage6_4 := sprintf("%s %s %s", ["Links and external images safety Enable:",
-                                      "automatically enables all future",
-                                      "added settings"])
-
-Check6_4_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage6_4, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check6_4_OK if {PolicyApiInUse}
-
 NonComplianceMessage6_4(value) := sprintf("Apply future recommended settings automatically is: %s",
                                           [value])
-
-NonCompliantOUs6_4 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage6_4(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage6_4, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs6_4 contains {
     "Name": OU,
@@ -1042,27 +622,12 @@ if {
 tests contains {
     "PolicyId": GmailId6_4,
     "Criticality": "Should",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check6_4_OK
-}
-
-tests contains {
-    "PolicyId": GmailId6_4,
-    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check6_4_OK
     Status := count(NonCompliantOUs6_4) == 0
 }
 #--
@@ -1091,38 +656,10 @@ tests contains {
 # Baseline GWS.GMAIL.7.1
 #--
 
-# No group level control
-
 GmailId7_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.1")
-
-LogMessage7_1 := sprintf("%s %s %s", ["Spoofing and authentication safety",
-                                      "Enable: protect against domain spoofing",
-                                      "using similar domain names"])
-
-Check7_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage7_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check7_1_OK if {PolicyApiInUse}
 
 NonComplianceMessage7_1(value) := sprintf("Protect against domain spoofing using similar domain names is set to: %s",
                                           [value])
-
-NonCompliantOUs7_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage7_1(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage7_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs7_1 contains {
     "Name": OU,
@@ -1138,27 +675,12 @@ if {
 tests contains {
     "PolicyId": GmailId7_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check7_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId7_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check7_1_OK
     Status := count(NonCompliantOUs7_1) == 0
 }
 #--
@@ -1169,34 +691,8 @@ if {
 
 GmailId7_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.2")
 
-LogMessage7_2 := sprintf("%s %s %s", ["Spoofing and authentication safety",
-                                      "Enable: protect against spoofing of",
-                                      "employee names"])
-
-Check7_2_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage7_2, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check7_2_OK if {PolicyApiInUse}
-
 NonComplianceMessage7_2(value) := sprintf("Protect against spoofing of employee names is set to: %s",
                                           [value])
-
-NonCompliantOUs7_2 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage7_2(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage7_2, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs7_2 contains {
     "Name": OU,
@@ -1212,27 +708,12 @@ if {
 tests contains {
     "PolicyId": GmailId7_2,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check7_2_OK
-}
-
-tests contains {
-    "PolicyId": GmailId7_2,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check7_2_OK
     Status := count(NonCompliantOUs7_2) == 0
 }
 #--
@@ -1243,34 +724,8 @@ if {
 
 GmailId7_3 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.3")
 
-LogMessage7_3 := sprintf("%s %s %s", ["Spoofing and authentication safety",
-                                      "Enable: protect against inbound emails",
-                                      "spoofing your domain"])
-
-Check7_3_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage7_3, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check7_3_OK if {PolicyApiInUse}
-
 NonComplianceMessage7_3(value) := sprintf("Protect against inbound emails spoofing your domain is set to: %s",
                                           [value])
-
-NonCompliantOUs7_3 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage7_3(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage7_3, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs7_3 contains {
     "Name": OU,
@@ -1286,27 +741,12 @@ if {
 tests contains {
     "PolicyId": GmailId7_3,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check7_3_OK
-}
-
-tests contains {
-    "PolicyId": GmailId7_3,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check7_3_OK
     Status := count(NonCompliantOUs7_3) == 0
 }
 #--
@@ -1317,34 +757,8 @@ if {
 
 GmailId7_4 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.4")
 
-LogMessage7_4 := sprintf("%s %s %s", ["Spoofing and authentication safety",
-                                      "Enable: protect against any",
-                                      "unauthenticated emails"])
-
-Check7_4_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage7_4, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check7_4_OK if {PolicyApiInUse}
-
 NonComplianceMessage7_4(value) := sprintf("Protect against any unauthenticated emails is set to: %s",
                                           [value])
-
-NonCompliantOUs7_4 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage7_4(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage7_4, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs7_4 contains {
     "Name": OU,
@@ -1360,27 +774,12 @@ if {
 tests contains {
     "PolicyId": GmailId7_4,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check7_4_OK
-}
-
-tests contains {
-    "PolicyId": GmailId7_4,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check7_4_OK
     Status := count(NonCompliantOUs7_4) == 0
 }
 #--
@@ -1391,34 +790,8 @@ if {
 
 GmailId7_5 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.5")
 
-LogMessage7_5 := sprintf("%s %s %s", ["Spoofing and authentication safety",
-                                      "Enable: protect your Groups from",
-                                      "inbound emails spoofing your domain"])
-
-Check7_5_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage7_5, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check7_5_OK if {PolicyApiInUse}
-
 NonComplianceMessage7_5(value) := sprintf("Protect your Groups from inbound emails spoofing your domain is set to: %s",
                                           [value])
-
-NonCompliantOUs7_5 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage7_5(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage7_5, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs7_5 contains {
     "Name": OU,
@@ -1434,27 +807,12 @@ if {
 tests contains {
     "PolicyId": GmailId7_5,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check7_5_OK
-}
-
-tests contains {
-    "PolicyId": GmailId7_5,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_5},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check7_5_OK
     Status := count(NonCompliantOUs7_5) == 0
 }
 #--
@@ -1467,38 +825,6 @@ GmailId7_6 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.6")
 
 NonComplianceMessage7_6(types) := sprintf("%s spoof emails not removed from inbox",
                                           [concat(", ", sort(types))])
-
-# No such event is true if any of the relevant settings doesn't having any events
-default NoSuchEvent7_6 := false
-
-NoSuchEvent7_6 := false if {
-    PolicyApiInUse
-} else := true if {
-    SettingName :=
-        "Spoofing and authentication safety Protect against domain spoofing based on similar domain names action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-} else := true if {
-    SettingName :=
-        "Spoofing and authentication safety Protect against spoofing of employee names action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-} else := true if {
-    SettingName :=
-        "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-} else := true if {
-    SettingName :=
-        "Spoofing and authentication safety Protect against any unauthenticated emails action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-} else := true if {
-    SettingName :=
-        "Spoofing and authentication safety Protect your Groups from inbound emails spoofing your domain action"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-}
 
 DomainNamesMessage(NewValueDomainNames) := "Inbound emails spoofing similar domain names"
     if { NewValueDomainNames == "Show warning" }
@@ -1547,56 +873,6 @@ GetFriendlyValue7_6(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundE
     "</ul>"
 ])
 
-NonCompliantOUs7_6 contains {
-    "Name": OU,
-    "Value": GetFriendlyValue7_6(LastEventDomainNames.NewValue, LastEventEmployeeNames.NewValue,
-        LastEventInboundEmails.NewValue, LastEventUnauthenticatedEmails.NewValue,
-        LastEventGroupEmails.NewValue)
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-
-      DomainNamesSetting := concat("", [
-        "Spoofing and authentication safety Protect against domain spoofing based on ",
-        "similar domain names action"
-    ])
-    DomainNamesEvents := utils.FilterEventsOU(LogEvents, DomainNamesSetting, OU)
-    LastEventDomainNames := utils.GetLastEvent(DomainNamesEvents)
-
-    EmployeeNamesSetting :=
-        "Spoofing and authentication safety Protect against spoofing of employee names action"
-    EmployeeNamesEvents := utils.FilterEventsOU(LogEvents, EmployeeNamesSetting, OU)
-    LastEventEmployeeNames := utils.GetLastEvent(EmployeeNamesEvents)
-
-    InboundEmailsSetting :=
-        "Spoofing and authentication safety Protect against inbound emails spoofing your domain action"
-    InboundEmailsEvents := utils.FilterEventsOU(LogEvents, InboundEmailsSetting, OU)
-    LastEventInboundEmails := utils.GetLastEvent(InboundEmailsEvents)
-
-    UnauthenticatedEmailsSetting :=
-        "Spoofing and authentication safety Protect against any unauthenticated emails action"
-    UnauthenticatedEmailsEvents := utils.FilterEventsOU(LogEvents, UnauthenticatedEmailsSetting, OU)
-    LastEventUnauthenticatedEmails := utils.GetLastEvent(UnauthenticatedEmailsEvents)
-
-    GroupEmailsSetting := concat("", [
-        "Spoofing and authentication safety Protect your Groups from inbound emails spoofing ",
-        "your domain action"
-    ])
-    GroupEmailsEvents := utils.FilterEventsOU(LogEvents, GroupEmailsSetting, OU)
-    LastEventGroupEmails := utils.GetLastEvent(GroupEmailsEvents)
-
-    # OU is non-compliant if any of the following are true
-    true in [
-        LastEventDomainNames.NewValue == "Show warning",
-        LastEventEmployeeNames.NewValue == "Show warning",
-        LastEventInboundEmails.NewValue == "Show warning",
-        LastEventUnauthenticatedEmails.NewValue == "Show warning",
-        LastEventUnauthenticatedEmails.NewValue == "No action",
-        LastEventGroupEmails.NewValue == "Show warning"
-    ]
-}
-
 SpoofConfigs := [
 	{"type": "domain", "setting": "domainSpoofingConsequence"},
 	{"type": "domain name", "setting": "domainNameSpoofingConsequence"},
@@ -1623,27 +899,12 @@ if {
 tests contains {
     "PolicyId": GmailId7_6,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    NoSuchEvent7_6
-}
-
-tests contains {
-    "PolicyId": GmailId7_6,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_6, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_6},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    not NoSuchEvent7_6
     Status := count(NonCompliantOUs7_6) == 0
 }
 #--
@@ -1654,34 +915,8 @@ if {
 
 GmailId7_7 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.7")
 
-LogMessage7_7 := sprintf("%s %s %s", ["Spoofing and authentication safety",
-                                      "Enable: automatically enables all",
-                                      "future added settings"])
-
-Check7_7_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsNoOU(LogEvents, LogMessage7_7)
-    count(events) > 0
-}
-
-Check7_7_OK if {PolicyApiInUse}
-
 NonComplianceMessage7_7(value) := sprintf("Automatically enable all future added settings is set to: %s",
                                           [value])
-
-NonCompliantOUs7_7 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage7_7(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage7_7, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs7_7 contains {
     "Name": OU,
@@ -1697,27 +932,12 @@ if {
 tests contains {
     "PolicyId": GmailId7_7,
     "Criticality": "Should",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check7_7_OK
-}
-
-tests contains {
-    "PolicyId": GmailId7_7,
-    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_7, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_7},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check7_7_OK
     Status := count(NonCompliantOUs7_7) == 0
 }
 #--
@@ -1739,7 +959,6 @@ tests contains {
 }
 #--
 
-
 ###############
 # GWS.GMAIL.8 #
 ###############
@@ -1750,30 +969,7 @@ tests contains {
 
 GmailId8_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.8.1")
 
-LogMessage8_1 := "ENABLE_EMAIL_USER_IMPORT"
-
-Check8_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage8_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check8_1_OK if {PolicyApiInUse}
-
 NonComplianceMessage8_1(value) := sprintf("User email uploads is %s", [value])
-
-NonCompliantOUs8_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage8_1(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage8_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
 
 NonCompliantOUs8_1 contains {
     "Name": OU,
@@ -1789,27 +985,12 @@ if {
 tests contains {
     "PolicyId": GmailId8_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check8_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId8_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs8_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check8_1_OK
     Status := count(NonCompliantOUs8_1) == 0
 }
 #--
@@ -1824,24 +1005,6 @@ if {
 
 GmailId9_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.9.1")
 
-Check9_1_OK if {
-    not NoSuchEvent9_1(utils.TopLevelOU)
-}
-
-Check9_1_OK if {PolicyApiInUse}
-
-default NoSuchEvent9_1(_) := false
-
-NoSuchEvent9_1(TopLevelOU) := true if {
-    SettingName := "IMAP_ACCESS"
-    EventsIMAPAccess := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(EventsIMAPAccess) == 0
-} else := true if {
-    SettingName := "ENABLE_POP_ACCESS"
-    EventsPOPAccess := utils.FilterEventsOU(LogEvents, SettingName, TopLevelOU)
-    count(EventsPOPAccess) == 0
-}
-
 GetFriendlyValue9_1(ImapEnabled, PopEnabled) := Description if {
     ImapEnabled == true
     PopEnabled == true
@@ -1855,55 +1018,6 @@ GetFriendlyValue9_1(ImapEnabled, PopEnabled) := Description if {
     PopEnabled == true
     Description := "POP access is enabled"
 } else := "Both IMAP and POP access are disabled"
-
-
-NonCompliantOUs9_1 contains {
-    "Name": OU,
-    "Value": GetFriendlyValue9_1(ImapEnabled, PopEnabled)
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-
-    ImapEvents := utils.FilterEventsOU(LogEvents, "IMAP_ACCESS", OU)
-    count(ImapEvents) > 0
-    LastImapEvent := utils.GetLastEvent(ImapEvents)
-
-    PopEvents := utils.FilterEventsOU(LogEvents, "ENABLE_POP_ACCESS", OU)
-    count(PopEvents) > 0
-    LastPopEvent := utils.GetLastEvent(PopEvents)
-
-    ImapEnabled := (LastImapEvent.NewValue in {"DISABLED", "INHERIT_FROM_PARENT"}) == false
-    PopEnabled := (LastPopEvent.NewValue in {"false", "INHERIT_FROM_PARENT"}) == false
-    true in {
-        ImapEnabled,
-        PopEnabled
-    }
-}
-
-NonCompliantGroups9_1 contains {
-    "Name": Group,
-    "Value": GetFriendlyValue9_1(ImapEnabled, PopEnabled)
-}
-if {
-    not PolicyApiInUse
-    some Group in utils.GroupsWithEvents
-
-    ImapEvents := utils.FilterEventsGroup(LogEvents, "IMAP_ACCESS", Group)
-    count(ImapEvents) > 0
-    LastImapEvent := utils.GetLastEvent(ImapEvents)
-
-    PopEvents := utils.FilterEventsGroup(LogEvents, "ENABLE_POP_ACCESS", Group)
-    count(PopEvents) > 0
-    LastPopEvent := utils.GetLastEvent(PopEvents)
-
-    ImapEnabled := (LastImapEvent.NewValue in {"DISABLED", "INHERIT_FROM_PARENT"}) == false
-    PopEnabled := (LastPopEvent.NewValue in {"false", "INHERIT_FROM_PARENT"}) == false
-    true in {
-        ImapEnabled,
-        PopEnabled
-    }
-}
 
 NonCompliantOUs9_1 contains {
     "Name": OU,
@@ -1927,29 +1041,13 @@ if {
 tests contains {
     "PolicyId": GmailId9_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check9_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId9_1,
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, NonCompliantGroups9_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1, "NonCompliantGroups": NonCompliantGroups9_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check9_1_OK
-    Conditions := {count(NonCompliantOUs9_1) == 0, count(NonCompliantGroups9_1) == 0}
-    Status := (false in Conditions) == false
+    Status := count(NonCompliantOUs9_1) == 0
 }
 #--
 
@@ -1963,32 +1061,8 @@ if {
 
 GmailId10_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.10.1")
 
-LogMessage10_1 := "ENABLE_OUTLOOK_SYNC"
-
-Check10_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage10_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check10_1_OK if {PolicyApiInUse}
-
 NonComplianceMessage10_1(value) := sprintf("Google Workspace Sync is %s",
                                           [value])
-
-NonCompliantOUs10_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage10_1(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage10_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
-}
 
 NonCompliantOUs10_1 contains {
     "Name": OU,
@@ -2004,27 +1078,12 @@ if {
 tests contains {
     "PolicyId": GmailId10_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check10_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId10_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check10_1_OK
     Status := count(NonCompliantOUs10_1) == 0
 }
 #--
@@ -2056,32 +1115,8 @@ tests contains {
 
 GmailId11_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.11.1")
 
-LogMessage11_1 := "ENABLE_EMAIL_AUTOFORWARDING"
-
-Check11_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage11_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check11_1_OK if {PolicyApiInUse}
-
 NonComplianceMessage11_1(value) := sprintf("Automatic email forwarding is set to: %s",
                                            [value])
-
-NonCompliantOUs11_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage11_1(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage11_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
-}
 
 NonCompliantOUs11_1 contains {
     "Name": OU,
@@ -2097,27 +1132,12 @@ if {
 tests contains {
     "PolicyId": GmailId11_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check11_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId11_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs11_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check11_1_OK
     Status := count(NonCompliantOUs11_1) == 0
 }
 #--
@@ -2132,31 +1152,8 @@ if {
 
 GmailId12_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.12.1")
 
-LogMessage12_1 := "OUTBOUND_RELAY_ENABLED"
-
-Check12_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage12_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check12_1_OK if {PolicyApiInUse}
-
 NonComplianceMessage12_1(value) := sprintf("Per-user Outbound Gateways are %s",
                                            [value])
-
-NonCompliantOUs12_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage12_1(GetFriendlyEnabledValue(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage12_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
 
 NonCompliantOUs12_1 contains {
     "Name": OU,
@@ -2172,27 +1169,12 @@ if {
 tests contains {
     "PolicyId": GmailId12_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check12_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId12_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs12_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check12_1_OK
     Status := count(NonCompliantOUs12_1) == 0
 }
 #--
@@ -2270,83 +1252,28 @@ if {
 
 GmailId14_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.14.1")
 
-LogMessage14_1 := "GmailIpWhitelistSpamFilteringProto is_empty"
-
-Check14_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage14_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check14_1_OK if {PolicyApiInUse}
-
 NonComplianceMessage14_1(Value, OU) := sprintf("Email allowlists are %s in %s.",
                                                [Value, OU])
 
-# Note that in the event logs, a STRING value of "false" means allowlists are
-# enabled, but policy API checks for a boolean true value.
-
-GetFriendlyValue14_1(Value) := "enabled" if {
-    Value in {true, "false"}
-} else := "disabled" if {
-    Value in {false, "true"}
-} else := Value
+# As with the other tests, this always returns a result, even if gmail is
+# disabled - see how this is implemented by converting the enable status to 1/0
+# (whereas a false value would fail the tests conditional).
 
 tests contains {
     "PolicyId": GmailId14_1,
     "Criticality": "Should",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": {LogMessage14_1: "No relevant event in the current logs"},
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check14_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId14_1,
-    "Criticality": "Should",
-    "ReportDetails": NonComplianceMessage14_1(GetFriendlyValue14_1(LastEvent.NewValue),
-                                              utils.TopLevelOU),
-    "ActualValue": {LastEvent.Setting: LastEvent.NewValue},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage14_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    Status := LastEvent.NewValue == "true"
-}
-
-# This test applies only to the policy API - it is NOT shared with the events
-# implementation.  Similar to the above events implementation test, this test
-# always returns a result, even if gmail is disabled - see how this is
-# implemented by converting the enable status to 1/0 (whereas a false value
-# would fail the tests conditional).
-
-tests contains {
-    "PolicyId": GmailId14_1,
-    "Criticality": "Should",
-    "ReportDetails": NonComplianceMessage14_1(GetFriendlyValue14_1(allowListCount > 0),
+    "ReportDetails": NonComplianceMessage14_1(GetFriendlyEnabledValue(allowListCount > 0),
                                               utils.TopLevelOU),
     "ActualValue": {utils.TopLevelOU: allowList},
     "RequirementMet": allowListCount == 0,
     "NoSuchEvent": false
 }
 if {
-    PolicyApiInUse
     enabled := to_number(GmailEnabled(utils.TopLevelOU))
     settings := input.policies[utils.TopLevelOU]
     allowList := settings.gmail_email_spam_filter_ip_allowlist.allowedIpAddresses
     allowListCount := enabled * count(allowList)
 }
-
 #--
 
 ################
@@ -2359,42 +1286,12 @@ if {
 
 GmailId15_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.15.1")
 
-LogMessage15_1 := "DelayedDeliverySettingsProto disable_delayed_delivery_for_suspicious_email"
-
-Check15_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage15_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check15_1_OK if {PolicyApiInUse}
-
 NonComplianceMessage15_1(value) := sprintf("Enhanced pre-delivery message scanning is %s",
                                            [value])
 
-GetFriendlyValue15_1(Value) := "enabled" if {
-    Value in {true, "false"}
-} else := "disabled" if {
-    Value in {false, "true"}
-} else := Value
-
 NonCompliantOUs15_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage15_1(GetFriendlyValue15_1(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage15_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
-
-NonCompliantOUs15_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage15_1(GetFriendlyValue15_1(preScanning))
+    "Value": NonComplianceMessage15_1(GetFriendlyEnabledValue(preScanning))
 }
 if {
     some OU, settings in input.policies
@@ -2407,27 +1304,12 @@ if {
 tests contains {
     "PolicyId": GmailId15_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check15_1_OK
-}
-
-tests contains {
-    "PolicyId": GmailId15_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs15_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check15_1_OK
     Status := count(NonCompliantOUs15_1) == 0
 }
 #--
@@ -2544,7 +1426,6 @@ tests contains {
     "NoSuchEvent": false
 }
 #--
-
 
 ################
 # GWS.GMAIL.18 #
