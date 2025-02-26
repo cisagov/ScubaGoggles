@@ -656,8 +656,8 @@ Ability to add recovery information SHOULD be disabled.
 - _Last modified:_ February 2025
 
 - MITRE ATT&CK TTP Mapping
-  - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
-    - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
 ### Resources
 
 -   [GWS Admin Help \| Allow super administrators to recover their password](https://support.google.com/a/answer/9436964?fl=1)
