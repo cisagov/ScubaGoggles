@@ -50,9 +50,8 @@ test_Count_Correct_V1 if {
     RuleOutput[0].ReportDetails == concat("", [
         "The following super admins are configured: ",
         "admin1@example.org, admin2@example.org. ",
-        "<i>Note: Exceptions are ",
-        "allowed for \"break glass\" super admin accounts, ",
-        "though we are not able to account for this automatically.</i>"
+        "<i>Note: Exceptions are allowed for \"break glass\" super admin accounts. ",
+        "\"Break glass\" accounts can be specified in a config file.<i>"
     ])
 }
 
@@ -83,9 +82,8 @@ test_Count_Correct_V2 if {
     RuleOutput[0].ReportDetails == concat("", [
         "The following super admins are configured: ",
         "admin1@example.org, admin2@example.org, admin3@example.org. ",
-        "<i>Note: Exceptions are ",
-        "allowed for \"break glass\" super admin accounts, ",
-        "though we are not able to account for this automatically.</i>"
+        "<i>Note: Exceptions are allowed for \"break glass\" super admin accounts. ",
+        "\"Break glass\" accounts can be specified in a config file.<i>"
     ])
 }
 
@@ -136,9 +134,8 @@ test_Count_Correct_V3 if {
     RuleOutput[0].ReportDetails == concat("", [
         "The following super admins are configured: ",
         "admin1@example.org, admin2@example.org, admin3@example.org, admin4@example.org, ",
-        "admin5@example.org, admin6@example.org, admin7@example.org, admin8@example.org. <i>Note: Exceptions are ",
-        "allowed for \"break glass\" super admin accounts, ",
-        "though we are not able to account for this automatically.</i>"
+        "admin5@example.org, admin6@example.org, admin7@example.org, admin8@example.org. <i>Note: Exceptions are allowed for \"break glass\" super admin accounts. ",
+        "\"Break glass\" accounts can be specified in a config file.<i>"
     ])
 }
 
@@ -193,9 +190,8 @@ test_Count_Incorrect_V1 if {
     RuleOutput[0].ReportDetails == concat("", [
         "The following super admins are configured: ",
         "admin1@example.org, admin2@example.org, admin3@example.org, admin4@example.org, admin5@example.org, ",
-        "admin6@example.org, admin7@example.org, admin8@example.org, admin9@example.org. <i>Note: Exceptions are ",
-        "allowed for \"break glass\" super admin accounts, ",
-        "though we are not able to account for this automatically.</i>"
+        "admin6@example.org, admin7@example.org, admin8@example.org, admin9@example.org. <i>Note: Exceptions are allowed for \"break glass\" super admin accounts. ",
+        "\"Break glass\" accounts can be specified in a config file.<i>"
     ])
 }
 
@@ -217,9 +213,8 @@ test_Count_Incorrect_V2 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
         "The following super admins are configured: ",
-        "admin1@example.org. <i>Note: Exceptions are ",
-        "allowed for \"break glass\" super admin accounts, ",
-        "though we are not able to account for this automatically.</i>"
+        "admin1@example.org. <i>Note: Exceptions are allowed for \"break glass\" super admin accounts. ",
+        "\"Break glass\" accounts can be specified in a config file.<i>"
     ])
 }
 #--
