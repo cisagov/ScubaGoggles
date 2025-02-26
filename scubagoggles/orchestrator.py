@@ -283,7 +283,7 @@ class Orchestrator:
             'ProductAbbreviationMapping': product_abbreviation_mapping,
             'Tool':  'ScubaGoggles',
             'ToolVersion':  Version.number,
-            'TimeStampZulu': timestamp_zulu
+            'TimestampZulu': timestamp_zulu
         }
 
         total_output.update({'MetaData': report_metadata})
