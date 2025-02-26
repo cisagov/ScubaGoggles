@@ -17,8 +17,7 @@ from scubagoggles.orchestrator import Orchestrator, UserRuntimeError
 from scubagoggles.purge import purge_reports
 from scubagoggles.reporter.md_parser import MarkdownParserError
 from scubagoggles.scuba_argument_parser import ScubaArgumentParser
-from scubagoggles.user_setup import default_file_names, find_legacy_dir, \
-    user_setup
+from scubagoggles.user_setup import default_file_names, user_setup
 from scubagoggles.utils import path_parser
 from scubagoggles.version import Version
 
@@ -35,16 +34,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     :param UserConfig user_config: user configuration object
     """
 
-    # This module is located in the scubagoggles subdirectory.  The parent
-    # directory is where the rego and baselines subdirectories are also
-    # located - these are the default for the rego and baseline files,
-    # respectively.  The instructions typically instruct the user to place
-    # both the OPA executable and the credentials JSON file in this
-    # directory.
-
     scuba_path = Path(__file__).parent
-    user_dir = find_legacy_dir(user_config) or user_config.output_dir
-    opa_dir = user_config.opa_dir or user_dir
 
     gws = Orchestrator.gws_products()
     gws_baselines = tuple(sorted(gws['gws_baselines']))
@@ -66,10 +56,10 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         help = help_msg)
 
     help_msg = ('The folder path where both the output JSON & HTML report will '
-                f'be created. Defaults to {user_dir}.')
+                f'be created. Defaults to "{user_config.output_dir}".')
     parser.add_argument('--outputpath',
                         '-o',
-                        default = user_dir,
+                        default = user_config.output_dir,
                         metavar = '<directory>',
                         type = path_parser,
                         help = help_msg)
@@ -82,15 +72,12 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar = '<output-JSON-file>',
                         help = help_msg)
 
-    try:
-        default_credentials = user_config.credentials_file
-    except FileNotFoundError:
-        default_credentials = str(user_dir / 'credentials.json')
     help_msg = ('The location and name of the OAuth / service account '
-                f'credentials json file.  Defaults to "{default_credentials}".')
+                'credentials json file.  Defaults to '
+                f'"{user_config.credentials_file}".')
     parser.add_argument('--credentials',
                         '-c',
-                        default = Path(default_credentials),
+                        default = Path(user_config.credentials_file),
                         metavar = '<credentials-JSON-file>',
                         type = path_parser,
                         help = help_msg)
@@ -121,6 +108,10 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar = '<customer-id>',
                         help = help_msg)
 
+    # If the user defaults file does not exist, assume the setup util hasn't
+    # been run. As the setup util creates the ~/.scubagoggles directory,
+    # fallback to the backup default (the current directory).
+    opa_dir = "./" if not user_config.file_exists else user_config.opa_dir
     help_msg = ('The directory containing the OPA executable. '
                 f'Defaults to {opa_dir}.')
     parser.add_argument('--opapath',
@@ -235,14 +226,11 @@ def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         help = 'Version of OPA to download (default: latest '
                             'version)')
 
-    help_msg = 'Directory containing OPA executable'
-    if user_config.opa_dir:
-        help_msg += f' (default: {user_config.opa_dir})'
     parser.add_argument('--opa_directory',
                         '-r',
                         metavar = '<directory>',
                         type = path_parser,
-                        help = help_msg)
+                        help = 'Directory containing OPA executable')
 
 
 def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
@@ -263,12 +251,6 @@ def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         type = path_parser,
                         help = 'OAuth2 credentials file for Google APIs')
 
-    parser.add_argument('--mkdir',
-                        '-m',
-                        default = False,
-                        action = 'store_true',
-                        help = 'Create directory(ies), if needed')
-
     parser.add_argument('--nocheck',
                         '-nc',
                         default = False,
@@ -282,20 +264,14 @@ def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         help = 'Do not download OPA executable when it does '
                                'not exist')
 
-    parser.add_argument('--noprompt',
-                        '-np',
-                        default = False,
-                        action = 'store_true',
-                        help = 'Do not prompt for missing items')
-
-    parser.add_argument('--opa_directory',
+    parser.add_argument('--opapath',
                         '-r',
                         metavar = '<directory>',
                         type = path_parser,
                         help = 'Directory containing OPA executable')
 
-    parser.add_argument('--work_directory',
-                        '-d',
+    parser.add_argument('--outputpath',
+                        '-o',
                         metavar = '<directory>',
                         type = path_parser,
                         help = 'Scubagoggles output directory')
