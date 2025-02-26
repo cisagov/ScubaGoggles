@@ -654,6 +654,7 @@ Ability to add recovery information SHOULD be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding PII to their organizational account, making it more difficult for a potential adversary to steal PII in the event of a compromise.
 - _Last modified:_ February 2025
+- _Note:_ This setting doesn’t apply if you’re using single sign-on (SSO) with a third-party identity provider or Password Sync.
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -673,7 +674,7 @@ Ability to add recovery information SHOULD be disabled.
 To disable Super Admin account self-recovery:
 
 1.  Sign in to https://admin.google.com as an administrator.
-2.  Select **Security** -\> **Authentication.**
+2.  Select **Security** -\> **Authentication**.
 3.  Select **Account Recovery**.
 4.  Click **Super admin account recovery**.
 5.  Deselect the **Allow Super Admins to recover their account** checkbox.
@@ -681,7 +682,7 @@ To disable Super Admin account self-recovery:
 
 #### GWS.COMMONCONTROLS.8.2v0.4 Instructions
 1.  Sign in to https://admin.google.com as an administrator.
-2.  Select **Security** -\> **Authentication.**
+2.  Select **Security** -\> **Authentication**.
 3.  Select **Account Recovery**.
 4.  Click **User account recovery**.
 5.  Deselect the **Allow users and all non-super admins to recover their account** checkbox.
@@ -689,7 +690,7 @@ To disable Super Admin account self-recovery:
 
 #### GWS.COMMONCONTROLS.8.3v0.4 Instructions
 1.  Sign in to https://admin.google.com as an administrator.
-2.  Select **Security** -\> **Authentication.**
+2.  Select **Security** -\> **Authentication**.
 3.  Select **Account Recovery**. 
 4.  Click **Recovery Information**.
 5.  Deselect the **Allow admins and users to add recovery email information to their account** checkbox.
