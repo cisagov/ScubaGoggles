@@ -411,13 +411,30 @@ class Provider:
         """
         Gets the high-level tenant info using the directory API
         """
-        primary_domain = 'Error Retrieving'
-        for domain in self.list_domains():
-            if domain['isPrimary']:
-                primary_domain = domain['domainName']
-        return {
-            'domain': primary_domain,
-            'topLevelOU': self._top_ou
+        tenant_id = ''
+        try:
+            response = self._services['directory'].customers().get(
+                            customerKey = self._customer_id).execute()
+            tenant_id = response.get('id')
+            primary_domain = 'Error Retrieving'
+            for domain in self.list_domains():
+                if domain['isPrimary']:
+                    primary_domain = domain['domainName']
+            return {
+                'ID' : tenant_id,
+                'domain': primary_domain,
+                'topLevelOU': self._top_ou
+            }
+        except Exception as exc:
+            warnings.warn(
+                f'Exception thrown while retrieving customer list: {exc}',
+                RuntimeWarning
+            )
+            self._unsuccessful_calls.add(ApiReference.LIST_CUSTOMERS.value)
+            return {
+                'ID': "",
+                'domain': primary_domain,
+                'topLevelOU': self._top_ou
         }
 
     def get_gws_logs(self, products: list, event: str) -> dict:
