@@ -11,7 +11,7 @@ import time
 from operator import itemgetter
 from pathlib import Path
 
-from scubagoggles.user_setup import default_file_names, find_legacy_dir
+from scubagoggles.user_setup import default_file_names
 
 log = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ def purge_reports(arguments: argparse.Namespace):
     log.info('GWS Conformance Report Directory Purge')
 
     config = arguments.user_config
-    output_dir = find_legacy_dir(config) or config.output_dir
+    output_dir = config.output_dir
 
     # Find all directories with generated names in the user's output directory.
     # The returned directories are sorted by date (the oldest first).
