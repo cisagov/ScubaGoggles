@@ -217,7 +217,7 @@ def validate_opa_dir(opa_dir: Path = None):
     :return: True if the OPA executable exists; False otherwise.
     """
 
-    if opa_dir and opa_dir.exist() and not opa_dir.is_dir():
+    if opa_dir and opa_dir.exists() and not opa_dir.is_dir():
         log.warning('? %s - specified OPA path exists but is not a directory', opa_dir)
         return False
 
