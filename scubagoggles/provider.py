@@ -432,7 +432,7 @@ class Provider:
             }
         except Exception as exc:
             warnings.warn(
-                f'Exception thrown while customer list: {exc}',
+                f'Exception thrown while retrieving customer list: {exc}',
                 RuntimeWarning
             )
             self._unsuccessful_calls.add(ApiReference.LIST_CUSTOMERS.value)
