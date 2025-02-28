@@ -1285,8 +1285,8 @@ tests contains {
 }
 if {
     SuperAdmins := {Admin.primaryEmail | some Admin in input.super_admins}
-    BreakGlassAccounts := {account | account := input.break_glass_accounts[_]}
-    filterBreakGlassAccounts := {admin | admin := SuperAdmins[_]; not BreakGlassAccounts[admin]}
+    BreakGlassAccounts := {account | some account in input.break_glass_accounts}
+    filterBreakGlassAccounts := {admin | some admin in SuperAdmins; not BreakGlassAccounts[admin]}
     Conditions := {count(filterBreakGlassAccounts) >= 2, count(filterBreakGlassAccounts) <= 8}
     Status := (false in Conditions) == false
 }
