@@ -10,6 +10,7 @@ from pathlib import Path
 
 from yaml import dump, Dumper, load, Loader
 
+
 class UserConfig:
 
     """Implementation of user configuration for ScubaGoggles.  Certain
@@ -24,13 +25,15 @@ class UserConfig:
     # the configuration file is stored at ~/.scubagoggles/userdefaults.yaml.
 
     _defaults = {'scubagoggles': {'opa_dir': '~/.scubagoggles',
-                                    'output_dir': './',
-                                    'credentials': './credentials.json'}}
+                                  'output_dir': './',
+                                  'credentials': './credentials.json'}}
 
     # This is the main key (TOML: table) in the configuration
     _main = _defaults['scubagoggles']
 
     _default_config_file = Path('~/.scubagoggles/userdefaults.yaml').expanduser()
+
+    _legacy_config_file = Path('~/.scubagoggles').expanduser()
 
     def __init__(self, config_file: Union[str, os.PathLike] = None):
 
@@ -41,12 +44,14 @@ class UserConfig:
             default, this is ~/.scubagoggles/userdefaults.yaml
         """
 
+        self._transition_config_file(config_file)
+
         self._config_file = (Path(os.path.expandvars(config_file))
                              if config_file else self._default_config_file)
 
         self._config_file = self._config_file.expanduser()
 
-        if self._config_file.exists() and self._config_file.is_file():
+        if self._config_file.exists():
             with self._config_file.open(encoding = 'utf-8') as in_stream:
                 self._doc = load(in_stream, Loader)
             self._file_exists = True
@@ -160,3 +165,31 @@ class UserConfig:
             dump(self._doc, out_stream, Dumper)
 
         self._file_exists = True
+
+    def _transition_config_file(self, config_file: Union[str, os.PathLike] = None):
+
+        """Transitions a user's configuration file from the original location
+        to the current location.  This retains the user's configuration file
+        and puts it in the correct place without requiring user action.  This
+        is only temporary to transition users running ScubaGoggles 0.4 due to
+        change in the configuration file location for ScubaGoggles 1.0.
+
+        :param Path config_file: [optional] user configuration file.
+        """
+
+        config_path = (Path(os.path.expandvars(config_file))
+                       if config_file else self._legacy_config_file)
+
+        if (not (config_path.is_file()
+            and config_path.samefile(self._legacy_config_file))):
+            return
+
+        self._config_file = self._default_config_file
+
+        with config_path.open(encoding = 'utf-8') as in_stream:
+            self._doc = load(in_stream, Loader)
+
+        if config_path.samefile(self._config_file.parent):
+            config_path.unlink(missing_ok = True)
+
+        self.write()

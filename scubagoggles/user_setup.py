@@ -48,15 +48,6 @@ def user_setup(arguments: argparse.Namespace):
 
     config = arguments.user_config
 
-    # ScubaGoggles v0.4 stored the config file in text file called
-    # ~/.scubagoggles. ~/.scubagoggles is now expected to be a folder.
-    # Users who have .scubagoggles as text file instead of a folder
-    # will need to move that file first.
-    if config.config_path.parent.exists() and not config.config_path.parent.is_dir():
-        raise NotADirectoryError(f"Cannot save user defaults to {config.config_path} "\
-            f"because {config.config_path.parent} is not a directory. Please move "\
-            f"the existing {config.config_path.parent} file then try again.")
-
     modified = user_directory(arguments)
 
     modified |= opa_directory(arguments)
