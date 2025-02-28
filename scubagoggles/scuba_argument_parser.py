@@ -43,6 +43,9 @@ class ScubaArgumentParser:
         """
         args = self.parse_args()
 
+        if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
+            args.breakglassaccounts = []
+
         if not 'config' in args or not args.config:
             return args
 

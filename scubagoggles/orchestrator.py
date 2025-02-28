@@ -94,6 +94,7 @@ class Orchestrator:
 
         args = self._args
         products = args.baselines
+        break_glass_accounts = args.breakglassaccounts
 
         with Provider(args.customerid,
                       args.credentials,
@@ -102,6 +103,7 @@ class Orchestrator:
             provider_dict['baseline_suffix'] = Version.suffix
             provider_dict['successful_calls'] = list(provider.successful_calls)
             provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
+            provider_dict['break_glass_accounts'] = break_glass_accounts
 
         out_jsonfile = args.outputpath / args.outputproviderfilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
