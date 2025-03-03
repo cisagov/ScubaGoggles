@@ -1277,7 +1277,9 @@ tests contains {
     "ReportDetails": concat("", [
         concat("", ["The following super admins are configured: ", concat(", ", SuperAdmins)]),
         ". <i>Note: Exceptions are allowed for \"break glass\" super admin accounts. ",
-        "\"Break glass\" accounts can be specified in a config file.<i>"
+        "\"Break glass\" accounts can be specified in a config file. ",
+        format_int(count(BreakGlassAccounts), 10),
+        " break glass accounts are currently configured.<i>"
     ]),
     "ActualValue": SuperAdmins,
     "RequirementMet": Status,
