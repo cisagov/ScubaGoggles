@@ -155,6 +155,6 @@ test_CCAPI_PwdResetFrequency_NonComply_1 if {
     Output := tests with input as BadCaseInputApi05
 
     failedOU := [{"Name": "topOU",
-                 "Value": "Password reset frequency is 10h"}]
+                 "Value": "Password reset frequency is 36000 seconds"}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
