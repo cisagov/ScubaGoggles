@@ -52,9 +52,6 @@ In some cases, it may be appropriate to specify the number of break glass accoun
 
 The `breakglassaccounts` top-level key, shown in this [example ScubaGoggles configuration file](../../scubagoggles/sample-config-files/break_glass_accounts.yaml), allows the user to specify the break glass accounts to exclude from the admin count. The number of break glass accounts will be shown on the ScubaGoggles report. 
 
-To specify break glass accounts, the `breakglassaccounts` value must be formatted as a list with brackets.
-
-
 ## Navigation
 - Continue to [Usage: Examples](Examples.md)
 - Return to [Documentation Home](/README.md)
