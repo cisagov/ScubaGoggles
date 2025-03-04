@@ -444,7 +444,7 @@ if {
 
 tests contains {
     "PolicyId": MeetId5_1,
-    "Criticality": "Shall",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1, "NonCompliantGroups": NonCompliantGroups5_1},
     "RequirementMet": Status,
@@ -470,12 +470,13 @@ MeetId6_1 := utils.PolicyIdWithSuffix("GWS.MEET.6.1")
 
 tests contains {
     "PolicyId": MeetId6_1,
-    "Criticality": "Shall",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
     "NoSuchEvent": true
 }
+#--
 
 #
 # Baseline GWS.MEET.6.2
@@ -491,3 +492,4 @@ tests contains {
     "RequirementMet": false,
     "NoSuchEvent": true
 }
+#--
