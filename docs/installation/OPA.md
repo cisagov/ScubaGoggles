@@ -57,7 +57,7 @@ scubagoggles getopa -v v0.60.0
 ```
 
 If you have run the [ScubaGoggles setup utility](DownloadAndInstall.md#ScubaGoggles-Setup-Utility),
-you may have specified the location of the OPA executable. `getupa` will save the OPA executable to this location.  Optionally, you may specify an alternate location for the executable, such as a location that is in the PATH environment variable. If you experience issues with ScubaGoggles recognizing your OPA executable, rename the executable to `opa`.
+you may have specified the location of the OPA executable. `getopa` will save the OPA executable to this location.  Optionally, you may specify an alternate location for the executable, such as a location that is in the PATH environment variable. If you experience issues with ScubaGoggles recognizing your OPA executable, rename the executable to `opa`.
 
 ## OPTIONAL: Downloading the OPA Executable from the OPA Website
 
