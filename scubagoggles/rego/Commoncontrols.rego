@@ -1442,58 +1442,6 @@ if {
 #--
 
 #
-# Baseline GWS.COMMONCONTROLS.15.3
-#--
-
-CommonControlsId15_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.15.3")
-
-# NOTE: This setting cannot be controlled at the group level
-
-NonCompliantOUs15_3 contains {
-    "Name": OU,
-    "Value": "Supplemental data storage is set to Russian Federation"
-}
-if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
-
-tests contains {
-    "PolicyId": CommonControlsId15_3,
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := true
-    Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": CommonControlsId15_3,
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs15_3, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_3},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Events := utils.FilterEventsOU(LogEvents, "CHANGE_DATA_LOCALIZATION_FOR_RUSSIA", utils.TopLevelOU)
-    count(Events) > 0
-    Status := count(NonCompliantOUs15_3) == 0
-}
-#--
-
-#
 # Baseline GWS.COMMONCONTROLS.16.1
 #--
 
