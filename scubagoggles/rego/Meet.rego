@@ -503,15 +503,6 @@ tests contains {
     "NoSuchEvent": true
 }
 
-tests contains {
-    "PolicyId": MeetId6_1,
-    "Criticality": "Shall",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-
 #
 # Baseline GWS.MEET.6.2
 #--
@@ -551,13 +542,4 @@ tests contains {
     "ActualValue": "",
     "RequirementMet": false,
     "NoSuchEvent": true
-}
-
-tests contains {
-    "PolicyId": MeetId6_2,
-    "Criticality": "Shall",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
 }
