@@ -245,32 +245,6 @@ if {
 
 MeetId6_1 := utils.PolicyIdWithSuffix("GWS.MEET.6.1")
 
-NonCompliantOUs6_1 contains {
-    "Name": OU,
-    "Value": "Meetings are recorded by default"
-}
-if {
-    some OU in utils.OUsWithEvents
-    SettingName := "AutoStartRecordingSettingsProto auto_start_recording_enabled"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
-
-NonCompliantGroups6_1 contains {
-    "Name": Group,
-    "Value": "Meetings are recorded by default"
-}
-if {
-    some Group in utils.GroupsWithEvents
-    SettingName := "AutoStartRecordingSettingsProto auto_start_recording_enabled"
-    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
-
 tests contains {
     "PolicyId": MeetId6_1,
     "Criticality": "Shall",
@@ -285,32 +259,6 @@ tests contains {
 #--
 
 MeetId6_2 := utils.PolicyIdWithSuffix("GWS.MEET.6.2")
-
-NonCompliantOUs6_2 contains {
-    "Name": OU,
-    "Value": "Meetings are transcribed by default"
-}
-if {
-    some OU in utils.OUsWithEvents
-    SettingName := "AutoStartTranscriptionSettingsProto auto_start_transcription_enabled"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
-
-NonCompliantGroups6_2 contains {
-    "Name": Group,
-    "Value": "Meetings are transcribed by default"
-}
-if {
-    some Group in utils.GroupsWithEvents
-    SettingName := "AutoStartTranscriptionSettingsProto auto_start_transcription_enabled"
-    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
 
 tests contains {
     "PolicyId": MeetId6_2,
