@@ -16,7 +16,7 @@ Setting up to run ScubaGoggles as a user for the first time involves the followi
 6. Creating a Google OAuth credential file, unless you'll be using a Google
    service account.
 
-Each of the above steps are detailed in the following sections.
+Each of the above steps is detailed in the following sections.
 
 ## Installing Python 3
 

@@ -17,9 +17,9 @@ scubagoggles setup
 ```
 
 > [!NOTE]
-> The ScubaGoggles setup utility only need be run once, for the initial instalation of ScubaGoggles, but may be run as many times as needed.
+> The ScubaGoggles setup utility only needs to be run once, for the initial installation of ScubaGoggles, but may be run as many times as needed.
 > It creates a `.scubagoggles` directory in your home directory and
-> populates it with an OPA executable and a config file controling several default ScubaGoggles parameters.
+> populates it with an OPA executable and a config file controlling several default ScubaGoggles parameters.
 > There are several advanced configuration options for setup that allow users to indicate what values should be used for those defaults;
 > advanced users may use these options now if desired, but those defaults can be configured at any time.
 > See [Configuring Defaults](../installation/Defaults.md) for more details.
@@ -71,7 +71,7 @@ you may have specified the location of the OPA executable. `getupa` will save th
 4. Follow the instructions for downloading the respective OPA executable for
    your OS.
 5. Rename the OPA executable to `opa`
-6. Run `scubagoggles setup --opapath [path to executable]` to configure ScubaGoggles to use the newly dowloaded executable as the default OPA location.
+6. Run `scubagoggles setup --opapath [path to executable]` to configure ScubaGoggles to use the newly downloaded executable as the default OPA location.
 
 > [!NOTE]
 > For linux and macOS, you must make sure the OPA executable has execute
