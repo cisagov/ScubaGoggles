@@ -4,7 +4,7 @@ The Development Guide establishes conventions that regular contributors are expe
 
 ## Setting up ScubaGoggles Development Environment
 
-Setting up your development environment to contribute to ScubaGoggles involves many of the same steps that are outlined in the [Download and Install Guide](../installation/DownloadAndInstall.md). The steps diverage in the stages of downloading the latest ScubaGoggles release, installing ScubaGoggles and its dependencies and running `scubagoggles setup` steps. Replace steps 3, 4 and 5 in the Download and Install Guide with the following steps:
+Setting up your development environment to contribute to ScubaGoggles involves many of the same steps that are outlined in the [Download and Install Guide](../installation/DownloadAndInstall.md). The steps diverge in the stages of downloading the latest ScubaGoggles release, installing ScubaGoggles and its dependencies and running `scubagoggles setup` steps. Replace steps 3, 4 and 5 in the Download and Install Guide with the following steps:
 
 1. **Install [Git](https://git-scm.com/downloads) on your system**
 2. **Clone the ScubaGoggles repository**
