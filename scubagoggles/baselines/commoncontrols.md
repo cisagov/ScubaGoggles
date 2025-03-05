@@ -1147,15 +1147,6 @@ Data SHALL be processed in the region selected for data at rest.
   - [T1567: Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567/)
     - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud Storage](https://attack.mitre.org/techniques/T1567/002/)
 
-#### GWS.COMMONCONTROLS.15.3v0.4
-The supplemental data storage region SHALL NOT be set to 'Russian Federation'.
-
-- _Rationale:_ This policy is aligned with the concept of sovereignty, taking into account geopolitical and USG national security concerns. Keeping data out of Russia helps prevent official data from being subject to Russian law.
-- _Last modified:_ November 30, 2023
-
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
 ### Resources
 -	[GWS Admin Help \| Data regions: Choose a geographic location for your data](https://support.google.com/a/answer/7630496)
 -	[GWS Admin Help \| What data is covered by a data region policy?](https://support.google.com/a/answer/9223653)
@@ -1182,14 +1173,6 @@ To configure Data Regions per the policy:
 4. Click the **Data processing** card.
 5. Select the radio button option: "**Process data in the region selected for data at rest**".
 6. Click **Save**.
-
-#### GWS.COMMONCONTROLS.15.3v0.4 Instructions
-To configure Supplemental Data Storage per the policy:
-1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Account** -> **Account settings**.
-3.	Click the **Supplemental Data Storage** card.
-4.	Ensure the checkbox for "**Russian Federation**" is unchecked.
-6.	Click **Save**.
 
 
 ## 16. Additional Google Services
