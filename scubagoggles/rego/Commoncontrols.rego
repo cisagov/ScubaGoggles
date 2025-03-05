@@ -1427,18 +1427,203 @@ if {
 # Baseline GWS.COMMONCONTROLS.13.1
 #--
 
+AlertCenterRules := [
+    "Government-backed attacks",
+    "User-reported phishing",
+    "User's Admin privilege revoked",
+    "User suspended for spamming through relay",
+    "User suspended for spamming",
+    "User suspended due to suspicious activity",
+    "User suspended (Google identity alert)",
+    "User suspended (by admin)",
+    "User granted Admin privilege",
+    "User deleted",
+    "Suspicious programmatic login",
+    "Suspicious message reported",
+    "Suspicious login",
+    "Suspicious device activity",
+    "Suspended user made active",
+    "Spike in user-reported spam",
+    "Phishing message detected post-delivery",
+    "Phishing in inboxes due to bad whitelist",
+    "New user added",
+    "Mobile settings changed",
+    "Malware message detected post-delivery",
+    "Leaked password",
+    "Google Voice configuration problem",
+    "Google Operations",
+    "Gmail potential employee spoofing",
+    "Email settings changed",
+    "Drive settings changed",
+    "Domain data export initiated",
+    "Directory sync cancelled due to safeguard threshold exceeded",
+    "Device compromised",
+    "Calendar settings changed",
+    "Apps outage alert",
+    "App Maker Cloud SQL setup",
+    "Account suspension warning",
+    "[Beta] Client-side encryption service unavailable",
+]
+
+EmailOnlyRules := [
+    "TLS failure",
+    "Rate limited recipient",
+    "Smarthost failure",
+    "Exchange journaling failure"
+]
+
+# Custom functions/rules for identifying rule state change events
+FilterAlertsEvents(RuleName) := FilteredEvents if
+{
+    Events := AlertsChangeEvents
+    FilteredEvents := {Event | some Event in Events; Event.RuleName == RuleName}
+}
+
+FilterReceiversEvents(RuleName) := FilteredEvents if
+{
+    Events := ReceiversChangeEvents
+    FilteredEvents := {Event | some Event in Events; Event.RuleName == RuleName}
+}
+
+AlertsChangeEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
+    "TimestampStr": Item.id.time,
+    "RuleName": RuleName,
+    "Change": Change
+}
+if {
+    some Item in input.commoncontrols_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
+
+    # Does this event have the parameters we're looking for?
+    "SYSTEM_DEFINED_RULE_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE" in {Parameter.name | some Parameter in Event.parameters}
+
+    # Extract the values
+    RuleName := [
+        Parameter.value | some Parameter in Event.parameters;
+        Parameter.name == "SYSTEM_DEFINED_RULE_NAME"][0]
+    Change := [
+        Parameter.value | some Parameter in Event.parameters;
+        Parameter.name == "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE"][0]
+    Change != "Status unchanged."
+}
+
+ReceiversChangeEvents contains {
+    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
+    "TimestampStr": Item.id.time,
+    "RuleName": RuleName,
+    "Change": Change
+}
+if {
+    some Item in input.commoncontrols_logs.items # For each item...
+    some Event in Item.events # For each event in the item...
+
+    # Does this event have the parameters we're looking for?
+    "SYSTEM_DEFINED_RULE_NAME" in {Parameter.name | some Parameter in Event.parameters}
+    "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE" in {Parameter.name | some Parameter in Event.parameters}
+
+    # Extract the values
+    RuleName := [
+        Parameter.value | some Parameter in Event.parameters;
+        Parameter.name == "SYSTEM_DEFINED_RULE_NAME"][0]
+    Change := [
+        Parameter.value | some Parameter in Event.parameters;
+        Parameter.name == "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE"][0]
+    Change != "Email notification status unchanged, receivers unchanged."
+}
+
+EnabledAdminCenterRules contains Rule if {
+    some Rule in AlertCenterRules
+    Events := FilterAlertsEvents(Rule)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.Change == "Status changed from OFF to ON."
+}
+
+DisabledAdminCenterRules contains Rule if {
+    some Rule in AlertCenterRules
+    Events := FilterAlertsEvents(Rule)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.Change != "Status changed from OFF to ON."
+}
+
+EnabledEmailOnlyRules contains Rule if {
+    some Rule in EmailOnlyRules
+    Events := FilterReceiversEvents(Rule)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    true in {
+        contains(LastEvent.Change, "Email notification status changed from OFF to ON"),
+        contains(LastEvent.Change, "receivers changed from NULL to")
+    }
+}
+
+DisabledEmailOnlyRules contains Rule if {
+    some Rule in EmailOnlyRules
+    Events := FilterReceiversEvents(Rule)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    contains(LastEvent.Change, "Email notification status changed from OFF to ON") == false
+    contains(LastEvent.Change, "receivers changed from NULL to") == false
+}
+
 CommonControlsId13_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.13.1")
+
+CongugateToBe(n) := "is" if n == 1 else := "are"
+
+CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount) := Message if {
+    TotalRuleCount == EnabledRulesCount + DisabledRulesCount
+    Message := concat(" ", [
+        "Of the",
+        format_int(TotalRuleCount, 10),
+        "required rules,",
+        format_int(EnabledRulesCount, 10),
+        CongugateToBe(EnabledRulesCount),
+        "enabled and",
+        format_int(DisabledRulesCount, 10),
+        CongugateToBe(DisabledRulesCount),
+        "are disabled."
+    ])
+} else := Message if {
+    EnabledRulesCount + DisabledRulesCount == 0
+    Message := concat(" ", [
+        "Unable to determine the state of any of the",
+        format_int(TotalRuleCount, 10),
+        "required rules."
+    ])
+} else := concat(" ", [
+    "Of the",
+    format_int(TotalRuleCount, 10),
+    "required rules, at least",
+    format_int(EnabledRulesCount, 10),
+    CongugateToBe(EnabledRulesCount),
+    "enabled and",
+    format_int(DisabledRulesCount, 10),
+    CongugateToBe(DisabledRulesCount),
+    "disabled. Unable to determine the state of the",
+    format_int(TotalRuleCount - EnabledRulesCount - DisabledRulesCount, 10),
+    "remaining required rules.",
+])
 
 tests contains {
     "PolicyId": CommonControlsId13_1,
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": concat("", [
-        "Results for GWS.COMMONCONTROLS.13 are listed in the ",
-        "<a href='../IndividualReports/RulesReport.html'>Rules Report</a>."
-    ]),
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "Criticality": "Shall",
+    "ReportDetails": CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount),
+    "ActualValue": {
+        "enabled_rules": EnabledAdminCenterRules | EnabledEmailOnlyRules,
+        "disabled_rules": DisabledAdminCenterRules | DisabledEmailOnlyRules
+    },
+    "RequirementMet": Status,
+    "NoSuchEvent": NoSuchEvent
+}
+if {
+    TotalRuleCount := count(AlertCenterRules) + count(EmailOnlyRules)
+    EnabledRulesCount := count(EnabledAdminCenterRules) + count(EnabledEmailOnlyRules)
+    DisabledRulesCount := count(DisabledAdminCenterRules) + count(DisabledEmailOnlyRules)
+    NoSuchEvent := EnabledRulesCount + DisabledRulesCount != TotalRuleCount
+    Status := DisabledRulesCount == 0
 }
 #--
 
