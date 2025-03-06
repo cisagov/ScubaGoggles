@@ -396,52 +396,6 @@ GmailId5_5 := utils.PolicyIdWithSuffix("GWS.GMAIL.5.5")
 NonComplianceMessage5_5(types) := sprintf("%s attachment emails not removed from inbox",
                                           [concat(", ", sort(types))])
 
-EncryptedAttachmentMessage(NewValueEncryptedAttachment)
-    := "Encrypted attachments from untrusted senders"
-    if { NewValueEncryptedAttachment == "Show warning" }
-    else := ""
-
-AttachmentWithScriptsMessage(NewValueAttachmentWithScripts)
-    := "Emails with attachments, with scripts from untrusted senders"
-    if { NewValueAttachmentWithScripts == "Show warning" }
-    else := ""
-
-AnomalousAttachmentMessage(NewValueAnomalousAttachment)
-    := "Emails with anomalous attachments"
-    if { NewValueAnomalousAttachment == "Show warning" }
-    else := ""
-
-AllDetailedMessageListEmailAttachments(
-    NewValueEncryptedAttachment,
-    NewValueAttachmentWithScripts, NewValueAnomalousAttachment
-) := [
-    EncryptedAttachmentMessage(NewValueEncryptedAttachment),
-    AttachmentWithScriptsMessage(NewValueAttachmentWithScripts),
-    AnomalousAttachmentMessage(NewValueAnomalousAttachment)
-]
-
-DetailedMessageListEmailAttachments(NewValueEncryptedAttachment,
-    NewValueAttachmentWithScripts, NewValueAnomalousAttachment) := [
-        s | some s in AllDetailedMessageListEmailAttachments(
-            NewValueEncryptedAttachment, NewValueAttachmentWithScripts,
-            NewValueAnomalousAttachment
-        ); s != ""
-    ]
-
-GetFriendlyValue5_5(NewValueEventEncryptedAttachment, NewValueAttachmentWithScripts,
-    NewValueAnomalousAttachment) := concat("", [
-    "The following email types are kept in the inbox:",
-    "<ul>",
-    concat("", [concat("", [
-        "<li>",
-        Value,
-        "</li>"
-    ]) | some Value in DetailedMessageListEmailAttachments(NewValueEventEncryptedAttachment,
-        NewValueAttachmentWithScripts,
-        NewValueAnomalousAttachment)]),
-    "</ul>"
-])
-
 AttachConfigs := [
 	{"type": "anomalous type",
 	 "setting": "anomalousAttachmentProtectionConsequence"},
@@ -825,53 +779,6 @@ GmailId7_6 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.6")
 
 NonComplianceMessage7_6(types) := sprintf("%s spoof emails not removed from inbox",
                                           [concat(", ", sort(types))])
-
-DomainNamesMessage(NewValueDomainNames) := "Inbound emails spoofing similar domain names"
-    if { NewValueDomainNames == "Show warning" }
-    else := ""
-
-EmployeeNamesMessage(NewValueEmployeeNames) := "Inbound emails spoofing employee names"
-    if { NewValueEmployeeNames == "Show warning" }
-    else := ""
-
-InboundEmailsMessage(NewValueInboundEmail) := "Inbound emails spoofing your domain name"
-    if { NewValueInboundEmail == "Show warning" }
-    else := ""
-
-UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails) := "Unauthenticated emails"
-    if { NewValueUnauthenticatedEmails in ["Show warning", "No action"] }
-    else := ""
-
-GroupEmailsMessage(NewValueGroupEmails) := "Inbound spoofing emails addressed to groups"
-    if { NewValueGroupEmails == "Show warning" }
-    else := ""
-
-AllDetailedMessages(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
-    NewValueUnauthenticatedEmails, NewValueGroupEmails) := [
-        DomainNamesMessage(NewValueDomainNames), EmployeeNamesMessage(NewValueEmployeeNames),
-        InboundEmailsMessage(NewValueInboundEmails), UnauthenticatedEmailsMessage(NewValueUnauthenticatedEmails),
-        GroupEmailsMessage(NewValueGroupEmails)
-    ]
-
-DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
-    NewValueUnauthenticatedEmails, NewValueGroupEmails) := [s | some s in
-        AllDetailedMessages(
-            NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
-    NewValueUnauthenticatedEmails, NewValueGroupEmails
-        ); s != ""]
-
-GetFriendlyValue7_6(NewValueDomainNames, NewValueEmployeeNames, NewValueInboundEmails,
-    NewValueUnauthenticatedEmails, NewValueGroupEmails) := concat("", [
-    "The following email types are kept in the inbox:",
-    "<ul>",
-    concat("", [concat("", [
-        "<li>",
-        Value,
-        "</li>"
-    ]) | some Value in DetailedMessageList(NewValueDomainNames, NewValueEmployeeNames,
-        NewValueInboundEmails, NewValueUnauthenticatedEmails, NewValueGroupEmails)]),
-    "</ul>"
-])
 
 SpoofConfigs := [
 	{"type": "domain", "setting": "domainSpoofingConsequence"},
