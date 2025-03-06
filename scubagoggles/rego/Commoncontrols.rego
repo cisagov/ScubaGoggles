@@ -715,8 +715,10 @@ tests contains {
     "Criticality": "Shall",
     "ReportDetails": concat("", [
         concat("", ["The following super admins are configured: ", concat(", ", SuperAdmins)]),
-        ". <i>Note: Exceptions are allowed for \"break glass\" super admin accounts, ",
-        "though we are not able to account for this automatically.</i>"
+        ". <i>Note: Exceptions are allowed for \"break glass\" super admin accounts. ",
+        "\"Break glass\" accounts can be specified in a config file. ",
+        format_int(count(BreakGlassAccounts), 10),
+        " break glass accounts are currently configured.<i>"
     ]),
     "ActualValue": SuperAdmins,
     "RequirementMet": Status,
@@ -724,7 +726,9 @@ tests contains {
 }
 if {
     SuperAdmins := {Admin.primaryEmail | some Admin in input.super_admins}
-    Conditions := {count(SuperAdmins) >= 2, count(SuperAdmins) <= 8}
+    BreakGlassAccounts := {account | some account in input.break_glass_accounts}
+    filterBreakGlassAccounts := {admin | some admin in SuperAdmins; not BreakGlassAccounts[admin]}
+    Conditions := {count(filterBreakGlassAccounts) >= 2, count(filterBreakGlassAccounts) <= 8}
     Status := (false in Conditions) == false
 }
 #--
