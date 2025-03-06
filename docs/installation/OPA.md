@@ -70,8 +70,7 @@ you may have specified the location of the OPA executable. `getopa` will save th
    `Introduction -> Running OPA -> Download OPA`
 4. Follow the instructions for downloading the respective OPA executable for
    your OS.
-5. Rename the OPA executable to `opa`
-6. Run `scubagoggles setup --opapath [path to executable]` to configure ScubaGoggles to use the newly downloaded executable as the default OPA location.
+5. Run `scubagoggles setup --opapath [path to executable]` to configure ScubaGoggles to use the newly downloaded executable as the default OPA location.
 
 > [!NOTE]
 > For linux and macOS, you must make sure the OPA executable has execute
