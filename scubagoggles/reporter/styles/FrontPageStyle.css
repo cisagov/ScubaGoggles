@@ -56,7 +56,8 @@ table.tenantdata tr:first-child {
 }
 
 .alignRight {
-    text-align: right;
+    float: right;
+    padding-right: 0.313em;
     color: grey;
     font-size: 80%;
 
