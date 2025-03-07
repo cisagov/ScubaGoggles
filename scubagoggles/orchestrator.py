@@ -11,6 +11,7 @@ import platform
 import shutil
 import uuid
 import webbrowser
+import glob
 
 from datetime import datetime, timezone
 from pathlib import Path
@@ -106,6 +107,7 @@ class Orchestrator:
             provider_dict['unsuccessful_calls'] = list(
                 provider.unsuccessful_calls)
             provider_dict['break_glass_accounts'] = break_glass_accounts
+            provider_dict['report_uuid'] = args.report_uuid
 
         out_jsonfile = args.outputpath / args.outputproviderfilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
@@ -146,7 +148,7 @@ class Orchestrator:
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(results, out_stream, indent=4)
 
-    def _get_full_out_jsonfile_name(self):
+    def _get_full_out_jsonfile_name(self, report_uuid: str):
         """
         This function determines the full file name of the SCuBA results file.
         """
@@ -155,8 +157,8 @@ class Orchestrator:
         # This is is to possibly prevent Windows maximum path
         # length errors that may occur when moving files
         # with a large number of characters
-        truncated_uuid = args.report_uuid[0:len(
-            args.report_uuid) - args.numberofuuidcharacterstotruncate]
+        truncated_uuid = report_uuid[0:len(
+            report_uuid) - args.numberofuuidcharacterstotruncate]
 
         # If the UUID exists after truncation
         if len(truncated_uuid) > 0:
@@ -235,9 +237,6 @@ class Orchestrator:
         reports_images_path = individual_reports_path / 'images'
         reports_images_path.mkdir(parents=True, exist_ok=True)
 
-        # Create the SCuBA results JSON file name
-        out_jsonfile = self._get_full_out_jsonfile_name()
-
         # Copy the CISA logo to the repo folder so that it can be accessed
         # from there
         images_dir = Path(__file__).parent / 'reporter' / 'images'
@@ -263,6 +262,10 @@ class Orchestrator:
         tenant_name = tenant_info['topLevelOU']
         successful_calls = set(settings_data['successful_calls'])
         unsuccessful_calls = set(settings_data['unsuccessful_calls'])
+        report_uuid = settings_data['report_uuid']
+
+        # Create the SCuBA results JSON file name
+        out_jsonfile = self._get_full_out_jsonfile_name(report_uuid)
 
         md_products = set(args.baselines) - {'rules'}
 
@@ -312,7 +315,7 @@ class Orchestrator:
             'Tool':  'ScubaGoggles',
             'ToolVersion':  Version.number,
             'TimestampZulu': timestamp_zulu,
-            'ReportUUID': args.report_uuid
+            'ReportUUID': report_uuid
         }
 
         total_output.update({'MetaData': report_metadata})
@@ -375,7 +378,7 @@ class Orchestrator:
         fragments.append(Reporter.create_html_table(table_data))
         front_page_html = Reporter.build_front_page_html(fragments,
                                                          tenant_info,
-                                                         args.report_uuid)
+                                                         report_uuid)
         report_path.write_text(front_page_html, encoding='utf-8')
 
         # suppress opening the report in the browser
@@ -404,9 +407,7 @@ class Orchestrator:
         """
 
         args = self._args
-        args.outputpath = str(rel_abs_path(__file__, args.outputpath))
         Path(args.outputpath).mkdir(parents=True, exist_ok=True)
-        args.outputpath = os.path.abspath(args.outputpath)
 
         if not args.skipexport:
             self._run_gws_providers()
@@ -417,13 +418,32 @@ class Orchestrator:
             # created the output. If the provider output doesn't exist as a
             # standalone file, create it from the scuba results file so the
             # other functions can execute as normal.
-            with open(f'{args.outputpath}/{args.outjsonfilename}.json', 'r',
-                      encoding='UTF-8') as scuba_results:
-                provider_output = json.load(scuba_results)['Raw']
-            with open(f'{args.outputpath}/{args.outputproviderfilename}.json',
-                      'w', encoding='UTF-8') as provider_file:
-                json.dump(provider_output, provider_file)
 
+            # find all files that match the outjsonfilename_guid.json convention
+            results_file_pattern = os.path.join(
+                args.outputpath, f'{args.outjsonfilename}*.json')
+            matching_results_files = glob.glob(results_file_pattern)
+
+            if matching_results_files:
+                # get the latest modified file with that matches the pattern
+                latest_results_file = max(
+                    matching_results_files, key=os.path.getmtime)
+
+                # delete any duplicates to prevent confusion
+                log.debug(
+                    'Deleting duplicate matching result files in runcached')
+                for file in matching_results_files:
+                    if file != latest_results_file:
+                        os.remove(file)
+                        log.debug(f'deleted {file}')
+                # open results file
+                with open(latest_results_file, 'r',
+                          encoding='UTF-8') as scuba_results:
+                    # get the raw section and dump the original provider settings export file
+                    provider_output = json.load(scuba_results)['Raw']
+                with open(f'{args.outputpath}/{args.outputproviderfilename}.json',
+                          'w', encoding='UTF-8') as provider_file:
+                    json.dump(provider_output, provider_file)
         self._rego_eval()
         self._run_reporter()
 
