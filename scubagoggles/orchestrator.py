@@ -146,6 +146,24 @@ class Orchestrator:
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(results, out_stream, indent=4)
 
+    def _get_full_out_jsonfile_name(self):
+        """
+        This function determines the full file name of the SCuBA results file.
+        """
+        args = self._args
+        # Truncate the UUID at the end of the ScubaResults JSON file by the parameter value.
+        # This is is to possibly prevent Windows maximum path
+        # length errors that may occur when moving files
+        # with a large number of characters
+        truncated_uuid = args.report_uuid[0:len(
+            args.report_uuid) - args.numberofuuidcharacterstotruncate]
+
+        # If the UUID exists after truncation
+        if len(truncated_uuid) > 0:
+            return args.outjsonfilename + '_' + truncated_uuid
+        else:
+            return args.outjsonfilename
+
     @staticmethod
     def _pluralize(singular: str, plural: str, count: int) -> str:
         """
@@ -217,6 +235,9 @@ class Orchestrator:
         reports_images_path = individual_reports_path / 'images'
         reports_images_path.mkdir(parents=True, exist_ok=True)
 
+        # Create the SCuBA results JSON file name
+        out_jsonfile = self._get_full_out_jsonfile_name()
+
         # Copy the CISA logo to the repo folder so that it can be accessed
         # from there
         images_dir = Path(__file__).parent / 'reporter' / 'images'
@@ -225,7 +246,7 @@ class Orchestrator:
         shutil.copy2(cisa_logo, reports_images_path)
         shutil.copy2(triangle_svg, reports_images_path)
 
-        # we should load the test results json here
+        # load the rego results json here
         products = args.baselines
         prod_to_fullname = args.fullnamesdict
         test_results_json = out_folder / f'{args.outputregofilename}.json'
@@ -267,8 +288,7 @@ class Orchestrator:
         if 'omitpolicy' in args and args.omitpolicy is not None:
             omissions = args.omitpolicy
 
-        # Create the individual report files
-        out_jsonfile = args.outjsonfilename
+        # Begin Creating the individual report files
         summary = {}
         results = {}
         total_output = {}
@@ -282,7 +302,6 @@ class Orchestrator:
         timestamp_utc = datetime.now(timezone.utc)
         timestamp_zulu = timestamp_utc.strftime(
             '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-        report_uuid = str(uuid.uuid4())
         report_metadata = {
             'TenantId':  tenant_id,
             'DisplayName':  tenant_name,
@@ -293,7 +312,7 @@ class Orchestrator:
             'Tool':  'ScubaGoggles',
             'ToolVersion':  Version.number,
             'TimestampZulu': timestamp_zulu,
-            'ReportUUID': report_uuid
+            'ReportUUID': args.report_uuid
         }
 
         total_output.update({'MetaData': report_metadata})
@@ -356,7 +375,7 @@ class Orchestrator:
         fragments.append(Reporter.create_html_table(table_data))
         front_page_html = Reporter.build_front_page_html(fragments,
                                                          tenant_info,
-                                                         report_uuid)
+                                                         args.report_uuid)
         report_path.write_text(front_page_html, encoding='utf-8')
 
         # suppress opening the report in the browser
@@ -446,6 +465,7 @@ class Orchestrator:
         gws_params = self.gws_products()
         additional_args = vars(args)
         additional_args['fullnamesdict'] = gws_params['prod_to_fullname']
+        additional_args['report_uuid'] = str(uuid.uuid4())
 
         if args.skipexport and not args.runcached:
             message = ('Used --skipexport without --runcached please rerun '

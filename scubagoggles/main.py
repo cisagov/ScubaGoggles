@@ -21,6 +21,7 @@ from scubagoggles.user_setup import default_file_names, find_legacy_dir, \
     user_setup
 from scubagoggles.utils import path_parser
 from scubagoggles.version import Version
+from scubagoggles.scuba_constants import NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES
 
 EXIT_FAILURE = 1
 
@@ -28,7 +29,6 @@ EXIT_SUCCESS = 0
 
 
 def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
-
     """Adds the arguments for the GWS parser
 
     :param argparse.ArgumentParser parser: argparse object
@@ -52,35 +52,35 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     def gws_dispatch(args):
         Orchestrator(args).start_automation()
 
-    parser.set_defaults(dispatch = gws_dispatch)
+    parser.set_defaults(dispatch=gws_dispatch)
 
     help_msg = ('A list of one or more abbreviated GWS baseline names that the '
                 'tool will assess. Defaults to all baselines. '
                 f'Choices: {(", ".join(gws_baselines))}')
     parser.add_argument('--baselines',
                         '-b',
-                        nargs = '+',
-                        default = gws_baselines,
-                        choices = gws_baselines,
-                        metavar = '<baseline>',
-                        help = help_msg)
+                        nargs='+',
+                        default=gws_baselines,
+                        choices=gws_baselines,
+                        metavar='<baseline>',
+                        help=help_msg)
 
     help_msg = ('The folder path where both the output JSON & HTML report will '
                 f'be created. Defaults to {user_dir}.')
     parser.add_argument('--outputpath',
                         '-o',
-                        default = user_dir,
-                        metavar = '<directory>',
-                        type = path_parser,
-                        help = help_msg)
+                        default=user_dir,
+                        metavar='<directory>',
+                        type=path_parser,
+                        help=help_msg)
 
     default_json = default_file_names.json_output_name
     help_msg = ('The name of the file that encapsulates all assessment output. '
                 f' Defaults to {default_json}.')
     parser.add_argument('--outjsonfilename',
-                        default = default_json,
-                        metavar = '<output-JSON-file>',
-                        help = help_msg)
+                        default=default_json,
+                        metavar='<output-JSON-file>',
+                        help=help_msg)
 
     try:
         default_credentials = user_config.credentials_file
@@ -90,10 +90,10 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                 f'credentials json file.  Defaults to "{default_credentials}".')
     parser.add_argument('--credentials',
                         '-c',
-                        default = Path(default_credentials),
-                        metavar = '<credentials-JSON-file>',
-                        type = path_parser,
-                        help = help_msg)
+                        default=Path(default_credentials),
+                        metavar='<credentials-JSON-file>',
+                        type=path_parser,
+                        help=help_msg)
 
     help_msg = ('Local file path to a YAML formatted configuration file. '
                 'Configuration file parameters can be used in place of '
@@ -103,49 +103,49 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                 'specific tests.')
     parser.add_argument('--config',
                         metavar='<YAML-config-file>',
-                        help = help_msg)
+                        help=help_msg)
 
     help_msg = ('Only applicable when using a service account. The email '
                 'address of a user the service account should act on '
                 'behalf of. This user must have the necessary privileges '
                 'to run scubagoggles.')
     parser.add_argument('--subjectemail',
-                        metavar = '<email-address>',
-                        help = help_msg)
+                        metavar='<email-address>',
+                        help=help_msg)
 
     help_msg = ('The customer ID the tool should run on. Defaults to '
                 '"my_customer" which will be the domain of the '
                 'user / service account authenticating.')
     parser.add_argument('--customerid',
-                        default = 'my_customer',
-                        metavar = '<customer-id>',
-                        help = help_msg)
+                        default='my_customer',
+                        metavar='<customer-id>',
+                        help=help_msg)
 
     help_msg = ('The directory containing the OPA executable. '
                 f'Defaults to {opa_dir}.')
     parser.add_argument('--opapath',
-                        default = Path(opa_dir),
-                        metavar = '<opa-directory>',
-                        type = path_parser,
-                        help = help_msg)
+                        default=Path(opa_dir),
+                        metavar='<opa-directory>',
+                        type=path_parser,
+                        help=help_msg)
 
     default_rego = scuba_path / 'rego'
     help_msg = ('The relative path to the directory contain the folder '
                 f'containing the rego files. Defaults to {default_rego}.')
     parser.add_argument('--regopath',
-                        default = default_rego,
-                        metavar = '<directory>',
-                        type = path_parser,
-                        help = help_msg)
+                        default=default_rego,
+                        metavar='<directory>',
+                        type=path_parser,
+                        help=help_msg)
 
     default_baselines = scuba_path / 'baselines'
     help_msg = ('The relative path to the directory containing the SCuBA '
                 f'baseline documents. Defaults to {default_baselines}')
     parser.add_argument('--documentpath',
-                        default = default_baselines,
-                        metavar = '<directory>',
-                        type = path_parser,
-                        help = help_msg)
+                        default=default_baselines,
+                        metavar='<directory>',
+                        type=path_parser,
+                        help=help_msg)
 
     output_folder = default_file_names.output_folder_name
     help_msg = ('The name of the folder created in --outputpath where both '
@@ -153,42 +153,53 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                 f"Defaults to {output_folder}. The client's local timestamp "
                 'will be appended to this name.')
     parser.add_argument('--outputfoldername',
-                        default = output_folder,
-                        metavar = '<name>',
-                        help = help_msg)
+                        default=output_folder,
+                        metavar='<name>',
+                        help=help_msg)
 
     provider_filename = default_file_names.provider_output_name
     help_msg = ('The name of the Provider output json in --outputpath. '
                 f'Defaults to {provider_filename}.')
     parser.add_argument('--outputproviderfilename',
-                        default = provider_filename,
-                        metavar = '<name>',
-                        help = help_msg)
+                        default=provider_filename,
+                        metavar='<name>',
+                        help=help_msg)
 
     rego_filename = default_file_names.rego_output_name
     help_msg = ('The name of the Rego output json in --outputpath. '
                 f'Defaults to {rego_filename}.')
     parser.add_argument('--outputregofilename',
-                        default = rego_filename,
-                        metavar = '<name>',
-                        help = help_msg)
+                        default=rego_filename,
+                        metavar='<name>',
+                        help=help_msg)
 
     report_filename = default_file_names.report_output_name
     help_msg = ('The name of the main html file homepage created in '
                 '--outputpath. Defaults to '
                 f'{report_filename}.')
     parser.add_argument('--outputreportfilename',
-                        default = report_filename,
-                        metavar = '',
-                        help = help_msg)
+                        default=report_filename,
+                        metavar='',
+                        help=help_msg)
 
     help_msg = ('This switch suppresses automatically launching a web '
                 'browser to open the html report output and the loading '
                 'bar output.')
-    parser.add_argument('--quiet', action = 'store_true', help = help_msg)
+    parser.add_argument('--quiet', action='store_true', help=help_msg)
+
+    default_uuid_chars_to_truncate = 18
+    help_msg = ('Controls how many characters will be truncated from the report UUID when appended to the end of outjsonfilename. '
+                'Valid values are 0, 13, 18, 36. '
+                f'Defaults to {default_uuid_chars_to_truncate}.')
+    parser.add_argument('--numberofuuidcharacterstotruncate',
+                        default=default_uuid_chars_to_truncate,
+                        choices=NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES,
+                        type=int,
+                        metavar='<number>',
+                        help=help_msg)
 
     help_msg = 'This switch is used to print debugging information for OPA.'
-    parser.add_argument('--debug', action = 'store_true', help = help_msg)
+    parser.add_argument('--debug', action='store_true', help=help_msg)
 
     group = parser.add_argument_group('Cached Mode options')
 
@@ -196,147 +207,143 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                 '"RunCached mode". When combined with --skipexport allows '
                 'the user to skip authentication and provider export.')
     group.add_argument('--runcached',
-                       action = 'store_true',
-                       help = help_msg)
+                       action='store_true',
+                       help=help_msg)
 
     help_msg = ('This switch when added will skip the provider export. To be '
                 'used in conjunction with --runcached.')
     group.add_argument('--skipexport',
-                       action = 'store_true',
-                       help = help_msg)
+                       action='store_true',
+                       help=help_msg)
 
 
 def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
-
     """Adds the arguments for the "get OPA" parser.
 
     :param argparse.ArgumentParser parser: argparse object
     """
 
-    parser.set_defaults(dispatch = getopa)
+    parser.set_defaults(dispatch=getopa)
 
-    parser.set_defaults(user_config = user_config)
+    parser.set_defaults(user_config=user_config)
 
     parser.add_argument('--nocheck',
                         '-nc',
-                        default = False,
-                        action = 'store_true',
-                        help = 'Do not check hash code after download')
+                        default=False,
+                        action='store_true',
+                        help='Do not check hash code after download')
 
     parser.add_argument('--force',
                         '-f',
-                        default = False,
-                        action = 'store_true',
-                        help = 'Overwrite existing OPA executable')
+                        default=False,
+                        action='store_true',
+                        help='Overwrite existing OPA executable')
 
     parser.add_argument('--version',
                         '-v',
-                        metavar = '<OPA-version>',
-                        help = 'Version of OPA to download (default: latest '
-                            'version)')
+                        metavar='<OPA-version>',
+                        help='Version of OPA to download (default: latest '
+                        'version)')
 
     help_msg = 'Directory containing OPA executable'
     if user_config.opa_dir:
         help_msg += f' (default: {user_config.opa_dir})'
     parser.add_argument('--opa_directory',
                         '-r',
-                        metavar = '<directory>',
-                        type = path_parser,
-                        help = help_msg)
+                        metavar='<directory>',
+                        type=path_parser,
+                        help=help_msg)
 
 
 def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
-
     """Adds the arguments for the setup parser
 
     :param argparse.ArgumentParser parser: argparse object
     :param UserConfig user_config: user configuration object
     """
 
-    parser.set_defaults(dispatch = user_setup)
+    parser.set_defaults(dispatch=user_setup)
 
-    parser.set_defaults(user_config = user_config)
+    parser.set_defaults(user_config=user_config)
 
     parser.add_argument('--credentials',
                         '-c',
-                        metavar = '<JSON-credentials-file>',
-                        type = path_parser,
-                        help = 'OAuth2 credentials file for Google APIs')
+                        metavar='<JSON-credentials-file>',
+                        type=path_parser,
+                        help='OAuth2 credentials file for Google APIs')
 
     parser.add_argument('--mkdir',
                         '-m',
-                        default = False,
-                        action = 'store_true',
-                        help = 'Create directory(ies), if needed')
+                        default=False,
+                        action='store_true',
+                        help='Create directory(ies), if needed')
 
     parser.add_argument('--nocheck',
                         '-nc',
-                        default = False,
-                        action = 'store_true',
-                        help = 'Do not check for directory or file existence')
+                        default=False,
+                        action='store_true',
+                        help='Do not check for directory or file existence')
 
     parser.add_argument('--nodownload',
                         '-nd',
-                        default = False,
-                        action = 'store_true',
-                        help = 'Do not download OPA executable when it does '
-                               'not exist')
+                        default=False,
+                        action='store_true',
+                        help='Do not download OPA executable when it does '
+                        'not exist')
 
     parser.add_argument('--noprompt',
                         '-np',
-                        default = False,
-                        action = 'store_true',
-                        help = 'Do not prompt for missing items')
+                        default=False,
+                        action='store_true',
+                        help='Do not prompt for missing items')
 
     parser.add_argument('--opa_directory',
                         '-r',
-                        metavar = '<directory>',
-                        type = path_parser,
-                        help = 'Directory containing OPA executable')
+                        metavar='<directory>',
+                        type=path_parser,
+                        help='Directory containing OPA executable')
 
     parser.add_argument('--work_directory',
                         '-d',
-                        metavar = '<directory>',
-                        type = path_parser,
-                        help = 'Scubagoggles output directory')
+                        metavar='<directory>',
+                        type=path_parser,
+                        help='Scubagoggles output directory')
 
 
 def get_purge_args(parser: argparse.ArgumentParser, user_config: UserConfig):
-
     """Adds the arguments for the purge parser
 
     :param argparse.ArgumentParser parser: argparse object
     :param UserConfig user_config: user configuration object
     """
 
-    parser.set_defaults(dispatch = purge_reports)
+    parser.set_defaults(dispatch=purge_reports)
 
-    parser.set_defaults(user_config = user_config)
+    parser.set_defaults(user_config=user_config)
 
     parser.add_argument('--expire',
                         '-e',
-                        metavar = '<expire-days>',
-                        type = int,
-                        help = 'Days after which reports have expired')
+                        metavar='<expire-days>',
+                        type=int,
+                        help='Days after which reports have expired')
 
     keep_default = 1
     parser.add_argument('--keep',
                         '-k',
-                        metavar = '<keep-report-count>',
-                        type = int,
-                        default = keep_default,
-                        help = 'Number of recent reports to keep (default: '
-                               f'{keep_default})')
+                        metavar='<keep-report-count>',
+                        type=int,
+                        default=keep_default,
+                        help='Number of recent reports to keep (default: '
+                        f'{keep_default})')
 
 
 def get_version_args(parser: argparse.ArgumentParser):
-
     """Adds the arguments for the version parser
 
     :param argparse.ArgumentParser parser: argparse object
     """
 
-    parser.set_defaults(dispatch = Version.command_dispatch)
+    parser.set_defaults(dispatch=Version.command_dispatch)
 
     group = parser.add_mutually_exclusive_group()
 
@@ -344,18 +351,17 @@ def get_version_args(parser: argparse.ArgumentParser):
 
     group.add_argument('--check',
                        '-c',
-                       default = False,
-                       action = 'store_true',
-                       help = f'{pfx} Check version number consistency in code')
+                       default=False,
+                       action='store_true',
+                       help=f'{pfx} Check version number consistency in code')
 
     group.add_argument('--upgrade',
                        '-u',
-                       metavar = '<version>',
-                       help = f'{pfx} Upgrade code to new version number')
+                       metavar='<version>',
+                       help=f'{pfx} Upgrade code to new version number')
 
 
 def log_level(level):
-
     """Normalizes a given log level string.
 
     A complete upper-cased log level string is returned if the given string
@@ -385,7 +391,6 @@ def log_level(level):
 
 
 def dive():
-
     """Takes in the arguments needed to run scubagoggles
     """
 
@@ -407,10 +412,10 @@ def dive():
     """
 
     helpFormatter = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(description = overall_description,
-                                     formatter_class = helpFormatter)
+    parser = argparse.ArgumentParser(description=overall_description,
+                                     formatter_class=helpFormatter)
 
-    parser.set_defaults(dispatch = lambda _: parser.print_help())
+    parser.set_defaults(dispatch=lambda _: parser.print_help())
 
     log_levels = ('debug', 'info', 'warning', 'error', 'critical')
 
@@ -420,49 +425,49 @@ def dive():
 
     parser.add_argument('--log',
                         '-l',
-                        choices = ('d', 'i', 'w', 'e', 'c') + log_levels,
-                        default = default_log_level,
-                        help = 'Level for message log '
-                               f'(default: {default_log_level})')
+                        choices=('d', 'i', 'w', 'e', 'c') + log_levels,
+                        default=default_log_level,
+                        help='Level for message log '
+                        f'(default: {default_log_level})')
 
-    subparsers = parser.add_subparsers(description = 'valid subcommands:',
-                                       help = '<subcommand> -h for help')
+    subparsers = parser.add_subparsers(description='valid subcommands:',
+                                       help='<subcommand> -h for help')
 
     help_msg = ('SCuBA automated conformance check for '
                 'Google Workspace (GWS) products')
     gws_parser = subparsers.add_parser('gws',
-                                       description = help_msg,
-                                       help = help_msg)
+                                       description=help_msg,
+                                       help=help_msg)
     get_gws_args(gws_parser, user_config)
 
     help_msg = 'Download OPA executable'
     getopa_parser = subparsers.add_parser('getopa',
-                                         description = help_msg,
-                                         help = help_msg)
+                                          description=help_msg,
+                                          help=help_msg)
     get_opa_args(getopa_parser, user_config)
 
     help_msg = 'Purge old ScubaGoggles reports'
     purge_parser = subparsers.add_parser('purge',
-                                         description = help_msg,
-                                         help = help_msg)
+                                         description=help_msg,
+                                         help=help_msg)
     get_purge_args(purge_parser, user_config)
 
     help_msg = 'ScubaGoggles user setup'
     setup_parser = subparsers.add_parser('setup',
-                                         description = help_msg,
-                                         help = help_msg)
+                                         description=help_msg,
+                                         help=help_msg)
     get_setup_args(setup_parser, user_config)
 
     help_msg = 'ScubaGoggles version'
     setup_parser = subparsers.add_parser('version',
-                                         description = help_msg,
-                                         help = help_msg)
+                                         description=help_msg,
+                                         help=help_msg)
     get_version_args(setup_parser)
 
     scuba_parser = ScubaArgumentParser(parser)
     args = scuba_parser.parse_args_with_config()
 
-    logging.basicConfig(format = '(%(levelname)s): %(message)s')
+    logging.basicConfig(format='(%(levelname)s): %(message)s')
     level = log_level(args.log)
     log = logging.root
     log.setLevel(level)

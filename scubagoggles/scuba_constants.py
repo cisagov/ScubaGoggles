@@ -1,11 +1,12 @@
 """
-api_reference.py is where short-hand references and full URLs to the GWS api calls are maintained.
-
+scuba_constants.py is where short-hand references and full URLs to the GWS api calls are maintained.
+Also used to centralize other constant values.
 """
 
 from enum import Enum
 
 BASE_URL = 'https://developers.google.com/admin-sdk'
+
 
 class ApiReference(Enum):
     '''
@@ -19,6 +20,7 @@ class ApiReference(Enum):
     LIST_ACTIVITIES = 'reports/v1/activities/list'
     GET_GROUP = 'groups-settings/v1/groups/get'
 
+
 class ApiUrl(Enum):
     '''
     Enum for mapping code-friendly names of the various API calls to their documentation URLs
@@ -31,7 +33,13 @@ class ApiUrl(Enum):
     LIST_ACTIVITIES = f'{BASE_URL}/reports/reference/rest/v1/activities/list'
     GET_GROUP = f'{BASE_URL}/groups-settings/v1/reference/groups/get'
 
+
 # Dictionary mapping short-hand reference to <a> tags linking to the documentation
 API_LINKS = {
     api.value: f'<a href="{ApiUrl[api.name].value}">{api.value}</a>' for api in ApiReference
 }
+
+
+NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES = (
+    0, 12, 18, 36
+)
