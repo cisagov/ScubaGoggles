@@ -13,9 +13,8 @@ runs:
   steps:
     - name: Virtual Environment Activation Definition - macOS or linux
       shell: bash
-      run: >
-        echo "SCUBAGOGGLES_ACTIVATE_VENV=. .venv/bin/activate"
-        >> "$GITHUB_ENV"
+      run: |
+        echo "SCUBAGOGGLES_ACTIVATE_VENV=scuba-env/bin/activate" >> "$GITHUB_ENV"
 
     - name: Setup virtual environment and install dependencies
       shell: bash
@@ -30,7 +29,8 @@ runs:
     - name: Download OPA executable
       shell: bash
       env:
-        opa_version: ${{ inputs.opa-version == 'latest' && ' '
+        opa_version: |
+          ${{ inputs.opa-version == 'latest' && ' '
           || format('-v {0}', inputs.opa-version) }}
       run: |
         ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
