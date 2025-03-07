@@ -21,7 +21,6 @@ from scubagoggles.provider import Provider
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.reporter.reporter import Reporter
 from scubagoggles.run_rego import opa_eval, find_opa
-from scubagoggles.utils import rel_abs_path
 from scubagoggles.version import Version
 
 log = logging.getLogger(__name__)
@@ -308,7 +307,7 @@ class Orchestrator:
             'TenantId':  tenant_id,
             'DisplayName':  tenant_name,
             'DomainName':  tenant_domain,
-            'ProductSuite':  'GWS',
+            'ProductSuite':  'Google Workspace',
             'ProductsAssessed': products_assessed,
             'ProductAbbreviationMapping': product_abbreviation_mapping,
             'Tool':  'ScubaGoggles',
@@ -434,7 +433,7 @@ class Orchestrator:
                 for file in matching_results_files:
                     if file != latest_results_file:
                         os.remove(file)
-                        log.debug(f'deleted {file}')
+                        log.debug('deleted %s', file)
                 # open results file
                 with open(latest_results_file, 'r',
                           encoding='UTF-8') as scuba_results:

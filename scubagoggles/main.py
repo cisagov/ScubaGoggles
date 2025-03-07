@@ -188,7 +188,8 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     parser.add_argument('--quiet', action='store_true', help=help_msg)
 
     default_uuid_chars_to_truncate = 18
-    help_msg = ('Controls how many characters will be truncated from the report UUID when appended to the end of outjsonfilename. '
+    help_msg = ('Controls how many characters will be truncated '
+                'from the report UUID when appended to the end of outjsonfilename. '
                 'Valid values are 0, 13, 18, 36. '
                 f'Defaults to {default_uuid_chars_to_truncate}.')
     parser.add_argument('--numberofuuidcharacterstotruncate',
