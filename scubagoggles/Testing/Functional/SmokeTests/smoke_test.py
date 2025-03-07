@@ -44,7 +44,7 @@ class SmokeTest:
         svc_account_option = (f' --subjectemail {subjectemail}' if subjectemail
                               else '')
         # smoke test shall ignore the uuid parameter append for now
-        # todo is to modify the smoke test to account for this
+        # todo is to modify the smoke test to handle the appended uuid
         command = f'scubagoggles gws{svc_account_option} --quiet --numberofuuidcharacterstotruncate 36'
 
         try:

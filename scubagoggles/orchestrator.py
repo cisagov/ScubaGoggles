@@ -163,8 +163,7 @@ class Orchestrator:
         # If the UUID exists after truncation
         if len(truncated_uuid) > 0:
             return args.outjsonfilename + '_' + truncated_uuid
-        else:
-            return args.outjsonfilename
+        return args.outjsonfilename
 
     @staticmethod
     def _pluralize(singular: str, plural: str, count: int) -> str:

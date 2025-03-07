@@ -1,11 +1,12 @@
 main {
-    height: 115vh;
-    padding-bottom: 0px;
+    height: 100%;
+    min-height: 125vh;
+    padding-bottom: 0em;
 }
 
 footer {
     position: absolute;
-    bottom: 5px;
+    bottom: 0.313em;
     text-align: center;
     width: 100%;
 }

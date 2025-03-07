@@ -39,7 +39,6 @@ API_LINKS = {
     api.value: f'<a href="{ApiUrl[api.name].value}">{api.value}</a>' for api in ApiReference
 }
 
-
 NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES = (
     0, 12, 18, 36
 )
