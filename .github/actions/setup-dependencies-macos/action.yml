@@ -14,12 +14,12 @@ runs:
     - name: Virtual Environment Activation Definition - macOS or linux
       shell: bash
       run: |
-        echo "SCUBAGOGGLES_ACTIVATE_VENV=scuba-env/bin/activate" >> "$GITHUB_ENV"
+        echo "SCUBAGOGGLES_ACTIVATE_VENV=. scuba-env/bin/activate" >> "$GITHUB_ENV"
 
     - name: Setup virtual environment and install dependencies
       shell: bash
       run: |
-        python -m venv .venv
+        python -m venv scuba-env
         ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
         python -m pip install .
         pip install -r requirements.txt
