@@ -1348,7 +1348,7 @@ GmailId18_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.18.1")
 # and not available within the generated logs
 tests contains {
     "PolicyId": GmailId18_1,
-    "Criticality": "Should/Not-Implemented",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
@@ -1362,11 +1362,9 @@ tests contains {
 
 GmailId18_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.18.2")
 
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
 tests contains {
     "PolicyId": GmailId18_2,
-    "Criticality": "Should/Not-Implemented",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
@@ -1380,64 +1378,8 @@ tests contains {
 
 GmailId18_3 := utils.PolicyIdWithSuffix("GWS.GMAIL.18.3")
 
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
 tests contains {
     "PolicyId": GmailId18_3,
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-################
-# GWS.GMAIL.19 #
-################
-
-#
-# Baseline GWS.GMAIL.19.1
-#--
-
-GmailId19_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.19.1")
-
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
-tests contains {
-    "PolicyId": GmailId19_1,
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-#
-# Baseline GWS.GMAIL.19.2
-#--
-
-GmailId19_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.19.2")
-
-tests contains {
-    "PolicyId": GmailId19_2,
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
-#
-# Baseline GWS.GMAIL.19.3
-#--
-
-GmailId19_3 := utils.PolicyIdWithSuffix("GWS.GMAIL.19.3")
-
-tests contains {
-    "PolicyId": GmailId19_3,
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
