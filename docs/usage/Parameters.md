@@ -20,6 +20,7 @@ usage: scubagoggles gws [-h]
                         [--outputregofilename <name>]
                         [--outputreportfilename]
                         [--quiet]
+                        [--numberofuuidcharacterstotruncate <number>]
                         [--debug]
                         [--runcached]
                         [--skipexport]
@@ -62,6 +63,9 @@ options:
   --outputreportfilename
                         The name of the main html file homepage created in --outputpath. Defaults to BaselineReports.
   --quiet               This switch suppresses automatically launching a web browser to open the html report output and the loading bar output.
+  --numberofuuidcharacterstotruncate <number>
+                        Controls how many characters will be truncated from the report UUID when appended to  
+                        the end of outjsonfilename. Valid values are 0, 13, 18, 36. Defaults to 18.
   --debug               This switch is used to print debugging information for OPA.
 
 Cached Mode options:

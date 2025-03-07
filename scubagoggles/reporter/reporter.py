@@ -157,7 +157,11 @@ class Reporter:
         return table_html
 
     @classmethod
-    def build_front_page_html(cls, fragments: list, tenant_info: dict) -> str:
+    def build_front_page_html(cls,
+                              fragments: list,
+                              tenant_info: dict,
+                              report_uuid: str) -> str:
+
         """
         Builds the Front Page Report using the HTML Report Template
 
@@ -178,7 +182,7 @@ class Reporter:
         front_css_file = cls._reporter_path / 'styles/FrontPageStyle.css'
         css = front_css_file.read_text(encoding = 'utf-8')
         html = html.replace('{{FRONT_CSS}}', f'<style>{css}</style>')
-
+        html = html.replace('{{report_uuid}}', report_uuid)
         html = html.replace('{{TABLE}}', table)
 
         now = datetime.now()
