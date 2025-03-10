@@ -19,7 +19,6 @@ from scubagoggles.robust_dns import RobustDNSClient
 
 EVENTS = {
     'calendar': [
-        'CHANGE_CALENDAR_SETTING',
         'CHANGE_APPLICATION_SETTING',
         'CREATE_APPLICATION_SETTING',
         'DELETE_APPLICATION_SETTING'
