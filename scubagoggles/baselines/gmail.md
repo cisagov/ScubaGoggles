@@ -137,7 +137,7 @@ The Sender Policy Framework (SPF) is a mechanism that allows administrators to s
 An SPF policy SHALL be published for each domain that fails all non-approved senders.
 
 - _Rationale:_ Adversaries could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
-- _Last modified:_ February 14, 2024
+- _Last modified:_ February 2024
 - _Note:_ SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`).
 
 - MITRE ATT&CK TTP Mapping
