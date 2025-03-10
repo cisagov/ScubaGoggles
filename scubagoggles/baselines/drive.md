@@ -41,7 +41,7 @@ This section covers whether users can share files outside of the organization, w
 Agencies SHOULD disable sharing outside of the organization's domain.
 
 - _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk of inadvertent of data leakage.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 - _Note:_
   - This policy restricts information sharing
   - This policy prevents data leakage outside of the organization
@@ -57,7 +57,7 @@ Agencies SHOULD disable sharing outside of the organization's domain.
 Agencies SHOULD disable users' receiving files from outside of the organization's domain.
 
 - _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce the risk of data loss or falling victim to external threats.
-- _Last modified:_ January 3, 2024
+- _Last modified:_ January 2024
 - _Note:_ This policy only applies if sharing outside was disabled in Policy 1.1
 
 - MITRE ATT&CK TTP Mapping
@@ -68,7 +68,7 @@ Agencies SHOULD disable users' receiving files from outside of the organization'
 Warnings SHALL be enabled when a user is attempting to share something outside the domain.
 
 - _Rationale:_ Users may not always be aware a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
-- _Last modified:_ February 8, 2024
+- _Last modified:_ February 2024
 - _Note:_ This policy only applies if external sharing was allowed in Policy 1.1
 
 - MITRE ATT&CK TTP Mapping
@@ -79,7 +79,7 @@ Warnings SHALL be enabled when a user is attempting to share something outside t
 If sharing outside of the organization, then agencies SHALL disable sharing of files with individuals who are not using a Google account.
 
 - _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 - _Note:_ This policy only applies if external sharing is allowed in Policy 1.1
 
 - MITRE ATT&CK TTP Mapping
@@ -90,7 +90,7 @@ If sharing outside of the organization, then agencies SHALL disable sharing of f
 Agencies SHALL disable making files and published web content visible to anyone with the link.
 
 - _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of a potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -100,7 +100,7 @@ Agencies SHALL disable making files and published web content visible to anyone 
 Agencies SHALL set access checking to recipients only.
 
 - _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients.
-- _Last modified:_ June 7, 2024
+- _Last modified:_ June 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -110,7 +110,7 @@ Agencies SHALL set access checking to recipients only.
 Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organization.
 
 - _Rationale:_ Once a document is moved outside the organization's drives, the organization no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -120,7 +120,7 @@ Agencies SHALL NOT allow any users to distribute content from an organization-ow
 Agencies SHALL set newly created items to have Private to the Owner as the default level of access.
 
 - _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent overly broad accidental sharing of information.
-- _Last modified:_ November 14, 2023
+- _Last modified:_ November 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -188,7 +188,7 @@ This section covers whether users can create new shared drives to share with oth
 Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.
 
 - _Rationale:_ Allowing users who are not the drive owner to override settings violates the principle of least privilege. This policy reduces the risk of drive settings being modified by unauthorized individuals.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -197,7 +197,7 @@ Agencies SHOULD NOT allow members with manager access to override shared drive c
 Agencies SHOULD NOT allow users outside of their organization to access files in shared drives.
 
 - _Rationale:_ To regulate document access within the organization, it is recommended that agencies restrict external users from accessing files on shared drives. This policy is aimed at safeguarding internal documents from being distributed outside the organization without explicit consent and approval.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -206,7 +206,7 @@ Agencies SHOULD NOT allow users outside of their organization to access files in
 Agencies SHALL allow users who are not shared drive members to be added to files.
 
 - _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as drive members, potentially exposing all drive files and increasing the risk of sensitive content exposure. By disallowing the sharing of these individual files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -215,7 +215,7 @@ Agencies SHALL allow users who are not shared drive members to be added to files
 Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.
 
 - _Rationale:_ Downloading and removing a file from the GWS tenant bypasses all access control settings, increasing the risk of data leakage. By preventing the sharing of these externally downloaded files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -262,7 +262,7 @@ This section covers whether a security update issued by Google will be applied t
 Agencies SHALL enable the security update for Drive files.
 
 - _Rationale:_ By not enabling the update to the resource key security update a user could potentially gain unauthorized access to files. Enabling this security update decreases risk of unauthorized access and data spillage by controlling access to files in Google Drive.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -297,7 +297,7 @@ This section covers whether users have access to Google Drive with the Drive SDK
 Agencies SHOULD disable Drive SDK access.
 
 - _Rationale:_ The Drive SDK allows third-party applications to access Drive data, potentially leading to unintentional information sharing and data leakage. By disabling the Drive SDK you can decrease the risk of internal documents from being distributed outside the organization without explicit consent and approval.
-- _Last modified:_ January 3, 2024
+- _Last modified:_ January 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
@@ -333,7 +333,7 @@ This section covers whether users can use add-ons in file editors within Google 
 Agencies SHALL disable Add-Ons.
 
 - _Rationale:_ Google Docs Add-Ons, depending on their permissions, can present a security risk, including potential exposure of sensitive content. By disabling unapproved add-ons and preventing their sharing, the risk of data leakage can be significantly reduced.
-- _Last modified:_ January 3, 2024
+- _Last modified:_ January 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
