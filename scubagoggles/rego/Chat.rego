@@ -2,7 +2,6 @@ package chat
 
 import future.keywords
 import data.utils
-import data.utils.PolicyApiInUse
 
 LogEvents := utils.GetEvents("chat_logs")
 
@@ -18,45 +17,12 @@ ChatEnabled(orgunit) := utils.AppEnabled(input.policies, "chat", orgunit)
 
 ChatId1_1 := utils.PolicyIdWithSuffix("GWS.CHAT.1.1")
 
-LogMessage1_1 := "ChatArchivingProto chatsDefaultToOffTheRecord"
-
-Check1_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage1_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check1_1_OK if {PolicyApiInUse}
-
-# This is a weird one - for logging, history is off if the value is
-# "true" (string), but for the policy API history is off if the value
-# is false (boolean).
-
-GetFriendlyValue1_1(Value) := "OFF" if {
-    Value in {false, "true"}
-} else := "ON" if {
-    Value in {true, "false"}
-} else := Value
-
-NonComplianceMessage1_1(value) := sprintf("Default conversation history is set to: %s",
+NonComplianceMessage1_1(value) := sprintf("Default conversation history is %s",
                                           [value])
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage1_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
-
-NonCompliantOUs1_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(chatHistory))
+    "Value": NonComplianceMessage1_1(utils.GetFriendlyEnabledValue(chatHistory))
 } if {
     some OU, settings in input.policies
     ChatEnabled(OU)
@@ -67,29 +33,12 @@ NonCompliantOUs1_1 contains {
 tests contains {
     "PolicyId": ChatId1_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check1_1_OK
-}
-
-tests contains {
-    "PolicyId": ChatId1_1,
-    "Criticality": "Shall",
-    # Empty list in next line for non compliant groups, as this setting can't
-    # be changed at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check1_1_OK
     Status := count(NonCompliantOUs1_1) == 0
 }
 #--
@@ -97,39 +46,17 @@ if {
 #
 # Baseline GWS.CHAT.1.2
 #--
+
 ChatId1_2 := utils.PolicyIdWithSuffix("GWS.CHAT.1.2")
 
-LogMessage1_2 := "ChatArchivingProto allow_chat_archiving_setting_modification"
-
-Check1_2_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage1_2, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check1_2_OK if {PolicyApiInUse}
-
-GetFriendlyValue1_2(Value) := "Yes" if {
-    Value in {true, "true"}
-} else := "No" if {
-    Value in {false, "false"}
+GetFriendlyValue1_2(Value) := "are" if {
+    Value == true
+} else := "are not" if {
+    Value == false
 } else := Value
 
-NonComplianceMessage1_2(value) := sprintf("Allow users to change their history setting is set to: %s",
+NonComplianceMessage1_2(value) := sprintf("Users %s allowed to change their history setting",
                                           [value])
-
-NonCompliantOUs1_2 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents,  LogMessage1_2, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "true"
-}
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
@@ -144,27 +71,12 @@ NonCompliantOUs1_2 contains {
 tests contains {
     "PolicyId": ChatId1_2,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check1_2_OK
-}
-
-tests contains {
-    "PolicyId": ChatId1_2,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check1_2_OK
     Status := count(NonCompliantOUs1_2) == 0
 }
 #--
@@ -179,16 +91,6 @@ if {
 
 ChatId2_1 := utils.PolicyIdWithSuffix("GWS.CHAT.2.1")
 
-LogMessage2_1 := "DynamiteFileSharingSettingsProto external_file_sharing_setting"
-
-Check2_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage2_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check2_1_OK if {PolicyApiInUse}
-
 GetFriendlyValue2_1(Value) := "Allow all files" if {
     Value == "ALL_FILES"
 } else := "Images only" if {
@@ -199,20 +101,6 @@ GetFriendlyValue2_1(Value) := "Allow all files" if {
 
 NonComplianceMessage2_1(value) := sprintf("External file sharing is set to: %s",
                                           [value])
-
-NonCompliantOUs2_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage2_1(GetFriendlyValue2_1(LastEvent.NewValue))
-}
-if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents,  LogMessage2_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "NO_FILES"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
@@ -227,27 +115,12 @@ NonCompliantOUs2_1 contains {
 tests contains {
     "PolicyId": ChatId2_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check2_1_OK
-}
-
-tests contains {
-    "PolicyId": ChatId2_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check2_1_OK
     Status := count(NonCompliantOUs2_1) == 0
 }
 #--
@@ -262,21 +135,11 @@ if {
 
 ChatId3_1 := utils.PolicyIdWithSuffix("GWS.CHAT.3.1")
 
-LogMessage3_1 := "RoomOtrSettingsProto otr_state"
-
-Check3_1_OK if {
-    not PolicyApiInUse
-    events := utils.FilterEventsOU(LogEvents, LogMessage3_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-Check3_1_OK if {PolicyApiInUse}
-
 NonComplianceMessage3_1(value) := sprintf("Conversation history settings for spaces is set to: %s",
                                           [value])
 
 GetFriendlyValue3_1(Value) := "OFF by default" if {
-    Value in {"DEFAULT_HISTORY_OFF", "DEFAULT_OFF_THE_RECORD"}
+    Value == "DEFAULT_HISTORY_OFF"
 } else := "ON by default" if {
     Value == "DEFAULT_HISTORY_ON"
 } else := "ALWAYS ON" if {
@@ -284,20 +147,8 @@ GetFriendlyValue3_1(Value) := "OFF by default" if {
 } else := "Unspecified" if {
     Value == "HISTORY_STATE_UNSPECIFIED"
 } else := "ALWAYS OFF" if {
-    Value in {"HISTORY_ALWAYS_OFF", "ALWAYS_OFF_THE_RECORD"}
+    Value == "HISTORY_ALWAYS_OFF"
 } else := Value
-
-NonCompliantOUs3_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage3_1(GetFriendlyValue3_1(LastEvent.NewValue))
-} if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage3_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    not contains("DEFAULT_ON_THE_RECORD ALWAYS_ON_THE_RECORD", LastEvent.NewValue)
-}
 
 NonCompliantOUs3_1 contains {
     "Name": OU,
@@ -312,27 +163,12 @@ NonCompliantOUs3_1 contains {
 tests contains {
     "PolicyId": ChatId3_1,
     "Criticality": "Should",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := true
-    not Check3_1_OK
-}
-
-tests contains {
-    "PolicyId": ChatId3_1,
-    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check3_1_OK
     Status := count(NonCompliantOUs3_1) == 0
 }
 #--
@@ -347,29 +183,6 @@ if {
 
 ChatId4_1 := utils.PolicyIdWithSuffix("GWS.CHAT.4.1")
 
-LogMessage4_1 := "RestrictChatProto restrictChatToOrganization"
-
-default NoSuchEvent4_1(_) := false
-
-NoSuchEvent4_1(TopLevelOU) := true if {
-    Events := utils.FilterEventsOU(LogEvents, LogMessage4_1, TopLevelOU)
-    count(Events) == 0
-}
-
-NoSuchEvent4_1(TopLevelOU) := true if {
-    Events := utils.FilterEventsOU(LogEvents,
-                                   "RestrictChatProto externalChatRestriction",
-                                   TopLevelOU)
-    count(Events) == 0
-}
-
-Check4_1_OK if {
-    not PolicyApiInUse
-    not NoSuchEvent4_1(utils.TopLevelOU)
-}
-
-Check4_1_OK if {PolicyApiInUse}
-
 GetFriendlyValue4_1(Value) := "all domains" if {
     Value == "NO_RESTRICTION"
 } else := "Unspecified" if {
@@ -378,27 +191,6 @@ GetFriendlyValue4_1(Value) := "all domains" if {
 
 NonComplianceMessage4_1(value) := sprintf("Allow external chat within: %s",
                                           [value])
-
-NonCompliantOUs4_1 contains {
-    "Name": OU,
-    "Value": "External chat is enabled for all domains"
-}
- if {
-    not PolicyApiInUse
-    some OU in utils.OUsWithEvents
-    Events_A := utils.FilterEventsOU(LogEvents, LogMessage4_1, OU)
-    count(Events_A) > 0
-    LastEvent_A := utils.GetLastEvent(Events_A)
-    LastEvent_A.NewValue != "DELETE_APPLICATION_SETTING"
-
-    Events_B := utils.FilterEventsOU(LogEvents, "RestrictChatProto externalChatRestriction", OU)
-    count(Events_B) > 0
-    LastEvent_B := utils.GetLastEvent(Events_B)
-    LastEvent_B.NewValue != "DELETE_APPLICATION_SETTING"
-
-    LastEvent_A.NewValue == "false"
-    LastEvent_B.NewValue != "TRUSTED_DOMAINS"
-}
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
@@ -415,27 +207,12 @@ NonCompliantOUs4_1 contains {
 tests contains {
     "PolicyId": ChatId4_1,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    not PolicyApiInUse
-    DefaultSafe := false
-    not Check4_1_OK
-}
-
-tests contains {
-    "PolicyId": ChatId4_1,
-    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Check4_1_OK
     Status := count(NonCompliantOUs4_1) == 0
 }
 #--
