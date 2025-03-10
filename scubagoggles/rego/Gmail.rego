@@ -995,23 +995,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.10.2
-#--
-
-GmailId10_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.10.2")
-
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": GmailId10_2,
-    "Criticality": "May/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
-
 ################
 # GWS.GMAIL.11 #
 ################
