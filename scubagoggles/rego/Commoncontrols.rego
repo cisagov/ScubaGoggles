@@ -115,12 +115,23 @@ GetFriendlyMethods(Value) := "Any" if {
     Value == "PASSKEY_PLUS_SECURITY_CODE"
 } else := Value
 
-NonComplianceMessage1_1a := "Users cannot enable 2-step verification (2SV)."
+TwoSV := "2-step verification (2SV)"
+NonComplianceMessage1_1a := sprintf("Users cannot enable %s.", [TwoSV])
 
-NonComplianceMessage1_1b(value) := sprintf("Allowed methods is set to %s",
-                                          [value])
+NonComplianceMessage1_1b(value) := sprintf("Allowed %s method is set to \"%s\".",
+                                           [TwoSV, value])
 
-NonComplianceMessage1_1c := "2-step verification (2SV) is not enforced."
+NonComplianceMessage1_1c := sprintf("%s is not enforced.", [TwoSV])
+
+Today := time.now_ns()
+
+Is2SVEnforced(enforce2SV) := true if {
+    # 2SV is enforced if the given time (as an ISO8601/RFC3339 date/time string)
+    # of enforcement is before the current time (today, right now).
+    RFC3339 := "2006-01-02T15:04:05Z07:00"
+    enforceValue := time.parse_ns(RFC3339, enforce2SV)
+    enforceValue <= Today
+} else := false
 
 # There are 3 items to check for this baseline.  First, users must be allowed to
 # enroll in 2SV.  If they have been enrolled, then the passkey (aka security
@@ -144,7 +155,9 @@ NonCompliantOUs1_1 contains {
 }
 if {
     some OU, settings in input.policies
-    enable2SV := settings.security_two_step_verification_enrollment.allowEnrollment
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
     enable2SV
     enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
     enforceMethod != "PASSKEY_ONLY"
@@ -155,16 +168,17 @@ NonCompliantOUs1_1 contains {
     "Value": NonComplianceMessage1_1c
 }
 if {
-    today := time.now_ns()
-    RFC3339 := "2006-01-02T15:04:05Z07:00"
     some OU, settings in input.policies
-    enable2SV := settings.security_two_step_verification_enrollment.allowEnrollment
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
     enable2SV
-    enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
+    enforceMethod := utils.GetApiSettingValue("security_two_step_verification_enforcement_factor",
+                                              "allowedSignInFactorSet",
+                                              OU)
     enforceMethod == "PASSKEY_ONLY"
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    enforceValue := time.parse_ns(RFC3339, enforce2SV)
-    enforceValue > today
+    Is2SVEnforced(enforce2SV) == false
 }
 
 tests contains {
@@ -186,21 +200,32 @@ if {
 
 CommonControlsId1_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.1.2")
 
-NonComplianceMessage1_2(value, expected) := sprintf("New user enrollment period (%s) %s (%s)",
-                                                    [utils.GetFriendlyDuration(value),
-                                                    "doesn't match expected",
-                                                    utils.GetFriendlyDuration(expected)])
+NonComplianceMessage1_2a := NonComplianceMessage1_1a
+
+NonComplianceMessage1_2b := NonComplianceMessage1_1c
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(enrollSeconds, expectedPeriod)
+    "Value": NonComplianceMessage1_2a
 }
 if {
-    expectedPeriod := utils.DurationToSeconds("7d")
     some OU, settings in input.policies
-    enrollPeriod := settings.security_two_step_verification_grace_period.enrollmentGracePeriod
-    enrollSeconds := utils.DurationToSeconds(enrollPeriod)
-    enrollSeconds != expectedPeriod
+    enable2SV := settings.security_two_step_verification_enrollment.allowEnrollment
+    not enable2SV
+}
+
+NonCompliantOUs1_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_2b
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    Is2SVEnforced(enforce2SV) == false
 }
 
 tests contains {
@@ -222,16 +247,52 @@ if {
 
 CommonControlsId1_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.1.3")
 
-NonComplianceMessage1_3 := "User is allowed to trust device."
+NonComplianceMessage1_3a := NonComplianceMessage1_1a
+
+NonComplianceMessage1_3b := "Verification codes via text and phone call allowed."
+
+NonComplianceMessage1_3c := NonComplianceMessage1_1c
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3
+    "Value": NonComplianceMessage1_3a
 }
 if {
     some OU, settings in input.policies
-    trustDevice := settings.security_two_step_verification_device_trust.allowTrustingDevice
-    trustDevice
+    enable2SV := settings.security_two_step_verification_enrollment.allowEnrollment
+    not enable2SV
+}
+
+NonCompliantOUs1_3 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_3b
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
+    enforceMethod == "ALL"
+}
+
+NonCompliantOUs1_3 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_3c
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforceMethod := utils.GetApiSettingValue("security_two_step_verification_enforcement_factor",
+                                              "allowedSignInFactorSet",
+                                              OU)
+    enforceMethod != "ALL"
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    Is2SVEnforced(enforce2SV) == false
 }
 
 tests contains {
@@ -253,61 +314,73 @@ if {
 
 CommonControlsId1_4 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.1.4")
 
+Prefix1_4 := "New user enrollment period"
+NonComplianceMessage1_4(value,
+                        expected) := sprintf("%s is NONE", [Prefix1_4]) if {
+                            value == 0
+                        } else := sprintf("%s %s (longer than %s)",
+                                          [Prefix1_4,
+                                           utils.GetFriendlyDuration(value),
+                                           utils.GetFriendlyDuration(expected)])
+
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": "Allowed methods is set to Any"
+    "Value": NonComplianceMessage1_4(enrollSeconds, expectedPeriod)
 }
 if {
-    some OU in utils.OUsWithEvents
-    Events := FilterEventsOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "ANY"
-}
-
-NonCompliantGroups1_4 contains {
-    "Name": Group,
-    "Value": "Allowed methods is set to Any"
-}
-if {
-    some Group in utils.GroupsWithEvents
-    Events := FilterEventsGroup("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", Group)
-    # Ignore groups without any events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "ANY"
+    expectedPeriod := utils.DurationToSeconds("7d")
+    some OU, settings in input.policies
+    enrollPeriod := settings.security_two_step_verification_grace_period.enrollmentGracePeriod
+    enrollSeconds := utils.DurationToSeconds(enrollPeriod)
+    true in {
+        enrollSeconds == 0,
+        enrollSeconds > expectedPeriod
+    }
 }
 
 tests contains {
     "PolicyId": CommonControlsId1_4,
     "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    Events := FilterEventsOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": CommonControlsId1_4,
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_4, NonCompliantGroups1_4),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4, "NonCompliantGroups": NonCompliantGroups1_4},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_4, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := FilterEventsOU("CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS", utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs1_4) == 0, count(NonCompliantGroups1_4) == 0}
-    Status := (false in Conditions) == false}
+    Status := count(NonCompliantOUs1_4) == 0
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.1.5
+#--
+
+CommonControlsId1_5 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.1.5")
+
+NonComplianceMessage1_5 := "User is allowed to trust device."
+
+NonCompliantOUs1_5 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_5
+}
+if {
+    some OU, settings in input.policies
+    trustDevice := settings.security_two_step_verification_device_trust.allowTrustingDevice
+    trustDevice
+}
+
+tests contains {
+    "PolicyId": CommonControlsId1_5,
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_5, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_5},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs1_5) == 0
+}
+#--
 
 ########################
 # GWS.COMMONCONTROLS.2 #
@@ -661,7 +734,8 @@ CommonControlsId5_6 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.5.6")
 
 NonCompliantOUs5_6 contains {
     "Name": OU,
-    "Value": sprintf("Password reset frequency is %s", [passwordExpiration])
+    "Value": sprintf("Password reset frequency is %s",
+                     [utils.GetFriendlyDuration(expirationValue)])
 }
 if {
     some OU, settings in input.policies
@@ -1189,7 +1263,7 @@ LogMessage11_1_B := "Apps Access Setting allow_all_internal_apps"
 NonCompliancePrefix11_1 := "Users can install and run any"
 NonComplianceMessage11_1(anyApp) := sprintf("%s app from the Marketplace.",
                                             [NonCompliancePrefix11_1]) if {
-    anyApp
+    anyApp == true
 } else := sprintf("%s internal app, even if it's not allowlisted.",
                   [NonCompliancePrefix11_1])
 
@@ -1210,8 +1284,8 @@ NonCompliantOUs11_1 contains {
 if {
     some OU, settings in input.policies
     access := settings.workspace_marketplace_apps_access_options.accessLevel
-    allowInternal := settings.workspace_marketplace_apps_access_options.allowAllInternalApps
     access == "ALLOW_LISTED_APPS"
+    allowInternal := settings.workspace_marketplace_apps_access_options.allowAllInternalApps
     allowInternal != false
 }
 
