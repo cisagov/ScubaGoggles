@@ -498,6 +498,15 @@ FailTestBothNonCompliant(PolicyId, Output, OUListing, GroupListing) if {
                                          EnumGroupSettings(GroupListing)])
 } else := false
 
+ManualCheckMessage := "Currently not able to be tested automatically; please manually check."
+
+NotImplementedTestResult(PolicyId, Output) if {
+    RuleOutput := FindTestOutput(PolicyId, Output)
+    RuleOutput.RequirementMet == false
+    RuleOutput.NoSuchEvent
+    RuleOutput.ReportDetails == ManualCheckMessage
+} else := false
+
 TestResult(PolicyId, Output, ReportDetailString, RequirementMet) := true if {
     RuleOutput := FindTestOutput(PolicyId, Output)
     RuleOutput.RequirementMet == RequirementMet
