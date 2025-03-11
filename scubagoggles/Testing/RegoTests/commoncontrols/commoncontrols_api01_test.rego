@@ -26,6 +26,10 @@ GoodCaseInputApi01 := {
         "nextOU": {
             "security_two_step_verification_grace_period": {
                 "enrollmentGracePeriod": "604800s"}
+        },
+        "thirdOU": {
+            "security_two_step_verification_grace_period": {
+                "enrollmentGracePeriod": "86400s"}
         }
     },
     "tenant_info": {
@@ -49,11 +53,11 @@ BadCaseInputApi01 := {
                 "allowEnrollment": false
             },
             "security_two_step_verification_grace_period": {
-                "enrollmentGracePeriod": "0s"}
+                "enrollmentGracePeriod": "1209600s"}
         },
         "nextOU": {
             "security_two_step_verification_enforcement": {
-                "enforcedFrom": "2028-02-16T23:22:21.732Z"
+                "enforcedFrom": "2032-02-16T23:22:21.732Z"
             },
             "security_two_step_verification_enforcement_factor": {
                 "allowedSignInFactorSet": "ALL"
@@ -79,17 +83,57 @@ BadCaseInputApi01 := {
     }
 }
 
+# For the following test input, the top-level orgunit is compliant with all 1.*
+# baselines.  It's the settings in the sub-orgunits that deviate from the
+# requirements.
+
 BadCaseInputApi01a := {
     "policies": {
         "topOU": {
-            "security_login_challenges": {
-                "enableEmployeeIdChallenge": true
+            "security_two_step_verification_device_trust": {
+                "allowTrustingDevice": false
+            },
+            "security_two_step_verification_enforcement": {
+                "enforcedFrom": "2024-02-16T23:22:21.732Z"
+            },
+            "security_two_step_verification_enforcement_factor": {
+                "allowedSignInFactorSet": "PASSKEY_ONLY"
+            },
+            "security_two_step_verification_enrollment": {
+                "allowEnrollment": true
+            },
+            "security_two_step_verification_grace_period": {
+                "enrollmentGracePeriod": "168h"}
+        },
+        "nextOU": {
+            "security_two_step_verification_enforcement_factor": {
+                "allowedSignInFactorSet": "ALL"
             }
         },
-         "nextOU": {
-            "security_login_challenges": {
-                "enableEmployeeIdChallenge": false
-            }
+        "thirdOU": {
+            "security_two_step_verification_enrollment": {
+                "allowEnrollment": false},
+            "security_two_step_verification_device_trust": {
+                "allowTrustingDevice": true}
+        },
+        "fourthOU": {
+            "security_two_step_verification_grace_period": {
+                "enrollmentGracePeriod": "0s"}
+        },
+        "fifthOU": {
+            "security_two_step_verification_enforcement_factor": {
+                "allowedSignInFactorSet": "NO_TELEPHONY"},
+        },
+        "sixthOU": {
+            "security_two_step_verification_enforcement": {
+                "enforcedFrom": "2035-02-16T23:22:21.732Z"},
+            "security_two_step_verification_device_trust": {
+                "allowTrustingDevice": true}
+        },
+        "seventhOU": {
+            # This is the value Google provides for 2SV enforcement "Off".
+            "security_two_step_verification_enforcement": {
+                "enforcedFrom": "1970-01-01T00:00:00Z"}
         }
     },
     "tenant_info": {
@@ -117,35 +161,141 @@ test_2SV_Incorrect_1 if {
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
-test_EnrollPeriod_Correct_1 if {
+test_2SV_Incorrect_2 if {
+    PolicyId := CommonControlsId1_1
+    Output := tests with input as BadCaseInputApi01a
+
+    failedOU := [{"Name": "fifthOU",
+                  "Value": NonComplianceMessage1_1b(GetFriendlyMethods("NO_TELEPHONY"))},
+                  {"Name": "nextOU",
+                  "Value": NonComplianceMessage1_1b(GetFriendlyMethods("ALL"))},
+                  {"Name": "seventhOU",
+                  "Value": NonComplianceMessage1_1c},
+                  {"Name": "sixthOU",
+                  "Value": NonComplianceMessage1_1c},
+                  {"Name": "thirdOU",
+                  "Value": NonComplianceMessage1_1a}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_Alt2SV_Correct_1 if {
     PolicyId := CommonControlsId1_2
     Output := tests with input as GoodCaseInputApi01
 
     PassTestResult(PolicyId, Output)
 }
 
-test_EnrollPeriod_Incorrect_1 if {
+test_Alt2SV_Incorrect_1 if {
     PolicyId := CommonControlsId1_2
     Output := tests with input as BadCaseInputApi01
 
+    failedOU := [{"Name": "nextOU",
+                  "Value": NonComplianceMessage1_2b},
+                 {"Name": "thirdOU",
+                  "Value": NonComplianceMessage1_2b},
+                 {"Name": "topOU",
+                  "Value": NonComplianceMessage1_2a}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_Alt2SV_Incorrect_2 if {
+    PolicyId := CommonControlsId1_2
+    Output := tests with input as BadCaseInputApi01a
+
+    failedOU := [{"Name": "seventhOU",
+                  "Value": NonComplianceMessage1_2b},
+                 {"Name": "sixthOU",
+                  "Value": NonComplianceMessage1_2b},
+                 {"Name": "thirdOU",
+                  "Value": NonComplianceMessage1_2a}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_NoTelephony2SV_Correct_1 if {
+    PolicyId := CommonControlsId1_3
+    Output := tests with input as GoodCaseInputApi01
+
+    PassTestResult(PolicyId, Output)
+}
+
+test_NoTelephony2SV_Incorrect_1 if {
+    PolicyId := CommonControlsId1_3
+    Output := tests with input as BadCaseInputApi01
+
+    failedOU := [{"Name": "nextOU",
+                  "Value": NonComplianceMessage1_3b},
+                 {"Name": "thirdOU",
+                  "Value": NonComplianceMessage1_3c},
+                 {"Name": "topOU",
+                  "Value": NonComplianceMessage1_3a}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_NoTelephony2SV_Incorrect_2 if {
+    PolicyId := CommonControlsId1_3
+    Output := tests with input as BadCaseInputApi01a
+
+    failedOU := [{"Name": "nextOU",
+                  "Value": NonComplianceMessage1_3b},
+                 {"Name": "seventhOU",
+                  "Value": NonComplianceMessage1_3c},
+                 {"Name": "sixthOU",
+                  "Value": NonComplianceMessage1_3c},
+                 {"Name": "thirdOU",
+                  "Value": NonComplianceMessage1_3a}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_2SVUserEnrollment_Correct_1 if {
+    PolicyId := CommonControlsId1_4
+    Output := tests with input as GoodCaseInputApi01
+
+    PassTestResult(PolicyId, Output)
+}
+
+test_2SVUserEnrollment_Incorrect_1 if {
+    PolicyId := CommonControlsId1_4
+    Output := tests with input as BadCaseInputApi01
+
     failedOU := [{"Name": "topOU",
-                  "Value": NonComplianceMessage1_2(0,
+                  "Value": NonComplianceMessage1_4(1209600,
                                                    utils.DurationToSeconds("7d"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
-test_DeviceTrust_Correct_1 if {
-    PolicyId := CommonControlsId1_3
+test_2SVUserEnrollment_Incorrect_2 if {
+    PolicyId := CommonControlsId1_4
+    Output := tests with input as BadCaseInputApi01a
+
+    failedOU := [{"Name": "fourthOU",
+                  "Value": NonComplianceMessage1_4(0,
+                                                   utils.DurationToSeconds("7d"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_2SVDeviceTrust_Correct_1 if {
+    PolicyId := CommonControlsId1_5
     Output := tests with input as GoodCaseInputApi01
 
     PassTestResult(PolicyId, Output)
 }
 
-test_DeviceTrust_Incorrect_1 if {
-    PolicyId := CommonControlsId1_3
+test_2SVDeviceTrust_Incorrect_1 if {
+    PolicyId := CommonControlsId1_5
     Output := tests with input as BadCaseInputApi01
 
     failedOU := [{"Name": "topOU",
-                  "Value": NonComplianceMessage1_3}]
+                  "Value": NonComplianceMessage1_5}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_2SVDeviceTrust_Incorrect_2 if {
+    PolicyId := CommonControlsId1_5
+    Output := tests with input as BadCaseInputApi01a
+
+    failedOU := [{"Name": "sixthOU",
+                  "Value": NonComplianceMessage1_5},
+                  {"Name": "thirdOU",
+                  "Value": NonComplianceMessage1_5}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
