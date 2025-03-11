@@ -130,6 +130,7 @@ Is2SVEnforced(enforce2SV) := true if {
     # of enforcement is before the current time (today, right now).
     RFC3339 := "2006-01-02T15:04:05Z07:00"
     enforceValue := time.parse_ns(RFC3339, enforce2SV)
+    enforceValue != 0
     enforceValue <= Today
 } else := false
 

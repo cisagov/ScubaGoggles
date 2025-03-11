@@ -129,6 +129,11 @@ BadCaseInputApi01a := {
                 "enforcedFrom": "2035-02-16T23:22:21.732Z"},
             "security_two_step_verification_device_trust": {
                 "allowTrustingDevice": true}
+        },
+        "seventhOU": {
+            # This is the value Google provides for 2SV enforcement "Off".
+            "security_two_step_verification_enforcement": {
+                "enforcedFrom": "1970-01-01T00:00:00Z"}
         }
     },
     "tenant_info": {
@@ -164,6 +169,8 @@ test_2SV_Incorrect_2 if {
                   "Value": NonComplianceMessage1_1b(GetFriendlyMethods("NO_TELEPHONY"))},
                   {"Name": "nextOU",
                   "Value": NonComplianceMessage1_1b(GetFriendlyMethods("ALL"))},
+                  {"Name": "seventhOU",
+                  "Value": NonComplianceMessage1_1c},
                   {"Name": "sixthOU",
                   "Value": NonComplianceMessage1_1c},
                   {"Name": "thirdOU",
@@ -195,7 +202,9 @@ test_Alt2SV_Incorrect_2 if {
     PolicyId := CommonControlsId1_2
     Output := tests with input as BadCaseInputApi01a
 
-    failedOU := [{"Name": "sixthOU",
+    failedOU := [{"Name": "seventhOU",
+                  "Value": NonComplianceMessage1_2b},
+                 {"Name": "sixthOU",
                   "Value": NonComplianceMessage1_2b},
                  {"Name": "thirdOU",
                   "Value": NonComplianceMessage1_2a}]
@@ -228,6 +237,8 @@ test_NoTelephony2SV_Incorrect_2 if {
 
     failedOU := [{"Name": "nextOU",
                   "Value": NonComplianceMessage1_3b},
+                 {"Name": "seventhOU",
+                  "Value": NonComplianceMessage1_3c},
                  {"Name": "sixthOU",
                   "Value": NonComplianceMessage1_3c},
                  {"Name": "thirdOU",
