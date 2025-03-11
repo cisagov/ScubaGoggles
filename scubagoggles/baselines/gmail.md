@@ -54,7 +54,7 @@ This section determines whether users can delegate access to their mailbox to ot
 Mail Delegation SHOULD be disabled.
 
 - _Rationale:_ Granting mail delegation can inadvertently lead to disclosure of sensitive information, impersonation of delegated accounts, or malicious alteration or deletion of emails. By controlling mail delegation, these risks can be significantly reduced, improving the security and integrity of email communications.
-- _Last modified:_ October 4, 2023
+- _Last modified:_ October 2023
 - _Note:_ Exceptions should be limited to individuals authorized by existing Agency policy, such as SES or Politically Appointed staff. Other considerations include ensuring that delegated accounts require Phishing-Resistant Multi-Factor Authentication (MFA), limiting delegated account permissions (ex. allowing view/reply but not delete), monitoring delegated accounts regularly, and disabling them if no longer required.
 
 - MITRE ATT&CK TTP Mapping
@@ -92,7 +92,7 @@ This section enables DomainKeys Identified Mail (DKIM) to help prevent spoofing 
 DKIM SHOULD be enabled for all domains.
 
 - _Rationale:_ Enabling DKIM for all domains can help prevent email spoofing and phishing attacks. Without DKIM, adversaries could manipulate email headers to appear as if they're from a legitimate source, potentially leading to the disclosure of sensitive information. By enabling DKIM, the authenticity of emails can be verified, reducing this risk.
-- _Last modified:_ November 13, 2023
+- _Last modified:_ November 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -137,7 +137,7 @@ The Sender Policy Framework (SPF) is a mechanism that allows administrators to s
 An SPF policy SHALL be published for each domain that fails all non-approved senders.
 
 - _Rationale:_ Adversaries could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
-- _Last modified:_ February 14, 2024
+- _Last modified:_ February 2024
 - _Note:_ SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`).
 
 - MITRE ATT&CK TTP Mapping
@@ -183,7 +183,7 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 A DMARC policy SHALL be published for every second-level domain.
 
 - _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every second-level domain further reduces the risk posed by authentication failures.
-- _Last modified:_ November 13, 2023
+- _Last modified:_ November 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -192,7 +192,7 @@ A DMARC policy SHALL be published for every second-level domain.
 The DMARC message rejection option SHALL be p=reject.
 
 - _Rationale:_ Without stringent email authentication, adversaries could potentially send deceptive emails that appear to be from your domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for federal, executive branch, departments and agencies.
-- _Last modified:_ November 13, 2023
+- _Last modified:_ November 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -206,7 +206,7 @@ The DMARC message rejection option SHALL be p=reject.
 The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.
 
 - _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for federal, executive branch, departments and agencies, set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows CISA to monitor and address email authentication issues.
-- _Last modified:_ November 13, 2023
+- _Last modified:_ November 2023
 - _Note:_ Only federal, executive branch, departments and agencies should include this email address in their DMARC record.
 
 - MITRE ATT&CK TTP Mapping
@@ -216,7 +216,7 @@ The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cy
 An agency point of contact SHOULD be included for aggregate and failure reports.
 
 - _Rationale:_ Without a designated agency point of contact for DMARC aggregate and failure reports, potential email security issues may not be promptly addressed, increasing the risk of phishing attacks. By including an agency point of contact, this risk can be reduced as it facilitates a timely response to email authentication issues, enhancing overall email security.
-- _Last modified:_ November 13, 2023
+- _Last modified:_ November 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -271,7 +271,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 Protect against encrypted attachments from untrusted senders SHALL be enabled.
 
 - _Rationale:_ Attachments from untrusted senders, especially encrypted ones, may contain malicious content that poses a security risk. By enabling protection against encrypted attachments from untrusted senders, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -287,7 +287,7 @@ Protect against encrypted attachments from untrusted senders SHALL be enabled.
 Protect against attachments with scripts from untrusted senders SHALL be enabled.
 
 - _Rationale:_ Attachments with scripts from untrusted senders may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -303,7 +303,7 @@ Protect against attachments with scripts from untrusted senders SHALL be enabled
 Protect against anomalous attachment types in emails SHALL be enabled.
 
 - _Rationale:_ Anomalous attachment types in emails may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of the user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -319,7 +319,7 @@ Protect against anomalous attachment types in emails SHALL be enabled.
 Google SHOULD be allowed to automatically apply future recommended settings for attachments.
 
 - _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest security measures recommended by Google, reducing the risk of security breaches.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -328,7 +328,7 @@ Google SHOULD be allowed to automatically apply future recommended settings for 
 Emails flagged by the above attachment protection controls SHALL NOT be kept in inbox.
 
 - _Rationale:_ Keeping emails flagged by attachment protection controls in the inbox could potentially expose users to malicious content. Removing these emails from the inbox enhances the safety and integrity of user data and systems.
-- _Last modified:_ September 8, 2023
+- _Last modified:_ September 2023
 - _Note:_ Agencies and Organizations can choose whether to send email to spam or quarantine. Applies to Policies 5.1 - 5.3.
 
 - MITRE ATT&CK TTP Mapping
@@ -346,7 +346,7 @@ Emails flagged by the above attachment protection controls SHALL NOT be kept in 
 Any third-party or outside application selected for attachment protection SHOULD offer services comparable to those offered by Google Workspace.
 
 - _Rationale:_ Using third-party or outside applications for attachment protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -404,7 +404,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 Identify links behind shortened URLs SHALL be enabled.
 
 - _Rationale:_ Shortened URLs can potentially hide malicious links, posing a security risk. By enabling the identification of links behind shortened URLs, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -417,7 +417,7 @@ Identify links behind shortened URLs SHALL be enabled.
 Scan linked images SHALL be enabled.
 
 - _Rationale:_ Linked images in emails can potentially contain malicious content, posing a security risk. By enabling the scanning of linked images, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -430,7 +430,7 @@ Scan linked images SHALL be enabled.
 Show warning prompt for any click on links to untrusted domains SHALL be enabled.
 
 - _Rationale:_ Clicking on links to unfamiliar domains can potentially expose users to malicious content, posing a security risk. By enabling a warning prompt for any click on such links, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -443,7 +443,7 @@ Show warning prompt for any click on links to untrusted domains SHALL be enabled
 Google SHALL be allowed to automatically apply future recommended settings for links and external images.
 
 - _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -452,7 +452,7 @@ Google SHALL be allowed to automatically apply future recommended settings for l
 Any third-party or outside application selected for links and external images protection SHOULD offer services comparable to those offered by Google Workspace.
 
 - _Rationale:_ Using third-party or outside applications for links and external images protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services enhances the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -508,7 +508,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 Protect against domain spoofing based on similar domain names SHALL be enabled.
 
 - _Rationale:_ Emails sent from domains that look similar to your domain can potentially deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -520,7 +520,7 @@ Protect against domain spoofing based on similar domain names SHALL be enabled.
 Protect against spoofing of employee names SHALL be enabled.
 
 - _Rationale:_ Spoofing of employee identities (e.g., CEO and IT staff) can potentially deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -532,7 +532,7 @@ Protect against spoofing of employee names SHALL be enabled.
 Protect against inbound emails spoofing your domain SHALL be enabled.
 
 - _Rationale:_ Inbound emails appearing to come from your domain can potentially deceive users into interacting with malicious content, posing a security risk. By enabling protection against such spoofing, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -544,7 +544,7 @@ Protect against inbound emails spoofing your domain SHALL be enabled.
 Protect against any unauthenticated emails SHALL be enabled.
 
 - _Rationale:_ Unauthenticated emails can potentially contain malicious content, posing a security risk. By enabling protection against such emails, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -556,7 +556,7 @@ Protect against any unauthenticated emails SHALL be enabled.
 Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
 
 - _Rationale:_ Inbound emails spoofing your domain can potentially deceive users into interacting with malicious content, posing a security risk. By enabling protection against such spoofing, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -568,7 +568,7 @@ Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
 Emails flagged by the above spoofing and authentication controls SHALL NOT be kept in inbox.
 
 - _Rationale:_ Keeping emails flagged by spoofing and authentication controls in the inbox could potentially expose users to malicious content. Moving emails out of the inbox can reduce this risk, enhancing the safety and integrity of the user's data and systems.
-- _Last modified:_ September 8, 2023
+- _Last modified:_ September 2023
 - _Note:_ Agencies and organizations can choose whether to send to spam or quarantine. This policy applies to Policy 7.1 - Policy 7.5
 
 - MITRE ATT&CK TTP Mapping
@@ -582,7 +582,7 @@ Emails flagged by the above spoofing and authentication controls SHALL NOT be ke
 Google SHALL be allowed to automatically apply future recommended settings for spoofing and authentication.
 
 - _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -594,7 +594,7 @@ Google SHALL be allowed to automatically apply future recommended settings for s
 Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace.
 
 - _Rationale:_ Using third-party or outside applications for spoofing and authentication protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -657,7 +657,7 @@ This section addresses a feature that enables users to import their email and co
 User email uploads SHALL be disabled to protect against unauthorized files being introduced into the secured environment.
 
 - _Rationale:_ Allowing user email uploads could potentially introduce unauthorized or malicious files into the secured environment, posing a security risk. By disabling user email uploads, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
@@ -697,7 +697,7 @@ This section determines whether users have POP3 and IMAP access. Doing so allows
 POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
 
 - _Rationale:_ Enabling POP and IMAP access could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. By disabling POP and IMAP access, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 - _Note:_ POP and IMAP access MAY be enabled on a per-user and per-application basis as needed.
 
 - MITRE ATT&CK TTP Mapping
@@ -736,7 +736,7 @@ This section determines whether Google Workspace Sync allows data synchronizatio
 Google Workspace Sync SHOULD be disabled.
 
 - _Rationale:_ Enabling Google Workspace Sync could potentially expose sensitive agency or organization data to unauthorized access or loss, posing a security risk. By disabling Google Workspace Sync, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 - _Note:_ Google Workspace Sync MAY be enabled on a per-user basis as needed.
 
 - MITRE ATT&CK TTP Mapping
@@ -777,7 +777,7 @@ This section determines whether emails can be automatically forwarded from a use
 Automatic forwarding SHOULD be disabled, especially to external domains.
 
 - _Rationale:_ By enabling automatic forwarding, especially to external domains, adversaries could gain persistent access to a victim's email, potentially exposing sensitive agency or organization emails to unauthorized access or loss. By disabling automatic forwarding, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1114: Email Collection](https://attack.mitre.org/techniques/T1114/)
@@ -811,7 +811,7 @@ This section determines whether outgoing mail is delivered only through the Goog
 Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers SHALL be disabled.
 
 - _Rationale:_ Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers could potentially expose sensitive agency or organization emails to unauthorized access or loss, posing a security risk. By disabling this feature, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1114: Email Collection](https://attack.mitre.org/techniques/T1114/)
@@ -850,7 +850,7 @@ This section determines whether users are prompted with a warning for messages t
 Unintended external reply warnings SHALL be enabled.
 
 - _Rationale:_ Unintended external reply warnings can help reduce the risk of exposing sensitive information in replies to external messages. Enabling these warnings reminds users to treat external messages with caution, reducing this risk and enhancing the safety and integrity of user data and systems.
-- _Last modified:_ June 7, 2024
+- _Last modified:_ June 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -890,7 +890,7 @@ This section determines whether an email allowlist allows for messages from cert
 An email allowlist SHOULD not be implemented.
 
 - _Rationale:_ Implementing an email allowlist could potentially expose users to security risks as allowlisted senders bypass important security mechanisms, including spam filtering and sender authentication checks. By not implementing an allowlist, this risk can be reduced, enhancing the safety and integrity of the user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -932,7 +932,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.
 
 - _Rationale:_ Without enhanced pre-delivery message scanning, users may be exposed to phishing attempts, posing a security risk. By enabling this feature, potential phishing emails can be identified and blocked before reaching the user, reducing this risk and enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -944,7 +944,7 @@ Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.
 Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.
 
 - _Rationale:_ Using third-party or outside applications for enhanced pre-delivery message scanning that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -984,7 +984,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 Security sandbox SHOULD be enabled to provide additional protections for their email messages.
 
 - _Rationale:_ Without a security sandbox, emails with malicious content could potentially interact directly with the users' systems, posing a risk. By enabling the security sandbox, additional protections are provided for email messages, reducing this risk and enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -994,7 +994,7 @@ Security sandbox SHOULD be enabled to provide additional protections for their e
 Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.
 
 - _Rationale:_ Using third-party or outside applications for security sandbox that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -1037,7 +1037,7 @@ This section allows for email messages sent through other Google Workspace appli
 Comprehensive mail storage SHOULD be enabled to allow tracking of information across applications.
 
 - _Rationale:_ Without comprehensive mail storage, tracking of information across applications could be compromised, posing a potential security risk. Enabling comprehensive mail storage can reduce this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ November 14, 2023
+- _Last modified:_ November 2023
 
 - MITRE ATT&CK TTP Mapping
   - None
@@ -1072,7 +1072,7 @@ This section covers the settings relating to bypassing spam filters.
 Domains SHALL NOT be added to lists that bypass spam filters.
 
 - _Rationale:_ Legitimate emails may be incorrectly filtered by spam protections. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, however, provides for a large number of potentially unknown users to bypass spam protections.
-- _Last modified:_ April 10, 2024
+- _Last modified:_ April 2024
 - _Note:_ Allowed senders MAY be added.
 
 - MITRE ATT&CK TTP Mapping
@@ -1085,7 +1085,7 @@ Domains SHALL NOT be added to lists that bypass spam filters.
 Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 
 - _Rationale:_ Legitimate emails may be incorrectly filtered by spam protections. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, however, provides for a large number of potentially unknown users to bypass spam protections.
-- _Last modified:_ April 10, 2024
+- _Last modified:_ April 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -1097,7 +1097,7 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.
 
 - _Rationale:_ Bypassing spam filters and hiding warning for all messages from internal and external senders creates a security risk because all messages are allowed to bypass filters. Disabling this feature mitigates the risk.
-- _Last modified:_ April 10, 2024
+- _Last modified:_ April 2024
 
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
