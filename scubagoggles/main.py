@@ -231,6 +231,7 @@ def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
 
     parser.add_argument('--version',
                         '-v',
+                        default = 'v0.60.0',
                         metavar = '<OPA-version>',
                         help = 'Version of OPA to download (default: latest '
                             'version)')

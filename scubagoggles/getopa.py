@@ -58,7 +58,7 @@ def getopa(arguments: argparse.Namespace):
 
 
 def download_opa(opa_dir: Path,
-                 version: str = None,
+                 version: str = 'v0.60.0',
                  verify: bool = False,
                  force: bool = False):
 
