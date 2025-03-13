@@ -394,7 +394,7 @@ class Orchestrator:
 
         report_file = out_folder / f'{out_jsonfile}.json'
         with report_file.open('w', encoding='utf-8') as results_file:
-            json.dump(total_output, results_file, indent=4)
+            json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
 
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
@@ -457,10 +457,6 @@ class Orchestrator:
             # created the output. If the provider output doesn't exist as a
             # standalone file, create it from the scuba results file so the
             # other functions can execute as normal.
-            args_dict = vars(args)
-            param_out_path = os.path.join(args.outputpath, 'args_param.json')
-            with open(param_out_path, mode='w', encoding='UTF-8') as parm_file:
-                json.dump(args_dict, parm_file, indent=4, cls=ArgumentsEncoder)
 
             # find all files that match the outjsonfilename_guid.json convention
             results_file_pattern = os.path.join(
