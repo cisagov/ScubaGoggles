@@ -4,8 +4,7 @@
 > Use of this tool requires access to an internet browser for initial setup
 > and to view the html report output.
 
-Setting up to run ScubaGoggles as a user for the first time involves the following steps. If you are a developer looking to contribute to ScubaGoggles, see the [Development Guide](../development/DEVELOPMENTGUIDE.md) for instructions on setting up ScubaGoggles for development.
-
+Setting up to run ScubaGoggles as a user for the first time involves the following steps:
 1. Installing [Python 3](https://www.python.org/) on your system.
 2. (Optional) Creating and activating a Python virtual environment.
 3. Downloading the latest release.
@@ -79,6 +78,9 @@ To download ScubaGoggles, click [here](https://github.com/cisagov/ScubaGoggles/r
 to display the download site in a browser.  Download the file with the name ending
 in `.whl` (known as a Python "wheel" file), for example
 `scubagoggles-<version>-py3-none-any.whl`.
+
+> [!NOTE]
+> If you are a developer looking to contribute to ScubaGoggles, see the [Development Guide](../development/DEVELOPMENTGUIDE.md) for instructions on setting up ScubaGoggles for development.
 
 ### Installing ScubaGoggles
 
