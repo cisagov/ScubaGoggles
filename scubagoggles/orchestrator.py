@@ -13,6 +13,7 @@ import uuid
 import webbrowser
 import glob
 
+from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
 from tqdm import tqdm
@@ -31,6 +32,42 @@ class UserRuntimeError(RuntimeError):
     user) for which a traceback might not be appropriate (error has nothing
     to do with the code).
     """
+
+class ArgumentsEncoder(json.JSONEncoder):
+
+    """Custom JSON encoder for the ScubaGoggles command line arguments data
+    structure.
+    """
+
+    def default(self, o):
+
+        """Handles special encoding for certain fields in the arguments
+        data structure.
+
+        For example, there are some fields in the arguments for internal
+        use, such as the dispatch function.  This is not serializable with
+        the default encoder.
+
+        The Path values are converted to strings.
+
+        Any data types not handled by this method are processed by the base
+        class method.
+
+        :param o: data (arbitrary type) to be serialized.
+
+        :return: a serializable version of the given object.
+        """
+
+        # The "dispatch" value is a function and does not need to be
+        # serialized.
+
+        if isinstance(o, Callable):
+            return None
+
+        if isinstance(o, Path):
+            return str(o)
+
+        return super().default(o)
 
 
 class Orchestrator:
@@ -345,15 +382,18 @@ class Orchestrator:
             total_output.update({'Summary': summary})
             total_output.update({'Results': results})
 
+        args_dict = vars(args)
+
         # Create the ScubaResults files
         scuba_results_file = out_folder / f'{args.outputproviderfilename}.json'
         with scuba_results_file.open(encoding='UTF-8') as file:
             raw_data = json.load(file)
+            raw_data.update({'scuba_config': args_dict})
         total_output.update({'Raw': raw_data})
 
         report_file = out_folder / f'{out_jsonfile}.json'
         with report_file.open('w', encoding='utf-8') as results_file:
-            json.dump(total_output, results_file, indent=4)
+            json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
 
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
