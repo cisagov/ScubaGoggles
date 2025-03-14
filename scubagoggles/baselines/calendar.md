@@ -170,7 +170,7 @@ To configure the settings for Calendar Interop:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
 3.  Select **Calendar Interop management**.
-4.  Select **Exchange availability in Calendar**. 
+4.  Select **Exchange availability in Calendar**.
 5.  Uncheck the **Allow Google Calendar to display Exchange users availability** checkbox.
 6.  Select **Save**.
 
@@ -181,8 +181,8 @@ To configure the settings for Calendar Interop:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
 3.  Select **Calendar Interop management**.
-4.  Select **Exchange availability in Calendar**. 
-5.  Select **Allow Google Calendar to display Exchange users availability**.  
+4.  Select **Exchange availability in Calendar**.
+5.  Select **Allow Google Calendar to display Exchange users availability**.
 6.  Select **OAuth 2.0 client credentials**
 7.  Select **Save**.
 
@@ -217,5 +217,5 @@ Appointment Schedule with Payments SHALL be disabled.
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
 3.  Select **Advanced Settings -\> Appointment schedules with payments**
-4.  Ensure the **Allow appointment schedule users to require payments for booked appointments through their own payment provider accounts** checkbox is unchecked. 
+4.  Ensure the **Allow appointment schedule users to require payments for booked appointments through their own payment provider accounts** checkbox is unchecked.
 5.  Select **Save**.
