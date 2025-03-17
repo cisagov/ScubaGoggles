@@ -44,6 +44,26 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
 
     parser.set_defaults(dispatch=gws_dispatch)
 
+    help_msg = ('The location and name of the OAuth / service account '
+            'credentials json file. ')
+    if user_config.credentials_file is not None:
+        help_msg += f'Defaults to {user_config.credentials_file}.'
+        parser.add_argument('--credentials',
+                            '-c',
+                            default=Path(user_config.credentials_file),
+                            metavar='<credentials-JSON-file>',
+                            type=path_parser,
+                            help=help_msg)
+    else:
+        help_msg += ('Required unless the credentials path '
+            'has been saved using the ScubaGoggles setup utility.')
+        parser.add_argument('--credentials',
+                            '-c',
+                            metavar='<credentials-JSON-file>',
+                            default=None,
+                            type=path_parser,
+                            help=help_msg)
+
     help_msg = ('A list of one or more abbreviated GWS baseline names that the '
                 'tool will assess. Defaults to all baselines. '
                 f'Choices: {(", ".join(gws_baselines))}')
@@ -72,16 +92,6 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar='<output-JSON-file>',
                         help=help_msg)
 
-    help_msg = ('The location and name of the OAuth / service account '
-                'credentials json file.  Defaults to '
-                f'"{user_config.credentials_file}".')
-    parser.add_argument('--credentials',
-                        '-c',
-                        default=Path(user_config.credentials_file),
-                        metavar='<credentials-JSON-file>',
-                        type=path_parser,
-                        help=help_msg)
-
     help_msg = ('Local file path to a YAML formatted configuration file. '
                 'Configuration file parameters can be used in place of '
                 'command-line parameters. Additional parameters and variables '
@@ -108,14 +118,10 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar='<customer-id>',
                         help=help_msg)
 
-    # If the user defaults file does not exist, assume the setup util hasn't
-    # been run. As the setup util creates the ~/.scubagoggles directory,
-    # fallback to the backup default (the current directory).
-    opa_dir = "./" if not user_config.file_exists else user_config.opa_dir
     help_msg = ('The directory containing the OPA executable. '
-                f'Defaults to {opa_dir}.')
+                f'Defaults to {user_config.opa_dir}.')
     parser.add_argument('--opapath',
-                        default=Path(opa_dir),
+                        default=Path(user_config.opa_dir),
                         metavar='<opa-directory>',
                         type=path_parser,
                         help=help_msg)

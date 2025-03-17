@@ -26,7 +26,7 @@ class UserConfig:
 
     _defaults = {'scubagoggles': {'opa_dir': '~/.scubagoggles',
                                   'output_dir': './',
-                                  'credentials': './credentials.json'}}
+                                  'credentials': None}}
 
     # This is the main key (TOML: table) in the configuration
     _main = _defaults['scubagoggles']

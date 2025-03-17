@@ -29,6 +29,9 @@ SCuBA automated conformance check for Google Workspace (GWS) products
 
 options:
   -h, --help            show this help message and exit
+  --credentials <credentials-JSON-file>, -c <credentials-JSON-file>
+                        The location and name of the OAuth / service account credentials json file. Required unless the
+                        credentials path has been saved using the ScubaGoggles setup utility.
   --baselines <baseline> [<baseline> ...], -b <baseline> [<baseline> ...]
                         A list of one or more abbreviated GWS baseline names that the tool will assess. Defaults to all baselines. Choices: calendar, chat,
                         classroom, commoncontrols, drive, gmail, groups, meet, rules, sites
@@ -36,8 +39,6 @@ options:
                         The folder path where both the output JSON & HTML report will be created.
   --outjsonfilename <output-JSON-file>
                         The name of the file that encapsulates all assessment output. Defaults to ScubaResults.
-  --credentials <credentials-JSON-file>, -c <credentials-JSON-file>
-                        The location and name of the OAuth / service account credentials json file.
   --config <YAML-config-file>
                         Local file path to a YAML formatted configuration file. Configuration file parameters can be used in place of command-line
                         parameters. Additional parameters and variables not available on the command line can also be included in the file that will be
@@ -49,7 +50,7 @@ options:
                         The customer ID the tool should run on. Defaults to "my_customer" which will be the domain of the user / service account
                         authenticating.
   --opapath <opa-directory>
-                        The directory containing the OPA executable.
+                        The directory containing the OPA executable. Defaults to ~/.scubagoggles/.
   --regopath <directory>
                         The relative path to the directory contain the folder containing the rego files.
   --documentpath <directory>

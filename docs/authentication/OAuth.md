@@ -29,13 +29,14 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 18. Click **CREATE**
 19. Click **DOWNLOAD JSON** from the resulting **OAuth client created** page
 20. Click **OK**
-21. Optionally run the following command to configure ScubaGoggles to use those credentials by default: `scubagoggles setup --credentials [path to JSON credentials file]`. If you skip this step, by default ScubaGoggles will look for a file called "credentials.json" in the current working directory of the user calling ScubaGoggles. Alternatively, the credentials path can be indicated at run time using the `credentials` parameter (see [Parameters](/docs/usage/Parameters.md)).
-22. Go back the menu on the left and click **Enabled API Services**
-23. In the center screen click **Enabled APIs & Services**
-24. Search for and enable the **Admin SDK API**
-25. Search for and enable the **Groups Settings API**
-26. Search for and enable the **Cloud Identity API**
-27. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
+21. Move the credentials file to a safe location. There is no set location requirement for this file, but it should be saved somewhere it won't be inadvertently deleted or accessed by unauthorized entities.
+22. Optionally run the following command to configure ScubaGoggles to use those credentials by default: `scubagoggles setup --credentials [path to JSON credentials file]`. If you skip this step, you will be required to indicate the path at run time using the `credentials` parameter (see [Parameters](/docs/usage/Parameters.md)).
+23. Go back the menu on the left and click **Enabled API Services**
+24. In the center screen click **Enabled APIs & Services**
+25. Search for and enable the **Admin SDK API**
+26. Search for and enable the **Groups Settings API**
+27. Search for and enable the **Cloud Identity API**
+28. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
     with an account with the necessary privileges and click allow.
 
 ## Add the Oauth App to the allowlist
