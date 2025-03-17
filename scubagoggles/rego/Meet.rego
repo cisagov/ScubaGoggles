@@ -234,3 +234,39 @@ if {
     Conditions := {count(NonCompliantOUs5_1) == 0, count(NonCompliantGroups5_1) == 0}
     Status := (false in Conditions) == false
 }
+
+##############
+# GWS.MEET.6 #
+##############
+
+#
+# Baseline GWS.MEET.6.1
+#--
+
+MeetId6_1 := utils.PolicyIdWithSuffix("GWS.MEET.6.1")
+
+tests contains {
+    "PolicyId": MeetId6_1,
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#
+# Baseline GWS.MEET.6.2
+#--
+
+MeetId6_2 := utils.PolicyIdWithSuffix("GWS.MEET.6.2")
+
+tests contains {
+    "PolicyId": MeetId6_2,
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
