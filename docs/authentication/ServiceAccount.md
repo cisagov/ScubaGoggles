@@ -16,6 +16,11 @@ Only complete this section if not authenticating via [OAuth](OAuth.md). See [Aut
 1. Enter the `client_id` from the downloaded credentials (also visible after clicking on the created Service account under Details -> Unique ID)
 1. Enter each OAuth scope as listed in [Permissions](../prerequisites/Prerequisites.md#permissions)
 1. Select **AUTHORIZE**
+1. Return to https://console.cloud.google.com. Open the menu on the left and click **APIs and Services** -> **Enabled API Services**
+1. In the center screen click **Enable APIs & Services**
+1. Search for and enable the **Admin SDK API**
+1. Search for and enable the **Groups Settings API**
+1. Search for and enable the **Cloud Identity API**
 1. Finally, run ScubaGoggles with the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
 
 > [!NOTE]

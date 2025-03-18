@@ -31,8 +31,8 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 20. Click **OK**
 21. Move the credentials file to a safe location. There is no set location requirement for this file, but it should be saved somewhere it won't be inadvertently deleted or accessed by unauthorized entities.
 22. Optionally run the following command to configure ScubaGoggles to use those credentials by default: `scubagoggles setup --credentials [path to JSON credentials file]`. If you skip this step, you will be required to indicate the path at run time using the `credentials` parameter (see [Parameters](/docs/usage/Parameters.md)).
-23. Go back the menu on the left and click **Enabled API Services**
-24. In the center screen click **Enabled APIs & Services**
+23. Go back to menu on the left and click **APIs and Services** -> **Enabled API Services**
+24. In the center screen click **Enable APIs & Services**
 25. Search for and enable the **Admin SDK API**
 26. Search for and enable the **Groups Settings API**
 27. Search for and enable the **Cloud Identity API**
