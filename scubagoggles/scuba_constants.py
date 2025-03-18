@@ -35,3 +35,5 @@ class ApiUrl(Enum):
 API_LINKS = {
     api.value: f'<a href="{ApiUrl[api.name].value}">{api.value}</a>' for api in ApiReference
 }
+
+OPA_VERSION = 'v1.0.1'

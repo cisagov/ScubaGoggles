@@ -17,6 +17,7 @@ from scubagoggles.orchestrator import Orchestrator, UserRuntimeError
 from scubagoggles.purge import purge_reports
 from scubagoggles.reporter.md_parser import MarkdownParserError
 from scubagoggles.scuba_argument_parser import ScubaArgumentParser
+from scubagoggles.scuba_constants import OPA_VERSION
 from scubagoggles.user_setup import default_file_names, find_legacy_dir, \
     user_setup
 from scubagoggles.utils import path_parser
@@ -231,7 +232,7 @@ def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
 
     parser.add_argument('--version',
                         '-v',
-                        default = 'v0.60.0',
+                        default = OPA_VERSION,
                         metavar = '<OPA-version>',
                         help = 'Version of OPA to download (default: latest '
                             'version)')
