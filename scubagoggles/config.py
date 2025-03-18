@@ -5,7 +5,7 @@ location, and the OPA executable location.
 
 import os
 
-from typing import Union
+from typing import Iterable, Union
 from pathlib import Path
 
 from yaml import dump, Dumper, load, Loader
@@ -54,6 +54,7 @@ class UserConfig:
         if self._config_file.exists():
             with self._config_file.open(encoding = 'utf-8') as in_stream:
                 self._doc = load(in_stream, Loader)
+            self._validate()
             self._file_exists = True
         else:
             self._doc = dict(self._defaults)
@@ -193,3 +194,37 @@ class UserConfig:
             config_path.unlink(missing_ok = True)
 
         self.write()
+
+    def _validate(self, keys: Iterable = None) -> Union[list, None]:
+
+        """Validates the current configuration by checking the dictionary
+        keys to make sure they match the keys in the default configuration.
+        This is a recursive method, initially called without arguments.
+
+        :return: list of bad key names or None if configuration keys are
+            correct.
+        """
+
+        bad_keys = []
+
+        if not keys:
+            for key in self._doc:
+                bad_keys += self._validate((key,))
+            if bad_keys:
+                raise KeyError(f'? {", ".join(bad_keys)} key(s) not '
+                               'recognized')
+            return None
+
+        current_defaults = self._defaults
+
+        current_doc = self._doc
+
+        for key in keys:
+            current_defaults = current_defaults[key]
+            current_doc = current_doc[key]
+
+        if isinstance(current_doc, dict):
+            for key in current_doc:
+                bad_keys += self._validate([*keys, key])
+
+        return bad_keys
