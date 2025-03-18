@@ -464,7 +464,7 @@ class Orchestrator:
         args.outputpath = args.outputpath.resolve()
 
         if args.credentials is None:
-            raise UserRuntimeError(f'Google credentials file path not provided. '
+            raise UserRuntimeError('Google credentials file path not provided. '
                 'Either save the credentials path using the ScubaGoggles setup '
                 'utility or specify the path using the "--credentials" option.')
         args.credentials = args.credentials.resolve()
