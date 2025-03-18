@@ -35,4 +35,4 @@ runs:
       run: |
         ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
         scubagoggles -l d setup -nd -o ~/scubagoggles -c credentials.json
-        scubagoggles getopa -v ${{ inputs.opa-version }}
+        scubagoggles getopa -v ${{ env.opa-version }}
