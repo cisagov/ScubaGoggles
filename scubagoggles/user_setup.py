@@ -57,7 +57,10 @@ def user_setup(arguments: argparse.Namespace):
     print("Configured default locations:")
     print(f' - Output directory: {config.output_dir}')
     print(f' - OPA executable: {config.opa_dir}')
-    print(f' - API credentials file: {config.credentials_file}')
+    if config.credentials_file is None:
+        print(f' - API credentials file: Not configured yet')
+    else:
+        print(f' - API credentials file: {config.credentials_file}')
 
     if modified:
         config.write()
