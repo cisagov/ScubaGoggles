@@ -72,38 +72,23 @@ Make note of the command used to activate the virtual environment.  You will nee
 command whenever you create a new session (i.e., terminal) where you will be
 running ScubaGoggles.
 
-## Downloading the Latest ScubaGoggles Release
+## Installing the Latest ScubaGoggles Release
+> [!NOTE]
+> If you are interested in contributing to ScubaGoggles or for any reason need to install the latest development code, please see the [Development Guide](../development/DEVELOPMENTGUIDE.md) for instructions on setting up ScubaGoggles for development. Otherwise, continue with the instructions below.
 
-To download ScubaGoggles, click [here](https://github.com/cisagov/ScubaGoggles/releases)
+To install ScubaGoggles:
+1. Download ScubaGoggles by clicking [here](https://github.com/cisagov/ScubaGoggles/releases/)
 to display the download site in a browser.  Download the file with the name ending
 in `.whl` (known as a Python "wheel" file), for example
 `scubagoggles-<version>-py3-none-any.whl`.
-
-> [!NOTE]
-> If you are a developer looking to contribute to ScubaGoggles, see the [Development Guide](../development/DEVELOPMENTGUIDE.md) for instructions on setting up ScubaGoggles for development.
-
-### Installing ScubaGoggles
-
-ScubaGoggles is installed as a Python package, whether you are using a virtual
-environment or the system's Python environment (if you have write access to it).
-
-Install ScubaGoggles using Python's `pip` utility.  If you are using a virtual
-environment, make sure your current session has activated the virtual
-environment.  Normally, the command you use is `pip` or `pip3`.
-
+2. If you are using a virtual environment, ensure your environment is activated by running the appropriate command from the previous section.
+3. Run the following command, replacing `scubagoggles-<version>-py3-none-any.whl` with the location and version of the ScubaGoggles wheel file you
+downloaded. Depending on your system, you may also need to substitute `pip` with `pip3`.
 ```
 pip install scubagoggles-<version>-py3-none-any.whl
 ```
 
-where you will replace `scubagoggles-<version>-py3-none-any.whl` in the above
-command with the location and version of the ScubaGoggles wheel file you
-downloaded.
-
-This command will install ScubaGoggles and all its dependencies.  The system on
-which ScubaGoggles is installed must be able to access the internet so the
-dependencies may be downloaded.
-
-At this point, the ScubaGoggles module will be installed, but additional setup
+At this point, ScubaGoggles will be installed, but additional setup
 steps are necessary before it can be used. Continue to [Download the OPA executable](OPA.md)
 for the next steps.
 
