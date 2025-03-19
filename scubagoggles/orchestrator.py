@@ -80,6 +80,10 @@ class Orchestrator:
         """
 
         self._args = args
+        self._md_parser = MarkdownParser(args.documentpath)
+
+        md_products = set(args.baselines) - {'rules'}
+        self._baseline_policies = self._md_parser.parse_baselines(md_products)
 
     @classmethod
     def gws_products(cls) -> dict:
@@ -101,12 +105,13 @@ class Orchestrator:
                       args.credentials,
                       args.subjectemail) as provider:
             provider_dict = provider.call_gws_providers(products, args.quiet)
-            provider_dict['baseline_suffix'] = Version.suffix
             provider_dict['successful_calls'] = list(provider.successful_calls)
-            provider_dict['unsuccessful_calls'] = list(
-                provider.unsuccessful_calls)
-            provider_dict['break_glass_accounts'] = break_glass_accounts
-            provider_dict['report_uuid'] = args.report_uuid
+            provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
+
+        provider_dict['baseline_suffix'] = self._md_parser.default_version
+        provider_dict['baseline_versions'] = self._md_parser.policy_version_map
+        provider_dict['break_glass_accounts'] = break_glass_accounts
+        provider_dict['report_uuid'] = args.report_uuid
 
         out_jsonfile = args.outputpath / args.outputproviderfilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
@@ -125,8 +130,7 @@ class Orchestrator:
         results = []
         for product in products_bar:
             product_name = product
-            input_file = args.outputpath / \
-                f'{args.outputproviderfilename}.json'
+            input_file = args.outputpath / f'{args.outputproviderfilename}.json'
             opa_path = args.opapath
             rego_path = args.regopath
 
@@ -265,11 +269,7 @@ class Orchestrator:
         # Create the SCuBA results JSON file name
         out_jsonfile = self._get_full_out_jsonfile_name(report_uuid)
 
-        md_products = set(args.baselines) - {'rules'}
-
-        md_parser = MarkdownParser(args.documentpath)
-
-        baseline_policies = md_parser.parse_baselines(md_products)
+        baseline_policies = self._baseline_policies
 
         if 'rules' in args.baselines:
             # There's no baseline specific to rules, so this case

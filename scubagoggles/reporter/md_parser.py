@@ -38,7 +38,11 @@ class MarkdownParser:
 
     _baseline_re = re.compile(r'####\s*(?P<baseline>GWS\.(?P<product>[^.]+)'
                               r'\.(?P<id>\d+)\.(?P<item>\d+)'
-                              r'(?P<version>v\d+\.\d+))$')
+                              r'(?P<version>v\d+))$')
+
+    # This handles the single exception case where the combined drive
+    # and docs product has a product name of "drive", but the baseline
+    # identifiers are "drivedocs" (e.g., GWS.DRIVEDOCS.1.8). Arggh.
 
     _baseline_id_map = {'drive': 'drivedocs'}
 
@@ -55,11 +59,11 @@ class MarkdownParser:
         if not self._baseline_dir.is_dir():
             raise NotADirectoryError(f'{self._baseline_dir}')
 
-        # This handles the single exception case where the combined drive
-        # and docs product has a product name of "drive", but the baseline
-        # identifiers are "drivedocs" (e.g., GWS.DRIVEDOCS.1.8). Arggh.
+        self._default_version = None
 
-        self._baseline_id_map = {'drive': 'drivedocs'}
+        self._version_policy_map = defaultdict(set)
+
+        self._policy_version_map = {}
 
     @classmethod
     def baseline_identifier(cls, product: str) -> str:
@@ -72,6 +76,26 @@ class MarkdownParser:
         """
 
         return cls._baseline_id_map.get(product, product).lower()
+
+    @property
+    def default_version(self):
+
+        """Returns the default policy id version suffix.  This is the suffix
+        to use for any policy id which is not present in the "version policy
+        map".
+        """
+
+        return self._default_version
+
+    @property
+    def policy_version_map(self):
+
+        """Returns a dictionary where the policy identifier is the key and
+        the value is its baseline suffix.  Policies will only be present in
+        this map if the suffix is different from the default.
+        """
+
+        return self._policy_version_map
 
     def parse_baselines(self, products: Iterable[str]) -> dict:
 
@@ -90,6 +114,8 @@ class MarkdownParser:
         for product in products:
             product_result = self._parse(product)
             result.update(product_result)
+
+        self._create_policy_version_map()
 
         return result
 
@@ -285,7 +311,7 @@ class MarkdownParser:
                                        group_id,
                                        group_name)
 
-                if version != Version.suffix:
+                if  not Version.is_valid_suffix(version):
                     message = f'invalid baseline version ({version})'
                     self._parser_error(md_file,
                                        message,
@@ -327,6 +353,9 @@ class MarkdownParser:
                 control = {'Id': baseline, 'Value': value}
                 group['Controls'].append(control)
 
+                policy_id = baseline.removesuffix(version)
+                self._version_policy_map[version].add(policy_id)
+
                 # Break out of this inner loop, and as long as we're not
                 # at the end of the file, the outer loop will re-enter
                 # the inner loop to locate the next baseline section.
@@ -334,6 +363,28 @@ class MarkdownParser:
                 break
 
         return lines_seen
+
+    def _create_policy_version_map(self):
+
+        """Creates the policy version map from the existing version policy map,
+        which is a reverse mapping.  It also determines the "default" version
+        suffix based on the version with the most policies.
+        """
+
+        if not self._version_policy_map:
+            return
+
+        # The version having the most policies is the default, and all other
+        # policies will be mapped to their version suffixes.
+
+        sorted_versions = sorted(self._version_policy_map.keys(),
+                                 key = lambda k: len(self._version_policy_map[k]),
+                                 reverse = True)
+
+        self._default_version = sorted_versions[0]
+
+        self._policy_version_map = {p: v for v in sorted_versions[1:]
+                                    for p in self._version_policy_map[v]}
 
     @staticmethod
     def _parser_error(md_file: Path,

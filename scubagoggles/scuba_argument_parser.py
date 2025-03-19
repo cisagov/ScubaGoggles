@@ -3,7 +3,6 @@ Class for parsing the config file and command-line arguments.
 """
 
 import argparse
-import re
 import warnings
 
 from pathlib import Path
@@ -12,7 +11,6 @@ import yaml
 
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.utils import path_parser
-from scubagoggles.version import Version
 
 
 class ScubaArgumentParser:
@@ -73,8 +71,6 @@ class ScubaArgumentParser:
                 continue
             vars(args)[param] = config[param]
 
-        self.fix_omit_ids(args)
-
         # Check for logical errors in the resulting configuration
         self.validate_config(args)
 
@@ -104,33 +100,6 @@ class ScubaArgumentParser:
                 aux_parser.add_argument(*dests)
         cli_args, _ = aux_parser.parse_known_args()
         return cli_args
-
-    @staticmethod
-    def fix_omit_ids(args : argparse.Namespace) -> None:
-
-        """If there are policy ids specified to be omitted, make sure they
-        have the correct version suffix so they can be correctly compared
-        with the current release's policy ids.
-        """
-
-        if 'omitpolicy' not in args:
-            return
-
-        version_suffix_re = re.compile(r'v\d+\.\d+$')
-
-        omit_policies = args.omitpolicy
-
-        policy_id_map = {}
-
-        for policy_id in omit_policies:
-            new_id = (version_suffix_re.sub('', policy_id).upper()
-                      + Version.suffix)
-            policy_id_map[policy_id] = new_id
-
-        args.omitpolicy = {new_id: omit_policies[old_id]
-                           for old_id, new_id in policy_id_map.items()}
-
-        return
 
     @staticmethod
     def validate_config(args : argparse.Namespace) -> None:
