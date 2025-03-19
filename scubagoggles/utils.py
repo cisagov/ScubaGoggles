@@ -115,33 +115,6 @@ def prompt_boolean(prompt: str, default: bool = True) -> bool:
     return (not answer and default) or (answer and strtobool(answer))
 
 
-def prompt_string(prompt: str, default: str = None) -> str:
-
-    """Asks the user to enter a string to a given prompt.
-
-    :param str prompt: the question/confirmation to ask the user.
-
-    :param str default: [optional] the default string response to return
-        if the user presses "enter" ("return").  It defaults to None.
-
-    :return: entered string or default.
-    """
-
-    suffix = f' [{default}]' if default else ''
-
-    # This handles when the user enters EOF (which is ^Z in Windows or ^D
-    # in other OS environments).  It's assumed that this response is
-    # equivalent to ^C (user abort).
-
-    try:
-        answer = input(f'{prompt}{suffix}? ').strip()
-
-    except EOFError as e:
-        raise KeyboardInterrupt() from e
-
-    return answer if answer else default
-
-
 def strtobool(value: str) -> bool:
 
     """Convert a string representation of truth to a boolean (True/False).
