@@ -1526,48 +1526,23 @@ if {
 
 CommonControlsId16_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.16.1")
 
-NonComplianceMessage16_1 := "Access to additional services without individual control is turned on"
-
-# NOTE: This setting cannot be controlled at the group level
+NonComplianceMessage16_1 := "Access to additional services without individual control is ON"
 
 NonCompliantOUs16_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage16_1
 }
 if {
-    some OU in utils.OUsWithEvents
-    # Note that this setting requires the custom ToggleServiceEvents rule.
-    # Filter based on the service name of the event, otherwise all events are returned.
-    Events := {
-        Event | some Event in ToggleServiceEvents;
-        Event.OrgUnit == OU;
-        Event.ServiceName == "DISABLE_UNLISTED_SERVICES"
-    }
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "false"
-}
+    some OU, settings in input.policies
 
-tests contains {
-    "PolicyId": CommonControlsId16_1,
-    "Criticality": "Should",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    # Filter based on the service name of the event, otherwise all events are returned.
-    Events := {
-        Event | some Event in ToggleServiceEvents;
-        Event.OrgUnit == utils.TopLevelOU;
-        Event.ServiceName == "DISABLE_UNLISTED_SERVICES"
-    }
-    count(Events) == 0
+    # This is a "backwards" logic one from Google - the setting name is key to
+    # understanding:  the "restrictions" are "disabled" when users can
+    # access additional services.
+
+    entServiceState := utils.AppExplicitStatus(input.policies,
+                                               "enterprise_service_restrictions",
+                                               OU)
+    entServiceState != "ENABLED"
 }
 
 tests contains {
@@ -1579,13 +1554,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    # Filter based on the service name of the event, otherwise all events are returned.
-    Events := {
-        Event | some Event in ToggleServiceEvents;
-        Event.OrgUnit == utils.TopLevelOU;
-        Event.ServiceName == "DISABLE_UNLISTED_SERVICES"
-    }
-    count(Events) > 0
     Status := count(NonCompliantOUs16_1) == 0
 }
 #--

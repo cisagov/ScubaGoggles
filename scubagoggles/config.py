@@ -1,6 +1,6 @@
 """ScubaGoggles User Configuration - The UserConfig class implementation
-manages the creation, modification, and use of the ScubaGoggles user
-configuration file.
+manages the default values for the output location, the credentials file
+location, and the OPA executable location.
 """
 
 import os
@@ -14,31 +14,26 @@ from yaml import dump, Dumper, load, Loader
 class UserConfig:
 
     """Implementation of user configuration for ScubaGoggles.  Certain
-    settings, such as the directory for ScubaGoggles output, location of the
-    Google API credentials file, and the location of the OPA executable,
-    are managed by this class.
+    settings, specifically the directory for ScubaGoggles output,
+    location of the Google API credentials file, and the location of
+    the OPA executable, are managed by this class.
     """
 
     # FWIW, this was originally implemented using TOML (Tom's Obvious Minimal
     # Language) (hence the reference to "_doc"), but was converted to use YAML
     # for compatibilty with the other user configuration.  For ScubaGoggles,
-    # the configuration file is named .scubagoggles (note the leading dot),
-    # located in the user's home directory.
+    # the configuration file is stored at ~/.scubagoggles/userdefaults.yaml.
 
-    _defaults = {'scubagoggles': {'opa_dir': None,
-                                  'output_dir': '~/scubagoggles'}}
+    _defaults = {'scubagoggles': {'opa_dir': '~/.scubagoggles',
+                                  'output_dir': './',
+                                  'credentials': None}}
 
-    # This is the main key (TOML: table) in the configuration, and is used to
-    # continue defining the defaults.  For example, we want the default
-    # credentials file default after the initial defaults dictionary has been
-    # defined (so we can access the output directory).
-
+    # This is the main key (TOML: table) in the configuration
     _main = _defaults['scubagoggles']
 
-    _defaults['scubagoggles']['credentials'] = (f'{_main["output_dir"]}/'
-                                                'credentials.json')
+    _default_config_file = Path('~/.scubagoggles/userdefaults.yaml').expanduser()
 
-    _default_config_file = Path('~/.scubagoggles').expanduser()
+    _legacy_config_file = Path('~/.scubagoggles').expanduser()
 
     def __init__(self, config_file: Union[str, os.PathLike] = None):
 
@@ -46,15 +41,15 @@ class UserConfig:
         configuration stored in the class.
 
         :param Path config_file: [optional] user configuration file.  By
-            default, this is ~/.scubagoggles
+            default, this is ~/.scubagoggles/userdefaults.yaml
         """
+
+        self._transition_config_file(config_file)
 
         self._config_file = (Path(os.path.expandvars(config_file))
                              if config_file else self._default_config_file)
 
         self._config_file = self._config_file.expanduser()
-
-        self._check = True
 
         if self._config_file.exists():
             with self._config_file.open(encoding = 'utf-8') as in_stream:
@@ -68,14 +63,19 @@ class UserConfig:
     @property
     def file_exists(self) -> bool:
 
-        """Returns True if the user's configuration file existed at the time
-        this instance was created.  False is returned otherwise, including
-        if the file does exist but was written after this instance was
-        created.  This property is being used to determine if a user's
-        "legacy" setup area should be looked for.
+        """Returns True if the user's defaults file exists, False otherwise.
+        This property is being used to determine if a user has used the setup
+        utility.
         """
 
         return self._file_exists
+
+    @property
+    def config_path(self):
+
+        """Returns the config file location.
+        """
+        return self._config_file
 
     def _get_path_config(self, name: str) -> Union[Path, None]:
 
@@ -87,6 +87,8 @@ class UserConfig:
         :return: configuration value as a Path.
         """
 
+        # Return None if the variable wasn't defined in the user defaults
+        # file
         value = (self._doc['scubagoggles'][name]
                  if name in self._doc['scubagoggles'] else None)
 
@@ -101,13 +103,7 @@ class UserConfig:
         """Returns the Path to the Google API credentials file.
         """
 
-        credentials = self._get_path_config('credentials')
-
-        if self._check and credentials and (not credentials.exists()
-                                            or not credentials.is_file()):
-            raise FileNotFoundError(f'? {credentials} - credentials not found')
-
-        return credentials
+        return self._get_path_config('credentials')
 
     @credentials_file.setter
     def credentials_file(self, value: Union[str, os.PathLike]):
@@ -135,15 +131,6 @@ class UserConfig:
         :param value: location of the OPA executable file.
         """
 
-        opa_path = Path(os.path.expandvars(value)).expanduser()
-
-        if not opa_path.exists() or not opa_path.is_dir():
-            raise NotADirectoryError(f'? {opa_path} - directory not found')
-
-        # Purposely storing this as the given value, so it's stored in the
-        # file as given.  For example, if '~/opa' is given, we check it above
-        # in expanded form, but still store it unexpanded.
-
         self._doc['scubagoggles']['opa_dir'] = str(value)
 
     @property
@@ -162,37 +149,51 @@ class UserConfig:
         :param value: location of the output directory.
         """
 
-        output_dir = Path(os.path.expandvars(value)).expanduser()
-
-        if not output_dir.exists() or not output_dir.is_dir():
-            raise NotADirectoryError(f'? {output_dir} - directory not found')
-
-        # Purposely storing this as the given value, so it's stored in the
-        # file as given.  For example, if '~/scubagoggles' is given, we check
-        # it above in expanded form, but still store it unexpanded.
-
         self._doc['scubagoggles']['output_dir'] = str(value)
-
-    def path_check(self, check: bool) -> None:
-
-        """Setter property that alters path checking behavior.
-
-        :param bool check: check valid paths and raise exceptions
-            if True.  Should only be False during initial configuration when
-            directories/files may not yet exist.
-        """
-
-        self._check = check
-
-    path_check = property(fset = path_check)
 
     def write(self):
 
         """Writes the configuration document in YAML format.
         """
 
+        # Since the default location for the config is
+        # ~/.scubagoggles/scubadefaults.yaml, the .scubagoggles
+        # folder may need to be created first
+        if not self._config_file.parent.exists():
+            self._config_file.parent.mkdir()
+
         with self._config_file.open('w', encoding = 'utf-8') as out_stream:
             dump(self._doc, out_stream, Dumper)
+
+        self._file_exists = True
+
+    def _transition_config_file(self, config_file: Union[str, os.PathLike] = None):
+
+        """Transitions a user's configuration file from the original location
+        to the current location.  This retains the user's configuration file
+        and puts it in the correct place without requiring user action.  This
+        is only temporary to transition users running ScubaGoggles 0.4 due to
+        change in the configuration file location for ScubaGoggles 1.0.
+
+        :param Path config_file: [optional] user configuration file.
+        """
+
+        config_path = (Path(os.path.expandvars(config_file))
+                       if config_file else self._legacy_config_file)
+
+        if (not (config_path.is_file()
+            and config_path.samefile(self._legacy_config_file))):
+            return
+
+        self._config_file = self._default_config_file
+
+        with config_path.open(encoding = 'utf-8') as in_stream:
+            self._doc = load(in_stream, Loader)
+
+        if config_path.samefile(self._config_file.parent):
+            config_path.unlink(missing_ok = True)
+
+        self.write()
 
     def _validate(self, keys: Iterable = None) -> Union[list, None]:
 

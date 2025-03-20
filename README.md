@@ -38,6 +38,7 @@ We use a three-step process:
 
 - [Download and Python Install](docs/installation/DownloadAndInstall.md)
 - [Download the OPA Executable](docs/installation/OPA.md)
+- [Configure Defaults](docs/installation/Defaults.md)
 
 ### Prerequisites
 
