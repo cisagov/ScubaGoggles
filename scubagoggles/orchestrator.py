@@ -12,6 +12,7 @@ import shutil
 import uuid
 import webbrowser
 import glob
+import csv
 
 from datetime import datetime, timezone
 from pathlib import Path
@@ -146,7 +147,50 @@ class Orchestrator:
         out_jsonfile = out_jsonfile.with_suffix('.json')
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(results, out_stream, indent=4)
+    
 
+    def convert_to_result_csv(self, output_dict):
+        # This function converts the controls inside the Results section of the json output to a csv.
+        ActionPlanCsv = []
+        ScubaResultsCsv = []  
+       
+        # Iterate through products, groups, and controls
+        for product, value in output_dict["Results"].items():  
+          
+           for group in value:  # Accessing the 'Value' property of each product
+               for control in group["Controls"]:  # Accessing the 'Controls' property of each group
+                  # Format the Requirement and Details fields
+                 
+                  if ('Requirement' in control):
+                    control["Requirement"] = control["Requirement"].strip()
+                    control["Details"] = control["Details"].strip()
+            
+                  # Add the control to ScubaResultsCsv
+                  ScubaResultsCsv.append(control)
+            
+                  # Check if the control result is "Fail"
+                  if control["Result"] == "Fail":
+                    # Add blank fields for documenting reasons for failures and remediation timelines
+                    control["Non-Compliance Reason"] = " "
+                    control["Remediation Completion Date"] = " "
+                    control["Justification"] = " "
+                
+                # Add the control to ActionPlanCsv
+                    ActionPlanCsv.append(control)
+        
+        args = self._args
+        out_folder = args.outputpath
+        planCsvFileName = os.path.join(out_folder, "actionPlan.csv")
+
+        headers = list(ScubaResultsCsv[0].keys())
+        headers += ["Non-Compliance Reason", "Remediation Completion Date", "Justification"]
+        
+        with open(planCsvFileName, mode="w",  newline="") as plan_file:
+          writer = csv.DictWriter(plan_file, fieldnames=ActionPlanCsv[0].keys())
+          writer.writeheader()
+          writer.writerows(ActionPlanCsv)
+        
+       
     def _get_full_out_jsonfile_name(self, report_uuid: str):
         """
         This function determines the full file name of the SCuBA results file.
@@ -350,6 +394,8 @@ class Orchestrator:
         with scuba_results_file.open(encoding='UTF-8') as file:
             raw_data = json.load(file)
         total_output.update({'Raw': raw_data})
+      
+        self.convert_to_result_csv(total_output)
 
         report_file = out_folder / f'{out_jsonfile}.json'
         with report_file.open('w', encoding='utf-8') as results_file:
@@ -398,6 +444,7 @@ class Orchestrator:
                 # need to have the exception abort the run).
                 log.warning('No web browser available, report: %s',
                             str(report_path))
+    
 
     def _run_cached(self):
         """
@@ -507,3 +554,6 @@ class Orchestrator:
             self._run_reporter()
         else:
             self._run_cached()
+
+   
+        
