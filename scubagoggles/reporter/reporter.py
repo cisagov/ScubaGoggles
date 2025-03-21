@@ -270,11 +270,13 @@ class Reporter:
             return 'Rationale not provided.'
         return self._omissions[control_id]['rationale']
 
-    def _build_report_html(self, fragments: list) -> str:
+    def _build_report_html(self, fragments: list, rules_data : dict) -> str:
         """
         Adds data into HTML Template and formats the page accordingly
 
         :param fragments: list object containing each baseline
+        :param rules_data: the 'actual_value' for GWS.COMMONCONTROLS.13.1 if
+            present, None otherwise
         """
 
         template_file = (self._reporter_path
@@ -326,6 +328,24 @@ class Reporter:
         collected = ''.join(fragments)
 
         html = html.replace('{{TABLES}}', collected)
+        if rules_data:
+            rules_html = '<hr>'
+            rules_html += '<h2>System Defined Alerts</h2>'
+            rules_html += '<p>Note: As ScubaGoggles currently relies on admin log events '
+            rules_html += 'to determine alert status, ScubaGoggles will not be able to '
+            rules_html += 'determine the current status of any alerts whose state has '
+            rules_html += 'not changed recently.</p>'
+            rules_table = []
+            for rule in rules_data['enabled_rules']:
+                rules_table.append({'Alert Name': rule, 'Status': 'Enabled'})
+            for rule in rules_data['disabled_rules']:
+                rules_table.append({'Alert Name': rule, 'Status': 'Disabled'})
+            for rule in rules_data['unknown']:
+                rules_table.append({'Alert Name': rule, 'Status': 'Unknown'})
+            rules_html += self.create_html_table(rules_table)
+            html = html.replace('{{RULES}}', rules_html)
+        else:
+            html = html.replace('{{RULES}}', '')
         return html
 
     def _get_failed_prereqs(self, test: dict) -> set:
@@ -437,6 +457,7 @@ class Reporter:
             'Omit': 0
         }
 
+        rules_data = None
         for baseline_group in self._product_policies:
             table_data = []
             results_data = {}
@@ -483,6 +504,10 @@ class Reporter:
                                            'Criticality': test['Criticality'],
                                            'Details': failed_details})
                         continue
+
+                    if control_id.startswith('GWS.COMMONCONTROLS.13.1'):
+                        rules_data = test['ActualValue']
+
                     result = self._get_test_result(test['RequirementMet'],
                                                     test['Criticality'],
                                                     test['NoSuchEvent'])
@@ -520,7 +545,7 @@ class Reporter:
             results_data.update({'GroupReferenceURL': group_reference_url})
             results_data.update({'Controls': table_data})
             json_data.append(results_data)
-        html = self._build_report_html(fragments)
+        html = self._build_report_html(fragments, rules_data)
         with open(f'{out_path}/IndividualReports/{ind_report_name}.html',
                   mode='w', encoding='UTF-8') as html_file:
             html_file.write(html)
