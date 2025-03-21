@@ -1427,7 +1427,7 @@ if {
 # Baseline GWS.COMMONCONTROLS.13.1
 #--
 
-AlertCenterRules := [
+AlertCenterRules := {
     "Government-backed attacks",
     "User-reported phishing",
     "User's Admin privilege revoked",
@@ -1463,14 +1463,14 @@ AlertCenterRules := [
     "App Maker Cloud SQL setup",
     "Account suspension warning",
     "[Beta] Client-side encryption service unavailable",
-]
+}
 
-EmailOnlyRules := [
+EmailOnlyRules := {
     "TLS failure",
     "Rate limited recipient",
     "Smarthost failure",
     "Exchange journaling failure"
-]
+}
 
 # Custom functions/rules for identifying rule state change events
 FilterAlertsEvents(RuleName) := FilteredEvents if
@@ -1613,15 +1613,18 @@ tests contains {
     "ReportDetails": CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount),
     "ActualValue": {
         "enabled_rules": EnabledAdminCenterRules | EnabledEmailOnlyRules,
-        "disabled_rules": DisabledAdminCenterRules | DisabledEmailOnlyRules
+        "disabled_rules": DisabledAdminCenterRules | DisabledEmailOnlyRules,
+        "unknown": (AlertCenterRules | EmailOnlyRules) - EnabledRules - DisabledRules
     },
     "RequirementMet": Status,
     "NoSuchEvent": NoSuchEvent
 }
 if {
     TotalRuleCount := count(AlertCenterRules) + count(EmailOnlyRules)
-    EnabledRulesCount := count(EnabledAdminCenterRules) + count(EnabledEmailOnlyRules)
-    DisabledRulesCount := count(DisabledAdminCenterRules) + count(DisabledEmailOnlyRules)
+    EnabledRules = EnabledAdminCenterRules | EnabledEmailOnlyRules
+    DisabledRules = DisabledAdminCenterRules | DisabledEmailOnlyRules
+    EnabledRulesCount := count(EnabledRules)
+    DisabledRulesCount := count(DisabledRules)
     NoSuchEvent := EnabledRulesCount + DisabledRulesCount != TotalRuleCount
     Status := DisabledRulesCount == 0
 }
