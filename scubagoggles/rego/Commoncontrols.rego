@@ -547,7 +547,7 @@ if {
     # they inherit from a parent OU if they have no events.
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "PERFORM_CHALLENGE_SELECTION"
+    LastEvent.NewValue != "SSO_PROFILES_PERFORM_CHALLENGE_SELECTION"
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 
