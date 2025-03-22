@@ -838,7 +838,7 @@ tests contains {
 
 CommonControlsId8_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.8.1")
 
-NonComplianceMessage8_1 := "Allow super admins to recover their account is ON"
+NonComplianceMessage8_1 := "Super admins are allowed to recover their accounts."
 
 NonCompliantOUs8_1 contains {
     "Name": OU,
@@ -859,6 +859,52 @@ tests contains {
 }
 if {
     Status := count(NonCompliantOUs8_1) == 0
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.8.2
+#--
+
+CommonControlsId8_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.8.2")
+
+NonComplianceMessage8_2 := "Users and non-super admins are allowed to recover their accounts."
+
+NonCompliantOUs8_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage8_2
+}
+if {
+    some OU, settings in input.policies
+    settings.security_user_account_recovery.enableAccountRecovery == true
+}
+
+tests contains {
+    "PolicyId": CommonControlsId8_2,
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs8_2, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs8_2) == 0
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.8.3
+#--
+
+CommonControlsId8_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.8.3")
+
+tests contains {
+    "PolicyId": CommonControlsId8_3,
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": utils.ManualCheckMessage,
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
 }
 #--
 
