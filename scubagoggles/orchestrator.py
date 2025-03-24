@@ -201,8 +201,13 @@ class Orchestrator:
                  
                   if ('Requirement' in control):
                     control["Requirement"] = control["Requirement"].strip()
-                    control["Details"] = control["Details"].strip()
-            
+                    if ("<ul>" in control["Details"]):
+                            control["Details"] = control ["Details"].replace("<ul>", " ")
+                            control["Details"] = control ["Details"].replace("<li>", "\n- ")
+                            control["Details"] = control ["Details"].replace("</li>", " ")
+                            control["Details"] = control ["Details"].replace("</ul>", "")
+                            control["Details"] = control["Details"].strip()
+
                   # Add the control to ScubaResultsCsv
                   ScubaResultsCsv.append(control)
             
