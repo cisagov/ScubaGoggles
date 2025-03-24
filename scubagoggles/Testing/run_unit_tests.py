@@ -26,7 +26,6 @@ gws_baselines = [
     "meet",
     "sites",
     "commoncontrols",
-    "rules",
     'classroom'
 ]
 

@@ -1586,7 +1586,7 @@ CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount
         "enabled and",
         format_int(DisabledRulesCount, 10),
         CongugateToBe(DisabledRulesCount),
-        "are disabled.",
+        "disabled.",
         AlertsTableLink
     ])
 } else := Message if {
@@ -1639,7 +1639,7 @@ if {
         DisabledRulesCount == 0
     }
     NoSuchEvent := (false in NoSuchEventConditions) == false
-    Status := DisabledRulesCount == 0
+    Status := EnabledRulesCount == TotalRuleCount
 }
 #--
 
