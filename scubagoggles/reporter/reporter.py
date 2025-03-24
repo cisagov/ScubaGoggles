@@ -5,6 +5,7 @@ import io
 import logging
 import time
 import warnings
+import json
 
 from datetime import datetime
 from html import escape
@@ -330,19 +331,34 @@ class Reporter:
 
         html = html.replace('{{TABLES}}', collected)
         if rules_data:
+            alert_descriptions = json.loads((self._reporter_path
+                         / 'IndividualReport/AlertsDescriptions.json').read_text())
             rules_html = '<hr>'
-            rules_html += '<h2>System Defined Alerts</h2>'
+            rules_html += '<h2 id="alerts">System Defined Alerts</h2>'
             rules_html += '<p>Note: As ScubaGoggles currently relies on admin log events '
             rules_html += 'to determine alert status, ScubaGoggles will not be able to '
             rules_html += 'determine the current status of any alerts whose state has '
             rules_html += 'not changed recently.</p>'
             rules_table = []
             for rule in rules_data['enabled_rules']:
-                rules_table.append({'Alert Name': rule, 'Status': 'Enabled'})
+                rules_table.append({
+                    'Alert Name': rule,
+                    'Description': alert_descriptions[rule],
+                    'Status': 'Enabled'
+                })
             for rule in rules_data['disabled_rules']:
-                rules_table.append({'Alert Name': rule, 'Status': 'Disabled'})
+                rules_table.append({
+                    'Alert Name': rule,
+                    'Description': alert_descriptions[rule],
+                    'Status': 'Disabled'
+                })
             for rule in rules_data['unknown']:
-                rules_table.append({'Alert Name': rule, 'Status': 'Unknown'})
+                rules_table.append({
+                    'Alert Name': rule,
+                    'Description': alert_descriptions[rule],
+                    'Status': 'Unknown'
+                })
+            rules_table.sort(key=lambda rule: rule['Alert Name'])
             rules_html += self.create_html_table(rules_table)
             html = html.replace('{{RULES}}', rules_html)
         else:

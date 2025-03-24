@@ -1573,6 +1573,8 @@ CommonControlsId13_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.13.1")
 
 CongugateToBe(n) := "is" if n == 1 else := "are"
 
+AlertsTableLink := "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
+
 CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount) := Message if {
     TotalRuleCount == EnabledRulesCount + DisabledRulesCount
     Message := concat(" ", [
@@ -1584,14 +1586,16 @@ CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount
         "enabled and",
         format_int(DisabledRulesCount, 10),
         CongugateToBe(DisabledRulesCount),
-        "are disabled."
+        "are disabled.",
+        AlertsTableLink
     ])
 } else := Message if {
     EnabledRulesCount + DisabledRulesCount == 0
     Message := concat(" ", [
         "Unable to determine the state of any of the",
         format_int(TotalRuleCount, 10),
-        "required rules."
+        "required rules.",
+        AlertsTableLink
     ])
 } else := concat(" ", [
     "Of the",
@@ -1605,6 +1609,7 @@ CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount
     "disabled. Unable to determine the state of the",
     format_int(TotalRuleCount - EnabledRulesCount - DisabledRulesCount, 10),
     "remaining required rules.",
+    AlertsTableLink
 ])
 
 tests contains {
@@ -1625,7 +1630,15 @@ if {
     DisabledRules = DisabledAdminCenterRules | DisabledEmailOnlyRules
     EnabledRulesCount := count(EnabledRules)
     DisabledRulesCount := count(DisabledRules)
-    NoSuchEvent := EnabledRulesCount + DisabledRulesCount != TotalRuleCount
+    # No such event if the state of any rule is unknown AND there
+    # are no rules that we know are disabled. If a rule is disabled,
+    # we know enough to fail this policy, even if we don't know the
+    # state of all the other rules.
+    NoSuchEventConditions := {
+        EnabledRulesCount + DisabledRulesCount != TotalRuleCount,
+        DisabledRulesCount == 0
+    }
+    NoSuchEvent := (false in NoSuchEventConditions) == false
     Status := DisabledRulesCount == 0
 }
 #--
