@@ -9,8 +9,11 @@ import logging
 import os
 import platform
 import shutil
+import uuid
 import webbrowser
+import glob
 
+from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
 from tqdm import tqdm
@@ -19,7 +22,6 @@ from scubagoggles.provider import Provider
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.reporter.reporter import Reporter
 from scubagoggles.run_rego import opa_eval, find_opa
-from scubagoggles.utils import rel_abs_path
 from scubagoggles.version import Version
 
 log = logging.getLogger(__name__)
@@ -30,6 +32,44 @@ class UserRuntimeError(RuntimeError):
     user) for which a traceback might not be appropriate (error has nothing
     to do with the code).
     """
+
+
+class ArgumentsEncoder(json.JSONEncoder):
+
+    """Custom JSON encoder for the ScubaGoggles command line arguments data
+    structure.
+    """
+
+    def default(self, o):
+
+        """Handles special encoding for certain fields in the arguments
+        data structure.
+
+        For example, there are some fields in the arguments for internal
+        use, such as the dispatch function.  This is not serializable with
+        the default encoder.
+
+        The Path values are converted to strings.
+
+        Any data types not handled by this method are processed by the base
+        class method.
+
+        :param o: data (arbitrary type) to be serialized.
+
+        :return: a serializable version of the given object.
+        """
+
+        # The "dispatch" value is a function and does not need to be
+        # serialized.
+
+        if isinstance(o, Callable):
+            return None
+
+        if isinstance(o, Path):
+            return str(o)
+
+        return super().default(o)
+
 
 class Orchestrator:
 
@@ -70,7 +110,6 @@ class Orchestrator:
     }
 
     def __init__(self, args: argparse.Namespace):
-
         """Orchestrator class initialization
 
         :param args: command arguments parsed by the argparse module.  See
@@ -94,6 +133,7 @@ class Orchestrator:
 
         args = self._args
         products = args.baselines
+        break_glass_accounts = args.breakglassaccounts
 
         with Provider(args.customerid,
                       args.credentials,
@@ -101,12 +141,15 @@ class Orchestrator:
             provider_dict = provider.call_gws_providers(products, args.quiet)
             provider_dict['baseline_suffix'] = Version.suffix
             provider_dict['successful_calls'] = list(provider.successful_calls)
-            provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
+            provider_dict['unsuccessful_calls'] = list(
+                provider.unsuccessful_calls)
+            provider_dict['break_glass_accounts'] = break_glass_accounts
+            provider_dict['report_uuid'] = args.report_uuid
 
         out_jsonfile = args.outputpath / args.outputproviderfilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
-        with out_jsonfile.open('w', encoding = 'utf-8') as out_stream:
-            json.dump(provider_dict, out_stream, indent = 4)
+        with out_jsonfile.open('w', encoding='utf-8') as out_stream:
+            json.dump(provider_dict, out_stream, indent=4)
 
     def _rego_eval(self):
         """
@@ -120,11 +163,13 @@ class Orchestrator:
         results = []
         for product in products_bar:
             product_name = product
-            input_file = args.outputpath / f'{args.outputproviderfilename}.json'
+            input_file = args.outputpath / \
+                f'{args.outputproviderfilename}.json'
             opa_path = args.opapath
             rego_path = args.regopath
 
-            products_bar.set_description(f'Running Rego verification for {product}...')
+            products_bar.set_description(
+                f'Running Rego verification for {product}...')
             product_tests = opa_eval(product_name,
                                      input_file,
                                      opa_path,
@@ -137,8 +182,25 @@ class Orchestrator:
 
         out_jsonfile = args.outputpath / args.outputregofilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
-        with out_jsonfile.open('w', encoding = 'utf-8') as out_stream:
-            json.dump(results, out_stream, indent = 4)
+        with out_jsonfile.open('w', encoding='utf-8') as out_stream:
+            json.dump(results, out_stream, indent=4)
+
+    def _get_full_out_jsonfile_name(self, report_uuid: str):
+        """
+        This function determines the full file name of the SCuBA results file.
+        """
+        args = self._args
+        # Truncate the UUID at the end of the ScubaResults JSON file by the parameter value.
+        # This is is to possibly prevent Windows maximum path
+        # length errors that may occur when moving files
+        # with a large number of characters
+        truncated_uuid = report_uuid[0:len(
+            report_uuid) - args.numberofuuidcharacterstotruncate]
+
+        # If the UUID exists after truncation
+        if len(truncated_uuid) > 0:
+            return args.outjsonfilename + '_' + truncated_uuid
+        return args.outjsonfilename
 
     @staticmethod
     def _pluralize(singular: str, plural: str, count: int) -> str:
@@ -219,7 +281,7 @@ class Orchestrator:
         shutil.copy2(cisa_logo, reports_images_path)
         shutil.copy2(triangle_svg, reports_images_path)
 
-        # we should load the test results json here
+        # load the rego results json here
         products = args.baselines
         prod_to_fullname = args.fullnamesdict
         test_results_json = out_folder / f'{args.outputregofilename}.json'
@@ -236,6 +298,10 @@ class Orchestrator:
         tenant_name = tenant_info['topLevelOU']
         successful_calls = set(settings_data['successful_calls'])
         unsuccessful_calls = set(settings_data['unsuccessful_calls'])
+        report_uuid = settings_data['report_uuid']
+
+        # Create the SCuBA results JSON file name
+        out_jsonfile = self._get_full_out_jsonfile_name(report_uuid)
 
         md_products = set(args.baselines) - {'rules'}
 
@@ -261,8 +327,7 @@ class Orchestrator:
         if 'omitpolicy' in args and args.omitpolicy is not None:
             omissions = args.omitpolicy
 
-        # Create the individual report files
-        out_jsonfile = args.outjsonfilename
+        # Begin Creating the individual report files
         summary = {}
         results = {}
         total_output = {}
@@ -274,18 +339,19 @@ class Orchestrator:
                                         fullname in prod_to_fullname.items()}
 
         timestamp_utc = datetime.now(timezone.utc)
-        timestamp_zulu = timestamp_utc.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-
+        timestamp_zulu = timestamp_utc.strftime(
+            '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
         report_metadata = {
             'TenantId':  tenant_id,
             'DisplayName':  tenant_name,
             'DomainName':  tenant_domain,
-            'ProductSuite':  'GWS',
+            'ProductSuite':  'Google Workspace',
             'ProductsAssessed': products_assessed,
             'ProductAbbreviationMapping': product_abbreviation_mapping,
             'Tool':  'ScubaGoggles',
             'ToolVersion':  Version.number,
-            'TimestampZulu': timestamp_zulu
+            'TimestampZulu': timestamp_zulu,
+            'ReportUUID': report_uuid
         }
 
         total_output.update({'MetaData': report_metadata})
@@ -310,21 +376,25 @@ class Orchestrator:
                 reporter.rego_json_to_ind_reports(test_results_data,
                                                   out_folder)
             baseline_product_summary = {product: stats_and_data[product][0]}
-            baseline_product_results_json = {product: stats_and_data[product][1]}
+            baseline_product_results_json = {
+                product: stats_and_data[product][1]}
             summary.update(baseline_product_summary)
             results.update(baseline_product_results_json)
             total_output.update({'Summary': summary})
             total_output.update({'Results': results})
 
+        args_dict = vars(args)
+
         # Create the ScubaResults files
         scuba_results_file = out_folder / f'{args.outputproviderfilename}.json'
         with scuba_results_file.open(encoding='UTF-8') as file:
             raw_data = json.load(file)
+            raw_data.update({'scuba_config': args_dict})
         total_output.update({'Raw': raw_data})
 
         report_file = out_folder / f'{out_jsonfile}.json'
-        with report_file.open('w', encoding = 'utf-8') as results_file:
-            json.dump(total_output, results_file, indent = 4)
+        with report_file.open('w', encoding='utf-8') as results_file:
+            json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
 
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
@@ -345,8 +415,10 @@ class Orchestrator:
                                'Details': self._generate_summary(stats[0])})
 
         fragments.append(Reporter.create_html_table(table_data))
-        front_page_html = Reporter.build_front_page_html(fragments, tenant_info)
-        report_path.write_text(front_page_html, encoding = 'utf-8')
+        front_page_html = Reporter.build_front_page_html(fragments,
+                                                         tenant_info,
+                                                         report_uuid)
+        report_path.write_text(front_page_html, encoding='utf-8')
 
         # suppress opening the report in the browser
         if args.quiet:
@@ -374,9 +446,7 @@ class Orchestrator:
         """
 
         args = self._args
-        args.outputpath = str(rel_abs_path(__file__, args.outputpath))
         Path(args.outputpath).mkdir(parents=True, exist_ok=True)
-        args.outputpath = os.path.abspath(args.outputpath)
 
         if not args.skipexport:
             self._run_gws_providers()
@@ -387,13 +457,32 @@ class Orchestrator:
             # created the output. If the provider output doesn't exist as a
             # standalone file, create it from the scuba results file so the
             # other functions can execute as normal.
-            with open(f'{args.outputpath}/{args.outjsonfilename}.json', 'r',
-                      encoding='UTF-8') as scuba_results:
-                provider_output = json.load(scuba_results)['Raw']
-            with open(f'{args.outputpath}/{args.outputproviderfilename}.json',
-                      'w', encoding='UTF-8') as provider_file:
-                json.dump(provider_output, provider_file)
 
+            # find all files that match the outjsonfilename_guid.json convention
+            results_file_pattern = os.path.join(
+                args.outputpath, f'{args.outjsonfilename}*.json')
+            matching_results_files = glob.glob(results_file_pattern)
+
+            if matching_results_files:
+                # get the latest modified file with that matches the pattern
+                latest_results_file = max(
+                    matching_results_files, key=os.path.getmtime)
+
+                # delete any duplicates to prevent confusion
+                log.debug(
+                    'Deleting duplicate matching result files in runcached')
+                for file in matching_results_files:
+                    if file != latest_results_file:
+                        os.remove(file)
+                        log.debug('deleted %s', file)
+                # open results file
+                with open(latest_results_file, 'r',
+                          encoding='UTF-8') as scuba_results:
+                    # get the raw section and dump the original provider settings export file
+                    provider_output = json.load(scuba_results)['Raw']
+                with open(f'{args.outputpath}/{args.outputproviderfilename}.json',
+                          'w', encoding='UTF-8') as provider_file:
+                    json.dump(provider_output, provider_file)
         self._rego_eval()
         self._run_reporter()
 
@@ -414,7 +503,13 @@ class Orchestrator:
         if not isinstance(args.outputpath, Path):
             args.outputpath = Path(args.outputpath)
         args.outputpath = args.outputpath.resolve()
+
+        if args.credentials is None:
+            raise UserRuntimeError('Google credentials file path not provided. '
+                'Either save the credentials path using the ScubaGoggles setup '
+                'utility or specify the path using the "--credentials" option.')
         args.credentials = args.credentials.resolve()
+
         args.opapath = args.opapath.resolve()
         args.regopath = args.regopath.resolve()
         args.documentpath = args.documentpath.resolve()
@@ -435,6 +530,7 @@ class Orchestrator:
         gws_params = self.gws_products()
         additional_args = vars(args)
         additional_args['fullnamesdict'] = gws_params['prod_to_fullname']
+        additional_args['report_uuid'] = str(uuid.uuid4())
 
         if args.skipexport and not args.runcached:
             message = ('Used --skipexport without --runcached please rerun '

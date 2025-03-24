@@ -10,6 +10,7 @@ import platform
 import re
 import subprocess
 
+from collections.abc import Callable
 from pathlib import Path
 
 log = logging.getLogger(__name__)
@@ -57,29 +58,33 @@ def opa_eval(product_name: str,
                '--format=values']
 
     if debug:
-        # This "explain" option seems to do nothing...
         command.append('--explain=full')
 
-    try:
-        log.debug('Running OPA: %s', ' '.join(command))
+    log.debug('Running OPA: %s', ' '.join(command))
 
-        output = subprocess.run(command, capture_output=True, check=True)
-        str_output = output.stdout.decode()
-        if debug:
-            log.debug('Rego output:\n%s', output.stdout.decode('utf-8'))
-            stderr_text = output.stderr.decode('utf-8')
-            if stderr_text:
-                log.debug('Rego error:\n%s', stderr_text)
-        ret_tests = json.loads(str_output)
-        return ret_tests
+    try:
+        output = subprocess.run(command,
+                                check = True,
+                                stderr = subprocess.STDOUT,
+                                stdout = subprocess.PIPE)
     except subprocess.CalledProcessError as cpe:
-        logging.error('\n--- OPA failed to execute from process error ---\n %s',
-                      cpe.output)
-        return {'opa_error': 'process_error'}
+        log.error('OPA failed to execute from process:')
+        log_rego_output(cpe.output)
+        raise RuntimeError('OPA failure') from cpe
     except Exception as exc:
-        logging.error('\n--- OPA failed to execute from unknown error ---\n %s',
-                      exc)
-        return {'opa_error': 'general_error'}
+        log.error('OPA failed to execute from unexpected error:')
+        log.error('  %s', str(exc))
+        raise RuntimeError('Unexpected failure trying to run OPA') from exc
+
+    if debug:
+        log.debug('Rego output:')
+        log_rego_output(output.stdout, log.debug)
+
+    str_output = output.stdout.decode()
+    ret_tests = json.loads(str_output)
+
+    return ret_tests
+
 
 
 def find_opa(opa_path: Path = None):
@@ -157,17 +162,32 @@ def find_opa(opa_path: Path = None):
         raise FileNotFoundError('OPA executable not found in PATH')
     try:
         process = subprocess.run((opa_exe, 'version'),
-                                 capture_output = True,
-                                 check = True)
+                                 check = True,
+                                 stderr = subprocess.STDOUT,
+                                 stdout = subprocess.PIPE)
     except subprocess.CalledProcessError as cpe:
         if cpe.stderr:
-            log.error('Error during OPA version check:\n%s',
-                      cpe.stderr.decode('utf-8'))
+            log.error('Error during OPA version check:')
+            log_rego_output(cpe.output)
         raise RuntimeError('Error occurred during OPA version check - '
                            f'return code: {cpe.returncode}') from cpe
 
-    match = opa_version_re.search(process.stdout.decode('utf-8'))
+    match = opa_version_re.search(process.stdout.decode())
     if match:
         log.info('OPA %s', match[0])
 
     return opa_exe
+
+def log_rego_output(stream: bytes, logger: Callable = log.error) -> None:
+
+    """Writes the given error and/or output stream (in bytes) to the log.
+
+    :param bytes stream: the contents of the error/output stream.
+    :param Callable logger: logging function to write the output - defaults
+        to the error log.
+    """
+
+    output = stream.decode().splitlines()
+
+    for line in output:
+        logger('  %s', line)

@@ -41,8 +41,7 @@ class Reporter:
                  successful_calls: set,
                  unsuccessful_calls: set,
                  omissions: dict,
-                 progress_bar = None):
-
+                 progress_bar=None):
         """Reporter class initialization
 
         :param product: name of product being tested
@@ -114,7 +113,6 @@ class Reporter:
 
     @staticmethod
     def create_html_table(table_data: list) -> str:
-
         """Creates an HTML Table for the results of the Rego Scan
 
         :param list table_data: list of dictionaries containing the results of
@@ -157,7 +155,10 @@ class Reporter:
         return table_html
 
     @classmethod
-    def build_front_page_html(cls, fragments: list, tenant_info: dict) -> str:
+    def build_front_page_html(cls,
+                              fragments: list,
+                              tenant_info: dict,
+                              report_uuid: str) -> str:
         """
         Builds the Front Page Report using the HTML Report Template
 
@@ -167,18 +168,18 @@ class Reporter:
 
         template_file = (cls._reporter_path
                          / 'FrontPageReport/FrontPageReportTemplate.html')
-        html = template_file.read_text(encoding = 'utf-8')
+        html = template_file.read_text(encoding='utf-8')
 
         table = ''.join(fragments)
 
         main_css_file = cls._reporter_path / 'styles/main.css'
-        css = main_css_file.read_text(encoding = 'utf-8')
+        css = main_css_file.read_text(encoding='utf-8')
         html = html.replace('{{MAIN_CSS}}', f'<style>{css}</style>')
 
         front_css_file = cls._reporter_path / 'styles/FrontPageStyle.css'
-        css = front_css_file.read_text(encoding = 'utf-8')
+        css = front_css_file.read_text(encoding='utf-8')
         html = html.replace('{{FRONT_CSS}}', f'<style>{css}</style>')
-
+        html = html.replace('{{report_uuid}}', report_uuid)
         html = html.replace('{{TABLE}}', table)
 
         now = datetime.now()
@@ -186,8 +187,8 @@ class Reporter:
                        + ' ' + time.tzname[time.daylight])
 
         meta_data = ('<table style = "text-align:center;">'
-                      '<tr><th>Customer Name</th><th>Customer Domain</th>'
-                      '<th>Customer ID</th><th>Report Date</th></tr>'
+                     '<tr><th>Customer Name</th><th>Customer Domain</th>'
+                     '<th>Customer ID</th><th>Report Date</th></tr>'
                      f'<tr><td>{tenant_info["topLevelOU"]}</td><td>{tenant_info["domain"]}</td>'
                      f'<td>{tenant_info["ID"]}</td><td>{report_date}'
                      '</td></tr></table>')
@@ -197,7 +198,7 @@ class Reporter:
 
         return html
 
-    def _is_control_omitted(self, control_id : str) -> bool:
+    def _is_control_omitted(self, control_id: str) -> bool:
         """
         Determine if the supplied control was marked for omission in the
         config file and if the expiration date has passed, if applicable.
@@ -228,9 +229,9 @@ class Reporter:
             except ValueError:
                 # Malformed date, don't omit the policy
                 warning = (f'Config file indicates omitting {control_id}, '
-                    f'but the provided expiration date, {raw_date}, is '
-                    'malformed. The expected format is yyyy-mm-dd. Control'
-                    ' will not be omitted.')
+                           f'but the provided expiration date, {raw_date}, is '
+                           'malformed. The expected format is yyyy-mm-dd. Control'
+                           ' will not be omitted.')
                 self._warn(warning, RuntimeWarning)
                 return False
             now = datetime.now()
@@ -239,12 +240,12 @@ class Reporter:
                 return True
             # The expiration date is passed, don't omit the policy
             warning = (f'Config file indicates omitting {control_id}, but '
-                f'the provided expiration date, {raw_date}, has passed. '
-                'Control will not be omitted.')
+                       f'the provided expiration date, {raw_date}, has passed. '
+                       'Control will not be omitted.')
             self._warn(warning, RuntimeWarning)
         return False
 
-    def _get_omission_rationale(self, control_id : str) -> str:
+    def _get_omission_rationale(self, control_id: str) -> str:
         """
         Return the rationale indicated in the config file for the indicated
         control, if provided. If not, return a string warning the user that
@@ -260,12 +261,12 @@ class Reporter:
         # If any of the following conditions is true, no rationale was
         # provided
         no_rationale = ((self._omissions[control_id] is None) or
-            ('rationale' not in self._omissions[control_id]) or
-            (self._omissions[control_id]['rationale'] is None) or
-            (self._omissions[control_id]['rationale'] == ''))
+                        ('rationale' not in self._omissions[control_id]) or
+                        (self._omissions[control_id]['rationale'] is None) or
+                        (self._omissions[control_id]['rationale'] == ''))
         if no_rationale:
             warning = (f'Config file indicates omitting {control_id}, but '
-                'no rationale provided.')
+                       'no rationale provided.')
             self._warn(warning, RuntimeWarning)
             return 'Rationale not provided.'
         return self._omissions[control_id]['rationale']
@@ -279,14 +280,14 @@ class Reporter:
 
         template_file = (self._reporter_path
                          / 'IndividualReport/IndividualReportTemplate.html')
-        html = template_file.read_text(encoding = 'utf-8')
+        html = template_file.read_text(encoding='utf-8')
 
         main_css_file = self._reporter_path / 'styles/main.css'
-        css = main_css_file.read_text(encoding = 'utf-8')
+        css = main_css_file.read_text(encoding='utf-8')
         html = html.replace('{{MAIN_CSS}}', f'<style>{css}</style>')
 
         main_js_file = self._reporter_path / 'scripts/main.js'
-        javascript = main_js_file.read_text(encoding = 'utf-8')
+        javascript = main_js_file.read_text(encoding='utf-8')
         html = html.replace('{{MAIN_JS}}', f'<script>{javascript}</script>')
 
         title = self._full_name + ' Baseline Report'
@@ -314,7 +315,7 @@ class Reporter:
                        + ' ' + time.tzname[time.daylight])
         meta_data = (f'<table style = "text-align:center;">'
                      '<tr><th>Customer Name</th><th>Customer Domain</th>'
-                     '<th>Cusomter ID</th><th>Report Date</th>'
+                     '<th>Customer ID</th><th>Report Date</th>'
                      '<th>Baseline Version</th><th>Tool Version</th></tr>'
                      f'<tr><td>{self._tenant_name}</td><td>{self._tenant_domain}</td>'
                      f'<td>{self._tenant_id}</td><td>{report_date}</td>'
@@ -398,7 +399,7 @@ class Reporter:
             return 'Passes'
         raise ValueError(f'Unexpected result, {result}', RuntimeWarning)
 
-    def _handle_rules_omission(self, control_id : str, tests : list):
+    def _handle_rules_omission(self, control_id: str, tests: list):
         """Process the test results for the rules report if the rules control
         was omitted.
 
@@ -489,7 +490,8 @@ class Reporter:
                     # Handle the case where the control was omitted
                     if product_capitalized == 'Rules':
                         # Rules is a special case
-                        rules_data = self._handle_rules_omission(control_id, tests)
+                        rules_data = self._handle_rules_omission(
+                            control_id, tests)
                         table_data.extend(rules_data)
                         report_stats['Omit'] += len(rules_data)
                         continue
@@ -507,7 +509,8 @@ class Reporter:
                     failed_prereqs = self._get_failed_prereqs(test)
                     if len(failed_prereqs) > 0:
                         report_stats['Errors'] += 1
-                        failed_details = self._get_failed_details(failed_prereqs)
+                        failed_details = self._get_failed_details(
+                            failed_prereqs)
                         table_data.append({'Control ID': control_id,
                                            'Requirement': requirement,
                                            'Result': 'Error',
@@ -515,8 +518,8 @@ class Reporter:
                                            'Details': failed_details})
                         continue
                     result = self._get_test_result(test['RequirementMet'],
-                                                    test['Criticality'],
-                                                    test['NoSuchEvent'])
+                                                   test['Criticality'],
+                                                   test['NoSuchEvent'])
 
                     details = test['ReportDetails']
 

@@ -43,7 +43,10 @@ class SmokeTest:
 
         svc_account_option = (f' --subjectemail {subjectemail}' if subjectemail
                               else '')
-        command = f'scubagoggles gws{svc_account_option} --quiet'
+        # smoke test shall ignore the uuid parameter append for now
+        # a to do is to modify the smoke test to handle the appended uuid
+        command = (f'scubagoggles gws{svc_account_option} --quiet '
+                   '--numberofuuidcharacterstotruncate 36')
 
         try:
             subprocess.run(command, shell=True, check=True)

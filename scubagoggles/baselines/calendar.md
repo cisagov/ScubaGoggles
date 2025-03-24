@@ -39,7 +39,7 @@ This section determines what information is shared from calendars with external 
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."
 
 - _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -48,7 +48,7 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
 External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)."
 
 - _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -93,7 +93,7 @@ This section determines whether users are warned when inviting one or more guest
 External invitations warnings SHALL be enabled to prompt users before sending invitations.
 
 - _Rationale:_ Users may inadvertently include external guests in calendar event invitations, potentially resulting in data leakage. Warning users when external participants are included can help reduce this risk.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -135,7 +135,7 @@ Due to the added complexity and attack surface associated with configuring Calen
 Calendar Interop SHOULD be disabled.
 
 - _Rationale:_ Enabling Calendar interop adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature unless required by the organization conforms to the principle of least functionality.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 - Notes
   - This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar
 
@@ -147,7 +147,7 @@ Calendar Interop SHOULD be disabled.
 OAuth 2.0 SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.
 
 - _Rationale:_ Basic authentication is a deprecated and risk-prone authentication method. Using OAuth 2.0 helps reduce the risk of credential compromise.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1555: Credentials from Password Stores](https://attack.mitre.org/techniques/T1555/)
@@ -196,7 +196,7 @@ This section covers whether or not the paid appointment booking feature is enabl
 Appointment Schedule with Payments SHALL be disabled.
 
 - _Rationale:_ Enabling paid appointments adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature conforms to the principle of least functionality.
-- _Last modified:_ July 10, 2023
+- _Last modified:_ July 2023
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

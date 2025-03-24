@@ -45,6 +45,12 @@ For each omitted policy, the config file allows you to indicate the following:
 - `rationale`: The reason the policy should be omitted from the report. This value will be displayed in the "Details" column of the report. ScubaGoggles will output a warning if no rationale is provided.
 - `expiration`: Optional. A date after which the policy should no longer be omitted from the report. The expected format is yyyy-mm-dd.
 
+### Break Glass Accounts
+
+In some cases, it may be appropriate to specify the number of break glass accounts to be omitted from the total admin count. For example:
+- When a policy is looking for the total number of break glass accounts (e.g. policy GWS.COMMONCONTROLS.6.2).
+
+The `breakglassaccounts` top-level key, shown in this [example ScubaGoggles configuration file](../../scubagoggles/sample-config-files/break_glass_accounts.yaml), allows the user to specify the break glass accounts to exclude from the admin count. The number of break glass accounts will be shown on the ScubaGoggles report. 
 
 ## Navigation
 - Continue to [Usage: Examples](Examples.md)

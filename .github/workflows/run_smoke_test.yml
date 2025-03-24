@@ -82,6 +82,13 @@ jobs:
           cache: "pip"
           cache-dependency-path: "requirements.txt"
 
+      - name: Setup credentials for service account
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.3
+        with:
+          name: "credentials.json"
+          json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
+
       - name: Setup Dependencies (Windows)
         if: ${{ matrix.operating-system == 'windows-latest' }}
         uses: ./.github/actions/setup-dependencies-windows
@@ -97,13 +104,6 @@ jobs:
           operating-system: "macos"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
-
-      - name: Setup credentials for service account
-        id: create-json
-        uses: jsdaniell/create-json@v1.2.3
-        with:
-          name: "credentials.json"
-          json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
       - name: Run ScubaGoggles and check for correct output
         run: |

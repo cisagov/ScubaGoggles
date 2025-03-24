@@ -40,11 +40,6 @@ def getopa(arguments: argparse.Namespace):
                                'run "setup" first (see documentation)')
 
     if not opa_dir.is_dir():
-        answer = prompt_boolean(f'Create directory {opa_dir}')
-        if not answer:
-            log.error('OPA directory required')
-            return
-
         opa_dir.mkdir(exist_ok = True)
 
     if arguments.opa_directory and not config.opa_dir:
@@ -149,7 +144,7 @@ def download_opa(opa_dir: Path,
     if verify:
         download_ok = verify_opa(download_url, output_file)
         if not download_ok:
-            log.error('Hash generated from downloaded file does NOT '
+            raise RuntimeError('Hash generated from downloaded file does NOT '
                       'match expected value')
 
     test_opa(output_file)
