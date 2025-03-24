@@ -3,8 +3,8 @@ import future.keywords
 
 # Because it takes close to 900 lines to have at least one event for each rule,
 # we define a perfect state for the rules once (at the end of this file) then
-# then modify the perfect state as needed to produce the various conditions to
-# we need to test for.
+# modify the perfect state as needed to produce the various conditions we need
+# to test for.
 
 #
 # GWS.COMMONCONTROLS.13.1
