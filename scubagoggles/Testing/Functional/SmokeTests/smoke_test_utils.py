@@ -239,7 +239,7 @@ def run_selenium(browser, customerdomain):
                 if len(headers) == 3:
                     # Is this the rules table?
                     assert headers[0].text == 'Alert Name'
-                    assert headers[1].text in 'Description'
+                    assert headers[1].text == 'Description'
                     assert headers[2].text == 'Status'
                 else:
                     # If not, this has to be a generic result table
