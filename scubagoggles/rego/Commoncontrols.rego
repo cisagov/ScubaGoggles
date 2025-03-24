@@ -1092,7 +1092,7 @@ ReportDetails10_2(false) := concat("", [
 
 tests contains {
     "PolicyId": CommonControlsId10_2,
-    "Criticality": "SHALL",
+    "Criticality": "Shall",
     "ReportDetails": concat("", [
         "No API Access Allowed/Blocked events in the current logs. ",
         "While we are unable to determine the state from the logs, ",
