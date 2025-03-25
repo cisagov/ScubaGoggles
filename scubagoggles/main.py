@@ -17,8 +17,6 @@ from scubagoggles.orchestrator import Orchestrator, UserRuntimeError
 from scubagoggles.purge import purge_reports
 from scubagoggles.reporter.md_parser import MarkdownParserError
 from scubagoggles.scuba_argument_parser import ScubaArgumentParser
-from scubagoggles.user_setup import default_file_names, find_legacy_dir, \
-    user_setup
 from scubagoggles.user_setup import default_file_names, user_setup
 from scubagoggles.utils import path_parser
 from scubagoggles.version import Version
