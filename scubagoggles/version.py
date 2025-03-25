@@ -6,6 +6,7 @@ import csv
 import logging
 import re
 
+from collections import defaultdict
 from pathlib import Path
 
 from scubagoggles import __version__
@@ -42,13 +43,19 @@ class Version:
 
     _code_root = Path(__file__).parent
 
+    _suffix_regex = r'v(?P<major>\d+)'
+
+    suffix_re = re.compile(_suffix_regex, re.IGNORECASE)
+
     # The following regular expression is used to locate the policy ID (with
     # version suffix) within a string.  It separates the policy ID from the
-    # suffix, so it can be replaced when the version number is updated.
+    # suffix.
 
-    _version_regex = r'(?P<policy_id>GWS\.\w+\.\d+\.\d+)(?P<sfx>v\d+\.\d+)'
+    _version_regex = r'(?P<policy_id>GWS\.\w+\.\d+\.\d+)(?P<sfx>v\d+)'
 
     version_re = re.compile(_version_regex, re.IGNORECASE)
+
+    _baseline_version_map = {}
 
     @classmethod
     def initialize(cls, version = __version__):
@@ -80,10 +87,12 @@ class Version:
 
         cls.major, cls.minor, cls.build = [int(v) for v in version.split('.')]
 
-        # This is the version suffix used at the end of policy IDs
-        # (e.g., 'GWS.CHAT.1.0.v1.0', where 'v1.0' is the version suffix).
+        # This is the version suffix used at the end of policy IDs (e.g.,
+        # 'GWS.CHAT.1.0.v1', where 'v1' is the version suffix). For a new
+        # release 2 (e.g, '2.0'), the suffix is 'v2'.  These are manually
+        # changed for each policy ID.
 
-        cls.suffix = f'v{cls.major}.{cls.minor}'
+        cls.suffix = f'v{cls.major}'
 
     @classmethod
     def command_dispatch(cls, arguments: argparse.Namespace):
@@ -112,6 +121,73 @@ class Version:
             print(cls.with_name)
 
     @classmethod
+    def check_version(cls, data: str) ->  tuple[bool, dict]:
+
+        """Given a data string with zero or more policy identifiers, this
+        function checks that the baseline version suffix(es) is/are correct
+        and consistent.
+
+        :param str data: string which may contain policy identifiers.
+        :return: a tuple, where the first element is a boolean indicating
+        whether the version check succeeded for the given string.  The second
+        element is an empty dictionary if the check succeeded; otherwise, it
+        is a dictionary with the policy id as key and the value is a list
+        with the expected version suffix, followed by the invalid suffix(es)
+        found in the input string.
+        """
+
+        # This is part of the data returned.  For each policy identifier
+        # that has an incorrect version suffix, the value in the dictionary
+        # (keyed by policy id) is a list with the expected version suffix
+        # along with one or more encountered suffixes that don't match the
+        # expected value.
+
+        suffix_errors = defaultdict(list)
+
+        # In most cases, there will be only one policy identifier in the
+        # given string.
+
+        # This check only determines whether the version suffixes are
+        # consistent and "reasonable" for a given policy ID.  A version
+        # suffix is reasonable if it corresponds to the current ScubaGoggles
+        # version or a prior version.  The '_baseline_version_map' is
+        # used for check for consistent suffixes for policy IDs.
+
+        for current_match in cls.version_re.finditer(data):
+
+            policy_id = current_match['policy_id']
+
+            version_sfx = current_match['sfx']
+
+            expected_sfx = cls._baseline_version_map.get(policy_id)
+
+            if not expected_sfx:
+
+                if cls.is_valid_suffix(version_sfx):
+                    cls._baseline_version_map[policy_id] = version_sfx
+                    continue
+
+                # The policy's suffix isn't valid, so we set the expected
+                # suffix to the current version suffix.  It will fail the
+                # next comparison and an error will be created for it.  NOTE
+                # that the way the versioning is done makes it unlikely
+                # that this condition will occur (mistakenly using "v0"
+                # is one case).
+
+                expected_sfx = cls.suffix
+
+            if version_sfx != expected_sfx:
+
+                entry = suffix_errors[policy_id]
+
+                if not entry:
+                    entry.append(expected_sfx)
+
+                entry.append(version_sfx)
+
+        return len(suffix_errors) == 0, suffix_errors
+
+    @classmethod
     def check_versions(cls, update: bool = False) -> bool:
 
         """Checks the versions throughout the ScubaGoggles files to ensure
@@ -125,6 +201,8 @@ class Version:
             version inconsistency was found.
         """
 
+        cls._baseline_version_map = {}
+
         # The meaning of 'modified' is dependent on the value of 'update'.
         # For update True, it'll mean at least 1 file was modified; for
         # False, it means a version inconsistency was found.
@@ -132,7 +210,7 @@ class Version:
         modified = cls.check_or_update_readme(update)
 
         for md_file in cls._code_root.glob('**/*.md'):
-            modified |= cls.check_or_update_md(md_file, update)
+            cls.check_md(md_file)
 
         # The drift rules CSV files are not part of the code content, and
         # exist in the directory above the code root.
@@ -144,23 +222,20 @@ class Version:
                                      'directory missing')
 
         for csv_file in drift_rules_dir.glob('*.csv'):
-            modified |= cls.check_or_update_csv(csv_file, update)
+            cls.check_csv(csv_file)
 
         return modified
 
     @classmethod
-    def check_or_update_csv(cls, drift_csv: Path, update: bool = False) -> bool:
+    def check_csv(cls, drift_csv: Path) -> bool:
 
         """Validates the ScubaGoggles version number embedded in the given
         drift monitoring rules CSV file.
 
         :param Path drift_csv: file specification for a drift CSV file.
-        :param bool update: update the versions in the file if True; otherwise,
-            check the versions in the file to make sure they match the current
-            version (default).
-        :return:  True if file was modified (update) or version(s) in the
-            file do NOT match the current version; False if the file is
-            consistent with the current version.
+        :return:  True if the versions of the policy IDs found in the file
+            are reasonable and consistent with the current version; False
+            otherwise.
         """
 
         log.debug(str(drift_csv))
@@ -169,87 +244,75 @@ class Version:
 
             reader = csv.DictReader(csvfile)
 
-            field_names = reader.fieldnames
-
             contents = list(reader)
 
-        logger = log.debug if update else log.error
-
-        modified = False
+        error_found = False
 
         for index, row in enumerate(contents):
-            policy_id = cls.version_re.sub(f'\\g<policy_id>{cls.suffix}',
-                                           row['PolicyId'])
 
-            if policy_id != row['PolicyId']:
-                if update:
-                    row['PolicyId'] = policy_id
+            # These CSV files have a field for the policy ID, so it must
+            # exist.  In addition to the version suffix, we also check the
+            # format of the policy ID itself.
 
-                if not modified:
-                    logger('%s:', str(drift_csv))
-                    modified = True
+            match = cls.version_re.match(row['PolicyId'])
 
-                logger('  %3d) {"PolicyId": %s}', index + 2, row['PolicyId'])
+            sfx_ok = errors = None
 
-        if modified and update:
-            with drift_csv.open(mode = 'w', encoding = 'utf-8') as csvfile:
-                writer = csv.DictWriter(csvfile,
-                                        field_names,
-                                        lineterminator = '\n')
-                writer.writeheader()
-                for row in contents:
-                    writer.writerow(row)
+            if match:
+                sfx_ok, errors = cls.check_version(row['PolicyId'])
 
-        return modified
+            if not sfx_ok:
+
+                if not error_found:
+                    log.error('%s:', str(drift_csv))
+                    error_found = True
+
+                if not match:
+                    log.error('  %3d) Invalid PolicyId: "%s"',
+                              index + 2,
+                              row['PolicyId'])
+                else:
+                    cls.log_version_errors(index + 2, errors)
+
+        return not error_found
 
     @classmethod
-    def check_or_update_md(cls, md_file: Path, update: bool = False) -> bool:
+    def check_md(cls, md_file: Path) -> bool:
 
         """Validates the ScubaGoggles version number embedded in the given
         Markdown file.
 
         :param Path md_file: file specification for a Markdown file.
-        :param bool update: update the versions in the file if True; otherwise,
-            check the versions in the file to make sure they match the current
-            version (default).
-        :return:  True if file was modified (update) or version(s) in the
-            file do NOT match the current version; False if the file is
-            consistent with the current version.
+        :return:  True if the versions of the policy IDs found in the file
+            are reasonable and consistent with the current version; False
+            otherwise.
         """
 
         log.debug(str(md_file))
 
         contents = md_file.read_text(encoding = 'utf-8').splitlines()
 
-        logger = log.debug if update else log.error
-
-        modified = False
+        error_found = False
 
         for index, line in enumerate(contents):
-            new_line = cls.version_re.sub(f'\\g<policy_id>{cls.suffix}', line)
 
-            if line != new_line:
-                if update:
-                    contents[index] = new_line
+            sfx_ok, errors = cls.check_version(line)
 
-                if not modified:
-                    logger('%s:', str(md_file))
-                    modified = True
+            if not sfx_ok:
 
-                logger('  %3d) %s',
-                       index + 1,
-                       (new_line if update else line).strip())
+                if not error_found:
+                    log.error('%s:', str(md_file))
+                    error_found = True
 
-        if modified and update:
-            md_file.write_text('\n'.join(contents) + '\n', encoding = 'utf-8')
+                cls.log_version_errors(index + 1, errors)
 
-        return modified
+        return not error_found
 
     @classmethod
     def check_or_update_readme(cls, update: bool = False) -> bool:
 
         """Validates the ScubaGoggles version number embedded in the top-level
-        README Markdown file.  There are a couple version number references
+        README Markdown file.  There may be a couple version number references
         in URLs located in the file.
 
         :param bool update: update the versions in the file if True; otherwise,
@@ -273,18 +336,14 @@ class Version:
 
         modified = False
 
-        # The top-level README file has two places where the version is
-        # hardcoded.  Both references are embedded in a URL.
+        # The top-level README file has one place where the version is
+        # hardcoded.  The reference is embedded in a URL.
 
         tool_regex = f'(?P<prefix>{cls.name}-)' + r'v\d+(?:\.\d+){2}'
         tool_version_re = re.compile(tool_regex)
 
-        scb_re = re.compile(r'(?P<prefix>GWS_SCB-)v\d+\.\d+')
-
         for index, line in enumerate(contents):
             new_line = tool_version_re.sub(f'\\g<prefix>{cls.current}', line)
-
-            new_line = scb_re.sub(f'\\g<prefix>{cls.suffix}', new_line)
 
             if line != new_line:
                 if update:
@@ -347,6 +406,44 @@ class Version:
 
         cls.initialize(version)
         cls.check_versions(True)
+
+    @classmethod
+    def is_valid_suffix(cls, version_sfx: str) -> bool:
+
+        """Determines if a given policy version suffix is in the correct
+        format and value.
+
+        :param str version_sfx: string containing a policy ID version suffix.
+        :return: True if the given version suffix is valid; False otherwise.
+        """
+
+        match = cls.suffix_re.match(version_sfx)
+
+        if not match:
+            return False
+
+        major = int(match['major'])
+
+        return major >= 1
+
+    @staticmethod
+    def log_version_errors(line_number: int, errors: dict) -> None:
+
+        """Logs version suffix errors returned by check_version().
+
+        :param int line_number: the line number in the file where the error(s)
+            were found.
+        :param dict errors: version suffix errors, by policy ID.  See the
+            description for the return value in check_version().
+        """
+
+        for policy_id, versions in errors.items():
+
+            log.error('  %3d) %s: expected %s, got %s',
+                      line_number,
+                      policy_id,
+                      versions[0],
+                      ', '.join(versions[1:]))
 
 
 # This initializes the class variables during module load.  The initialization
