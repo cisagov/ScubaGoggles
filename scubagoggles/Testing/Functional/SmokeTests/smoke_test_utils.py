@@ -198,7 +198,7 @@ def run_selenium(browser, customerdomain):
         for product in gws_products['prod_to_fullname'].values()
     }
 
-    # Before entering loop check that we actually display 10 rows in table
+    # Before entering loop check that we actually display 9 rows in table
     reports_table = get_reports_table(browser)
 
     if len(reports_table) == 9:
