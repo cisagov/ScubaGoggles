@@ -20,7 +20,7 @@ from scubagoggles.scuba_argument_parser import ScubaArgumentParser
 from scubagoggles.user_setup import default_file_names, user_setup
 from scubagoggles.utils import path_parser
 from scubagoggles.version import Version
-from scubagoggles.scuba_constants import NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES
+from scubagoggles.scuba_constants import NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES, OPA_VERSION
 
 EXIT_FAILURE = 1
 
@@ -239,9 +239,10 @@ def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
 
     parser.add_argument('--version',
                         '-v',
-                        metavar='<OPA-version>',
-                        help='Version of OPA to download (default: latest '
-                        'version)')
+                        default = OPA_VERSION,
+                        metavar = '<OPA-version>',
+                        help = 'Version of OPA to download (default: latest '
+                            'version)')
 
     parser.add_argument('--opa_directory',
                         '-r',
