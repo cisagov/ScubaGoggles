@@ -118,7 +118,7 @@ class Orchestrator:
         self._args = args
         self._md_parser = MarkdownParser(args.documentpath)
 
-        md_products = set(args.baselines) - {'rules'}
+        md_products = set(args.baselines)
         self._baseline_policies = self._md_parser.parse_baselines(md_products)
 
     @classmethod
