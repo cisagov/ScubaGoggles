@@ -76,6 +76,7 @@ class Reporter:
             key.lower(): value for key, value in omissions.items()
         }
         self.progress_bar = progress_bar
+        self.rules_table = None
 
     @staticmethod
     def _get_test_result(requirement_met: bool,
@@ -361,6 +362,8 @@ class Reporter:
             rules_table.sort(key=lambda rule: rule['Alert Name'])
             rules_html += self.create_html_table(rules_table)
             html = html.replace('{{RULES}}', rules_html)
+            # Save the rules table to the object so the orchestrator can access it
+            self.rules_table = rules_table
         else:
             html = html.replace('{{RULES}}', '')
         return html

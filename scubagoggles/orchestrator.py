@@ -316,6 +316,7 @@ class Orchestrator:
         summary = {}
         results = {}
         total_output = {}
+        rules_table = {}
         stats_and_data = {}
 
         products_assessed = [prod_to_fullname[product] for product in products
@@ -367,6 +368,8 @@ class Orchestrator:
             results.update(baseline_product_results_json)
             total_output.update({'Summary': summary})
             total_output.update({'Results': results})
+            if reporter.rules_table is not None:
+                rules_table = reporter.rules_table
 
         args_dict = vars(args)
 
@@ -376,6 +379,7 @@ class Orchestrator:
             raw_data = json.load(file)
             raw_data.update({'scuba_config': args_dict})
         total_output.update({'Raw': raw_data})
+        total_output['Raw']['rules_table'] = rules_table
 
         report_file = out_folder / f'{out_jsonfile}.json'
         with report_file.open('w', encoding='utf-8') as results_file:
