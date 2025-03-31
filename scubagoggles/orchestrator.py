@@ -189,6 +189,10 @@ class Orchestrator:
 
     def convert_to_result_csv(self, output_dict):
         # This function converts the controls inside the Results section of the json output to a csv.
+        if len(output_dict) == 0:
+           print ("No action plan: result is empty")
+           return
+        
         ActionPlanCsv = []
         ScubaResultsCsv = []  
        
@@ -440,7 +444,8 @@ class Orchestrator:
             raw_data = json.load(file)
             raw_data.update({'scuba_config': args_dict})
         total_output.update({'Raw': raw_data})
-      
+
+        # Generate action report file
         self.convert_to_result_csv(total_output)
 
         report_file = out_folder / f'{out_jsonfile}.json'
