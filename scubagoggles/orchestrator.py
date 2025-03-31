@@ -188,27 +188,27 @@ class Orchestrator:
         out_jsonfile = args.outputpath / args.outputregofilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
-            json.dump(results, out_stream, indent=4)    
+            json.dump(results, out_stream, indent=4)
 
     def convert_to_result_csv(self, output_dict):
-        # This function converts the controls inside the Results section of the json output to a csv.
-        if (len(output_dict) == 0):
-           print ("No action plan: result is empty")
-           return
-         
-        actionPlanCsv = []
-        scubaResultsCsv = []
-       
+        """Converts the controls inside the Results section of the json output to a csv."""
+        if len(output_dict) == 0:
+            print ("No action plan: result is empty")
+            return
+
+        action_plan_csv = []
+        scuba_results_csv = []
+
         # Iterate through products, groups, and controls
         for product, value in output_dict["Results"].items():
-          
+
             for group in value:  # Accessing the 'Value' property of each product
                 for control in group["Controls"]:  # Accessing the 'Controls' property of each group
                     # Format the Requirement and Details fields
-                 
-                    if ('Requirement' in control):
+
+                    if 'Requirement' in control:
                         control["Requirement"] = control["Requirement"].strip()
-                        if ("<ul>" in control["Details"]):
+                        if "<ul>" in control["Details"]:
                             control["Details"] = control ["Details"].replace("<ul>", " ")
                             control["Details"] = control ["Details"].replace("<li>", "\n- ")
                             control["Details"] = control ["Details"].replace("</li>", " ")
@@ -216,30 +216,30 @@ class Orchestrator:
                             control["Details"] = control["Details"].strip()
 
                 # Add the control to scubaResultsCsv
-                scubaResultsCsv.append(control)
-            
+                scuba_results_csv.append(control)
+
                 # Check if the control result is "Fail"
                 if control["Result"] == "Fail":
-                    # Add blank fields for documenting reasons for failures and remediation timelines
+                    # Add blank fields for documenting reasons: failures and remediation timelines
                     control["Non-Compliance Reason"] = " "
                     control["Remediation Completion Date"] = " "
                     control["Justification"] = " "
-                
+
                 # Add the control to actionPlanCsv
-                    actionPlanCsv.append(control)
-        
+                    action_plan_csv.append(control)
+
         args = self._args
         out_folder = args.outputpath
-        planCsvFileName = os.path.join(out_folder, "ActionPlan.csv")
+        plan_csv_filename = os.path.join(out_folder, "ActionPlan.csv")
 
-        headers = list(scubaResultsCsv[0].keys())
+        headers = list(scuba_results_csv[0].keys())
         headers += ["Non-Compliance Reason", "Remediation Completion Date", "Justification"]
-        
-        with open(planCsvFileName, mode="w",  newline="") as plan_file:
-            writer = csv.DictWriter(plan_file, fieldnames=actionPlanCsv[0].keys())
+
+        with open(plan_csv_filename, mode="w",  newline="", encoding='UTF-8') as plan_file:
+            writer = csv.DictWriter(plan_file, fieldnames=action_plan_csv[0].keys())
             writer.writeheader()
-            writer.writerows(actionPlanCsv)
-        
+            writer.writerows(action_plan_csv)
+
     def _get_full_out_jsonfile_name(self, report_uuid: str):
         """
         This function determines the full file name of the SCuBA results file.
@@ -493,7 +493,7 @@ class Orchestrator:
                 # need to have the exception abort the run).
                 log.warning('No web browser available, report: %s',
                             str(report_path))
-    
+
     def _run_cached(self):
         """
         Has the ability to run scuba on a cached provider json
