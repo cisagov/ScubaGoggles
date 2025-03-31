@@ -39,6 +39,9 @@ API_LINKS = {
     api.value: f'<a href="{ApiUrl[api.name].value}">{api.value}</a>' for api in ApiReference
 }
 
+
+OPA_VERSION = 'v1.0.1'
+
 NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES = (
     0, 13, 18, 36
 )

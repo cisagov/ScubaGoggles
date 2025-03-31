@@ -1,25 +1,30 @@
 package utils
 import future.keywords
 
-# This is for use in versioning the baseline policy identifiers.  Because all
-# policy identifiers have the same baseline version suffix, it makes sense
-# to define the version once here, so it only has to be changed once.  The
-# policy identifiers are created with the PolicyIdWithSuffix() function.
-#
-# The baseline version suffix value is included by the Orchestrator in the
-# input data for normal policy evaluation.  For testing, the version suffix
-# is not required in the input data, as the default will be used and the
-# results are only processed by OPA (and not the Reporter, which WILL look
-# for matches between policy IDs in the Markdown and OPA results).
+# This is for use in versioning the baseline policy identifiers.  The versions
+# are kept out of the Rego files to minimize updates.  The baseline Markdown
+# files are the source of the policy version suffixes.  Both the default
+# "baseline_suffix" and policy to version mapping ("baseline_versions") are
+# included by the Orchestrator in the input data for normal policy evaluation.
+# For testing, the version suffix is not required in the input data, as the
+# default will be used and the results are only processed by OPA (and not the
+# Reporter, which WILL look for matches between policy IDs in the Markdown and
+# OPA results).
 
-default BaseVersionSuffix := "vM.m"
+default BaseVersionSuffix := "vM"
 
 BaseVersionSuffix := input.baseline_suffix if {
     "baseline_suffix" in object.keys(input)}
 
+PolicyIdSuffix(PolicyIdPrefix) := policyVersionSuffix if {
+    "baseline_versions" in object.keys(input)
+    PolicyIdPrefix in object.keys(input.baseline_versions)
+    policyVersionSuffix := input.baseline_versions[PolicyIdPrefix]
+} else := BaseVersionSuffix
+
 PolicyIdWithSuffix(PolicyIdPrefix) := sprintf("%s%s",
                                               [PolicyIdPrefix,
-                                               BaseVersionSuffix])
+                                               PolicyIdSuffix(PolicyIdPrefix)])
 
 NoSuchEventDetails(DefaultSafe, TopLevelOU) := Message if {
     DefaultSafe == true

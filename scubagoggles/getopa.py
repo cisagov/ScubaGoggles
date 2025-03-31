@@ -17,6 +17,7 @@ from urllib.parse import urljoin, urlsplit
 from urllib.request import Request, urlcleanup, urlopen, urlretrieve
 
 from scubagoggles.orchestrator import UserRuntimeError
+from scubagoggles.scuba_constants import OPA_VERSION
 from scubagoggles.utils import prompt_boolean
 
 log = logging.getLogger(__name__)
@@ -53,7 +54,7 @@ def getopa(arguments: argparse.Namespace):
 
 
 def download_opa(opa_dir: Path,
-                 version: str = None,
+                 version: str = OPA_VERSION,
                  verify: bool = False,
                  force: bool = False):
 
