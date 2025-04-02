@@ -245,7 +245,7 @@ def run_selenium(browser, customerdomain):
                     # If not, this has to be a generic result table
                     assert len(headers) == 5
                     assert headers[0].text == 'Control ID'
-                    assert headers[1].text == 'Requirements'
+                    assert headers[1].text == 'Requirement'
                     assert headers[2].text == 'Result'
                     assert headers[3].text == 'Criticality'
                     assert headers[4].text == 'Details'
