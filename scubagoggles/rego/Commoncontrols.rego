@@ -1571,7 +1571,7 @@ DisabledEmailOnlyRules contains Rule if {
 
 CommonControlsId13_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.13.1")
 
-CongugateToBe(n) := "is" if n == 1 else := "are"
+ConjugateToBe(n) := "is" if n == 1 else := "are"
 
 AlertsTableLink := "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
 
@@ -1582,10 +1582,10 @@ CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount
         format_int(TotalRuleCount, 10),
         "required rules,",
         format_int(EnabledRulesCount, 10),
-        CongugateToBe(EnabledRulesCount),
+        ConjugateToBe(EnabledRulesCount),
         "enabled and",
         format_int(DisabledRulesCount, 10),
-        CongugateToBe(DisabledRulesCount),
+        ConjugateToBe(DisabledRulesCount),
         "disabled.",
         AlertsTableLink
     ])
@@ -1602,10 +1602,10 @@ CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount
     format_int(TotalRuleCount, 10),
     "required rules, at least",
     format_int(EnabledRulesCount, 10),
-    CongugateToBe(EnabledRulesCount),
+    ConjugateToBe(EnabledRulesCount),
     "enabled and",
     format_int(DisabledRulesCount, 10),
-    CongugateToBe(DisabledRulesCount),
+    ConjugateToBe(DisabledRulesCount),
     "disabled. Unable to determine the state of the",
     format_int(TotalRuleCount - EnabledRulesCount - DisabledRulesCount, 10),
     "remaining required rules.",
