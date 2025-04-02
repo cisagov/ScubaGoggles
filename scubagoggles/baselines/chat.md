@@ -149,7 +149,7 @@ To configure the settings for History for spaces:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **History for spaces**.
-4.  Select **History is ON by default** or **History is ALWAYS ON**.
+4.  Select **History is ALWAYS ON**.
 5.  Select **Save**.
 
 ## 4. External Chat Messaging
