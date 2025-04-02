@@ -135,7 +135,7 @@ class ScubaArgumentParser:
         set of IDs covered by the baselines specificied in --baselines.
         """
 
-        md_products = set(args.baselines) - {'rules'}
+        md_products = set(args.baselines)
 
         # Parse the baselines to determine the set of valid control IDs
         md_parser = MarkdownParser(args.documentpath)

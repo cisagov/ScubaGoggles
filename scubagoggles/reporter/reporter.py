@@ -5,6 +5,7 @@ import io
 import logging
 import time
 import warnings
+import json
 
 from datetime import datetime
 from html import escape
@@ -75,6 +76,7 @@ class Reporter:
             key.lower(): value for key, value in omissions.items()
         }
         self.progress_bar = progress_bar
+        self.rules_table = None
 
     @staticmethod
     def _get_test_result(requirement_met: bool,
@@ -271,11 +273,13 @@ class Reporter:
             return 'Rationale not provided.'
         return self._omissions[control_id]['rationale']
 
-    def _build_report_html(self, fragments: list) -> str:
+    def _build_report_html(self, fragments: list, rules_data : dict) -> str:
         """
         Adds data into HTML Template and formats the page accordingly
 
         :param fragments: list object containing each baseline
+        :param rules_data: the 'actual_value' for GWS.COMMONCONTROLS.13.1 if
+            present, None otherwise
         """
 
         template_file = (self._reporter_path
@@ -327,6 +331,41 @@ class Reporter:
         collected = ''.join(fragments)
 
         html = html.replace('{{TABLES}}', collected)
+        if rules_data:
+            alert_descriptions = json.loads((self._reporter_path
+                         / 'IndividualReport/AlertsDescriptions.json').read_text())
+            rules_html = '<hr>'
+            rules_html += '<h2 id="alerts">System Defined Alerts</h2>'
+            rules_html += '<p>Note: As ScubaGoggles currently relies on admin log events '
+            rules_html += 'to determine alert status, ScubaGoggles will not be able to '
+            rules_html += 'determine the current status of any alerts whose state has '
+            rules_html += 'not changed recently.</p>'
+            rules_table = []
+            for rule in rules_data['enabled_rules']:
+                rules_table.append({
+                    'Alert Name': rule,
+                    'Description': alert_descriptions[rule],
+                    'Status': 'Enabled'
+                })
+            for rule in rules_data['disabled_rules']:
+                rules_table.append({
+                    'Alert Name': rule,
+                    'Description': alert_descriptions[rule],
+                    'Status': 'Disabled'
+                })
+            for rule in rules_data['unknown']:
+                rules_table.append({
+                    'Alert Name': rule,
+                    'Description': alert_descriptions[rule],
+                    'Status': 'Unknown'
+                })
+            rules_table.sort(key=lambda rule: rule['Alert Name'])
+            rules_html += self.create_html_table(rules_table)
+            html = html.replace('{{RULES}}', rules_html)
+            # Save the rules table to the object so the orchestrator can access it
+            self.rules_table = rules_table
+        else:
+            html = html.replace('{{RULES}}', '')
         return html
 
     def _get_failed_prereqs(self, test: dict) -> set:
@@ -399,31 +438,6 @@ class Reporter:
             return 'Passes'
         raise ValueError(f'Unexpected result, {result}', RuntimeWarning)
 
-    def _handle_rules_omission(self, control_id: str, tests: list):
-        """Process the test results for the rules report if the rules control
-        was omitted.
-
-        :control_id: The control ID for the rules control.
-        :tests: A list of test result dictionaries.
-        """
-        table_data = []
-        for test in tests:
-            if 'Not-Implemented' in test['Criticality']:
-                # The easiest way to identify the common controls "rules"
-                # results that belong to the Common Controls report is they're
-                # marked as Not-Implemented. This if excludes them from the
-                # rules report.
-                continue
-            rationale = self._get_omission_rationale(control_id)
-            table_data.append({
-                'Control ID': control_id,
-                'Rule Name': test['Requirement'],
-                'Result': 'Omitted',
-                'Criticality': test['Criticality'],
-                'Rule Description': f'N/A; test omitted by user. {rationale}'
-            })
-        return table_data
-
     def _warn(self, *args, **kwargs):
         """
         Wrapper for the warnings.warn function, that clears and refreshes the
@@ -463,6 +477,7 @@ class Reporter:
             'Omit': 0
         }
 
+        rules_data = None
         for baseline_group in self._product_policies:
             table_data = []
             results_data = {}
@@ -488,13 +503,6 @@ class Reporter:
                     continue
                 if self._is_control_omitted(control_id):
                     # Handle the case where the control was omitted
-                    if product_capitalized == 'Rules':
-                        # Rules is a special case
-                        rules_data = self._handle_rules_omission(
-                            control_id, tests)
-                        table_data.extend(rules_data)
-                        report_stats['Omit'] += len(rules_data)
-                        continue
                     report_stats['Omit'] += 1
                     rationale = self._get_omission_rationale(control_id)
                     table_data.append({
@@ -517,9 +525,13 @@ class Reporter:
                                            'Criticality': test['Criticality'],
                                            'Details': failed_details})
                         continue
+
+                    if control_id.startswith('GWS.COMMONCONTROLS.13.1'):
+                        rules_data = test['ActualValue']
+
                     result = self._get_test_result(test['RequirementMet'],
-                                                   test['Criticality'],
-                                                   test['NoSuchEvent'])
+                                                    test['Criticality'],
+                                                    test['NoSuchEvent'])
 
                     details = test['ReportDetails']
 
@@ -529,39 +541,14 @@ class Reporter:
                                         'width="15" height="15">'
                                         '</object>')
                         details = warning_icon + ' ' + test['ReportDetails']
-                    # As rules doesn't have its own baseline, Rules
-                    # and Common Controls need to be handled specially
-                    if product_capitalized == 'Rules':
-                        if 'Not-Implemented' in test['Criticality']:
-                            # The easiest way to identify the
-                            # GWS.COMMONCONTROLS.13.1 results that belong to the
-                            # Common Controls report is they're marked as
-                            # Not-Implemented. This if excludes them from the
-                            # rules report.
-                            continue
-                        report_stats[self._get_summary_category(result)] += 1
-                        table_data.append({
-                            'Control ID': control_id,
-                            'Rule Name': test['Requirement'],
-                            'Result': result,
-                            'Criticality': test['Criticality'],
-                            'Rule Description': test['ReportDetails']})
-                    elif (product_capitalized == 'Commoncontrols'
-                          and baseline_group['GroupName'] == 'System-defined Rules'
-                          and 'Not-Implemented' not in test['Criticality']):
-                        # The easiest way to identify the System-defined Rules
-                        # results that belong to the Common Controls report is
-                        # they're marked as Not-Implemented. This if excludes
-                        # the full results from the Common Controls report.
-                        continue
-                    else:
-                        report_stats[self._get_summary_category(result)] += 1
-                        table_data.append({
-                            'Control ID': control_id,
-                            'Requirement': requirement,
-                            'Result': result,
-                            'Criticality': test['Criticality'],
-                            'Details': details})
+
+                    report_stats[self._get_summary_category(result)] += 1
+                    table_data.append({
+                        'Control ID': control_id,
+                        'Requirement': requirement,
+                        'Result': result,
+                        'Criticality': test['Criticality'],
+                        'Details': details})
             markdown_group_name = '-'.join(baseline_group['GroupName'].split())
             group_reference_url = (f'{self._github_url}/blob/{Version.current}/'
                                    f'scubagoggles/baselines/{product}.md'
@@ -579,7 +566,7 @@ class Reporter:
             results_data.update({'GroupReferenceURL': group_reference_url})
             results_data.update({'Controls': table_data})
             json_data.append(results_data)
-        html = self._build_report_html(fragments)
+        html = self._build_report_html(fragments, rules_data)
         with open(f'{out_path}/IndividualReports/{ind_report_name}.html',
                   mode='w', encoding='UTF-8') as html_file:
             html_file.write(html)
