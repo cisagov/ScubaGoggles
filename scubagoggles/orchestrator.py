@@ -215,18 +215,18 @@ class Orchestrator:
                             control["Details"] = control ["Details"].replace("</ul>", "")
                             control["Details"] = control["Details"].strip()
 
-                # Add the control to scubaResultsCsv
-                scuba_results_csv.append(control)
+                        # Add the control to scubaResultsCsv
+                        scuba_results_csv.append(control)
 
-                # Check if the control result is "Fail"
-                if control["Result"] == "Fail":
-                    # Add blank fields for documenting reasons: failures and remediation timelines
-                    control["Non-Compliance Reason"] = " "
-                    control["Remediation Completion Date"] = " "
-                    control["Justification"] = " "
+                        # Check if the control result is "Fail"
+                        if control["Result"] == "Fail":
+                            # Add blank fields for documenting reasons: failures and remediation timelines
+                            control["Non-Compliance Reason"] = " "
+                            control["Remediation Completion Date"] = " "
+                            control["Justification"] = " "
 
-                # Add the control to actionPlanCsv
-                    action_plan_csv.append(control)
+                            # Add the control to actionPlanCsv - only for result is fail
+                            action_plan_csv.append(control)
 
         args = self._args
         out_folder = args.outputpath
