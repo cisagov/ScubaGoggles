@@ -157,7 +157,7 @@ NonCompliantOUs3_1 contains {
     some OU, settings in input.policies
     ChatEnabled(OU)
     spaceHistory := settings.chat_space_history.historyState
-    not spaceHistory in ["DEFAULT_HISTORY_ON", "HISTORY_ALWAYS_ON"]
+    spaceHistory != "HISTORY_ALWAYS_ON"
 }
 
 tests contains {
@@ -267,19 +267,19 @@ NonCompliantOUs5_1 contains {
     # these settings.
     OU != utils.TopLevelOU
 
+    # Ignore OUs without all event types. We're already asserting that the
+    # top-level OU has at least one event for all types; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
     OneOnOneEvents := utils.FilterEventsOU(LogEvents, "ContentReportingProto one_on_one_reporting", OU)
+    count(OneOnOneEvents) > 0
     GroupEvents := utils.FilterEventsOU(LogEvents, "ContentReportingProto group_chat_reporting", OU)
+    count(GroupEvents) > 0
     SpacesEvents := utils.FilterEventsOU(LogEvents, "ContentReportingProto room_reporting", OU)
+    count(SpacesEvents) > 0
 
     # This setting corresponds to the "All spaces" or "Discoverable spaces only" toggle under the Spaces box
     SpacesRestrictionEvents := utils.FilterEventsOU(LogEvents, "ContentReportingProto room_restrictions", OU)
 
-    # Ignore OUs without all event types. We're already asserting that the
-    # top-level OU has at least one event for all types; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(OneOnOneEvents) > 0
-    count(GroupEvents) > 0
-    count(SpacesEvents) > 0
     count(SpacesRestrictionEvents) > 0
 
     # Get the last event for each setting
@@ -305,19 +305,19 @@ NonCompliantOUs5_1 contains {
     # NOTE: the top-level OU is a special case, see comments above.
     OU := utils.TopLevelOU
 
+    # Ignore OUs without all event types. We're already asserting that the
+    # top-level OU has at least one event for all types; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
     OneOnOneEvents := utils.FilterEventsOU(LogEvents, "ContentReportingProto one_on_one_reporting", OU)
+    count(OneOnOneEvents) > 0
     GroupEvents := utils.FilterEventsOU(LogEvents, "ContentReportingProto group_chat_reporting", OU)
+    count(GroupEvents) > 0
     SpacesEvents := utils.FilterEventsOU(LogEvents, "ContentReportingProto room_reporting", OU)
+    count(SpacesEvents) > 0
 
     # This setting corresponds to the "All spaces" or "Discoverable spaces only" toggle under the Spaces box
     SpacesRestrictionEvents := utils.FilterEventsOU(LogEvents, "ContentReportingProto room_restrictions", OU)
 
-    # Ignore OUs without all event types. We're already asserting that the
-    # top-level OU has at least one event for all types; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(OneOnOneEvents) > 0
-    count(GroupEvents) > 0
-    count(SpacesEvents) > 0
     count(SpacesRestrictionEvents) > 0
 
     # Get the last event for each setting
