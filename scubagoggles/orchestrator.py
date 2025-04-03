@@ -200,7 +200,7 @@ class Orchestrator:
         scuba_results_csv = []
 
         # Iterate through products, groups, and controls
-        for product, value in output_dict["Results"].items():
+        for value in output_dict["Results"].values():
 
             for group in value:  # Accessing the 'Value' property of each product
                 for control in group["Controls"]:  # Accessing the 'Controls' property of each group
