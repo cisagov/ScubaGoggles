@@ -220,7 +220,8 @@ class Orchestrator:
 
                         # Check if the control result is "Fail"
                         if control["Result"] == "Fail":
-                            # Add blank fields for documenting reasons: failures and remediation timelines
+                            # Add blank fields for documenting reasons:
+                            # failures and remediation timelines
                             control["Non-Compliance Reason"] = " "
                             control["Remediation Completion Date"] = " "
                             control["Justification"] = " "
