@@ -229,11 +229,13 @@ class Orchestrator:
         out_folder = args.outputpath
         plan_csv_filename = os.path.join(out_folder, "ActionPlan.csv")
 
-
         with open(plan_csv_filename, mode="w",  newline="", encoding='UTF-8') as plan_file:
-            writer = csv.DictWriter(plan_file, fieldnames=action_plan_csv[0].keys())
-            writer.writeheader()
-            writer.writerows(action_plan_csv)
+            if (action_plan_csv != []):
+                writer = csv.DictWriter(plan_file, fieldnames=action_plan_csv[0].keys())
+                writer.writeheader()
+                writer.writerows(action_plan_csv)
+            else:
+                log.info ("No action required")
 
     def _get_full_out_jsonfile_name(self, report_uuid: str):
         """
