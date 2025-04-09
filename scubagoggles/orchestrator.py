@@ -188,14 +188,15 @@ class Orchestrator:
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(results, out_stream, indent=4)
 
-    def convert_to_result_csv(self, output_dict):
-        """Converts the controls inside the Results section of the json output to a csv."""
+    def convert_to_result_csv(self, output_dict: dict):
+        """Converts the controls inside the Results section of the json output to a csv.
+        :param output_dict: scuba results
+        """
         if len(output_dict) == 0:
-            print ("No action plan: result is empty")
+            log.info ("No action plan: result is empty")
             return
 
         action_plan_csv = []
-        scuba_results_csv = []
 
         # Iterate through products, groups, and controls
         for value in output_dict["Results"].values():
@@ -213,9 +214,6 @@ class Orchestrator:
                             control["Details"] = control ["Details"].replace("</ul>", "")
                             control["Details"] = control["Details"].strip()
 
-                        # Add the control to scubaResultsCsv
-                        scuba_results_csv.append(control)
-
                         # Check if the control result is "Fail"
                         if control["Result"] == "Fail":
                             # Add blank fields for documenting reasons:
@@ -231,8 +229,6 @@ class Orchestrator:
         out_folder = args.outputpath
         plan_csv_filename = os.path.join(out_folder, "ActionPlan.csv")
 
-        headers = list(scuba_results_csv[0].keys())
-        headers += ["Non-Compliance Reason", "Remediation Completion Date", "Justification"]
 
         with open(plan_csv_filename, mode="w",  newline="", encoding='UTF-8') as plan_file:
             writer = csv.DictWriter(plan_file, fieldnames=action_plan_csv[0].keys())
