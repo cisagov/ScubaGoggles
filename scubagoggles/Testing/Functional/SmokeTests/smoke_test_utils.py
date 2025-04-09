@@ -198,10 +198,10 @@ def run_selenium(browser, customerdomain):
         for product in gws_products['prod_to_fullname'].values()
     }
 
-    # Before entering loop check that we actually display 10 rows in table
+    # Before entering loop check that we actually display 9 rows in table
     reports_table = get_reports_table(browser)
 
-    if len(reports_table) == 10:
+    if len(reports_table) == 9:
         for i in range(len(reports_table)):
 
             # Check if customerdomain is present in agency table
@@ -236,12 +236,19 @@ def run_selenium(browser, customerdomain):
                     .find_elements(By.TAG_NAME, 'tr')[0]
                     .find_elements(By.TAG_NAME, 'th')
                 )
-                assert len(headers) == 5
-                assert headers[0].text == 'Control ID'
-                assert headers[1].text in 'Requirements' or headers[1].text in 'Rule Name'
-                assert headers[2].text == 'Result'
-                assert headers[3].text == 'Criticality'
-                assert headers[4].text in 'Details' or headers[4].text in 'Rule Description'
+                if len(headers) == 3:
+                    # Is this the rules table?
+                    assert headers[0].text == 'Alert Name'
+                    assert headers[1].text == 'Description'
+                    assert headers[2].text == 'Status'
+                else:
+                    # If not, this has to be a generic result table
+                    assert len(headers) == 5
+                    assert headers[0].text == 'Control ID'
+                    assert headers[1].text == 'Requirement'
+                    assert headers[2].text == 'Result'
+                    assert headers[3].text == 'Criticality'
+                    assert headers[4].text == 'Details'
 
                 # Verify policy table rows are populated
                 tbody = table.find_element(By.TAG_NAME, 'tbody')
@@ -263,7 +270,7 @@ def run_selenium(browser, customerdomain):
                 )
             )
     else:
-        raise ValueError('Expected the reports table to have a length of 10')
+        raise ValueError('Expected the reports table to have a length of 9')
 
 
 def verify_navigation_links(browser):

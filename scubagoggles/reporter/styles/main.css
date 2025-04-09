@@ -150,3 +150,17 @@ a.control_group:active {
     color: var(--link-color);
     text-decoration: none;
 }
+
+hr {
+    margin: 0.5em;
+    margin-top: 3em;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 50%;
+    text-align: center;
+    margin: auto;
+    font-size: 12px;
+    padding-bottom: 1.5em;
+}

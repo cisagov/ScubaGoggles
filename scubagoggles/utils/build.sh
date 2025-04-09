@@ -33,6 +33,7 @@ shopt -s expand_aliases
 gitTag=
 outDir="$PWD"
 scubaGogglesGit='git@github.com:cisagov/ScubaGoggles.git'
+zipSource=true
 
 usage()
 {
@@ -45,9 +46,10 @@ usage()
   printf '              defaults to %s\n' "$scubaGogglesGit"
   printf '    -t <git-tag-or-branch>: checkout tag or branch for build\n'
   printf '                            defaults to top of main branch\n'
+  printf '    -x: omit the ZIP source distribution file\n'
 }
 
-while getopts ':ho:r:t:' option
+while getopts ':ho:r:t:x' option
 do
   case "$option" in
     h)
@@ -64,6 +66,9 @@ do
     t)
       gitTag=$OPTARG
       ;;
+    x)
+      zipSource=false
+      ;;
     ?)
       usage
       exit 1
@@ -78,12 +83,50 @@ shift $((OPTIND -1))
 # Used to distinguish output from this script.
 buildPfx='{build>>>}'
 
-cleanup() {
+cleanup()
+{
   echo "$buildPfx Performing build cleanup..."
   [[ $(type -t deactivate) == function ]] && deactivate
   [[ "${DIRSTACK[0]}" == "$scubaGoggles" ]] && popd
   rm -rf "$scubaEnv"
   rm -rf "$scubaGoggles"
+}
+
+generateSourceZip()
+{
+  # Generates a ZIP file version of the source code distribution, which is
+  # in gzipped tar format (.tar.gz).  There are 2 parameters to this function:
+  #
+  #     generateSourceZip <gz-tar-file> <out-var-name>
+  #
+  # where <gz-tar-file> is an existing source distribution (the file must
+  # end with ".tar.gz" (not ".tgz")), and <out-var-name> is the name of the
+  # variable where the output file name will be written.  The ZIP source
+  # code file will be created in the same location as the given tar file.
+  #
+  # Python's PEP 517 has restricted the source distributions built by
+  # backends to be gzipped tar files only.
+  #
+  # This work is done in a temporary directory, which is removed provided
+  # that no errors occur during the creation of the ZIP file.
+
+  local gztarFile
+  local sourceTemp
+  local -n outFile=$2
+
+  gztarFile=$1
+  sourceTemp=$(mktemp -d -t scubagoggles_src.XXXXXXXXXX)
+  outFile=$(realpath "${gztarFile/tar.gz/zip}")
+
+  tar xfz "$gztarFile" -C "$sourceTemp"
+
+  pushd "$sourceTemp"
+
+  zip -qr "$outFile" .
+
+  popd
+
+  rm -rf "$sourceTemp"
 }
 
 pushd() { builtin pushd "$@" > /dev/null; }
@@ -140,7 +183,16 @@ python -m build
 wheelFile=$(realpath dist/scubagoggles-*.whl)
 tarFile=$(realpath dist/scubagoggles-*.tar.gz)
 
-for file in "$wheelFile" "$tarFile"
+packageFiles=("$wheelFile" "$tarFile")
+
+if [ "$zipSource" == true ]
+then
+  echo "$buildPfx Generating Source ZIP File..."
+  generateSourceZip "$tarFile" zipFile
+  packageFiles+=("$zipFile")
+fi
+
+for file in "${packageFiles[@]}"
 do
   echo "$buildPfx Copying $file to $outDir"
   cp "$file" "$outDir/$(basename "$file")"

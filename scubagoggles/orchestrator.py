@@ -89,7 +89,6 @@ class Orchestrator:
         'meet',
         'sites',
         'commoncontrols',
-        'rules',
         'classroom'
     ]
     _prod_to_fullname = {
@@ -101,7 +100,6 @@ class Orchestrator:
         'meet': 'Google Meet',
         'sites': 'Google Sites',
         'commoncontrols': 'Common Controls',
-        'rules': 'Rules',
         'classroom': 'Google Classroom'
     }
 
@@ -121,7 +119,7 @@ class Orchestrator:
         self._args = args
         self._md_parser = MarkdownParser(args.documentpath)
 
-        md_products = set(args.baselines) - {'rules'}
+        md_products = set(args.baselines)
         self._baseline_policies = self._md_parser.parse_baselines(md_products)
 
     @classmethod
@@ -361,19 +359,6 @@ class Orchestrator:
 
         baseline_policies = self._baseline_policies
 
-        if 'rules' in args.baselines:
-            # There's no baseline specific to rules, so this case
-            # needs to be handled separately
-            baseline_policies['rules'] = []
-            for group in baseline_policies['commoncontrols']:
-                if group['GroupName'] == 'System-defined Rules':
-                    baseline_policies['rules'].append(group)
-                    break
-            else:
-                raise RuntimeError("Unable to process 'rules' as no policy "
-                                   "group named 'System-defined Rules' found "
-                                   'in the Common Controls baseline.')
-
         # Determine if any controls were omitted in the config file
         omissions = {}
         if 'omitpolicy' in args and args.omitpolicy is not None:
@@ -383,6 +368,7 @@ class Orchestrator:
         summary = {}
         results = {}
         total_output = {}
+        rules_table = {}
         stats_and_data = {}
 
         products_assessed = [prod_to_fullname[product] for product in products
@@ -434,6 +420,8 @@ class Orchestrator:
             results.update(baseline_product_results_json)
             total_output.update({'Summary': summary})
             total_output.update({'Results': results})
+            if reporter.rules_table is not None:
+                rules_table = reporter.rules_table
 
         args_dict = vars(args)
 
@@ -443,6 +431,7 @@ class Orchestrator:
             raw_data = json.load(file)
             raw_data.update({'scuba_config': args_dict})
         total_output.update({'Raw': raw_data})
+        total_output['Raw']['rules_table'] = rules_table
 
         # Generate action report file
         self.convert_to_result_csv(total_output)
@@ -548,10 +537,6 @@ class Orchestrator:
 
         args = self._args
         args.baselines = list(args.baselines)
-        if 'commoncontrols' in args.baselines and 'rules' not in args.baselines:
-            args.baselines.append('rules')
-        if 'rules' in args.baselines and 'commoncontrols' not in args.baselines:
-            args.baselines.append('commoncontrols')
         args.baselines.sort()
 
         # get the absolute paths relative to this directory
