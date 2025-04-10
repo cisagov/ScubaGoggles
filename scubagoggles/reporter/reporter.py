@@ -41,6 +41,7 @@ class Reporter:
                  product_policies: list,
                  successful_calls: set,
                  unsuccessful_calls: set,
+                 missing_policies: set,
                  omissions: dict,
                  progress_bar=None):
         """Reporter class initialization
@@ -55,6 +56,8 @@ class Reporter:
             read from the baseline markdown
         :param successful_calls: set with the set of successful calls
         :param unsuccessful_calls: set with the set of unsuccessful calls
+        :param missing_policies: set with the set of policies missing from the
+            policy API output
         :param omissions: dict with the omissions specified in the config
             file (empty dict if none omitted)
         :param progress_bar: Optional TQDM instance. If provided, the
@@ -70,6 +73,11 @@ class Reporter:
         self._product_policies = product_policies
         self._successful_calls = successful_calls
         self._unsuccessful_calls = unsuccessful_calls
+        self._missing_policies = set()
+        for policy in missing_policies:
+            # Prepend each missing policy with "policy/" as that's how they are
+            # listed in the rego
+            self._missing_policies.add(f'policy/{policy}')
         self._full_name = prod_to_fullname[product]
         self._omissions = {
             # Lowercase all the keys for case-insensitive comparisons
@@ -378,18 +386,33 @@ class Reporter:
         """
 
         if 'Prerequisites' not in test:
-            # If Prerequisites is not defined, assume the test just depends
-            # on the reports API.
-            prereqs = {'reports/v1/activities/list'}
+            # TODO change this once the Rego for each baseline has been updated
+            # with the enhanced error handling for the provider API. Once that
+            # update has been made, each rego test should include a
+            # prerequisites section. For now, to avoid a breaking change,
+            # any test with a prerequisites defined gets a free pass.
+            prereqs = {}
         else:
-            prereqs = set(test['Prerequisites'])
+            prereqs = test['Prerequisites']
 
-        # A call is failed if it is either missing from the successful_calls
-        # set or present in the unsuccessful_calls
+        policy_prereqs = set()
+        other_prereqs = set()
+        for prereq in prereqs:
+            if prereq.startswith('policy/'):
+                policy_prereqs.add(prereq)
+            else:
+                other_prereqs.add(prereq)
+
+        # A function/API call is failed if it is either missing from the
+        # successful_calls set or present in the unsuccessful_calls
         failed_prereqs = set().union(
-            prereqs.difference(self._successful_calls),
-            prereqs.intersection(self._unsuccessful_calls)
+            other_prereqs.difference(self._successful_calls),
+            other_prereqs.intersection(self._unsuccessful_calls)
         )
+
+        # Add any missing policies to the failed prereq set
+        failed_prereqs = failed_prereqs.union(
+            self._missing_policies.intersection(policy_prereqs))
 
         return failed_prereqs
 
@@ -405,17 +428,39 @@ class Reporter:
 
         failed_apis = [API_LINKS[api] for api in failed_prereqs
                        if api in API_LINKS]
-        failed_functions = [call for call in failed_prereqs
-                            if call not in API_LINKS]
+        missing_policies = [prereq for prereq in failed_prereqs
+                            if prereq.startswith('policy/')]
+        failed_functions = failed_prereqs.difference(failed_apis,
+                                                    missing_policies)
+
         failed_details = ''
         if len(failed_apis) > 0:
             links = ', '.join(failed_apis)
-            failed_details += ('This test depends on the following API call(s) '
-                               f'which did not execute successfully: {links}.')
+            failed_details += ('This test depends on the following API '
+                               'call(s) which did not execute successfully: '
+                               f'{links}. ')
+
+        if len(missing_policies) > 0:
+            # [7:] in the following line removes the leading "policy/" from the
+            # string, that's not actually part of the setting name, the Rego
+            # includes that just to disambiguate the policy settings from the
+            # function prereqs
+            styled_policies = [f'<pre>{policy[7:]}</pre>'
+                                for policy in missing_policies]
+            policy_str = ''.join(styled_policies)
+            is_plural = len(missing_policies) != 1
+            failed_details += 'This test depends on the following '
+            failed_details += 'settings ' if is_plural else 'setting '
+            failed_details += 'returned by the policy API but '
+            failed_details += 'are ' if is_plural else 'is '
+            failed_details += f'unexpectedly missing or invalid: {policy_str} '
+
         if len(failed_functions) > 0:
+            function_str = ', '.join(failed_functions)
             failed_details += ('This test depends on the following '
                                'function(s) which did not execute '
-                               f"successfully: {', '.join(failed_functions)}.")
+                               f'successfully: {function_str}. ')
+
         failed_details += 'See terminal output for more details.'
         return failed_details
 
