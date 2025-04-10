@@ -386,7 +386,8 @@ class Reporter:
         """
 
         if 'Prerequisites' not in test:
-            # TODO change this once the Rego for each baseline has been updated
+            # TODO # pylint: disable=fixme
+            # Change this once the Rego for each baseline has been updated
             # with the enhanced error handling for the provider API. Once that
             # update has been made, each rego test should include a
             # prerequisites section. For now, to avoid a breaking change,
