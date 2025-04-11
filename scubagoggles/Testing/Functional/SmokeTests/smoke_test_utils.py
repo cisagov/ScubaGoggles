@@ -4,6 +4,7 @@ Helper methods for running the functional smoke tests.
 
 import os
 import json
+import logging
 
 from operator import itemgetter
 from pathlib import Path
@@ -20,6 +21,8 @@ OUTPUT_DIRECTORY = 'GWSBaselineConformance'
 BASELINE_REPORT_H1 = 'SCuBA GWS Secure Configuration Baseline Reports'
 CISA_GOV_URL = 'https://www.cisa.gov/scuba'
 SCUBAGOGGLES_BASELINES_URL = 'https://github.com/cisagov/ScubaGoggles/tree/main/baselines'
+
+log = logging.getLogger(__name__)
 
 
 def get_output_path() -> Path:
@@ -319,13 +322,49 @@ def verify_tenant_table(browser, customerdomain, parent):
         .find_elements(By.TAG_NAME, 'tr')
     )
     assert len(tenant_table_rows) == 2
-    domain = tenant_table_rows[1].find_elements(By.TAG_NAME, 'td')[0].text
-    assert domain == customerdomain
+
+    # The tenant table has 2 rows - the heading and the data.  First, create
+    # a map of the headings to their corresponding row indices.  This will
+    # allow us to get the values by heading.
+
+    error_occurred = False
+
+    row0, row1 = tenant_table_rows
+    heading_index_map = {e.text.strip(): i for i, e
+                         in enumerate(row0.find_elements(By.TAG_NAME, 'th'))}
+
+    # These are the checks to be done.  Always check the customer domain, and
+    # for the individual reports check that the tool version reported is
+    # correct.
+
+    tests = [('Customer Domain', customerdomain)]
 
     if not parent:
-        # Check for correct tool version, e.g. 0.2.0
-        tool_version = tenant_table_rows[1].find_elements(By.TAG_NAME, 'td')[3].text
-        assert tool_version == Version.current
+        tests.append(('Tool Version', Version.current))
 
-        # Baseline version should also be checked in this method
-        # Add as an additional todo
+    values = [e.text for e in row1.find_elements(By.TAG_NAME, 'td')]
+
+    for heading, expected_value in tests:
+
+        if heading not in heading_index_map:
+            log.error('"%s" - heading missing from tenant table', heading)
+            error_occurred = True
+            continue
+
+        index = heading_index_map[heading]
+
+        if index >= len(values):
+            log.error('value missing for "%s" in tenant table', heading)
+            error_occurred = True
+            continue
+
+        value = values[index]
+
+        if value != expected_value:
+            log.error('"%s" != "%s" (expected) for "%s"',
+                      value,
+                      expected_value,
+                      heading)
+            error_occurred = True
+
+    assert not error_occurred
