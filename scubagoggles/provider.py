@@ -403,6 +403,7 @@ class Provider:
                 f'Exception thrown while getting top level OU: {exc}',
                 RuntimeWarning
             )
+            self._check_scopes(exc)
             self._unsuccessful_calls.add(ApiReference.LIST_OUS.value)
             return 'Error Retrieving'
 
@@ -685,3 +686,11 @@ class Provider:
             request = resource.list_next(request, response)
 
         return results
+
+    def _check_scopes(self, exc):
+        # If one of the scopes is not authorized in a Service account the 
+        # error is thrown: ('access_denied: Requested client not authorized.', 
+        # {'error': 'access_denied', 'error_description': 'Requested client not authorized.'})
+        scopes_list = GwsAuth._scopes
+        if 'access_denied: Requested client not authorized.' in str(exc):
+            warnings.warn(f'Your credential may be missing one of the following scope: {scopes_list}')
