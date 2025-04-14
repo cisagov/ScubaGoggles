@@ -688,9 +688,10 @@ class Provider:
         return results
 
     def _check_scopes(self, exc):
-        # If one of the scopes is not authorized in a Service account the 
-        # error is thrown: ('access_denied: Requested client not authorized.', 
+        # If one of the scopes is not authorized in a Service account the
+        # error is thrown: ('access_denied: Requested client not authorized.',
         # {'error': 'access_denied', 'error_description': 'Requested client not authorized.'})
-        scopes_list = GwsAuth._scopes
+        scopes_list = self._credentials.scopes
         if 'access_denied: Requested client not authorized.' in str(exc):
-            warnings.warn(f'Your credential may be missing one of the following scope: {scopes_list}')
+            warnings.warn(f'Your credential may be missing one' 
+                          f' of the following scopes: {scopes_list}')
