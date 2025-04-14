@@ -693,5 +693,5 @@ class Provider:
         # {'error': 'access_denied', 'error_description': 'Requested client not authorized.'})
         scopes_list = self._credentials.scopes
         if 'access_denied: Requested client not authorized.' in str(exc):
-            warnings.warn(f'Your credential may be missing one' 
+            warnings.warn(f'Your credential may be missing one'
                           f' of the following scopes: {scopes_list}')

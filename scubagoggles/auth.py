@@ -127,7 +127,7 @@ class GwsAuth:
 
             # Identifies the missing scope(s) from the token file.
             missing_scopes = list(set(valid_scopes).difference(token_scopes))
-            warnings.warn(f'Your credential is missing the ' 
+            warnings.warn(f'Your credential is missing the '
                           f'following scope(s): {str(missing_scopes)[1:-1]}')
 
     def _load_token(self):
