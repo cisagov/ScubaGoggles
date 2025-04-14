@@ -17,6 +17,7 @@ usage: scubagoggles gws [-h]
                         [--documentpath <directory>]
                         [--outputfoldername <name>]
                         [--outputproviderfilename <name>]
+                        [--outputactionplanfilename <name>]
                         [--outputregofilename <name>]
                         [--outputreportfilename]
                         [--quiet]
@@ -59,6 +60,8 @@ options:
                         The name of the folder created in --outputpath where both the output JSON and the HTML report will be created. Defaults to GWSBaselineConformance. The client's local timestamp will be appended to this name.
   --outputproviderfilename <name>
                         The name of the Provider output json in --outputpath. Defaults to ProviderSettingsExport.
+  --outputactionplanfilename <name>
+                        The name of the Actions Plan output csv in --outputpath. Defaults to ActionsPlan.
   --outputregofilename <name>
                         The name of the Rego output json in --outputpath. Defaults to TestResults.
   --outputreportfilename

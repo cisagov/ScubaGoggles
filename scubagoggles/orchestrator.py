@@ -226,9 +226,8 @@ class Orchestrator:
                             action_plan_csv.append(control)
 
         args = self._args
-        out_folder = args.outputpath
-        plan_csv_filename = os.path.join(out_folder, "ActionPlan.csv")
-
+        plan_csv_filename = args.outputpath / f'{args.outputactionplanfilename}.csv'
+        
         with open(plan_csv_filename, mode="w",  newline="", encoding='UTF-8') as plan_file:
             if (action_plan_csv != []):
                 writer = csv.DictWriter(plan_file, fieldnames=action_plan_csv[0].keys())
