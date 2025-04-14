@@ -227,14 +227,15 @@ class Orchestrator:
 
         args = self._args
         plan_csv_filename = args.outputpath / f'{args.outputactionplanfilename}.csv'
-        
+
         with open(plan_csv_filename, mode="w",  newline="", encoding='UTF-8') as plan_file:
-            if (action_plan_csv != []):
+            if action_plan_csv:
                 writer = csv.DictWriter(plan_file, fieldnames=action_plan_csv[0].keys())
                 writer.writeheader()
                 writer.writerows(action_plan_csv)
             else:
-                header = ['ControlID', 'Requirement', 'Result', 'Criticality', 'Details', 'Non-Compliance Reason', 'Remediation Completion Date', 'Justification']
+                header = ['ControlID', 'Requirement', 'Result', 'Criticality', 'Details', 'Non-Compliance Reason', 
+                    'Remediation Completion Date', 'Justification']
                 writer = csv.DictWriter(plan_file, fieldnames=header)
                 writer.writeheader()
                 log.info ("No action required")
