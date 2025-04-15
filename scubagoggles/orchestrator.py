@@ -234,8 +234,8 @@ class Orchestrator:
                 writer.writeheader()
                 writer.writerows(action_plan_csv)
             else:
-                header = ['ControlID', 'Requirement', 'Result', 'Criticality', 'Details', 'Non-Compliance Reason', 
-                    'Remediation Completion Date', 'Justification']
+                header = ['ControlID', 'Requirement', 'Result', 'Criticality', 'Details',
+                    'Non-Compliance Reason', 'Remediation Completion Date', 'Justification']
                 writer = csv.DictWriter(plan_file, fieldnames=header)
                 writer.writeheader()
                 log.info ("No action required")
