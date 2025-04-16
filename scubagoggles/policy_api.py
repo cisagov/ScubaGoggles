@@ -739,10 +739,33 @@ class PolicyAPI:
         # The defaults apply only to the top-level orgunit.  The top orgunit
         # must contain all settings, and the subordinate orgunits and groups
         # only contain settings that have changed from the top orgunit's
-        # values.  We'll keep track of the default settings actually applied
-        # so they can be reported in the log.
+        # values.
 
         top_ou_policies = policies[self._top_orgunit]
+
+        # For some GWS tenants, there may be inactive SKUs for certain
+        # applications.  For example, the customer may not have an active
+        # SKU that allows them to use the Vault service.  In this case, there
+        # will be no "vault_service_status" returned by the Policy API.
+        # According to Google, any missing service status is due to the
+        # customer not subscribing to the service, so we can assume
+        # that the service is disabled.
+
+        missing_service_status = sorted(s for s in self._expectedPolicySettings
+                                  if s.endswith('_service_status')
+                                  and s not in top_ou_policies)
+
+        for section in missing_service_status:
+            top_ou_policies[section] = {'serviceState': 'DISABLED'}
+
+        if missing_service_status:
+            log.debug('%s: %s - service status missing (assumed DISABLED)',
+                      self._top_orgunit,
+                      ', '.join(s.removesuffix('_service_status')
+                                for s in missing_service_status))
+
+        # We'll keep track of the default settings actually applied so they can
+        # be reported in the log.
 
         applied = defaultdict(dict)
 
