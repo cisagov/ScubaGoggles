@@ -162,6 +162,14 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar='<name>',
                         help=help_msg)
 
+    actionplan_filename = default_file_names.action_plan_name
+    help_msg = ('The name of the action plan output csv in --outputpath. '
+                f'Defaults to {actionplan_filename}.')
+    parser.add_argument('--outputactionplanfilename',
+                        default=actionplan_filename,
+                        metavar='<name>',
+                        help=help_msg)
+
     rego_filename = default_file_names.rego_output_name
     help_msg = ('The name of the Rego output json in --outputpath. '
                 f'Defaults to {rego_filename}.')
