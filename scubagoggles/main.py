@@ -237,19 +237,25 @@ def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         action='store_true',
                         help='Overwrite existing OPA executable')
 
-    parser.add_argument('--version',
-                        '-v',
-                        default = OPA_VERSION,
-                        metavar = '<OPA-version>',
-                        help = 'Version of OPA to download (default: latest '
-                            'version)')
-
     parser.add_argument('--opa_directory',
                         '-r',
                         metavar='<directory>',
                         type=path_parser,
                         help='Directory containing OPA executable')
 
+    version_group = parser.add_mutually_exclusive_group()
+
+    version_group.add_argument('--latest',
+                               '-l',
+                               action='store_true',
+                               help='Download latest OPA version')
+
+    version_group.add_argument('--version',
+                               '-v',
+                               default = OPA_VERSION,
+                               metavar = '<OPA-version>',
+                               help = 'Version of OPA to download (default: '
+                                   f'{OPA_VERSION})')
 
 def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     """Adds the arguments for the setup parser
