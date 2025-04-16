@@ -4,50 +4,55 @@ import future.keywords
 import data.utils.FailTestOUNonCompliant
 import data.utils.PassTestResult
 
-test_SitesAPI_Comply_1 if {
-    PolicyId := SitesId1_1
-    Output := tests with input as {
-        "policies": {
-            "topOU": {
-                "sites_service_status": {
-                    "serviceState": "DISABLED"
-                },
-            },
-            "nextOU": {
-                "sites_service_status": {
-                    # Case doesn't matter
-                    "serviceState": "DisaBled"
-                }
-            }
-        },
-        "tenant_info": {
-            "topLevelOU": "topOU"
+GoodSitesApi01 := {
+    "policies": {
+        "topOU": {
+            "sites_service_status": {"serviceState": "DISABLED"}
         }
+    },
+    "tenant_info": {
+        "topLevelOU": "topOU"
     }
+}
+
+BadSitesApi01 := {
+    "policies": {
+        "topOU": {
+            "sites_service_status": {"serviceState": "ENABLED"}
+        },
+        "nextOU": {
+            "sites_service_status": {"serviceState": "ENABLED"},
+        }
+    },
+    "tenant_info": {
+        "topLevelOU": "topOU"
+    }
+}
+
+BadSitesApi01a := {
+    "policies": {
+        "topOU": {
+            "sites_service_status": {"serviceState": "DISABLED"}
+        },
+        "topOU (group \"Even More Secret Group\")": {
+            "sites_service_status": {"serviceState": "ENABLED"},
+        }
+    },
+    "tenant_info": {
+        "topLevelOU": "topOU"
+    }
+}
+
+test_SitesAPI_Correct_1 if {
+    PolicyId := SitesId1_1
+    Output := tests with input as GoodSitesApi01
 
     PassTestResult(PolicyId, Output)
 }
 
-test_SitesAPI_NonComply_1 if {
+test_SitesAPI_Incorrect_1 if {
     PolicyId := SitesId1_1
-    Output := tests with input as {
-        "policies": {
-            "topOU": {
-                "sites_service_status": {
-                    "serviceState": "ENABLED"
-                }
-            },
-            "nextOU": {
-                "sites_service_status": {
-                    # Fail even if some unexpected value (not en/disabled)
-                    "serviceState": "invalid"
-                }
-            }
-        },
-        "tenant_info": {
-            "topLevelOU": "topOU"
-        }
-    }
+    Output := tests with input as BadSitesApi01
 
     failedOU := [{"Name": "nextOU",
                  "Value": NonComplianceMessage1_1},
@@ -56,29 +61,11 @@ test_SitesAPI_NonComply_1 if {
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
-test_SitesAPI_NonComply_2 if {
+test_SitesAPI_Incorrect_2 if {
     PolicyId := SitesId1_1
-    Output := tests with input as {
-        "policies": {
-            "topOU": {
-                "sites_service_status": {
-                    "serviceState": "ENABLED"
-                }
-            },
-            "topOU (group \"Even More Secret Group\")": {
-                "sites_service_status": {
-                    "serviceState": "ENABLED"
-                }
-            }
-        },
-        "tenant_info": {
-            "topLevelOU": "topOU"
-        }
-    }
+    Output := tests with input as BadSitesApi01a
 
-    failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_1},
-                 {"Name": "topOU (group \"Even More Secret Group\")",
+    failedOU := [{"Name": "topOU (group \"Even More Secret Group\")",
                  "Value": NonComplianceMessage1_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

@@ -3,7 +3,9 @@ package sites
 import future.keywords
 import data.utils
 
-SitesEnabled(orgunit) := utils.AppEnabled(input.policies, "sites", orgunit)
+SitesEnabled(orgunit) if utils.AppExplicitStatus(input.policies,
+                                                 "sites",
+                                                 orgunit) == "ENABLED"
 
 ###############
 # GWS.SITES.1 #
