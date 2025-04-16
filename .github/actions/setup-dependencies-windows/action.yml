@@ -30,7 +30,7 @@ runs:
     - name: Download OPA executable
       shell: powershell
       env:
-        opa_version: ${{ inputs.opa-version == 'latest' && ' '
+        opa_version: ${{ inputs.opa-version == 'latest' && '-l'
           || format('-v {0}', inputs.opa-version) }}
       run: |
         ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
