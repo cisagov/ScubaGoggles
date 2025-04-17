@@ -13,10 +13,10 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 6. Under **Contact Information**, add an email address. Click **Next**
 7. Select the checkbox to agree to the Google API Services: Users Data Policy. Click **Continue**
 8. Click **Create**
-9. On the sidebar, click “Branding”
-10. Under Authorized domains, add the primary domain of your GWS organization, then click “Save”
+9. On the sidebar, click **Branding**
+10. Under **Authorized domains**, add the primary domain of your GWS organization, then click **Save**
 11. Click the "hamburger" menu on the left, and select **APIs & Services** -> **Credentials**
-12. Click **CREATE CREDENTIALS**
+12. Click **+Create credentials**
 13. Select **Oauth client ID**
 14. Select **Web application** for **Application type**
 15. Give name as appropriate
@@ -34,7 +34,7 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 23. In the center screen click **Enable APIs & Services**
 24. Search for and enable the **Admin SDK API**
 25. Search for and enable the **Groups Settings API**
-26. Search for and enable the **Cloud Identity-Aware Proxy API**
+26. Search for and enable the **Cloud Identity**
 27. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
     with an account with the necessary privileges and click allow.
 
@@ -48,11 +48,12 @@ If you've limited application access to Google's APIs in your organization, the 
 4. Select **Credentials**
 5. Copy your client ID under **OAuth 2.0 Client IDs**
 6. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
-7. Select **Add App** -> **Oauth App Name** or **Client ID**
+7. Select **Configure new app**
 8. Search by your **OAuth client ID**
 9. Select the App
-10. Select your root organization as the domain
-11. Select **Trusted**
+10. Under **Scope**, select your root organization as the domain. Click **Continue**
+11. Under **Access to Google Data**, select **Trusted**. Click **Continue**
+12. Click **Finish**
 
 ## Navigation
 
