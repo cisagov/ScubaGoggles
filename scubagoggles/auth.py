@@ -5,9 +5,10 @@ This module uses a local credential.json file to authenticate to a GWS org
 """
 
 import json
-import warnings
+import logging
 from pathlib import Path
 
+from google.auth.exceptions import RefreshError
 from google.auth.credentials import TokenState
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -125,10 +126,10 @@ class GwsAuth:
         if token_scopes != valid_scopes:
             self._token_path.unlink(missing_ok=True)
 
-            # Identifies the missing scope(s) from the token file.
+        # Identifies the missing scope(s) from the token file.
             missing_scopes = list(set(valid_scopes).difference(token_scopes))
-            warnings.warn(f'Your credential is missing the '
-                          f'following scope(s): {str(missing_scopes)[1:-1]}')
+            logging.error(f'Your credential is missing the '
+                            f'following scope(s): {str(missing_scopes)[1:-1]}')
 
     def _load_token(self):
         """Loads and existing Google API token file, if it exists, and

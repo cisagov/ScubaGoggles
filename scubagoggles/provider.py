@@ -2,12 +2,13 @@
 provider.py is where the GWS api calls are made.
 """
 
+import logging
 import warnings
 from pathlib import Path
 from tqdm import tqdm
 
 from googleapiclient.discovery import build
-
+from google.auth.exceptions import RefreshError
 from scubagoggles.auth import GwsAuth
 from scubagoggles.policy_api import PolicyAPI
 from scubagoggles.utils import create_subset_inverted_dict, \
@@ -398,6 +399,9 @@ class Provider:
             ou_name = response['name']
             self._successful_calls.add(ApiReference.LIST_OUS.value)
             return ou_name
+        except RefreshError as exc:
+            self._check_scopes(exc)
+
         except Exception as exc:
             warnings.warn(
                 f'Exception thrown while getting top level OU: {exc}',
@@ -693,5 +697,6 @@ class Provider:
         # {'error': 'access_denied', 'error_description': 'Requested client not authorized.'})
         scopes_list = self._credentials.scopes
         if 'access_denied: Requested client not authorized.' in str(exc):
-            warnings.warn(f'Your credential may be missing one'
+            logging.error(f'Your credential may be missing one'
                           f' of the following scopes: {scopes_list}')
+        raise

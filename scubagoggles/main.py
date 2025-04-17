@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 from scubagoggles.config import UserConfig
+from google.auth.exceptions import RefreshError
 from scubagoggles.getopa import getopa
 from scubagoggles.orchestrator import Orchestrator, UserRuntimeError
 from scubagoggles.purge import purge_reports
@@ -478,6 +479,9 @@ def dive():
         error = True
     except KeyboardInterrupt:
         print('\nUser interrupt')
+    except RefreshError as rfe:
+        print(f'\n{rfe}')
+        error = True
 
     if error:
         sys.exit(EXIT_FAILURE)
