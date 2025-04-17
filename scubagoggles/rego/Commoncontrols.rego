@@ -184,6 +184,11 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId1_1,
+    "Prerequisites": [
+        "policy/security_two_step_verification_enrollment.allowEnrollment",
+        "policy/security_two_step_verification_enforcement_factor.allowedSignInFactorSet",
+        "policy/security_two_step_verification_enforcement.enforcedFrom"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -231,6 +236,10 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId1_2,
+    "Prerequisites": [
+        "policy/security_two_step_verification_enrollment.allowEnrollment",
+        "policy/security_two_step_verification_enforcement.enforcedFrom"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
@@ -298,6 +307,11 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId1_3,
+    "Prerequisites": [
+        "policy/security_two_step_verification_enrollment.allowEnrollment",
+        "policy/security_two_step_verification_enforcement_factor.allowedSignInFactorSet",
+        "policy/security_two_step_verification_enforcement.enforcedFrom"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_3},
@@ -341,6 +355,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId1_4,
+    "Prerequisites": ["policy/security_two_step_verification_grace_period.enrollmentGracePeriod"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4},
@@ -372,6 +387,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId1_5,
+    "Prerequisites": ["policy/security_two_step_verification_device_trust.allowTrustingDevice"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_5},
@@ -399,6 +415,7 @@ CommonControlsId2_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.2.1")
 # to check each OU.
 tests contains {
     "PolicyId": CommonControlsId2_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     "ReportDetails": concat("", [
         "No relevant event in the current logs. While we are unable ",
@@ -418,6 +435,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId2_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetailsBoolean(Status),
     "ActualValue": {"TOGGLE_CAA_ENABLEMENT": LastEvent.NewValue},
@@ -471,6 +489,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId3_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -484,6 +503,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId3_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     # Empty list on the next line as this setting can't be set at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
@@ -507,6 +527,7 @@ CommonControlsId3_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.3.2")
 # SsoPolicyProto sso_profile_challenge_selection_behavior appears to the appropriate log event
 tests contains {
     "PolicyId": CommonControlsId3_2,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -547,6 +568,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId4_1,
+    "Prerequisites": ["policy/security_session_controls.webSessionDuration"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -586,6 +608,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId5_1,
+    "Prerequisites": ["policy/security_password.allowedStrength"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
@@ -621,6 +644,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId5_2,
+    "Prerequisites": ["policy/security_password.minimumLength"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_2},
@@ -656,6 +680,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId5_3,
+    "Prerequisites": ["policy/security_password.minimumLength"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_3},
@@ -686,6 +711,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId5_4,
+    "Prerequisites": ["policy/security_password.enforceRequirementsAtLogin"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_4},
@@ -716,6 +742,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId5_5,
+    "Prerequisites": ["policy/security_password.allowReuse"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
@@ -747,6 +774,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId5_6,
+    "Prerequisites": ["policy/security_password.expirationDuration"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_6, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_6},
@@ -770,6 +798,7 @@ CommonControlsId6_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.6.1")
 
 tests contains {
     "PolicyId": CommonControlsId6_1,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -820,6 +849,7 @@ CommonControlsId7_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.7.1")
 
 tests contains {
     "PolicyId": CommonControlsId7_1,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -851,6 +881,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId8_1,
+    "Prerequisites": ["policy/security_super_admin_account_recovery.enableAccountRecovery"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs8_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_1},
@@ -881,6 +912,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId8_2,
+    "Prerequisites": ["policy/security_user_account_recovery.enableAccountRecovery"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs8_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_2},
@@ -900,6 +932,7 @@ CommonControlsId8_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.8.3")
 
 tests contains {
     "PolicyId": CommonControlsId8_3,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": utils.ManualCheckMessage,
     "ActualValue": "",
@@ -920,6 +953,7 @@ CommonControlsId9_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.9.1")
 
 tests contains {
     "PolicyId": CommonControlsId9_1,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -936,6 +970,7 @@ CommonControlsId9_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.9.2")
 
 tests contains {
     "PolicyId": CommonControlsId9_2,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1026,6 +1061,7 @@ ReportDetails10_1(false) := concat("", [
 
 tests contains {
     "PolicyId": CommonControlsId10_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": concat("", [
         "No API Access Allowed/Blocked events in the current logs. ",
@@ -1044,6 +1080,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId10_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetails10_1(Status),
     "RequirementMet": Status,
@@ -1092,6 +1129,7 @@ ReportDetails10_2(false) := concat("", [
 
 tests contains {
     "PolicyId": CommonControlsId10_2,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": concat("", [
         "No API Access Allowed/Blocked events in the current logs. ",
@@ -1110,6 +1148,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId10_2,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": ReportDetails10_2(Status),
     "RequirementMet": Status,
@@ -1164,6 +1203,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId10_3,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1178,11 +1218,12 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId10_3,
-        "Criticality": "Shall",
-        "ReportDetails": utils.ReportDetails(NonCompliantOUs10_3, []),
-        "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_3},
-        "RequirementMet": Status,
-        "NoSuchEvent": false
+    "Prerequisites": ["reports/v1/activities/list"],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_3, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_3},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
 }
 if {
     Events := {Event | some Event in DomainOwnedAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
@@ -1240,6 +1281,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId10_4,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1254,6 +1296,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId10_4,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_4},
@@ -1287,6 +1330,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId10_5,
+    "Prerequisites": ["policy/security_less_secure_apps.allowLessSecureApps"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_5},
@@ -1342,6 +1386,10 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId11_1,
+    "Prerequisites": [
+        "policy/workspace_marketplace_apps_access_options.accessLevel",
+        "policy/workspace_marketplace_apps_access_options.allowAllInternalApps"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs11_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1},
@@ -1408,6 +1456,18 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId12_1,
+    "Prerequisites": [
+        "policy/takeout_service_status.serviceState",
+        "policy/blogger_user_takeout.takeoutStatus",
+        "policy/books_user_takeout.takeoutStatus",
+        "policy/location_history_user_takeout.takeoutStatus",
+        "policy/maps_user_takeout.takeoutStatus",
+        "policy/pay_user_takeout.takeoutStatus",
+        "policy/photos_user_takeout.takeoutStatus",
+        "policy/play_user_takeout.takeoutStatus",
+        "policy/play_console_user_takeout.takeoutStatus",
+        "policy/youtube_user_takeout.takeoutStatus"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs12_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_1},
@@ -1614,6 +1674,7 @@ CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount
 
 tests contains {
     "PolicyId": CommonControlsId13_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount),
     "ActualValue": {
@@ -1655,6 +1716,7 @@ CommonControlsId14_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.14.1")
 
 tests contains {
     "PolicyId": CommonControlsId14_1,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1671,6 +1733,7 @@ CommonControlsId14_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.14.2")
 
 tests contains {
     "PolicyId": CommonControlsId14_2,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1691,6 +1754,7 @@ CommonControlsId15_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.15.1")
 
 tests contains {
     "PolicyId": CommonControlsId15_1,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1733,6 +1797,7 @@ NonCompliantGroups15_2 contains {
 
 tests contains {
     "PolicyId": CommonControlsId15_2,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1748,6 +1813,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId15_2,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs15_2, NonCompliantGroups15_2),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_2, "NonCompliantGroups": NonCompliantGroups15_2},
@@ -1794,6 +1860,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId16_1,
+    "Prerequisites": ["policy/enterprise_service_restrictions_service_status.serviceState"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs16_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_1},
@@ -1825,6 +1892,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId16_2,
+    "Prerequisites": ["policy/early_access_apps_service_status.serviceState"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs16_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_2},
@@ -1861,6 +1929,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId17_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -1876,6 +1945,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId17_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs17_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs17_1},
@@ -1904,6 +1974,7 @@ CommonControlsId18_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.18.1")
 
 tests contains {
     "PolicyId": CommonControlsId18_1,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1920,6 +1991,7 @@ CommonControlsId18_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.18.2")
 
 tests contains {
     "PolicyId": CommonControlsId18_2,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1936,6 +2008,7 @@ CommonControlsId18_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.18.3")
 
 tests contains {
     "PolicyId": CommonControlsId18_3,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1952,6 +2025,7 @@ CommonControlsId18_4 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.18.4")
 
 tests contains {
     "PolicyId": CommonControlsId18_4,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",

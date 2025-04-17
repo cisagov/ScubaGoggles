@@ -143,6 +143,7 @@ class Orchestrator:
             provider_dict = provider.call_gws_providers(products, args.quiet)
             provider_dict['successful_calls'] = list(provider.successful_calls)
             provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
+            provider_dict['missing_policies'] = list(provider.missing_policies)
 
         provider_dict['baseline_suffix'] = self._md_parser.default_version
         provider_dict['baseline_versions'] = self._md_parser.policy_version_map
@@ -300,6 +301,7 @@ class Orchestrator:
         tenant_name = tenant_info['topLevelOU']
         successful_calls = set(settings_data['successful_calls'])
         unsuccessful_calls = set(settings_data['unsuccessful_calls'])
+        missing_policies = set(settings_data['missing_policies'])
         report_uuid = settings_data['report_uuid']
 
         # Create the SCuBA results JSON file name
@@ -356,6 +358,7 @@ class Orchestrator:
                                 baseline_policies[product],
                                 successful_calls,
                                 unsuccessful_calls,
+                                missing_policies,
                                 omissions,
                                 products_bar)
             stats_and_data[product] = \
