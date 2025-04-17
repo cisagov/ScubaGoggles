@@ -55,6 +55,7 @@ h4 {
 
 .links {
     display: flex;
+    align-items: center;
 }
 
 header {
