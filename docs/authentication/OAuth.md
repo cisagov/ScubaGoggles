@@ -7,16 +7,13 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 1. Sign in to your account at http://console.cloud.google.com/.
 2. Click the "hamburger" menu on the left (three horizontal
    bars on top of each other), and select **APIs & Services** -> **OAuth consent screen**
-3. Select **Internal** for **User Type**
-4. Click **Create**
-5. Fill in your **App name** and **User support email**
-6. Scroll down to the **Authorized Domains** section
-7. Under **Authorized domains**, add the primary domain of your GWS organization.
-8. Add another email address for **Developer contact information**
-9. Click **SAVE AND CONTINUE**
-10. Do nothing on the **Scopes** screen, just click **SAVE AND CONTINUE**
-11. Review summary, then click **BACK TO DASHBOARD**
-12. Click **Credentials** from the menu on the left
+3. Click **Get started**
+5. Fill in your **App name**, select your **User support email** and click **Next**
+7. Under **Audience**, choose **Internal** and click **Next**
+9. Under **Contact Information**, add an email address and click **Next**
+10. Select the checkbox to agree to the Google API Services: Users Data Policy and clikc **Continue**
+9. Click **Create**
+12. Click the "hamburger" menu on the left, and select **APIs & Services** -> **Credentials**
 13. Click **CREATE CREDENTIALS**
 14. Select **Oauth client ID**
 15. Select **Web application** for **Application type**
@@ -29,13 +26,13 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 18. Click **CREATE**
 19. Click **DOWNLOAD JSON** from the resulting **OAuth client created** page
 20. Click **OK**
-21. Move the credentials file to a safe location. There is no set location requirement for this file, but it should be saved somewhere it won't be inadvertently deleted or accessed by unauthorized entities.
+21. Move the credentials file to the location that was specified during the ScubaGoggles setup utility.
 22. Optionally run the following command to configure ScubaGoggles to use those credentials by default: `scubagoggles setup --credentials [path to JSON credentials file]`. If you skip this step, you will be required to indicate the path at run time using the `credentials` parameter (see [Parameters](/docs/usage/Parameters.md)).
 23. Go back to menu on the left and click **APIs and Services** -> **Enabled API Services**
 24. In the center screen click **Enable APIs & Services**
 25. Search for and enable the **Admin SDK API**
 26. Search for and enable the **Groups Settings API**
-27. Search for and enable the **Cloud Identity API**
+27. Search for and enable the **Cloud Identity-Aware Proxy API**
 28. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
     with an account with the necessary privileges and click allow.
 
