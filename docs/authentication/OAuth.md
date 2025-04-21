@@ -14,24 +14,24 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 7. Select the checkbox to agree to the Google API Services: Users Data Policy. Click **Continue**
 8. Click **Create**
 9. On the sidebar, click **Branding**
-10. Under **Authorized domains**, add the primary domain of your GWS organization, then click **Save**
+10. Under **Authorized domains**, click **+ Add domain**, add the primary domain of your GWS organization, then click **Save**
 11. Click the "hamburger" menu on the left, and select **APIs & Services** -> **Credentials**
-12. Click **+Create credentials**
-13. Select **Oauth client ID**
-14. Select **Web application** for **Application type**
+12. Click **+ Create credentials**
+13. Select **OAuth client ID**
+14. Under **Application type**, select **Web application**
 15. Give name as appropriate
-16. Under **Authorized redirect URIs**, click "ADD URI." Add `http://localhost`
+16. Under **Authorized redirect URIs**, click **+ Add URI**. Add `http://localhost`
     and `http://localhost:8080/`. **NOTE** the ending slash (`/`) in the *second*
     URL is **necessary**.  If the slash is missing, you will eventually get an
     error when running ScubaGoggles (It will be an "access blocked" error on the
     Google authentication webpage.  You'll also see `Error 400: redirect_uri_mismatch`).
-17. Click **CREATE**
-18. Click **DOWNLOAD JSON** from the resulting **OAuth client created** page
+17. Click **Create**
+18. Click **Download JSON** from the resulting **OAuth client created** page
 19. Click **OK**
 20. Move the credentials file to the location that was specified during the ScubaGoggles setup utility.
 21. Optionally run the following command to configure ScubaGoggles to use those credentials by default: `scubagoggles setup --credentials [path to JSON credentials file]`. If you skip this step, you will be required to indicate the path at run time using the `credentials` parameter (see [Parameters](/docs/usage/Parameters.md)).
 22. Go back to menu on the left and click **APIs and Services** -> **Enabled API Services**
-23. In the center screen click **Enable APIs & Services**
+23. On the toolbar, click **+ Enable APIs & Services**
 24. Search for and enable the **Admin SDK API**
 25. Search for and enable the **Groups Settings API**
 26. Search for and enable the **Cloud Identity**
@@ -47,7 +47,7 @@ If you've limited application access to Google's APIs in your organization, the 
 3. Select **API's & Services** from the top left hamburger icon
 4. Select **Credentials**
 5. Copy your client ID under **OAuth 2.0 Client IDs**
-6. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **Manage Third-Party App Access**
+6. Now login to [admin.google.com](https://admin.google.com/) and navigate to **Security** -> **Access and Data Control** -> **API Controls** -> **MANAGE THIRD-PARTY APP ACCESS**
 7. Select **Configure new app**
 8. Search by your **OAuth client ID**
 9. Select the App
