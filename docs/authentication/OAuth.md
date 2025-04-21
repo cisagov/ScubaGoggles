@@ -28,7 +28,7 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 17. Click **Create**
 18. Click **Download JSON** from the resulting **OAuth client created** page
 19. Click **OK**
-20. Move the credentials file to the location that was specified during the ScubaGoggles setup utility.
+20. Move the credentials file to a safe location. There is no set location requirement for this file, but it should be saved somewhere it won't be inadvertently deleted or accessed by unauthorized entities.
 21. Optionally run the following command to configure ScubaGoggles to use those credentials by default: `scubagoggles setup --credentials [path to JSON credentials file]`. If you skip this step, you will be required to indicate the path at run time using the `credentials` parameter (see [Parameters](/docs/usage/Parameters.md)).
 22. Go back to menu on the left and click **APIs and Services** -> **Enabled API Services**
 23. On the toolbar, click **+ Enable APIs & Services**
