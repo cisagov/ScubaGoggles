@@ -391,7 +391,7 @@ class Reporter:
             # with the enhanced error handling for the provider API. Once that
             # update has been made, each rego test should include a
             # prerequisites section. For now, to avoid a breaking change,
-            # any test with a prerequisites defined gets a free pass.
+            # any test without a prerequisites defined gets a free pass.
             prereqs = {}
         else:
             prereqs = test['Prerequisites']
