@@ -121,6 +121,7 @@ class Provider:
         self._customer_id = customer_id
         self._successful_calls = set()
         self._unsuccessful_calls = set()
+        self._missing_policies = set()
         self._dns_client = RobustDNSClient()
         self._domains = None
 
@@ -154,6 +155,16 @@ class Provider:
         """
 
         return self._unsuccessful_calls
+
+    @property
+    def missing_policies(self):
+
+        """Returns names of policies missing from the policy API output.
+
+        :rtype: set
+        """
+
+        return self._missing_policies
 
     def _initialize_services(self):
 
@@ -615,7 +626,7 @@ class Provider:
 
         with PolicyAPI(self._gws_auth, self._top_ou) as policy_api:
             policies = policy_api.get_policies()
-            policy_api.verify(policies)
+            self._missing_policies = policy_api.verify(policies)
 
         product_to_items['policies'] = policies
 
@@ -649,6 +660,7 @@ class Provider:
 
         product_to_items['successful_calls'] = list(self._successful_calls)
         product_to_items['unsuccessful_calls'] = list(self._unsuccessful_calls)
+        product_to_items['missing_policies'] = list(self._missing_policies)
 
         return product_to_items
 

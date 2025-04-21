@@ -796,7 +796,7 @@ class PolicyAPI:
             if not is_stream:
                 out_stream.close()
 
-    def verify(self, policies: dict) -> bool:
+    def verify(self, policies: dict) -> set:
 
         """Verify that all expected policy settings (see above) are present
         for the top-level orgunit, and that the values of each setting are the
@@ -804,18 +804,16 @@ class PolicyAPI:
 
         We do this verification because while Rego is good at checking for
         policy requirements, it may yield incorrect results when expected
-        settings are missing or values are incorrect.  This verification only
-        issues warnings. so we're not aborting if something is found to be
-        missing or incorrect.  However, if warnings are issued, checks should be
-        done to determine what's wrong with the data returned by Google.
+        settings are missing or values are incorrect.  If any settings that are
+        missing, checks should be done to determine what's wrong with the data
+        returned by the API.
 
         :param dict policies: policy settings returned by get_policies().
-        :return: True if all expected policy settings are found and the setting
-            values are correct types and format.
+        :return: A set containing any missing settings or settings with invalid
+            values.
         """
 
         orgunit = self._top_orgunit
-        policies_ok = True
 
         expected_policy_settings = self._expectedPolicySettings
         orgunit_policies = policies.get(orgunit)
@@ -824,34 +822,35 @@ class PolicyAPI:
             log.warning('No policy settings found for orgunit: %s', orgunit)
             return False
 
-        missing_settings = {n for n in expected_policy_settings
-                            if n not in orgunit_policies}
-
-        if missing_settings:
-            log.warning('Setting(s) missing from %s orgunit: %s',
-                        orgunit,
-                        str(sorted(missing_settings)))
-            policies_ok = False
+        missing_settings = set()
+        invalid_settings = set()
 
         for section, section_data in expected_policy_settings.items():
 
             expected_settings = section_data['settings']
             settings = orgunit_policies.get(section)
             if not settings:
+                for expected_setting in expected_settings:
+                    missing_settings.add(f'{section}.{expected_setting}')
                 continue
-
-            invalid_settings = []
 
             for setting_name, verifier in expected_settings.items():
                 policy_value = settings.get(setting_name)
-                if policy_value is None or not verifier(policy_value):
-                    invalid_settings.append(setting_name)
+                if policy_value is None:
+                    missing_settings.add(f'{section}.{setting_name}')
+                elif not verifier(policy_value):
+                    invalid_settings.add(f'{section}.{setting_name}')
 
-            if invalid_settings:
-                log.warning('Settings missing or values invalid for '
-                            'orgunit %s, resource %s: %s',
-                            orgunit,
-                            section,
-                            sorted(invalid_settings))
 
-        return policies_ok
+        if missing_settings:
+            log.warning('Setting(s) missing from %s orgunit: %s',
+                        orgunit,
+                        str(sorted(missing_settings)))
+
+        if invalid_settings:
+            log.warning('Settings with invalid values for '
+                        'orgunit %s, resource %s',
+                        orgunit,
+                        str(sorted(invalid_settings)))
+
+        return missing_settings.union(invalid_settings)
