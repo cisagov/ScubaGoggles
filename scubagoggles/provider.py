@@ -67,7 +67,7 @@ EVENTS = {
         'CREATE_APPLICATION_SETTING',
         'DELETE_APPLICATION_SETTING'
     ],
-    'sites': ['TOGGLE_SERVICE_ENABLED'],
+    'sites': [],
     'classroom': [
         'CREATE_APPLICATION_SETTING',
         'CHANGE_APPLICATION_SETTING',
