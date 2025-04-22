@@ -543,22 +543,30 @@ class Reporter:
                         'Requirement': requirement,
                         'Result': 'Error - Test results missing',
                         'Criticality': '-',
-                        'Details': f'Report issue on {issues_link}'})
+                        'Details': f'Report issue on {issues_link}', 
+                        'OmittedEvaluationResults': None,
+                        'OmittedEvaluationDetails': None
+                        })
                     log.error('No test results found for Control Id %s',
                               control_id)
                     continue
+
                 if self._is_control_omitted(control_id):
                     # Handle the case where the control was omitted
                     report_stats['Omit'] += 1
                     rationale = self._get_omission_rationale(control_id)
+
                     table_data.append({
                         'Control ID': control_id,
                         'Requirement': requirement,
                         'Result': 'Omitted',
-                        'Criticality': tests[0]['Criticality'],
-                        'Details': f'Test omitted by user. {rationale}'
+                        'Criticality': 'N/A',
+                        'Details': f'Test omitted by user. {rationale}',
+                        'OmittedEvaluationResults': 'Omitted',
+                        'OmittedEvaluationDetails': rationale
                     })
                     continue
+
                 for test in tests:
                     failed_prereqs = self._get_failed_prereqs(test)
                     if len(failed_prereqs) > 0:
@@ -569,7 +577,9 @@ class Reporter:
                                            'Requirement': requirement,
                                            'Result': 'Error',
                                            'Criticality': test['Criticality'],
-                                           'Details': failed_details})
+                                           'Details': failed_details, 
+                                           'OmittedEvaluationResults': None,
+                                           'OmittedEvaluationDetails': None})
                         continue
 
                     if control_id.startswith('GWS.COMMONCONTROLS.13.1'):
@@ -594,7 +604,9 @@ class Reporter:
                         'Requirement': requirement,
                         'Result': result,
                         'Criticality': test['Criticality'],
-                        'Details': details})
+                        'Details': details,  
+                        'OmittedEvaluationResults': None,
+                        'OmittedEvaluationDetails': None})
             markdown_group_name = '-'.join(baseline_group['GroupName'].split())
             group_reference_url = (f'{self._github_url}/blob/{Version.current}/'
                                    f'scubagoggles/baselines/{product}.md'
