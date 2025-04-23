@@ -989,108 +989,120 @@ tests contains {
 
 CommonControlsId10_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.1")
 
-# NOTE: App access cannot be controlled at the group/OU level
-
-# Step 1: Get the set of services that have either an API access allow or API access block event
-APIAccessEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "EventName": Event.name,
-    "OrgUnit": OrgUnit,
-    "ServiceName": ServiceName
-}
-if {
-    some Item in input.commoncontrols_logs.items
-    some Event in Item.events
-    # Filter for events where event name is either ALLOW_SERVICE_FOR_OAUTH2_ACCESS or DISALLOW...
-    true in {
-        Event.name == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS",
-        Event.name == "DISALLOW_SERVICE_FOR_OAUTH2_ACCESS"
-    }
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-    ServiceName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "OAUTH2_SERVICE_NAME"][0]
-}
-
-# Step 2: Identify services whose most recent event is an allow event
-HighRiskBlocked contains Service if {
-    # Iterate through all services
-    some Service in {Event.ServiceName | some Event in APIAccessEvents}
-    # Only look at services that end with _HIGH_RISK. It's confusing
-    # how these events appear in the logs. If a user selects "Restricted"
-    # and doesn't check "allow not high risk" a pair of events will appear:
-    # 1 with the service name (e.g., DRIVE) with ALLOW_SERVICE_FOR_OAUTH2_ACCESS
-    # and a second with the DRIVE_HIGH_RISK set to DISALLOW_SERVICE_FOR_OAUTH2_ACCESS.
-    # If user user instead selects "Restricted" but doesn't check "allow not high risk",
-    # again, a pair of events will appear:
-    # 1 with the service name (e.g., DRIVE) with DISALLOW_SERVICE_FOR_OAUTH2_ACCESS
-    # and a second with the DRIVE_HIGH_RISK set to ALLOW_SERVICE_FOR_OAUTH2_ACCESS.
-    # Really confusing. But, in short, to identify services that are set to "resticted but
-    # allow not high risk", we just need to look for events ending with _HIGH_RISK.
-    endswith(Service, "_HIGH_RISK")
-    # Filter for just that service
-    FilteredEvents := {Event | some Event in APIAccessEvents; Event.ServiceName == Service}
-    # Get the most recent change
-    Event := utils.GetLastEvent(FilteredEvents)
-    # If the most recent change is ALLOW, this service is unrestricted
-    Event.EventName == "DISALLOW_SERVICE_FOR_OAUTH2_ACCESS"
-}
-
-# Step 3: Identify services whose most recent event is an allow event and where
-# the high-risk context isn't blocked
-UnrestrictedServices10_1 contains Service if {
-    # Iterate through all services
-    some Service in {Event.ServiceName | some Event in APIAccessEvents}
-    # Ignore services that end risk _HIGH_RISK. Those are handled later
-    not endswith(Service, "_HIGH_RISK")
-    # Filter for just that service
-    FilteredEvents := {Event | some Event in APIAccessEvents; Event.ServiceName == Service}
-    # Get the most recent change
-    Event := utils.GetLastEvent(FilteredEvents)
-    # If the most recent change is ALLOW... and the _HIGH_RISK
-    # version of the service is not blocked, then the app is unrestricted
-    Event.EventName == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS"
-    not concat("", [Service, "_HIGH_RISK"]) in HighRiskBlocked
-}
-
-ReportDetails10_1(true) := "Requirement met."
-
-ReportDetails10_1(false) := concat("", [
-    "The following services allow access: ",
-    concat(", ", UnrestrictedServices10_1), "."
-])
-
 tests contains {
     "PolicyId": CommonControlsId10_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": concat("", [
-        "No API Access Allowed/Blocked events in the current logs. ",
-        "While we are unable to determine the state from the logs, ",
-        "the default setting is non-compliant; manual check recommended."
-    ]),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
     "NoSuchEvent": true
 }
-if {
-    DefaultSafe := false
-    Events := APIAccessEvents
-    count(Events) == 0
-}
+#--
 
-tests contains {
-    "PolicyId": CommonControlsId10_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": ReportDetails10_1(Status),
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Events := APIAccessEvents
-    count(Events) > 0
-    Status := count(UnrestrictedServices10_1) == 0
-}
+# CommonControlsId10_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.1")
+
+# # NOTE: App access cannot be controlled at the group/OU level
+
+# # Step 1: Get the set of services that have either an API access allow or API access block event
+# APIAccessEvents contains {
+#     "Timestamp": time.parse_rfc3339_ns(Item.id.time),
+#     "TimestampStr": Item.id.time,
+#     "EventName": Event.name,
+#     "OrgUnit": OrgUnit,
+#     "ServiceName": ServiceName
+# }
+# if {
+#     some Item in input.commoncontrols_logs.items
+#     some Event in Item.events
+#     # Filter for events where event name is either ALLOW_SERVICE_FOR_OAUTH2_ACCESS or DISALLOW...
+#     true in {
+#         Event.name == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS",
+#         Event.name == "DISALLOW_SERVICE_FOR_OAUTH2_ACCESS"
+#     }
+#     OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
+#     ServiceName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "OAUTH2_SERVICE_NAME"][0]
+# }
+
+# # Step 2: Identify services whose most recent event is an allow event
+# HighRiskBlocked contains Service if {
+#     # Iterate through all services
+#     some Service in {Event.ServiceName | some Event in APIAccessEvents}
+#     # Only look at services that end with _HIGH_RISK. It's confusing
+#     # how these events appear in the logs. If a user selects "Restricted"
+#     # and doesn't check "allow not high risk" a pair of events will appear:
+#     # 1 with the service name (e.g., DRIVE) with ALLOW_SERVICE_FOR_OAUTH2_ACCESS
+#     # and a second with the DRIVE_HIGH_RISK set to DISALLOW_SERVICE_FOR_OAUTH2_ACCESS.
+#     # If user user instead selects "Restricted" but doesn't check "allow not high risk",
+#     # again, a pair of events will appear:
+#     # 1 with the service name (e.g., DRIVE) with DISALLOW_SERVICE_FOR_OAUTH2_ACCESS
+#     # and a second with the DRIVE_HIGH_RISK set to ALLOW_SERVICE_FOR_OAUTH2_ACCESS.
+#     # Really confusing. But, in short, to identify services that are set to "resticted but
+#     # allow not high risk", we just need to look for events ending with _HIGH_RISK.
+#     endswith(Service, "_HIGH_RISK")
+#     # Filter for just that service
+#     FilteredEvents := {Event | some Event in APIAccessEvents; Event.ServiceName == Service}
+#     # Get the most recent change
+#     Event := utils.GetLastEvent(FilteredEvents)
+#     # If the most recent change is ALLOW, this service is unrestricted
+#     Event.EventName == "DISALLOW_SERVICE_FOR_OAUTH2_ACCESS"
+# }
+
+# # Step 3: Identify services whose most recent event is an allow event and where
+# # the high-risk context isn't blocked
+# UnrestrictedServices10_1 contains Service if {
+#     # Iterate through all services
+#     some Service in {Event.ServiceName | some Event in APIAccessEvents}
+#     # Ignore services that end risk _HIGH_RISK. Those are handled later
+#     not endswith(Service, "_HIGH_RISK")
+#     # Filter for just that service
+#     FilteredEvents := {Event | some Event in APIAccessEvents; Event.ServiceName == Service}
+#     # Get the most recent change
+#     Event := utils.GetLastEvent(FilteredEvents)
+#     # If the most recent change is ALLOW... and the _HIGH_RISK
+#     # version of the service is not blocked, then the app is unrestricted
+#     Event.EventName == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS"
+#     not concat("", [Service, "_HIGH_RISK"]) in HighRiskBlocked
+# }
+
+# ReportDetails10_1(true) := "Requirement met."
+
+# ReportDetails10_1(false) := concat("", [
+#     "The following services allow access: ",
+#     concat(", ", UnrestrictedServices10_1), "."
+# ])
+
+# tests contains {
+#     "PolicyId": CommonControlsId10_1,
+#     "Prerequisites": ["reports/v1/activities/list"],
+#     "Criticality": "Shall",
+#     "ReportDetails": concat("", [
+#         "No API Access Allowed/Blocked events in the current logs. ",
+#         "While we are unable to determine the state from the logs, ",
+#         "the default setting is non-compliant; manual check recommended."
+#     ]),
+#     "ActualValue": "No relevant event for the top-level OU in the current logs",
+#     "RequirementMet": DefaultSafe,
+#     "NoSuchEvent": true
+# }
+# if {
+#     DefaultSafe := false
+#     Events := APIAccessEvents
+#     count(Events) == 0
+# }
+
+# tests contains {
+#     "PolicyId": CommonControlsId10_1,
+#     "Prerequisites": ["reports/v1/activities/list"],
+#     "Criticality": "Shall",
+#     "ReportDetails": ReportDetails10_1(Status),
+#     "RequirementMet": Status,
+#     "NoSuchEvent": false
+# }
+# if {
+#     Events := APIAccessEvents
+#     count(Events) > 0
+#     Status := count(UnrestrictedServices10_1) == 0
+# }
 
 # Note that the above logic doesn't filter for OU. As the logic for this setting
 # is already fairly complex and GWS doesn't currently allow you to modify this
