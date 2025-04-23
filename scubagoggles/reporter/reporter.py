@@ -544,8 +544,8 @@ class Reporter:
                         'Result': 'Error - Test results missing',
                         'Criticality': '-',
                         'Details': f'Report issue on {issues_link}', 
-                        'OmittedEvaluationResults': None,
-                        'OmittedEvaluationDetails': None
+                        'OmittedEvaluationResult': 'N/A',
+                        'OmittedEvaluationDetails': 'N/A'
                         })
                     log.error('No test results found for Control Id %s',
                               control_id)
@@ -556,14 +556,23 @@ class Reporter:
                     report_stats['Omit'] += 1
                     rationale = self._get_omission_rationale(control_id)
 
+                    omitted_result = 'N/A'
+                    omitted_details = 'N/A'
+
+                    for test in tests: 
+                        result = self._get_test_result(test['RequirementMet'], test['Criticality'], test['NoSuchEvent'])
+                        details = test['ReportDetails']
+                        omitted_result = result
+                        omitted_details = details
+
                     table_data.append({
                         'Control ID': control_id,
                         'Requirement': requirement,
                         'Result': 'Omitted',
-                        'Criticality': 'N/A',
+                        'Criticality': tests[0]['Criticality'],
                         'Details': f'Test omitted by user. {rationale}',
-                        'OmittedEvaluationResults': 'Omitted',
-                        'OmittedEvaluationDetails': rationale
+                        'OmittedEvaluationResult': omitted_result,
+                        'OmittedEvaluationDetails': omitted_details
                     })
                     continue
 
@@ -578,8 +587,8 @@ class Reporter:
                                            'Result': 'Error',
                                            'Criticality': test['Criticality'],
                                            'Details': failed_details, 
-                                           'OmittedEvaluationResults': None,
-                                           'OmittedEvaluationDetails': None})
+                                           'OmittedEvaluationResult': 'N/A',
+                                           'OmittedEvaluationDetails': 'N/A'})
                         continue
 
                     if control_id.startswith('GWS.COMMONCONTROLS.13.1'):
@@ -605,8 +614,8 @@ class Reporter:
                         'Result': result,
                         'Criticality': test['Criticality'],
                         'Details': details,  
-                        'OmittedEvaluationResults': None,
-                        'OmittedEvaluationDetails': None})
+                        'OmittedEvaluationResult': 'N/A',
+                        'OmittedEvaluationDetails': 'N/A'})
             markdown_group_name = '-'.join(baseline_group['GroupName'].split())
             group_reference_url = (f'{self._github_url}/blob/{Version.current}/'
                                    f'scubagoggles/baselines/{product}.md'
