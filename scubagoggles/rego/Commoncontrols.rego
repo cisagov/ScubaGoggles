@@ -1054,7 +1054,6 @@ UnrestrictedServices10_1 contains Service if {
 
 # This policy does not have API support currently and the rego logic does not correctly catch the corresponding event.
 # Hence updating to be manually checked
-CommonControlsId10_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.1")
 
 tests contains {
     "PolicyId": CommonControlsId10_1,
