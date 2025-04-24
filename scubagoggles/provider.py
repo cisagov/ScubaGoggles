@@ -16,6 +16,8 @@ from scubagoggles.utils import create_subset_inverted_dict, \
 from scubagoggles.scuba_constants import ApiReference
 from scubagoggles.robust_dns import RobustDNSClient
 
+log = logging.getLogger(__name__)
+
 # pylint: disable=too-many-instance-attributes
 
 EVENTS = {
@@ -697,6 +699,6 @@ class Provider:
         # {'error': 'access_denied', 'error_description': 'Requested client not authorized.'})
         scopes_list = self._credentials.scopes
         if 'access_denied: Requested client not authorized.' in str(exc):
-            logging.error(f'Your credential may be missing one'
-                          f' of the following scopes: {scopes_list}')
-        raise
+            log.error('Your credential may be missing one'
+                      ' of the following scopes: %s', scopes_list)
+            raise
