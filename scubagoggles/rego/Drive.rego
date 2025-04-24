@@ -350,7 +350,6 @@ if {
 tests contains {
     "PolicyId": DriveId1_6,
     "Prerequisites": [
-        "policy/drive_and_docs_external_sharing.externalSharingMode",
         "policy/drive_and_docs_external_sharing.accessCheckerSuggestions",
         "policy/drive_and_docs_service_status.serviceState"
     ],
