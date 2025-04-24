@@ -34,7 +34,7 @@ Only complete this section if not authenticating via [Service Account](ServiceAc
 23. On the toolbar, click **+ Enable APIs & Services**
 24. Search for and enable the **Admin SDK API**
 25. Search for and enable the **Groups Settings API**
-26. Search for and enable the **Cloud Identity**
+26. Search for and enable the **Cloud Identity** API
 27. During the first run of this tool your default web browser will open up a page to consent to the API scopes needed to run this tool. Sign in
     with an account with the necessary privileges and click allow.
 

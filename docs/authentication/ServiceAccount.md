@@ -20,7 +20,7 @@ Only complete this section if not authenticating via [OAuth](OAuth.md). See [Aut
 1. On the toolbar, click **+ Enable APIs & Services**
 1. Search for and enable the **Admin SDK API**
 1. Search for and enable the **Groups Settings API**
-1. Search for and enable the **Cloud Identity**
+1. Search for and enable the **Cloud Identity** API
 1. Finally, run ScubaGoggles with the `--subjectemail` option set to the email of an admin with necessary permissions to run ScubaGoggles.
 
 > [!NOTE]
