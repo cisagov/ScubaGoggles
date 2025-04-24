@@ -28,6 +28,7 @@ if {
 
 tests contains {
     "PolicyId": SitesId1_1,
+    "Prerequisites": ["policy/sites_service_status.serviceState"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},

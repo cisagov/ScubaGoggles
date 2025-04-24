@@ -41,6 +41,10 @@ NonCompliantOUs1_1 contains {
 
 tests contains {
     "PolicyId": MeetId1_1,
+    "Prerequisites": [
+        "policy/meet_safety_domain.usersAllowedToJoin",
+        "policy/meet_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -85,6 +89,10 @@ NonCompliantOUs2_1 contains {
 
 tests contains {
     "PolicyId": MeetId2_1,
+    "Prerequisites": [
+        "policy/meet_safety_access.meetingsAllowedToJoin",
+        "policy/meet_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
@@ -121,6 +129,10 @@ NonCompliantOUs3_1 contains {
 
 tests contains {
     "PolicyId": MeetId3_1,
+    "Prerequisites": [
+        "policy/meet_safety_host_management.enableHostManagement",
+        "policy/meet_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -157,6 +169,10 @@ NonCompliantOUs4_1 contains {
 
 tests contains {
     "PolicyId": MeetId4_1,
+    "Prerequisites": [
+        "policy/meet_safety_external_participants.enableExternalLabel",
+        "policy/meet_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -206,6 +222,7 @@ if {
 
 tests contains {
     "PolicyId": MeetId5_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -221,6 +238,7 @@ if {
 
 tests contains {
     "PolicyId": MeetId5_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1, "NonCompliantGroups": NonCompliantGroups5_1},
@@ -247,6 +265,7 @@ MeetId6_1 := utils.PolicyIdWithSuffix("GWS.MEET.6.1")
 
 tests contains {
     "PolicyId": MeetId6_1,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -263,6 +282,7 @@ MeetId6_2 := utils.PolicyIdWithSuffix("GWS.MEET.6.2")
 
 tests contains {
     "PolicyId": MeetId6_2,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
