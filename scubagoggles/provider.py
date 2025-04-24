@@ -395,10 +395,6 @@ class Provider:
                 # changes have to apply to the top-level OU.
                 return ''
             parent_ou = response['organizationUnits'][0]['parentOrgUnitId']
-            with self._services['directory'].orgunits() as orgunits:
-                response = orgunits.get(customerId = self._customer_id,
-                                        orgUnitPath = parent_ou).execute()
-            ou_name = response['name']
             self._successful_calls.add(ApiReference.LIST_OUS.value)
             return ou_name
         except RefreshError as exc:
@@ -412,7 +408,10 @@ class Provider:
             self._check_scopes(exc)
             self._unsuccessful_calls.add(ApiReference.LIST_OUS.value)
             return 'Error Retrieving'
-
+        with self._services['directory'].orgunits() as orgunits:
+            response = orgunits.get(customerId = self._customer_id,
+                                orgUnitPath = parent_ou).execute()
+        ou_name = response['name']
     def get_tenant_info(self) -> dict:
         """
         Gets the high-level tenant info using the directory API
@@ -702,3 +701,4 @@ class Provider:
             log.error('Your credential may be missing one'
                       ' of the following scopes: %s', scopes_list)
             raise
+
