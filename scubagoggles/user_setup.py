@@ -27,6 +27,7 @@ Defaults = namedtuple('Defaults',
                        'output_folder_name',
                        'provider_output_name',
                        'rego_output_name',
+                       'action_plan_name',
                        'report_output_name'])
 
 
@@ -34,6 +35,7 @@ default_file_names = Defaults(json_output_name = 'ScubaResults',
                               output_folder_name = 'GWSBaselineConformance',
                               provider_output_name = 'ProviderSettingsExport',
                               rego_output_name = 'TestResults',
+                              action_plan_name = 'ActionsPlan',
                               report_output_name = 'BaselineReports')
 
 
