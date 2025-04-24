@@ -17,7 +17,6 @@ from urllib.parse import urljoin, urlsplit
 from urllib.request import Request, urlcleanup, urlopen, urlretrieve
 
 from scubagoggles.orchestrator import UserRuntimeError
-from scubagoggles.scuba_constants import OPA_VERSION
 from scubagoggles.utils import prompt_boolean
 
 log = logging.getLogger(__name__)
@@ -48,13 +47,18 @@ def getopa(arguments: argparse.Namespace):
 
     verify = not arguments.nocheck
     force = arguments.force
-    version = arguments.version.lower() if arguments.version else None
+
+    # The user can specify either to download the latest version, a specific
+    # version, or the default if no version options are given on the command
+    # line.
+
+    version = None if arguments.latest else arguments.version.lower()
 
     download_opa(opa_dir, version, verify, force)
 
 
 def download_opa(opa_dir: Path,
-                 version: str = OPA_VERSION,
+                 version: str = None,
                  verify: bool = False,
                  force: bool = False):
 
