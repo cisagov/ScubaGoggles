@@ -1199,7 +1199,7 @@ User access to Early Access apps SHOULD be disabled.
 
 - _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
 - _Last modified:_ January 2025
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ 
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
   - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
@@ -1242,7 +1242,7 @@ Require multi party approval for sensitive admin actions SHALL be enabled.
 
 - _Rationale_: Changes to sensitive admin settings, such as disabling 2-step verification, could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
 - _Last modified:_ June 2024
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ 
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
 - MITRE ATT&CK TTP Mapping
   - No TTP Mappings
 
