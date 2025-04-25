@@ -96,7 +96,7 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
 
 - _Rationale:_ This is a stopgap security policy to help protect the tenant if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk.
 - _Last modified:_ February 2025
-_NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AI-2(1), IA-2(2)
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AI-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
