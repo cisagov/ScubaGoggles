@@ -395,7 +395,10 @@ class Provider:
                 # changes have to apply to the top-level OU.
                 return ''
             parent_ou = response['organizationUnits'][0]['parentOrgUnitId']
-            self._successful_calls.add(ApiReference.LIST_OUS.value)
+            with self._services['directory'].orgunits() as orgunits:
+                response = orgunits.get(customerId = self._customer_id,
+                            orgUnitPath = parent_ou).execute()
+
         except RefreshError as exc:
             self._check_scopes(exc)
 
@@ -407,11 +410,11 @@ class Provider:
             self._check_scopes(exc)
             self._unsuccessful_calls.add(ApiReference.LIST_OUS.value)
             return 'Error Retrieving'
-        with self._services['directory'].orgunits() as orgunits:
-            response = orgunits.get(customerId = self._customer_id,
-                                orgUnitPath = parent_ou).execute()
+
         ou_name = response['name']
+        self._successful_calls.add(ApiReference.LIST_OUS.value)
         return ou_name
+
     def get_tenant_info(self) -> dict:
         """
         Gets the high-level tenant info using the directory API
@@ -692,7 +695,7 @@ class Provider:
 
         return results
 
-    def _check_scopes(self, exc):
+    def _check_scopes(self, exc: Exception):
         # If one of the scopes is not authorized in a Service account the
         # error is thrown: ('access_denied: Requested client not authorized.',
         # {'error': 'access_denied', 'error_description': 'Requested client not authorized.'})
@@ -700,4 +703,4 @@ class Provider:
         if 'access_denied: Requested client not authorized.' in str(exc):
             log.error('Your credential may be missing one'
                       ' of the following scopes: %s', scopes_list)
-            raise
+            raise exc
