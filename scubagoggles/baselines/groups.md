@@ -45,7 +45,7 @@ Group access from outside the organization SHALL be disabled unless explicitly g
 
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
@@ -80,7 +80,7 @@ Group owners' ability to add external members to groups SHOULD be disabled unles
 
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7, AC-6(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -117,7 +117,7 @@ Group owners' ability to allow posting to a group by an external, non-group memb
 
 - _Rationale:_ Allowing external users to post opens the door for phishing or other malicious activity to be shared via Groups. Restricting posting by non-group members reduces this risk.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7, AC-6(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -157,7 +157,7 @@ Group creation SHOULD be restricted to admins within the organization unless nec
 
 - _Rationale:_ Many settings for Google Workspace products can be set at the Group level. Allowing unrestricted group creation complicates setting management and opens channels of unmanaged communication.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1069: Permission Groups Discovery](https://attack.mitre.org/techniques/T1069/)
@@ -195,7 +195,7 @@ The default permission to view conversations SHOULD be set to All Group Members.
 - _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace organization. Restricting access to group members reduces the risk of data loss.
 - _Last modified:_ July 2023
 - _Note:_ This setting can be changed by group owners and group managers.
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -233,7 +233,7 @@ The Ability for Groups to be Hidden from the Directory SHALL be disabled.
 
 - _Rationale:_ Hidden groups are not visible, even to admins, in the list of groups found at groups.google.com, though they are still visible on the directory page on admin.google.com. As such, allowing for hidden groups increases the risk of groups being created without admin oversight.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
