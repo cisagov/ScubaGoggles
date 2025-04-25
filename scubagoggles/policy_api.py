@@ -184,7 +184,8 @@ class PolicyAPI:
         'gmail_enhanced_pre_delivery_message_scanning': {'settings': {
             'enableImprovedSuspiciousContentDetection': isBool}},
         'gmail_imap_access': {'settings': {'enableImapAccess': isBool}},
-        'gmail_links_and_external_images': {'settings': {
+        'gmail_links_and_external_images': {'reducer': _merge_reducer,
+                                            'settings': {
             'applyFutureSettingsAutomatically': isBool,
             'enableAggressiveWarningsOnUntrustedLinks': isBool,
             'enableExternalImageScanning': isBool,
@@ -192,7 +193,8 @@ class PolicyAPI:
         'gmail_mail_delegation': {'settings': {'enableMailDelegation': isBool}},
         'gmail_pop_access': {'settings': {'enablePopAccess': isBool}},
         'gmail_service_status': {'settings': {'serviceState': isState}},
-        'gmail_spoofing_and_authentication': {'settings': {
+        'gmail_spoofing_and_authentication': {'reducer': _merge_reducer,
+                                              'settings': {
             'applyFutureSettingsAutomatically': isBool,
             'detectDomainNameSpoofing': isBool,
             'detectDomainSpoofingFromUnauthenticatedSenders': isBool,
@@ -667,7 +669,7 @@ class PolicyAPI:
 
             # If there is a reducer associated with this policy, it will
             # be invoked.
-            reduce_name = expected_settings.get('reduce_method')
+            reduce_name = expected_settings.get('reducer')
 
             if reduce_name:
                 reduce_method = getattr(self, reduce_name)
