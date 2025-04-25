@@ -11,8 +11,9 @@ import sys
 
 from pathlib import Path
 
-from scubagoggles.config import UserConfig
 from google.auth.exceptions import RefreshError
+
+from scubagoggles.config import UserConfig
 from scubagoggles.getopa import getopa
 from scubagoggles.orchestrator import Orchestrator, UserRuntimeError
 from scubagoggles.purge import purge_reports
