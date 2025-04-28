@@ -304,7 +304,7 @@ Protect against anomalous attachment types in emails SHALL be enabled.
 
 - _Rationale:_ Anomalous attachment types in emails may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of the user data and systems.
 - _Last modified:_ July 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_SI-3, SI-8
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)

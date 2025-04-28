@@ -96,7 +96,7 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
 
 - _Rationale:_ This is a stopgap security policy to help protect the tenant if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk.
 - _Last modified:_ February 2025
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AI-2(1), IA-2(2)
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -147,7 +147,7 @@ Allow users to trust the device SHALL be disabled.
 
 - _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
 - _Last modified:_ February 2025
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_IA-2(1), IA-2(2)
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -643,7 +643,7 @@ Account self-recovery for users and non-super admins SHALL be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential adversary to compromise an account.
 - _Last modified:_ February 2025
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_IA-5d, IT-5g
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5d, IA-5g
 - MITRE ATT&CK TTP Mapping
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
