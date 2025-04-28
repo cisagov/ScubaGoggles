@@ -64,6 +64,9 @@ We use a three-step process:
 - [scubagoggles Not Found](docs/troubleshooting/Troubleshooting.md#scubagoggles-not-found)
 - [Unable to view HTML report due to environment limitations](docs/troubleshooting/Troubleshooting.md#unable-to-view-html-report-due-to-environment-limitations)
 
+### Misc
+- [Mappings](docs/misc/mappings.md)
+
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative
 Commons Zero license. With developer approval, contributions may be
