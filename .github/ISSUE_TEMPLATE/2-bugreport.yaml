@@ -10,6 +10,15 @@ body:
       options:
         - label: This issue has an informative and human-readable title.
           required: true
+  - type: textarea
+    attributes:
+      label: ScubaGoggles Version
+      description: Which ScubaGoggles version are you using?
+      placeholder: |
+        Activate your virtual environment (scuba-env\Scripts\activate), then run scubagoggles version locally and paste output here
+        to ensure correct version is indicated.
+      validations:
+        required: true
   - type: input
     attributes:
       label: Operating System
@@ -29,17 +38,20 @@ body:
     attributes:
       label: "\U0001F41B Summary"
       description: What's wrong? Please be specific.
-      placeholder: This bug is resulting in an unexpected result in the reports...
+      placeholder: Seeing unexpected result in the reports...
     validations:
       required: true
   - type: textarea
     attributes:
       label: Steps to reproduce
-      description: Steps to reproduce the behavior.
+      description: Steps to reproduce the behavior. Any helpful log output or screenshots?
       placeholder: |
-        1. Using this environment...
-        2. Ran scubagoggles gws with these parameters...
-        3. Got this specific error output at this line number...
+        1. Using this environment
+        2. Ran scubagoggles gws with these parameters
+        3. Got this specific error output at this line number
+
+
+        Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
     validations:
       required: true
   - type: textarea
@@ -48,11 +60,3 @@ body:
       description: What did you expect to happen that didn't?
     validations:
       required: true
-  - type: textarea
-    attributes:
-      label: Any helpful log output or screenshots? (optional)
-      description: |
-        Links? References? Anything that will give us more context about the issue you are encountering!
-      placeholder: "Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in."
-    validations:
-      required: false
