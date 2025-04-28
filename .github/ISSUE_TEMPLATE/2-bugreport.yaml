@@ -17,8 +17,8 @@ body:
       placeholder: |
         Activate your virtual environment (scuba-env\Scripts\activate), then run scubagoggles version locally and paste output here
         to ensure correct version is indicated.
-      validations:
-        required: true
+    validations:
+      required: true
   - type: input
     attributes:
       label: Operating System
