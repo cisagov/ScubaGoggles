@@ -3,6 +3,8 @@
 Only complete this section if not authenticating via [Service Account](ServiceAccount.md). See [Authentication Methods](AuthenticationMethods.md) for more details.
 
 ## Create an OAuth credential
+> [!NOTE]  
+> These instructions assume a brand-new project. If you're using a preexisting project, the UI may differ as you may have previously completed some of these steps.
 
 1. Sign in to your account at http://console.cloud.google.com/.
 2. Click the "hamburger" menu on the left (three horizontal
