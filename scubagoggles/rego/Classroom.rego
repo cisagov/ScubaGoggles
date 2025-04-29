@@ -39,6 +39,10 @@ NonCompliantOUs1_1 contains {
 
 tests contains {
     "PolicyId": ClassroomId1_1,
+    "Prerequisites": [
+        "policy/classroom_service_status.serviceState",
+        "policy/classroom_class_membership.whoCanJoinClasses"
+    ],
     "Criticality": "Shall",
     # Empty list is for noncompliant groups as classroom settings can't be
     # modified at the group level
@@ -80,6 +84,10 @@ NonCompliantOUs1_2 contains {
 
 tests contains {
     "PolicyId": ClassroomId1_2,
+    "Prerequisites": [
+        "policy/classroom_service_status.serviceState",
+        "policy/classroom_class_membership.whichClassesCanUsersJoin"
+    ],
     "Criticality": "Shall",
     # Empty list is for noncompliant groups as classroom settings can't be
     # modified at the group level
@@ -125,6 +133,10 @@ NonCompliantOUs2_1 contains {
 
 tests contains {
     "PolicyId": ClassroomId2_1,
+    "Prerequisites": [
+        "policy/classroom_service_status.serviceState",
+        "policy/classroom_api_data_access.enableApiAccess"
+    ],
     "Criticality": "Shall",
     # Empty list is for noncompliant groups as classroom settings can't be
     # modified at the group level
@@ -168,6 +180,10 @@ NonCompliantOUs3_1 contains {
 
 tests contains {
     "PolicyId": ClassroomId3_1,
+    "Prerequisites": [
+        "policy/classroom_service_status.serviceState",
+        "policy/classroom_roster_import.rosterImportOption"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -210,6 +226,10 @@ NonCompliantOUs4_1 contains {
 
 tests contains {
     "PolicyId": ClassroomId4_1,
+    "Prerequisites": [
+        "policy/classroom_service_status.serviceState",
+        "policy/classroom_student_unenrollment.whoCanUnenrollStudents"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -253,6 +273,10 @@ NonCompliantOUs5_1 contains {
 
 tests contains {
     "PolicyId": ClassroomId5_1,
+    "Prerequisites": [
+        "policy/classroom_service_status.serviceState",
+        "policy/classroom_teacher_permissions.whoCanCreateClasses"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
