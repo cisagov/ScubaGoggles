@@ -2,18 +2,21 @@
 provider.py is where the GWS api calls are made.
 """
 
+import logging
 import warnings
 from pathlib import Path
 from tqdm import tqdm
 
 from googleapiclient.discovery import build
-
+from google.auth.exceptions import RefreshError
 from scubagoggles.auth import GwsAuth
 from scubagoggles.policy_api import PolicyAPI
 from scubagoggles.utils import create_subset_inverted_dict, \
     create_key_to_list, merge_dicts
 from scubagoggles.scuba_constants import ApiReference
 from scubagoggles.robust_dns import RobustDNSClient
+
+log = logging.getLogger(__name__)
 
 # pylint: disable=too-many-instance-attributes
 
@@ -405,17 +408,23 @@ class Provider:
             parent_ou = response['organizationUnits'][0]['parentOrgUnitId']
             with self._services['directory'].orgunits() as orgunits:
                 response = orgunits.get(customerId = self._customer_id,
-                                        orgUnitPath = parent_ou).execute()
-            ou_name = response['name']
-            self._successful_calls.add(ApiReference.LIST_OUS.value)
-            return ou_name
+                            orgUnitPath = parent_ou).execute()
+
+        except RefreshError as exc:
+            self._check_scopes(exc)
+
         except Exception as exc:
             warnings.warn(
                 f'Exception thrown while getting top level OU: {exc}',
                 RuntimeWarning
             )
+            self._check_scopes(exc)
             self._unsuccessful_calls.add(ApiReference.LIST_OUS.value)
             return 'Error Retrieving'
+
+        ou_name = response['name']
+        self._successful_calls.add(ApiReference.LIST_OUS.value)
+        return ou_name
 
     def get_tenant_info(self) -> dict:
         """
@@ -697,3 +706,13 @@ class Provider:
             request = resource.list_next(request, response)
 
         return results
+
+    def _check_scopes(self, exc: Exception):
+        # If one of the scopes is not authorized in a Service account the
+        # error is thrown: ('access_denied: Requested client not authorized.',
+        # {'error': 'access_denied', 'error_description': 'Requested client not authorized.'})
+        scopes_list = self._credentials.scopes
+        if 'access_denied: Requested client not authorized.' in str(exc):
+            log.error('Your credential may be missing one'
+                      ' of the following scopes: %s', scopes_list)
+            raise exc
