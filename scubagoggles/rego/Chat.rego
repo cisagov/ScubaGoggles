@@ -32,6 +32,10 @@ NonCompliantOUs1_1 contains {
 
 tests contains {
     "PolicyId": ChatId1_1,
+    "Prerequisites": [
+        "policy/chat_service_status.serviceState",
+        "policy/chat_chat_history.historyOnByDefault"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -70,6 +74,10 @@ NonCompliantOUs1_2 contains {
 
 tests contains {
     "PolicyId": ChatId1_2,
+    "Prerequisites": [
+        "policy/chat_service_status.serviceState",
+        "policy/chat_chat_history.allowUserModification"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
@@ -114,6 +122,10 @@ NonCompliantOUs2_1 contains {
 
 tests contains {
     "PolicyId": ChatId2_1,
+    "Prerequisites": [
+        "policy/chat_service_status.serviceState",
+        "policy/chat_chat_file_sharing.externalFileSharing"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
@@ -162,6 +174,10 @@ NonCompliantOUs3_1 contains {
 
 tests contains {
     "PolicyId": ChatId3_1,
+    "Prerequisites": [
+        "policy/chat_service_status.serviceState",
+        "policy/chat_space_history.historyState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -206,6 +222,11 @@ NonCompliantOUs4_1 contains {
 
 tests contains {
     "PolicyId": ChatId4_1,
+    "Prerequisites": [
+        "policy/chat_service_status.serviceState",
+        "policy/chat_external_chat_restriction.allowExternalChat",
+        "policy/chat_external_chat_restriction.externalChatRestriction"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -357,6 +378,7 @@ NoSuchEvent5_1 := true if {
 
 tests contains {
     "PolicyId": ChatId5_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -370,6 +392,7 @@ if {
 
 tests contains {
     "PolicyId": ChatId5_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": concat("<br>", [utils.ReportDetails(NonCompliantOUs5_1, []), Chat5Warning]),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
@@ -468,6 +491,7 @@ NonCompliantOUs5_2 contains {
 
 tests contains {
     "PolicyId": ChatId5_2,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -482,6 +506,7 @@ if {
 
 tests contains {
     "PolicyId": ChatId5_2,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_2},

@@ -21,11 +21,7 @@ log = logging.getLogger(__name__)
 # pylint: disable=too-many-instance-attributes
 
 EVENTS = {
-    'calendar': [
-        'CHANGE_APPLICATION_SETTING',
-        'CREATE_APPLICATION_SETTING',
-        'DELETE_APPLICATION_SETTING'
-    ],
+    'calendar': [],
     'chat': [
         'CHANGE_APPLICATION_SETTING',
         'CREATE_APPLICATION_SETTING',
