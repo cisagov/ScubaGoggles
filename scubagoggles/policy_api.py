@@ -612,7 +612,17 @@ class PolicyAPI:
             if 'orgUnit' in policy['policyQuery']:
                 orgunit_id = policy['policyQuery']['orgUnit']
                 orgunit_id = orgunit_id.removeprefix('orgUnits/')
-                orgunit_name = self._orgunit_id_map[orgunit_id]['name']
+                orgunit_data = self._orgunit_id_map[orgunit_id]
+                orgunit_name = orgunit_data['name']
+                path = orgunit_data['path']
+                if len(path) > 1 and orgunit_name != path[1:]:
+                    # The orgunit is below the first level of orgunits in the
+                    # hierarchy.  The name will include the following suffix
+                    # that shows the parent hierarchy where it belongs so it can
+                    # be identified, particularly if the same name is used
+                    # in different suborgunit hierarchies.
+                    parent = path[1:].removesuffix(f'/{orgunit_name}')
+                    orgunit_name += f' (in {parent})'
             else:
                 # NOTE: a policy setting should always be associated with
                 # an org unit.  In rare cases, an org unit is not provided,
