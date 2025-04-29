@@ -1097,49 +1097,17 @@ UnrestrictedServices10_1 contains Service if {
     not concat("", [Service, "_HIGH_RISK"]) in HighRiskBlocked
 }
 
-ReportDetails10_1(true) := "Requirement met."
-
-ReportDetails10_1(false) := concat("", [
-    "The following services allow access: ",
-    concat(", ", UnrestrictedServices10_1), "."
-])
+# This policy does not have API support currently and the rego logic does not correctly catch the corresponding event.
+# Hence updating to be manually checked
 
 tests contains {
     "PolicyId": CommonControlsId10_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": concat("", [
-        "No API Access Allowed/Blocked events in the current logs. ",
-        "While we are unable to determine the state from the logs, ",
-        "the default setting is non-compliant; manual check recommended."
-    ]),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
     "NoSuchEvent": true
 }
-if {
-    DefaultSafe := false
-    Events := APIAccessEvents
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": CommonControlsId10_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": ReportDetails10_1(Status),
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Events := APIAccessEvents
-    count(Events) > 0
-    Status := count(UnrestrictedServices10_1) == 0
-}
-
-# Note that the above logic doesn't filter for OU. As the logic for this setting
-# is already fairly complex and GWS doesn't currently allow you to modify this
-# setting at the OU level, leaving that as out of scope for now.
 #--
 
 #
