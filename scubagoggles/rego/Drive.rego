@@ -53,6 +53,10 @@ if {
 
 tests contains {
     "PolicyId": DriveId1_1,
+    "Prerequisites": [
+        "policy/drive_and_docs_external_sharing.externalSharingMode",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -121,6 +125,11 @@ if {
 
 tests contains {
     "PolicyId": DriveId1_2,
+    "Prerequisites": [
+        "policy/drive_and_docs_external_sharing.externalSharingMode",
+        "policy/drive_and_docs_external_sharing.allowReceivingFilesOutsideAllowlistedDomains",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
@@ -181,6 +190,12 @@ if {
 
 tests contains {
     "PolicyId": DriveId1_3,
+    "Prerequisites": [
+        "policy/drive_and_docs_external_sharing.externalSharingMode",
+        "policy/drive_and_docs_external_sharing.warnForExternalSharing",
+        "policy/drive_and_docs_external_sharing.warnForSharingOutsideAllowlistedDomains",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_3},
@@ -242,6 +257,12 @@ if {
 
 tests contains {
     "PolicyId": DriveId1_4,
+    "Prerequisites": [
+        "policy/drive_and_docs_external_sharing.externalSharingMode",
+        "policy/drive_and_docs_external_sharing.allowNonGoogleInvites",
+        "policy/drive_and_docs_external_sharing.allowNonGoogleInvitesInAllowlistedDomains",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4},
@@ -283,6 +304,11 @@ if {
 
 tests contains {
     "PolicyId": DriveId1_5,
+    "Prerequisites": [
+        "policy/drive_and_docs_external_sharing.externalSharingMode",
+        "policy/drive_and_docs_external_sharing.allowPublishingFiles",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_5},
@@ -323,6 +349,10 @@ if {
 
 tests contains {
     "PolicyId": DriveId1_6,
+    "Prerequisites": [
+        "policy/drive_and_docs_external_sharing.accessCheckerSuggestions",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_6, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_6},
@@ -372,6 +402,11 @@ if {
 
 tests contains {
     "PolicyId": DriveId1_7,
+    "Prerequisites": [
+        "policy/drive_and_docs_external_sharing.externalSharingMode",
+        "policy/drive_and_docs_external_sharing.allowedPartiesForDistributingContent",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_7, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_7},
@@ -413,6 +448,10 @@ if {
 
 tests contains {
     "PolicyId": DriveId1_8,
+    "Prerequisites": [
+        "policy/drive_and_docs_general_access_default.defaultFileAccess",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_8, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_8},
@@ -449,6 +488,10 @@ if {
 
 tests contains {
     "PolicyId": DriveId2_1,
+    "Prerequisites": [
+        "policy/drive_and_docs_shared_drive_creation.allowManagersToOverrideSettings",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
@@ -481,6 +524,10 @@ if {
 
 tests contains {
     "PolicyId": DriveId2_2,
+    "Prerequisites": [
+        "policy/drive_and_docs_shared_drive_creation.allowExternalUserAccess",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_2},
@@ -513,6 +560,10 @@ if {
 
 tests contains {
     "PolicyId": DriveId2_3,
+    "Prerequisites": [
+        "policy/drive_and_docs_shared_drive_creation.allowNonMemberAccess",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_3},
@@ -545,6 +596,10 @@ if {
 
 tests contains {
     "PolicyId": DriveId2_4,
+    "Prerequisites": [
+        "policy/drive_and_docs_shared_drive_creation.allowedPartiesForDownloadPrintCopy",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_4},
@@ -591,6 +646,11 @@ if {
 
 tests contains {
     "PolicyId": DriveId3_1,
+    "Prerequisites": [
+        "policy/drive_and_docs_file_security_update.allowUsersToManageUpdate",
+        "policy/drive_and_docs_file_security_update.securityUpdate",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue" : {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -627,6 +687,10 @@ if {
 
 tests contains {
     "PolicyId": DriveId4_1,
+    "Prerequisites": [
+        "policy/drive_and_docs_drive_sdk.enableDriveSdkApiAccess",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -698,6 +762,7 @@ if {
 
 tests contains {
     "PolicyId": DriveId5_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -711,6 +776,7 @@ if {
 
 tests contains {
     "PolicyId": DriveId5_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1,
@@ -771,6 +837,11 @@ if {
 
 tests contains {
     "PolicyId": DriveId6_1,
+    "Prerequisites": [
+        "policy/drive_and_docs_drive_for_desktop.allowDriveForDesktop",
+        "policy/drive_and_docs_drive_for_desktop.restrictToAuthorizedDevices",
+        "policy/drive_and_docs_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, []),
     "ActualValue" : {"NonCompliantOUs": NonCompliantOUs6_1},

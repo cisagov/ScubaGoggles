@@ -3,7 +3,9 @@ package sites
 import future.keywords
 import data.utils
 
-SitesEnabled(orgunit) := utils.AppEnabled(input.policies, "sites", orgunit)
+SitesEnabled(orgunit) if utils.AppExplicitStatus(input.policies,
+                                                 "sites",
+                                                 orgunit) == "ENABLED"
 
 ###############
 # GWS.SITES.1 #
@@ -28,6 +30,7 @@ if {
 
 tests contains {
     "PolicyId": SitesId1_1,
+    "Prerequisites": ["policy/sites_service_status.serviceState"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},

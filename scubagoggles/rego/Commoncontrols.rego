@@ -523,17 +523,62 @@ if {
 
 CommonControlsId3_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.3.2")
 
-# TODO replace the following placeholder with actual implementation
-# SsoPolicyProto sso_profile_challenge_selection_behavior appears to the appropriate log event
+LogMessage3_2 := "SsoPolicyProto sso_profile_challenge_selection_behavior"
+
+Check3_2_OK if {
+    events := utils.FilterEventsOU(LogEvents, LogMessage3_2, utils.TopLevelOU)
+    count(events) > 0
+}
+
+NonComplianceMessage3_2 := "Post Single Sign-on (SSO) verification is disabled."
+
+# NOTE: this setting cannot be controlled at the group-level,
+# so only a check at the OU-level is implemented here.
+NonCompliantOUs3_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage3_2
+}
+
+if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, LogMessage3_2, OU)
+    # Ignore OUs without any events. We're already asserting that the
+    # top-level OU has at least one event; for all other OUs we assume
+    # they inherit from a parent OU if they have no events.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "SSO_PROFILES_PERFORM_CHALLENGE_SELECTION"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
 tests contains {
     "PolicyId": CommonControlsId3_2,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Criticality": "Should",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
+if {
+    DefaultSafe := false
+    not Check3_2_OK
+}
+
+tests contains {
+    "PolicyId": CommonControlsId3_2,
+    "Criticality": "Should",
+    # Empty list on the next line as this setting can't be set at the group level
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs3_2, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+
+if {
+    Check3_2_OK
+    Status := count(NonCompliantOUs3_2) == 0
+}
+
 #--
 
 ########################
@@ -1052,49 +1097,17 @@ UnrestrictedServices10_1 contains Service if {
     not concat("", [Service, "_HIGH_RISK"]) in HighRiskBlocked
 }
 
-ReportDetails10_1(true) := "Requirement met."
-
-ReportDetails10_1(false) := concat("", [
-    "The following services allow access: ",
-    concat(", ", UnrestrictedServices10_1), "."
-])
+# This policy does not have API support currently and the rego logic does not correctly catch the corresponding event.
+# Hence updating to be manually checked
 
 tests contains {
     "PolicyId": CommonControlsId10_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": concat("", [
-        "No API Access Allowed/Blocked events in the current logs. ",
-        "While we are unable to determine the state from the logs, ",
-        "the default setting is non-compliant; manual check recommended."
-    ]),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
     "NoSuchEvent": true
 }
-if {
-    DefaultSafe := false
-    Events := APIAccessEvents
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": CommonControlsId10_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": ReportDetails10_1(Status),
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Events := APIAccessEvents
-    count(Events) > 0
-    Status := count(UnrestrictedServices10_1) == 0
-}
-
-# Note that the above logic doesn't filter for OU. As the logic for this setting
-# is already fairly complex and GWS doesn't currently allow you to modify this
-# setting at the OU level, leaving that as out of scope for now.
 #--
 
 #

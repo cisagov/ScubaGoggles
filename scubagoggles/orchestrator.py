@@ -12,6 +12,7 @@ import shutil
 import uuid
 import webbrowser
 import glob
+import csv
 
 from collections.abc import Callable
 from datetime import datetime, timezone
@@ -187,6 +188,58 @@ class Orchestrator:
         out_jsonfile = out_jsonfile.with_suffix('.json')
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(results, out_stream, indent=4)
+
+    def convert_to_result_csv(self, output_dict: dict):
+        """Converts the controls inside the Results section of the json output to a csv.
+        :param output_dict: scuba results
+        """
+        if len(output_dict) == 0:
+            log.info ("No action plan: result is empty")
+            return
+
+        action_plan_csv = []
+
+        # Iterate through products, groups, and controls
+        for value in output_dict["Results"].values():
+
+            for group in value:  # Accessing the 'Value' property of each product
+                for control in group["Controls"]:  # Accessing the 'Controls' property of each group
+                    # Format the Requirement and Details fields
+
+                    if 'Requirement' in control:
+                        control["Requirement"] = control["Requirement"].strip()
+                        if "<ul>" in control["Details"]:
+                            control["Details"] = control ["Details"].replace("<ul>", " ")
+                            control["Details"] = control ["Details"].replace("<li>", "\n- ")
+                            control["Details"] = control ["Details"].replace("</li>", " ")
+                            control["Details"] = control ["Details"].replace("</ul>", "")
+                            control["Details"] = control["Details"].strip()
+
+                        # Check if the control result is "Fail"
+                        if control["Result"] == "Fail":
+                            # Add blank fields for documenting reasons:
+                            # failures and remediation timelines
+                            control["Non-Compliance Reason"] = " "
+                            control["Remediation Completion Date"] = " "
+                            control["Justification"] = " "
+
+                            # Add the control to actionPlanCsv - only for result is fail
+                            action_plan_csv.append(control)
+
+        args = self._args
+        plan_csv_filename = args.outputpath / f'{args.outputactionplanfilename}.csv'
+
+        with open(plan_csv_filename, mode="w",  newline="", encoding='UTF-8') as plan_file:
+            if action_plan_csv:
+                writer = csv.DictWriter(plan_file, fieldnames=action_plan_csv[0].keys())
+                writer.writeheader()
+                writer.writerows(action_plan_csv)
+            else:
+                header = ['ControlID', 'Requirement', 'Result', 'Criticality', 'Details',
+                    'Non-Compliance Reason', 'Remediation Completion Date', 'Justification']
+                writer = csv.DictWriter(plan_file, fieldnames=header)
+                writer.writeheader()
+                log.info ("No action required")
 
     def _get_full_out_jsonfile_name(self, report_uuid: str):
         """
@@ -383,6 +436,9 @@ class Orchestrator:
             raw_data.update({'scuba_config': args_dict})
         total_output.update({'Raw': raw_data})
         total_output['Raw']['rules_table'] = rules_table
+
+        # Generate action report file
+        self.convert_to_result_csv(total_output)
 
         report_file = out_folder / f'{out_jsonfile}.json'
         with report_file.open('w', encoding='utf-8') as results_file:

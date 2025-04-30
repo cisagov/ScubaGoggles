@@ -11,6 +11,8 @@ import sys
 
 from pathlib import Path
 
+from google.auth.exceptions import RefreshError
+
 from scubagoggles.config import UserConfig
 from scubagoggles.getopa import getopa
 from scubagoggles.orchestrator import Orchestrator, UserRuntimeError
@@ -162,6 +164,14 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar='<name>',
                         help=help_msg)
 
+    actionplan_filename = default_file_names.action_plan_name
+    help_msg = ('The name of the action plan output csv in --outputpath. '
+                f'Defaults to {actionplan_filename}.')
+    parser.add_argument('--outputactionplanfilename',
+                        default=actionplan_filename,
+                        metavar='<name>',
+                        help=help_msg)
+
     rego_filename = default_file_names.rego_output_name
     help_msg = ('The name of the Rego output json in --outputpath. '
                 f'Defaults to {rego_filename}.')
@@ -237,19 +247,25 @@ def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         action='store_true',
                         help='Overwrite existing OPA executable')
 
-    parser.add_argument('--version',
-                        '-v',
-                        default = OPA_VERSION,
-                        metavar = '<OPA-version>',
-                        help = 'Version of OPA to download (default: latest '
-                            'version)')
-
     parser.add_argument('--opa_directory',
                         '-r',
                         metavar='<directory>',
                         type=path_parser,
                         help='Directory containing OPA executable')
 
+    version_group = parser.add_mutually_exclusive_group()
+
+    version_group.add_argument('--latest',
+                               '-l',
+                               action='store_true',
+                               help='Download latest OPA version')
+
+    version_group.add_argument('--version',
+                               '-v',
+                               default = OPA_VERSION,
+                               metavar = '<OPA-version>',
+                               help = 'Version of OPA to download (default: '
+                                   f'{OPA_VERSION})')
 
 def get_setup_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     """Adds the arguments for the setup parser
@@ -478,6 +494,9 @@ def dive():
         error = True
     except KeyboardInterrupt:
         print('\nUser interrupt')
+    except RefreshError as rfe:
+        print(f'\n{rfe}')
+        error = True
 
     if error:
         sys.exit(EXIT_FAILURE)

@@ -24,7 +24,8 @@ dependencies = ["dnspython>=2.6.1",
 requires-python = ">= 3.9"
 description='SCuBA security baseline assessment tool'
 authors = [{name = "CISA"}]
-license = {file = "LICENSE"}
+license = "CC0-1.0"
+license-files = ["LICENSE"]
 readme = "README.md"
 
 [project.scripts]
