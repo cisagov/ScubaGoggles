@@ -222,6 +222,8 @@ class Orchestrator:
                             control["Non-Compliance Reason"] = " "
                             control["Remediation Completion Date"] = " "
                             control["Justification"] = " "
+                            control["OmittedEvaluationResult"] = ""
+                            control["OmittedEvaluationDetails"] = ""
 
                             # Add the control to actionPlanCsv - only for result is fail
                             action_plan_csv.append(control)
