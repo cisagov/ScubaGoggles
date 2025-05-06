@@ -873,6 +873,8 @@ tests contains {
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
+# TODO
+# Change this to privilege not roles. need list of privileges and what would make a "super admin"
 if {
     SuperAdmins := {Admin.primaryEmail | some Admin in input.super_admins}
     BreakGlassAccounts := {account | some account in input.break_glass_accounts}
