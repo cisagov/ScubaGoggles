@@ -1102,6 +1102,7 @@ UnrestrictedServices10_1 contains Service if {
 
 tests contains {
     "PolicyId": CommonControlsId10_1,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",

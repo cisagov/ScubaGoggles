@@ -40,6 +40,10 @@ if {
 
 tests contains {
     "PolicyId": CalendarId1_1,
+    "Prerequisites": [
+        "policy/calendar_service_status.serviceState",
+        "policy/calendar_primary_calendar_max_allowed_external_sharing.maxAllowedExternalSharing"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -75,6 +79,10 @@ if {
 
 tests contains {
     "PolicyId": CalendarId1_2,
+    "Prerequisites": [
+        "policy/calendar_service_status.serviceState",
+        "policy/calendar_secondary_calendar_max_allowed_external_sharing.maxAllowedExternalSharing"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_2},
@@ -112,6 +120,10 @@ if {
 
 tests contains {
     "PolicyId": CalendarId2_1,
+    "Prerequisites": [
+        "policy/calendar_service_status.serviceState",
+        "policy/calendar_external_invitations.warnOnInvite"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_1},
@@ -149,6 +161,10 @@ if {
 
 tests contains {
     "PolicyId": CalendarId3_1,
+    "Prerequisites": [
+        "policy/calendar_service_status.serviceState",
+        "policy/calendar_interoperability.enableInteroperability"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -168,6 +184,7 @@ CalendarId3_2 := utils.PolicyIdWithSuffix("GWS.CALENDAR.3.2")
 
 tests contains {
     "PolicyId": CalendarId3_2,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -202,6 +219,10 @@ if {
 
 tests contains {
     "PolicyId": CalendarId4_1,
+    "Prerequisites": [
+        "policy/calendar_service_status.serviceState",
+        "policy/calendar_appointment_schedules.enablePayments"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},

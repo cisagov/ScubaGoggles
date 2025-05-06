@@ -41,6 +41,10 @@ NonCompliantOUs1_1 contains {
 
 tests contains {
     "PolicyId": GroupsId1_1,
+    "Prerequisites": [
+        "policy/groups_for_business_service_status.serviceState",
+        "policy/groups_for_business_groups_sharing.collaborationCapability"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -76,6 +80,10 @@ NonCompliantOUs2_1 contains {
 
 tests contains {
     "PolicyId": GroupsId2_1,
+    "Prerequisites": [
+        "policy/groups_for_business_service_status.serviceState",
+        "policy/groups_for_business_groups_sharing.ownersCanAllowExternalMembers"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
     "ActualValue": {"NonCompliantOUs":NonCompliantOUs2_1},
@@ -111,6 +119,10 @@ NonCompliantOUs3_1 contains {
 
 tests contains {
     "PolicyId": GroupsId3_1,
+    "Prerequisites": [
+        "policy/groups_for_business_service_status.serviceState",
+        "policy/groups_for_business_groups_sharing.ownersCanAllowIncomingMailFromPublic"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs3_1},
@@ -154,6 +166,10 @@ NonCompliantOUs4_1 contains {
 
 tests contains {
     "PolicyId": GroupsId4_1,
+    "Prerequisites": [
+        "policy/groups_for_business_service_status.serviceState",
+        "policy/groups_for_business_groups_sharing.createGroupsAccessLevel"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
@@ -201,6 +217,10 @@ NonCompliantOUs5_1 contains {
 
 tests contains {
     "PolicyId": GroupsId5_1,
+    "Prerequisites": [
+        "policy/groups_for_business_service_status.serviceState",
+        "policy/groups_for_business_groups_sharing.viewTopicsDefaultAccessLevel"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
@@ -236,6 +256,10 @@ NonCompliantOUs6_1 contains {
 
 tests contains {
     "PolicyId": GroupsId6_1,
+    "Prerequisites": [
+        "policy/groups_for_business_service_status.serviceState",
+        "policy/groups_for_business_groups_sharing.ownersCanHideGroups"
+    ],
     "Criticality": "Shall",
     "ReportDetails":utils.ReportDetails(NonCompliantOUs6_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1},
