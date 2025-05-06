@@ -553,7 +553,6 @@ class Reporter:
 
                 if self._is_control_omitted(control_id):
                     # Handle the case where the control was omitted
-                    report_stats['Omit'] += 1
                     rationale = self._get_omission_rationale(control_id)
 
                     omitted_result = 'N/A'
@@ -629,6 +628,7 @@ class Reporter:
             fragments.append(f'<h2>{product_upper}-'
                              f'{baseline_group["GroupNumber"]} '
                              f'{markdown_link}</h2>')
+
             fragments.append(self.create_html_table(table_data))
             results_data.update({'GroupName': baseline_group['GroupName']})
             results_data.update({'GroupNumber': baseline_group['GroupNumber']})
