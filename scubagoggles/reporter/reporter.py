@@ -629,7 +629,12 @@ class Reporter:
                              f'{baseline_group["GroupNumber"]} '
                              f'{markdown_link}</h2>')
 
-            fragments.append(self.create_html_table(table_data))
+            filtered_table_data = [
+                {k: v for k, v in row.items()
+                if k not in ('OmittedEvaluationResult', 'OmittedEvaluationDetails')}
+                for row in table_data
+            ]
+            fragments.append(self.create_html_table(filtered_table_data))
             results_data.update({'GroupName': baseline_group['GroupName']})
             results_data.update({'GroupNumber': baseline_group['GroupNumber']})
             results_data.update({'GroupReferenceURL': group_reference_url})
