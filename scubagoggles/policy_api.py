@@ -853,7 +853,7 @@ class PolicyAPI:
 
         if not orgunit_policies:
             log.warning('No policy settings found for orgunit: %s', orgunit)
-            return False
+            return set()
 
         missing_settings = set()
         invalid_settings = set()
