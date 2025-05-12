@@ -1029,8 +1029,6 @@ if {
 tests contains {
     "PolicyId": GmailId9_1,
     "Prerequisites": [
-        "policy/enableImapAccess",
-	"policy/enablePopAccess",
         "policy/gmail_service_status.serviceState"
     ],
     "Criticality": "Shall",
