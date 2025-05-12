@@ -380,24 +380,7 @@ class Provider:
             with self._services['directory'].orgunits() as orgunits:
                 response = orgunits.list(customerId = self._customer_id,
                                          orgUnitPath = '/',
-                                         type = 'children').execute()
-            # Because we set orgUnitPath to / and type to children, the API call will only
-            # return the second-level OUs, meaning the parentOrgUnitId of any of the OUs returned
-            # will point us to OU of the entire organization
-            if 'organizationUnits' not in response:
-                # No custom OUs have been created. In this case, we can't
-                # determine the name of the top-level OU. See:
-                # https://stackoverflow.com/questions/26936357/google-directory-api-org-name-of-root-org-unit-path
-                # https://stackoverflow.com/questions/60464432/cannot-get-root-orgunit-in-google-directory-api?noredirect=1&lq=1
-                # Fortunately, when there are no custom OUs present, we won't
-                # need to check if a setting change was made at the top-level
-                # OU in the Rego; because no custom OUs have been created, any
-                # changes have to apply to the top-level OU.
-                return ''
-            parent_ou = response['organizationUnits'][0]['parentOrgUnitId']
-            with self._services['directory'].orgunits() as orgunits:
-                response = orgunits.get(customerId = self._customer_id,
-                            orgUnitPath = parent_ou).execute()
+                                         type = 'allIncludingParent').execute()
 
         except RefreshError as exc:
             self._check_scopes(exc)
@@ -411,9 +394,13 @@ class Provider:
             self._unsuccessful_calls.add(ApiReference.LIST_OUS.value)
             return 'Error Retrieving'
 
-        ou_name = response['name']
         self._successful_calls.add(ApiReference.LIST_OUS.value)
-        return ou_name
+
+        for ou in response['organizationUnits']:
+            if ou['orgUnitPath'] == '/':
+                return ou['name']
+
+        log.warning('Unable to determine the name of the top-level OU.')
 
     def get_tenant_info(self) -> dict:
         """
