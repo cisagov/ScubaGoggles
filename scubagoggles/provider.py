@@ -401,6 +401,7 @@ class Provider:
                 return ou['name']
 
         log.warning('Unable to determine the name of the top-level OU.')
+        return ''
 
     def get_tenant_info(self) -> dict:
         """
