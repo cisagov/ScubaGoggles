@@ -51,7 +51,7 @@ if {
 
 tests contains {
     "PolicyId": GmailId1_1,
-    "Prerequisites" [
+    "Prerequisites": [
         "policy/gmail_mail_delegation.enableMailDelegation",
         "policy/gmail_service_status.serviceState"
     ],
@@ -394,7 +394,7 @@ tests contains {
     "PolicyId": GmailId5_4,
     "Prerequisites": [
         "policy/gmail_email_attachment_safety.applyFutureRecommendedSettingsAutomatically",
-        "policy/gmail_service_status.srivceState"
+        "policy/gmail_service_status.serviceState"
     ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_4, []),
@@ -442,7 +442,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId5_5,
-    "Prerequisites": ["reports/v1/activities/list"],
+     "Prerequisites": [
+        "policy/gmail_email_attachment_safety[config.setting]",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
@@ -864,7 +867,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId7_6,
-    "Prerequisites": ["reports/v1/activities/list"],
+    "Prerequisites": [
+        "policy/gmail_spoofing_and_authentication[config.setting]",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_6, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_6},
@@ -1016,7 +1022,11 @@ if {
 
 tests contains {
     "PolicyId": GmailId9_1,
-    "Prerequisites": ["reports/v1/activities/list"],
+    "Prerequisites": [
+        "policy/enableImapAccess",
+	"policy/enablePopAccess",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1},
@@ -1235,7 +1245,11 @@ NonComplianceMessage14_1(Value, OU) := sprintf("Email allowlists are %s in %s.",
 
 tests contains {
     "PolicyId": GmailId14_1,
-    "prerequisites": ["directory/v1/users/list"],
+    "Prerequisites": [
+        "policy/enableImapAccess",
+	"policy/enablePopAccess",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": NonComplianceMessage14_1(GetFriendlyEnabledValue(allowListCount > 0),
                                               utils.TopLevelOU),
@@ -1279,7 +1293,7 @@ if {
 tests contains {
     "PolicyId": GmailId15_1,
     "Prerequisites": [
-        "policy/gmail_enhanced_pre_delivery_message_scanning",
+        "policy/gmail_enhanced_pre_delivery_message_scanning.enableImprovedSuspiciousContentDetection",
         "policy/gmail_service_status.serviceState"
     ],
     "Criticality": "Shall",
