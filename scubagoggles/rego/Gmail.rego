@@ -870,7 +870,11 @@ if {
 tests contains {
     "PolicyId": GmailId7_6,
     "Prerequisites": [
-        "policy/gmail_spoofing_and_authentication[config.setting]",
+        "policy/gmail_spoofing_and_authentication.domainSpoofingConsequence",
+	"policy/gmail_spoofing_and_authentication.domainNameSpoofingConsequence",
+	"policy/gmail_spoofing_and_authentication.employeeNameSpoofingConsequence",
+	"policy/gmail_spoofing_and_authentication.groupsSpoofingConsequence",
+	"policy/gmail_spoofing_and_authentication.unauthenticatedEmailConsequence",
         "policy/gmail_service_status.serviceState"
     ],
     "Criticality": "Shall",
