@@ -393,6 +393,7 @@ class Reporter:
             # prerequisites section. For now, to avoid a breaking change,
             # any test without a prerequisites defined gets a free pass.
             prereqs = {}
+            raise RuntimeError(f'No prerequisites found for {self.product}')
         else:
             prereqs = test['Prerequisites']
 
