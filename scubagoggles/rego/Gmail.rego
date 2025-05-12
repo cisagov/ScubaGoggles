@@ -1246,8 +1246,7 @@ NonComplianceMessage14_1(Value, OU) := sprintf("Email allowlists are %s in %s.",
 tests contains {
     "PolicyId": GmailId14_1,
     "Prerequisites": [
-        "policy/enableImapAccess",
-	"policy/enablePopAccess",
+        "policy/gmail_email_spam_filter_ip_allowlist.allowedIpAddresses",
         "policy/gmail_service_status.serviceState"
     ],
     "Criticality": "Should",
