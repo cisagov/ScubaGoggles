@@ -444,8 +444,8 @@ tests contains {
     "PolicyId": GmailId5_5,
      "Prerequisites": [
         "policy/gmail_email_attachment_safety.anomalousAttachmentProtectionConsequence",
-	"policy/gmail_email_attachment_safety.encryptedAttachmentProtectionConsequence",
-	"policy/gmail_email_attachment_safety.attachmentWithScriptsProtectionConsequence",
+		"policy/gmail_email_attachment_safety.encryptedAttachmentProtectionConsequence",
+		"policy/gmail_email_attachment_safety.attachmentWithScriptsProtectionConsequence",
         "policy/gmail_service_status.serviceState"
     ],
     "Criticality": "Shall",
