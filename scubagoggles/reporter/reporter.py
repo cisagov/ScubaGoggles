@@ -388,7 +388,7 @@ class Reporter:
         if 'Prerequisites' not in test:
             prereqs = {}
             raise RuntimeError(f'No prerequisites found for {test["PolicyId"]}')
-            
+
         prereqs = test['Prerequisites']
 
         policy_prereqs = set()
