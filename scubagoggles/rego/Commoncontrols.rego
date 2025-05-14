@@ -553,6 +553,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId3_2,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
@@ -566,6 +567,7 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId3_2,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     # Empty list on the next line as this setting can't be set at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs3_2, []),
