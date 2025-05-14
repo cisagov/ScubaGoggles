@@ -874,16 +874,4 @@ class PolicyAPI:
                 elif not verifier(policy_value):
                     invalid_settings.add(f'{section}.{setting_name}')
 
-
-        if missing_settings:
-            log.warning('Setting(s) missing from %s orgunit: %s',
-                        orgunit,
-                        str(sorted(missing_settings)))
-
-        if invalid_settings:
-            log.warning('Settings with invalid values for '
-                        'orgunit %s, resource %s',
-                        orgunit,
-                        str(sorted(invalid_settings)))
-
         return missing_settings.union(invalid_settings)

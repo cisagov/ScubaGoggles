@@ -51,6 +51,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId1_1,
+    "Prerequisites": [
+        "policy/gmail_mail_delegation.enableMailDelegation",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
@@ -277,6 +281,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId5_1,
+    "Prerequisites": [
+        "policy/gmail_email_attachment_safety.enableEncryptedAttachmentProtection",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
@@ -310,6 +318,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId5_2,
+    "Prerequisites": [
+        "policy/gmail_email_attachment_safety.enableAttachmentWithScriptsProtection",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_2},
@@ -343,6 +355,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId5_3,
+    "Prerequisites": [
+        "policy/gmail_email_attachment_safety.enableAnomalousAttachmentProtection",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_3},
@@ -376,6 +392,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId5_4,
+    "Prerequisites": [
+        "policy/gmail_email_attachment_safety.applyFutureRecommendedSettingsAutomatically",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_4},
@@ -422,6 +442,12 @@ if {
 
 tests contains {
     "PolicyId": GmailId5_5,
+     "Prerequisites": [
+        "policy/gmail_email_attachment_safety.anomalousAttachmentProtectionConsequence",
+		"policy/gmail_email_attachment_safety.encryptedAttachmentProtectionConsequence",
+		"policy/gmail_email_attachment_safety.attachmentWithScriptsProtectionConsequence",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_5},
@@ -442,6 +468,7 @@ GmailId5_6 := utils.PolicyIdWithSuffix("GWS.GMAIL.5.6")
 
 tests contains {
     "PolicyId": GmailId5_6,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please check manually.",
     "ActualValue": "",
@@ -476,6 +503,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId6_1,
+    "Prerequisites": [
+        "policy/gmail_links_and_external_images.enableShortenerScanning",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1},
@@ -509,6 +540,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId6_2,
+    "Prerequisites": [
+        "policy/gmail_links_and_external_images.enableExternalImageScanning",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_2},
@@ -542,6 +577,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId6_3,
+    "Prerequisites": [
+        "policy/gmail_links_and_external_images.enableAggressiveWarningsOnUntrustedLinks",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_3},
@@ -575,6 +614,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId6_4,
+    "Prerequisites": [
+        "policy/gmail_links_and_external_images.applyFutureSettingsAutomatically",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_4},
@@ -595,6 +638,7 @@ GmailId6_5 := utils.PolicyIdWithSuffix("GWS.GMAIL.6.5")
 # No implementation steps provided for this policy
 tests contains {
     "PolicyId": GmailId6_5,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -628,6 +672,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId7_1,
+    "Prerequisites": [
+        "policy/gmail_spoofing_and_authentication.detectDomainNameSpoofing",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_1},
@@ -661,6 +709,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId7_2,
+    "Prerequisites": [
+        "policy/gmail_spoofing_and_authentication.detectEmployeeNameSpoofing",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_2},
@@ -694,6 +746,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId7_3,
+    "Prerequisites": [
+        "policy/gmail_spoofing_and_authentication.detectDomainSpoofingFromUnauthenticatedSenders",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_3, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_3},
@@ -727,6 +783,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId7_4,
+    "Prerequisites": [
+        "policy/gmail_spoofing_and_authentication.detectUnauthenticatedEmails",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_4},
@@ -760,6 +820,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId7_5,
+    "Prerequisites": [
+        "policy/gmail_spoofing_and_authentication.detectDomainSpoofingFromUnauthenticatedSenders",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_5},
@@ -805,6 +869,14 @@ if {
 
 tests contains {
     "PolicyId": GmailId7_6,
+    "Prerequisites": [
+        "policy/gmail_spoofing_and_authentication.domainSpoofingConsequence",
+		"policy/gmail_spoofing_and_authentication.domainNameSpoofingConsequence",
+		"policy/gmail_spoofing_and_authentication.employeeNameSpoofingConsequence",
+		"policy/gmail_spoofing_and_authentication.groupsSpoofingConsequence",
+		"policy/gmail_spoofing_and_authentication.unauthenticatedEmailConsequence",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_6, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_6},
@@ -838,6 +910,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId7_7,
+    "Prerequisites": [
+        "policy/gmail_spoofing_and_authentication.applyFutureSettingsAutomatically",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_7, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_7},
@@ -858,6 +934,7 @@ GmailId7_8 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.8")
 # No implementation steps provided for this policy
 tests contains {
     "PolicyId": GmailId7_8,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -891,6 +968,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId8_1,
+    "Prerequisites": [
+        "policy/gmail_user_email_uploads.enableMailAndContactsImport",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs8_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs8_1},
@@ -947,6 +1028,9 @@ if {
 
 tests contains {
     "PolicyId": GmailId9_1,
+    "Prerequisites": [
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1},
@@ -984,6 +1068,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId10_1,
+    "Prerequisites": [
+        "policy/gmail_workspace_sync_for_outlook.enableGoogleWorkspaceSyncForMicrosoftOutlook",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_1},
@@ -1021,6 +1109,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId11_1,
+    "Prerequisites": [
+        "policy/gmail_auto_forwarding.enableAutoForwarding",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs11_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1},
@@ -1058,6 +1150,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId12_1,
+    "Prerequisites": [
+        "policy/gmail_per_user_outbound_gateway.allowUsersToUseExternalSmtpServers",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs12_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs12_1},
@@ -1103,6 +1199,7 @@ if {
 
 tests contains {
     "PolicyId": GmailId13_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1118,6 +1215,7 @@ if {
 
 tests contains {
     "PolicyId": GmailId13_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs13_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs13_1},
@@ -1151,6 +1249,10 @@ NonComplianceMessage14_1(Value, OU) := sprintf("Email allowlists are %s in %s.",
 
 tests contains {
     "PolicyId": GmailId14_1,
+    "Prerequisites": [
+        "policy/gmail_email_spam_filter_ip_allowlist.allowedIpAddresses",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Should",
     "ReportDetails": NonComplianceMessage14_1(GetFriendlyEnabledValue(allowListCount > 0),
                                               utils.TopLevelOU),
@@ -1193,6 +1295,10 @@ if {
 
 tests contains {
     "PolicyId": GmailId15_1,
+    "Prerequisites": [
+        "policy/gmail_enhanced_pre_delivery_message_scanning.enableImprovedSuspiciousContentDetection",
+        "policy/gmail_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs15_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_1},
@@ -1213,6 +1319,7 @@ GmailId15_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.15.2")
 # No implementation steps provided for this policy
 tests contains {
     "PolicyId": GmailId15_2,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1249,6 +1356,7 @@ if {
 
 tests contains {
     "PolicyId": GmailId16_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -1264,6 +1372,7 @@ if {
 
 tests contains {
     "PolicyId": GmailId16_1,
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs16_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs16_1},
@@ -1287,6 +1396,7 @@ GmailId16_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.16.2")
 # No implementation steps provided for this policy
 tests contains {
     "PolicyId": GmailId16_2,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1309,6 +1419,7 @@ GmailId17_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.17.1")
 # and not available within the generated logs
 tests contains {
     "PolicyId": GmailId17_1,
+    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1331,6 +1442,7 @@ GmailId18_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.18.1")
 # and not available within the generated logs
 tests contains {
     "PolicyId": GmailId18_1,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1347,6 +1459,7 @@ GmailId18_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.18.2")
 
 tests contains {
     "PolicyId": GmailId18_2,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
@@ -1363,6 +1476,7 @@ GmailId18_3 := utils.PolicyIdWithSuffix("GWS.GMAIL.18.3")
 
 tests contains {
     "PolicyId": GmailId18_3,
+    "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",

@@ -386,15 +386,10 @@ class Reporter:
         """
 
         if 'Prerequisites' not in test:
-            # TODO # pylint: disable=fixme
-            # Change this once the Rego for each baseline has been updated
-            # with the enhanced error handling for the provider API. Once that
-            # update has been made, each rego test should include a
-            # prerequisites section. For now, to avoid a breaking change,
-            # any test without a prerequisites defined gets a free pass.
             prereqs = {}
-        else:
-            prereqs = test['Prerequisites']
+            raise RuntimeError(f'No prerequisites found for {test["PolicyId"]}')
+
+        prereqs = test['Prerequisites']
 
         policy_prereqs = set()
         other_prereqs = set()
