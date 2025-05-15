@@ -1,0 +1,42 @@
+name: Publish Python distribution to PyPI
+on:
+  push:
+    paths:
+      - ".github/workflows/publish_to_pypi.yml"
+    branches:
+      - "main"
+       
+  workflow_call:
+  workflow_dispatch:
+    inputs:
+      operating-system:
+        description: "Choose operating system(s), format must be an array of strings:"
+        required: true
+        type: string
+        default: "['windows-latest', 'macos-latest']"
+      python-version:
+        description: "Choose python version(s), format must be an array of strings:"
+        required: true
+        type: string
+        default: "['3.10']"
+      opa-version:
+        description: "Choose OPA version"
+        required: true
+        type: string
+        default: latest
+
+jobs:
+  build:
+    name: Build distrbution
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
