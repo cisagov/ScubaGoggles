@@ -11,7 +11,7 @@ from datetime import datetime
 from html import escape
 from pathlib import Path
 
-from scubagoggles.scuba_constants import API_LINKS
+from scubagoggles.scuba_constants import API_LINKS, ApiReference
 from scubagoggles.version import Version
 
 log = logging.getLogger(__name__)
@@ -27,6 +27,19 @@ class Reporter:
     """
 
     _github_url = 'https://github.com/cisagov/scubagoggles'
+    _limitations_url = f"{_github_url}/blob/main/docs/usage/Limitations.md"
+    _warning_icon = ('<object data="./images/triangle-exclamation-solid.svg" '
+                     'alt="Warning icon." title="Warning" width="13" height="13">'
+                     '</object>')
+    # "&nbsp;" just adds a bit of horizontal whitespace
+    # between the warning icon and the text.
+    _log_based_warning = (f'<span style="display: block;">{_warning_icon}'
+                          f'&nbsp;Log-based check. See <a href="{_limitations_url}">'
+                          'limitations</a>.</span>')
+    # Plaintext version of the above warning
+    _log_based_warning_plaintext = ('Warning: log-based check. See documentation '
+                                    'in ScubaGoggles GitHub repository for '
+                                    'limitations.')
 
     _reporter_path = Path(__file__).parent
 
@@ -280,6 +293,19 @@ class Reporter:
             self._warn(warning, RuntimeWarning)
             return 'Rationale not provided.'
         return self._omissions[control_id]['rationale']
+
+    def _sanitize_details(self, table_data: list) -> list:
+        '''
+        Remove HTML elements from the 'Details' column of the results that
+        aren't appropriate for JSON, e.g., icons.
+        '''
+        for result in table_data:
+            details = result['Details']
+            details = details.replace(self._log_based_warning,
+                                      self._log_based_warning_plaintext)
+            details = details.replace('<br>', '\n')
+            result['Details'] = details
+        return table_data
 
     def _build_report_html(self, fragments: list, rules_data : dict) -> str:
         """
@@ -582,7 +608,7 @@ class Reporter:
                                            'Requirement': requirement,
                                            'Result': 'Error',
                                            'Criticality': test['Criticality'],
-                                           'Details': failed_details, 
+                                           'Details': failed_details,
                                            'OmittedEvaluationResult': 'N/A',
                                            'OmittedEvaluationDetails': 'N/A'})
                         continue
@@ -596,12 +622,21 @@ class Reporter:
 
                     details = test['ReportDetails']
 
-                    if result == 'No events found':
-                        warning_icon = ('<object data="./images/'
-                                        'triangle-exclamation-solid.svg" '
-                                        'width="15" height="15">'
-                                        '</object>')
-                        details = warning_icon + ' ' + test['ReportDetails']
+                    reports_api_link = ApiReference.LIST_ACTIVITIES.value
+                    if reports_api_link in test['Prerequisites']:
+                        # If the test depends on the reports API, append a
+                        # warning about the API's limitations to the details
+                        # column.
+                        if not details.endswith('</ul>'):
+                            # If the details ends with a list (e.g., "The
+                            # following OUs are non-compliant:..."), there will
+                            # already be enough whitespace between the list and
+                            # this warning. But if it doesn't end with a list,
+                            # e.g., "Requirement met in all OUs and groups.",
+                            # insert some additional whitespace for improved
+                            # readability.
+                            details += '<br><br>'
+                        details += self._log_based_warning
 
                     report_stats[self._get_summary_category(result)] += 1
                     table_data.append({
@@ -609,7 +644,7 @@ class Reporter:
                         'Requirement': requirement,
                         'Result': result,
                         'Criticality': test['Criticality'],
-                        'Details': details,  
+                        'Details': details,
                         'OmittedEvaluationResult': 'N/A',
                         'OmittedEvaluationDetails': 'N/A'})
             markdown_group_name = '-'.join(baseline_group['GroupName'].split())
@@ -633,7 +668,7 @@ class Reporter:
             results_data.update({'GroupName': baseline_group['GroupName']})
             results_data.update({'GroupNumber': baseline_group['GroupNumber']})
             results_data.update({'GroupReferenceURL': group_reference_url})
-            results_data.update({'Controls': table_data})
+            results_data.update({'Controls': self._sanitize_details(table_data)})
             json_data.append(results_data)
         html = self._build_report_html(fragments, rules_data)
         with open(f'{out_path}/IndividualReports/{ind_report_name}.html',
