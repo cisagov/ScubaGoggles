@@ -29,7 +29,6 @@ jobs:
   build:
     name: Build distrbution
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,3 +39,58 @@ jobs:
           python-version: "3.x"
           cache: "pip"
           cache-dependency-path: "requirements.txt"
+      - name: Install pypa/build
+        run: >-
+          python3 -m
+          pip install
+          build
+          --user
+      - name: Build binary wheel and source tarball
+        run: python3 -m build
+      - name: Store distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  publish-to-pypi:
+    name: >-
+      Publish Python distribution to PyPI
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/scubagoggles
+    permissions:
+      id-token: write
+    steps:
+      - name: Download all dists
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+  
+  publish-to-testpypi:
+    name: Publish Python distribution to TestPyPI
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/scubagoggles
+    permissions:
+      id-token: write
+    steps:
+      - name: Download all dists
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish distribution to TestPyPI
+        uses: pypa/gh-action/pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
