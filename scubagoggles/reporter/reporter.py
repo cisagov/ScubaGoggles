@@ -538,22 +538,40 @@ class Reporter:
                         'Requirement': requirement,
                         'Result': 'Error - Test results missing',
                         'Criticality': '-',
-                        'Details': f'Report issue on {issues_link}'})
+                        'Details': f'Report issue on {issues_link}', 
+                        'OmittedEvaluationResult': 'N/A',
+                        'OmittedEvaluationDetails': 'N/A'
+                        })
                     log.error('No test results found for Control Id %s',
                               control_id)
                     continue
+
                 if self._is_control_omitted(control_id):
                     # Handle the case where the control was omitted
-                    report_stats['Omit'] += 1
                     rationale = self._get_omission_rationale(control_id)
+
+                    omitted_result = 'N/A'
+                    omitted_details = 'N/A'
+
+                    for test in tests:
+                        result = self._get_test_result(test['RequirementMet'],
+                                                        test['Criticality'],
+                                                        test['NoSuchEvent'])
+                        details = test['ReportDetails']
+                        omitted_result = result
+                        omitted_details = details
+
                     table_data.append({
                         'Control ID': control_id,
                         'Requirement': requirement,
                         'Result': 'Omitted',
                         'Criticality': tests[0]['Criticality'],
-                        'Details': f'Test omitted by user. {rationale}'
+                        'Details': f'Test omitted by user. {rationale}',
+                        'OmittedEvaluationResult': omitted_result,
+                        'OmittedEvaluationDetails': omitted_details
                     })
                     continue
+
                 for test in tests:
                     failed_prereqs = self._get_failed_prereqs(test)
                     if len(failed_prereqs) > 0:
@@ -564,7 +582,9 @@ class Reporter:
                                            'Requirement': requirement,
                                            'Result': 'Error',
                                            'Criticality': test['Criticality'],
-                                           'Details': failed_details})
+                                           'Details': failed_details, 
+                                           'OmittedEvaluationResult': 'N/A',
+                                           'OmittedEvaluationDetails': 'N/A'})
                         continue
 
                     if control_id.startswith('GWS.COMMONCONTROLS.13.1'):
@@ -589,7 +609,9 @@ class Reporter:
                         'Requirement': requirement,
                         'Result': result,
                         'Criticality': test['Criticality'],
-                        'Details': details})
+                        'Details': details,  
+                        'OmittedEvaluationResult': 'N/A',
+                        'OmittedEvaluationDetails': 'N/A'})
             markdown_group_name = '-'.join(baseline_group['GroupName'].split())
             group_reference_url = (f'{self._github_url}/blob/{Version.current}/'
                                    f'scubagoggles/baselines/{product}.md'
@@ -601,7 +623,13 @@ class Reporter:
             fragments.append(f'<h2>{product_upper}-'
                              f'{baseline_group["GroupNumber"]} '
                              f'{markdown_link}</h2>')
-            fragments.append(self.create_html_table(table_data))
+
+            filtered_table_data = [
+                {k: v for k, v in row.items()
+                if k not in ('OmittedEvaluationResult', 'OmittedEvaluationDetails')}
+                for row in table_data
+            ]
+            fragments.append(self.create_html_table(filtered_table_data))
             results_data.update({'GroupName': baseline_group['GroupName']})
             results_data.update({'GroupNumber': baseline_group['GroupNumber']})
             results_data.update({'GroupReferenceURL': group_reference_url})
