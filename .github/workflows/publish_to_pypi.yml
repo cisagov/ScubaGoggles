@@ -1,11 +1,10 @@
-name: Publish Python distribution to PyPI
+name: Publish ScubaGoggles to PyPI
 on:
   push:
     paths:
-      - ".github/workflows/publish_to_pypi.yml"
+    - ".github/workflows/publish_to_pypi.yml"
     branches:
-      - "main"
-  workflow_call:
+    - "main"
   workflow_dispatch:
 
 jobs:
@@ -13,35 +12,35 @@ jobs:
     name: Build distrbution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-          cache: "pip"
-          cache-dependency-path: "requirements.txt"
-      - name: Install pypa/build
-        run: >-
-          python3 -m
-          pip install
-          build
-          --user
-      - name: Build binary wheel and source tarball
-        run: python3 -m build
-      - name: Store distribution packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-package-distributions
-          path: dist/
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.x"
+        cache: "pip"
+        cache-dependency-path: "requirements.txt"
+    - name: Install pypa/build
+      run: >-
+        python3 -m
+        pip install
+        build
+        --user
+    - name: Build binary wheel and source tarball
+      run: python3 -m build
+    - name: Store distribution packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: python-package-distributions
+        path: dist/
 
   publish-to-pypi:
     name: >-
-      Publish Python distribution to PyPI
+      Publish ScubaGoggles to pypi
     if: startsWith(github.ref, 'refs/tags/')
     needs:
-      - build
+    - build
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -49,18 +48,18 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - name: Download all dists
-        uses: actions/download-artifact@v4
-        with:
-          name: python-package-distributions
-          path: dist/
-      - name: Publish distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+    - name: Download all dists
+      uses: actions/download-artifact@v4
+      with:
+        name: python-package-distributions
+        path: dist/
+    - name: Publish distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
   
   publish-to-testpypi:
-    name: Publish Python distribution to TestPyPI
+    name: Publish ScubaGoggles to testpypi
     needs:
-      - build
+    - build
     runs-on: ubuntu-latest
     environment:
       name: testpypi
@@ -68,12 +67,12 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - name: Download all dists
-        uses: actions/download-artifact@v4
-        with:
-          name: python-package-distributions
-          path: dist/
-      - name: Publish distribution to TestPyPI
-        uses: pypa/gh-action/pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
+    - name: Download all dists
+      uses: actions/download-artifact@v4
+      with:
+        name: python-package-distributions
+        path: dist/
+    - name: Publish distribution to testpypi
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
