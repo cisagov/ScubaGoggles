@@ -1691,7 +1691,7 @@ CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount
 tests contains {
     "PolicyId": CommonControlsId13_1,
     "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": CommonControls13_1_Details(TotalRuleCount, EnabledRulesCount, DisabledRulesCount),
     "ActualValue": {
         "enabled_rules": EnabledAdminCenterRules | EnabledEmailOnlyRules,
