@@ -7,6 +7,7 @@ on:
     paths:
     - ".github/workflows/publish_to_pypi.yml"
     branches:
+    - "553-publish-pypi"
     - "main"
   workflow_dispatch:
 
