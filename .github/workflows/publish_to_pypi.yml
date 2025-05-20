@@ -1,5 +1,8 @@
 name: Publish ScubaGoggles to PyPI
 on:
+  release:
+    types:
+    - published
   push:
     paths:
     - ".github/workflows/publish_to_pypi.yml"
