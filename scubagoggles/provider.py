@@ -692,4 +692,4 @@ class Provider:
         if 'access_denied: Requested client not authorized.' in str(exc):
             log.error('Your credential may be missing one'
                       ' of the following scopes: %s', scopes_list)
-            raise exc
+        raise exc
