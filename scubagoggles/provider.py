@@ -321,7 +321,7 @@ class Provider:
             warnings.warn(f'An exception was thrown by get_dmarc_records: {exc}', RuntimeWarning)
             self._unsuccessful_calls.add('get_dmarc_records')
         return output
-    
+ 
     def get_all_admins(self) -> dict:
         """
         Gets all the super admins and "other" admins. using the directory API
