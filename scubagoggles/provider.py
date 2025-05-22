@@ -344,7 +344,7 @@ class Provider:
                 # strip out the leading '/'
                 org_unit = org_unit[1:] if org_unit.startswith('/') else org_unit
                 email = user['primaryEmail']
-                admins.append({'primaryEmail': email, 'orgUnitPath': org_unit})
+                all_admins.append({'primaryEmail': email, 'orgUnitPath': org_unit})
             self._successful_calls.add(ApiReference.LIST_USERS.value)
             return {'all_admins': all_admins}
         except Exception as exc:
@@ -373,7 +373,7 @@ class Provider:
                 # strip out the leading '/'
                 org_unit = org_unit[1:] if org_unit.startswith('/') else org_unit
                 email = user['primaryEmail']
-                admins.append({'primaryEmail': email, 'orgUnitPath': org_unit})
+                super_admins.append({'primaryEmail': email, 'orgUnitPath': org_unit})
             self._successful_calls.add(ApiReference.LIST_USERS.value)
             return {'super_admins': super_admins}
         except Exception as exc:
