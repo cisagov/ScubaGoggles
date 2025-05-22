@@ -321,6 +321,39 @@ class Provider:
             warnings.warn(f'An exception was thrown by get_dmarc_records: {exc}', RuntimeWarning)
             self._unsuccessful_calls.add('get_dmarc_records')
         return output
+    
+    def get_all_admins(self) -> dict:
+        """
+        Gets all the super admins and "other" admins. using the directory API
+        """
+
+        try:
+            with self._services['directory'].users() as users:
+                user_list = self._get_list(users,
+                                           'users',
+                                           customer = self._customer_id,
+                                           query = 'isAdmin=True')
+                user_list += self._get_list(users,
+                                           'users',
+                                           customer = self._customer_id,
+                                           query = 'isDelegatedAdmin=True')
+
+            all_admins = []
+            for user in user_list:
+                org_unit = user['orgUnitPath']
+                # strip out the leading '/'
+                org_unit = org_unit[1:] if org_unit.startswith('/') else org_unit
+                email = user['primaryEmail']
+                admins.append({'primaryEmail': email, 'orgUnitPath': org_unit})
+            self._successful_calls.add(ApiReference.LIST_USERS.value)
+            return {'all_admins': all_admins}
+        except Exception as exc:
+            warnings.warn(
+                f'Exception thrown while getting super admins; outputs will be incorrect: {exc}',
+                RuntimeWarning
+            )
+            self._unsuccessful_calls.add(ApiReference.LIST_USERS.value)
+            return {'all_admins': []}
 
     def get_super_admins(self) -> dict:
         """
@@ -334,7 +367,7 @@ class Provider:
                                            customer = self._customer_id,
                                            query = 'isAdmin=True')
 
-            admins = []
+            super_admins = []
             for user in user_list:
                 org_unit = user['orgUnitPath']
                 # strip out the leading '/'
@@ -342,7 +375,7 @@ class Provider:
                 email = user['primaryEmail']
                 admins.append({'primaryEmail': email, 'orgUnitPath': org_unit})
             self._successful_calls.add(ApiReference.LIST_USERS.value)
-            return {'super_admins': admins}
+            return {'super_admins': super_admins}
         except Exception as exc:
             warnings.warn(
                 f'Exception thrown while getting super admins; outputs will be incorrect: {exc}',
@@ -634,6 +667,7 @@ class Provider:
             if 'commoncontrols' in product_to_logs:
                 # add list of super admins if CC is being run
                 product_to_items.update(self.get_super_admins())
+                product_to_items.update(self.get_all_admins())
 
             if 'groups' in product_to_logs:
                 product_to_items.update(self.get_group_settings())

@@ -845,12 +845,22 @@ CommonControlsId6_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.6.1")
 
 tests contains {
     "PolicyId": CommonControlsId6_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
+    "Prerequisites": ["directory/v1/users/list", "reports/v1/activities/list"],
+    "Criticality": "Shall",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
     "NoSuchEvent": true
+}
+if {
+    orgNames := {org.name | some Admin in input.all_admins; some org in Admin.organizations}
+    OUs := orgNames & utils.OUsWithEvents
+    some OU in OUs
+    Events := utils.FilterEventsOU(LogEvents, "Inbound SSO Settings SSO mode", OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "SSO off"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
 }
 #--
 
@@ -865,8 +875,8 @@ tests contains {
     "Prerequisites": ["directory/v1/users/list"],
     "Criticality": "Shall",
     "ReportDetails": concat("", [
-        concat("", ["The following super admins are configured: ", concat(", ", SuperAdmins)]),
-        ". <i>Note: Exceptions are allowed for \"break glass\" super admin accounts. ",
+        concat("", ["The following privileged accounts are configured: ", concat(", ", SuperAdmins)]),
+        ". <i>Note: Exceptions are allowed for \"break glass\" privileged accounts. ",
         "\"Break glass\" accounts can be specified in a config file. ",
         format_int(count(BreakGlassAccounts), 10),
         " break glass accounts are currently configured.<i>"
