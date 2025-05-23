@@ -1,0 +1,83 @@
+name: Publish ScubaGoggles to PyPI
+on:
+  release:
+    types:
+    - published
+  push:
+    paths:
+    - ".github/workflows/publish_to_pypi.yml"
+    branches:
+    - "553-publish-pypi"
+    - "main"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build distrbution
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.x"
+        cache: "pip"
+        cache-dependency-path: "requirements.txt"
+    - name: Install pypa/build
+      run: >-
+        python3 -m
+        pip install
+        build
+        --user
+    - name: Build binary wheel and source tarball
+      run: python3 -m build
+    - name: Store distribution packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: python-package-distributions
+        path: dist/
+
+  publish-to-pypi:
+    name: >-
+      Publish ScubaGoggles to pypi
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/scubagoggles
+    steps:
+    - name: Download all dists
+      uses: actions/download-artifact@v4
+      with:
+        name: python-package-distributions
+        path: dist/
+    - name: Publish distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+  
+  publish-to-testpypi:
+    name: Publish ScubaGoggles to testpypi
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/scubagoggles
+    steps:
+    - name: Download all dists
+      uses: actions/download-artifact@v4
+      with:
+        name: python-package-distributions
+        path: dist/
+    - name: Publish distribution to testpypi
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
+        verbose: true
