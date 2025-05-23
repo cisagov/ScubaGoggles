@@ -30,12 +30,12 @@ unable to determine the current state and recommend a manual check. However, Scu
 does _not_ assert that at least one event is present for each custom OU. If a custom OU
 has no event, ScubaGoggles assumes that it inherits the setting from its parent. In
 practice, this will often be the case but is by no means guaranteed. For example, if a
-setting for a custom was changed over 6 months ago, ScubaGoggles will not be able to
+setting for a custom OU was changed over 6 months ago, ScubaGoggles will not be able to
 see the corresponding log event and will assume it inherits the setting from its parent,
 which in-fact is not the case.
 
 For all the above limitations, any ScubaGoggles result that is marked as dependent on
-the reports API should be viewed with a healthy degree of skepticism as missing results
+log events should be viewed with a healthy degree of skepticism as missing results
 and false negatives are possible.
 
 ## Navigation
