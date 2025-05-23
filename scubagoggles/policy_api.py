@@ -295,6 +295,7 @@ class PolicyAPI:
     # documented defaults must be kept current with the implementation).
 
     _defaults = {
+        'calendar_external_invitations': {'warnOnInvite': True},
         'chat_chat_history': {'allowUserModification': True,
                               'historyOnByDefault': False},
         'chat_external_chat_restriction': {
@@ -318,6 +319,11 @@ class PolicyAPI:
             'enableGoogleWorkspaceSyncForMicrosoftOutlook': True},
         'gmail_email_spam_filter_ip_allowlist': {
             'allowedIpAddresses': []},
+        'gmail_links_and_external_images': {
+            'applyFutureSettingsAutomatically': True,
+            'enableAggressiveWarningsOnUntrustedLinks': False},
+        'gmail_spoofing_and_authentication': {
+            'applyFutureSettingsAutomatically': True},
         'groups_for_business_groups_sharing': {
             'collaborationCapability': 'DOMAIN_USERS_ONLY',
             'createGroupsAccessLevel': 'USERS_IN_DOMAIN',
