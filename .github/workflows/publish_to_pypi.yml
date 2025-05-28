@@ -7,7 +7,6 @@ on:
     paths:
     - ".github/workflows/publish_to_pypi.yml"
     branches:
-    - "553-publish-pypi"
     - "main"
   workflow_dispatch:
 
@@ -41,8 +40,8 @@ jobs:
 
   publish-to-pypi:
     name: >-
-      Publish ScubaGoggles to pypi
-    if: startsWith(github.ref, 'refs/tags/')
+      Publish to pypi environment
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
     needs:
     - build
     runs-on: ubuntu-latest
@@ -52,16 +51,17 @@ jobs:
       name: pypi
       url: https://pypi.org/p/scubagoggles
     steps:
-    - name: Download all dists
+    - name: Download distributions
       uses: actions/download-artifact@v4
       with:
         name: python-package-distributions
         path: dist/
-    - name: Publish distributions to PyPI
+    - name: Publish distributions
       uses: pypa/gh-action-pypi-publish@release/v1
   
   publish-to-testpypi:
-    name: Publish ScubaGoggles to testpypi
+    name: Publish to testpypi environment
+    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
     needs:
     - build
     runs-on: ubuntu-latest
@@ -71,12 +71,12 @@ jobs:
       name: testpypi
       url: https://test.pypi.org/p/scubagoggles
     steps:
-    - name: Download all dists
+    - name: Download distributions
       uses: actions/download-artifact@v4
       with:
         name: python-package-distributions
         path: dist/
-    - name: Publish distribution to testpypi
+    - name: Publish distributions
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         repository-url: https://test.pypi.org/legacy/
