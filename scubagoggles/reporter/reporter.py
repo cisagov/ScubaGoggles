@@ -579,6 +579,8 @@ class Reporter:
                     omitted_result = 'N/A'
                     omitted_details = 'N/A'
 
+                    report_stats['Omit'] += 1
+
                     for test in tests:
                         result = self._get_test_result(test['RequirementMet'],
                                                         test['Criticality'],
