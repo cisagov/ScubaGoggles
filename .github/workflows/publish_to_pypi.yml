@@ -3,12 +3,6 @@ on:
   release:
     types:
     - published
-  push:
-    paths:
-    - ".github/workflows/publish_to_pypi.yml"
-    branches:
-    - "553-publish-pypi"
-    - "main"
   workflow_dispatch:
 
 jobs:
@@ -41,7 +35,7 @@ jobs:
 
   publish-to-pypi:
     name: >-
-      Publish to pypi environment
+      Publish to pypi
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
     needs:
     - build
@@ -59,26 +53,5 @@ jobs:
         path: dist/
     - name: Publish distributions
       uses: pypa/gh-action-pypi-publish@release/v1
-  
-  publish-to-testpypi:
-    name: Publish to testpypi environment
-    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-    needs:
-    - build
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/scubagoggles
-    steps:
-    - name: Download distributions
-      uses: actions/download-artifact@v4
       with:
-        name: python-package-distributions
-        path: dist/
-    - name: Publish distributions
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        repository-url: https://test.pypi.org/legacy/
         verbose: true
