@@ -6,8 +6,8 @@ This document outlines the ScubaGoggles software release process.
 
 - [Versioning](#versioning)
 - [Release branches and tags](#release-branches-and-tags)
-- [Preparing ScubaGoggles release candidate](#preparing-scubagear-release-candidate)
-- [Publishing ScubaGoggles release candidate](#publishing-scubagear-release-candidate)
+- [Preparing ScubaGoggles release candidate](#preparing-scubagoggles-release-candidate)
+- [Publishing ScubaGoggles release candidate](#publishing-scubagoggles-release-candidate)
 
 ## Versioning ##
 
@@ -36,7 +36,7 @@ The checklist below is used by the development team when it prepares a new relea
 - [ ] Update the ScubaGoggles and SCB version in the [README.md](https://github.com/cisagov/ScubaGoggles/blob/main/README.md) badge image links.
 - [ ] Update and redact the sample report using the redaction tool and manual review
 - [ ] Check README for any necessary changes and documentation updates as needed
-- [ ] Build initial release candidate by manually triggering `Build Draft Release` workflow with expected release name (vX.X.X) and release version (X.X.X) based on semantic versioning
+- [ ] Build initial release candidate by manually triggering [`Build Draft Release`](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_release.yml) workflow with expected release name (vX.X.X) and release version (X.X.X) based on semantic versioning
 - [ ] Conduct release testing of each baseline
 - [ ] Fix critical defects deemed release blocking
 - [ ] Document non-critical issues for future development cycle
@@ -44,7 +44,7 @@ The checklist below is used by the development team when it prepares a new relea
 
 ## Publishing ScubaGoggles release candidate ##
 
-After running the [`Build Draft Release`](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_release.yml) workflow, a draft release will be visible to development team members for review and revision. The checklist below is designed to ensure consistency in review and publishing of the release candidate as the final release. 
+After running the `Build Draft Release` workflow, a draft release will be visible to development team members for review and revision. The checklist below is designed to ensure consistency in review and publishing of the release candidate as the final release. 
 
 - [ ] Update release notes manually
   - Adjust default change format to use PR listing as `- #{{TITLE}} ##{{NUMBER}}`
