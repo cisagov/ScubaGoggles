@@ -23,9 +23,6 @@ Baseline [documents](scubagoggles/baselines/README.md).
 
 For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://github.com/cisagov/ScubaGear).
 
-> [!WARNING]
-> This tool is in an alpha state and in active development. At this time, outputs could be incorrect and should be reviewed carefully.
-
 ## Overview
 We use a three-step process:
 1. **Export**. In this step, we primarily use the Google Admin SDK API to export and serialize all the relevant logs and settings into json. ScubaGoggles also uses various other Google APIs to grab organization metadata, user privileges etc.
