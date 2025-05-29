@@ -1,5 +1,5 @@
 
-![CISA Logo](https://github.com/cisagov/ScubaGoggles/blob/main/docs/images/cisa.png)
+![CISA Logo](https://github.com/cisagov/ScubaGoggles/raw/main/docs/images/cisa.png)
 <div align='center' style="margin:0;" id="user-content-toc">
   <ul>
     <h1 style="display: inline-block;">ScubaGoggles</h1>
