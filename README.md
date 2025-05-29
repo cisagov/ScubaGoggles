@@ -1,5 +1,5 @@
 
-![CISA Logo](docs/images/cisa.png)
+![CISA Logo](https://github.com/cisagov/ScubaGoggles/blob/main/docs/images/cisa.png)
 <div align='center' style="margin:0;" id="user-content-toc">
   <ul>
     <h1 style="display: inline-block;">ScubaGoggles</h1>
@@ -19,7 +19,7 @@ Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google
 Workspace (GWS) organization's configuration conforms to the policies
 described in the Secure Cloud Business Applications
 ([SCuBA](https://cisa.gov/scuba)) Secure Configuration
-Baseline [documents](scubagoggles/baselines/README.md).
+Baseline [documents](https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/baselines/README.md).
 
 For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://github.com/cisagov/ScubaGear).
 
@@ -36,33 +36,32 @@ We use a three-step process:
 
 ### Installation
 
-- [Download and Python Install](docs/installation/DownloadAndInstall.md)
-- [Download the OPA Executable](docs/installation/OPA.md)
-- [Configure Defaults](docs/installation/Defaults.md)
+- [Download and Python Install](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md)
+- [Download the OPA Executable](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/OPA.md)
+- [Configure Defaults](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/Defaults.md)
 
 ### Prerequisites
 
-- [Permissions](docs/prerequisites/Prerequisites.md#permissions)
-- [Create a Project](docs/prerequisites/Prerequisites.md#create-a-project)
+- [Permissions](https://github.com/cisagov/ScubaGoggles/blob/main/docs/prerequisites/Prerequisites.md#permissions)
+- [Create a Project](https://github.com/cisagov/ScubaGoggles/blob/main/docs/prerequisites/Prerequisites.md#create-a-project)
 
 ### Authentication
-- [Authentication Methods](docs/authentication/AuthenticationMethods.md)
-- [Using OAuth](docs/authentication/OAuth.md)
-- [Using a Service Account](docs/authentication/ServiceAccount.md)
+- [Authentication Methods](https://github.com/cisagov/ScubaGoggles/blob/main/docs/authentication/AuthenticationMethods.md)
+- [Using OAuth](https://github.com/cisagov/ScubaGoggles/blob/main/docs/authentication/OAuth.md)
+- [Using a Service Account](https://github.com/cisagov/ScubaGoggles/blob/main/docs/authentication/ServiceAccount.md)
 
 ### Usage
 
-- [Usage: Parameters](docs/usage/Parameters.md)
-- [Usage: Config File](docs/usage/Config.md)
-- [Usage: Examples](docs/usage/Examples.md)
-- [Reviewing Output](docs/usage/ReviewOutput.md)
-- [Limitations](docs/usage/Limitations.md)
+- [Usage: Parameters](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Parameters.md)
+- [Usage: Config File](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md)
+- [Usage: Examples](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Examples.md)
+- [Reviewing Output](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/ReviewOutput.md)
+- [Limitations](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Limitations.md)
 
 ### Troubleshooting
-- [Lots of Manual Checks](docs/troubleshooting/Troubleshooting.md#lots-of-manual-checks)
-- [Not Authorized to Access This Resource](docs/troubleshooting/Troubleshooting.md#not-authorized-to-access-this-resource)
-- [scubagoggles Not Found](docs/troubleshooting/Troubleshooting.md#scubagoggles-not-found)
-- [Unable to view HTML report due to environment limitations](docs/troubleshooting/Troubleshooting.md#unable-to-view-html-report-due-to-environment-limitations)
+- [Not Authorized to Access This Resource](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#not-authorized-to-access-this-resource)
+- [WinError 10013 Permission Error](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#windows--winerror-10013-permission-error)
+- [Unable to view HTML report due to environment limitations](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#unable-to-view-html-report-due-to-environment-limitations)
 
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative
