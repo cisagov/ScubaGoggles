@@ -13,8 +13,9 @@ footer {
 
 .summary {
     display: inline-block;
-    padding: 5px;
-    border-radius: 5px;
+    padding: 0.313em;
+    border-radius: 0.313em;
+    margin-right: 0.25em;
     min-width: 100px;
     text-align: center;
 }
