@@ -10,7 +10,7 @@ on:
         required: true
         type: string
 
-name: Build Release
+name: Build Draft Release
 
 jobs:
   build-and-deploy:
