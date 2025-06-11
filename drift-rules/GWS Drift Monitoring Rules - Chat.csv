@@ -1,11 +1,11 @@
 PolicyId,Name,Data Source,Event (Is),Setting Name (Is),New Value (Is Not),Rule ID,Last Successful Test
-GWS.CHAT.1.1v1,Chat history SHOULD be enabled for information traceability.,Admin Log Event,Change Application Setting,DynamiteOTRSettingsProto off_the_record_state,ALWAYS_ON_THE_RECORD,rules/00gjdgxs1svgvm3,JK 08-01-23 @ 06:36
-GWS.CHAT.1.2v1,Users SHALL NOT be allowed to change their history setting.,Admin Log Event,Change Application Setting,DynamiteOTRSettingsProto off_the_record_state,ALWAYS_ON_THE_RECORD,rules/00gjdgxs18ozqwd,JK 08-01-23 @ 06:51
-GWS.CHAT.2.1v1,External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.,Admin Log Event,Change Application Setting,DynamiteFileSharingSettingsProto external_file_sharing_setting,NO_FILES,rules/00gjdgxs2l93fr0,JK 08-01-23 @ 07:01
-GWS.CHAT.3.1v1,Space history SHOULD be enabled for traceability of information.,Admin Log Event,Change Application Setting,RoomOtrSettingsProto otr_state,"ALWAYS_ON_THE_RECORD
+GWS.CHAT.1.1v0.5,Chat history SHOULD be enabled for information traceability.,Admin Log Event,Change Application Setting,DynamiteOTRSettingsProto off_the_record_state,ALWAYS_ON_THE_RECORD,rules/00gjdgxs1svgvm3,JK 08-01-23 @ 06:36
+GWS.CHAT.1.2v0.5,Users SHALL NOT be allowed to change their history setting.,Admin Log Event,Change Application Setting,DynamiteOTRSettingsProto off_the_record_state,ALWAYS_ON_THE_RECORD,rules/00gjdgxs18ozqwd,JK 08-01-23 @ 06:51
+GWS.CHAT.2.1v0.5,External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.,Admin Log Event,Change Application Setting,DynamiteFileSharingSettingsProto external_file_sharing_setting,NO_FILES,rules/00gjdgxs2l93fr0,JK 08-01-23 @ 07:01
+GWS.CHAT.3.1v0.5,Space history SHOULD be enabled for traceability of information.,Admin Log Event,Change Application Setting,RoomOtrSettingsProto otr_state,"ALWAYS_ON_THE_RECORD
 OR
 DEFAULT_ON_THE_RECORD",rules/00gjdgxs13kc3ei,JK 08-01-23 @ 11:58
-GWS.CHAT.4.1v1(a),External Chat messaging SHALL be restricted to allowlisted domains only.,Admin Log Event,Change Application Setting,RestrictChatProto restrictChatToOrganization,false,rules/00gjdgxs3vz76ij,JK 08-01-23 @ 13:17
-GWS.CHAT.4.1v1(b),External Chat messaging SHALL be restricted to allowlisted domains only.,Admin Log Event,Change Application Setting,RestrictChatProto externalChatRestriction,TRUSTED_DOMAINS,rules/00gjdgxs3exvv2u,JK 08-01-23 @ 13:27
-GWS.CHAT.5.1v1,Chat content reporting SHALL be enabled for all conversation types.,Admin Log Event,Create Application Setting,ContentReportingProto group_chat_reporting,CONTENT_REPORTING_STATE_ENABLED,N/A, MD @ 10-15-24 @ 16:47
-GWS.CHAT.5.2v1,All reporting message categories SHOULD be selected.,N/A,N/A,N/A,N/A,N/A,Not Alertable due to no specfic log event
+GWS.CHAT.4.1v0.5(a),External Chat messaging SHALL be restricted to allowlisted domains only.,Admin Log Event,Change Application Setting,RestrictChatProto restrictChatToOrganization,false,rules/00gjdgxs3vz76ij,JK 08-01-23 @ 13:17
+GWS.CHAT.4.1v0.5(b),External Chat messaging SHALL be restricted to allowlisted domains only.,Admin Log Event,Change Application Setting,RestrictChatProto externalChatRestriction,TRUSTED_DOMAINS,rules/00gjdgxs3exvv2u,JK 08-01-23 @ 13:27
+GWS.CHAT.5.1v0.5,Chat content reporting SHALL be enabled for all conversation types.,Admin Log Event,Create Application Setting,ContentReportingProto group_chat_reporting,CONTENT_REPORTING_STATE_ENABLED,N/A, MD @ 10-15-24 @ 16:47
+GWS.CHAT.5.2v0.5,All reporting message categories SHOULD be selected.,N/A,N/A,N/A,N/A,N/A,Not Alertable due to no specfic log event

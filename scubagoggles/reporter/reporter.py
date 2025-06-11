@@ -349,6 +349,15 @@ class Reporter:
 
         now = datetime.now()
 
+        # Before the ScubaGoggles 1.0 release, the "baseline version" to
+        # display in the report metadata is the ScubaGoggles major + minor
+        # version, e.g., 0.5. After the 1.0 release, just display the major
+        # version.
+        if Version.major == 0:
+            baseline_version = f'{Version.major}.{Version.minor}'
+        else:
+            baseline_version = Version.major
+
         report_date = (now.strftime('%m/%d/%Y %H:%M:%S')
                        + ' ' + time.tzname[time.daylight])
         meta_data = (f'<table style = "text-align:center;">'
@@ -357,7 +366,7 @@ class Reporter:
                      '<th>Baseline Version</th><th>Tool Version</th></tr>'
                      f'<tr><td>{self._tenant_name}</td><td>{self._tenant_domain}</td>'
                      f'<td>{self._tenant_id}</td><td>{report_date}</td>'
-                     f'<td>{Version.suffix}</td><td>{Version.current}</td></tr>'
+                     f'<td>{baseline_version}</td><td>{Version.current}</td></tr>'
                      '</table>')
 
         html = html.replace('{{METADATA}}', meta_data)

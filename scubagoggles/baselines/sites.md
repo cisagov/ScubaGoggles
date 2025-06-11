@@ -34,7 +34,7 @@ This section covers whether users are able to access Google Sites.
 
 ### Policies
 
-#### GWS.SITES.1.1v1
+#### GWS.SITES.1.1v0.5
 Sites Service SHOULD be disabled for all users.
 
 - _Rationale:_ Google Sites can increase the attack surface of Google Workspace. Disabling this feature unless it is needed conforms to the principle of least functionality.
@@ -57,7 +57,7 @@ Sites Service SHOULD be disabled for all users.
 
 To configure the settings for Site creation and editing:
 
-#### GWS.SITES.1.1v1 Instructions
+#### GWS.SITES.1.1v0.5 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Sites**.
 3.  Select **Service Status**

@@ -43,7 +43,7 @@ class Version:
 
     _code_root = Path(__file__).parent
 
-    _suffix_regex = r'v(?P<major>\d+)'
+    _suffix_regex = r'v(?P<major>\d+)\.?(?P<minor>\d*)'
 
     suffix_re = re.compile(_suffix_regex, re.IGNORECASE)
 
@@ -51,7 +51,7 @@ class Version:
     # version suffix) within a string.  It separates the policy ID from the
     # suffix.
 
-    _version_regex = r'(?P<policy_id>GWS\.\w+\.\d+\.\d+)(?P<sfx>v\d+)'
+    _version_regex = r'(?P<policy_id>GWS\.\w+\.\d+\.\d+)(?P<sfx>v\d+\.?\d*)'
 
     version_re = re.compile(_version_regex, re.IGNORECASE)
 
@@ -419,12 +419,7 @@ class Version:
 
         match = cls.suffix_re.match(version_sfx)
 
-        if not match:
-            return False
-
-        major = int(match['major'])
-
-        return major >= 1
+        return bool(match)
 
     @staticmethod
     def log_version_errors(line_number: int, errors: dict) -> None:
