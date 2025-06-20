@@ -57,9 +57,9 @@ table.tenantdata tr:first-child {
     color: #d10000;
 }
 
-.alignRight {
+.uuid {
     float: right;
     padding-right: 0.313em;
-    color: grey;
-    font-size: 80%;
+    color: var(--uuid-color);
+    font-size: 0.7em;
 }
