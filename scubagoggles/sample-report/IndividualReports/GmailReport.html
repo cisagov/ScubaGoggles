@@ -23,6 +23,7 @@
     --toggle-width: 46px;
     --toggle-radius: 18px;
     --unvisited-link-color: #0000EE;
+    --uuid-color: #424242;
 }
 
 body {
@@ -154,46 +155,79 @@ a.control_group:active {
     color: var(--link-color);
     text-decoration: none;
 }
-</style>
+
+hr {
+    margin: 0.5em;
+    margin-top: 3em;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 50%;
+    text-align: center;
+    margin: auto;
+    font-size: 12px;
+    padding-bottom: 1.5em;
+}</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
  */
 const colorRows = () => {
     let rows = document.querySelectorAll('tr');
-    const requirementCol = 1
+    // consts for the generic results rows
+    const requirementCol = 1;
     const statusCol = 2;
     const criticalityCol = 3;
+
+    // const for the alerts rows
+    const alertStatusCol = 2;
+
     for (let i = 0; i < rows.length; i++) {
         try {
-            if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
-                rows[i].style.color = "var(--test-deleted-color)";
-                rows[i].style.background = "var(--test-other)";
+            if (rows[i].children.length == 3) {
+                // This row is in the Alerts table
+                if (rows[i].children[alertStatusCol].innerHTML === "Enabled") {
+                    rows[i].style.background = "var(--test-pass)";
+                }
+                else if (rows[i].children[alertStatusCol].innerHTML === "Disabled") {
+                    rows[i].style.background = "var(--test-fail)";
+                }
+                else if (rows[i].children[alertStatusCol].innerHTML === "Unknown") {
+                    rows[i].style.background = "var(--test-other)";
+                }
             }
-            else if (rows[i].children[statusCol].innerHTML === "Fail") {
-                rows[i].style.background = "var(--test-fail)";
-            }
-            else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[statusCol].innerHTML === "Warning") {
-                rows[i].style.background = "var(--test-warning)";
-            }
-            else if (rows[i].children[statusCol].innerHTML === "Pass") {
-                rows[i].style.background = "var(--test-pass)";
-            }
-            else if (rows[i].children[statusCol].innerHTML === "Omitted") {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
-                rows[i].style.background = "var(--test-fail)";
-                rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
-                rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
+            else {
+                // This row is in one of the generic results rows
+                if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
+                    rows[i].style.color = "var(--test-deleted-color)";
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Fail") {
+                    rows[i].style.background = "var(--test-fail)";
+                }
+                else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Warning") {
+                    rows[i].style.background = "var(--test-warning)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Pass") {
+                    rows[i].style.background = "var(--test-pass)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
+                    rows[i].style.background = "var(--test-fail)";
+                    rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
+                    rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
+                }
             }
         }
         catch (error) {
@@ -219,8 +253,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Gmail Baseline Report</h1>
             
-            <table style = "text-align:center;"><tr><th>Customer Domain</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>example.org</td><td>02/10/2025 09:39:56 Pacific Daylight Time</td><td>v0.4</td><td>v0.4.0</td></tr></table>
-            <h2>GMAIL-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#1-Mail-Delegation" target="_blank">Mail Delegation</a></h2><table>
+            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/25/2025 14:22:58 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
+            <h2>GMAIL-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#1-Mail-Delegation" target="_blank">Mail Delegation</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -232,14 +266,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.1.1v0.4</td>
+      <td>GWS.GMAIL.1.1v0.5</td>
       <td>Mail Delegation SHOULD be disabled.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Mail delegation is enabled</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Michelle Collins: Mail delegation is enabled</li></ul></td>
     </tr>
   </tbody>
-</table><h2>GMAIL-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#2-DomainKeys-Identified-Mail" target="_blank">DomainKeys Identified Mail</a></h2><table>
+</table><h2>GMAIL-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#2-DomainKeys-Identified-Mail" target="_blank">DomainKeys Identified Mail</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -251,14 +285,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.2.1v0.4</td>
+      <td>GWS.GMAIL.2.1v0.5</td>
       <td>DKIM SHOULD be enabled for all domains.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>1 of 2 agency domain(s) found in violation: Matthew Wilson.</td>
+      <td>1 of 2 agency domain(s) found in violation: David Hill.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#3-Sender-Policy-Framework" target="_blank">Sender Policy Framework</a></h2><table>
+</table><h2>GMAIL-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#3-Sender-Policy-Framework" target="_blank">Sender Policy Framework</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -270,14 +304,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.3.1v0.4</td>
+      <td>GWS.GMAIL.3.1v0.5</td>
       <td>An SPF policy SHALL be published for each domain that fails all non-approved senders.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>2 of 2 agency domain(s) found in violation: example.org, Matthew Wilson.</td>
+      <td>2 of 2 agency domain(s) found in violation: example.org, David Hill.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#4-Domain-based-Message-Authentication,-Reporting,-and-Conformance" target="_blank">Domain-based Message Authentication, Reporting, and Conformance</a></h2><table>
+</table><h2>GMAIL-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#4-Domain-based-Message-Authentication,-Reporting,-and-Conformance" target="_blank">Domain-based Message Authentication, Reporting, and Conformance</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -289,35 +323,35 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.4.1v0.4</td>
+      <td>GWS.GMAIL.4.1v0.5</td>
       <td>A DMARC policy SHALL be published for every second-level domain.</td>
       <td>Fail</td>
       <td>Shall</td>
       <td>1 of 2 agency domain(s) found in violation: example.org.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.4.2v0.4</td>
+      <td>GWS.GMAIL.4.2v0.5</td>
       <td>The DMARC message rejection option SHALL be p=reject.</td>
       <td>Fail</td>
       <td>Shall</td>
       <td>1 of 2 agency domain(s) found in violation: example.org.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.4.3v0.4</td>
+      <td>GWS.GMAIL.4.3v0.5</td>
       <td>The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.</td>
       <td>Fail</td>
       <td>Shall</td>
       <td>1 of 2 agency domain(s) found in violation: example.org.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.4.4v0.4</td>
+      <td>GWS.GMAIL.4.4v0.5</td>
       <td>An agency point of contact SHOULD be included for aggregate and failure reports.</td>
       <td>Warning</td>
       <td>Should</td>
       <td>1 of 2 agency domain(s) found in violation: example.org.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#5-Attachment-Protections" target="_blank">Attachment Protections</a></h2><table>
+</table><h2>GMAIL-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#5-Attachment-Protections" target="_blank">Attachment Protections</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -329,49 +363,49 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.5.1v0.4</td>
+      <td>GWS.GMAIL.5.1v0.5</td>
       <td>Protect against encrypted attachments from untrusted senders SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.5.2v0.4</td>
+      <td>GWS.GMAIL.5.2v0.5</td>
       <td>Protect against attachments with scripts from untrusted senders SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.5.3v0.4</td>
+      <td>GWS.GMAIL.5.3v0.5</td>
       <td>Protect against anomalous attachment types in emails SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.5.4v0.4</td>
+      <td>GWS.GMAIL.5.4v0.5</td>
       <td>Google SHOULD be allowed to automatically apply future recommended settings for attachments.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.5.5v0.4</td>
+      <td>GWS.GMAIL.5.5v0.5</td>
       <td>Emails flagged by the above attachment protection controls SHALL NOT be kept in inbox.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.5.6v0.4</td>
+      <td>GWS.GMAIL.5.6v0.5</td>
       <td>Any third-party or outside application selected for attachment protection SHOULD offer services comparable to those offered by Google Workspace.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please check manually.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-6 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#6-Links-and-External-Images-Protection" target="_blank">Links and External Images Protection</a></h2><table>
+</table><h2>GMAIL-6 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#6-Links-and-External-Images-Protection" target="_blank">Links and External Images Protection</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -383,42 +417,42 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.6.1v0.4</td>
+      <td>GWS.GMAIL.6.1v0.5</td>
       <td>Identify links behind shortened URLs SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.6.2v0.4</td>
+      <td>GWS.GMAIL.6.2v0.5</td>
       <td>Scan linked images SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.6.3v0.4</td>
+      <td>GWS.GMAIL.6.3v0.5</td>
       <td>Show warning prompt for any click on links to untrusted domains SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.6.4v0.4</td>
+      <td>GWS.GMAIL.6.4v0.5</td>
       <td>Google SHALL be allowed to automatically apply future recommended settings for links and external images.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.6.5v0.4</td>
+      <td>GWS.GMAIL.6.5v0.5</td>
       <td>Any third-party or outside application selected for links and external images protection SHOULD offer services comparable to those offered by Google Workspace.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-7 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#7-Spoofing-and-Authentication-Protection" target="_blank">Spoofing and Authentication Protection</a></h2><table>
+</table><h2>GMAIL-7 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#7-Spoofing-and-Authentication-Protection" target="_blank">Spoofing and Authentication Protection</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -430,63 +464,63 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.7.1v0.4</td>
+      <td>GWS.GMAIL.7.1v0.5</td>
       <td>Protect against domain spoofing based on similar domain names SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.7.2v0.4</td>
+      <td>GWS.GMAIL.7.2v0.5</td>
       <td>Protect against spoofing of employee names SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.7.3v0.4</td>
+      <td>GWS.GMAIL.7.3v0.5</td>
       <td>Protect against inbound emails spoofing your domain SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.7.4v0.4</td>
+      <td>GWS.GMAIL.7.4v0.5</td>
       <td>Protect against any unauthenticated emails SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.7.5v0.4</td>
+      <td>GWS.GMAIL.7.5v0.5</td>
       <td>Protect your Groups from inbound emails spoofing your domain SHALL be enabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.7.6v0.4</td>
+      <td>GWS.GMAIL.7.6v0.5</td>
       <td>Emails flagged by the above spoofing and authentication controls SHALL NOT be kept in inbox.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: domain, domain name, employee name, groups, unauthenticated spoof emails not removed from inbox</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.7.7v0.4</td>
+      <td>GWS.GMAIL.7.7v0.5</td>
       <td>Google SHALL be allowed to automatically apply future recommended settings for spoofing and authentication.</td>
-      <td>Pass</td>
+      <td>Warning</td>
       <td>Should</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Automatically enable all future added settings is set to: disabled</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.7.8v0.4</td>
+      <td>GWS.GMAIL.7.8v0.5</td>
       <td>Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-8 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#8-User-Email-Uploads" target="_blank">User Email Uploads</a></h2><table>
+</table><h2>GMAIL-8 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#8-User-Email-Uploads" target="_blank">User Email Uploads</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -498,14 +532,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.8.1v0.4</td>
+      <td>GWS.GMAIL.8.1v0.5</td>
       <td>User email uploads SHALL be disabled to protect against unauthorized files being introduced into the secured environment.</td>
-      <td>Fail</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: User email uploads is enabled</li></ul></td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-9 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#9-POP-and-IMAP-Access-for-Users" target="_blank">POP and IMAP Access for Users</a></h2><table>
+</table><h2>GMAIL-9 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#9-POP-and-IMAP-Access-for-Users" target="_blank">POP and IMAP Access for Users</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -517,14 +551,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.9.1v0.4</td>
+      <td>GWS.GMAIL.9.1v0.5</td>
       <td>POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Marilyn Cuevas: IMAP and POP access are enabled</li><li>Org Name: POP access is enabled</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Michelle Collins: IMAP and POP access are enabled</li><li>Cool Example Org: IMAP and POP access are enabled</li></ul></td>
     </tr>
   </tbody>
-</table><h2>GMAIL-10 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#10-Google-Workspace-Sync" target="_blank">Google Workspace Sync</a></h2><table>
+</table><h2>GMAIL-10 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#10-Google-Workspace-Sync" target="_blank">Google Workspace Sync</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -536,21 +570,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.10.1v0.4</td>
+      <td>GWS.GMAIL.10.1v0.5</td>
       <td>Google Workspace Sync SHOULD be disabled.</td>
-      <td>Fail</td>
+      <td>Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Google Workspace Sync is enabled</li></ul></td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.10.2v0.4</td>
-      <td>Google Workspace Sync MAY be enabled on a per-user basis as needed.</td>
-      <td>N/A</td>
-      <td>May/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-11 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#11-Automatic-Forwarding" target="_blank">Automatic Forwarding</a></h2><table>
+</table><h2>GMAIL-11 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#11-Automatic-Forwarding" target="_blank">Automatic Forwarding</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -562,14 +589,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.11.1v0.4</td>
+      <td>GWS.GMAIL.11.1v0.5</td>
       <td>Automatic forwarding SHOULD be disabled, especially to external domains.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-12 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#12-Per-user-Outbound-Gateways" target="_blank">Per-user Outbound Gateways</a></h2><table>
+</table><h2>GMAIL-12 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#12-Per-user-Outbound-Gateways" target="_blank">Per-user Outbound Gateways</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -581,14 +608,33 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.12.1v0.4</td>
+      <td>GWS.GMAIL.12.1v0.5</td>
       <td>Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers SHALL be disabled.</td>
+      <td>Pass</td>
+      <td>Shall</td>
+      <td>Requirement met in all OUs and groups.</td>
+    </tr>
+  </tbody>
+</table><h2>GMAIL-13 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#13-Unintended-External-Reply-Warning" target="_blank">Unintended External Reply Warning</a></h2><table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GWS.GMAIL.13.1v0.5</td>
+      <td>Unintended external reply warnings SHALL be enabled.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Per-user Outbound Gateways are enabled</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Warn for external participants is set to disabled</li></ul><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
   </tbody>
-</table><h2>GMAIL-13 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#13-Unintended-External-Reply-Warning" target="_blank">Unintended External Reply Warning</a></h2><table>
+</table><h2>GMAIL-14 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#14-Email-Allowlist" target="_blank">Email Allowlist</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -600,33 +646,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.13.1v0.4</td>
-      <td>Unintended external reply warnings SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-14 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#14-Email-Allowlist" target="_blank">Email Allowlist</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.14.1v0.4</td>
+      <td>GWS.GMAIL.14.1v0.5</td>
       <td>An email allowlist SHOULD not be implemented.</td>
-      <td>Warning</td>
+      <td>Pass</td>
       <td>Should</td>
-      <td>Email allowlists are enabled in Org Name.</td>
+      <td>Email allowlists are disabled in Cool Example Org.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-15 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#15-Enhanced-Pre-Delivery-Message-Scanning" target="_blank">Enhanced Pre-Delivery Message Scanning</a></h2><table>
+</table><h2>GMAIL-15 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#15-Enhanced-Pre-Delivery-Message-Scanning" target="_blank">Enhanced Pre-Delivery Message Scanning</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -638,21 +665,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.15.1v0.4</td>
+      <td>GWS.GMAIL.15.1v0.5</td>
       <td>Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Enhanced pre-delivery message scanning is disabled</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.15.2v0.4</td>
+      <td>GWS.GMAIL.15.2v0.5</td>
       <td>Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-16 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#16-Security-Sandbox" target="_blank">Security Sandbox</a></h2><table>
+</table><h2>GMAIL-16 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#16-Security-Sandbox" target="_blank">Security Sandbox</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -664,21 +691,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.16.1v0.4</td>
+      <td>GWS.GMAIL.16.1v0.5</td>
       <td>Security sandbox SHOULD be enabled to provide additional protections for their email messages.</td>
-      <td>Pass</td>
+      <td>No events found</td>
       <td>Should</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.16.2v0.4</td>
+      <td>GWS.GMAIL.16.2v0.5</td>
       <td>Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-17 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#17-Comprehensive-Mail-Storage" target="_blank">Comprehensive Mail Storage</a></h2><table>
+</table><h2>GMAIL-17 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#17-Comprehensive-Mail-Storage" target="_blank">Comprehensive Mail Storage</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -690,14 +717,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.17.1v0.4</td>
+      <td>GWS.GMAIL.17.1v0.5</td>
       <td>Comprehensive mail storage SHOULD be enabled to allow tracking of information across applications.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>GMAIL-18 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#18-Content-Compliance-Filtering" target="_blank">Content Compliance Filtering</a></h2><table>
+</table><h2>GMAIL-18 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#18-Spam-Filtering" target="_blank">Spam Filtering</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -709,54 +736,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GMAIL.18.1v0.4</td>
-      <td>Content filtering SHOULD be enabled within Gmail messages.</td>
-      <td>N/A</td>
-      <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.18.2v0.4</td>
-      <td>Any third-party or outside application selected for advanced email content filtering SHOULD offer services comparable to those offered by Google Workspace.</td>
-      <td>N/A</td>
-      <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.18.3v0.4</td>
-      <td>Gmail or third-party applications SHALL be configured to protect PII and sensitive information as defined by the agency. At a minimum, credit card numbers, taxpayer Identification Numbers (TIN), and Social Security Numbers (SSN) SHALL be blocked.</td>
-      <td>N/A</td>
-      <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-19 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/gmail.md#19-Spam-Filtering" target="_blank">Spam Filtering</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.19.1v0.4</td>
+      <td>GWS.GMAIL.18.1v0.5</td>
       <td>Domains SHALL NOT be added to lists that bypass spam filters.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.19.2v0.4</td>
+      <td>GWS.GMAIL.18.2v0.5</td>
       <td>Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.GMAIL.19.3v0.4</td>
+      <td>GWS.GMAIL.18.3v0.5</td>
       <td>Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
@@ -764,6 +758,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     </tr>
   </tbody>
 </table>
+            
         </main>
     </body>
 </html>
