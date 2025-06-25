@@ -43,7 +43,7 @@ class SmokeTest:
 
         svc_account_option = (f' --subjectemail {subjectemail}' if subjectemail
                               else '')
-        command = (f'scubagoggles gws{svc_account_option} --quiet ')
+        command = f'scubagoggles gws{svc_account_option} --quiet '
 
         try:
             subprocess.run(command, shell=True, check=True)

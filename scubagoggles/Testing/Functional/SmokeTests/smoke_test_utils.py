@@ -161,8 +161,8 @@ def verify_all_outputs_exist(output: list, required_entries: list):
     output_names = {entry.name for entry in output}
     for required_entry in required_entries:
         if RESULTS_RE.match(required_entry):
-            for output in output_names:
-                if RESULTS_RE.match(output):
+            for output_name in output_names:
+                if RESULTS_RE.match(output_name):
                     break
             else:
                 raise ValueError(f'{required_entry} was not found in the generated report')
@@ -185,7 +185,7 @@ def verify_scubaresults(output_path: Path):
         if RESULTS_RE.match(fname):
             break
     else:
-        raise ValueError(f'ScubaResults*.json file was not found in the generated report')
+        raise ValueError('ScubaResults*.json file was not found in the generated report')
     results_path = output_path / fname
     with results_path.open(encoding = 'utf-8') as jsonfile:
         scubaresults = json.load(jsonfile)
