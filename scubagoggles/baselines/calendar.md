@@ -182,7 +182,7 @@ To configure the settings for Calendar Interop:
 2.  Select **Apps -\> Google Workspace -\> Calendar**.
 3.  Select **Calendar Interop management**.
 4.  Select **Exchange availability in Calendar**.
-5.  Select **Allow Google Calendar to display Exchange users availability**.
+5.  Select **Allow Google Calendar to display Exchange users' availability**.
 6.  Select **OAuth 2.0 client credentials**.
 7.  Select **Save**.
 
