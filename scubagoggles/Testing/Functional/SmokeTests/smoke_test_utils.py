@@ -3,6 +3,7 @@ Helper methods for running the functional smoke tests.
 """
 
 import os
+import re
 import json
 import logging
 
@@ -21,6 +22,7 @@ OUTPUT_DIRECTORY = 'GWSBaselineConformance'
 BASELINE_REPORT_H1 = 'SCuBA GWS Secure Configuration Baseline Reports'
 CISA_GOV_URL = 'https://www.cisa.gov/scuba'
 SCUBAGOGGLES_BASELINES_URL = 'https://github.com/cisagov/ScubaGoggles/tree/main/baselines'
+RESULTS_RE = re.compile(r"ScubaResults_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}\.json")
 
 log = logging.getLogger(__name__)
 
@@ -158,8 +160,14 @@ def verify_all_outputs_exist(output: list, required_entries: list):
     """
     output_names = {entry.name for entry in output}
     for required_entry in required_entries:
-        if required_entry in output_names:
-            assert True
+        if RESULTS_RE.match(required_entry):
+            for output_name in output_names:
+                if RESULTS_RE.match(output_name):
+                    break
+            else:
+                raise ValueError(f'{required_entry} was not found in the generated report')
+        elif required_entry in output_names:
+            continue
         else:
             raise ValueError(f'{required_entry} was not found in the generated report')
 
@@ -173,7 +181,12 @@ def verify_scubaresults(output_path: Path):
         output_path: ScubaGoggles output directory containing the results JSON
             file.
     """
-    results_path = output_path / f'{default_file_names.json_output_name}.json'
+    for fname in os.listdir(output_path):
+        if RESULTS_RE.match(fname):
+            break
+    else:
+        raise ValueError('ScubaResults*.json file was not found in the generated report')
+    results_path = output_path / fname
     with results_path.open(encoding = 'utf-8') as jsonfile:
         scubaresults = json.load(jsonfile)
 

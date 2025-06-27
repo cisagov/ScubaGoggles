@@ -23,6 +23,7 @@
     --toggle-width: 46px;
     --toggle-radius: 18px;
     --unvisited-link-color: #0000EE;
+    --uuid-color: #424242;
 }
 
 body {
@@ -154,46 +155,79 @@ a.control_group:active {
     color: var(--link-color);
     text-decoration: none;
 }
-</style>
+
+hr {
+    margin: 0.5em;
+    margin-top: 3em;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 50%;
+    text-align: center;
+    margin: auto;
+    font-size: 12px;
+    padding-bottom: 1.5em;
+}</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
  */
 const colorRows = () => {
     let rows = document.querySelectorAll('tr');
-    const requirementCol = 1
+    // consts for the generic results rows
+    const requirementCol = 1;
     const statusCol = 2;
     const criticalityCol = 3;
+
+    // const for the alerts rows
+    const alertStatusCol = 2;
+
     for (let i = 0; i < rows.length; i++) {
         try {
-            if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
-                rows[i].style.color = "var(--test-deleted-color)";
-                rows[i].style.background = "var(--test-other)";
+            if (rows[i].children.length == 3) {
+                // This row is in the Alerts table
+                if (rows[i].children[alertStatusCol].innerHTML === "Enabled") {
+                    rows[i].style.background = "var(--test-pass)";
+                }
+                else if (rows[i].children[alertStatusCol].innerHTML === "Disabled") {
+                    rows[i].style.background = "var(--test-fail)";
+                }
+                else if (rows[i].children[alertStatusCol].innerHTML === "Unknown") {
+                    rows[i].style.background = "var(--test-other)";
+                }
             }
-            else if (rows[i].children[statusCol].innerHTML === "Fail") {
-                rows[i].style.background = "var(--test-fail)";
-            }
-            else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[statusCol].innerHTML === "Warning") {
-                rows[i].style.background = "var(--test-warning)";
-            }
-            else if (rows[i].children[statusCol].innerHTML === "Pass") {
-                rows[i].style.background = "var(--test-pass)";
-            }
-            else if (rows[i].children[statusCol].innerHTML === "Omitted") {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
-                rows[i].style.background = "var(--test-fail)";
-                rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
-                rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
+            else {
+                // This row is in one of the generic results rows
+                if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
+                    rows[i].style.color = "var(--test-deleted-color)";
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Fail") {
+                    rows[i].style.background = "var(--test-fail)";
+                }
+                else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Warning") {
+                    rows[i].style.background = "var(--test-warning)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Pass") {
+                    rows[i].style.background = "var(--test-pass)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
+                    rows[i].style.background = "var(--test-fail)";
+                    rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
+                    rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
+                }
             }
         }
         catch (error) {
@@ -219,8 +253,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Google Classroom Baseline Report</h1>
             <h4>Note: Google Classroom is not available by default in GWS but as an additional Google Service.</h4>
-            <table style = "text-align:center;"><tr><th>Customer Domain</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>example.org</td><td>02/10/2025 09:39:56 Pacific Daylight Time</td><td>v0.4</td><td>v0.4.0</td></tr></table>
-            <h2>CLASSROOM-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/classroom.md#1-Class-Membership" target="_blank">Class Membership</a></h2><table>
+            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/26/2025 16:02:22 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
+            <h2>CLASSROOM-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/classroom.md#1-Class-Membership" target="_blank">Class Membership</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -232,21 +266,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CLASSROOM.1.1v0.4</td>
+      <td>GWS.CLASSROOM.1.1v0.5</td>
       <td>Who can join classes in your domain SHALL be set to Users in your domain only.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.CLASSROOM.1.2v0.4</td>
+      <td>GWS.CLASSROOM.1.2v0.5</td>
       <td>Which classes users in your domain can join SHALL be set to Classes in your domain only.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/classroom.md#2-Classroom-API" target="_blank">Classroom API</a></h2><table>
+</table><h2>CLASSROOM-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/classroom.md#2-Classroom-API" target="_blank">Classroom API</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -258,14 +292,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CLASSROOM.2.1v0.4</td>
+      <td>GWS.CLASSROOM.2.1v0.5</td>
       <td>Users SHALL NOT be able to authorize apps to access their Google Classroom data.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/classroom.md#3-Roster-Import" target="_blank">Roster Import</a></h2><table>
+</table><h2>CLASSROOM-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/classroom.md#3-Roster-Import" target="_blank">Roster Import</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -277,14 +311,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CLASSROOM.3.1v0.4</td>
+      <td>GWS.CLASSROOM.3.1v0.5</td>
       <td>Roster import with Clever SHOULD be turned off.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/classroom.md#4-Student-Unenrollment" target="_blank">Student Unenrollment</a></h2><table>
+</table><h2>CLASSROOM-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/classroom.md#4-Student-Unenrollment" target="_blank">Student Unenrollment</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -296,14 +330,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CLASSROOM.4.1v0.4</td>
+      <td>GWS.CLASSROOM.4.1v0.5</td>
       <td>Only teachers SHALL be allowed to unenroll students from classes.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/classroom.md#5-Class-Creation" target="_blank">Class Creation</a></h2><table>
+</table><h2>CLASSROOM-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/classroom.md#5-Class-Creation" target="_blank">Class Creation</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -315,7 +349,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.CLASSROOM.5.1v0.4</td>
+      <td>GWS.CLASSROOM.5.1v0.5</td>
       <td>Class creation SHALL be restricted to verified teachers only.</td>
       <td>Pass</td>
       <td>Shall</td>
@@ -323,6 +357,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     </tr>
   </tbody>
 </table>
+            
         </main>
     </body>
 </html>
