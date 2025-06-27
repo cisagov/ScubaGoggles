@@ -253,7 +253,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Common Controls Baseline Report</h1>
             
-            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/25/2025 14:22:58 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
+            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/26/2025 16:02:22 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
             <h2>COMMONCONTROLS-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#1-Phishing-Resistant-Multi-Factor-Authentication" target="_blank">Phishing-Resistant Multi-Factor Authentication</a></h2><table>
   <thead>
     <tr>
@@ -270,35 +270,35 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Phishing-Resistant MFA SHALL be required for all users.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Teresa Thompson: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Amy Oliver: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Cool Example Org (group "Derrick Holmes"): Allowed 2-step verification (2SV) method is set to "Any".</li><li>Sub alden test ou (in Amy Oliver): Allowed 2-step verification (2SV) method is set to "Any except verification codes via text, phone call".</li><li>Lisa Flores: Users cannot enable 2-step verification (2SV).</li><li>Alyssa Nichols: Allowed 2-step verification (2SV) method is set to "Any".</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Matthew Jones's OU: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Cool Example Org (group "Pamela Martinez's group"): Allowed 2-step verification (2SV) method is set to "Any".</li><li>John Bennett's OU (in Matthew Jones's OU): Allowed 2-step verification (2SV) method is set to "Any except verification codes via text, phone call".</li><li>Cheryl Santiago's OU: Users cannot enable 2-step verification (2SV).</li><li>Andrea Davis's OU (test): Allowed 2-step verification (2SV) method is set to "Any".</li></ul></td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.1.2v0.5</td>
       <td>If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL be enforced for all users.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Teresa Thompson: 2-step verification (2SV) is not enforced.</li><li>Amy Oliver: 2-step verification (2SV) is not enforced.</li><li>Lisa Flores: Users cannot enable 2-step verification (2SV).</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Matthew Jones's OU: 2-step verification (2SV) is not enforced.</li><li>Cheryl Santiago's OU: Users cannot enable 2-step verification (2SV).</li></ul></td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.1.3v0.5</td>
       <td>SMS or Voice as the MFA method SHALL NOT be used.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Teresa Thompson: Verification codes via text and phone call allowed.</li><li>Amy Oliver: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Verification codes via text and phone call allowed.</li><li>Cool Example Org (group "Derrick Holmes"): Verification codes via text and phone call allowed.</li><li>Lisa Flores: Users cannot enable 2-step verification (2SV).</li><li>Alyssa Nichols: Verification codes via text and phone call allowed.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: Verification codes via text and phone call allowed.</li><li>Matthew Jones's OU: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Verification codes via text and phone call allowed.</li><li>Cool Example Org (group "Pamela Martinez's group"): Verification codes via text and phone call allowed.</li><li>Cheryl Santiago's OU: Users cannot enable 2-step verification (2SV).</li><li>Andrea Davis's OU (test): Verification codes via text and phone call allowed.</li></ul></td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.1.4v0.5</td>
       <td>Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Teresa Thompson: New user enrollment period is NONE</li><li>Cool Example Org (group "Derrick Holmes"): New user enrollment period is NONE</li><li>Lisa Flores: New user enrollment period 14 days (longer than 7 days)</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: New user enrollment period is NONE</li><li>Cool Example Org (group "Pamela Martinez's group"): New user enrollment period is NONE</li><li>Cheryl Santiago's OU: New user enrollment period 14 days (longer than 7 days)</li></ul></td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.1.5v0.5</td>
       <td>Allow users to trust the device SHALL be disabled.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in Amy Oliver): User is allowed to trust device.</li><li>1-1-1-1 (in Amy Oliver) (group "Security Group"): User is allowed to trust device.</li><li>Teresa Thompson: User is allowed to trust device.</li><li>Cool Example Org: User is allowed to trust device.</li><li>Cool Example Org (group "Derrick Holmes"): User is allowed to trust device.</li><li>Sub alden test ou (in Amy Oliver): User is allowed to trust device.</li><li>Alyssa Nichols: User is allowed to trust device.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in Matthew Jones's OU): User is allowed to trust device.</li><li>1-1-1-1 (in Matthew Jones's OU) (group "Jennifer Owens's group"): User is allowed to trust device.</li><li>2SV Exempt: User is allowed to trust device.</li><li>Cool Example Org: User is allowed to trust device.</li><li>Cool Example Org (group "Pamela Martinez's group"): User is allowed to trust device.</li><li>John Bennett's OU (in Matthew Jones's OU): User is allowed to trust device.</li><li>Andrea Davis's OU (test): User is allowed to trust device.</li></ul></td>
     </tr>
   </tbody>
 </table><h2>COMMONCONTROLS-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#2-Context-aware-Access" target="_blank">Context-aware Access</a></h2><table>
@@ -362,7 +362,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Alyssa Nichols: Web session duration: 20 hours</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Andrea Davis's OU (test): Web session duration: 20 hours</li></ul></td>
     </tr>
   </tbody>
 </table><h2>COMMONCONTROLS-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#5-Secure-Passwords" target="_blank">Secure Passwords</a></h2><table>
@@ -395,28 +395,28 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>User password length SHOULD be at least 15 characters.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Minimum password length: 8, recommended is at least 15</li><li>Amy Oliver: Minimum password length: 12, recommended is at least 15</li><li>Cool Example Org: Minimum password length: 12, recommended is at least 15</li><li>Alyssa Nichols: Minimum password length: 12, recommended is at least 15</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Minimum password length: 8, recommended is at least 15</li><li>Matthew Jones's OU: Minimum password length: 12, recommended is at least 15</li><li>Cool Example Org: Minimum password length: 12, recommended is at least 15</li><li>Andrea Davis's OU (test): Minimum password length: 12, recommended is at least 15</li></ul></td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.5.4v0.5</td>
       <td>Password policy SHALL be enforced at next sign-in.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Enforce password policy at next sign-in is OFF</li><li>Cool Example Org: Enforce password policy at next sign-in is OFF</li><li>Kelly Bryant: Enforce password policy at next sign-in is OFF</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Enforce password policy at next sign-in is OFF</li><li>Cool Example Org: Enforce password policy at next sign-in is OFF</li><li>Fernando Rodriguez's OU: Enforce password policy at next sign-in is OFF</li></ul></td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.5.5v0.5</td>
       <td>User passwords SHALL NOT be reused.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Amy Oliver: Allow password reuse is ON</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Matthew Jones's OU: Allow password reuse is ON</li></ul></td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.5.6v0.5</td>
       <td>User passwords SHALL NOT expire.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Amy Oliver: Password reset frequency is 30 days</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Matthew Jones's OU: Password reset frequency is 30 days</li></ul></td>
     </tr>
   </tbody>
 </table><h2>COMMONCONTROLS-6 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#6-Privileged-Accounts" target="_blank">Privileged Accounts</a></h2><table>
@@ -442,7 +442,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following super admins are configured: carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net, carpenterpaul@example.net. <i>Note: Exceptions are allowed for "break glass" super admin accounts. "Break glass" accounts can be specified in a config file. 3 break glass accounts are currently configured.<i></td>
+      <td>The following Andrea Davis's OU are configured: stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org. <i>Note: Exceptions are allowed for "break glass" super admin accounts. "Break glass" accounts can be specified in a config file. 3 break glass accounts are currently configured.<i></td>
     </tr>
   </tbody>
 </table><h2>COMMONCONTROLS-7 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#7-Conflicting-Account-Management" target="_blank">Conflicting Account Management</a></h2><table>
@@ -477,17 +477,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
   <tbody>
     <tr>
       <td>GWS.COMMONCONTROLS.8.1v0.5</td>
-      <td>Account self-recovery for super admins SHALL be disabled.</td>
+      <td>Account self-recovery for Andrea Davis's OU SHALL be disabled.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.8.2v0.5</td>
-      <td>Account self-recovery for users and non-super admins SHALL be disabled.</td>
+      <td>Account self-recovery for users and non-Andrea Davis's OU SHALL be disabled.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Users and non-super admins are allowed to recover their accounts.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Users and non-Andrea Davis's OU are allowed to recover their accounts.</li></ul></td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.8.3v0.5</td>
@@ -560,7 +560,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Agencies SHALL NOT allow users to access unconfigured third-party apps.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Amy Oliver: Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google.</li></ul><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
+      <td>The following OUs are non-compliant:<ul><li>Matthew Jones's OU: Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google.</li></ul><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
     <tr>
       <td>GWS.COMMONCONTROLS.10.5v0.5</td>
@@ -605,7 +605,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Google Takeout services SHALL be disabled.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Amy Oliver: The following apps with individual admin control have Takeout enabled: YouTube</li><li>Cool Example Org: Takeout is enabled for services without an individual admin control.</li><li>Cool Example Org: The following apps with individual admin control have Takeout enabled: Blogger, Google Books</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Matthew Jones's OU: The following apps with individual admin control have Takeout enabled: YouTube</li><li>Cool Example Org: Takeout is enabled for services without an individual admin control.</li><li>Cool Example Org: The following apps with individual admin control have Takeout enabled: Blogger, Google Books</li></ul></td>
     </tr>
   </tbody>
 </table><h2>COMMONCONTROLS-13 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#13-System-defined-Rules" target="_blank">System-defined Rules</a></h2><table>

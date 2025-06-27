@@ -253,7 +253,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Gmail Baseline Report</h1>
             
-            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/25/2025 14:22:58 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
+            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/26/2025 16:02:22 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
             <h2>GMAIL-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#1-Mail-Delegation" target="_blank">Mail Delegation</a></h2><table>
   <thead>
     <tr>
@@ -270,7 +270,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Mail Delegation SHOULD be disabled.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Michelle Collins: Mail delegation is enabled</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Michael Carey's OU: Mail delegation is enabled</li></ul></td>
     </tr>
   </tbody>
 </table><h2>GMAIL-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#2-DomainKeys-Identified-Mail" target="_blank">DomainKeys Identified Mail</a></h2><table>
@@ -289,7 +289,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>DKIM SHOULD be enabled for all domains.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>1 of 2 agency domain(s) found in violation: David Hill.</td>
+      <td>1 of 2 agency domain(s) found in violation: carroll.com.</td>
     </tr>
   </tbody>
 </table><h2>GMAIL-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#3-Sender-Policy-Framework" target="_blank">Sender Policy Framework</a></h2><table>
@@ -308,7 +308,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>An SPF policy SHALL be published for each domain that fails all non-approved senders.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>2 of 2 agency domain(s) found in violation: example.org, David Hill.</td>
+      <td>2 of 2 agency domain(s) found in violation: example.org, carroll.com.</td>
     </tr>
   </tbody>
 </table><h2>GMAIL-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#4-Domain-based-Message-Authentication,-Reporting,-and-Conformance" target="_blank">Domain-based Message Authentication, Reporting, and Conformance</a></h2><table>
@@ -555,7 +555,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Michelle Collins: IMAP and POP access are enabled</li><li>Cool Example Org: IMAP and POP access are enabled</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Michael Carey's OU: IMAP and POP access are enabled</li><li>Cool Example Org: IMAP and POP access are enabled</li></ul></td>
     </tr>
   </tbody>
 </table><h2>GMAIL-10 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#10-Google-Workspace-Sync" target="_blank">Google Workspace Sync</a></h2><table>
