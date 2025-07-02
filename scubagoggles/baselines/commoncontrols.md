@@ -9,7 +9,7 @@ The CISA SCuBA SCBs for GWS help secure federal information assets stored within
 For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation and addresses the following:
-- [Phishing-Resistant Multifactor Authentication](#1-phishing-resistant-multifactor-authentication)
+- [Phishing-Resistant Multifactor Authentication](#1-phishing-resistant-multi-factor-authentication)
 - [Context Aware Access](#2-context-aware-access)
 - [Login Challenges](#3-login-challenges)
 - [User Session Duration](#4-user-session-duration)
@@ -49,7 +49,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## 1. Phishing-Resistant Multifactor Authentication
 
-Multi-factor authentication (MFA), particularly phishing-resistant MFA, is a critical security control against attacks such as password spraying, password theft, and phishing. Adopting phishing-resistant MFA may take time, especially on mobile devices. Organizations must upgrade to a phishing-resistant MFA method as soon as possible to be compliant with OMB M-22-09 and this policy to address the critical security threat posed by modern phishing attacks.
+Multifactor authentication (MFA), particularly phishing-resistant MFA, is a critical security control against attacks such as password spraying, password theft, and phishing. Adopting phishing-resistant MFA may take time, especially on mobile devices. Organizations must upgrade to a phishing-resistant MFA method as soon as possible to be compliant with OMB M-22-09 and this policy to address the critical security threat posed by modern phishing attacks.
 
 This control recognizes federation as a viable option for phishing-resistant MFA and includes architectural considerations around on-premises and cloud-native identity federation in established Federal Civilian Executive Branch (FCEB) environments. Federation for GWS can be implemented via a cloud-native identity provider (IdP). Google's documentation acknowledges that on-premises Active Directory implementations may be predominant in environments that adopt GWS and provides guidance on the use of Google Cloud Directory Sync (GCDS) to synchronize Google Account data with an established Microsoft Active Directory or LDAP server.
 
@@ -78,7 +78,7 @@ Phishing-Resistant MFA SHALL be required for all users.
             - Google Passkeys
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
-- _Last modified:_ August 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -95,7 +95,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL be enforced for all users.
 
 - _Rationale:_ This is a stopgap security policy to help protect the tenant if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk.
-- _Last modified:_ February 2025
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -112,7 +112,7 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
 SMS or Voice as the MFA method SHALL NOT be used.
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
-- _Last modified:_ February 2025
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -129,7 +129,7 @@ SMS or Voice as the MFA method SHALL NOT be used.
 Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.
 
 - _Rationale:_ Enrollment must be enforced within a reasonable timeframe. One week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
-- _Last modified:_ February 2025
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -172,6 +172,10 @@ Allow users to trust the device SHALL be disabled.
 -   GWS.COMMONCONTROLS.1.1v0.5 may require FIDO2-compliant security keys
 
 ### Implementation
+
+Note: If using a third-party IdP with GWS, refer to Google documentation on setting up third-party single sign-on (SSO). If using GWS as the IdP, refer to Google documentation on setting up SSO.
+
+To enforce Phishing-Resistant 2-Step Verification (MFA) for all users, use the Google Workspace Admin Console:
 
 #### Policy 1 Common Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com/) as an administrator.
@@ -506,7 +510,7 @@ Administrative or admin accounts are privileged accounts in GWS that can manage 
 
 Some examples of these privileged accounts include the following Pre-Built GWS Admin Roles:
 
--   Super Admin: This role possesses critical control over the entire GWS structure. It has access to all features in the Admin Console and Admin API and can manage every aspect of agency GWS accounts.
+-   Super Admin: This role possesses critical control over the entire GWS structure. It has access to all features in the Admin Console and Admin API and can manage every aspect of an agency's GWS accounts.
 -   User Management Admin: This account has rights to add, remove, and delete normal users in addition to managing all user passwords, security settings, and other management tasks that make it potentially crucial if compromised.
 -   Services Admin: This admin has full rights to turn on or off GWS services and security settings for these services (Gmail, Drive, Voice, etc.). Given that most GWS features are premised on these services being secure, compromise of this account would be critical.
 -   Mobile Admin: This admin has full rights to manage all of an agency's mobile devices including authorizing their use and controlling the apps that can be downloaded and used on them. This admin also can set the security policies on all agency mobile devices connected to GWS.
@@ -515,7 +519,7 @@ Some examples of these privileged accounts include the following Pre-Built GWS A
 ### Policies
 
 #### GWS.COMMONCONTROLS.6.1v0.5
-All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication(MFA) and not the agency's authoritative on-premises or federated identity system.
+All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication(MFA), not an agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last modified:_ January 2025
@@ -590,8 +594,8 @@ By changing the email address, the user resolves the conflict by ensuring that t
 #### GWS.COMMONCONTROLS.7.1v0.5
 Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed ones.
 
-- _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by Workspace admins. By resolving conflicting accounts, you ensure all users in your Workspace are using managed accounts.
-- _Last modified:_ January 2025
+- _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by Workspace admins. By resolving conflicting accounts, organizations can ensure all users in their Workspace are using managed accounts.
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1136: Create Account](https://attack.mitre.org/techniques/T1136/)
@@ -1079,7 +1083,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as directed by OMB M-21-31.
 
 - _Rationale:_ Audit logs may be unavailable when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
-- _Last modified:_ January 2024
+- _Last modified:_ April 2025
 - _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies are free to use the tool that best fits their individual circumstances.
 
 - MITRE ATT&CK TTP Mapping
@@ -1239,10 +1243,10 @@ This section covers whether multiple super admins need to approve changes to spe
 ### Policies
 
 #### GWS.COMMONCONTROLS.17.1v0.5
-Require multi party approval for sensitive admin actions SHALL be enabled.
+Require multiparty approval for sensitive admin actions SHALL be enabled.
 
 - _Rationale_: Changes to sensitive admin settings such as disabling 2-step verification could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
-- _Last modified:_ June 2024
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - No TTP Mappings
