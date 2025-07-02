@@ -9,7 +9,7 @@ The CISA SCuBA SCBs for GWS help secure federal information assets stored within
 For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation and addresses the following:
-- [Phishing-Resistant Multifactor Authentication](#1-phishing-resistant-multi-factor-authentication)
+- [Phishing-Resistant Multifactor Authentication](#1-phishing-resistant-multifactor-authentication)
 - [Context Aware Access](#2-context-aware-access)
 - [Login Challenges](#3-login-challenges)
 - [User Session Duration](#4-user-session-duration)
