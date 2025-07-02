@@ -760,7 +760,7 @@ Google Workspace Sync SHOULD be disabled.
 To configure the settings for Google Workspace Sync:
 
 #### GWS.GMAIL.10.1v0.5 Instructions
-1.  Sign in to the [Google Admin console](https://admin.google.com)
+1.  Sign in to the [Google Admin console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
 3.  Select **End User Access -\> Google Workspace Sync**.
 4.  Uncheck the **Enable Google Workspace Sync for Microsoft Outlook for my users** checkbox.
