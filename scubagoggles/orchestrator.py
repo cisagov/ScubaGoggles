@@ -281,7 +281,7 @@ class Orchestrator:
         n_manual = stats['Manual']
         n_error = stats['Errors']
         n_omit = stats['Omit']
-        
+
         # The warnings, failures, and manuals are only shown if they are
         # greater than zero. Reserve the space for them here. They will
         # be filled next if needed.
@@ -292,7 +292,7 @@ class Orchestrator:
         error_summary = "<div class='summary'></div>"
         omit_summary = "<div class='summary'></div>"
 
-        if n_success > 0: 
+        if n_success > 0:
             pass_summary = (f"<div class='summary pass'>{n_success}"
                         f" {cls._pluralize('pass', 'passes', n_success)}</div>")
         if n_warn > 0:
