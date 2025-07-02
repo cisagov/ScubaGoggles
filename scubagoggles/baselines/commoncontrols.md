@@ -173,10 +173,6 @@ Allow users to trust the device SHALL be disabled.
 
 ### Implementation
 
-Note: If using a third-party IdP with GWS, refer to Google documentation on setting up third-party single sign-on (SSO). If using GWS as the IdP, refer to Google documentation on setting up SSO.
-
-To enforce Phishing-Resistant 2-Step Verification (MFA) for all users, use the Google Workspace Admin Console:
-
 #### Policy 1 Common Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com/) as an administrator.
 2.  Select **Security** -\> **Authentication**.
