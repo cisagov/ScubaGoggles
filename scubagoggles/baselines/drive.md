@@ -397,7 +397,7 @@ To Disable Google Drive for Desktop:
 
 To limit Google Drive for Desktop to authorized devices:
 
-1.  Sign in to the [Google Admin console](https://admin.google.com)
+1.  Sign in to the [Google Admin console](https://admin.google.com).
 2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs**.
 3.  Select **Google Drive for Desktop**.
 4.  Select **Enable Drive for Desktop**.
