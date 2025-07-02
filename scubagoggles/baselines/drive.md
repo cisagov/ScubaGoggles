@@ -388,7 +388,7 @@ Google Drive for Desktop SHOULD be enabled only for authorized devices.
 #### GWS.DRIVEDOCS.6.1v0.5 Instructions
 To Disable Google Drive for Desktop:
 
-1.  Sign in to the [Google Admin console](https://admin.google.com)
+1.  Sign in to the [Google Admin console](https://admin.google.com).
 2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs**.
 3.  Select **Google Drive for Desktop**.
 4.  Select **Enable Drive for Desktop**.
