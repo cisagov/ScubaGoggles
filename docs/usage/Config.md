@@ -45,6 +45,24 @@ For each omitted policy, the config file allows you to indicate the following:
 - `rationale`: The reason the policy should be omitted from the report. This value will be displayed in the "Details" column of the report. ScubaGoggles will output a warning if no rationale is provided.
 - `expiration`: Optional. A date after which the policy should no longer be omitted from the report. The expected format is yyyy-mm-dd.
 
+### Annotate Policies
+
+ScubaGoggles supports annotating results for individual policies. Annotated policies will be shown in the HTML with the
+annotation appended to the details column. Annotated policies are intended to:
+- Document action plans for any failed controls. ScubaGoggles will output a warning for any failing controls that are not
+documented in the config file, though this warning can be silenced with the `-silencebodwarnings` flag.
+- Allow users to identify incorrect results
+- Help contextualize results
+
+The `annotatepolicy` top-level key, shown in this [example ScubaGoggles configuration file](../../scubagoggles/sample-config-files/annotate_policies.yaml), allows the user to specify the policies that should be annotated.
+
+For each annotated policy, the config file allows you to indicate the following:
+- `incorrectresult`: Boolean, whether or not to mark the result incorrect. Optional, defaults to false.
+- `comment`: The annotation to add to the report. A warning will be printed if control is marked incorrect with no comment provided as justification.
+- `remediationdate`: Optional. The date a failing control is anticipated to be implemented. The expected format is yyyy-mm-dd.
+
+**Exercise care when marking incorrect results because this can inadvertently introduce blind spots when assessing your system.**
+
 ### Break Glass Accounts
 
 In some cases, it may be appropriate to specify the number of break glass accounts to be omitted from the total admin count. For example:

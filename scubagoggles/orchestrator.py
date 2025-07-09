@@ -281,6 +281,7 @@ class Orchestrator:
         n_manual = stats['Manual']
         n_error = stats['Errors']
         n_omit = stats['Omit']
+        n_incorrect = stats['IncorrectResults']
 
         pass_summary = (f"<div class='summary pass'>{n_success}"
                         f" {cls._pluralize('pass', 'passes', n_success)}</div>")
@@ -293,6 +294,7 @@ class Orchestrator:
         manual_summary = "<div class='summary'></div>"
         error_summary = "<div class='summary'></div>"
         omit_summary = "<div class='summary'></div>"
+        incorrect_summary = "<div class='summary'></div>"
 
         if n_warn > 0:
             warning_summary = (f"<div class='summary warning'>{n_warn}"
@@ -314,8 +316,15 @@ class Orchestrator:
             omit_summary = (f"<div class='summary manual'>{n_omit}"
                             ' omitted</div>')
 
+        if n_incorrect > 0:
+            plural_aware_results = cls._pluralize('incorrect result',
+                                  'incorrect results',
+                                  n_incorrect)
+            incorrect_summary = (f"<div class='summary incorrect'>{n_incorrect}"
+                              f" {plural_aware_results}</div>")
+
         return (f'{pass_summary}{warning_summary}{failure_summary}'
-                f'{manual_summary}{omit_summary}{error_summary}')
+                f'{manual_summary}{omit_summary}{incorrect_summary}{error_summary}')
 
     def _run_reporter(self):
         """
@@ -367,6 +376,11 @@ class Orchestrator:
         if 'omitpolicy' in args and args.omitpolicy is not None:
             omissions = args.omitpolicy
 
+        # Determine if any controls were annotated in the config file
+        annotations = {}
+        if 'annotatepolicy' in args and args.annotatepolicy is not None:
+            annotations = args.annotatepolicy
+
         # Begin Creating the individual report files
         summary = {}
         results = {}
@@ -413,6 +427,7 @@ class Orchestrator:
                                 unsuccessful_calls,
                                 missing_policies,
                                 omissions,
+                                annotations,
                                 products_bar)
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,

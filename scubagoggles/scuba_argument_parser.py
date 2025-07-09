@@ -128,6 +128,9 @@ class ScubaArgumentParser:
         if 'omitpolicy' in args:
             ScubaArgumentParser.validate_omissions(args)
 
+        if 'annotatepolicy' in args:
+            ScubaArgumentParser.validate_annotations(args)
+
     @staticmethod
     def validate_omissions(args : argparse.Namespace) -> None:
         """
@@ -155,3 +158,30 @@ class ScubaArgumentParser:
                               'of the controls encompassed by the baselines '
                               'indicated by the baselines parameter. Control '
                               'will not be omitted.')
+
+    @staticmethod
+    def validate_annotations(args : argparse.Namespace) -> None:
+        """
+        Warn for any control IDs configured for annotation that aren't in the
+        set of IDs covered by the baselines specificied in --baselines.
+        """
+
+        md_products = set(args.baselines)
+
+        # Parse the baselines to determine the set of valid control IDs
+        md_parser = MarkdownParser(args.documentpath)
+        baseline_policies = md_parser.parse_baselines(md_products)
+
+        control_ids = set()
+        for product_baseline in baseline_policies.values():
+            for group in product_baseline:
+                for control in group['Controls']:
+                    control_ids.add(control['Id'].lower())
+
+        # Warn for any unexpected IDs
+        for control_id in args.annotatepolicy:
+            if control_id.lower() not in control_ids:
+                warnings.warn('Config file adds annotations for '
+                              f'{control_id}, but {control_id} is not one '
+                              'of the controls encompassed by the baselines '
+                              'indicated by the baselines parameter.')
