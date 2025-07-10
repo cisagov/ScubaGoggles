@@ -131,6 +131,18 @@ class ScubaArgumentParser:
         if 'annotatepolicy' in args:
             ScubaArgumentParser.validate_annotations(args)
 
+        # We want OrgName to be in PascalCase for consistency with ScubaGear.
+        # But as all other options for ScubaGoggles are all lowercase, make
+        # ScubaGoggles accept either orgname or OrgName to make things more
+        # user friendly
+        if 'orgname' in args:
+            vars(args)['OrgName'] = args.orgname
+            del vars(args)['orgname']
+
+        if 'orgunitname' in args:
+            vars(args)['OrgUnitName'] = args.orgunitname
+            del vars(args)['orgunitname']
+
     @staticmethod
     def validate_omissions(args : argparse.Namespace) -> None:
         """
