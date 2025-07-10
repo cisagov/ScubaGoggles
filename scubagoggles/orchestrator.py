@@ -455,6 +455,19 @@ class Orchestrator:
         total_output['Raw']['rules_table'] = rules_table
         total_output['AnnotatedFailedPolicies'] = annotated_failed_policies
 
+        # Warn for missing annotations if applicable
+        if not args.silencebodwarnings:
+            missing_comment = []
+            for policy in annotated_failed_policies:
+                if annotated_failed_policies[policy]['Comment'] is None:
+                    missing_comment.append(policy)
+            if len(missing_comment) > 0:
+                missing_str = ', '.join(missing_comment)
+                docs = 'https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md#annotate-policies'
+                log.warning((f'{len(missing_comment)} controls are failing '
+                             'and are not documented in the config file: '
+                             f'{missing_str}. See {docs} for more details.'))
+
         # Generate action report file
         self.convert_to_result_csv(total_output)
 
@@ -587,6 +600,16 @@ class Orchestrator:
         if not args.credentials.exists():
             raise UserRuntimeError(f'? "{args.credentials}" - Google '
                                    f'credentials file missing - {see_docs}')
+
+        # Validate orgname
+        orgname_missing = (('OrgName' not in args) or
+                           (args.OrgName is None) or
+                           (args.OrgName == ''))
+        if not args.silencebodwarnings and orgname_missing:
+            log.warning(('Config file option OrgName not provided. This '
+                         'option is required for BOD submissions. This '
+                         'warning can be silenced with the '
+                         '--silencebodwarnings parameter.'))
 
         # add any additional variables to args
         gws_params = self.gws_products()

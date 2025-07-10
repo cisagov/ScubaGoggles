@@ -313,15 +313,10 @@ class Reporter:
         """
         # Lowercase for case-insensitive comparison
         control_id = control_id.lower()
-        incorrect_result = False
         if control_id in self._annotations:
             if 'incorrectresult' in self._annotations[control_id]:
-                incorrect_result = bool(self._annotations[control_id]\
-                                        ['incorrectresult'])
-        if incorrect_result and self._get_annotation_comment(control_id) is None:
-            self._warn((f"Config file marks the result for {control_id} as "
-                        "incorrect, but no justification provided."))
-        return incorrect_result
+                return bool(self._annotations[control_id]['incorrectresult'])
+        return False
 
     def _get_annotation_comment(self, control_id: str) -> str:
         """
@@ -587,13 +582,13 @@ class Reporter:
 
     def _warn(self, *args, **kwargs):
         """
-        Wrapper for the warnings.warn function, that clears and refreshes the
+        Wrapper for the warning function, that clears and refreshes the
         progress bar if one has been provided, to keep the output clean.
-        Accepts all the arguments the warnings.warn function accepts.
+        Accepts all the arguments the warning function accepts.
         """
         if self.progress_bar is not None:
             self.progress_bar.clear()
-        warnings.warn(*args, **kwargs)
+        log.warning(*args, **kwargs)
         if self.progress_bar is not None:
             self.progress_bar.refresh()
 
@@ -617,7 +612,7 @@ class Reporter:
             if comment is None:
                 # Result marked incorrect, comment not provided
                 self._warn((f"Config file marks the result for {control_id} "
-                           "incorrect, but no justificaiton provided."))
+                           "incorrect, but no justification provided."))
                 details = ("Test result marked incorrect by user. <span class="
                            "'comment-heading'>User justification not provided"
                            "</span>")

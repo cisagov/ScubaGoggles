@@ -194,6 +194,13 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                 'bar output.')
     parser.add_argument('--quiet', action='store_true', help=help_msg)
 
+    help_msg = ('This switch suppresses warning relating to requirements '
+                'specific to BOD compliance (e.g., documenting OrgName in the '
+                'config file).')
+    parser.add_argument('--silencebodwarnings',
+                        action='store_true',
+                        help=help_msg)
+
     default_uuid_chars_to_truncate = 18
     help_msg = ('Controls how many characters will be truncated '
                 'from the report UUID when appended to the end of outjsonfilename. '
