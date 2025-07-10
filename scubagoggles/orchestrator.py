@@ -281,6 +281,7 @@ class Orchestrator:
         n_manual = stats['Manual']
         n_error = stats['Errors']
         n_omit = stats['Omit']
+        n_incorrect = stats['IncorrectResults']
 
         pass_summary = (f"<div class='summary pass'>{n_success}"
                         f" {cls._pluralize('pass', 'passes', n_success)}</div>")
@@ -293,6 +294,7 @@ class Orchestrator:
         manual_summary = "<div class='summary'></div>"
         error_summary = "<div class='summary'></div>"
         omit_summary = "<div class='summary'></div>"
+        incorrect_summary = "<div class='summary'></div>"
 
         if n_warn > 0:
             warning_summary = (f"<div class='summary warning'>{n_warn}"
@@ -314,8 +316,15 @@ class Orchestrator:
             omit_summary = (f"<div class='summary manual'>{n_omit}"
                             ' omitted</div>')
 
+        if n_incorrect > 0:
+            plural_aware_results = cls._pluralize('incorrect result',
+                                  'incorrect results',
+                                  n_incorrect)
+            incorrect_summary = (f"<div class='summary incorrect'>{n_incorrect}"
+                              f" {plural_aware_results}</div>")
+
         return (f'{pass_summary}{warning_summary}{failure_summary}'
-                f'{manual_summary}{omit_summary}{error_summary}')
+                f'{manual_summary}{omit_summary}{incorrect_summary}{error_summary}')
 
     def _run_reporter(self):
         """
@@ -367,6 +376,11 @@ class Orchestrator:
         if 'omitpolicy' in args and args.omitpolicy is not None:
             omissions = args.omitpolicy
 
+        # Determine if any controls were annotated in the config file
+        annotations = {}
+        if 'annotatepolicy' in args and args.annotatepolicy is not None:
+            annotations = args.annotatepolicy
+
         # Begin Creating the individual report files
         summary = {}
         results = {}
@@ -399,6 +413,7 @@ class Orchestrator:
 
         main_report_name = args.outputreportfilename
         products_bar = tqdm(products, leave=False, disable=args.quiet)
+        annotated_failed_policies = {}
         for product in products_bar:
             products_bar.set_description('Creating the HTML and JSON Report '
                                          f'for {product}...')
@@ -413,6 +428,7 @@ class Orchestrator:
                                 unsuccessful_calls,
                                 missing_policies,
                                 omissions,
+                                annotations,
                                 products_bar)
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
@@ -422,6 +438,7 @@ class Orchestrator:
                 product: stats_and_data[product][1]}
             summary.update(baseline_product_summary)
             results.update(baseline_product_results_json)
+            annotated_failed_policies.update(reporter.annotated_failed_policies)
             total_output.update({'Summary': summary})
             total_output.update({'Results': results})
             if reporter.rules_table is not None:
@@ -436,6 +453,21 @@ class Orchestrator:
             raw_data.update({'scuba_config': args_dict})
         total_output.update({'Raw': raw_data})
         total_output['Raw']['rules_table'] = rules_table
+        total_output['AnnotatedFailedPolicies'] = annotated_failed_policies
+
+        # Warn for missing annotations if applicable
+        missing_comment = []
+        for policy_id, annotation in annotated_failed_policies.items():
+            if annotation['Comment'] is None:
+                missing_comment.append(policy_id)
+        if not args.silencebodwarnings and len(missing_comment) > 0:
+            missing_str = ', '.join(missing_comment)
+            github_url = 'https://github.com/cisagov/ScubaGoggles'
+            docs = f'{github_url}/blob/main/docs/usage/Config.md#annotate-policies'
+            warning_str = (f'{len(missing_comment)} controls are failing '
+                            'and are not documented in the config file: '
+                            f'{missing_str}. See {docs} for more details.')
+            log.warning(warning_str)
 
         # Generate action report file
         self.convert_to_result_csv(total_output)
@@ -569,6 +601,16 @@ class Orchestrator:
         if not args.credentials.exists():
             raise UserRuntimeError(f'? "{args.credentials}" - Google '
                                    f'credentials file missing - {see_docs}')
+
+        # Validate orgname
+        orgname_missing = (('OrgName' not in args) or
+                           (args.OrgName is None) or
+                           (args.OrgName == ''))
+        if not args.silencebodwarnings and orgname_missing:
+            log.warning(('Config file option OrgName not provided. This '
+                         'option is required for BOD submissions. This '
+                         'warning can be silenced with the '
+                         '--silencebodwarnings parameter.'))
 
         # add any additional variables to args
         gws_params = self.gws_products()
