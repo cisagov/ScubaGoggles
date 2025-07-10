@@ -105,6 +105,7 @@ class Reporter:
         }
         self.progress_bar = progress_bar
         self.rules_table = None
+        self.annotated_failed_policies = {}
 
     @staticmethod
     def _get_test_result(requirement_met: bool,
@@ -312,10 +313,15 @@ class Reporter:
         """
         # Lowercase for case-insensitive comparison
         control_id = control_id.lower()
+        incorrect_result = False
         if control_id in self._annotations:
             if 'incorrectresult' in self._annotations[control_id]:
-                return self._annotations[control_id]['incorrectresult'] == True
-        return False
+                incorrect_result = bool(self._annotations[control_id]\
+                                        ['incorrectresult'])
+        if incorrect_result and self._get_annotation_comment(control_id) is None:
+            self._warn((f"Config file marks the result for {control_id} as "
+                        "incorrect, but no justification provided."))
+        return incorrect_result
 
     def _get_annotation_comment(self, control_id: str) -> str:
         """
@@ -352,12 +358,12 @@ class Reporter:
         # If any of the following conditions is true, no date was
         # provided
         no_date = ((self._annotations[control_id] is None) or
-                        ('remediation_date' not in self._annotations[control_id]) or
-                        (self._annotations[control_id]['remediation_date'] is None) or
-                        (self._annotations[control_id]['remediation_date'] == ''))
+                        ('remediationdate' not in self._annotations[control_id]) or
+                        (self._annotations[control_id]['remediationdate'] is None) or
+                        (self._annotations[control_id]['remediationdate'] == ''))
         if no_date:
             return None
-        return self._annotations[control_id]['remediation_date']
+        return self._annotations[control_id]['remediationdate']
 
     def _sanitize_details(self, table_data: list) -> list:
         '''
@@ -782,7 +788,17 @@ class Reporter:
                                                    result,
                                                    details)
 
+
                     incorrect_result = self._is_control_marked_incorrect(control_id)
+                    if result == "Fail":
+                        # If the user commented on a failed control, save the
+                        # comment to the failed control to comment mapping
+                        self.annotated_failed_policies[control_id] = {
+                            'Comment': self._get_annotation_comment(control_id),
+                            'RemediationDate': self._get_remediation_date(control_id),
+                            'IncorrectResult': incorrect_result
+                        }
+
                     if incorrect_result and result in ("Pass", "Fail", "Warning"):
                         # Handle incorrect results
                         report_stats["IncorrectResults"] += 1

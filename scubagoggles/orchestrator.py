@@ -413,6 +413,7 @@ class Orchestrator:
 
         main_report_name = args.outputreportfilename
         products_bar = tqdm(products, leave=False, disable=args.quiet)
+        annotated_failed_policies = {}
         for product in products_bar:
             products_bar.set_description('Creating the HTML and JSON Report '
                                          f'for {product}...')
@@ -437,6 +438,7 @@ class Orchestrator:
                 product: stats_and_data[product][1]}
             summary.update(baseline_product_summary)
             results.update(baseline_product_results_json)
+            annotated_failed_policies.update(reporter.annotated_failed_policies)
             total_output.update({'Summary': summary})
             total_output.update({'Results': results})
             if reporter.rules_table is not None:
@@ -451,6 +453,7 @@ class Orchestrator:
             raw_data.update({'scuba_config': args_dict})
         total_output.update({'Raw': raw_data})
         total_output['Raw']['rules_table'] = rules_table
+        total_output['AnnotatedFailedPolicies'] = annotated_failed_policies
 
         # Generate action report file
         self.convert_to_result_csv(total_output)
