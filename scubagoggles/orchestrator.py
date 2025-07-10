@@ -456,17 +456,18 @@ class Orchestrator:
         total_output['AnnotatedFailedPolicies'] = annotated_failed_policies
 
         # Warn for missing annotations if applicable
-        if not args.silencebodwarnings:
-            missing_comment = []
-            for policy in annotated_failed_policies:
-                if annotated_failed_policies[policy]['Comment'] is None:
-                    missing_comment.append(policy)
-            if len(missing_comment) > 0:
-                missing_str = ', '.join(missing_comment)
-                docs = 'https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md#annotate-policies'
-                log.warning((f'{len(missing_comment)} controls are failing '
-                             'and are not documented in the config file: '
-                             f'{missing_str}. See {docs} for more details.'))
+        missing_comment = []
+        for policy_id, annotation in annotated_failed_policies.items():
+            if annotation['Comment'] is None:
+                missing_comment.append(policy_id)
+        if not args.silencebodwarnings and len(missing_comment) > 0:
+            missing_str = ', '.join(missing_comment)
+            github_url = 'https://github.com/cisagov/ScubaGoggles'
+            docs = f'{github_url}/blob/main/docs/usage/Config.md#annotate-policies'
+            warning_str = (f'{len(missing_comment)} controls are failing '
+                            'and are not documented in the config file: '
+                            f'{missing_str}. See {docs} for more details.')
+            log.warning(warning_str)
 
         # Generate action report file
         self.convert_to_result_csv(total_output)

@@ -4,7 +4,6 @@ reporter.py creates the report html page
 import io
 import logging
 import time
-import warnings
 import json
 
 from datetime import datetime
