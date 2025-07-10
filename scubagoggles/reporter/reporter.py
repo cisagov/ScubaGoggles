@@ -799,8 +799,8 @@ class Reporter:
                             'IncorrectResult': incorrect_result
                         }
 
+                    # Handle incorrect results
                     if incorrect_result and result in ("Pass", "Fail", "Warning"):
-                        # Handle incorrect results
                         report_stats["IncorrectResults"] += 1
                         table_data.append({
                             'Control ID': control_id,
@@ -812,20 +812,22 @@ class Reporter:
                             'OmittedEvaluationDetails': 'N/A',
                             'IncorrectResult': result,
                             'IncorrectDetails': details_pre_annotation})
-                    else:
-                        # This ithe typical case, the test result is not
-                        # missing, omitted, or incorrect
-                        report_stats[self._get_summary_category(result)] += 1
-                        table_data.append({
-                            'Control ID': control_id,
-                            'Requirement': requirement,
-                            'Result': result,
-                            'Criticality': test['Criticality'],
-                            'Details': details,
-                            'OmittedEvaluationResult': 'N/A',
-                            'OmittedEvaluationDetails': 'N/A',
-                            'IncorrectResult': 'N/A',
-                            'IncorrectDetails': 'N/A'})
+                        continue
+
+                    # This is the typical case, the test result is not
+                    # missing, omitted, or incorrect
+                    report_stats[self._get_summary_category(result)] += 1
+                    table_data.append({
+                        'Control ID': control_id,
+                        'Requirement': requirement,
+                        'Result': result,
+                        'Criticality': test['Criticality'],
+                        'Details': details,
+                        'OmittedEvaluationResult': 'N/A',
+                        'OmittedEvaluationDetails': 'N/A',
+                        'IncorrectResult': 'N/A',
+                        'IncorrectDetails': 'N/A'})
+
             markdown_group_name = '-'.join(baseline_group['GroupName'].split())
             group_reference_url = (f'{self._github_url}/blob/{Version.current}/'
                                    f'scubagoggles/baselines/{product}.md'
