@@ -285,7 +285,7 @@ class Orchestrator:
         # The warnings, failures, and manuals are only shown if they are
         # greater than zero. Reserve the space for them here. They will
         # be filled next if needed.
-        pass_summary = ""
+        pass_summary = "<div class='summary'></div>"
         warning_summary = "<div class='summary'></div>"
         failure_summary = "<div class='summary'></div>"
         manual_summary = "<div class='summary'></div>"
