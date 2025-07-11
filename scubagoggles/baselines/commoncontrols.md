@@ -9,7 +9,7 @@ The CISA SCuBA SCBs for GWS help secure federal information assets stored within
 For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation and addresses the following:
-- [Phishing-Resistant Multi-Factor Authentication](#1-phishing-resistant-multi-factor-authentication)
+- [Phishing-Resistant Multifactor Authentication](#1-phishing-resistant-multifactor-authentication)
 - [Context Aware Access](#2-context-aware-access)
 - [Login Challenges](#3-login-challenges)
 - [User Session Duration](#4-user-session-duration)
@@ -47,9 +47,9 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 # Baseline Policies
 
-## 1. Phishing-Resistant Multi-Factor Authentication
+## 1. Phishing-Resistant Multifactor Authentication
 
-Multi-factor authentication (MFA), particularly phishing-resistant MFA, is a critical security control against attacks such as password spraying, password theft, and phishing. Adopting phishing-resistant MFA may take time, especially on mobile devices. Organizations must upgrade to a phishing-resistant MFA method as soon as possible to be compliant with OMB M-22-09 and this policy to address the critical security threat posed by modern phishing attacks.
+Multifactor authentication (MFA), particularly phishing-resistant MFA, is a critical security control against attacks such as password spraying, password theft, and phishing. Adopting phishing-resistant MFA may take time, especially on mobile devices. Organizations must upgrade to a phishing-resistant MFA method as soon as possible to be compliant with OMB M-22-09 and this policy to address the critical security threat posed by modern phishing attacks.
 
 This control recognizes federation as a viable option for phishing-resistant MFA and includes architectural considerations around on-premises and cloud-native identity federation in established Federal Civilian Executive Branch (FCEB) environments. Federation for GWS can be implemented via a cloud-native identity provider (IdP). Google's documentation acknowledges that on-premises Active Directory implementations may be predominant in environments that adopt GWS and provides guidance on the use of Google Cloud Directory Sync (GCDS) to synchronize Google Account data with an established Microsoft Active Directory or LDAP server.
 
@@ -78,7 +78,7 @@ Phishing-Resistant MFA SHALL be required for all users.
             - Google Passkeys
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
-- _Last modified:_ August 2023
+- _Last modified:_ January 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -95,7 +95,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL be enforced for all users.
 
 - _Rationale:_ This is a stopgap security policy to help protect the tenant if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk.
-- _Last modified:_ February 2025
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -112,7 +112,7 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
 SMS or Voice as the MFA method SHALL NOT be used.
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
-- _Last modified:_ February 2025
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -128,8 +128,8 @@ SMS or Voice as the MFA method SHALL NOT be used.
 #### GWS.COMMONCONTROLS.1.4v0.5
 Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.
 
-- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. 1 week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
-- _Last modified:_ February 2025
+- _Rationale:_ Enrollment must be enforced within a reasonable timeframe. One week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
@@ -186,7 +186,7 @@ Allow users to trust the device SHALL be disabled.
 5.  Select **Save**.
 
 #### GWS.COMMONCONTROLS.1.2v0.5 Instructions
-1.  Under **Authentication**, ensure that **Allow users to turn on 2-Step Verification is checked**.
+1.  Under **Authentication**, ensure that **Allow users to turn on 2-Step Verification** is checked.
 2.  Set **Enforcement** to **On**.
 
 #### GWS.COMMONCONTROLS.1.3v0.5 Instructions
@@ -502,20 +502,20 @@ To configure a strong password policy is configured, use the Google Workspace Ad
 
 ## 6. Privileged Accounts
 
-Administrative or admin accounts are privileged accounts in Google Workspace that can manage settings, access sensitive data, and perform critical functions. The compromise of an admin account could have catastrophic impacts on the workspace organization. This section defines privileged accounts as both pre-built and custom admin accounts.
+Administrative or admin accounts are privileged accounts in GWS that can manage settings, access sensitive data, and perform critical functions. The compromise of an admin account could have catastrophic impacts on the Workspace organization. This section defines privileged accounts as both pre-built and custom admin accounts.
 
-Some examples of these privileged accounts include the pre-built GWS Admin Roles:
+Some examples of these privileged accounts include the following Pre-Built GWS Admin Roles:
 
--   Super Admin: This role possesses critical control over the entire GWS structure. It has access to all features in the Admin Console and Admin API and can manage every aspect of agency GWS accounts.
+-   Super Admin: This role possesses critical control over the entire GWS structure. It has access to all features in the Admin Console and Admin API and can manage every aspect of an agency's GWS accounts.
 -   User Management Admin: This account has rights to add, remove, and delete normal users in addition to managing all user passwords, security settings, and other management tasks that make it potentially crucial if compromised.
 -   Services Admin: This admin has full rights to turn on or off GWS services and security settings for these services (Gmail, Drive, Voice, etc.). Given that most GWS features are premised on these services being secure, compromise of this account would be critical.
--   Mobile Admin: This admin has full rights to manage all the agency mobile devices including authorizing their use and controlling the apps that can be downloaded and used on them. This admin can also set the security policies on all agency mobile devices connected to GWS.
--   Groups Admin: This admin has full rights to view profiles in the organizational and OU structures and can manage all rights for those members in the group.
+-   Mobile Admin: This admin has full rights to manage all of an agency's mobile devices including authorizing their use and controlling the apps that can be downloaded and used on them. This admin also can set the security policies on all agency mobile devices connected to GWS.
+-   Groups Admin: This admin has full rights to view profiles in the organizational and Organizational Unit (OU) structures and can manage all rights for members in the groups.
 
 ### Policies
 
 #### GWS.COMMONCONTROLS.6.1v0.5
-All administrative accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency's authoritative on-premises or federated identity system.
+All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication(MFA), not an agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last modified:_ January 2025
@@ -590,8 +590,8 @@ By changing the email address, the user resolves the conflict by ensuring that t
 #### GWS.COMMONCONTROLS.7.1v0.5
 Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed ones.
 
-- _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by workspace admins. By resolving conflicting accounts, you ensure all users in your workspace are using managed accounts.
-- _Last modified:_ January 2025
+- _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by Workspace admins. By resolving conflicting accounts, organizations can ensure all users in their Workspace are using managed accounts.
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - [T1136: Create Account](https://attack.mitre.org/techniques/T1136/)
@@ -625,7 +625,7 @@ To configure account conflict management per the policy:
 
 ## 8. Account Recovery Options
 
-This section addresses the Google Workspace account self-recovery feature. When enabled, this feature allows users to add a recovery email or phone number with which they can reset their own accounts if needed, without needing to contact a workspace admin for support.
+This section addresses the GWS account self-recovery feature. When enabled, this feature allows users to add a recovery email or phone number with which they can reset their own accounts if needed, without having to contact a Workspace admin for support.
 
 ### Policies
 
@@ -1076,11 +1076,11 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
 
 #### GWS.COMMONCONTROLS.14.2v0.5
-Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31.
+Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as directed by OMB M-21-31.
 
 - _Rationale:_ Audit logs may be unavailable when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
-- _Last modified:_ January 2024
-- _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets, for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies are free to use the tool that best fits their individual circumstances.
+- _Last modified:_ April 2025
+- _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies are free to use the tool that best fits their individual circumstances.
 
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -1239,10 +1239,10 @@ This section covers whether multiple super admins need to approve changes to spe
 ### Policies
 
 #### GWS.COMMONCONTROLS.17.1v0.5
-Require multi party approval for sensitive admin actions SHALL be enabled.
+Require multiparty approval for sensitive admin actions SHALL be enabled.
 
-- _Rationale_: Changes to sensitive admin settings, such as disabling 2-step verification, could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
-- _Last modified:_ June 2024
+- _Rationale_: Changes to sensitive admin settings such as disabling 2-step verification could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
+- _Last modified:_ April 2025
 
 - MITRE ATT&CK TTP Mapping
   - No TTP Mappings
@@ -1352,7 +1352,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 4. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **Global - Credit card number**. Select the remaining condition properties according to agency need.
     2. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
-    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
+    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number**. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
@@ -1365,7 +1365,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 4. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **Global - Credit card number**. Select the remaining condition properties according to agency need.
     2. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
-    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
+    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number**. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block**. Under **Select when this action should apply**, select **External Conversations**, **Spaces**, **Group chats**, and **1:1 chats** (See [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
@@ -1378,7 +1378,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 4. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **Global - Credit card number**. Select the remaining condition properties according to agency need.
     2. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
-    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number***. Select the remaining condition properties according to agency need.
+    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number**. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
 5. In the **Actions** section, select **Block message**. Under **Select when this action should apply**, check **Messages sent to external recipients** (See [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
