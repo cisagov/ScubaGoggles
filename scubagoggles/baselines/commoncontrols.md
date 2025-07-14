@@ -79,7 +79,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2), IA-5c, IA-5g, IA-2(8)
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -96,7 +96,7 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
 
 - _Rationale:_ This is a stopgap security policy to help protect the tenant if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk.
 - _Last modified:_ April 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -113,7 +113,7 @@ SMS or Voice as the MFA method SHALL NOT be used.
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
 - _Last modified:_ April 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7b, IA-5c
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -130,7 +130,7 @@ Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 
 
 - _Rationale:_ Enrollment must be enforced within a reasonable timeframe. One week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
 - _Last modified:_ April 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -147,7 +147,7 @@ Allow users to trust the device SHALL be disabled.
 
 - _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
 - _Last modified:_ February 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
   - [T1621: MFA Request Generation](https://attack.mitre.org/techniques/T1621/)
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -227,7 +227,7 @@ Policies restricting access to GWS based on signals about enterprise devices SHO
 - _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on user/device attributes.
 - _Last modified:_ July 2023
 - _Note:_ More granular controls may be used if the agency needs it.
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-3
 - MITRE ATT&CK TTP Mapping
   - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
     - [T1098:005: Account Manipulation: Device Registration](https://attack.mitre.org/techniques/T1098/005/)
@@ -299,7 +299,7 @@ Post-SSO verification SHOULD be enabled for users signing in using the SSO profi
 
 - _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -356,7 +356,7 @@ Users SHALL be forced to re-authenticate after an established 12-hour GWS login 
 
 - _Rationale:_ Allowing sessions to persist indefinitely allows users to bypass 2-Step Verification for future activity on that device. Limiting sessions to 12 hours may reduce the impact of session hijacking attacks and prevent users from inadvertently remaining logged in on unattended devices.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-11
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Material](https://attack.mitre.org/techniques/T1550/)
     - [T1550:004: Use Alternate Authentication Material: Web Session Cookie](https://attack.mitre.org/techniques/T1550/004/)
@@ -394,7 +394,7 @@ User password strength SHALL be enforced.
 - _Rationale:_ Weak passwords increase the risk of account compromise. Enforcing password strength adds an additional layer of defense, reducing the risk of account compromise.
  Strong password policies protect an organization by prohibiting the use of weak passwords.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5(1)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -406,7 +406,7 @@ User password length SHALL be at least 12 characters.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5(1)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -418,7 +418,7 @@ User password length SHOULD be at least 15 characters.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5(1)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -430,7 +430,7 @@ Password policy SHALL be enforced at next sign-in.
 
 - _Rationale:_ Unless the password policy is enforced at next login, a user could potentially operate indefinitely using a weak password. Enforcing the policy at next login helps ensure that all active user passwords meet current requirements.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5(1)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -442,7 +442,7 @@ User passwords SHALL NOT be reused.
 
 - _Rationale:_ Password reuse represents a significant security risk. Preventing password reuse when possible limits the scope of a compromised password.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5(1)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -454,7 +454,7 @@ User passwords SHALL NOT expire.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST), OMB, and Microsoft have published guidance indicating mandated periodic password changes make user accounts less secure. For example, OMB M-22-09 states, "Password policies must not require use of special characters or regular rotation."
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5(1)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -519,7 +519,7 @@ All administrative accounts SHALL leverage Google Account authentication with ph
 
 - _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(5)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -534,8 +534,7 @@ A minimum of **two** and maximum of **eight** separate and distinct super admin 
 - _Rationale:_ The super admin role provides unfettered access to the workspace. Properly managing the number of users with this level of access makes workspace compromise more challenging. However, having too few accounts can be problematic as it increases the risk of losing admin access entirely (e.g., if a super admin forgets their password); having between 2 and 4 balances these two concerns.
 - _Last modified:_ July 2023
 - _Note:_ Admin count does not include "break-glass" super admin accounts.
-
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(5)
 - MITRE ATT&CK TTP Mapping
   - [T1136: Create Account](https://attack.mitre.org/techniques/T1136/)
     - [T1136:003: Create Account: Cloud Account](https://attack.mitre.org/techniques/T1136/003/)
@@ -592,7 +591,7 @@ Account conflict management SHOULD be configured to replace conflicting unmanage
 
 - _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by Workspace admins. By resolving conflicting accounts, organizations can ensure all users in their Workspace are using managed accounts.
 - _Last modified:_ April 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2
 - MITRE ATT&CK TTP Mapping
   - [T1136: Create Account](https://attack.mitre.org/techniques/T1136/)
     - [T1136:003: Create Account: Cloud Account](https://attack.mitre.org/techniques/T1136/003/)
@@ -634,7 +633,7 @@ Account self-recovery for super admins SHALL be disabled.
 
 - _Rationale:_ If enabled, an adversary could attempt to gain access to a super admin account through the account recovery method. Disabling this feature forces super admins to contact another super admin to recover their account, making it more difficult for a potential adversary to compromise their account.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5d, IA-5g
 - MITRE ATT&CK TTP Mapping
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
@@ -644,7 +643,7 @@ Account self-recovery for users and non-super admins SHALL be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential adversary to compromise an account.
 - _Last modified:_ February 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5d, IA-5g
 - MITRE ATT&CK TTP Mapping
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
@@ -655,7 +654,7 @@ Ability to add recovery information SHOULD be disabled.
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding PII to their organizational account, making it more difficult for a potential adversary to steal PII in the event of a compromise.
 - _Last modified:_ February 2025
 - _Note:_ This setting doesn’t apply if you’re using single sign-on (SSO) with a third-party identity provider or Password Sync.
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
@@ -715,7 +714,7 @@ Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Prog
 
 - _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2), IA-5c, IA-5d, IA-5g, SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -730,7 +729,7 @@ All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection 
 - _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - _Last modified:_ July 2023
 - _Note:_ This control enforces more secure protection of sensitive user accounts from targeted attacks. Sensitive user accounts include political appointees, Senior Executive Service (SES) officials, or other senior officials whose account compromise would pose a level of risk prohibitive to agency mission fulfillment
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2), IA-5c, IA-5d, IA-5g, SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -772,7 +771,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
 
 - _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
     - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
@@ -786,7 +785,7 @@ Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 
 - _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with policy 10.1.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
     - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
@@ -800,7 +799,7 @@ Agencies SHALL NOT trust unconfigured internal apps.
 
 - _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
     - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
@@ -814,7 +813,7 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 - _Rationale:_ External apps may contain vulnerabilities and malicious content. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
   - [T1550: Use Alternate Authentication Materials](https://attack.mitre.org/techniques/T1550/)
     - [T1550:001: Use Alternate Authentication Materials: Application Access Token](https://attack.mitre.org/techniques/T1550/001/)
@@ -828,7 +827,7 @@ Access to Google Workspace applications by less secure apps that do not meet sec
 
 - _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
@@ -905,7 +904,7 @@ Only approved Google Workspace Marketplace applications SHALL be allowed for ins
 
 - _Rationale:_ Marketplace apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
 - _Last modified:_ October 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
     - [T1195:002: Supply Chain Compromise: Compromise Software Supply Chain](https://attack.mitre.org/techniques/T1195/002/)
@@ -947,7 +946,7 @@ Google Takeout services SHALL be disabled.
 
 - _Rationale:_ Google Takeout is a service that allows you to download a copy of your data stored within 40+ Google products and services, including data from Gmail, Drive, Photos, and Calendar. While there may be a valid use case for individuals to back up their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
@@ -1017,7 +1016,7 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
 - _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
 - _Last modified:_ January 2025
 - _Note:_ Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4(5)
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
     - [T1562:001: Impair Defenses: Disable or Modify Tools](https://attack.mitre.org/techniques/T1562/001/)
@@ -1070,7 +1069,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 
 - _Rationale:_ This policy enhances security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids agency compliance with applicable law and binding policy and helps maintain the confidentiality, integrity, and availability of the agency's information systems.
 - _Last modified:_ July 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4(5)
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
@@ -1081,7 +1080,7 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 - _Rationale:_ Audit logs may be unavailable when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
 - _Last modified:_ April 2025
 - _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies are free to use the tool that best fits their individual circumstances.
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-11
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
@@ -1126,7 +1125,7 @@ The data storage region SHALL be set to be the United States for all users in th
 
 - _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential foreign adversaries to compromise the data.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
     - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
@@ -1138,7 +1137,7 @@ Data SHALL be processed in the region selected for data at rest.
 
 - _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591/)
     - [T1591:001: Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
@@ -1186,7 +1185,7 @@ Service status for Google services that do not have an individual control SHOULD
 
 - _Rationale_: Allowing access to additional google services without a need may create unnecessary vulnerabilities within the Google Workspace environment. By turning these services off, it mitigates the risk by not allowing access.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
@@ -1200,7 +1199,7 @@ User access to Early Access apps SHOULD be disabled.
 
 - _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
   - [T1204: User Execution](https://attack.mitre.org/techniques/T1204/)
@@ -1243,7 +1242,7 @@ Require multiparty approval for sensitive admin actions SHALL be enabled.
 
 - _Rationale_: Changes to sensitive admin settings such as disabling 2-step verification could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
 - _Last modified:_ April 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
 - MITRE ATT&CK TTP Mapping
   - No TTP Mappings
 
@@ -1279,7 +1278,7 @@ A custom policy SHALL be configured for Google Drive to protect PII and sensitiv
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -1292,7 +1291,7 @@ A custom policy SHALL be configured for Google Chat to protect PII and sensitive
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -1304,7 +1303,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -1318,7 +1317,7 @@ The action for the above DLP policies SHOULD be set to block external sharing.
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)

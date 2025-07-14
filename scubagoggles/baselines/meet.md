@@ -44,7 +44,7 @@ Meeting access SHOULD be restricted to users signed in with a Google Account or 
 - _Rationale:_ Allowing users not signed-in to join meetings diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring all users to sign-in.
 - _Last modified:_ June 2023
 - _Note:_ There is a related configuration option shown to the meeting organizer within Google Meet itself, called "Meeting access type." The setting in the admin center restricts at the org-level the types of users able to join meetings. The setting shown to the meeting organizer allows the organizer to specify who, of those permitted to join meetings by the org-wide setting, must ask to join their meeting. This baseline only provides guidance on the org-wide setting; the per-meeting setting MAY be set as each agency sees fit.
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2, IA-8
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
@@ -83,7 +83,7 @@ Meeting access SHALL be disabled for meetings created by users who are not membe
 
 - _Rationale:_ Contact with unmanaged users can pose the risk of data leakage and other security threats. This policy reduces such contact by not allowing agency users to join meetings created by users' personal accounts.
 - _Last modified:_ September 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
   - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
@@ -123,7 +123,7 @@ Host Management meeting features SHALL be enabled.
 
 - _Rationale:_ With host management disabled, any internal participant is able to take control of meetings, performing actions such as recording the meeting, disabling or enabling the chat, and ending the meeting. When enabled, these options are only available to meeting hosts.
 - _Last modified:_ January 2024
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1562:001: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
     - [T1562:001: Impair Defenses: Disable or Modify Tools](https://attack.mitre.org/techniques/T1562/001/)
@@ -163,7 +163,7 @@ Warn for external participants SHALL be enabled.
 
 - _Rationale:_ Users may inadvertently include external users or not be aware that external users are present. When enabled, external or unidentified participants in a meeting are given a label. This increases situational awareness amongst meeting participants and can help prevent inadvertent data leakage.
 - _Last modified:_ September 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-15
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -204,7 +204,7 @@ Incoming calls SHALL be restricted to contacts and other users in the organizati
 
 - _Rationale:_ Calls could potentially be used to pass sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ March 2024
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8, SC-15a
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -243,7 +243,7 @@ Automatic recordings for Google Meet SHALL be disabled.
 - _Rationale:_ Automatic recordings could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024
 - _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1123: Audio Capture](https://attack.mitre.org/techniques/T1123/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
@@ -255,7 +255,7 @@ Automatic transcripts for Google Meet SHALL be disabled.
 - _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024
 - _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
