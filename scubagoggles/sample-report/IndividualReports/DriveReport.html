@@ -23,6 +23,7 @@
     --toggle-width: 46px;
     --toggle-radius: 18px;
     --unvisited-link-color: #0000EE;
+    --uuid-color: #424242;
 }
 
 body {
@@ -154,46 +155,79 @@ a.control_group:active {
     color: var(--link-color);
     text-decoration: none;
 }
-</style>
+
+hr {
+    margin: 0.5em;
+    margin-top: 3em;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 50%;
+    text-align: center;
+    margin: auto;
+    font-size: 12px;
+    padding-bottom: 1.5em;
+}</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
  */
 const colorRows = () => {
     let rows = document.querySelectorAll('tr');
-    const requirementCol = 1
+    // consts for the generic results rows
+    const requirementCol = 1;
     const statusCol = 2;
     const criticalityCol = 3;
+
+    // const for the alerts rows
+    const alertStatusCol = 2;
+
     for (let i = 0; i < rows.length; i++) {
         try {
-            if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
-                rows[i].style.color = "var(--test-deleted-color)";
-                rows[i].style.background = "var(--test-other)";
+            if (rows[i].children.length == 3) {
+                // This row is in the Alerts table
+                if (rows[i].children[alertStatusCol].innerHTML === "Enabled") {
+                    rows[i].style.background = "var(--test-pass)";
+                }
+                else if (rows[i].children[alertStatusCol].innerHTML === "Disabled") {
+                    rows[i].style.background = "var(--test-fail)";
+                }
+                else if (rows[i].children[alertStatusCol].innerHTML === "Unknown") {
+                    rows[i].style.background = "var(--test-other)";
+                }
             }
-            else if (rows[i].children[statusCol].innerHTML === "Fail") {
-                rows[i].style.background = "var(--test-fail)";
-            }
-            else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[statusCol].innerHTML === "Warning") {
-                rows[i].style.background = "var(--test-warning)";
-            }
-            else if (rows[i].children[statusCol].innerHTML === "Pass") {
-                rows[i].style.background = "var(--test-pass)";
-            }
-            else if (rows[i].children[statusCol].innerHTML === "Omitted") {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
-                rows[i].style.background = "var(--test-other)";
-            }
-            else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
-                rows[i].style.background = "var(--test-fail)";
-                rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
-                rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
+            else {
+                // This row is in one of the generic results rows
+                if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
+                    rows[i].style.color = "var(--test-deleted-color)";
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Fail") {
+                    rows[i].style.background = "var(--test-fail)";
+                }
+                else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Warning") {
+                    rows[i].style.background = "var(--test-warning)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Pass") {
+                    rows[i].style.background = "var(--test-pass)";
+                }
+                else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
+                    rows[i].style.background = "var(--test-other)";
+                }
+                else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
+                    rows[i].style.background = "var(--test-fail)";
+                    rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
+                    rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
+                }
             }
         }
         catch (error) {
@@ -219,8 +253,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </header>
             <h1>Google Drive and Docs Baseline Report</h1>
             
-            <table style = "text-align:center;"><tr><th>Customer Domain</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>example.org</td><td>02/10/2025 09:39:56 Pacific Daylight Time</td><td>v0.4</td><td>v0.4.0</td></tr></table>
-            <h2>DRIVEDOCS-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/drive.md#1-Sharing-Outside-the-Organization" target="_blank">Sharing Outside the Organization</a></h2><table>
+            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/26/2025 16:02:22 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
+            <h2>DRIVEDOCS-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/drive.md#1-Sharing-Outside-the-Organization" target="_blank">Sharing Outside the Organization</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -232,63 +266,63 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.1.1v0.4</td>
+      <td>GWS.DRIVEDOCS.1.1v0.5</td>
       <td>Agencies SHOULD disable sharing outside of the organization&#x27;s domain.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Files owned by users or shared drives can be shared outside of the organization</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Files owned by users or shared drives can be shared outside of the organization</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.2v0.4</td>
+      <td>GWS.DRIVEDOCS.1.2v0.5</td>
       <td>Agencies SHOULD disable users&#x27; receiving files from outside of the organization&#x27;s domain.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.3v0.4</td>
+      <td>GWS.DRIVEDOCS.1.3v0.5</td>
       <td>Warnings SHALL be enabled when a user is attempting to share something outside the domain.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.4v0.4</td>
+      <td>GWS.DRIVEDOCS.1.4v0.5</td>
       <td>If sharing outside of the organization, then agencies SHALL disable sharing of files with individuals who are not using a Google account.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.5v0.4</td>
+      <td>GWS.DRIVEDOCS.1.5v0.5</td>
       <td>Agencies SHALL disable making files and published web content visible to anyone with the link.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Published web content can be made visible to anyone with a link</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Published web content can be made visible to anyone with a link</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.6v0.4</td>
+      <td>GWS.DRIVEDOCS.1.6v0.5</td>
       <td>Agencies SHALL set access checking to recipients only.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.7v0.4</td>
-      <td>Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organization.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Anyone can distribute content outside of the organization</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Glenn Mahoney's OU: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li><li>Cool Example Org: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.1.8v0.4</td>
-      <td>Agencies SHALL set newly created items to have Private to the Owner as the default level of access.</td>
+      <td>GWS.DRIVEDOCS.1.7v0.5</td>
+      <td>Agencies SHALL NOT allow any users to distribute content from an organization-owned shared drive to shared drives owned by another organization.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
+    <tr>
+      <td>GWS.DRIVEDOCS.1.8v0.5</td>
+      <td>Agencies SHALL set newly created items to have Private to the Owner as the default level of access.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>The following OUs are non-compliant:<ul><li>Glenn Mahoney's OU: When users create items, the default access is set to: the primary target audience can search and find the item.</li></ul></td>
+    </tr>
   </tbody>
-</table><h2>DRIVEDOCS-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/drive.md#2-Shared-Drive-Creation" target="_blank">Shared Drive Creation</a></h2><table>
+</table><h2>DRIVEDOCS-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/drive.md#2-Shared-Drive-Creation" target="_blank">Shared Drive Creation</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -300,35 +334,35 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.2.1v0.4</td>
+      <td>GWS.DRIVEDOCS.2.1v0.5</td>
       <td>Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.2.2v0.4</td>
+      <td>GWS.DRIVEDOCS.2.2v0.5</td>
       <td>Agencies SHOULD NOT allow users outside of their organization to access files in shared drives.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.DRIVEDOCS.2.3v0.4</td>
+      <td>GWS.DRIVEDOCS.2.3v0.5</td>
       <td>Agencies SHALL allow users who are not shared drive members to be added to files.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name: Users who aren't shared drive members are not allowed to be added to files.</li></ul></td>
-    </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.2.4v0.4</td>
-      <td>Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
+    <tr>
+      <td>GWS.DRIVEDOCS.2.4v0.5</td>
+      <td>Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>The following OUs are non-compliant:<ul><li>Glenn Mahoney's OU: Viewers and commenters are allowed to download, print, and copy files.</li></ul></td>
+    </tr>
   </tbody>
-</table><h2>DRIVEDOCS-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/drive.md#3-Security-Updates-for-Files" target="_blank">Security Updates for Files</a></h2><table>
+</table><h2>DRIVEDOCS-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/drive.md#3-Security-Updates-for-Files" target="_blank">Security Updates for Files</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -340,14 +374,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.3.1v0.4</td>
+      <td>GWS.DRIVEDOCS.3.1v0.5</td>
       <td>Agencies SHALL enable the security update for Drive files.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/drive.md#4-Drive-SDK" target="_blank">Drive SDK</a></h2><table>
+</table><h2>DRIVEDOCS-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/drive.md#4-Drive-SDK" target="_blank">Drive SDK</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -359,14 +393,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.4.1v0.4</td>
+      <td>GWS.DRIVEDOCS.4.1v0.5</td>
       <td>Agencies SHOULD disable Drive SDK access.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/drive.md#5-User-Installation-of-Drive-and-Docs-Add-Ons" target="_blank">User Installation of Drive and Docs Add-Ons</a></h2><table>
+</table><h2>DRIVEDOCS-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/drive.md#5-User-Installation-of-Drive-and-Docs-Add-Ons" target="_blank">User Installation of Drive and Docs Add-Ons</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -378,14 +412,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.5.1v0.4</td>
+      <td>GWS.DRIVEDOCS.5.1v0.5</td>
       <td>Agencies SHALL disable Add-Ons.</td>
       <td>Pass</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>Requirement met in all OUs and groups.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-6 <a href="https://github.com/cisagov/scubagoggles/blob/v0.4.0/scubagoggles/baselines/drive.md#6-Drive-for-Desktop" target="_blank">Drive for Desktop</a></h2><table>
+</table><h2>DRIVEDOCS-6 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/drive.md#6-Drive-for-Desktop" target="_blank">Drive for Desktop</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -397,14 +431,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.DRIVEDOCS.6.1v0.4</td>
+      <td>GWS.DRIVEDOCS.6.1v0.5</td>
       <td>Google Drive for Desktop SHOULD be enabled only for authorized devices.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Org Name (group "Justin Cooper"): Drive for Desktop is enabled and can be used on any device.</li><li>Org Name (group "Aaron Smith"): Drive for Desktop is enabled and can be used on any device.</li><li>Org Name (group "Security Group"): Drive for Desktop is enabled and can be used on any device.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org (group "Dr. John Meza's group"): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group "Christina Nelson's group"): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group "Andrew Lawson's group"): Drive for Desktop is enabled and can be used on any device.</li></ul></td>
     </tr>
   </tbody>
 </table>
+            
         </main>
     </body>
 </html>

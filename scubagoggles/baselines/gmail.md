@@ -736,7 +736,7 @@ This section determines whether Google Workspace Sync allows data synchronizatio
 Google Workspace Sync SHOULD be disabled.
 
 - _Rationale:_ Enabling Google Workspace Sync could potentially expose sensitive agency or organization data to unauthorized access or loss, posing a security risk. By disabling Google Workspace Sync, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 2023
+- _Last modified:_ April 2025
 - _Note:_ Google Workspace Sync MAY be enabled on a per-user basis as needed.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
@@ -760,7 +760,7 @@ Google Workspace Sync SHOULD be disabled.
 To configure the settings for Google Workspace Sync:
 
 #### GWS.GMAIL.10.1v0.5 Instructions
-1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
+1.  Sign in to the [Google Admin console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
 3.  Select **End User Access -\> Google Workspace Sync**.
 4.  Uncheck the **Enable Google Workspace Sync for Microsoft Outlook for my users** checkbox.

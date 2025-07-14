@@ -1,0 +1,84 @@
+Control ID,Requirement,Result,Criticality,Details,OmittedEvaluationResult,OmittedEvaluationDetails,Non-Compliance Reason,Remediation Completion Date,Justification
+GWS.CALENDAR.1.1v0.5,External Sharing Options for Primary Calendars SHALL be configured to &quot;Only free/busy information (hide event details).&quot;,Fail,Shall,"The following OUs are non-compliant: 
+- Cool Example Org (group ""Jesse Reynolds's group""): External sharing options for primary calendars is set to: Share all information, and allow managing of calendars",N/A,N/A, , , 
+GWS.COMMONCONTROLS.1.1v0.5,Phishing-Resistant MFA SHALL be required for all users.,Fail,Shall,"The following OUs are non-compliant: 
+- 2SV Exempt: Allowed 2-step verification (2SV) method is set to ""Any"". 
+- Alicia Williams's OU: 2-step verification (2SV) is not enforced. 
+- Cool Example Org: Allowed 2-step verification (2SV) method is set to ""Any"". 
+- Cool Example Org (group ""James Harris's group""): Allowed 2-step verification (2SV) method is set to ""Any"". 
+- Yvette Wright's OU (in Alicia Williams's OU): Allowed 2-step verification (2SV) method is set to ""Any except verification codes via text, phone call"". 
+- Joshua Green's OU: Users cannot enable 2-step verification (2SV). 
+- Patricia Johnson's OU (test): Allowed 2-step verification (2SV) method is set to ""Any"".",N/A,N/A, , , 
+GWS.COMMONCONTROLS.1.2v0.5,"If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL be enforced for all users.",Fail,Shall,"The following OUs are non-compliant: 
+- 2SV Exempt: 2-step verification (2SV) is not enforced. 
+- Zachary Moore's OU: 2-step verification (2SV) is not enforced. 
+- Aaron Jackson's OU: Users cannot enable 2-step verification (2SV).",N/A,N/A, , , 
+GWS.COMMONCONTROLS.1.3v0.5,SMS or Voice as the MFA method SHALL NOT be used.,Fail,Shall,"The following OUs are non-compliant: 
+- 2SV Exempt: Verification codes via text and phone call allowed. 
+- Charles Wright's OU: 2-step verification (2SV) is not enforced. 
+- Cool Example Org: Verification codes via text and phone call allowed. 
+- Cool Example Org (group ""Michael Howard's group""): Verification codes via text and phone call allowed. 
+- Jerome Warren's OU: Users cannot enable 2-step verification (2SV). 
+- Whitney Jones's OU (test): Verification codes via text and phone call allowed.",N/A,N/A, , , 
+GWS.COMMONCONTROLS.1.4v0.5,Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.,Fail,Shall,"The following OUs are non-compliant: 
+- 2SV Exempt: New user enrollment period is NONE 
+- Cool Example Org (group ""Jody Johnson's group""): New user enrollment period is NONE 
+- Paul Smith's OU: New user enrollment period 14 days (longer than 7 days)",N/A,N/A, , , 
+GWS.COMMONCONTROLS.1.5v0.5,Allow users to trust the device SHALL be disabled.,Fail,Shall,"The following OUs are non-compliant: 
+- 1-1-1-1 (in Kelly Holland's OU): User is allowed to trust device. 
+- 1-1-1-1 (in Kelly Holland's OU) (group ""Tracy Cline's group""): User is allowed to trust device. 
+- 2SV Exempt: User is allowed to trust device. 
+- Cool Example Org: User is allowed to trust device. 
+- Cool Example Org (group ""Leslie Duke's group""): User is allowed to trust device. 
+- Sarah Garcia's OU (in Kelly Holland's OU): User is allowed to trust device. 
+- James Rodriguez's OU (test): User is allowed to trust device.",N/A,N/A, , , 
+GWS.COMMONCONTROLS.4.1v0.5,Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.,Fail,Shall,"The following OUs are non-compliant: 
+- Jeanette Pierce's OU (test): Web session duration: 20 hours",N/A,N/A, , , 
+GWS.COMMONCONTROLS.5.2v0.5,User password length SHALL be at least 12 characters.,Fail,Shall,"The following OUs are non-compliant: 
+- 1-1-1-1 (in 1/1-1/1-1-1): Minimum password length: 8, less than 12",N/A,N/A, , , 
+GWS.COMMONCONTROLS.5.4v0.5,Password policy SHALL be enforced at next sign-in.,Fail,Shall,"The following OUs are non-compliant: 
+- 1-1-1-1 (in 1/1-1/1-1-1): Enforce password policy at next sign-in is OFF 
+- Cool Example Org: Enforce password policy at next sign-in is OFF 
+- Travis Love MD's OU: Enforce password policy at next sign-in is OFF",N/A,N/A, , , 
+GWS.COMMONCONTROLS.5.5v0.5,User passwords SHALL NOT be reused.,Fail,Shall,"The following OUs are non-compliant: 
+- Jennifer Watkins's OU: Allow password reuse is ON",N/A,N/A, , , 
+GWS.COMMONCONTROLS.5.6v0.5,User passwords SHALL NOT expire.,Fail,Shall,"The following OUs are non-compliant: 
+- Albert Ramirez's OU: Password reset frequency is 30 days",N/A,N/A, , , 
+GWS.COMMONCONTROLS.6.2v0.5,A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.,Fail,Shall,"The following Dana Adkins's OU are configured: zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org, zjohnson@example.org. <i>Note: Exceptions are allowed for ""break glass"" super admin accounts. ""Break glass"" accounts can be specified in a config file. 3 break glass accounts are currently configured.<i>",N/A,N/A, , , 
+GWS.COMMONCONTROLS.8.2v0.5,Account self-recovery for users and non-Michael Anderson's OU SHALL be disabled.,Fail,Shall,"The following OUs are non-compliant: 
+- Cool Example Org: Users and non-Jeremy May's OU are allowed to recover their accounts.",N/A,N/A, , , 
+GWS.COMMONCONTROLS.10.2v0.5,Agencies SHALL NOT allow users to consent to access to low-risk scopes.,Fail,Shall,"The following services allow access: CALENDAR.
+
+Warning: log-based check. See documentation in ScubaGoggles GitHub repository for limitations.",N/A,N/A, , , 
+GWS.COMMONCONTROLS.10.4v0.5,Agencies SHALL NOT allow users to access unconfigured third-party apps.,Fail,Shall,"The following OUs are non-compliant: 
+- Gregory Moreno's OU: Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google. Warning: log-based check. See documentation in ScubaGoggles GitHub repository for limitations.",N/A,N/A, , , 
+GWS.COMMONCONTROLS.11.1v0.5,Only approved Google Workspace Marketplace applications SHALL be allowed for installation.,Fail,Shall,"The following OUs are non-compliant: 
+- Cool Example Org: Users can install and run any internal app, even if it's not allowlisted.",N/A,N/A, , , 
+GWS.COMMONCONTROLS.12.1v0.5,Google Takeout services SHALL be disabled.,Fail,Shall,"The following OUs are non-compliant: 
+- Joy Whitney's OU: The following apps with individual admin control have Takeout enabled: YouTube 
+- Cool Example Org: Takeout is enabled for services without an individual admin control. 
+- Cool Example Org: The following apps with individual admin control have Takeout enabled: Blogger, Google Books",N/A,N/A, , , 
+GWS.COMMONCONTROLS.17.1v0.5,Require multi party approval for sensitive admin actions SHALL be enabled.,Fail,Shall,"The following OUs are non-compliant: 
+- Cool Example Org: Require multi party approval for sensitive admin actions is DISABLED Warning: log-based check. See documentation in ScubaGoggles GitHub repository for limitations.",N/A,N/A, , , 
+GWS.DRIVEDOCS.1.5v0.5,Agencies SHALL disable making files and published web content visible to anyone with the link.,Fail,Shall,"The following OUs are non-compliant: 
+- Cool Example Org: Published web content can be made visible to anyone with a link",N/A,N/A, , , 
+GWS.DRIVEDOCS.1.6v0.5,Agencies SHALL set access checking to recipients only.,Fail,Shall,"The following OUs are non-compliant: 
+- Misty Franklin's OU: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required) 
+- Cool Example Org: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)",N/A,N/A, , , 
+GWS.DRIVEDOCS.1.8v0.5,Agencies SHALL set newly created items to have Private to the Owner as the default level of access.,Fail,Shall,"The following OUs are non-compliant: 
+- Sean Green's OU: When users create items, the default access is set to: the primary target audience can search and find the item.",N/A,N/A, , , 
+GWS.DRIVEDOCS.2.4v0.5,"Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.",Fail,Shall,"The following OUs are non-compliant: 
+- Brian Marshall's OU: Viewers and commenters are allowed to download, print, and copy files.",N/A,N/A, , , 
+GWS.GMAIL.3.1v0.5,An SPF policy SHALL be published for each domain that fails all non-approved senders.,Fail,Shall,"2 of 2 agency domain(s) found in violation: example.org, fisher.com.",N/A,N/A, , , 
+GWS.GMAIL.4.1v0.5,A DMARC policy SHALL be published for every second-level domain.,Fail,Shall,1 of 2 agency domain(s) found in violation: example.org.,N/A,N/A, , , 
+GWS.GMAIL.4.2v0.5,The DMARC message rejection option SHALL be p=reject.,Fail,Shall,1 of 2 agency domain(s) found in violation: example.org.,N/A,N/A, , , 
+GWS.GMAIL.4.3v0.5,The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.,Fail,Shall,1 of 2 agency domain(s) found in violation: example.org.,N/A,N/A, , , 
+GWS.GMAIL.7.6v0.5,Emails flagged by the above spoofing and authentication controls SHALL NOT be kept in inbox.,Fail,Shall,"The following OUs are non-compliant: 
+- Cool Example Org: domain, domain name, employee name, groups, unauthenticated spoof emails not removed from inbox",N/A,N/A, , , 
+GWS.GMAIL.9.1v0.5,POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.,Fail,Shall,"The following OUs are non-compliant: 
+- Patrick Wallace's OU: IMAP and POP access are enabled 
+- Cool Example Org: IMAP and POP access are enabled",N/A,N/A, , , 
+GWS.GMAIL.13.1v0.5,Unintended external reply warnings SHALL be enabled.,Fail,Shall,"The following OUs are non-compliant: 
+- Cool Example Org: Warn for external participants is set to disabled Warning: log-based check. See documentation in ScubaGoggles GitHub repository for limitations.",N/A,N/A, , , 
+GWS.GMAIL.15.1v0.5,Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.,Fail,Shall,"The following OUs are non-compliant: 
+- Cool Example Org: Enhanced pre-delivery message scanning is disabled",N/A,N/A, , , 
