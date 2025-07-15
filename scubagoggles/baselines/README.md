@@ -1,6 +1,7 @@
 Individual baselines can be visited directly at the links below:
 
 - [Common Controls](commoncontrols.md)
+- [Gemini](gemini.md)
 - [Gmail](gmail.md)
 - [Google Calendar](calendar.md)
 - [Google Chat](chat.md)

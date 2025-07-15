@@ -1,6 +1,7 @@
 Individual baselines can be visited directly at the links below:
 
 - [Common Controls](/scubagoggles/baselines/commoncontrols.md)
+- [Gemini](/scubagoggles/baselines/gemini.md)
 - [Gmail](/scubagoggles/baselines/gmail.md)
 - [Google Calendar](/scubagoggles/baselines/calendar.md)
 - [Google Chat](/scubagoggles/baselines/chat.md)
