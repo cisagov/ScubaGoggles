@@ -36,8 +36,9 @@ options:
                         credentials path has been saved using the ScubaGoggles setup utility.
   --baselines <baseline> [<baseline> ...], -b <baseline> [<baseline> ...]
                         A list of one or more abbreviated GWS baseline names that the tool will assess. Defaults to all
-                        baselines. Choices: calendar, chat, classroom, commoncontrols, drive, gmail, groups, meet,
-                        rules, sites
+                        baselines. Choices: calendar, chat, classroom, commoncontrols, drive, gemini gmail, groups,
+                        meet, rules, sites.
+
   --outputpath <directory>, -o <directory>
                         The folder path where both the output JSON & HTML report will be created.
   --outjsonfilename <output-JSON-file>

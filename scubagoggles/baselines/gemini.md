@@ -30,7 +30,7 @@ In General, user Gemini data for Workspace users is protected by the Google Work
 However, there are a few exceptions to this that necessitate restricting Gemini access in some cases,
 detailed in the following policies.
 
-### Policy
+### Policies
 
 #### GWS.GEMINI.1.1v0.5
 Gemini app user access SHALL be set to OFF for everyone without a license.
@@ -44,9 +44,21 @@ allowing user access to Gemini under any license creates the risk of data leakag
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
+#### GWS.GEMINI.1.2v0.5
+Gemini access to other Google apps SHALL be disabled.
+
+
+- _Rationale:_ Allowing Gemini access to other Google apps increases the risk of data leakage as
+the data for additional services are not covered by the organization's Google Workspace agreement.
+- _Last modified:_ July 2025
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
 ### Resources
 -   [Turn the Gemini app on or off](https://support.google.com/a/answer/14571493)
 -   [Google Workspace Terms of Service](https://workspace.google.com/terms/premier_terms/)
+-   [Turn Google apps in Gemini on or off](https://support.google.com/a/answer/15293691)
 
 ### Prerequisites
 
@@ -60,27 +72,6 @@ allowing user access to Gemini under any license creates the risk of data leakag
 3.  Select **User Access**.
 4.  Ensure **Allow all users to access the Gemini app, regardless of license** is **Unchecked**.
 5.  Select **Save**.
-
-
-#### GWS.GEMINI.1.2v0.5
-Gemini access to other Google apps SHALL be disabled.
-
-
-- _Rationale:_ Allowing Gemini access to other Google apps increases the risk of data leakage as
-the data for additional services are not covered by the organization's Google Workspace agreement.
-- _Last modified:_ July 2025
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-### Resources
--   [Turn Google apps in Gemini on or off](https://support.google.com/a/answer/15293691)
-
-### Prerequisites
-
--   None
-
-### Implementation
 
 #### GWS.GEMINI.1.2v0.5 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
@@ -99,6 +90,8 @@ Note that Alpha features in Gemini are subject to the Pre-General Availability
 Offering Terms (excluding Section 6.1(b)) of the Google Workspace Service
 Specific Terms. Section 6.1(d) prohibits government customers from using live or
 production data in connection with Pre-GA Offerings.
+
+### Policies
 
 #### GWS.GEMINI.2.1v0.5
 Alpha Gemini features SHALL be disabled.
