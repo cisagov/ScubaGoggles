@@ -30,6 +30,7 @@ NonCompliantOUs contains {
     "Value": GeminiNonCompDetails[data.ControlID]
 } if {
     some OU in utils.OUsWithEvents
+    GeminiEnabled(OU)
     Events := utils.FilterEventsOU(LogEvents, GeminiSettings[data.ControlID], OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
@@ -44,12 +45,16 @@ NonCompliantGroups contains {
     Events := utils.FilterEventsGroup(LogEvents, GeminiSettings[data.ControlID], Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
+    GeminiEnabled(LastEvent.OrgUnit)
     LastEvent.NewValue == "true"
 }
 
 tests contains {
     "PolicyId": ControlID,
-    "Prerequisites": ["reports/v1/activities/list"],
+    "Prerequisites": [
+        "reports/v1/activities/list",
+        "policy/gemini_app_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
@@ -65,7 +70,10 @@ if {
 
 tests contains {
     "PolicyId": ControlID,
-    "Prerequisites": ["reports/v1/activities/list"],
+    "Prerequisites": [
+        "reports/v1/activities/list",
+        "policy/gemini_app_service_status.serviceState"
+    ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(OUs, Groups),
     "ActualValue": {"NonCompliantOUs": OUs, "NonCompliantGroups": Groups},
