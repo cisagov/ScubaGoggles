@@ -8,7 +8,7 @@ GoodGroupsApi02 := {
     "policies": {
         "topOU": {
             "groups_for_business_groups_sharing": {
-                "ownersCanAllowExternalMembers": false
+                "createGroupsAccessLevel": "ADMIN_ONLY"
             },
             "groups_for_business_service_status": {"serviceState": "ENABLED"}
         },
@@ -29,9 +29,14 @@ BadGroupsApi02 := {
     "policies": {
         "topOU": {
             "groups_for_business_groups_sharing": {
-                "ownersCanAllowExternalMembers": true
+                "createGroupsAccessLevel": "USERS_IN_DOMAIN"
             },
             "groups_for_business_service_status": {"serviceState": "ENABLED"}
+        },
+        "nextOU": {
+            "groups_for_business_groups_sharing": {
+                "createGroupsAccessLevel": "ANYONE_CAN_CREATE"
+            }
         }
     },
     "tenant_info": {
@@ -39,18 +44,20 @@ BadGroupsApi02 := {
     }
 }
 
-test_GroupsAPI_ExternalAccess_Correct_1 if {
+test_GroupsAPI_Creator_Correct_1 if {
     PolicyId := GroupsId2_1
     Output := tests with input as GoodGroupsApi02
 
     PassTestResult(PolicyId, Output)
 }
 
-test_GroupsAPI_ExternalAccess_Incorrect_1 if {
+test_GroupsAPI_Creator_Incorrect_1 if {
     PolicyId := GroupsId2_1
     Output := tests with input as BadGroupsApi02
 
-    failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage2_1("Yes")}]
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage2_1("Any user")},
+                 {"Name": "topOU",
+                 "Value": NonComplianceMessage2_1("Users in your domain only")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
