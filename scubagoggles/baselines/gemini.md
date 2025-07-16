@@ -35,9 +35,9 @@ detailed in the following policies.
 #### GWS.GEMINI.1.1v0.5
 Gemini app user access SHALL be set to OFF for everyone without a license.
 
-- _Rationale:_ While Google Workspace supports allowing users to access Gemini regardless of license,
-only the data for users with the appropriate license will be protected by the Google Workspace Terms of Service.
-Data for users without the appropriate license can be used to improve generative AI models; as such,
+- _Rationale:_ Only Gemini data for users with the appropriate license will be
+protected by the Google Workspace Terms of Service. Data for users without the
+appropriate license can be used to improve Google's generative AI models; as such,
 allowing user access to Gemini under any license creates the risk of data leakage.
 - _Last modified:_ July 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
@@ -47,9 +47,10 @@ allowing user access to Gemini under any license creates the risk of data leakag
 #### GWS.GEMINI.1.2v0.5
 Gemini access to other Google apps SHALL be disabled.
 
-
-- _Rationale:_ Allowing Gemini access to other Google apps increases the risk of data leakage as
-the data for additional services are not covered by the organization's Google Workspace agreement.
+- _Rationale:_ This setting controls whether Google services outside of the Google
+Workspace core services are available to users in the Gemini app. These services
+are not covered by the Google Workspace agreement. As such, restricting Gemini
+access to these apps reduces the risk of data leakage.
 - _Last modified:_ July 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -57,8 +58,8 @@ the data for additional services are not covered by the organization's Google Wo
 
 ### Resources
 -   [Turn the Gemini app on or off](https://support.google.com/a/answer/14571493)
--   [Google Workspace Terms of Service](https://workspace.google.com/terms/premier_terms/)
 -   [Turn Google apps in Gemini on or off](https://support.google.com/a/answer/15293691)
+-   [Google Workspace Terms of Service](https://workspace.google.com/terms/premier_terms/)
 
 ### Prerequisites
 
@@ -83,8 +84,8 @@ the data for additional services are not covered by the organization's Google Wo
 
 
 ## 2. Alpha Gemini features
-Google Workspace permits admins to enable access to Gemini Alpha features before
-they're made generally available.
+Google Workspace permits admins to restrict or enable access to Gemini Alpha features
+before they're made generally available.
 
 Note that Alpha features in Gemini are subject to the Pre-General Availability
 Offering Terms (excluding Section 6.1(b)) of the Google Workspace Service
