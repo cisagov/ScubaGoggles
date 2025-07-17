@@ -8,20 +8,17 @@ LogEvents := utils.GetEvents("gemini_logs")
 GeminiEnabled(orgunit) := utils.AppEnabled(input.policies, "gemini_app", orgunit)
 
 GeminiId1_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.1.1")
-GeminiId1_2 := utils.PolicyIdWithSuffix("GWS.GEMINI.1.2")
 GeminiId2_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.2.1")
 
-ControlIDs := [GeminiId1_1, GeminiId1_2, GeminiId2_1]
+ControlIDs := [GeminiId1_1, GeminiId2_1]
 
 GeminiSettings := {
     GeminiId1_1: "BardNonDuetEnablementProto enable_bard_non_duet_access",
-    GeminiId1_2: "BardExtensionsFirstPartyProto allow_first_party_extensions",
     GeminiId2_1: "GenAiAlphaSettingsProto alpha_enabled"
 }
 
 GeminiNonCompDetails := {
     GeminiId1_1: "Gemini access regardless of license is enabled.",
-    GeminiId1_2: "Gemini access to other Google apps is enabled.",
     GeminiId2_1: "Alpha Gemini features are enabled."
 }
 
