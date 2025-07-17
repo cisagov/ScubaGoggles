@@ -21,6 +21,11 @@ log = logging.getLogger(__name__)
 # pylint: disable=too-many-instance-attributes
 
 EVENTS = {
+    'gemini': [
+        'CHANGE_APPLICATION_SETTING',
+        'CREATE_APPLICATION_SETTING',
+        'DELETE_APPLICATION_SETTING'
+    ],
     'calendar': [],
     'chat': [
         'CHANGE_APPLICATION_SETTING',
@@ -475,6 +480,7 @@ class Provider:
             ],
             'drive': ['Drive and Docs'],
             'gmail': ['Gmail'],
+            'gemini': ['Gemini app', 'Gemini in Workspace apps'],
             'groups': ['Groups for Business'],
             'meet': ['Google Meet'],
             'sites': ['Sites'],

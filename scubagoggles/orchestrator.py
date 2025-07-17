@@ -89,7 +89,8 @@ class Orchestrator:
         'meet',
         'sites',
         'commoncontrols',
-        'classroom'
+        'classroom',
+        'gemini'
     ]
     _prod_to_fullname = {
         'gmail': 'Gmail',
@@ -100,7 +101,8 @@ class Orchestrator:
         'meet': 'Google Meet',
         'sites': 'Google Sites',
         'commoncontrols': 'Common Controls',
-        'classroom': 'Google Classroom'
+        'classroom': 'Google Classroom',
+        'gemini': 'Gemini'
     }
 
     _gws = {
