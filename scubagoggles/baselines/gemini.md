@@ -26,9 +26,19 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 # Baseline Policies
 
 ## 1. Gemini App Access
-In General, user Gemini data for Workspace users is protected by the Google Workspace Terms of Service.
-However, there are a few exceptions to this that necessitate restricting Gemini access in some cases,
-detailed in the following policies.
+Data for users with a license that provides access to Gemini under the Google Workspace
+or Workspace for Education terms cannot be used by Google for training generative
+AI models. However, Google Workspace supports enabling access to Gemini, regardless
+of license; only Gemini data for users with the appropriate license will be protected
+by the Google Workspace Terms of Service.
+
+Note that Gemini access to Google services outside of the Google Workspace core
+services can be restricted in the admin center. These additional services
+are not covered by the Google Workspace agreement and as such, could represent
+some risk to user data. However, allowing Gemini access to those apps does not
+increase that risk as those apps cannot access data from Gemini. See
+[Additional Google Services](https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/baselines/commoncontrols.md#16-additional-google-services)
+for more details on configuring these additional services.
 
 ### Policies
 
@@ -39,18 +49,6 @@ Gemini app user access SHALL be set to OFF for everyone without a license.
 protected by the Google Workspace Terms of Service. Data for users without the
 appropriate license can be used to improve Google's generative AI models; as such,
 allowing user access to Gemini under any license creates the risk of data leakage.
-- _Last modified:_ July 2025
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-#### GWS.GEMINI.1.2v0.5
-Gemini access to other Google apps SHALL be disabled.
-
-- _Rationale:_ This setting controls whether Google services outside of the Google
-Workspace core services are available to users in the Gemini app. These services
-are not covered by the Google Workspace agreement. As such, restricting Gemini
-access to these apps reduces the risk of data leakage.
 - _Last modified:_ July 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -74,14 +72,6 @@ access to these apps reduces the risk of data leakage.
 4.  Ensure **Allow all users to access the Gemini app, regardless of license** is **Unchecked**.
 5.  Select **Save**.
 
-#### GWS.GEMINI.1.2v0.5 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Generative AI** -\> **Gemini App**.
-3.  Select **Apps**.
-4.  Select **Other Google apps**.
-4.  Ensure **Allow access to other Google apps** is **Unchecked**.
-5.  Select **Save**.
-
 
 ## 2. Alpha Gemini features
 Google Workspace permits admins to restrict or enable access to Gemini Alpha features
@@ -101,7 +91,7 @@ Alpha Gemini features SHALL be disabled.
 have not yet been fully vetted and may still need to undergo robust testing to ensure
 compliance with applicable security standards. Additionally, government customers are
 prohibited from using production data with pre-GA offerings, per the Google Workspace
-Service Specific Terms. 
+Service Specific Terms.
 - _Last modified:_ July 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
