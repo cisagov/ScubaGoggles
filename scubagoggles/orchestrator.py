@@ -217,14 +217,16 @@ class Orchestrator:
 
                         # Check if the control result is "Fail"
                         if control["Result"] == "Fail":
+                            # Make a copy because we don't want these fields in the JSON
+                            control_for_csv = control.copy()
                             # Add blank fields for documenting reasons:
                             # failures and remediation timelines
-                            control["Non-Compliance Reason"] = " "
-                            control["Remediation Completion Date"] = " "
-                            control["Justification"] = " "
+                            control_for_csv["Non-Compliance Reason"] = " "
+                            control_for_csv["Remediation Completion Date"] = " "
+                            control_for_csv["Justification"] = " "
 
                             # Add the control to actionPlanCsv - only for result is fail
-                            action_plan_csv.append(control)
+                            action_plan_csv.append(control_for_csv)
 
         args = self._args
         plan_csv_filename = args.outputpath / f'{args.outputactionplanfilename}.csv'
