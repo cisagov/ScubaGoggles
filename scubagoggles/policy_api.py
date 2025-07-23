@@ -347,6 +347,7 @@ class PolicyAPI:
         'workspace_marketplace_apps_access_options': {
             'accessLevel': 'ALLOW_ALL',
             'allowAllInternalApps': False},
+        'security_two_step_verification_grace_period': {'enrollmentGracePeriod': None},
     }
 
     # This is the URL to the Policies API.
@@ -806,13 +807,19 @@ class PolicyAPI:
                     top_ou_policies[section][setting] = value
                     applied[section][setting] = value
 
+        section = 'security_two_step_verification_enforcement'
+        if section not in top_ou_policies:
+            top_ou_policies[section] = {}
+        if 'enforcedFrom' not in top_ou_policies[section]:
+            top_ou_policies[section]['enforcedFrom'] = None
+        
         if applied:
             log.debug('Default value(s) applied to %s:', self._top_orgunit)
             for section, settings in applied.items():
                 log.debug('  %s:', section)
                 for setting, value in settings.items():
                     log.debug('    %s: %s', setting, str(value))
-
+        
     def _dump(self, policies: Iterable, file_or_stream = sys.stdout):
 
         """Writes the orgunit and group maps, and the given policies from
@@ -871,18 +878,34 @@ class PolicyAPI:
 
         missing_settings = set()
         invalid_settings = set()
-
+        
+        grace_period = False
         for section, section_data in expected_policy_settings.items():
-
             expected_settings = section_data['settings']
             settings = orgunit_policies.get(section)
+            
             if not settings:
                 for expected_setting in expected_settings:
                     missing_settings.add(f'{section}.{expected_setting}')
                 continue
-
             for setting_name, verifier in expected_settings.items():
+                print(f"DEBUG: Checking {section}.{setting_name}")
                 policy_value = settings.get(setting_name)
+
+                if section == 'security_two_step_verification_enforcement'and setting_name == 'enforcedFrom':
+                    print(f"DEBUG: Checking {section}.{setting_name}")
+                    print(f"DEBUG: Raw policy_value = {policy_value!r}(type: {type(policy_value)})")
+                    if policy_value is None:
+                        missing_settings.add(f'{section}.{setting_name}')
+                    continue
+
+                if section == 'security_two_step_verification_grace_period'and setting_name == 'enrollmentGracePeriod':
+                    print(f"DEBUG: Checking {section}.{setting_name}")
+                    print(f"DEBUG: Raw policy_value = {policy_value!r}(type: {type(policy_value)})")
+                    if policy_value is None:
+                        missing_settings.add(f'{section}.{setting_name}')
+                    continue
+
                 if policy_value is None:
                     missing_settings.add(f'{section}.{setting_name}')
                 elif not verifier(policy_value):
