@@ -43,7 +43,7 @@ Who can join classes in your domain SHALL be set to Users in your domain only.
 
 - _Rationale:_ Classes can contain private or otherwise sensitive information. Restricting classes to users in your domain helps prevent data leakage resulting from unauthorized classroom access.
 - _Last modified:_ September 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
@@ -53,7 +53,7 @@ Which classes users in your domain can join SHALL be set to Classes in your doma
 
 - _Rationale:_ Allowing users to join a class from outside your domain could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
 - _Last modified:_ January 2025
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
@@ -93,7 +93,7 @@ Users SHALL NOT be able to authorize apps to access their Google Classroom data.
 
 - _Rationale:_ Allowing ordinary users to authorize apps to have access to classroom data opens a possibility for data loss. Allowing only admins to authorize apps reduces this risk.
 - _Last modified:_ September 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(10)
 - MITRE ATT&CK TTP Mapping
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
@@ -128,7 +128,7 @@ Roster import with Clever SHOULD be turned off.
 
 - _Rationale:_ If your organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into your organization's environment. If your organization does use Clever, then roster imports may be enabled.
 - _Last modified:_ September 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
 
@@ -161,7 +161,7 @@ Only teachers SHALL be allowed to unenroll students from classes.
 
 - _Rationale:_ Allowing students to unenroll themselves creates the opportunity for data loss or other inconsistencies, especially for K-12 classrooms. Restricting this ability to teachers mitigates this risk.
 - _Last modified:_ September 2023
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
@@ -194,7 +194,7 @@ Class creation SHALL be restricted to verified teachers only.
 
 - _Rationale:_ Allowing pending teachers to create classes potentially allows students to impersonate teachers and exploit the trusted relationship between teacher and student, e.g., to phish sensitive information from the students. Restricting class creation to verified teachers reduces this risk.
 - _Last modified:_ June 2024
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(5), AC-6(10)
 - MITRE ATT&CK TTP Mapping
   - [T1656: Impersonation](https://attack.mitre.org/techniques/T1656/)
   - [T534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
