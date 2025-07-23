@@ -15,7 +15,7 @@ import glob
 import csv
 
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from pathlib import Path
 from tqdm import tqdm
 
@@ -68,6 +68,9 @@ class ArgumentsEncoder(json.JSONEncoder):
 
         if isinstance(o, Path):
             return str(o)
+
+        if isinstance(o, (datetime, date)):
+            return o.strftime('%Y-%m-%d')
 
         return super().default(o)
 

@@ -6,7 +6,7 @@ import logging
 import time
 import json
 
-from datetime import datetime
+from datetime import datetime, date
 from html import escape
 from pathlib import Path
 
@@ -254,25 +254,30 @@ class Reporter:
                 # If the expiration date is left blank or an empty string,
                 # omit the policy
                 return True
-            try:
-                expiration_date = datetime.strptime(raw_date, '%Y-%m-%d')
-            except ValueError:
-                # Malformed date, don't omit the policy
-                warning = (f'Config file indicates omitting {control_id}, '
-                           f'but the provided expiration date, {raw_date}, is '
-                           'malformed. The expected format is yyyy-mm-dd. Control'
-                           ' will not be omitted.')
-                self._warn(warning, RuntimeWarning)
-                return False
-            now = datetime.now()
-            if expiration_date > now:
+            if isinstance(raw_date, date):
+                # If the user put the date in without quotes, it's already
+                # a datetime object
+                expiration_date = raw_date
+            else:
+                try:
+                    expiration_date = datetime.strptime(raw_date, '%Y-%m-%d').date()
+                except (ValueError, TypeError):
+                    # Malformed date, don't omit the policy
+                    warning = (f'Config file indicates omitting {control_id}, '
+                            f'but the provided expiration date, {raw_date}, is '
+                            'malformed. The expected format is yyyy-mm-dd. Control'
+                            ' will not be omitted.')
+                    self._warn(warning)
+                    return False
+            today = datetime.now().date()
+            if expiration_date > today:
                 # The expiration date is in the future, omit the policy
                 return True
             # The expiration date is passed, don't omit the policy
             warning = (f'Config file indicates omitting {control_id}, but '
                        f'the provided expiration date, {raw_date}, has passed. '
                        'Control will not be omitted.')
-            self._warn(warning, RuntimeWarning)
+            self._warn(warning)
         return False
 
     def _get_omission_rationale(self, control_id: str) -> str:
@@ -297,7 +302,7 @@ class Reporter:
         if no_rationale:
             warning = (f'Config file indicates omitting {control_id}, but '
                        'no rationale provided.')
-            self._warn(warning, RuntimeWarning)
+            self._warn(warning)
             return ("<span class='comment-heading'>User justification not "
                     "provided</span>")
         return ("<span class='comment-heading'>User justification</span>\""
@@ -627,20 +632,28 @@ class Reporter:
             if remediation_date is not None:
                 details += ("<span class='comment-heading'>Anticipated "
                             f"remediation date</span>\"{remediation_date}\"")
-                try:
-                    parsed_date = datetime.strptime(remediation_date,
-                                                    '%Y-%m-%d')
-                except ValueError:
-                    # Malformed date
-                    warning = ('Error parsing the remediation date for '
-                            f'{control_id}, {remediation_date}. The expected '
-                            'format is yyyy-mm-dd.')
-                    self._warn(warning, RuntimeWarning)
-                now = datetime.now()
-                if parsed_date < now and result in ("Fail", "Warning"):
+
+                if isinstance(remediation_date, date):
+                    # If the user put the date in without quotes, it's already
+                    # a datetime object
+                    parsed_date = remediation_date
+                else:
+                    try:
+                        parsed_date = datetime.strptime(remediation_date,
+                                                        '%Y-%m-%d').date()
+                    except (ValueError, TypeError):
+                        # Malformed date
+                        warning = ('Error parsing the remediation date for '
+                                f'{control_id}, {remediation_date}. The expected '
+                                'format is yyyy-mm-dd.')
+                        self._warn(warning)
+                        return details
+
+                today = datetime.now().date()
+                if parsed_date < today and result in ("Fail", "Warning"):
                     warning = (f'Anticipated remediation date for {control_id}, '
                             f'{remediation_date}, has passed. ')
-                    self._warn(warning, RuntimeWarning)
+                    self._warn(warning)
         return details
 
     def rego_json_to_ind_reports(self,
