@@ -347,7 +347,8 @@ class PolicyAPI:
         'workspace_marketplace_apps_access_options': {
             'accessLevel': 'ALLOW_ALL',
             'allowAllInternalApps': False},
-        'security_two_step_verification_grace_period': {'enrollmentGracePeriod': None},
+        'security_two_step_verification_grace_period': {'enrollmentGracePeriod': "0s"},
+        'security_two_step_verification_enforcement': {'enforcedFrom': "0000-00-00T00:00:00Z"},
     }
 
     # This is the URL to the Policies API.
@@ -889,26 +890,9 @@ class PolicyAPI:
                     missing_settings.add(f'{section}.{expected_setting}')
                 continue
             for setting_name, verifier in expected_settings.items():
-                print(f"DEBUG: Checking {section}.{setting_name}")
                 policy_value = settings.get(setting_name)
-
-                if section == 'security_two_step_verification_enforcement'and setting_name == 'enforcedFrom':
-                    print(f"DEBUG: Checking {section}.{setting_name}")
-                    print(f"DEBUG: Raw policy_value = {policy_value!r}(type: {type(policy_value)})")
-                    if policy_value is None:
-                        missing_settings.add(f'{section}.{setting_name}')
-                    continue
-
-                if section == 'security_two_step_verification_grace_period'and setting_name == 'enrollmentGracePeriod':
-                    print(f"DEBUG: Checking {section}.{setting_name}")
-                    print(f"DEBUG: Raw policy_value = {policy_value!r}(type: {type(policy_value)})")
-                    if policy_value is None:
-                        missing_settings.add(f'{section}.{setting_name}')
-                    continue
-
                 if policy_value is None:
                     missing_settings.add(f'{section}.{setting_name}')
                 elif not verifier(policy_value):
                     invalid_settings.add(f'{section}.{setting_name}')
-
         return missing_settings.union(invalid_settings)
