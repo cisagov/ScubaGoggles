@@ -4,10 +4,9 @@ reporter.py creates the report html page
 import io
 import logging
 import time
-import warnings
 import json
 
-from datetime import datetime
+from datetime import datetime, date
 from html import escape
 from pathlib import Path
 
@@ -56,6 +55,7 @@ class Reporter:
                  unsuccessful_calls: set,
                  missing_policies: set,
                  omissions: dict,
+                 annotations: dict,
                  progress_bar=None):
         """Reporter class initialization
 
@@ -73,6 +73,8 @@ class Reporter:
             policy API output
         :param omissions: dict with the omissions specified in the config
             file (empty dict if none omitted)
+        :param annotations: dict with the annotations specified in the config
+            file (empty dict if none provided)
         :param progress_bar: Optional TQDM instance. If provided, the
             progress bar will be cleared before any warnings are printed
             while generating the report, for cleaner output.
@@ -96,8 +98,13 @@ class Reporter:
             # Lowercase all the keys for case-insensitive comparisons
             key.lower(): value for key, value in omissions.items()
         }
+        self._annotations = {
+            # Lowercase all the keys for case-insensitive comparisons
+            key.lower(): value for key, value in annotations.items()
+        }
         self.progress_bar = progress_bar
         self.rules_table = None
+        self.annotated_failed_policies = {}
 
     @staticmethod
     def _get_test_result(requirement_met: bool,
@@ -247,25 +254,30 @@ class Reporter:
                 # If the expiration date is left blank or an empty string,
                 # omit the policy
                 return True
-            try:
-                expiration_date = datetime.strptime(raw_date, '%Y-%m-%d')
-            except ValueError:
-                # Malformed date, don't omit the policy
-                warning = (f'Config file indicates omitting {control_id}, '
-                           f'but the provided expiration date, {raw_date}, is '
-                           'malformed. The expected format is yyyy-mm-dd. Control'
-                           ' will not be omitted.')
-                self._warn(warning, RuntimeWarning)
-                return False
-            now = datetime.now()
-            if expiration_date > now:
+            if isinstance(raw_date, date):
+                # If the user put the date in without quotes, it's already
+                # a datetime object
+                expiration_date = raw_date
+            else:
+                try:
+                    expiration_date = datetime.strptime(raw_date, '%Y-%m-%d').date()
+                except (ValueError, TypeError):
+                    # Malformed date, don't omit the policy
+                    warning = (f'Config file indicates omitting {control_id}, '
+                            f'but the provided expiration date, {raw_date}, is '
+                            'malformed. The expected format is yyyy-mm-dd. Control'
+                            ' will not be omitted.')
+                    self._warn(warning)
+                    return False
+            today = datetime.now().date()
+            if expiration_date > today:
                 # The expiration date is in the future, omit the policy
                 return True
             # The expiration date is passed, don't omit the policy
             warning = (f'Config file indicates omitting {control_id}, but '
                        f'the provided expiration date, {raw_date}, has passed. '
                        'Control will not be omitted.')
-            self._warn(warning, RuntimeWarning)
+            self._warn(warning)
         return False
 
     def _get_omission_rationale(self, control_id: str) -> str:
@@ -290,9 +302,67 @@ class Reporter:
         if no_rationale:
             warning = (f'Config file indicates omitting {control_id}, but '
                        'no rationale provided.')
-            self._warn(warning, RuntimeWarning)
-            return 'Rationale not provided.'
-        return self._omissions[control_id]['rationale']
+            self._warn(warning)
+            return ("<span class='comment-heading'>User justification not "
+                    "provided</span>")
+        return ("<span class='comment-heading'>User justification</span>\""
+                f"{self._omissions[control_id]['rationale']}\"")
+
+    def _is_control_marked_incorrect(self, control_id: str) -> bool:
+        """
+        Determine if the supplied control was marked incorrect in the config
+        file.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        """
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        if control_id in self._annotations:
+            if 'incorrectresult' in self._annotations[control_id]:
+                return bool(self._annotations[control_id]['incorrectresult'])
+        return False
+
+    def _get_annotation_comment(self, control_id: str) -> str:
+        """
+        Return the annotation comment in the config file for the indicated
+        control, if provided. If not provided or is empty, return None.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        """
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        if control_id not in self._annotations:
+            return None
+        # If any of the following conditions is true, no comment was
+        # provided
+        no_comment = ((self._annotations[control_id] is None) or
+                        ('comment' not in self._annotations[control_id]) or
+                        (self._annotations[control_id]['comment'] is None) or
+                        (self._annotations[control_id]['comment'] == ''))
+        if no_comment:
+            return None
+        return self._annotations[control_id]['comment']
+
+    def _get_remediation_date(self, control_id: str) -> str:
+        """
+        Return the remediation date in the config file for the indicated
+        control, if provided. If not provided or is empty, return None.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        """
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        if control_id not in self._annotations:
+            return None
+        # If any of the following conditions is true, no date was
+        # provided
+        no_date = ((self._annotations[control_id] is None) or
+                        ('remediationdate' not in self._annotations[control_id]) or
+                        (self._annotations[control_id]['remediationdate'] is None) or
+                        (self._annotations[control_id]['remediationdate'] == ''))
+        if no_date:
+            return None
+        return self._annotations[control_id]['remediationdate']
 
     def _sanitize_details(self, table_data: list) -> list:
         '''
@@ -516,15 +586,75 @@ class Reporter:
 
     def _warn(self, *args, **kwargs):
         """
-        Wrapper for the warnings.warn function, that clears and refreshes the
+        Wrapper for the warning function, that clears and refreshes the
         progress bar if one has been provided, to keep the output clean.
-        Accepts all the arguments the warnings.warn function accepts.
+        Accepts all the arguments the warning function accepts.
         """
         if self.progress_bar is not None:
             self.progress_bar.clear()
-        warnings.warn(*args, **kwargs)
+        log.warning(*args, **kwargs)
         if self.progress_bar is not None:
             self.progress_bar.refresh()
+
+    def _add_annotation(self, control_id: str, result: str, details: str):
+        """
+        Adds the annotation provided by the user in the config file to the
+        result details if applicable.
+
+        :param control_id: The control ID, e.g., GWS.GMAIL.1.1v0.5. Case-
+            insensitive.
+        :param result: The test result, e.g., "Pass"
+        :param details: The test result details, e.g., "Requirement met."
+        """
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        comment = self._get_annotation_comment(control_id)
+        incorrect_result = self._is_control_marked_incorrect(control_id)
+        remediation_date = self._get_remediation_date(control_id)
+
+        if incorrect_result and result in ("Pass", "Fail", "Warning"):
+            if comment is None:
+                # Result marked incorrect, comment not provided
+                self._warn((f"Config file marks the result for {control_id} "
+                           "incorrect, but no justification provided."))
+                details = ("Test result marked incorrect by user. <span class="
+                           "'comment-heading'>User justification not provided"
+                           "</span>")
+            else:
+                # Result marked incorrect, comment provided
+                details = ("Test result marked incorrect by user. <span class="
+                           "'comment-heading'>User justification</span>\""
+                           f"{comment}\"")
+        elif comment is not None:
+            # Not incorrect but comment provided
+            details += ("<span class='comment-heading'>User comment</span>\""
+                        f"{comment}\"")
+            if remediation_date is not None:
+                details += ("<span class='comment-heading'>Anticipated "
+                            f"remediation date</span>\"{remediation_date}\"")
+
+                if isinstance(remediation_date, date):
+                    # If the user put the date in without quotes, it's already
+                    # a datetime object
+                    parsed_date = remediation_date
+                else:
+                    try:
+                        parsed_date = datetime.strptime(remediation_date,
+                                                        '%Y-%m-%d').date()
+                    except (ValueError, TypeError):
+                        # Malformed date
+                        warning = ('Error parsing the remediation date for '
+                                f'{control_id}, {remediation_date}. The expected '
+                                'format is yyyy-mm-dd.')
+                        self._warn(warning)
+                        return details
+
+                today = datetime.now().date()
+                if parsed_date < today and result in ("Fail", "Warning"):
+                    warning = (f'Anticipated remediation date for {control_id}, '
+                            f'{remediation_date}, has passed. ')
+                    self._warn(warning)
+        return details
 
     def rego_json_to_ind_reports(self,
                                  test_results: list,
@@ -550,7 +680,8 @@ class Reporter:
             'Errors': 0,
             'Failures': 0,
             'Warnings': 0,
-            'Omit': 0
+            'Omit': 0,
+            'IncorrectResults': 0
         }
 
         rules_data = None
@@ -573,10 +704,12 @@ class Reporter:
                         'Requirement': requirement,
                         'Result': 'Error - Test results missing',
                         'Criticality': '-',
-                        'Details': f'Report issue on {issues_link}', 
+                        'Details': f'Report issue on {issues_link}',
                         'OmittedEvaluationResult': 'N/A',
-                        'OmittedEvaluationDetails': 'N/A'
-                        })
+                        'OmittedEvaluationDetails': 'N/A',
+                        'IncorrectResult': 'N/A',
+                        'IncorrectDetails': 'N/A'
+                    })
                     log.error('No test results found for Control Id %s',
                               control_id)
                     continue
@@ -595,6 +728,9 @@ class Reporter:
                                                         test['Criticality'],
                                                         test['NoSuchEvent'])
                         details = test['ReportDetails']
+                        details = self._add_annotation(control_id,
+                                                       result,
+                                                       details)
                         omitted_result = result
                         omitted_details = details
 
@@ -605,7 +741,9 @@ class Reporter:
                         'Criticality': tests[0]['Criticality'],
                         'Details': f'Test omitted by user. {rationale}',
                         'OmittedEvaluationResult': omitted_result,
-                        'OmittedEvaluationDetails': omitted_details
+                        'OmittedEvaluationDetails': omitted_details,
+                        'IncorrectResult': 'N/A',
+                        'IncorrectDetails': 'N/A'
                     })
                     continue
 
@@ -621,7 +759,9 @@ class Reporter:
                                            'Criticality': test['Criticality'],
                                            'Details': failed_details,
                                            'OmittedEvaluationResult': 'N/A',
-                                           'OmittedEvaluationDetails': 'N/A'})
+                                           'OmittedEvaluationDetails': 'N/A',
+                                           'IncorrectResult': 'N/A',
+                                           'IncorrectDetails': 'N/A'})
                         continue
 
                     if control_id.startswith('GWS.COMMONCONTROLS.13.1'):
@@ -649,6 +789,40 @@ class Reporter:
                             details += '<br><br>'
                         details += self._log_based_warning
 
+                    # Append annotation if applicable
+                    details_pre_annotation = details
+                    details = self._add_annotation(control_id,
+                                                   result,
+                                                   details)
+
+
+                    incorrect_result = self._is_control_marked_incorrect(control_id)
+                    if result == "Fail":
+                        # If the user commented on a failed control, save the
+                        # comment to the failed control to comment mapping
+                        self.annotated_failed_policies[control_id] = {
+                            'Comment': self._get_annotation_comment(control_id),
+                            'RemediationDate': self._get_remediation_date(control_id),
+                            'IncorrectResult': incorrect_result
+                        }
+
+                    # Handle incorrect results
+                    if incorrect_result and result in ("Pass", "Fail", "Warning"):
+                        report_stats["IncorrectResults"] += 1
+                        table_data.append({
+                            'Control ID': control_id,
+                            'Requirement': requirement,
+                            'Result': 'Incorrect result',
+                            'Criticality': test['Criticality'],
+                            'Details': details,
+                            'OmittedEvaluationResult': 'N/A',
+                            'OmittedEvaluationDetails': 'N/A',
+                            'IncorrectResult': result,
+                            'IncorrectDetails': details_pre_annotation})
+                        continue
+
+                    # This is the typical case, the test result is not
+                    # missing, omitted, or incorrect
                     report_stats[self._get_summary_category(result)] += 1
                     table_data.append({
                         'Control ID': control_id,
@@ -657,7 +831,10 @@ class Reporter:
                         'Criticality': test['Criticality'],
                         'Details': details,
                         'OmittedEvaluationResult': 'N/A',
-                        'OmittedEvaluationDetails': 'N/A'})
+                        'OmittedEvaluationDetails': 'N/A',
+                        'IncorrectResult': 'N/A',
+                        'IncorrectDetails': 'N/A'})
+
             markdown_group_name = '-'.join(baseline_group['GroupName'].split())
             group_reference_url = (f'{self._github_url}/blob/{Version.current}/'
                                    f'scubagoggles/baselines/{product}.md'
@@ -670,9 +847,15 @@ class Reporter:
                              f'{baseline_group["GroupNumber"]} '
                              f'{markdown_link}</h2>')
 
+            json_only = [
+                'OmittedEvaluationResult',
+                'OmittedEvaluationDetails',
+                'IncorrectResult',
+                'IncorrectDetails'
+            ]
             filtered_table_data = [
                 {k: v for k, v in row.items()
-                if k not in ('OmittedEvaluationResult', 'OmittedEvaluationDetails')}
+                if k not in json_only}
                 for row in table_data
             ]
             fragments.append(self.create_html_table(filtered_table_data))

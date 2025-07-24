@@ -1,0 +1,13 @@
+# YAML configuration demonstrating annotating policy results, including marking
+# a result incorrect.
+
+baselines: [gmail, commoncontrols]
+
+annotatepolicy:
+  GWS.GMAIL.3.1v0.5:
+    incorrectresult: true
+    comment: "Known incorrect result; our SPF policy currently cannot to be retrieved via ScubaGoggles due to a split
+      horizon setup but is available publicly."
+  GWS.COMMONCONTROLS.1.1v0.5:
+    comment: Implementation in progress.
+    remediationdate: "2025-08-01"
