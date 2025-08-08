@@ -974,7 +974,6 @@ Google Takeout services SHALL be disabled.
 
 GWS includes system-defined alerting rules that provide situational awareness into risky events and actions. A security best practice is to enable the following list of rules. Please note that some, but not all, of these rules may be set to "on" by default. Rules that are not listed may be useful but not security relevant. Review all system-defined rules to implement the appropriate configuration based on individual requirements.
 
--   Google security checklist for medium and large businesses
 -   Government-backed attacks
 -   User-reported phishing
 -   User's Admin privilege revoked
@@ -982,19 +981,15 @@ GWS includes system-defined alerting rules that provide situational awareness in
 -   User suspended for spamming
 -   User suspended due to suspicious activity
 -   User suspended (Google identity alert)
--   User suspended (by admin)
 -   User granted Admin privilege
--   User deleted
 -   Suspicious programmatic login
 -   Suspicious message reported
 -   Suspicious login
 -   Suspicious device activity
--   Suspended user made active
 -   Spike in user-reported spam
 -   Rate limited recipient
 -   Phishing message detected post-delivery
--   Phishing in inboxes due to bad allowlist
--   New user added
+-   Phishing in inboxes due to bad whitelist
 -   Mobile settings changed
 -   Malware message detected post-delivery
 -   Leaked password
@@ -1006,7 +1001,9 @@ GWS includes system-defined alerting rules that provide situational awareness in
 -   Device compromised
 -   Calendar settings changed
 -   Account suspension warning
--   Client-side encryption service unavailable
+-   Super admin password reset
+-   SSO profile added
+-   SSO profile updated
 
 ### Policies
 

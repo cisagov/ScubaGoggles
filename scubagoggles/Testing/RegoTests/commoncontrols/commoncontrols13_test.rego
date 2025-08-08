@@ -25,7 +25,7 @@ test_Alerts_V1 if {
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", [
-        "Of the 39 required rules, 39 are enabled and 0 are disabled.",
+        "Of the 30 required rules, 30 are enabled and 0 are disabled.",
         "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
     ])
 }
@@ -55,7 +55,7 @@ test_Alerts_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", [
-        "Of the 39 required rules, 38 are enabled and 1 is disabled.",
+        "Of the 30 required rules, 29 are enabled and 1 is disabled.",
         "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
     ])
 }
@@ -87,7 +87,7 @@ test_Alerts_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", [
-        "Of the 39 required rules, 37 are enabled and 2 are disabled.",
+        "Of the 30 required rules, 28 are enabled and 2 are disabled.",
         "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
     ])
 }
@@ -113,7 +113,7 @@ test_Alerts_V4 if {
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", [
-        "Of the 39 required rules, at least 38 are enabled and 0 are disabled.",
+        "Of the 30 required rules, at least 29 are enabled and 0 are disabled.",
         "Unable to determine the state of the 1 remaining required rules.",
         "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
     ])
@@ -145,7 +145,7 @@ test_Alerts_V5 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", [
-        "Of the 39 required rules, at least 37 are enabled and 1 is disabled.",
+        "Of the 30 required rules, at least 28 are enabled and 1 is disabled.",
         "Unable to determine the state of the 1 remaining required rules.",
         "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
     ])
@@ -167,7 +167,7 @@ test_Alerts_V6 if {
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", [
-        "Unable to determine the state of any of the 39 required rules.",
+        "Unable to determine the state of any of the 30 required rules.",
         "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
     ])
 }
@@ -176,7 +176,7 @@ test_Alerts_V7 if {
     # Just 1 enabled, the rest unknown
     PolicyId := CommonControlsId13_1
     # Delete all but one of the events
-    Patches = [{"op": "remove", "path": "/items/0"} | some i in numbers.range(0,37)]
+    Patches = [{"op": "remove", "path": "/items/0"} | some i in numbers.range(0,28)]
     Rules := json.patch(PerfectRules, Patches)
     Output := tests with input as {
         "commoncontrols_logs": Rules,
@@ -190,8 +190,8 @@ test_Alerts_V7 if {
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", [
-        "Of the 39 required rules, at least 1 is enabled and 0 are disabled.",
-        "Unable to determine the state of the 38 remaining required rules.",
+        "Of the 30 required rules, at least 1 is enabled and 0 are disabled.",
+        "Unable to determine the state of the 29 remaining required rules.",
         "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
     ])
 }
@@ -203,7 +203,7 @@ test_Alerts_V8 if {
     Rules := json.patch(PerfectRules, [
         {
             "op": "replace",
-            "path": "/items/38/events/0/parameters/1/value",
+            "path": "/items/29/events/0/parameters/1/value",
             "value": "Email notification status changed from ON to OFF."
         },
     ])
@@ -219,7 +219,7 @@ test_Alerts_V8 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", [
-        "Of the 39 required rules, 38 are enabled and 1 is disabled.",
+        "Of the 30 required rules, 29 are enabled and 1 is disabled.",
         "See <a href=\"#alerts\">System Defined Alerts</a> for more details."
     ])
 }
@@ -238,29 +238,6 @@ PerfectRules := {
                         {
                             "name": "SYSTEM_DEFINED_RULE_NAME",
                             "value": "Suspicious device activity"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
-                            "value": "Status changed from OFF to ON."
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
-                "time": "2022-12-02T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "User suspended (by admin)"
                         },
                         {
                             "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
@@ -345,29 +322,6 @@ PerfectRules := {
         },
         {
             "id": {
-                "time": "2022-12-06T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "User deleted"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
-                            "value": "Status changed from OFF to ON."
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
                 "time": "2022-12-07T00:02:28.672Z"
             },
             "events": [
@@ -422,29 +376,6 @@ PerfectRules := {
                         {
                             "name": "SYSTEM_DEFINED_RULE_NAME",
                             "value": "Leaked password"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
-                            "value": "Status changed from OFF to ON."
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
-                "time": "2022-12-10T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "[Beta] Client-side encryption service unavailable"
                         },
                         {
                             "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
@@ -529,52 +460,6 @@ PerfectRules := {
         },
         {
             "id": {
-                "time": "2022-12-14T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "Directory sync cancelled due to safeguard threshold exceeded"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
-                            "value": "Status changed from OFF to ON."
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
-                "time": "2022-12-15T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "Google Voice configuration problem"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
-                            "value": "Status changed from OFF to ON."
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
                 "time": "2022-12-16T00:02:28.672Z"
             },
             "events": [
@@ -583,29 +468,6 @@ PerfectRules := {
                         {
                             "name": "SYSTEM_DEFINED_RULE_NAME",
                             "value": "User's Admin privilege revoked"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
-                            "value": "Status changed from OFF to ON."
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
-                "time": "2022-12-17T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "New user added"
                         },
                         {
                             "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
@@ -782,29 +644,6 @@ PerfectRules := {
         },
         {
             "id": {
-                "time": "2022-12-25T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "Suspended user made active"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
-                            "value": "Status changed from OFF to ON."
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
                 "time": "2022-12-26T00:02:28.672Z"
             },
             "events": [
@@ -813,52 +652,6 @@ PerfectRules := {
                         {
                             "name": "SYSTEM_DEFINED_RULE_NAME",
                             "value": "Email settings changed"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
-                            "value": "Status changed from OFF to ON."
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
-                "time": "2022-12-27T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "App Maker Cloud SQL setup"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
-                            "value": "Status changed from OFF to ON."
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
-                "time": "2022-12-28T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "Apps outage alert"
                         },
                         {
                             "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
@@ -1012,6 +805,75 @@ PerfectRules := {
         },
         {
             "id": {
+                "time": "2023-01-03T00:02:28.672Z"
+            },
+            "events": [
+                {
+                    "parameters": [
+                        {
+                            "name": "SYSTEM_DEFINED_RULE_NAME",
+                            "value": "Super admin password reset"
+                        },
+                        {
+                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
+                            "value": "Status changed from OFF to ON."
+                        },
+                        {
+                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
+                            "value": "Email notification status unchanged, receivers unchanged."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": {
+                "time": "2023-01-03T00:02:28.672Z"
+            },
+            "events": [
+                {
+                    "parameters": [
+                        {
+                            "name": "SYSTEM_DEFINED_RULE_NAME",
+                            "value": "SSO profile added"
+                        },
+                        {
+                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
+                            "value": "Status changed from OFF to ON."
+                        },
+                        {
+                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
+                            "value": "Email notification status unchanged, receivers unchanged."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": {
+                "time": "2023-01-03T00:02:28.672Z"
+            },
+            "events": [
+                {
+                    "parameters": [
+                        {
+                            "name": "SYSTEM_DEFINED_RULE_NAME",
+                            "value": "SSO profile updated"
+                        },
+                        {
+                            "name": "SYSTEM_DEFINED_RULE_ACTION_STATUS_CHANGE",
+                            "value": "Status changed from OFF to ON."
+                        },
+                        {
+                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
+                            "value": "Email notification status unchanged, receivers unchanged."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": {
                 "time": "2023-01-04T00:02:28.672Z"
             },
             "events": [
@@ -1028,63 +890,6 @@ PerfectRules := {
                         {
                             "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
                             "value": "Email notification status unchanged, receivers unchanged."
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
-                "time": "2023-01-05T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "TLS failure"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "receivers changed from NULL to example example"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
-                "time": "2023-01-06T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "Exchange journaling failure"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "receivers changed from NULL to example example"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": {
-                "time": "2023-01-07T00:02:28.672Z"
-            },
-            "events": [
-                {
-                    "parameters": [
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_NAME",
-                            "value": "Smarthost failure"
-                        },
-                        {
-                            "name": "SYSTEM_DEFINED_RULE_ACTION_RECEIVERS_CHANGE",
-                            "value": "receivers changed from NULL to example example"
                         }
                     ]
                 }
