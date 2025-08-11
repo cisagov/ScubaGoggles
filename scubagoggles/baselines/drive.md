@@ -194,15 +194,6 @@ Agencies SHOULD NOT allow members with manager access to override shared drive c
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.DRIVEDOCS.2.2v0.5
-Agencies SHOULD NOT allow users outside of their organization to access files in shared drives.
-
-- _Rationale:_ To regulate document access within the organization, it is recommended that agencies restrict external users from accessing files on shared drives. This policy is aimed at safeguarding internal documents from being distributed outside the organization without explicit consent and approval.
-- _Last modified:_ July 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
 #### GWS.DRIVEDOCS.2.3v0.5
 Agencies SHALL allow users who are not shared drive members to be added to files.
 
@@ -211,16 +202,6 @@ Agencies SHALL allow users who are not shared drive members to be added to files
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-
-#### GWS.DRIVEDOCS.2.4v0.5
-Agencies SHALL NOT allow viewers and commenters to download, print, and copy files.
-
-- _Rationale:_ Downloading and removing a file from the GWS tenant bypasses all access control settings, increasing the risk of data leakage. By preventing the sharing of these externally downloaded files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
-- _Last modified:_ July 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
-- MITRE ATT&CK TTP Mapping
-  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
 
 ### Resources
 -   [Google Workspace Admin Help: Set Drive users' sharing permissions](https://support.google.com/a/answer/60781?hl=en)
@@ -244,14 +225,9 @@ To configure the settings for Shared drive creation:
 #### GWS.DRIVEDOCS.2.1v0.5 Instructions
 1.  Uncheck the **Allow members with manager access to override the settings below** checkbox.
 
-#### GWS.DRIVEDOCS.2.2v0.5 Instructions
-1.  Uncheck the **Allow users outside organization to access files in shared drives** checkbox.
-
 #### GWS.DRIVEDOCS.2.3v0.5 Instructions
 1.  Check the **Allow people who aren't shared drive members to be added to files** checkbox.
 
-#### GWS.DRIVEDOCS.2.4v0.5 Instructions
-1.  Check the **Allow viewers and commenters to download, print, and copy files** checkbox.
 
 ## 3. Security Updates for Files
 
