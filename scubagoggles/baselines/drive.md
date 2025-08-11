@@ -343,7 +343,7 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 ### Policies
 
 #### GWS.DRIVEDOCS.6.1v0.5
-Google Drive for Desktop SHOULD be enabled only for authorized devices.
+Google Drive for Desktop SHALL be enabled only for authorized devices.
 
 - _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
 - _Last modified:_ January 2025
