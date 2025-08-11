@@ -38,16 +38,17 @@ This section covers whether users can share files outside of the organization, w
 ### Policies
 
 #### GWS.DRIVEDOCS.1.1v0.5
-Agencies SHOULD disable sharing outside of the organization's domain.
+External sharing SHALL be restricted to allowlisted domains.
 
 - _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk of inadvertent of data leakage.
 - _Last modified:_ July 2023
 - _Note:_
   - This policy restricts information sharing
   - This policy prevents data leakage outside of the organization
-  - If this policy is enforced, then follow Policy 1.2
-  - If this policy is not enforced, then follow Policies 1.3 and 1.4
-  - Regardless, policies 1.5 through 1.8 must be followed
+  - If this policy is enforced, then follow Policy GWS.DRIVEDOCS.1.2
+  - If this policy is not enforced, then follow Policies GWS.DRIVEDOCS1.3 and GWS.DRIVEDOCS1.4
+  - Regardless, "policies GWS.DRIVEDOCS1.5 through GWS.DRIVEDOCS1.8 must be followed"
+  - If specific users have a need for broader external sharing (e.g., for community outreach), external sharing MAY be enabled for specific OUs.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
