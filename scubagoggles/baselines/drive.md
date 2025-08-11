@@ -122,7 +122,18 @@ Private to owner SHALL be the default access level for newly created items.
 
 - _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent overly broad accidental sharing of information.
 - _Last modified:_ November 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+  - [T1538: Cloud Service Dashboard](https://attack.mitre.org/techniques/T1538/)
+
+#### GWS.DRIVEDOCS.1.9v0.5
+Out-of-Domain file-level warnings SHALL be enabled.
+
+- _Rationale:_ By implementing Out-of-Domain file-level warnings, the feature can help users identify potentially risky files and avoid phishing scams when working with files shared from outside your organization.
+- _Last modified:_ August 2025
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
@@ -132,6 +143,7 @@ Private to owner SHALL be the default access level for newly created items.
 
 -   [Google Workspace Admin Help: Set Drive users' sharing permissions](https://support.google.com/a/answer/60781?hl=en)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
+-   [Manage external sharing for your organization](https://support.google.com/a/answer/60781)
 
 ### Prerequisites
 
@@ -178,6 +190,12 @@ To configure the settings for Sharing options:
 #### GWS.DRIVEDOCS.1.8v0.5 Instructions
 1.  Select **Sharing settings -\> General access default.**
 2.  Select **When users in your organization create items, the default access will be -\> Private to the owner.**
+
+#### GWS.DRIVEDOCS.1.9v0.5 Instructions
+1.  Select **Sharing settings -\> Sharing options**
+2.  Select **Highlight external files**
+3.  Check the **Highlight external Files** box to turn on the indicator.
+4.  Select **Save**.
 
 ## 2. Shared Drive Creation
 
