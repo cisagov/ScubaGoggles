@@ -37,7 +37,7 @@ This section covers whether users can share files outside of the organization, w
 
 ### Policies
 
-#### GWS.DRIVEDOCS.1.1v0.5
+#### GWS.DRIVEDOCS.1.1v0.6
 External sharing SHALL be restricted to allowlisted domains.
 
 - _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk of inadvertent of data leakage.
@@ -54,7 +54,7 @@ External sharing SHALL be restricted to allowlisted domains.
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.2v0.5
+#### GWS.DRIVEDOCS.1.2v0.6
 Receiving files from outside of allowlisted domains SHOULD be disabled.
 
 - _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce the risk of data loss or falling victim to external threats.
@@ -65,7 +65,7 @@ Receiving files from outside of allowlisted domains SHOULD be disabled.
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.3v0.5
+#### GWS.DRIVEDOCS.1.3v0.6
 Warnings SHALL be enabled when a user is attempting to share someone in allowlisted domains
 
 - _Rationale:_ Users may not always be aware a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
@@ -76,7 +76,7 @@ Warnings SHALL be enabled when a user is attempting to share someone in allowlis
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.4v0.5
+#### GWS.DRIVEDOCS.1.4v0.6
 If sharing outside of the organization, then agencies SHOULD disable sharing of files with individuals who are not using a Google account.
 
 - _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
@@ -87,7 +87,7 @@ If sharing outside of the organization, then agencies SHOULD disable sharing of 
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.5v0.5
+#### GWS.DRIVEDOCS.1.5v0.6
 Any OUs that do allow external sharing SHOULD disable making content available to anyone with the link.
 
 - _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of a potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
@@ -97,7 +97,7 @@ Any OUs that do allow external sharing SHOULD disable making content available t
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.6v0.5
+#### GWS.DRIVEDOCS.1.6v0.6
 Agencies SHALL set access checking to recipients only.
 
 - _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients.
@@ -107,7 +107,7 @@ Agencies SHALL set access checking to recipients only.
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.7v0.5
+#### GWS.DRIVEDOCS.1.7v0.6
 Users to SHOULD NOT be allowed to upload or move content to shared drives owned by another organization.
 
 - _Rationale:_ Once a document is moved outside the organization's drives, the organization no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
@@ -117,7 +117,7 @@ Users to SHOULD NOT be allowed to upload or move content to shared drives owned 
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.8v0.5
+#### GWS.DRIVEDOCS.1.8v0.6
 Private to owner SHALL be the default access level for newly created items.
 
 - _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent overly broad accidental sharing of information.
@@ -128,7 +128,7 @@ Private to owner SHALL be the default access level for newly created items.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
   - [T1538: Cloud Service Dashboard](https://attack.mitre.org/techniques/T1538/)
 
-#### GWS.DRIVEDOCS.1.9v0.5
+#### GWS.DRIVEDOCS.1.9v0.6
 Out-of-Domain file-level warnings SHALL be enabled.
 
 - _Rationale:_ By implementing Out-of-Domain file-level warnings, the feature can help users identify potentially risky files and avoid phishing scams when working with files shared from outside your organization.
@@ -159,39 +159,39 @@ To configure the settings for Sharing options:
 4.  Follow implementation for each individual policy
 5.  Select **Save**
 
-#### GWS.DRIVEDOCS.1.1v0.5 Instructions
+#### GWS.DRIVEDOCS.1.1v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Select **Sharing outside of your domain** -\> **OFF – Files owned by users in your domain cannot be shared outside of your domain**
 
-#### GWS.DRIVEDOCS.1.2v0.5 Instructions
+#### GWS.DRIVEDOCS.1.2v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Deselect **Allow users to receive files from users or shared drives outside of the organization**
 
-#### GWS.DRIVEDOCS.1.3v0.5 Instructions
+#### GWS.DRIVEDOCS.1.3v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Select **Warn when files owned by users or shared drives in your organization are shared outside of your organization.**
 
-#### GWS.DRIVEDOCS.1.4v0.5 Instructions
+#### GWS.DRIVEDOCS.1.4v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Deselect **Allow users or shared drives in your organization to share items with people outside of your organization who aren't using a Google account.**
 
-#### GWS.DRIVEDOCS.1.5v0.5 Instructions
+#### GWS.DRIVEDOCS.1.5v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Deselect **When sharing outside of your organization is allowed, users in your organization can make files and published web content visible to anyone with the link.**
 
-#### GWS.DRIVEDOCS.1.6v0.5 Instructions
+#### GWS.DRIVEDOCS.1.6v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Select **Access Checker** -\> **Recipients only.**
 
-#### GWS.DRIVEDOCS.1.7v0.5 Instructions
+#### GWS.DRIVEDOCS.1.7v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Select **Distributing content outside of your domain** -\> **No one**
 
-#### GWS.DRIVEDOCS.1.8v0.5 Instructions
+#### GWS.DRIVEDOCS.1.8v0.6 Instructions
 1.  Select **Sharing settings -\> General access default.**
 2.  Select **When users in your organization create items, the default access will be -\> Private to the owner.**
 
-#### GWS.DRIVEDOCS.1.9v0.5 Instructions
+#### GWS.DRIVEDOCS.1.9v0.6 Instructions
 1.  Select **Sharing settings -\> Sharing options**
 2.  Select **Highlight external files**
 3.  Check the **Highlight external Files** box to turn on the indicator.
@@ -203,7 +203,7 @@ This section covers whether users can create new shared drives to share with oth
 
 ### Policies
 
-#### GWS.DRIVEDOCS.2.1v0.5
+#### GWS.DRIVEDOCS.2.1v0.6
 Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.
 
 - _Rationale:_ Allowing users who are not the drive owner to override settings violates the principle of least privilege. This policy reduces the risk of drive settings being modified by unauthorized individuals.
@@ -212,7 +212,7 @@ Agencies SHOULD NOT allow members with manager access to override shared drive c
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.DRIVEDOCS.2.3v0.5
+#### GWS.DRIVEDOCS.2.2v0.6
 Agencies SHALL allow users who are not shared drive members to be added to files.
 
 - _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as drive members, potentially exposing all drive files and increasing the risk of sensitive content exposure. By disallowing the sharing of these individual files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
@@ -240,10 +240,10 @@ To configure the settings for Shared drive creation:
 4.  Follow the implementation for each individual policy.
 5.  Select **Save**
 
-#### GWS.DRIVEDOCS.2.1v0.5 Instructions
+#### GWS.DRIVEDOCS.2.1v0.6 Instructions
 1.  Uncheck the **Allow members with manager access to override the settings below** checkbox.
 
-#### GWS.DRIVEDOCS.2.3v0.5 Instructions
+#### GWS.DRIVEDOCS.2.2v0.6 Instructions
 1.  Check the **Allow people who aren't shared drive members to be added to files** checkbox.
 
 
@@ -253,7 +253,7 @@ This section covers whether a security update issued by Google will be applied t
 
 ### Policies
 
-#### GWS.DRIVEDOCS.3.1v0.5
+#### GWS.DRIVEDOCS.3.1v0.6
 Agencies SHALL enable the security update for Drive files.
 
 - _Rationale:_ By not enabling the update to the resource key security update a user could potentially gain unauthorized access to files. Enabling this security update decreases risk of unauthorized access and data spillage by controlling access to files in Google Drive.
@@ -274,7 +274,7 @@ Agencies SHALL enable the security update for Drive files.
 
 To configure the settings for Security update for files:
 
-##### GWS.DRIVEDOCS.3.1v0.5 Instructions
+##### GWS.DRIVEDOCS.3.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Drive and Docs.**
 3.  Select **Sharing settings -\> Security update for files.**
@@ -288,7 +288,7 @@ This section covers whether users have access to Google Drive with the Drive SDK
 
 ### Policies
 
-#### GWS.DRIVEDOCS.4.1v0.5
+#### GWS.DRIVEDOCS.4.1v0.6
 Agencies SHOULD disable Drive SDK access.
 
 - _Rationale:_ The Drive SDK allows third-party applications to access Drive data, potentially leading to unintentional information sharing and data leakage. By disabling the Drive SDK you can decrease the risk of internal documents from being distributed outside the organization without explicit consent and approval.
@@ -311,7 +311,7 @@ Agencies SHOULD disable Drive SDK access.
 
 To configure the settings for Drive SDK:
 
-#### GWS.DRIVEDOCS.4.1v0.5 Instructions
+#### GWS.DRIVEDOCS.4.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Drive and Docs.**
 3.  Select **Features and Applications -\> Drive SDK.**
@@ -324,7 +324,7 @@ This section covers whether users can use add-ons in file editors within Google 
 
 ### Policies
 
-#### GWS.DRIVEDOCS.5.1v0.5
+#### GWS.DRIVEDOCS.5.1v0.6
 Agencies SHALL disable Add-Ons.
 
 - _Rationale:_ Google Docs Add-Ons, depending on their permissions, can present a security risk, including potential exposure of sensitive content. By disabling unapproved add-ons and preventing their sharing, the risk of data leakage can be significantly reduced.
@@ -347,7 +347,7 @@ Agencies SHALL disable Add-Ons.
 
 To configure the settings for add-ons:
 
-#### GWS.DRIVEDOCS.5.1v0.5 Instructions
+#### GWS.DRIVEDOCS.5.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Drive and Docs.**
 3.  Select **Features and Applications -\> Add-Ons.**
@@ -360,7 +360,7 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 
 ### Policies
 
-#### GWS.DRIVEDOCS.6.1v0.5
+#### GWS.DRIVEDOCS.6.1v0.6
 Google Drive for Desktop SHALL be enabled only for authorized devices.
 
 - _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
@@ -380,7 +380,7 @@ Google Drive for Desktop SHALL be enabled only for authorized devices.
 
 ### Implementation
 
-#### GWS.DRIVEDOCS.6.1v0.5 Instructions
+#### GWS.DRIVEDOCS.6.1v0.6 Instructions
 To Disable Google Drive for Desktop:
 
 1.  Sign in to the [Google Admin console](https://admin.google.com).
