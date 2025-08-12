@@ -1946,7 +1946,7 @@ if {
 tests contains {
     "PolicyId": CommonControlsId17_1,
     "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -1962,7 +1962,7 @@ if {
 tests contains {
     "PolicyId": CommonControlsId17_1,
     "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs17_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs17_1},
     "RequirementMet": Status,
