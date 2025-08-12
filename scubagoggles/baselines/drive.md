@@ -137,7 +137,26 @@ Out-of-Domain file-level warnings SHALL be enabled.
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
-  - [T1538: Cloud Service Dashboard](https://attack.mitre.org/techniques/T1538/)
+
+#### GWS.DRIVEDOCS.1.10v0.6
+Forms owned by users within your organization SHOULD NOT be able to accept responses from anyone with the link outside the organization if external sharing isn't allowed. 
+
+- _Rationale:_ If external sharing isn't allowed, this setting when allowed provides bypasses the external sharing setting where forms can be used to collect and share data without oversight.
+- _Last modified:_ August 2025
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+
+#### GWS.DRIVEDOCS.1.11v0.6
+Users in your organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of your organization if receiving external files isn’t allowed.
+- _Rationale:_ If recieving external files isn't allowed, this setting when allowed bypasses the external sharing setting where external where forms can be used to collect and share data without oversight.
+- _Last modified:_ August 2025
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+
 
 ### Resources
 
