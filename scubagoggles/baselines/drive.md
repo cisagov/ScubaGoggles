@@ -47,7 +47,7 @@ External sharing SHALL be restricted to allowlisted domains.
   - This policy prevents data leakage outside of the organization
   - If this policy is enforced, then follow Policy GWS.DRIVEDOCS.1.2
   - If this policy is not enforced, then follow Policies GWS.DRIVEDOCS1.3 and GWS.DRIVEDOCS1.4
-  - Regardless, "policies GWS.DRIVEDOCS1.5 through GWS.DRIVEDOCS1.8 must be followed"
+  - Regardless, "policies GWS.DRIVEDOCS1.5 through GWS.DRIVEDOCS1.9 must be followed"
   - If specific users have a need for broader external sharing (e.g., for community outreach), external sharing MAY be enabled for specific OUs.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
