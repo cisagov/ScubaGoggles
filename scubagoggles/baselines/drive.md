@@ -141,7 +141,7 @@ Out-of-Domain file-level warnings SHALL be enabled.
 #### GWS.DRIVEDOCS.1.10v0.6
 Forms owned by users within your organization SHOULD NOT be able to accept responses from anyone with the link outside the organization if external sharing isn't allowed. 
 
-- _Rationale:_ If external sharing isn't allowed, this setting when allowed provides bypasses the external sharing setting where forms can be used to collect and share data without oversight.
+- _Rationale:_ If external sharing isn't allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
