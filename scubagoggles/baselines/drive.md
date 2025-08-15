@@ -41,13 +41,10 @@ This section covers whether users can share files outside of the organization, w
 External sharing SHALL be restricted to allowlisted domains.
 
 - _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk of inadvertent of data leakage.
-- _Last modified:_ July 2023
+- _Last modified:_ August 2025
 - _Note:_
   - This policy restricts information sharing
   - This policy prevents data leakage outside of the organization
-  - If this policy is enforced, then follow Policy GWS.DRIVEDOCS.1.2
-  - If this policy is not enforced, then follow Policies GWS.DRIVEDOCS1.3 and GWS.DRIVEDOCS1.4
-  - Regardless, "policies GWS.DRIVEDOCS1.5 through GWS.DRIVEDOCS1.9 must be followed"
   - If specific users have a need for broader external sharing (e.g., for community outreach), external sharing MAY be enabled for specific OUs.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -59,7 +56,7 @@ Receiving files from outside of allowlisted domains SHOULD be disabled.
 
 - _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce the risk of data loss or falling victim to external threats.
 - _Last modified:_ January 2024
-- _Note:_ This policy only applies if sharing outside was disabled in Policy 1.1
+- _Note:_ This policy only applies if sharing outside was disabled in Policy GWS.DRIVEDOCS.1.1
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -70,7 +67,7 @@ Warnings SHALL be enabled when a user is attempting to share someone in allowlis
 
 - _Rationale:_ Users may not always be aware a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
 - _Last modified:_ February 2024
-- _Note:_ This policy only applies if external sharing was allowed in Policy 1.1
+- _Note:_ This policy only applies if external sharing was allowed in Policy GWS.DRIVEDOCS.1.1
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AT-2b
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -81,7 +78,7 @@ If sharing outside of the organization, then agencies SHOULD disable sharing of 
 
 - _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ August 2025
-- _Note:_ This policy only applies if external sharing is allowed in Policy 1.1
+- _Note:_ This policy only applies if external sharing is allowed in Policy GWS.DRIVEDOCS.1.1
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -91,7 +88,7 @@ If sharing outside of the organization, then agencies SHOULD disable sharing of 
 Any OUs that do allow external sharing SHOULD disable making content available to anyone with the link.
 
 - _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of a potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
-- _Last modified:_ July 2023
+- _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -108,10 +105,10 @@ Agencies SHALL set access checking to recipients only.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.7v0.6
-Users to SHOULD NOT be allowed to upload or move content to shared drives owned by another organization.
+Users SHOULD NOT be allowed to upload or move content to shared drives owned by another organization.
 
 - _Rationale:_ Once a document is moved outside the organization's drives, the organization no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
-- _Last modified:_ July 2023
+- _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -121,7 +118,7 @@ Users to SHOULD NOT be allowed to upload or move content to shared drives owned 
 Private to owner SHALL be the default access level for newly created items.
 
 - _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent overly broad accidental sharing of information.
-- _Last modified:_ November 2023
+- _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
