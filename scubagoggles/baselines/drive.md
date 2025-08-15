@@ -150,7 +150,7 @@ Forms owned by users within your organization SHOULD NOT be able to accept respo
 
 #### GWS.DRIVEDOCS.1.11v0.6
 Users in your organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of your organization if receiving external files isn’t allowed.
-- _Rationale:_ If recieving external files isn't allowed, this setting when allowed bypasses the external sharing setting where external where forms can be used to collect and share data without oversight.
+- _Rationale:_ If receiving external files isn't allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
