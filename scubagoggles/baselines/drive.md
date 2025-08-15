@@ -139,7 +139,7 @@ Out-of-Domain file-level warnings SHALL be enabled.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.10v0.6
-Forms owned by users within your organization SHOULD NOT be able to accept responses from anyone with the link outside the organization if external sharing isn't allowed. 
+If external sharing isn't allowed, then forms owned by users within your organization SHOULD NOT be able to accept responses from anyone with the link outside the organization.
 
 - _Rationale:_ If external sharing isn't allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight.
 - _Last modified:_ August 2025
