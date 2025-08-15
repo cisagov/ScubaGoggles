@@ -149,7 +149,7 @@ If external sharing isn't allowed, then forms owned by users within your organiz
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.11v0.6
-Users in your organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of your organization if receiving external files isn’t allowed.
+If receiving external files isn’t allowed, then users in your organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of your organization.
 - _Rationale:_ If receiving external files isn't allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
