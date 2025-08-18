@@ -217,7 +217,7 @@ def run_selenium(browser, customerdomain):
     # Before entering loop check that we actually display 9 rows in table
     reports_table = get_reports_table(browser)
 
-    if len(reports_table) == 9:
+    if len(reports_table) == 10:
         for i in range(len(reports_table)):
 
             # Check if customerdomain is present in agency table
@@ -286,7 +286,7 @@ def run_selenium(browser, customerdomain):
                 )
             )
     else:
-        raise ValueError('Expected the reports table to have a length of 9')
+        raise ValueError('Expected the reports table to have a length of 10')
 
 
 def verify_navigation_links(browser):

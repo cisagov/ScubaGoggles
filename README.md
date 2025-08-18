@@ -62,6 +62,9 @@ We use a three-step process:
 - [WinError 10013 Permission Error](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#windows--winerror-10013-permission-error)
 - [Unable to view HTML report due to environment limitations](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#unable-to-view-html-report-due-to-environment-limitations)
 
+### Misc
+- [Mappings](docs/misc/mappings.md)
+
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative
 Commons Zero license. With developer approval, contributions may be
