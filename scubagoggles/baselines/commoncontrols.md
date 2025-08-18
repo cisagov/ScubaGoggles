@@ -653,8 +653,8 @@ Account self-recovery for users and non-super admins SHALL be disabled.
 Ability to add recovery information SHOULD be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding PII to their organizational account, making it more difficult for a potential adversary to steal PII in the event of a compromise.
-- _Last modified:_ February 2025
-- _Note:_ This setting doesn’t apply if you’re using single sign-on (SSO) with a third-party identity provider or Password Sync.
+- _Last modified:_ August 2025
+- _Note:_ This setting doesn’t apply if you’re using single sign-on (SSO) with a third-party identity provider or Password Sync. If GWS.COMMONCONTROLS.8.1 and GWS.COMMONCONTROLS.8.2 are enabled, this policy serves as notification of logon activity to an off domain account in orgizations where GWS is used a subset and another orgization email exists. 
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
