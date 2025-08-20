@@ -56,7 +56,7 @@ Receiving files from outside of allowlisted domains SHOULD be disabled.
 
 - _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce the risk of data loss or falling victim to external threats.
 - _Last modified:_ January 2024
-- _Note:_ This policy only applies if sharing outside was disabled in Policy GWS.DRIVEDOCS.1.1
+- _Note:_ This policy is only applicable if external sharing is set to **ALLOWLISTED DOMAINS**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
