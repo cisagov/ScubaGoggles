@@ -654,7 +654,7 @@ Ability to add recovery information SHOULD be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding PII to their organizational account, making it more difficult for a potential adversary to steal PII in the event of a compromise.
 - _Last modified:_ August 2025
-- _Note:_ This setting doesn’t apply if you’re using single sign-on (SSO) with a third-party identity provider or Password Sync. If GWS.COMMONCONTROLS.8.1 and GWS.COMMONCONTROLS.8.2 are enabled, this policy serves as notification of logon activity to an off domain account in orgizations where GWS is used a subset and another orgization email exists. 
+- _Note:_ This setting is not applicable if you’re using single sign-on (SSO) with a third-party identity provider or Password Sync. If GWS.COMMONCONTROLS.8.1v0.6 and GWS.COMMONCONTROLS.8.2v0.6 are enabled, then this policy serves as a notification of logon activity to an off-domain account in organizations where GWS is used as a subset and if another organization email exists. 
 
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
