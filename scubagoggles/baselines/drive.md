@@ -67,7 +67,7 @@ Warnings SHALL be enabled when a user is attempting to share someone not in allo
 
 - _Rationale:_ Users may not always be aware a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
 - _Last modified:_ February 2024
-- _Note:_ This policy only applies if external sharing was allowed in Policy GWS.DRIVEDOCS.1.1
+- _Note:_ This policy is only applicable if external sharing is set to **ALLOWLISTED DOMAINS**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AT-2b
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
