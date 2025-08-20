@@ -181,7 +181,7 @@ To configure the settings for Sharing options:
 
 #### GWS.DRIVEDOCS.1.2v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Deselect **Allow users to receive files from users or shared drives outside of the organization**
+2.  Deselect **Allow users to receive files from users or shared drives outside of allowlisted domains**.
 
 #### GWS.DRIVEDOCS.1.3v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
