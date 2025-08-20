@@ -185,7 +185,7 @@ To configure the settings for Sharing options:
 
 #### GWS.DRIVEDOCS.1.3v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Select **Warn when files owned by users or shared drives in your organization are shared outside of your organization.**
+2.  Select **Warn when files owned by users or shared drives in your organization are shared with users in allowlisted domains**.
 
 #### GWS.DRIVEDOCS.1.4v0.6 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
