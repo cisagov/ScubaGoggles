@@ -78,7 +78,7 @@ If sharing outside of the organization, then agencies SHOULD disable sharing of 
 
 - _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ August 2025
-- _Note:_ This policy only applies if external sharing is allowed in Policy GWS.DRIVEDOCS.1.1
+- _Note:_ This policy is only applicable if external sharing is set to **ON**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
