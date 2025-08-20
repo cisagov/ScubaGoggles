@@ -144,7 +144,7 @@ Calendar Interop SHOULD be disabled.
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
 
 #### GWS.CALENDAR.3.2v1
-Micorosoft 365 (Graph API) SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.
+Microsoft 365 (Graph API) SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.
 
 - _Rationale:_ Basic authentication is a deprecated and risk-prone authentication method. Using OAuth 2.0 helps reduce the risk of credential compromise.
 - _Last modified:_ August 2025
@@ -184,7 +184,7 @@ To configure the settings for Calendar Interop:
 4.  Select **Exchange availability in Calendar**.
 5.  Check the **Allow Google Calendar to display Exchange users availability** checkbox.
 6.  Select **Add an Exchange endpoint**.
-7.  Select **Micorsoft 365 API** as the **Endpoint Type**
+7.  Select **Microsoft 365 API** as the **Endpoint Type**
 8.  Enter the applicable **Exchange domain names**, **Exchange role accounts**, **Tenant ID**, **Application (client) ID**, and **Client secret**
 9.  Click **Add**
 11. Select **Save**.
