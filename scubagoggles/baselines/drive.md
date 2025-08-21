@@ -213,6 +213,18 @@ To configure the settings for Sharing options:
 3.  Check the **Highlight external Files** box to turn on the indicator.
 4.  Select **Save**.
 
+#### GWS.DRIVEDOCS.1.10v0.6 Instructions
+1.  Select **Sharing settings -\> Sharing options**
+2.  Select **Form responses**
+3.  Check the **Allow forms owned by users in XXXX to accept responses from anyone with the link outside XXXX, even if external sharing isn't allowed. If this option isn’t selected, settings for sharing outside XXXX apply to forms** box
+4.  Select **Save**.
+
+#### GWS.DRIVEDOCS.1.11v0.6 Instructions
+1.  Select **Sharing settings -\> Sharing options**
+2.  Select **Form responses**
+3.  Check the **Allow users in XXXX to submit responses to forms from users or shared drives outside of XXXX, even if receiving external files isn’t allowed. If this option isn’t selected, settings for receiving files external to XXXX apply to forms** box
+4.  Select **Save**.
+
 ## 2. Shared Drive Creation
 
 This section covers whether users can create new shared drives to share with other users, including those external to their organization. Even if users cannot create new shared drives, they can still be added to shared drives owned by other users. This control also determines which users, both internal and external to the organization, can access files in shared drives.
