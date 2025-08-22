@@ -392,7 +392,7 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 Google Drive for Desktop SHALL be enabled only for authorized devices.
 
 - _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
-- _Last modified:_ January 2025
+- _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
