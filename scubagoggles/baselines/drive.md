@@ -63,7 +63,7 @@ Receiving files from outside of allowlisted domains SHOULD be disabled.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.3v0.6
-Warnings SHALL be enabled when a user is attempting to share someone not in allowlisted domains.
+Warnings SHALL be enabled when a user is attempting to share with someone not in allowlisted domains.
 
 - _Rationale:_ Users may not always be aware a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
 - _Last modified:_ August 2025
