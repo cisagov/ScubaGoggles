@@ -96,6 +96,14 @@ jobs:
           operating-system: "windows"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
+      
+      - name: Setup Dependencies (Linux)
+        if: ${{ matrix.operating-system == 'linux-latest' }}
+        uses: ./.github/actions/setup-dependencies-macos
+        with:
+          operating-system: "linux"
+          opa-version: ${{ needs.configuration.outputs.opa-version }}
+          python-version: ${{ matrix.python-version }}
 
       - name: Setup Dependencies (macOS)
         if: ${{ matrix.operating-system == 'macos-latest' }}
