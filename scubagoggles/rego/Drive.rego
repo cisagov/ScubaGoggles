@@ -463,6 +463,57 @@ if {
 }
 #--
 
+#
+# Baseline GWS.DRIVEDOCS.1.9
+#--
+
+DriveId1_9 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.9")
+
+tests contains {
+    "PolicyId": DriveDocsId1_9 ,
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.DRIVEDOCS.1.10
+#--
+
+DriveId1_10 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.10")
+
+tests contains {
+    "PolicyId": DriveDocsId1_10 ,
+    "Prerequisites": [],
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.DRIVEDOCS.1.11
+#--
+
+DriveId1_11 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.11")
+
+tests contains {
+    "PolicyId": DriveDocsId1_11 ,
+    "Prerequisites": [],
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
 ###################
 # GWS.DRIVEDOCS.2 #
 ###################
