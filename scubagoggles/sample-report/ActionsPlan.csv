@@ -58,7 +58,7 @@ GWS.COMMONCONTROLS.12.1v0.5,Google Takeout services SHALL be disabled.,Fail,Shal
 - Joy Whitney's OU: The following apps with individual admin control have Takeout enabled: YouTube 
 - Cool Example Org: Takeout is enabled for services without an individual admin control. 
 - Cool Example Org: The following apps with individual admin control have Takeout enabled: Blogger, Google Books",N/A,N/A, , , 
-GWS.COMMONCONTROLS.17.1v0.5,Require multi party approval for sensitive admin actions SHALL be enabled.,Fail,Shall,"The following OUs are non-compliant: 
+GWS.COMMONCONTROLS.17.1v0.5,Require multi party approval for sensitive admin actions SHOULD be enabled.,Fail,Should,"The following OUs are non-compliant: 
 - Cool Example Org: Require multi party approval for sensitive admin actions is DISABLED Warning: log-based check. See documentation in ScubaGoggles GitHub repository for limitations.",N/A,N/A, , , 
 GWS.DRIVEDOCS.1.5v0.5,Agencies SHALL disable making files and published web content visible to anyone with the link.,Fail,Shall,"The following OUs are non-compliant: 
 - Cool Example Org: Published web content can be made visible to anyone with a link",N/A,N/A, , , 

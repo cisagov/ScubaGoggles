@@ -1511,41 +1511,32 @@ AlertCenterRules := {
     "User suspended for spamming",
     "User suspended due to suspicious activity",
     "User suspended (Google identity alert)",
-    "User suspended (by admin)",
     "User granted Admin privilege",
-    "User deleted",
     "Suspicious programmatic login",
     "Suspicious message reported",
     "Suspicious login",
     "Suspicious device activity",
-    "Suspended user made active",
     "Spike in user-reported spam",
     "Phishing message detected post-delivery",
     "Phishing in inboxes due to bad whitelist",
-    "New user added",
     "Mobile settings changed",
     "Malware message detected post-delivery",
     "Leaked password",
-    "Google Voice configuration problem",
     "Google Operations",
     "Gmail potential employee spoofing",
     "Email settings changed",
     "Drive settings changed",
     "Domain data export initiated",
-    "Directory sync cancelled due to safeguard threshold exceeded",
     "Device compromised",
     "Calendar settings changed",
-    "Apps outage alert",
-    "App Maker Cloud SQL setup",
     "Account suspension warning",
-    "[Beta] Client-side encryption service unavailable",
+    "Super admin password reset",
+    "SSO profile added",
+    "SSO profile updated"
 }
 
 EmailOnlyRules := {
-    "TLS failure",
     "Rate limited recipient",
-    "Smarthost failure",
-    "Exchange journaling failure"
 }
 
 # Custom functions/rules for identifying rule state change events
@@ -1946,7 +1937,7 @@ if {
 tests contains {
     "PolicyId": CommonControlsId17_1,
     "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event for the top-level OU in the current logs",
     "RequirementMet": DefaultSafe,
@@ -1962,7 +1953,7 @@ if {
 tests contains {
     "PolicyId": CommonControlsId17_1,
     "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs17_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs17_1},
     "RequirementMet": Status,

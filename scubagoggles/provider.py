@@ -21,6 +21,11 @@ log = logging.getLogger(__name__)
 # pylint: disable=too-many-instance-attributes
 
 EVENTS = {
+    'gemini': [
+        'CHANGE_APPLICATION_SETTING',
+        'CREATE_APPLICATION_SETTING',
+        'DELETE_APPLICATION_SETTING'
+    ],
     'calendar': [],
     'chat': [
         'CHANGE_APPLICATION_SETTING',
@@ -33,7 +38,6 @@ EVENTS = {
         'SYSTEM_DEFINED_RULE_UPDATED',
         'TOGGLE_CAA_ENABLEMENT',
         'TOGGLE_SERVICE_ENABLED',
-        'CHANGE_ALLOWED_TWO_STEP_VERIFICATION_METHODS',
         'ALLOW_SERVICE_FOR_OAUTH2_ACCESS',
         'DISALLOW_SERVICE_FOR_OAUTH2_ACCESS',
         'UNTRUST_DOMAIN_OWNED_OAUTH2_APPS',
@@ -41,9 +45,8 @@ EVENTS = {
         'BLOCK_ALL_THIRD_PARTY_API_ACCESS',
         'UNBLOCK_ALL_THIRD_PARTY_API_ACCESS',
         'SIGN_IN_ONLY_THIRD_PARTY_API_ACCESS',
-        'DELETE_APPLICATION_SETTING',
-        'CHANGE_DATA_LOCALIZATION_FOR_RUSSIA'
-    ],
+        'DELETE_APPLICATION_SETTING'
+],
     'drive': [
         'CREATE_APPLICATION_SETTING',
         'CHANGE_APPLICATION_SETTING',
@@ -475,6 +478,7 @@ class Provider:
             ],
             'drive': ['Drive and Docs'],
             'gmail': ['Gmail'],
+            'gemini': ['Gemini app', 'Gemini in Workspace apps'],
             'groups': ['Groups for Business'],
             'meet': ['Google Meet'],
             'sites': ['Sites'],
