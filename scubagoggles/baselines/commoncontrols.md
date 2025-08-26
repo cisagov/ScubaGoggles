@@ -61,7 +61,7 @@ Please note there is a distinction between Google 2 Step Verification (2SV) and 
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.1.1v0.5
+#### GWS.COMMONCONTROLS.1.1v0.6
 Phishing-Resistant MFA SHALL be required for all users.
 
 
@@ -91,7 +91,7 @@ Phishing-Resistant MFA SHALL be required for all users.
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
-#### GWS.COMMONCONTROLS.1.2v0.5
+#### GWS.COMMONCONTROLS.1.2v0.6
 If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL be enforced for all users.
 
 - _Rationale:_ This is a stopgap security policy to help protect the tenant if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk.
@@ -108,7 +108,7 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
-#### GWS.COMMONCONTROLS.1.3v0.5
+#### GWS.COMMONCONTROLS.1.3v0.6
 SMS or Voice as the MFA method SHALL NOT be used.
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
@@ -125,7 +125,7 @@ SMS or Voice as the MFA method SHALL NOT be used.
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
-#### GWS.COMMONCONTROLS.1.4v0.5
+#### GWS.COMMONCONTROLS.1.4v0.6
 Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.
 
 - _Rationale:_ Enrollment must be enforced within a reasonable timeframe. One week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
@@ -142,7 +142,7 @@ Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
-#### GWS.COMMONCONTROLS.1.5v0.5
+#### GWS.COMMONCONTROLS.1.5v0.6
 Allow users to trust the device SHALL be disabled.
 
 - _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
@@ -169,7 +169,7 @@ Allow users to trust the device SHALL be disabled.
 
 ### Prerequisites
 
--   GWS.COMMONCONTROLS.1.1v0.5 may require FIDO2-compliant security keys
+-   GWS.COMMONCONTROLS.1.1v0.6 may require FIDO2-compliant security keys
 
 ### Implementation
 
@@ -178,26 +178,26 @@ Allow users to trust the device SHALL be disabled.
 2.  Select **Security** -\> **Authentication**.
 3.  Select **2-Step Verification**.
 
-#### GWS.COMMONCONTROLS.1.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.1.1v0.6 Instructions
 1.  Under **Authentication**, ensure that **Allow users to turn on 2-Step Verification** is checked.
 2.  Set **Enforcement** to **On.**
 3.  Under **Methods** select **Only security key.**
 4.  Under **Security codes** select **Don't allow users to select security codes.**
 5.  Select **Save**.
 
-#### GWS.COMMONCONTROLS.1.2v0.5 Instructions
+#### GWS.COMMONCONTROLS.1.2v0.6 Instructions
 1.  Under **Authentication**, ensure that **Allow users to turn on 2-Step Verification** is checked.
 2.  Set **Enforcement** to **On**.
 
-#### GWS.COMMONCONTROLS.1.3v0.5 Instructions
+#### GWS.COMMONCONTROLS.1.3v0.6 Instructions
 1.  Under **Methods**, select **Any except verification codes via text, phone call**.
 2.  Select **Save**.
 
-#### GWS.COMMONCONTROLS.1.4v0.5 Instructions
+#### GWS.COMMONCONTROLS.1.4v0.6 Instructions
 1.  Set **New user enrollment** period to at least **1 Day** or at most **1 Week**.
 2.  Select **Save**.
 
-#### GWS.COMMONCONTROLS.1.5v0.5 Instructions
+#### GWS.COMMONCONTROLS.1.5v0.6 Instructions
 1.  Under Frequency, deselect the **Allow user to trust device** checkbox.
 2.  Select **Save**.
 
@@ -221,7 +221,7 @@ To enforce a device policy that requires company-owned devices, Google needs a l
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.2.1v0.5
+#### GWS.COMMONCONTROLS.2.1v0.6
 Policies restricting access to GWS based on signals about enterprise devices SHOULD be implemented.
 
 - _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on user/device attributes.
@@ -268,7 +268,7 @@ Policies restricting access to GWS based on signals about enterprise devices SHO
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.2.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.2.1v0.6 Instructions
 To turn on Context-Aware Access:
 
 1.  Access the [Google Admin console](https://admin.google.com/).
@@ -294,7 +294,7 @@ Google Workspace handles post-SSO verification for profiles assigned org-wide as
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.3.1v0.5
+#### GWS.COMMONCONTROLS.3.1v0.6
 Post-SSO verification SHOULD be enabled for users signing in using the SSO profile for your organization.
 
 - _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
@@ -306,7 +306,7 @@ Post-SSO verification SHOULD be enabled for users signing in using the SSO profi
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
-#### GWS.COMMONCONTROLS.3.2v0.5
+#### GWS.COMMONCONTROLS.3.2v0.6
 Post-SSO verification SHOULD be enabled for users signing in using other SSO profiles.
 
 - _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
@@ -335,11 +335,11 @@ Post-SSO verification SHOULD be enabled for users signing in using other SSO pro
 3.  Under **Organizational units**, ensure that the name for the entire organization is selected.
 4.  Click **Post-SSO verification**.
 
-#### GWS.COMMONCONTROLS.3.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.3.1v0.6 Instructions
 1. For **Settings for users signing in using the SSO profile for your organization**, select **Ask users for additional verifications from Google if a sign-in looks suspicious, and always apply 2-Step Verification policies (if configured)**.
 2. Click **SAVE**.
 
-#### GWS.COMMONCONTROLS.3.2v0.5 Instructions
+#### GWS.COMMONCONTROLS.3.2v0.6 Instructions
 1. For **Settings for users signing in using other SSO profiles**, select **Ask users for additional verifications from Google if a sign-in looks suspicious, and always apply 2-Step Verification policies (if configured)**.
 2. Click **SAVE**.
 
@@ -351,7 +351,7 @@ Note: If using a third-party IdP, and agency-set web session lengths for its use
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.4.1v0.5
+#### GWS.COMMONCONTROLS.4.1v0.6
 Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.
 
 - _Rationale:_ Allowing sessions to persist indefinitely allows users to bypass 2-Step Verification for future activity on that device. Limiting sessions to 12 hours may reduce the impact of session hijacking attacks and prevent users from inadvertently remaining logged in on unattended devices.
@@ -373,7 +373,7 @@ Users SHALL be forced to re-authenticate after an established 12-hour GWS login 
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.4.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.4.1v0.6 Instructions
 To configure Google session control:
 
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
@@ -388,7 +388,7 @@ Per NIST 800-63 and OMB M-22-09, ensure that user passwords do not expire and th
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.5.1v0.5
+#### GWS.COMMONCONTROLS.5.1v0.6
 User password strength SHALL be enforced.
 
 - _Rationale:_ Weak passwords increase the risk of account compromise. Enforcing password strength adds an additional layer of defense, reducing the risk of account compromise.
@@ -401,7 +401,7 @@ User password strength SHALL be enforced.
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
-#### GWS.COMMONCONTROLS.5.2v0.5
+#### GWS.COMMONCONTROLS.5.2v0.6
 User password length SHALL be at least 12 characters.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
@@ -413,7 +413,7 @@ User password length SHALL be at least 12 characters.
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
-#### GWS.COMMONCONTROLS.5.3v0.5
+#### GWS.COMMONCONTROLS.5.3v0.6
 User password length SHOULD be at least 15 characters.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
@@ -425,7 +425,7 @@ User password length SHOULD be at least 15 characters.
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
-#### GWS.COMMONCONTROLS.5.4v0.5
+#### GWS.COMMONCONTROLS.5.4v0.6
 Password policy SHALL be enforced at next sign-in.
 
 - _Rationale:_ Unless the password policy is enforced at next login, a user could potentially operate indefinitely using a weak password. Enforcing the policy at next login helps ensure that all active user passwords meet current requirements.
@@ -437,7 +437,7 @@ Password policy SHALL be enforced at next sign-in.
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
-#### GWS.COMMONCONTROLS.5.5v0.5
+#### GWS.COMMONCONTROLS.5.5v0.6
 User passwords SHALL NOT be reused.
 
 - _Rationale:_ Password reuse represents a significant security risk. Preventing password reuse when possible limits the scope of a compromised password.
@@ -449,7 +449,7 @@ User passwords SHALL NOT be reused.
     - [T1110:002: Brute Force: Password Cracking](https://attack.mitre.org/techniques/T1110/002/)
     - [T1110:003: Brute Force: Password Spraying](https://attack.mitre.org/techniques/T1110/003/)
 
-#### GWS.COMMONCONTROLS.5.6v0.5
+#### GWS.COMMONCONTROLS.5.6v0.6
 User passwords SHALL NOT expire.
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST), OMB, and Microsoft have published guidance indicating mandated periodic password changes make user accounts less secure. For example, OMB M-22-09 states, "Password policies must not require use of special characters or regular rotation."
@@ -482,22 +482,22 @@ To configure a strong password policy is configured, use the Google Workspace Ad
 4. Follow implementation for each individual policy.
 5. Select **Save**.
 
-#### GWS.COMMONCONTROLS.5.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.5.1v0.6 Instructions
 1.  Under **Strength**, select the **Enforce strong password** checkbox.
 
-#### GWS.COMMONCONTROLS.5.2v0.5 Instructions
+#### GWS.COMMONCONTROLS.5.2v0.6 Instructions
 1.  Under **Length**, set **Minimum Length** to 12+.
 
-#### GWS.COMMONCONTROLS.5.3v0.5 Instructions
+#### GWS.COMMONCONTROLS.5.3v0.6 Instructions
 1.  Under **Length**, set **Minimum Length** to 15+.
 
-#### GWS.COMMONCONTROLS.5.4v0.5 Instructions
+#### GWS.COMMONCONTROLS.5.4v0.6 Instructions
 1.  Under **Strength and Length enforcement**, select the **Enforce password policy at next sign-in** checkbox.
 
-#### GWS.COMMONCONTROLS.5.5v0.5 Instructions
+#### GWS.COMMONCONTROLS.5.5v0.6 Instructions
 1.  Under **Reuse**, deselect the **Allow password reuse** checkbox.
 
-#### GWS.COMMONCONTROLS.5.6v0.5 Instructions
+#### GWS.COMMONCONTROLS.5.6v0.6 Instructions
 1.  Under **Expiration**, select **Never Expires.**
 
 ## 6. Privileged Accounts
@@ -514,7 +514,7 @@ Some examples of these privileged accounts include the following Pre-Built GWS A
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.6.1v0.5
+#### GWS.COMMONCONTROLS.6.1v0.6
 All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication(MFA), not an agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
@@ -528,7 +528,7 @@ All administrative accounts SHALL leverage Google Account authentication with ph
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
-#### GWS.COMMONCONTROLS.6.2v0.5
+#### GWS.COMMONCONTROLS.6.2v0.6
 A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.
 
 - _Rationale:_ The super admin role provides unfettered access to the workspace. Properly managing the number of users with this level of access makes workspace compromise more challenging. However, having too few accounts can be problematic as it increases the risk of losing admin access entirely (e.g., if a super admin forgets their password); having between 2 and 4 balances these two concerns.
@@ -555,11 +555,11 @@ A minimum of **two** and maximum of **eight** separate and distinct super admin 
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.6.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.6.1v0.6 Instructions
 1.  Determine how to track highly privileged accounts. For example, create an OU or group containing all highly privileged accounts.
 2.  Follow the instructions on [Set up SSO for your organization](https://support.google.com/a/answer/12032922?hl=en), under "Decide which users should use SSO." For all OUs or groups with highly privileged users, set the **SSO profile assignment** to **None**.
 
-#### GWS.COMMONCONTROLS.6.2v0.5 Instructions
+#### GWS.COMMONCONTROLS.6.2v0.6 Instructions
 To obtain a list of all GWS Super Admins:
 
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
@@ -586,7 +586,7 @@ By changing the email address, the user resolves the conflict by ensuring that t
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.7.1v0.5
+#### GWS.COMMONCONTROLS.7.1v0.6
 Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed ones.
 
 - _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by Workspace admins. By resolving conflicting accounts, organizations can ensure all users in their Workspace are using managed accounts.
@@ -613,7 +613,7 @@ Account conflict management SHOULD be configured to replace conflicting unmanage
 -   Super Admin privileges
 
 ### Implementation
-#### GWS.COMMONCONTROLS.7.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.7.1v0.6 Instructions
 
 To configure account conflict management per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
@@ -628,7 +628,7 @@ This section addresses the GWS account self-recovery feature. When enabled, this
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.8.1v0.5
+#### GWS.COMMONCONTROLS.8.1v0.6
 Account self-recovery for super admins SHALL be disabled.
 
 - _Rationale:_ If enabled, an adversary could attempt to gain access to a super admin account through the account recovery method. Disabling this feature forces super admins to contact another super admin to recover their account, making it more difficult for a potential adversary to compromise their account.
@@ -638,7 +638,7 @@ Account self-recovery for super admins SHALL be disabled.
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
-#### GWS.COMMONCONTROLS.8.2v0.5
+#### GWS.COMMONCONTROLS.8.2v0.6
 Account self-recovery for users and non-super admins SHALL be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential adversary to compromise an account.
@@ -648,7 +648,7 @@ Account self-recovery for users and non-super admins SHALL be disabled.
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
-#### GWS.COMMONCONTROLS.8.3v0.5
+#### GWS.COMMONCONTROLS.8.3v0.6
 Ability to add recovery information SHOULD be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding PII to their organizational account, making it more difficult for a potential adversary to steal PII in the event of a compromise.
@@ -669,7 +669,7 @@ Ability to add recovery information SHOULD be disabled.
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.8.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.8.1v0.6 Instructions
 To disable Super Admin account self-recovery:
 
 1.  Sign in to https://admin.google.com as an administrator.
@@ -679,7 +679,7 @@ To disable Super Admin account self-recovery:
 5.  Deselect the **Allow Super Admins to recover their account** checkbox.
 6.  Click **Save**.
 
-#### GWS.COMMONCONTROLS.8.2v0.5 Instructions
+#### GWS.COMMONCONTROLS.8.2v0.6 Instructions
 1.  Sign in to https://admin.google.com as an administrator.
 2.  Select **Security** -\> **Authentication**.
 3.  Select **Account Recovery**.
@@ -687,7 +687,7 @@ To disable Super Admin account self-recovery:
 5.  Deselect the **Allow users and all non-super admins to recover their account** checkbox.
 6.  Click **Save**.
 
-#### GWS.COMMONCONTROLS.8.3v0.5 Instructions
+#### GWS.COMMONCONTROLS.8.3v0.6 Instructions
 1.  Sign in to https://admin.google.com as an administrator.
 2.  Select **Security** -\> **Authentication**.
 3.  Select **Account Recovery**. 
@@ -709,7 +709,7 @@ This control enforces more secure protection of highly privileged, senior execut
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.9.1v0.5
+#### GWS.COMMONCONTROLS.9.1v0.6
 Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Program.
 
 - _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
@@ -723,7 +723,7 @@ Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Prog
   - [T1556: Modifying Authentication Process](https://attack.mitre.org/techniques/T1556/)
     - [T1556:006: Modifying Authentication Process: Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
 
-#### GWS.COMMONCONTROLS.9.2v0.5
+#### GWS.COMMONCONTROLS.9.2v0.6
 All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program.
 
 - _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
@@ -766,7 +766,7 @@ Agencies need to have a process in place to manage and control application acces
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.10.1v0.5
+#### GWS.COMMONCONTROLS.10.1v0.6
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
 
 - _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
@@ -780,7 +780,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.2v0.5
+#### GWS.COMMONCONTROLS.10.2v0.6
 Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 
 - _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with policy 10.1.
@@ -794,7 +794,7 @@ Agencies SHALL NOT allow users to consent to access to low-risk scopes.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.3v0.5
+#### GWS.COMMONCONTROLS.10.3v0.6
 Agencies SHALL NOT trust unconfigured internal apps.
 
 - _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
@@ -808,7 +808,7 @@ Agencies SHALL NOT trust unconfigured internal apps.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.4v0.5
+#### GWS.COMMONCONTROLS.10.4v0.6
 Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 - _Rationale:_ External apps may contain vulnerabilities and malicious content. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
@@ -822,7 +822,7 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
   - [T1059: Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059/)
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
-#### GWS.COMMONCONTROLS.10.5v0.5
+#### GWS.COMMONCONTROLS.10.5v0.6
 Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
 - _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
@@ -855,31 +855,31 @@ Access to Google Workspace applications by less secure apps that do not meet sec
 1.  Sign in to [Google Admin console](https://admin.google.com).
 2.  Go to **Security** -\> **Access and Data Control** -\> **API controls.**
 
-#### GWS.COMMONCONTROLS.10.1v0.5 instructions:
+#### GWS.COMMONCONTROLS.10.1v0.6 instructions:
 1.  Select **Manage Google Services.**
 2.  Select the **Services box** to check all services boxes.
 3.  Once this box is selected, then the **Change access** link at the top of console will be available; select it.
 4.  Select **Restricted: Only trusted apps can access a service.**
 5.  Select **Change** then **confirm** if prompted.
 
-#### GWS.COMMONCONTROLS.10.2v0.5 instructions:
+#### GWS.COMMONCONTROLS.10.2v0.6 instructions:
 1.  Select **Manage Google Services.**
 2.  Select the **Services box** to check all services boxes.
 3.  Once this box is selected, then the **Change access** link at the top of console will be available; select it.
 4.  Ensure to uncheck the check box next to **For apps that are not trusted, allow users to give access to OAuth scopes that aren't classified as high-risk.**
 5.  Select **Change** then **confirm** if prompted.
 
-#### GWS.COMMONCONTROLS.10.3v0.5 Instructions
+#### GWS.COMMONCONTROLS.10.3v0.6 Instructions
 1.  Select **Settings.**
 2.  Select **Internal apps** and uncheck the box next to **Trust internal apps.**
 3.  Select **SAVE.**
 
-#### GWS.COMMONCONTROLS.10.4v0.5 Instructions
+#### GWS.COMMONCONTROLS.10.4v0.6 Instructions
 1.  Select **Settings.**
 2.  Select **Unconfigured third-party apps** and select **Don't allow users to access any third-party apps**
 3.  Select **SAVE.**
 
-#### GWS.COMMONCONTROLS.10.5v0.5 Instructions
+#### GWS.COMMONCONTROLS.10.5v0.6 Instructions
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Select **Security** -\> **Overview**.
 3.  Select **Less Secure Apps**.
@@ -899,7 +899,7 @@ Some older versions of common software may break when this control is implemente
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.11.1v0.5
+#### GWS.COMMONCONTROLS.11.1v0.6
 Only approved Google Workspace Marketplace applications SHALL be allowed for installation.
 
 - _Rationale:_ Marketplace apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
@@ -920,7 +920,7 @@ Only approved Google Workspace Marketplace applications SHALL be allowed for ins
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.11.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.11.1v0.6 Instructions
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Select **Apps** -\> **Google Workspace Marketplace apps** -\> **Settings.**
 3.  Select **Allow users to install and run allowlisted apps from the Marketplace.**
@@ -941,7 +941,7 @@ This section prevents users from downloading a copy of the Google Takeout servic
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.12.1v0.5
+#### GWS.COMMONCONTROLS.12.1v0.6
 Google Takeout services SHALL be disabled.
 
 - _Rationale:_ Google Takeout is a service that allows you to download a copy of your data stored within 40+ Google products and services, including data from Gmail, Drive, Photos, and Calendar. While there may be a valid use case for individuals to back up their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
@@ -961,7 +961,7 @@ Google Takeout services SHALL be disabled.
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.12.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.12.1v0.6 Instructions
 1.  Sign in to [Google Admin console](https://admin.google.com).
 2.  Select **Data** -\> **Data import & export** -\> **Google Takeout**.
 3.  Select **User access to Takeout for Google services**.
@@ -1007,7 +1007,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.13.1v0.5
+#### GWS.COMMONCONTROLS.13.1v0.6
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
 - _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
@@ -1029,7 +1029,7 @@ Required system-defined alerting rules, as listed in the Policy group descriptio
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.13.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.13.1v0.6 Instructions
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Click **Rules**.
 3.  From the Rules page, click **Add a filter**.
@@ -1049,7 +1049,7 @@ Configure GWS to send critical logs to the agency's centralized Security Informa
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.14.1v0.5
+#### GWS.COMMONCONTROLS.14.1v0.6
 The following critical logs SHALL be sent to the agency's centralized SIEM.
 
         > Admin Audit logs
@@ -1071,7 +1071,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
 
-#### GWS.COMMONCONTROLS.14.2v0.5
+#### GWS.COMMONCONTROLS.14.2v0.6
 Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as directed by OMB M-21-31.
 
 - _Rationale:_ Audit logs may be unavailable when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
@@ -1101,12 +1101,12 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.14.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.14.1v0.6 Instructions
 Follow the configuration instructions unique to the products and integration patterns at your organization to send the security logs to the security operations center for monitoring.
 
 Note: Agencies can benefit from security detection capabilities offered by the CISA Cloud Log Aggregation Warehouse (CLAW) system. Agencies are urged to send the logs to CLAW. Contact CISA at [cyberliason@cisa.dhs.gov]
 
-#### GWS.COMMONCONTROLS.14.2v0.5 Instructions
+#### GWS.COMMONCONTROLS.14.2v0.6 Instructions
 1.  There is no implementation for this policy.
 
 ## 15. Data Regions and Storage
@@ -1117,7 +1117,7 @@ At the time of writing, data region policies cannot be applied to data types not
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.15.1v0.5
+#### GWS.COMMONCONTROLS.15.1v0.6
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
 - _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential foreign adversaries to compromise the data.
@@ -1129,7 +1129,7 @@ The data storage region SHALL be set to be the United States for all users in th
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.COMMONCONTROLS.15.2v0.5
+#### GWS.COMMONCONTROLS.15.2v0.6
 Data SHALL be processed in the region selected for data at rest.
 
 - _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
@@ -1153,7 +1153,7 @@ Data SHALL be processed in the region selected for data at rest.
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.15.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.15.1v0.6 Instructions
 To configure Data Regions per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
@@ -1162,7 +1162,7 @@ To configure Data Regions per the policy:
 5.	Select the radio button option: "**United States**".
 6.	Click **Save**.
 
-#### GWS.COMMONCONTROLS.15.2v0.5 Instructions
+#### GWS.COMMONCONTROLS.15.2v0.6 Instructions
 1. Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2. Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
 3. Click the **Region** card.
@@ -1177,7 +1177,7 @@ Google Workspace considers some of its services "core services," including Gmail
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.16.1v0.5
+#### GWS.COMMONCONTROLS.16.1v0.6
 Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.
 
 - _Rationale_: Allowing access to additional google services without a need may create unnecessary vulnerabilities within the Google Workspace environment. By turning these services off, it mitigates the risk by not allowing access.
@@ -1191,7 +1191,7 @@ Service status for Google services that do not have an individual control SHOULD
     - [T1204:002: Trusted Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
     - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
-#### GWS.COMMONCONTROLS.16.2v0.5
+#### GWS.COMMONCONTROLS.16.2v0.6
 User access to Early Access apps SHOULD be disabled.
 
 - _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
@@ -1218,12 +1218,12 @@ User access to Early Access apps SHOULD be disabled.
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Apps** -> **Additional Google services**.
 
-#### GWS.COMMONCONTROLS.16.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.16.1v0.6 Instructions
 1. Click **CHANGE** at the top where it says if **Access to additional services without individual control for all organizational units is On/Off**.
 2. Select the option: "**OFF for everyone**"
 3. Click **Save**.
 
-#### GWS.COMMONCONTROLS.16.2v0.5 Instructions
+#### GWS.COMMONCONTROLS.16.2v0.6 Instructions
 1. In the list of all services, scroll to and click on the **Early Access Apps** service.
 2. Click on **Service status**.
 3. Ensure **OFF for everyone** is checked.
@@ -1234,11 +1234,11 @@ This section covers whether multiple super admins need to approve changes to spe
 
 ### Policies
 
-#### GWS.COMMONCONTROLS.17.1v0.5
-Require multiparty approval for sensitive admin actions SHALL be enabled.
+#### GWS.COMMONCONTROLS.17.1v0.6
+Require multiparty approval for sensitive admin actions SHOULD be enabled.
 
 - _Rationale_: Changes to sensitive admin settings such as disabling 2-step verification could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
-- _Last modified:_ April 2025
+- _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
 - MITRE ATT&CK TTP Mapping
   - No TTP Mappings
@@ -1252,7 +1252,7 @@ Require multiparty approval for sensitive admin actions SHALL be enabled.
 
 ### Implementation
 
-#### GWS.COMMONCONTROLS.17.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.17.1v0.6 Instructions
 To configure additional services per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.	Navigate to **Security** -> **Authentication** -> **Multi-party approval settings**.
@@ -1270,7 +1270,7 @@ There are several commercial DLP solutions available that document support for G
 Though use of Google's DLP solution is not strictly required, guidance for configuring Google's DLP solution can be found in the instructions of this policy section.
 
 ### Policies
-#### GWS.COMMONCONTROLS.18.1v0.5
+#### GWS.COMMONCONTROLS.18.1v0.6
 A custom policy SHALL be configured for Google Drive to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
@@ -1283,7 +1283,7 @@ A custom policy SHALL be configured for Google Drive to protect PII and sensitiv
   - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
 
-#### GWS.COMMONCONTROLS.18.2v0.5
+#### GWS.COMMONCONTROLS.18.2v0.6
 A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
@@ -1295,7 +1295,7 @@ A custom policy SHALL be configured for Google Chat to protect PII and sensitive
     - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
   - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
-#### GWS.COMMONCONTROLS.18.3v0.5
+#### GWS.COMMONCONTROLS.18.3v0.6
 A custom policy SHALL be configured for Gmail to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
@@ -1309,7 +1309,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 
 [//]: # (Keep the version suffix out of the anchor.)
 <a name="commoncontrols184"></a>
-#### GWS.COMMONCONTROLS.18.4v0.5
+#### GWS.COMMONCONTROLS.18.4v0.6
 The action for the above DLP policies SHOULD be set to block external sharing.
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
@@ -1341,7 +1341,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 3.  Under **Data protection rules and detectors** click **Manage Rules**.
 4.  Click **Add rule** -\> **New rule**.
 
-#### GWS.COMMONCONTROLS.18.1v0.5 Instructions
+#### GWS.COMMONCONTROLS.18.1v0.6 Instructions
 1. In the **Name** section, add the name and description of the rule.
 2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 3. In the **Apps** section, under **Google Drive**, choose the trigger for **Drive files**, then click **Continue**.
@@ -1354,7 +1354,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
-#### GWS.COMMONCONTROLS.18.2v0.5 Instructions
+#### GWS.COMMONCONTROLS.18.2v0.6 Instructions
 1. In the **Name** section, add the name and description of the rule.
 2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 3. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
@@ -1367,7 +1367,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
-#### GWS.COMMONCONTROLS.18.3v0.5 Instructions
+#### GWS.COMMONCONTROLS.18.3v0.6 Instructions
 1. In the **Name** section, add the name and description of the rule.
 2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
 3. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
@@ -1380,7 +1380,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
 7. Review the rule details, mark the rule as **Active**, and click **Create.**
 
-#### GWS.COMMONCONTROLS.18.4v0.5 Instructions
+#### GWS.COMMONCONTROLS.18.4v0.6 Instructions
 1.  For each rule in the **Actions** section follow these steps depending on application:
     1. For Google Drive policies select **Block external sharing**.
     2. For Chat policies rules select **Block message** and select **External Conversations** and **Spaces**, **Group chats**, and **1:1 chats**.
