@@ -174,8 +174,9 @@ def opa_filespec(opa_dir: Path = None):
     os_type = platform.system().lower()
 
     arch = platform.machine().lower()
-
-    if arch == 'x86_64':
+    
+    # Special case for Windows os and Arm64 arch
+    if arch == 'x86_64' or os_type == 'windows':
         arch = 'amd64'
     elif arch.startswith('arm'):
         arch = 'arm64'
