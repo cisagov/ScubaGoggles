@@ -185,7 +185,7 @@ To configure the settings for Calendar Interop:
 5.  Check the **Allow Google Calendar to display Exchange users availability** checkbox.
 6.  Select **Add an Exchange endpoint**.
 7.  Select **Microsoft 365 (Graph API)** as the **Endpoint Type**.
-8.  Enter the applicable **Exchange domain names**, **Exchange role accounts**, **Tenant ID**, **Application (client) ID**, and **Client secret**
+8.  Enter the applicable **Exchange domain names**, **Exchange role accounts**, **Tenant ID**, **Application (client) ID**, and **Client secret**.
 9.  Click **Add**
 11. Select **Save**.
 
