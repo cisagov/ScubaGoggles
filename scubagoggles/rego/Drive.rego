@@ -560,47 +560,11 @@ if {
 
 DriveId2_2 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.2.2")
 
-NonComplianceMessage2_2 := "Users outside the organization can access files in shared drives."
+NonComplianceMessage2_2 := "Users who aren't shared drive members are not allowed to be added to files."
 
 NonCompliantOUs2_2 contains {
     "Name": OU,
     "Value": NonComplianceMessage2_2
-}
-if {
-    some OU, settings in input.policies
-    DriveEnabled(OU)
-    externalAccess := settings.drive_and_docs_shared_drive_creation.allowExternalUserAccess
-    externalAccess != false
-}
-
-tests contains {
-    "PolicyId": DriveId2_2,
-    "Prerequisites": [
-        "policy/drive_and_docs_shared_drive_creation.allowExternalUserAccess",
-        "policy/drive_and_docs_service_status.serviceState"
-    ],
-    "Criticality": "Should",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_2, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_2},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Status := count(NonCompliantOUs2_2) == 0
-}
-#--
-
-#
-# Baseline GWS.DRIVEDOCS.2.3
-#--
-
-DriveId2_3 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.2.3")
-
-NonComplianceMessage2_3 := "Users who aren't shared drive members are not allowed to be added to files."
-
-NonCompliantOUs2_3 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage2_3
 }
 if {
     some OU, settings in input.policies
@@ -610,7 +574,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": DriveId2_3,
+    "PolicyId": DriveId2_2,
     "Prerequisites": [
         "policy/drive_and_docs_shared_drive_creation.allowNonMemberAccess",
         "policy/drive_and_docs_service_status.serviceState"
@@ -622,43 +586,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Status := count(NonCompliantOUs2_3) == 0
-}
-#--
-
-#
-# Baseline GWS.DRIVEDOCS.2.4
-#--
-
-DriveId2_4 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.2.4")
-
-NonComplianceMessage2_4 := "Viewers and commenters are allowed to download, print, and copy files."
-
-NonCompliantOUs2_4 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage2_4
-}
-if {
-    some OU, settings in input.policies
-    DriveEnabled(OU)
-    allowPrint := settings.drive_and_docs_shared_drive_creation.allowedPartiesForDownloadPrintCopy
-    allowPrint != "EDITORS_ONLY"
-}
-
-tests contains {
-    "PolicyId": DriveId2_4,
-    "Prerequisites": [
-        "policy/drive_and_docs_shared_drive_creation.allowedPartiesForDownloadPrintCopy",
-        "policy/drive_and_docs_service_status.serviceState"
-    ],
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_4, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_4},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Status := count(NonCompliantOUs2_4) == 0
+    Status := count(NonCompliantOUs2_2) == 0
 }
 #--
 
