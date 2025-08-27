@@ -10,7 +10,7 @@
         <img src="https://img.shields.io/badge/GWS_SCB-v0.5-%2385B065?labelColor=%23005288" alt="GWS SCB version #"></a>
         <a href="">
         <img src="https://img.shields.io/github/downloads/cisagov/ScubaGoggles/total.svg"  alt="Downloads"></a>
-        <a href="https://pypistats.org/packages/scubagoggles">
+        <a href="https://pypistats.org/packages/scubagoggles"> 
         <img src="https://img.shields.io/pypi/dm/scubagoggles.svg?labelColor=%23005288&label=PyPI%20downloads"  alt="PyPI downloads"></a>
   </ul>
 </div>
