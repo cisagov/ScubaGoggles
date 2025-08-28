@@ -836,8 +836,11 @@ class Reporter:
                         'IncorrectResult': 'N/A',
                         'IncorrectDetails': 'N/A'})
 
-            markdown_group_name = re.sub(r'[^\w\s-]', '-', baseline_group['GroupName'].lower()).replace(' ', '-')
-            markdown_group_name = re.sub(r'-+', '-', markdown_group_name).strip('-')
+            markdown_group_name = re.sub(r'[^\w\s-]', '-', 
+                                        baseline_group['GroupName'].lower())
+            markdown_group_name = re.sub(r'-+', '-', markdown_group_name)
+            markdown_group_name = markdown_group_name.strip('-')
+            markdown_group_name = markdown_group_name.replace(' ', '-')
             group_reference_url = (f'{self._github_url}/blob/{Version.current}/'
                                 f'scubagoggles/baselines/{product}.md'
                                 f'#{baseline_group["GroupNumber"]}-'
