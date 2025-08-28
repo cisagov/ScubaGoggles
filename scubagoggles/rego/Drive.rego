@@ -470,7 +470,7 @@ if {
 DriveId1_9 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.9")
 
 tests contains {
-    "PolicyId": DriveDocsId1_9 ,
+    "PolicyId": DriveId1_9,
     "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
