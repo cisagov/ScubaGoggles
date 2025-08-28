@@ -580,8 +580,8 @@ tests contains {
         "policy/drive_and_docs_service_status.serviceState"
     ],
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_3, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_3},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs2_2, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs2_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
