@@ -504,7 +504,7 @@ tests contains {
 DriveId1_11 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.11")
 
 tests contains {
-    "PolicyId": DriveDocsId1_11 ,
+    "PolicyId": DriveId1_11,
     "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
