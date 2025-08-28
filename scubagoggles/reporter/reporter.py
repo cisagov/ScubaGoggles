@@ -5,6 +5,7 @@ import io
 import logging
 import time
 import json
+import re
 
 from datetime import datetime, date
 from html import escape
@@ -835,11 +836,15 @@ class Reporter:
                         'IncorrectResult': 'N/A',
                         'IncorrectDetails': 'N/A'})
 
-            markdown_group_name = '-'.join(baseline_group['GroupName'].split())
+            markdown_group_name = re.sub(r'[^\w\s-]', '-',
+                                        baseline_group['GroupName'].lower())
+            markdown_group_name = re.sub(r'-+', '-', markdown_group_name)
+            markdown_group_name = markdown_group_name.strip('-')
+            markdown_group_name = markdown_group_name.replace(' ', '-')
             group_reference_url = (f'{self._github_url}/blob/{Version.current}/'
-                                   f'scubagoggles/baselines/{product}.md'
-                                   f'#{baseline_group["GroupNumber"]}-'
-                                   + markdown_group_name)
+                                f'scubagoggles/baselines/{product}.md'
+                                f'#{baseline_group["GroupNumber"]}-'
+                                + markdown_group_name)
             markdown_link = (f'<a href="{group_reference_url}" '
                              'target="_blank">'
                              f'{baseline_group["GroupName"]}</a>')
