@@ -1,9 +1,6 @@
 ![ScubaGoggles Logo](https://github.com/cisagov/ScubaGoggles/raw/main/docs/images/ScubaGoggles%20GitHub%20Graphic%20v2.jpg)
 <div align='center' style="margin:0;" id="user-content-toc">
   <ul>
-    <h1 style="display: inline-block;">ScubaGoggles</h1>
-  </ul>
-  <ul>
         <a href="https://github.com/cisagov/ScubaGoggles/releases">
         <img src="https://img.shields.io/badge/ScubaGoggles-v0.5.0-%2385B065?labelColor=%23005288"  alt="ScubaGoggles version #"></a>
         <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines">
@@ -14,7 +11,6 @@
         <img src="https://img.shields.io/pypi/dm/scubagoggles.svg?labelColor=%23005288&label=PyPI%20downloads"  alt="PyPI downloads"></a>
   </ul>
 </div>
-<h2 align='center' style="margin:0;">GWS Secure Configuration Baseline Assessment Tool </h2>
 
 Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google
 Workspace (GWS) organization's configuration conforms to the policies
