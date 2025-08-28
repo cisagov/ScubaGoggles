@@ -103,7 +103,7 @@ test_ManagerOverride_Incorrect_2 if {
 }
 
 test_NonMemberExternalAccess_Correct_1 if {
-    PolicyId := DriveId2_3
+    PolicyId := DriveId2_2
     Output := tests with input as GoodDriveApi02
 
     PassTestResult(PolicyId, Output)
@@ -114,7 +114,7 @@ test_NonMemberExternalAccess_1 if {
     Output := tests with input as BadDriveApi02
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage2_3}]
+                 "Value": NonComplianceMessage2_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
