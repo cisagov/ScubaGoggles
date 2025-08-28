@@ -836,7 +836,7 @@ class Reporter:
                         'IncorrectResult': 'N/A',
                         'IncorrectDetails': 'N/A'})
 
-            markdown_group_name = re.sub(r'[^\w\s-]', '-', 
+            markdown_group_name = re.sub(r'[^\w\s-]', '-',
                                         baseline_group['GroupName'].lower())
             markdown_group_name = re.sub(r'-+', '-', markdown_group_name)
             markdown_group_name = markdown_group_name.strip('-')
