@@ -1,18 +1,11 @@
 ![ScubaGoggles Logo](https://github.com/cisagov/ScubaGoggles/raw/main/docs/images/ScubaGoggles%20GitHub%20Graphic%20v2.jpg)
-<div align='center' style="margin:0;" id="user-content-toc">
-  <ul>
-    <h1 style="display: inline-block;">ScubaGoggles</h1>
-  </ul>
-  <ul>
-        <a href="https://github.com/cisagov/ScubaGoggles/releases">
-        <img src="https://img.shields.io/badge/ScubaGoggles-v0.5.0-%2385B065?labelColor=%23005288"  alt="ScubaGoggles version #"></a>
-        <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines">
-        <img src="https://img.shields.io/badge/GWS_SCB-v0.5-%2385B065?labelColor=%23005288" alt="GWS SCB version #"></a>
-        <a href="">
-        <img src="https://img.shields.io/github/downloads/cisagov/ScubaGoggles/total.svg"  alt="Downloads"></a>
-  </ul>
-</div>
-<h2 align='center' style="margin:0;">GWS Secure Configuration Baseline Assessment Tool </h2>
+
+
+[![GitHub Release][github-release-img]][release]
+[![PyPI - Version][pypi-version-img]][pypi]
+[![GitHub Downloads][github-downloads-img]][release]
+[![PyPI Downloads][pypi-downloads-img]][pypi]
+[![GitHub License][github-license-img]][license]
 
 Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google
 Workspace (GWS) organization's configuration conforms to the policies
@@ -70,3 +63,12 @@ Unless otherwise noted, this project is distributed under the Creative
 Commons Zero license. With developer approval, contributions may be
 submitted with an alternate compatible license. If accepted, those
 contributions will be listed herein with the appropriate license.
+
+[release]: https://github.com/cisagov/ScubaGoggles/releases
+[github-release-img]: https://img.shields.io/github/v/release/cisagov/ScubaGoggles?label=GitHub&logo=github
+[github-downloads-img]: https://img.shields.io/github/downloads/cisagov/ScubaGoggles/total?label=GitHub%20downloads
+[pypi]: https://pypi.org/project/scubagoggles/
+[pypi-downloads-img]: https://img.shields.io/pypi/dm/scubagoggles.svg?labelColor=%23005288&label=PyPI%20downloads
+[pypi-version-img]: https://img.shields.io/pypi/v/ScubaGoggles?label=PyPI
+[license]: https://github.com/cisagov/ScubaGoggles/blob/main/LICENSE
+[github-license-img]: https://img.shields.io/github/license/cisagov/ScubaGoggles
