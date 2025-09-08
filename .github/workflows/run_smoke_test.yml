@@ -22,7 +22,7 @@ on:
         description: "Choose operating system(s), format must be an array of strings:"
         required: true
         type: string
-        default: "['windows-latest', 'macos-latest']"
+        default: "['windows-latest', 'macos-latest', 'ubuntu-latest']"
       python-version:
         description: "Choose python version(s), format must be an array of strings:"
         required: true
@@ -53,7 +53,7 @@ jobs:
 
           # Default values for other events
           else
-            operatingsystem_val="['windows-latest', 'macos-latest']"
+            operatingsystem_val="['windows-latest', 'macos-latest', 'ubuntu-latest']"
             pythonversion_val="['3.10']"
             opaversion_val="latest"
           fi
@@ -94,6 +94,14 @@ jobs:
         uses: ./.github/actions/setup-dependencies-windows
         with:
           operating-system: "windows"
+          opa-version: ${{ needs.configuration.outputs.opa-version }}
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Setup Dependencies (ubuntu)
+        if: ${{ matrix.operating-system == 'ubuntu-latest' }}
+        uses: ./.github/actions/setup-dependencies-macos
+        with:
+          operating-system: "ubuntu"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
