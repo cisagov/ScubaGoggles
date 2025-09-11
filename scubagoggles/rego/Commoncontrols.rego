@@ -1400,6 +1400,18 @@ if {
     allowInternal != false
 }
 
+NonCompliantOUs11_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage11_1(false)
+}
+if {
+    some OU, settings in input.policies
+    access := settings.workspace_marketplace_apps_access_options.accessLevel
+    access == "ALLOW_NONE"
+    allowInternal := settings.workspace_marketplace_apps_access_options.allowAllInternalApps
+    allowInternal != false
+}
+
 tests contains {
     "PolicyId": CommonControlsId11_1,
     "Prerequisites": [
