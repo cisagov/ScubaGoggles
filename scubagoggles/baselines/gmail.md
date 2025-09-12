@@ -93,6 +93,7 @@ DKIM SHOULD be enabled for all domains.
 
 - _Rationale:_ Enabling DKIM for all domains can help prevent email spoofing and phishing attacks. Without DKIM, adversaries could manipulate email headers to appear as if they're from a legitimate source, potentially leading to the disclosure of sensitive information. By enabling DKIM, the authenticity of emails can be verified, reducing this risk.
 - _Last modified:_ November 2023
+- _Note:_ This policy is not applicable to user alias domains. Emails sent from user alias domains will be signed by a Google-managed DKIM signing domain (gappssmtp.com) even if DKIM is disabled.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-8
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -138,7 +139,9 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
 
 - _Rationale:_ Adversaries could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - _Last modified:_ February 2024
-- _Note:_ SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`).
+- _Note:_ 
+  - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`).
+  - This policy is not applicable to user alias domains. Gmail uses the primary domain as the `envelope-from` domain and the alias domain as the `header-from` domain, SPF only verifies the `envelope-from` domain.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-2d
 - MITRE ATT&CK TTP Mapping
   - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
@@ -180,10 +183,13 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 ### Policies
 
 #### GWS.GMAIL.4.1v0.5
-A DMARC policy SHALL be published for every second-level domain.
+A DMARC policy SHALL be published at the full domain or the second-level domain for all Google Workspace domains, including user alias domains.
 
-- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every second-level domain further reduces the risk posed by authentication failures.
-- _Last modified:_ November 2023
+- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every domain further reduces the risk posed by authentication failures.
+- _Last modified:_ September 2025
+- _Note:_
+  - A DMARC record published at the second-level domain applies to all subdomains by default. In other words, a DMARC record published for `example.com` will protect both `a.example.com` and `b.example.com`, but a separate record would need to be published for `c.example.gov`. In this example `a.example.com` is the full domain, or fully qualified domain name (FQDN), whereas `example.com` is the second-level domain.
+  - User alias domains provide an alternative email address to send or receive email and therefore must have a DMARC policy in place.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
   - None
@@ -239,8 +245,6 @@ An agency point of contact SHOULD be included for aggregate and failure reports.
 <a name="gmail41-instructions"></a>
 #### GWS.GMAIL.4.1v0.5 Instructions
 DMARC is not configured through the Google Admin Console, but rather via DNS records hosted by the agency's domain(s). As such, implementation varies depending on how an agency manages its DNS records. See [Add your DMARC record](https://support.google.com/a/answer/2466563) for Google guidance.
-
-Note, a DMARC record published at the second-level domain will protect all subdomains. In other words, a DMARC record published for `example.com` will protect both `a.example.com` and `b.example.com`, but a separate record would need to be published for `c.example.gov`.
 
 To test your DMARC configuration, consider using one of many publicly available web-based tools, such as the [Google Admin Toolbox](https://toolbox.googleapps.com/apps/checkmx/). Additionally, DMARC records can be requested using the command line tool `dig`. For example:
 
