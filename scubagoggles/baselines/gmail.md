@@ -186,7 +186,7 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 A DMARC policy SHALL be published at the full domain or the second-level domain for all Google Workspace domains, including user alias domains.
 
 - _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every domain further reduces the risk posed by authentication failures.
-- _Last modified:_ November 2023
+- _Last modified:_ September 2025
 - _Note:_
   - An example of a full domain, or fully qualified domain name (FQDN), is `mail.example.com`. The second-level domain in this case is `example.com`.
   - User alias domains provide an alternative email address to send or receive email and therefore must have a DMARC policy in place.
