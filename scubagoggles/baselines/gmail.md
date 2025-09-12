@@ -188,7 +188,7 @@ A DMARC policy SHALL be published at the full domain or the second-level domain 
 - _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every domain further reduces the risk posed by authentication failures.
 - _Last modified:_ September 2025
 - _Note:_
-  - An example of a full domain, or fully qualified domain name (FQDN), is `mail.example.com`. The second-level domain in this case is `example.com`.
+  - A DMARC record published at the second-level domain applies to all subdomains by default. In other words, a DMARC record published for `example.com` will protect both `a.example.com` and `b.example.com`, but a separate record would need to be published for `c.example.gov`. In this example `a.example.com` is the full domain, or fully qualified domain name (FQDN), whereas `example.com` is the second-level domain.
   - User alias domains provide an alternative email address to send or receive email and therefore must have a DMARC policy in place.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -245,8 +245,6 @@ An agency point of contact SHOULD be included for aggregate and failure reports.
 <a name="gmail41-instructions"></a>
 #### GWS.GMAIL.4.1v0.5 Instructions
 DMARC is not configured through the Google Admin Console, but rather via DNS records hosted by the agency's domain(s). As such, implementation varies depending on how an agency manages its DNS records. See [Add your DMARC record](https://support.google.com/a/answer/2466563) for Google guidance.
-
-Note, a DMARC record published at the second-level domain will protect all subdomains. In other words, a DMARC record published for `example.com` will protect both `a.example.com` and `b.example.com`, but a separate record would need to be published for `c.example.gov`.
 
 To test your DMARC configuration, consider using one of many publicly available web-based tools, such as the [Google Admin Toolbox](https://toolbox.googleapps.com/apps/checkmx/). Additionally, DMARC records can be requested using the command line tool `dig`. For example:
 
