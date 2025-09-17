@@ -118,7 +118,8 @@ GetFriendlyMethods(Value) := "Any" if {
 TwoSV := "2-step verification (2SV)"
 NonComplianceMessage1_1a := sprintf("Users cannot enable %s.", [TwoSV])
 
-NonComplianceMessage1_1b(value) := sprintf("%s is not enforced.", [TwoSV])
+NonComplianceMessage1_1b(value) := sprintf(""%s is not enforced.",
+                                           [TwoSV, value])
 
 NonComplianceMessage1_1c := sprintf("%s is not enforced.", [TwoSV])
 
