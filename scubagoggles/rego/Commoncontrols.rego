@@ -173,7 +173,7 @@ if {
                                           "allowEnrollment",
                                           OU)
     enable2SV
-    enforce2SV = true
+    Is2SVEnforced(enforce2SV) == true
     enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
     enforceMethod != "PASSKEY_ONLY"
 }
