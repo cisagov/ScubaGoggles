@@ -160,8 +160,7 @@ if {
                                           "allowEnrollment",
                                           OU)
     enable2SV
-    enforceMethod := settings.security.two_step_verification_enforcement.enforcedFrom
-    enforceMethod = "1970-01-01T00:00:00Z"
+    enforceValue = 0
 }
 
 NonCompliantOUs1_1 contains {
