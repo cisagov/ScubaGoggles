@@ -152,6 +152,20 @@ if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
+    "Value": NonComplianceMessage1_1c
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforceMethod := settings.security.two_step_verification_enforcement.enforcedFrom
+    enforceMethod = "1970-01-01T00:00:00Z"
+}
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
     "Value": NonComplianceMessage1_1b(GetFriendlyMethods(enforceMethod))
 }
 if {
