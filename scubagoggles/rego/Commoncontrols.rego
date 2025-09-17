@@ -301,6 +301,22 @@ if {
     enable2SV
     enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
     enforceMethod == "ALL"
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    Is2SVEnforced(enforce2SV) == true
+}
+
+NonCompliantOUs1_3 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_1c
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    Is2SVEnforced(enforce2SV) == false
 }
 
 NonCompliantOUs1_3 contains {
@@ -367,6 +383,22 @@ if {
         enrollSeconds == 0,
         enrollSeconds > expectedPeriod
     }
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    Is2SVEnforced(enforce2SV) == true
+}
+
+NonCompliantOUs1_4 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_1c
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    Is2SVEnforced(enforce2SV) == false
 }
 
 tests contains {
@@ -399,6 +431,22 @@ if {
     some OU, settings in input.policies
     trustDevice := settings.security_two_step_verification_device_trust.allowTrustingDevice
     trustDevice
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    Is2SVEnforced(enforce2SV) == true
+}
+
+NonCompliantOUs1_5 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_1c
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    Is2SVEnforced(enforce2SV) == false
 }
 
 tests contains {
