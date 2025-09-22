@@ -66,6 +66,12 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                             type=path_parser,
                             help=help_msg)
 
+    parser.add_argument('--darkmode',
+                        '-dm',
+                        metavar='<dark-mode>',
+                        choices=('true', 'false'),
+                        help='Enable dark mode')
+
     help_msg = ('A list of one or more abbreviated GWS baseline names that the '
                 'tool will assess. Defaults to all baselines. '
                 f'Choices: {(", ".join(gws_baselines))}')

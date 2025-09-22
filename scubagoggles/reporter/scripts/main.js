@@ -15,56 +15,56 @@ const colorRows = () => {
         try {
             if (rows[i].children.length == 3) {
                 // This row is in the Alerts table
-                if (rows[i].children[alertStatusCol].innerHTML === "Enabled") {
+                if (rows[i].children[alertStatusCol]?.innerHTML === "Enabled") {
                     rows[i].style.background = "var(--test-pass)";
                 }
-                else if (rows[i].children[alertStatusCol].innerHTML === "Disabled") {
+                else if (rows[i].children[alertStatusCol]?.innerHTML === "Disabled") {
                     rows[i].style.background = "var(--test-fail)";
                 }
-                else if (rows[i].children[alertStatusCol].innerHTML === "Unknown") {
+                else if (rows[i].children[alertStatusCol]?.innerHTML === "Unknown") {
                     rows[i].style.background = "var(--test-other)";
                 }
             }
             else {
                 // This row is in one of the generic results rows
-                if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
+                if (rows[i].children[requirementCol]?.innerHTML.startsWith("[DELETED]")) {
                     rows[i].style.color = "var(--test-deleted-color)";
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Fail") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Fail") {
                     rows[i].style.background = "var(--test-fail)";
                 }
-                else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
+                else if (rows[i].children[statusCol]?.innerHTML.includes("No events found")) {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Warning") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Warning") {
                     rows[i].style.background = "var(--test-warning)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Pass") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Pass") {
                     rows[i].style.background = "var(--test-pass)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Omitted") {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Incorrect result") {
-                    if (rows[i].children[criticalityCol].innerHTML === "Shall") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Incorrect result") {
+                    if (rows[i].children[criticalityCol]?.innerHTML === "Shall") {
                         rows[i].style.background = "linear-gradient(to right, var(--test-fail), var(--test-pass))";
                     }
-                    else if (rows[i].children[criticalityCol].innerHTML === "Should") {
+                    else if (rows[i].children[criticalityCol]?.innerHTML === "Should") {
                         rows[i].style.background = "linear-gradient(to right, var(--test-warning), var(--test-pass))";
                     }
                     else {
                         // This should never happen
-                        console.log(`Unexpected criticality for incorrect result, ${rows[i].children[criticalityCol].innerHTML}.`);
+                        console.log(`Unexpected criticality for incorrect result, ${rows[i].children[criticalityCol]?.innerHTML}.`);
                     }
                 }
-                else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
+                else if (rows[i].children[criticalityCol]?.innerHTML.includes("Not-Implemented")) {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
+                else if (rows[i].children[criticalityCol]?.innerHTML.includes("3rd Party")) {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
+                else if (rows[i].children[statusCol]?.innerHTML.includes("Error")) {
                     rows[i].style.background = "var(--test-fail)";
                     rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
                     rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
@@ -78,6 +78,115 @@ const colorRows = () => {
     }
 }
 
-window.addEventListener('DOMContentLoaded', (event) => {
+/**
+ * Toggles light and dark mode.
+ */
+const toggleDarkMode = () => {
+
+    const inputToggle = document.getElementById("toggle")
+
+    if (inputToggle.checked === true) {
+
+        return setDarkMode("true")
+    }
+
+    return setDarkMode("false")
+}
+
+/**
+ * Checks if  the report settings session-object exists. Returns undefined if it does not exist.
+ * Reads the report settings object in session storage. Returns value, true or false.
+ * @param {string} setting sgr_settings option to read
+ */
+const checkSettings = (setting) => {
+    if (!setting) return
+
+        let reportSettings = sessionStorage.getItem("sgr_settings")
+
+        if (reportSettings === null || reportSettings === undefined) {
+            return undefined
+        } else {
+
+            if (reportSettings[setting] != (undefined || null || false)) {
+                return reportSettings[setting] || true
+            }
+            return false
+        }
+
+}
+
+/**
+ * Updates the report settings object in session storage.
+ * @param {string} option sgr_settings option to update
+ * @param {string} value update value for sgr_settings option
+ */
+const updateSettings = (option, value) => {
+   return sessionStorage.setItem("sgr_settings", JSON.stringify({ [option]: value }))
+}
+
+/**
+ * Set the report CSS to light mode or dark mode.
+ * @param {string} state true for Dark Mode or false for Light Mode
+ */
+const setDarkMode = (state) => {
+    if (state === "true") {
+        document.querySelectorAll("html")[0].dataset.theme = "dark";
+        document.querySelector("#toggle-text").innerHTML = "Dark Mode"
+        return updateSettings("darkMode", "true")
+    }
+
+    document.querySelectorAll("html")[0].dataset.theme = "light";
+    document.querySelector("#toggle-text").innerHTML = "Light Mode"
+    return updateSettings("darkMode", "false")
+}
+
+/**
+ * Checks if darkMode cli-passed value exists and sets the report darkMode.
+ * Checks if darkMode session-stored variable exists. Creates one with a default value if it does not exist.
+ * Sets the report's default Dark Mode state using setDarkMode based on session-stored value.
+ */
+const mountDarkMode = () =>{
+
+    const inputToggle = document.getElementById("toggle")
+    const darkModeEnabled = document.getElementById("sgr_settings")
+    const mode = "darkMode"
+
+    if (darkModeEnabled.getAttribute("data-darkmode") === "true") {
+        inputToggle.checked = "true"
+        return setDarkMode("true")
+    }
+
+    if (checkSettings(mode) === null || checkSettings(mode) === undefined) {
+        return setDarkMode("false")
+    } else if (JSON.parse(sessionStorage.getItem("sgr_settings"))[mode] === "false") {
+        return setDarkMode("false")
+    } else {
+
+        if (checkSettings(mode)) {
+            inputToggle.checked = "true"
+            return setDarkMode("true")
+        }
+    }
+}
+
+/**
+ * Media Query for browser darkMode
+ */
+const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)")
+
+/**
+ * Event listener for broswer darkMode Media Query changes.
+ * Sets the report CSS to light mode or dark mode.
+ */
+darkModePreference.addEventListener("change", () =>  {
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return setDarkMode("true")
+    } else {
+        return setDarkMode("false")
+    }
+})
+
+window.addEventListener('DOMContentLoaded', () => {
     colorRows();
+    mountDarkMode();
 });
