@@ -1,5 +1,6 @@
 package gmail
 import future.keywords
+import data.gmail.DNSLink
 
 #
 # GWS.GMAIL.4.1
@@ -23,7 +24,7 @@ test_DMARC_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met."
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
 test_DMARC_Correct_V2 if {
@@ -51,7 +52,7 @@ test_DMARC_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met."
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
 test_DMARC_Incorrect_V1 if {
@@ -77,7 +78,8 @@ test_DMARC_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "1 of 2 agency domain(s) found in violation: test2.name."
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 2 agency domain(s) found in violation: test2.name.", DNSLink])
+    
 }
 
 test_DMARC_Incorrect_V2 if {
@@ -97,7 +99,7 @@ test_DMARC_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "1 of 1 agency domain(s) found in violation: test.name."
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
 }
 
 #
@@ -123,7 +125,7 @@ test_DMARCMessageReject_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met."
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
 test_DMARCMessageReject_Correct_V2 if {
@@ -151,7 +153,7 @@ test_DMARCMessageReject_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met."
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
 test_DMARCMessageReject_Incorrect_V1 if {
@@ -177,7 +179,7 @@ test_DMARCMessageReject_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "1 of 2 agency domain(s) found in violation: test2.name."
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 2 agency domain(s) found in violation: test2.name.", DNSLink])
 }
 
 test_DMARCMessageReject_Incorrect_V2 if {
@@ -197,7 +199,7 @@ test_DMARCMessageReject_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "1 of 1 agency domain(s) found in violation: test.name."
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
 }
 
 #
@@ -223,7 +225,7 @@ test_DMARCAggregateReports_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met."
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
 test_DMARCAggregateReports_Correct_V2 if {
@@ -251,7 +253,7 @@ test_DMARCAggregateReports_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met."
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
 test_DMARCAggregateReports_Incorrect_V1 if {
@@ -277,7 +279,7 @@ test_DMARCAggregateReports_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "1 of 2 agency domain(s) found in violation: test2.name."
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 2 agency domain(s) found in violation: test2.name.", DNSLink])
 }
 
 test_DMARCAggregateReports_Incorrect_V2 if {
@@ -297,7 +299,7 @@ test_DMARCAggregateReports_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "1 of 1 agency domain(s) found in violation: test.name."
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
 }
 
 #
@@ -323,7 +325,7 @@ test_DMARCAgencyPOC_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met."
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
 test_DMARCAgencyPOC_Correct_V2 if {
@@ -351,7 +353,7 @@ test_DMARCAgencyPOC_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met."
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
 test_DMARCAgencyPOC_Incorrect_V1 if {
@@ -377,7 +379,7 @@ test_DMARCAgencyPOC_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "1 of 2 agency domain(s) found in violation: test2.name."
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 2 agency domain(s) found in violation: test2.name.", DNSLink])
 }
 
 test_DMARCAgencyPOC_Incorrect_V2 if {
@@ -397,6 +399,6 @@ test_DMARCAgencyPOC_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "1 of 1 agency domain(s) found in violation: test.name."
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
 }
 #--
