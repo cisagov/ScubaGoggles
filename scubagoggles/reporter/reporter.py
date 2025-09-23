@@ -398,6 +398,25 @@ class Reporter:
             result['Details'] = details
         return table_data
 
+    def _insert_classroom_warning(self, html: str) -> str:
+        """
+        Adds the warning notifcation about the classroom baseline, if
+        applicable.
+
+        :param html: The HTML string representing the report.
+        """
+
+        classroom_notification = ('<h4>Note: Google Classroom is not available '
+                                  'by default in GWS but as an additional '
+                                  'Google Service.</h4>')
+
+        if self._full_name == 'Google Classroom':
+            html = html.replace('{{WARNING_NOTIFICATION}}',
+                                classroom_notification)
+        else:
+            html = html.replace('{{WARNING_NOTIFICATION}}', '')
+        return html
+
     def _build_report_html(self, fragments: list, rules_data : dict, darkmode: str) -> str:
         """
         Adds data into HTML Template and formats the page accordingly
@@ -439,17 +458,7 @@ class Reporter:
         html = html.replace('{{SGR_SETTINGS}}',
                             f'<span id="sgr_settings" data-darkmode="{darkmode}"></span>')
 
-        # This block of code is for adding warning notifications to any of
-        # the baseline reports.
-        classroom_notification = ('<h4>Note: Google Classroom is not available '
-                                  'by default in GWS but as an additional '
-                                  'Google Service.</h4>')
-
-        if self._full_name == 'Google Classroom':
-            html = html.replace('{{WARNING_NOTIFICATION}}',
-                                classroom_notification)
-        else:
-            html = html.replace('{{WARNING_NOTIFICATION}}', '')
+        html = self._insert_classroom_warning(html)
 
         # Relative path back to the front page
         home_page = f'../{self._main_report_name}.html'
@@ -517,7 +526,7 @@ class Reporter:
             self.rules_table = rules_table
         else:
             html = html.replace('{{RULES}}', '')
-        
+
         if self._dns_logs['spf'] is None:
             html = html.replace('{{DNS_LOGS}}', '')
             return html
