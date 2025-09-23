@@ -147,7 +147,7 @@ if {
 
 ChatId3_1 := utils.PolicyIdWithSuffix("GWS.CHAT.3.1")
 
-NonComplianceMessage3_1(value) := sprintf("Conversation history settings for spaces is set to: %s",
+NonComplianceMessage3_1(value) := sprintf("Conversation history settings for spaces is set to: %s (expected: ALWAYS ON)",
                                           [value])
 
 GetFriendlyValue3_1(Value) := "OFF by default" if {
@@ -169,7 +169,7 @@ NonCompliantOUs3_1 contains {
     some OU, settings in input.policies
     ChatEnabled(OU)
     spaceHistory := settings.chat_space_history.historyState
-    not spaceHistory in ["DEFAULT_HISTORY_ON", "HISTORY_ALWAYS_ON"]
+    spaceHistory != "HISTORY_ALWAYS_ON"
 }
 
 tests contains {
