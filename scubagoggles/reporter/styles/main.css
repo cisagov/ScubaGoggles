@@ -28,6 +28,10 @@ body {
     print-color-adjust:exact !important;
 }
 
+.alternating tr:nth-child(even) {
+    background-color: var(--cap-even);
+}
+
 table {
     margin: auto;
     font-size: 12px;

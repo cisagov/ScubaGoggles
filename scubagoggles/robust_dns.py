@@ -64,14 +64,12 @@ class RobustDNSClient:
         while try_number < max_tries:
             try_number += 1
             try:
-                # No exception was thrown, we got our answer, so break out of the retry loop and
-                # set success to True, no need to retry the traditional query or retry with DoH.
+                # No exception was thrown, we got our answer, so break out of the retry loop
                 response = dns.resolver.resolve(qname, "TXT")
                 for answer in response:
                     answers.append(answer.to_text().strip('"')) # Strip
                     # the quotes because the actual response comes wrapped in
                     # quotes, resulting in duplicate quotes in the json output
-                success = True
                 log_entries.append({
                     "query_name": qname,
                     "query_method": "traditional",
@@ -80,12 +78,13 @@ class RobustDNSClient:
                 })
                 break
             except dns.resolver.NoAnswer:
-                # The answer section was empty. This usually means that while the domain exists,
-                # but there are no records of the requested type. No need to retry the traditional
-                # query, this was not a transient failure. Don't set success to True though, as we
-                # want to retry this query from a public resolver, in case the internal DNS server
-                # returns a different answer than what is served to the public (i.e., split horizon
-                # DNS).
+                # The answer section was empty. This usually means that while
+                # the domain exists, but there are no records of the requested
+                # type. No need to retry the traditional query, this was not a
+                # transient failure. We do want to retry this query from a
+                # public resolver, in case the internal DNS server returns a
+                # different answer than what is served to the public (i.e.,
+                # split horizon DNS).
                 log_entries.append({
                     "query_name": qname,
                     "query_method": "traditional",
