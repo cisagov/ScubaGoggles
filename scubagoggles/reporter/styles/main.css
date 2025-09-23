@@ -72,6 +72,10 @@ body {
     color: var(--text-color)
 }
 
+.alternating tr:nth-child(even) {
+    background-color: var(--cap-even);
+}
+
 table {
     margin: auto;
     font-size: 12px;

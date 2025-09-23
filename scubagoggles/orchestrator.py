@@ -374,6 +374,12 @@ class Orchestrator:
         missing_policies = set(settings_data['missing_policies'])
         report_uuid = settings_data['report_uuid']
 
+        # Get the DNS data, if applicable
+        dns_logs = {}
+        dns_logs['spf'] = settings_data.get('spf_records')
+        dns_logs['dkim'] = settings_data.get('dkim_records')
+        dns_logs['dmarc'] = settings_data.get('dmarc_records')
+
         # Create the SCuBA results JSON file name
         out_jsonfile = self._get_full_out_jsonfile_name(report_uuid)
 
@@ -438,6 +444,7 @@ class Orchestrator:
                                 successful_calls,
                                 unsuccessful_calls,
                                 missing_policies,
+                                dns_logs,
                                 omissions,
                                 annotations,
                                 products_bar)

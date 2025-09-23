@@ -280,21 +280,21 @@ class Provider:
             self._successful_calls.add('get_spf_records')
         except Exception as exc:
             output['spf_records'] = []
-            log.warning('An exception was thrown by get_spf_records: %s' % str(exc))
+            log.warning('An exception was thrown by get_spf_records: %s', str(exc))
             self._unsuccessful_calls.add('get_spf_records')
         try:
             output['dkim_records'] = self.get_dkim_records(domains)
             self._successful_calls.add('get_dkim_records')
         except Exception as exc:
             output['dkim_records'] = []
-            log.warning('An exception was thrown by get_dkim_records: %s' % str(exc))
+            log.warning('An exception was thrown by get_dkim_records: %s', str(exc))
             self._unsuccessful_calls.add('get_dkim_records')
         try:
             output['dmarc_records'] = self.get_dmarc_records(domains)
             self._successful_calls.add('get_dmarc_records')
         except Exception as exc:
             output['dmarc_records'] = []
-            log.warning('An exception was thrown by get_dmarc_records: %s' % str(exc))
+            log.warning('An exception was thrown by get_dmarc_records: %s', str(exc))
             self._unsuccessful_calls.add('get_dmarc_records')
         return output
 
