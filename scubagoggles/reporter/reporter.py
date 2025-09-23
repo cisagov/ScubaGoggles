@@ -527,7 +527,7 @@ class Reporter:
         else:
             html = html.replace('{{RULES}}', '')
 
-        if self._dns_logs['spf'] is None:
+        if self._full_name != 'Gmail':
             html = html.replace('{{DNS_LOGS}}', '')
             return html
         log_html = "<hr><h2 id=\"dns-logs\">DNS Logs</h2>"

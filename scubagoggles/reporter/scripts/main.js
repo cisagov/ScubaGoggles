@@ -240,7 +240,7 @@ const truncateDNSTables = (maxRows) => {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    const MAX_DNS_ENTRIES = 2;
+    const MAX_DNS_ENTRIES = 20;
     colorRows();
     mountDarkMode();
     truncateDNSTables(MAX_DNS_ENTRIES);
