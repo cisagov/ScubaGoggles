@@ -1,6 +1,6 @@
 package gmail
 import future.keywords
-import data.gmail.DNSLink
+import data.gmail
 
 #
 # GWS.GMAIL.2.1
