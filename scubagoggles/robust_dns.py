@@ -1,7 +1,6 @@
 '''Code for running robust DNS queries, including logic for retries over both the traditional DNS
 as well as DNS over HTTPS (DoH)'''
 
-import json
 import dns.resolver
 import requests
 
