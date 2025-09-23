@@ -534,7 +534,7 @@ class Reporter:
         log_html += ("<p>DNS queries ScubaGear made while identifying SPF, "
             "DKIM, and DMARC records. Note: if DNS queries unexepectedly "
             "return 0 txt records, it may be a sign the system-defualt "
-            "resolver is unable to resolve the domain names (e.g., due to a )"
+            "resolver is unable to resolve the domain names (e.g., due to a "
             "split horizon setup).</p>") 
         for log_type in self._dns_logs:
             log_html += "<div class='dns-logs'>"
