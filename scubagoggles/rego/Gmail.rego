@@ -26,6 +26,9 @@ AllDomains := {Domain | some Domain in input.domains}
 
 LogEvents := utils.GetEvents("gmail_logs")
 
+# Link used for SPF, DKIM, and DMARC related logs
+DNSLink := "<a href=\"#dns-logs\">View DNS logs</a> for more details."
+
 ###############
 # GWS.GMAIL.1 #
 ###############
@@ -87,7 +90,7 @@ tests contains {
     "PolicyId": GmailId2_1,
     "Prerequisites": ["directory/v1/domains/list", "get_dkim_records"],
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDkim, AllDomains),
+    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDkim, AllDomains), DNSLink]),
     "ActualValue": input.dkim_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -124,7 +127,7 @@ tests contains {
     "PolicyId": GmailId3_1,
     "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsArray(Status, DomainsWithoutSpf, AllDomains),
+    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutSpf, AllDomains), DNSLink]),
     "ActualValue": DomainsWithoutSpf,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -157,7 +160,7 @@ tests contains {
     "PolicyId": GmailId4_1,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains),
+    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains), DNSLink]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -185,7 +188,7 @@ tests contains {
     "PolicyId": GmailId4_2,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains),
+    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains), DNSLink]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -213,7 +216,7 @@ tests contains {
     "PolicyId": GmailId4_3,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
-    "ReportDetails": ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains),
+    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains), DNSLink]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -241,7 +244,7 @@ tests contains {
     "PolicyId": GmailId4_4,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Should",
-    "ReportDetails": ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains),
+    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains), DNSLink]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false

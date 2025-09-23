@@ -395,6 +395,10 @@ class Reporter:
             details = details.replace(self._log_based_warning,
                                       self._log_based_warning_plaintext)
             details = details.replace('<br>', '\n')
+
+            dns_link = "<a href=\"#dns-logs\">View DNS logs</a> for more details."
+            details = details.replace(dns_link, "")
+
             result['Details'] = details
         return table_data
 
