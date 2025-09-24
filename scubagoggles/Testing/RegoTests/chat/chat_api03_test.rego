@@ -7,10 +7,10 @@ import data.utils.PassTestResult
 GoodChatApi03 := {
     "policies": {
         "topOU": {
-            "chat_space_history": {"historyState": "DEFAULT_HISTORY_ON"},
+            "chat_space_history": {"historyState": "HISTORY_ALWAYS_ON"},
             "chat_service_status": {"serviceState": "ENABLED"}
         },
-         "nextOU": {
+        "nextOU": {
             "chat_space_history": {"historyState": "HISTORY_ALWAYS_ON"}
         },
         "thirdOU": {
@@ -78,5 +78,27 @@ test_ChatAPI_Space_History_Incorrect_2 if {
                  "Value": NonComplianceMessage3_1("ALWAYS OFF")},
                  {"Name": "thirdOU",
                  "Value": NonComplianceMessage3_1("Unspecified")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+# DEFAULT_HISTORY_ON should now be noncompliant
+BadChatApi03b := {
+    "policies": {
+        "topOU": {
+            "chat_space_history": {"historyState": "DEFAULT_HISTORY_ON"},
+            "chat_service_status": {"serviceState": "ENABLED"}
+        }
+    },
+    "tenant_info": {
+        "topLevelOU": "topOU"
+    }
+}
+
+test_ChatAPI_Space_History_Incorrect_3 if {
+    PolicyId := ChatId3_1
+    Output := tests with input as BadChatApi03b
+
+    failedOU := [{"Name": "topOU",
+                 "Value": NonComplianceMessage3_1("ON by default")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
