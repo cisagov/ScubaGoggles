@@ -14,7 +14,7 @@ GoodCaseInputApi11 := {
         "nextOU": {
             "workspace_marketplace_apps_access_options": {
                 "accessLevel": "ALLOW_NONE",
-                "allowAllInternalApps": true}
+                "allowAllInternalApps": false}
         }
     },
     "tenant_info": {
