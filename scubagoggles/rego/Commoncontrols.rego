@@ -445,7 +445,6 @@ if {
                                           "allowEnrollment",
                                           OU)
     enable2SV
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == false
 }
 
