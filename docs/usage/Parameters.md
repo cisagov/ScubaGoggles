@@ -26,6 +26,7 @@ usage: scubagoggles gws [-h]
                         [--debug]
                         [--runcached]
                         [--skipexport]
+                        [--darkmode <boolean>]
 
 SCuBA automated conformance check for Google Workspace (GWS) products
 
@@ -80,7 +81,8 @@ options:
                         Controls how many characters will be truncated from the report UUID when appended to the end of
                         outjsonfilename. Valid values are 0, 13, 18, 36. Defaults to 18.
   --debug               This switch is used to print debugging information for OPA.
-
+  --darkmode            <boolean>
+                        Enable dark mode styles for the report output
 Cached Mode options:
   --runcached           This switch when added will run in the tool in "RunCached mode". When combined with --skipexport
                         allows the user to skip authentication and provider export.

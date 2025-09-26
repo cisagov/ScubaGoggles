@@ -419,6 +419,9 @@ class Orchestrator:
 
         total_output.update({'MetaData': report_metadata})
 
+        # Dark mode option for report
+        darkmode = args.darkmode
+
         main_report_name = args.outputreportfilename
         products_bar = tqdm(products, leave=False, disable=args.quiet)
         annotated_failed_policies = {}
@@ -440,7 +443,8 @@ class Orchestrator:
                                 products_bar)
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
-                                                  out_folder)
+                                                  out_folder,
+                                                  darkmode)
             baseline_product_summary = {product: stats_and_data[product][0]}
             baseline_product_results_json = {
                 product: stats_and_data[product][1]}
@@ -503,9 +507,13 @@ class Orchestrator:
                                'Details': self._generate_summary(stats[0])})
 
         fragments.append(Reporter.create_html_table(table_data))
+
+        darkmode = args.darkmode
+
         front_page_html = Reporter.build_front_page_html(fragments,
                                                          tenant_info,
-                                                         report_uuid)
+                                                         report_uuid,
+                                                         darkmode)
         report_path.write_text(front_page_html, encoding='utf-8')
 
         # suppress opening the report in the browser
