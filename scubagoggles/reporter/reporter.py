@@ -189,12 +189,14 @@ class Reporter:
     def build_front_page_html(cls,
                               fragments: list,
                               tenant_info: dict,
-                              report_uuid: str) -> str:
+                              report_uuid: str,
+                              darkmode: str) -> str:
         """
         Builds the Front Page Report using the HTML Report Template
 
         :param fragments: list object containing each baseline
         :param tenant_info: list object containing each baseline
+        :param darkmode: enable/disable dark mode
         """
 
         template_file = (cls._reporter_path
@@ -204,8 +206,23 @@ class Reporter:
         table = ''.join(fragments)
 
         main_css_file = cls._reporter_path / 'styles/main.css'
+
+        main_js_file = cls._reporter_path / 'scripts/main.js'
+
         css = main_css_file.read_text(encoding='utf-8')
+
+        javascript = main_js_file.read_text(encoding='utf-8')
+
         html = html.replace('{{MAIN_CSS}}', f'<style>{css}</style>')
+
+        html = html.replace('{{MAIN_JS}}', f'<script>{javascript}</script>')
+
+        dark_mode_toggle_template = cls._reporter_path / 'templates/DarkModeToggleTemplate.html'
+        dark_mode_toggle_button = dark_mode_toggle_template.read_text(encoding='utf-8')
+
+        html = html.replace('{{DARK_MODE_TOGGLE}}', dark_mode_toggle_button)
+        html = html.replace('{{SGR_SETTINGS}}',
+                            f'<span id="sgr_settings" data-darkmode="{darkmode}"></span>')
 
         front_css_file = cls._reporter_path / 'styles/FrontPageStyle.css'
         css = front_css_file.read_text(encoding='utf-8')
@@ -378,13 +395,14 @@ class Reporter:
             result['Details'] = details
         return table_data
 
-    def _build_report_html(self, fragments: list, rules_data : dict) -> str:
+    def _build_report_html(self, fragments: list, rules_data : dict, darkmode: str) -> str:
         """
         Adds data into HTML Template and formats the page accordingly
 
         :param fragments: list object containing each baseline
         :param rules_data: the 'actual_value' for GWS.COMMONCONTROLS.13.1 if
             present, None otherwise
+        :param darkmode: enable/disable dark mode
         """
 
         template_file = (self._reporter_path
@@ -401,6 +419,22 @@ class Reporter:
 
         title = self._full_name + ' Baseline Report'
         html = html.replace('{{TITLE}}', title)
+
+        main_js_file = self._reporter_path / 'scripts/main.js'
+
+        css = main_css_file.read_text(encoding='utf-8')
+
+        javascript = main_js_file.read_text(encoding='utf-8')
+
+        html = html.replace('{{MAIN_CSS}}', f'<style>{css}</style>')
+
+        html = html.replace('{{MAIN_JS}}', f'<script>{javascript}</script>')
+
+        dark_mode_toggle_template = self._reporter_path / 'templates/DarkModeToggleTemplate.html'
+        dark_mode_toggle_button = dark_mode_toggle_template.read_text(encoding='utf-8')
+        html = html.replace('{{DARK_MODE_TOGGLE}}', dark_mode_toggle_button)
+        html = html.replace('{{SGR_SETTINGS}}',
+                            f'<span id="sgr_settings" data-darkmode="{darkmode}"></span>')
 
         # This block of code is for adding warning notifications to any of
         # the baseline reports.
@@ -659,13 +693,15 @@ class Reporter:
 
     def rego_json_to_ind_reports(self,
                                  test_results: list,
-                                 out_path: str) -> list:
+                                 out_path: str,
+                                 darkmode: str) -> list:
         """
         Transforms the Rego JSON output into individual HTML and JSON reports
 
         :param test_results: list of dictionaries with results of Rego test,
             deserialized from JSON data.
         :param out_path: output path where HTML should be saved
+        :param darkmode: enable/disable dark mode
         """
 
         product = self._product
@@ -845,7 +881,7 @@ class Reporter:
                                 f'scubagoggles/baselines/{product}.md'
                                 f'#{baseline_group["GroupNumber"]}-'
                                 + markdown_group_name)
-            markdown_link = (f'<a href="{group_reference_url}" '
+            markdown_link = (f'<a class="control_group" href="{group_reference_url}" '
                              'target="_blank">'
                              f'{baseline_group["GroupName"]}</a>')
             fragments.append(f'<h2>{product_upper}-'
@@ -869,7 +905,7 @@ class Reporter:
             results_data.update({'GroupReferenceURL': group_reference_url})
             results_data.update({'Controls': self._sanitize_details(table_data)})
             json_data.append(results_data)
-        html = self._build_report_html(fragments, rules_data)
+        html = self._build_report_html(fragments, rules_data, darkmode)
         with open(f'{out_path}/IndividualReports/{ind_report_name}.html',
                   mode='w', encoding='UTF-8') as html_file:
             html_file.write(html)
