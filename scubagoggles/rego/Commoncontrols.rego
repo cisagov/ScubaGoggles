@@ -178,7 +178,7 @@ if {
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == false
-    enforceValue = 0
+    enforcedFrom = "1970-01-01T00:00:00Z"
 }
 
 NonCompliantOUs1_1 contains {
@@ -318,7 +318,7 @@ if {
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == false
-    enforceValue = 0
+    enforcedFrom = "1970-01-01T00:00:00Z"
 }
 
 NonCompliantOUs1_3 contains {
@@ -401,7 +401,7 @@ if {
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == false
-    enforceValue = 0
+    enforcedFrom = "1970-01-01T00:00:00Z"
 }
 
 tests contains {
@@ -450,7 +450,7 @@ if {
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == false
-    enforceValue = 0
+    enforcedFrom = "1970-01-01T00:00:00Z"
 }
 
 tests contains {
