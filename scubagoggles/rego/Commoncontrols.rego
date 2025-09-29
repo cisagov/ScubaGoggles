@@ -162,8 +162,6 @@ if {
     enable2SV
     enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
     enforceMethod != "PASSKEY_ONLY"
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true
 }
 
 NonCompliantOUs1_1 contains {
@@ -302,8 +300,6 @@ if {
     enable2SV
     enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
     enforceMethod == "ALL"
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true
 }
 
 NonCompliantOUs1_3 contains {
@@ -385,8 +381,6 @@ if {
         enrollSeconds == 0,
         enrollSeconds > expectedPeriod
     }
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true
 }
 
 NonCompliantOUs1_4 contains {
@@ -434,8 +428,6 @@ if {
     some OU, settings in input.policies
     trustDevice := settings.security_two_step_verification_device_trust.allowTrustingDevice
     trustDevice
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true
 }
 
 NonCompliantOUs1_5 contains {
