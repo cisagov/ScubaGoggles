@@ -178,6 +178,7 @@ if {
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == false
+    enforceValue = 0
 }
 
 NonCompliantOUs1_1 contains {
@@ -307,7 +308,7 @@ if {
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1c
+    "Value": NonComplianceMessage1_3c
 }
 if {
     some OU, settings in input.policies
@@ -317,6 +318,7 @@ if {
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == false
+    enforceValue = 0
 }
 
 NonCompliantOUs1_3 contains {
@@ -399,6 +401,7 @@ if {
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == false
+    enforceValue = 0
 }
 
 tests contains {
@@ -447,6 +450,7 @@ if {
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == false
+    enforceValue = 0
 }
 
 tests contains {
