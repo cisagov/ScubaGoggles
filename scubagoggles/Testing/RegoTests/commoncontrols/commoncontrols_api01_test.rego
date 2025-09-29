@@ -106,6 +106,9 @@ BadCaseInputApi01a := {
                 "enrollmentGracePeriod": "168h"}
         },
         "nextOU": {
+            "security_two_step_verification_enforcement": {
+                "enforcedFrom": "2024-02-16T23:22:21.732Z"
+            },
             "security_two_step_verification_enforcement_factor": {
                 "allowedSignInFactorSet": "ALL"
             }
