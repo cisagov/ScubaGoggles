@@ -55,6 +55,7 @@ class Reporter:
                  successful_calls: set,
                  unsuccessful_calls: set,
                  missing_policies: set,
+                 dns_logs: dict,
                  omissions: dict,
                  annotations: dict,
                  progress_bar=None):
@@ -72,6 +73,7 @@ class Reporter:
         :param unsuccessful_calls: set with the set of unsuccessful calls
         :param missing_policies: set with the set of policies missing from the
             policy API output
+        :param dns_logs: dictionary with the SPF, DKIM, and DMARC query logs
         :param omissions: dict with the omissions specified in the config
             file (empty dict if none omitted)
         :param annotations: dict with the annotations specified in the config
@@ -94,6 +96,7 @@ class Reporter:
             # Prepend each missing policy with "policy/" as that's how they are
             # listed in the rego
             self._missing_policies.add(f'policy/{policy}')
+        self._dns_logs = dns_logs
         self._full_name = prod_to_fullname[product]
         self._omissions = {
             # Lowercase all the keys for case-insensitive comparisons
@@ -392,8 +395,31 @@ class Reporter:
             details = details.replace(self._log_based_warning,
                                       self._log_based_warning_plaintext)
             details = details.replace('<br>', '\n')
+
+            dns_link = "<a href=\"#dns-logs\">View DNS logs</a> for more details."
+            details = details.replace(dns_link, "")
+
             result['Details'] = details
         return table_data
+
+    def _insert_classroom_warning(self, html: str) -> str:
+        """
+        Adds the warning notifcation about the classroom baseline, if
+        applicable.
+
+        :param html: The HTML string representing the report.
+        """
+
+        classroom_notification = ('<h4>Note: Google Classroom is not available '
+                                  'by default in GWS but as an additional '
+                                  'Google Service.</h4>')
+
+        if self._full_name == 'Google Classroom':
+            html = html.replace('{{WARNING_NOTIFICATION}}',
+                                classroom_notification)
+        else:
+            html = html.replace('{{WARNING_NOTIFICATION}}', '')
+        return html
 
     def _build_report_html(self, fragments: list, rules_data : dict, darkmode: str) -> str:
         """
@@ -436,17 +462,7 @@ class Reporter:
         html = html.replace('{{SGR_SETTINGS}}',
                             f'<span id="sgr_settings" data-darkmode="{darkmode}"></span>')
 
-        # This block of code is for adding warning notifications to any of
-        # the baseline reports.
-        classroom_notification = ('<h4>Note: Google Classroom is not available '
-                                  'by default in GWS but as an additional '
-                                  'Google Service.</h4>')
-
-        if self._full_name == 'Google Classroom':
-            html = html.replace('{{WARNING_NOTIFICATION}}',
-                                classroom_notification)
-        else:
-            html = html.replace('{{WARNING_NOTIFICATION}}', '')
+        html = self._insert_classroom_warning(html)
 
         # Relative path back to the front page
         home_page = f'../{self._main_report_name}.html'
@@ -514,6 +530,40 @@ class Reporter:
             self.rules_table = rules_table
         else:
             html = html.replace('{{RULES}}', '')
+
+        if self._full_name != 'Gmail':
+            html = html.replace('{{DNS_LOGS}}', '')
+            return html
+        log_html = "<hr><h2 id=\"dns-logs\">DNS Logs</h2>"
+        log_html += ("<p>DNS queries ScubaGear made while identifying SPF, "
+            "DKIM, and DMARC records. Note: if DNS queries unexepectedly "
+            "return 0 txt records, it may be a sign the system-defualt "
+            "resolver is unable to resolve the domain names (e.g., due to a "
+            "split horizon setup).</p>") 
+        for log_type in self._dns_logs:
+            log_html += "<div class='dns-logs'>"
+            log_html += f"<h3>{log_type.upper()}</h3>"
+            logs = []
+            for domain in self._dns_logs[log_type]:
+                for query in domain['log']:
+                    # Inserting the &#8203; tells the browser it can break these "words"
+                    # where ever it needs to. There are some really long domain names
+                    # and one-word txt records (e.g., DKIM records) that would really
+                    # skew the table otherwise
+                    qname = "&#8203;".join(query['query_name'])
+                    answers = query['query_answers']
+                    answers = ["&#8203;".join(answer) for answer in answers]
+                    logs.append({
+                        "Query Name": qname,
+                        "Query Method": query['query_method'],
+                        "Summary": query['query_result'],
+                        "Answers": '\n'.join(answers)
+                    })
+            log_table = self.create_html_table(logs)
+            log_table = log_table.replace("<table>", "<table class='alternating dns-table'>")
+            log_html += log_table
+            log_html += "</div>"
+        html = html.replace('{{DNS_LOGS}}', log_html)
         return html
 
     def _get_failed_prereqs(self, test: dict) -> set:

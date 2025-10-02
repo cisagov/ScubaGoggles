@@ -200,22 +200,13 @@ class Provider:
         :param domains: The list of domain names (strings).
         """
         results = []
-        n_low_confidence = 0
         for domain in domains:
             result = self._dns_client.query(domain)
-            if not result['HighConfidence']:
-                n_low_confidence += 1
             results.append({
                 'domain': domain,
-                'rdata': result['Answers'],
-                'log': result['LogEntries']
+                'rdata': result['answers'],
+                'log': result['log_entries']
             })
-        if n_low_confidence > 0:
-            warnings.warn(f"get_spf_records: for {n_low_confidence} domain(s), \
-    the traditional DNS queries returned an empty answer \
-    section and the DoH queries failed. Will assume SPF not configured, but \
-    can't guarantee that failure isn't due to something like split horizon DNS. \
-    See ProviderSettingsExport.json under 'spf_records' for more details.", RuntimeWarning)
         return results
 
     def get_dkim_records(self, domains: set) -> list:
@@ -225,34 +216,25 @@ class Provider:
         :param domains: The list of domain names (strings).
         """
         results = []
-        n_low_confidence = 0
         for domain in domains:
             qnames = [f'{selector}._domainkey.{domain}' for selector in SELECTORS]
             log_entries = []
             for qname in qnames:
                 result = self._dns_client.query(qname)
-                log_entries.extend(result['LogEntries'])
-                if len(result['Answers']) == 0:
+                log_entries.extend(result['log_entries'])
+                if len(result['answers']) == 0:
                     # The DKIM record does not exist with this selector, we need to try again with
                     # a different one
                     continue
                 # Otherwise, the DKIM record exists with this selector, no need to try the rest
                 break
 
-            if not result['HighConfidence']:
-                n_low_confidence += 1
             results.append({
                 'domain': domain,
-                'rdata': result['Answers'],
+                'rdata': result['answers'],
                 'log': log_entries
             })
 
-        if n_low_confidence > 0:
-            warnings.warn(f"get_dkim_records: for {n_low_confidence} domain(s), \
-    the traditional DNS queries returned an empty answer \
-    section and the DoH queries failed. Will assume DKIM not configured, but \
-    can't guarantee that failure isn't due to something like split horizon DNS. \
-    See ProviderSettingsExport.json under 'dkim_records' for more details.", RuntimeWarning)
         return results
 
     def get_dmarc_records(self, domains: set) -> list:
@@ -262,32 +244,23 @@ class Provider:
         :param domains: The list of domain names (strings).
         """
         results = []
-        n_low_confidence = 0
         for domain in domains:
             log_entries = []
             qname = f'_dmarc.{domain}'
             result = self._dns_client.query(qname)
-            log_entries.extend(result['LogEntries'])
-            if len(result['Answers']) == 0:
+            log_entries.extend(result['log_entries'])
+            if len(result['answers']) == 0:
                 # The domain does not exist. If the record is not available at the full domain
                 # level, we need to check at the organizational domain level.
                 labels = domain.split('.')
                 org_domain = f'{labels[-2]}.{labels[-1]}'
                 result = self._dns_client.query(f'_dmarc.{org_domain}')
-                log_entries.extend(result['LogEntries'])
-            if not result['HighConfidence']:
-                n_low_confidence += 1
+                log_entries.extend(result['log_entries'])
             results.append({
                 'domain': domain,
-                'rdata': result['Answers'],
+                'rdata': result['answers'],
                 'log': log_entries
             })
-        if n_low_confidence > 0:
-            warnings.warn(f"get_dmarc_records: for {n_low_confidence} domain(s), \
-    the traditional DNS queries returned an empty answer \
-    section and the DoH queries failed. Will assume DMARC not configured, but \
-    can't guarantee that failure isn't due to something like split horizon DNS. \
-    See ProviderSettingsExport.json under 'dmarc_records' for more details.", RuntimeWarning)
         return results
 
     def get_dnsinfo(self):
@@ -297,7 +270,7 @@ class Provider:
         output = {'domains': [], 'spf_records': [], 'dkim_records': [], 'dmarc_records': []}
         domains = {d['domainName'] for d in self.list_domains()}
         if len(domains) == 0:
-            warnings.warn('No domains found.', RuntimeWarning)
+            log.warning('No domains found, unable to request SPF, DKIM, or DMARC records.')
             return output
 
         output['domains'].extend(domains)
@@ -307,21 +280,21 @@ class Provider:
             self._successful_calls.add('get_spf_records')
         except Exception as exc:
             output['spf_records'] = []
-            warnings.warn(f'An exception was thrown by get_spf_records: {exc}', RuntimeWarning)
+            log.warning('An exception was thrown by get_spf_records: %s', str(exc))
             self._unsuccessful_calls.add('get_spf_records')
         try:
             output['dkim_records'] = self.get_dkim_records(domains)
             self._successful_calls.add('get_dkim_records')
         except Exception as exc:
             output['dkim_records'] = []
-            warnings.warn(f'An exception was thrown by get_dkim_records: {exc}', RuntimeWarning)
+            log.warning('An exception was thrown by get_dkim_records: %s', str(exc))
             self._unsuccessful_calls.add('get_dkim_records')
         try:
             output['dmarc_records'] = self.get_dmarc_records(domains)
             self._successful_calls.add('get_dmarc_records')
         except Exception as exc:
             output['dmarc_records'] = []
-            warnings.warn(f'An exception was thrown by get_dmarc_records: {exc}', RuntimeWarning)
+            log.warning('An exception was thrown by get_dmarc_records: %s', str(exc))
             self._unsuccessful_calls.add('get_dmarc_records')
         return output
 

@@ -72,6 +72,26 @@ body {
     color: var(--text-color)
 }
 
+.alternating tr:nth-child(even) {
+    background-color: var(--cap-even);
+}
+
+.show-more {
+    text-align: left;
+    margin-left: 50px;
+    margin-top: 5px;
+}
+
+button.show-more {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  color: var(--unvisited-link-color);
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 0;
+}
+
 table {
     margin: auto;
     font-size: 12px;

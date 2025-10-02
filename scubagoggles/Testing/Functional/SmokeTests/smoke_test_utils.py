@@ -243,7 +243,7 @@ def run_selenium(browser, customerdomain):
             # Check if customerdomain and tool version are present in individual report
             verify_tenant_table(browser, customerdomain, False)
 
-            policy_tables = browser.find_elements(By.TAG_NAME, 'table')
+            policy_tables = browser.find_elements(By.CSS_SELECTOR, "table:not(.dns-logs table)")
             for table in policy_tables[1:]:
 
                 # Verify policy table headers are correct
