@@ -57,7 +57,7 @@ BadCaseInputApi01 := {
         },
         "nextOU": {
             "security_two_step_verification_enforcement": {
-                "enforcedFrom": "2032-02-16T23:22:21.732Z"
+                "enforcedFrom": "2024-02-16T23:22:21.732Z"
             },
             "security_two_step_verification_enforcement_factor": {
                 "allowedSignInFactorSet": "ALL"
@@ -106,9 +106,14 @@ BadCaseInputApi01a := {
                 "enrollmentGracePeriod": "168h"}
         },
         "nextOU": {
+            "security_two_step_verification_enforcement": {
+                "enforcedFrom": "2024-02-16T23:22:21.732Z"
+            },
             "security_two_step_verification_enforcement_factor": {
                 "allowedSignInFactorSet": "ALL"
-            }
+            },
+            "security_two_step_verification_device_trust": {
+                "allowTrustingDevice": true}
         },
         "thirdOU": {
             "security_two_step_verification_enrollment": {
@@ -117,10 +122,18 @@ BadCaseInputApi01a := {
                 "allowTrustingDevice": true}
         },
         "fourthOU": {
+            "security_two_step_verification_enrollment": {
+                "allowEnrollment": true},
+            "security_two_step_verification_enforcement": {
+                "enforcedFrom": "2024-02-16T23:22:21.732Z"
+            },
             "security_two_step_verification_grace_period": {
                 "enrollmentGracePeriod": "0s"}
         },
         "fifthOU": {
+            "security_two_step_verification_enforcement": {
+                "enforcedFrom": "2024-02-16T23:22:21.732Z"
+            },
             "security_two_step_verification_enforcement_factor": {
                 "allowedSignInFactorSet": "NO_TELEPHONY"},
         },
@@ -189,9 +202,7 @@ test_Alt2SV_Incorrect_1 if {
     PolicyId := CommonControlsId1_2
     Output := tests with input as BadCaseInputApi01
 
-    failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage1_2b},
-                 {"Name": "thirdOU",
+    failedOU := [{"Name": "thirdOU",
                   "Value": NonComplianceMessage1_2b},
                  {"Name": "topOU",
                   "Value": NonComplianceMessage1_2a}]
@@ -257,7 +268,9 @@ test_2SVUserEnrollment_Incorrect_1 if {
     PolicyId := CommonControlsId1_4
     Output := tests with input as BadCaseInputApi01
 
-    failedOU := [{"Name": "topOU",
+    failedOU := [{"Name": "thirdOU",
+                  "Value": NonComplianceMessage1_1c},
+                 {"Name": "topOU",
                   "Value": NonComplianceMessage1_4(1209600,
                                                    utils.DurationToSeconds("7d"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
@@ -269,7 +282,11 @@ test_2SVUserEnrollment_Incorrect_2 if {
 
     failedOU := [{"Name": "fourthOU",
                   "Value": NonComplianceMessage1_4(0,
-                                                   utils.DurationToSeconds("7d"))}]
+                                                   utils.DurationToSeconds("7d"))},
+                 {"Name": "seventhOU",
+                  "Value": NonComplianceMessage1_1c},
+                 {"Name": "sixthOU",
+                  "Value": NonComplianceMessage1_1c},]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -284,7 +301,9 @@ test_2SVDeviceTrust_Incorrect_1 if {
     PolicyId := CommonControlsId1_5
     Output := tests with input as BadCaseInputApi01
 
-    failedOU := [{"Name": "topOU",
+    failedOU := [{"Name": "thirdOU",
+                  "Value": NonComplianceMessage1_1c},
+                 {"Name": "topOU",
                   "Value": NonComplianceMessage1_5}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
@@ -293,9 +312,11 @@ test_2SVDeviceTrust_Incorrect_2 if {
     PolicyId := CommonControlsId1_5
     Output := tests with input as BadCaseInputApi01a
 
-    failedOU := [{"Name": "sixthOU",
+    failedOU := [{"Name": "nextOU",
                   "Value": NonComplianceMessage1_5},
-                  {"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_5}]
+                 {"Name": "seventhOU",
+                  "Value": NonComplianceMessage1_1c},
+                  {"Name": "sixthOU",
+                  "Value": NonComplianceMessage1_1c}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
