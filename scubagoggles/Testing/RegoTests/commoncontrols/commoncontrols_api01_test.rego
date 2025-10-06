@@ -57,7 +57,7 @@ BadCaseInputApi01 := {
         },
         "nextOU": {
             "security_two_step_verification_enforcement": {
-                "enforcedFrom": "2022-02-16T23:22:21.732Z"
+                "enforcedFrom": "2024-02-16T23:22:21.732Z"
             },
             "security_two_step_verification_enforcement_factor": {
                 "allowedSignInFactorSet": "ALL"
