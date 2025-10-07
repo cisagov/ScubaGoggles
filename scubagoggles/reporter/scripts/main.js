@@ -82,37 +82,28 @@ const colorRows = () => {
  * Toggles light and dark mode.
  */
 const toggleDarkMode = () => {
-
-    const inputToggle = document.getElementById("toggle")
-
+    const inputToggle = document.getElementById("toggle");
     if (inputToggle.checked === true) {
-
-        return setDarkMode("true")
+        setDarkMode("true");
+        return;
     }
-
-    return setDarkMode("false")
+    setDarkMode("false");
 }
 
 /**
- * Checks if  the report settings session-object exists. Returns undefined if it does not exist.
- * Reads the report settings object in session storage. Returns value, true or false.
+ * Returns the value for the given setting from session storage. Returns
+ * undefined if it does not exist.
  * @param {string} setting sgr_settings option to read
  */
-const checkSettings = (setting) => {
-    if (!setting) return
-
-        let reportSettings = sessionStorage.getItem("sgr_settings")
-
-        if (reportSettings === null || reportSettings === undefined) {
-            return undefined
-        } else {
-
-            if (reportSettings[setting] != (undefined || null || false)) {
-                return reportSettings[setting] || true
-            }
-            return false
-        }
-
+const getSetting = (setting) => {
+    if (!setting) {
+        return undefined;
+    }
+    let reportSettings = sessionStorage.getItem("sgr_settings");
+    if (reportSettings === null || reportSettings === undefined) {
+        return undefined;
+    }
+    return JSON.parse(reportSettings)[setting];
 }
 
 /**
@@ -121,7 +112,12 @@ const checkSettings = (setting) => {
  * @param {string} value update value for sgr_settings option
  */
 const updateSettings = (option, value) => {
-   return sessionStorage.setItem("sgr_settings", JSON.stringify({ [option]: value }))
+    let settings = {};
+    if ("sgr_settings" in sessionStorage) {
+        settings = JSON.parse(sessionStorage.getItem("sgr_settings"));
+    }
+    settings[option] = value;
+    sessionStorage.setItem("sgr_settings", JSON.stringify(settings));
 }
 
 /**
@@ -129,50 +125,63 @@ const updateSettings = (option, value) => {
  * @param {string} state true for Dark Mode or false for Light Mode
  */
 const setDarkMode = (state) => {
+    const darkModeToggle = document.getElementById("toggle");
+
     if (state === "true") {
         document.querySelectorAll("html")[0].dataset.theme = "dark";
-        document.querySelector("#toggle-text").innerHTML = "Dark Mode"
-        return updateSettings("darkMode", "true")
+        document.querySelector("#toggle-text").innerHTML = "Dark Mode";
+        updateSettings("darkMode", "true");
+        darkModeToggle.checked = true;
+        return;
     }
 
     document.querySelectorAll("html")[0].dataset.theme = "light";
-    document.querySelector("#toggle-text").innerHTML = "Light Mode"
-    return updateSettings("darkMode", "false")
+    document.querySelector("#toggle-text").innerHTML = "Light Mode";
+    updateSettings("darkMode", "false");
+    darkModeToggle.checked = false;
 }
 
 /**
- * Checks if darkMode cli-passed value exists and sets the report darkMode.
- * Checks if darkMode session-stored variable exists. Creates one with a default value if it does not exist.
- * Sets the report's default Dark Mode state using setDarkMode based on session-stored value.
+ * Sets the dark mode according to the setting stored in session storage, the
+ * --darkmode CLI arg, and the system preference (in that order of precedence)
  */
-const mountDarkMode = () =>{
-
-    const inputToggle = document.getElementById("toggle")
-    const darkModeEnabled = document.getElementById("sgr_settings")
-    const mode = "darkMode"
-
-    if (darkModeEnabled.getAttribute("data-darkmode") === "true") {
-        inputToggle.checked = "true"
-        return setDarkMode("true")
+const mountDarkMode = () => {
+    // First, check session storage to see if dark mode has already been
+    // enabled or disabled. If it has, this is what should take precedence.
+    // "darkMode" setting will either be "true", "false", or undefined
+    const darkModeSessionVariable = getSetting("darkMode");
+    if (
+        darkModeSessionVariable !== null &&
+        darkModeSessionVariable !== undefined
+    ) {
+        setDarkMode(darkModeSessionVariable);
+        return;
     }
 
-    if (checkSettings(mode) === null || checkSettings(mode) === undefined) {
-        return setDarkMode("false")
-    } else if (JSON.parse(sessionStorage.getItem("sgr_settings"))[mode] === "false") {
-        return setDarkMode("false")
-    } else {
-
-        if (checkSettings(mode)) {
-            inputToggle.checked = "true"
-            return setDarkMode("true")
-        }
+    // Next, check to see if the user specified the dark mode via the --darkmode
+    // CLI argument. The Python code dynamically inserts with the value of that
+    // arg as the "data-darkmode" attribute of the #sgr_settings element.
+    // The value will be a string, either "true" (dark mode is enabled), "false"
+    // (disabled), or "None" (not specified).
+    const cliElement = document.getElementById("sgr_settings");
+    const cliElementValue = cliElement.getAttribute("data-darkmode");
+    if (cliElementValue !== "None") {
+        setDarkMode(cliElementValue);
+        return;
     }
-}
+
+    // Finally, if the dark mode setting is not found in session storage nor
+    // provided the --darkmode CLI argument, set the dark mode according to the
+    // system preference
+    const mediaQuery = "(prefers-color-scheme: dark)";
+    const systemPrefersDark = window.matchMedia(mediaQuery).matches;
+    setDarkMode(String(systemPrefersDark));
+};
 
 /**
  * Media Query for browser darkMode
  */
-const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)")
+const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 
 /**
  * Event listener for broswer darkMode Media Query changes.
@@ -180,9 +189,9 @@ const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)")
  */
 darkModePreference.addEventListener("change", () =>  {
     if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        return setDarkMode("true")
+        setDarkMode("true");
     } else {
-        return setDarkMode("false")
+        setDarkMode("false");
     }
 });
 
@@ -245,4 +254,3 @@ window.addEventListener('DOMContentLoaded', () => {
     mountDarkMode();
     truncateDNSTables(MAX_DNS_ENTRIES);
 });
-
