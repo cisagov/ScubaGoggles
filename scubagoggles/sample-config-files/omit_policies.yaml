@@ -5,13 +5,13 @@
 baselines: [gmail, commoncontrols]
 
 omitpolicy:
-  GWS.GMAIL.1.1v0.5:
+  GWS.GMAIL.1.1v0.6:
     rationale: "Accepting risk for now, will reevaluate at a later date."
     expiration: "2025-12-31"
-  GWS.COMMONCONTROLS.18.1v0.5:
+  GWS.COMMONCONTROLS.18.1v0.6:
     rationale: &DLPRationale "The DLP capability required by the baselines is implemented by third party product, [x],
       which ScubaGoggles does not have the ability to check."
-  GWS.COMMONCONTROLS.18.2v0.5:
+  GWS.COMMONCONTROLS.18.2v0.6:
     rationale: *DLPRationale
 
 # The "&" character used in the above example defines an anchor, which saves a value
