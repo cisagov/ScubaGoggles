@@ -159,10 +159,10 @@ const mountDarkMode = () => {
     }
 
     // Next, check to see if the user specified the dark mode via the --darkmode
-    // CLI argument. The Python code dynamically inserts with the value of that
-    // arg as the "data-darkmode" attribute of the #sgr_settings element.
-    // The value will be a string, either "true" (dark mode is enabled), "false"
-    // (disabled), or "None" (not specified).
+    // CLI argument. The Python code dynamically inserts the value of that arg
+    // as the "data-darkmode" attribute of the #sgr_settings element. The value
+    // will be a string, either "true" (dark mode is enabled), "false" (disabled),
+    // or "None" (not specified).
     const cliElement = document.getElementById("sgr_settings");
     const cliElementValue = cliElement.getAttribute("data-darkmode");
     if (cliElementValue !== "None") {
