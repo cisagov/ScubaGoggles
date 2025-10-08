@@ -373,6 +373,16 @@ NonComplianceMessage1_4(value,
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
+    "Value": NonComplianceMessage1_1a
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := settings.security_two_step_verification_enrollment.allowEnrollment
+    not enable2SV
+}
+
+NonCompliantOUs1_4 contains {
+    "Name": OU,
     "Value": NonComplianceMessage1_4(enrollSeconds, expectedPeriod)
 }
 if {
@@ -384,6 +394,10 @@ if {
         enrollSeconds == 0,
         enrollSeconds > expectedPeriod
     }
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
     Is2SVEnforced(enforce2SV) == true 
 }
@@ -424,6 +438,16 @@ if {
 CommonControlsId1_5 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.1.5")
 
 NonComplianceMessage1_5 := "User is allowed to trust device."
+
+NonCompliantOUs1_5 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_1a
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := settings.security_two_step_verification_enrollment.allowEnrollment
+    not enable2SV
+}
 
 NonCompliantOUs1_5 contains {
     "Name": OU,
