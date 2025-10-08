@@ -686,7 +686,7 @@ class Reporter:
         Adds the annotation provided by the user in the config file to the
         result details if applicable.
 
-        :param control_id: The control ID, e.g., GWS.GMAIL.1.1v0.5. Case-
+        :param control_id: The control ID, e.g., GWS.GMAIL.1.1v0.6. Case-
             insensitive.
         :param result: The test result, e.g., "Pass"
         :param details: The test result details, e.g., "Requirement met."

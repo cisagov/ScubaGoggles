@@ -38,7 +38,7 @@ This section covers who has the ability to join classes and what classes the use
 
 ### Policies
 
-#### GWS.CLASSROOM.1.1v0.5
+#### GWS.CLASSROOM.1.1v0.6
 Who can join classes in your domain SHALL be set to Users in your domain only.
 
 - _Rationale:_ Classes can contain private or otherwise sensitive information. Restricting classes to users in your domain helps prevent data leakage resulting from unauthorized classroom access.
@@ -48,7 +48,7 @@ Who can join classes in your domain SHALL be set to Users in your domain only.
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.CLASSROOM.1.2v0.5
+#### GWS.CLASSROOM.1.2v0.6
 Which classes users in your domain can join SHALL be set to Classes in your domain only.
 
 - _Rationale:_ Allowing users to join a class from outside your domain could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
@@ -74,11 +74,11 @@ To configure the settings for Class Membership:
 3.  Select **Class Settings**.
 4.  Select **About Class Membership**.
 
-#### GWS.CLASSROOM.1.1v0.5 Instructions
+#### GWS.CLASSROOM.1.1v0.6 Instructions
 1.  For **Who can join classes in your domain**, select **Users in your domain only**.
 2.  Select **Save**.
 
-#### GWS.CLASSROOM.1.2v0.5 Instructions
+#### GWS.CLASSROOM.1.2v0.6 Instructions
 1.  For **Which classes can users in your domain join**, select **Classes in your domain only**.
 2.  Select **Save**.
 
@@ -88,7 +88,7 @@ This section covers policies related to the Google Classroom API.
 
 ### Policies
 
-#### GWS.CLASSROOM.2.1v0.5
+#### GWS.CLASSROOM.2.1v0.6
 Users SHALL NOT be able to authorize apps to access their Google Classroom data.
 
 - _Rationale:_ Allowing ordinary users to authorize apps to have access to classroom data opens a possibility for data loss. Allowing only admins to authorize apps reduces this risk.
@@ -110,7 +110,7 @@ Users SHALL NOT be able to authorize apps to access their Google Classroom data.
 ### Implementation
 To configure the settings for Classroom API:
 
-#### GWS.CLASSROOM.2.1v0.5 Instructions
+#### GWS.CLASSROOM.2.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Data Access**.
@@ -123,7 +123,7 @@ This section covers policies related to importing rosters from Clever.
 
 ### Policies
 
-#### GWS.CLASSROOM.3.1v0.5
+#### GWS.CLASSROOM.3.1v0.6
 Roster import with Clever SHOULD be turned off.
 
 - _Rationale:_ If your organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into your organization's environment. If your organization does use Clever, then roster imports may be enabled.
@@ -143,7 +143,7 @@ Roster import with Clever SHOULD be turned off.
 ### Implementation
 To configure the settings for Roster Import:
 
-#### GWS.CLASSROOM.3.1v0.5 Instructions
+#### GWS.CLASSROOM.3.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Roster Import**.
@@ -156,7 +156,7 @@ This section covers policies related to unenrolling a student from a class.
 
 ### Policies
 
-#### GWS.CLASSROOM.4.1v0.5
+#### GWS.CLASSROOM.4.1v0.6
 Only teachers SHALL be allowed to unenroll students from classes.
 
 - _Rationale:_ Allowing students to unenroll themselves creates the opportunity for data loss or other inconsistencies, especially for K-12 classrooms. Restricting this ability to teachers mitigates this risk.
@@ -176,7 +176,7 @@ Only teachers SHALL be allowed to unenroll students from classes.
 ### Implementation
 To configure the settings for Student Unenrollment:
 
-#### GWS.CLASSROOM.4.1v0.5 Instructions
+#### GWS.CLASSROOM.4.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Student unenrollment**.
@@ -189,7 +189,7 @@ The first time users sign in to Classroom, they self-identify as either a studen
 
 ### Policies
 
-#### GWS.CLASSROOM.5.1v0.5
+#### GWS.CLASSROOM.5.1v0.6
 Class creation SHALL be restricted to verified teachers only.
 
 - _Rationale:_ Allowing pending teachers to create classes potentially allows students to impersonate teachers and exploit the trusted relationship between teacher and student, e.g., to phish sensitive information from the students. Restricting class creation to verified teachers reduces this risk.
@@ -214,7 +214,7 @@ Class creation SHALL be restricted to verified teachers only.
 ### Implementation
 To configure the settings for Class Creation:
 
-#### GWS.CLASSROOM.5.1v0.5 Instructions
+#### GWS.CLASSROOM.5.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **General Settings**.

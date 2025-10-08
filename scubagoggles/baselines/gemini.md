@@ -42,7 +42,7 @@ for more details on configuring these additional services.
 
 ### Policies
 
-#### GWS.GEMINI.1.1v0.5
+#### GWS.GEMINI.1.1v0.6
 Gemini app user access SHALL be set to OFF for everyone without a license.
 
 - _Rationale:_ Only Gemini data for users with the appropriate license will be
@@ -65,7 +65,7 @@ allowing user access to Gemini under any license creates the risk of data leakag
 
 ### Implementation
 
-#### GWS.GEMINI.1.1v0.5 Instructions
+#### GWS.GEMINI.1.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **User Access**.
@@ -84,7 +84,7 @@ production data in connection with Pre-GA Offerings.
 
 ### Policies
 
-#### GWS.GEMINI.2.1v0.5
+#### GWS.GEMINI.2.1v0.6
 Alpha Gemini features SHALL be disabled.
 
 - _Rationale:_ Allowing access to alpha features may expose users to features that
@@ -108,7 +108,7 @@ Service Specific Terms.
 
 ### Implementation
 
-#### GWS.GEMINI.2.1v0.5 Instructions
+#### GWS.GEMINI.2.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini for Workspace**.
 3.  Select **Alpha Gemini features**.
