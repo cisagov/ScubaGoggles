@@ -3,7 +3,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CALENDAR.3.2v0.5\"",
+    "PolicyId": "\"GWS.CALENDAR.3.2v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -12,7 +12,16 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CALENDAR.1.2v0.5\"",
+    "PolicyId": "\"GWS.CALENDAR.1.1v0.6\"",
+    "Prerequisites": "[\"policy/calendar_service_status.serviceState\", \"policy/calendar_primary_calendar_max_allowed_external_sharing.maxAllowedExternalSharing\"]",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CALENDAR.1.2v0.6\"",
     "Prerequisites": "[\"policy/calendar_service_status.serviceState\", \"policy/calendar_secondary_calendar_max_allowed_external_sharing.maxAllowedExternalSharing\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -21,16 +30,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CALENDAR.2.1v0.5\"",
-    "Prerequisites": "[\"policy/calendar_service_status.serviceState\", \"policy/calendar_external_invitations.warnOnInvite\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CALENDAR.4.1v0.5\"",
+    "PolicyId": "\"GWS.CALENDAR.4.1v0.6\"",
     "Prerequisites": "[\"policy/calendar_service_status.serviceState\", \"policy/calendar_appointment_schedules.enablePayments\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -39,25 +39,25 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CALENDAR.3.1v0.5\"",
+    "PolicyId": "\"GWS.CALENDAR.3.1v0.6\"",
     "Prerequisites": "[\"policy/calendar_service_status.serviceState\", \"policy/calendar_interoperability.enableInteroperability\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org (group \\\"Geoffrey Davis DDS's group\\\")\", \"Value\": \"External sharing options for primary calendars is set to: Share all information, and allow managing of calendars\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org (group \\\"Brandi Vaughn's group\\\")\", \"Value\": \"External Sharing Guest Prompt is disabled\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CALENDAR.1.1v0.5\"",
-    "Prerequisites": "[\"policy/calendar_service_status.serviceState\", \"policy/calendar_primary_calendar_max_allowed_external_sharing.maxAllowedExternalSharing\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org (group \\\"Denise Espinoza's group\\\"): External sharing options for primary calendars is set to: Share all information, and allow managing of calendars</li></ul>\"",
+    "PolicyId": "\"GWS.CALENDAR.2.1v0.6\"",
+    "Prerequisites": "[\"policy/calendar_service_status.serviceState\", \"policy/calendar_external_invitations.warnOnInvite\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org (group \\\"Kathryn Cruz's group\\\"): External Sharing Guest Prompt is disabled</li></ul>\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CHAT.1.1v0.5\"",
+    "PolicyId": "\"GWS.CHAT.1.1v0.6\"",
     "Prerequisites": "[\"policy/chat_service_status.serviceState\", \"policy/chat_chat_history.historyOnByDefault\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -66,7 +66,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CHAT.1.2v0.5\"",
+    "PolicyId": "\"GWS.CHAT.1.2v0.6\"",
     "Prerequisites": "[\"policy/chat_service_status.serviceState\", \"policy/chat_chat_history.allowUserModification\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -75,7 +75,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CHAT.2.1v0.5\"",
+    "PolicyId": "\"GWS.CHAT.2.1v0.6\"",
     "Prerequisites": "[\"policy/chat_service_status.serviceState\", \"policy/chat_chat_file_sharing.externalFileSharing\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -84,7 +84,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CHAT.4.1v0.5\"",
+    "PolicyId": "\"GWS.CHAT.4.1v0.6\"",
     "Prerequisites": "[\"policy/chat_service_status.serviceState\", \"policy/chat_external_chat_restriction.allowExternalChat\", \"policy/chat_external_chat_restriction.externalChatRestriction\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -93,52 +93,34 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CHAT.5.1v0.5\"",
+    "PolicyId": "\"GWS.CHAT.5.1v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.<br>WARNING: from the log events alone, it is not possible to distinguish between an OU inheriting settings from its parent and content reporting being disabled entirely. It's possible this tool classified some child OUs as compliant due to this limitation; manual check recommended for child OUs due to this edge case.\"",
     "RequirementMet": "true"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Conversation history settings for spaces is set to: OFF by default (expected: ALWAYS ON)\"}]}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CHAT.3.1v0.5\"",
+    "PolicyId": "\"GWS.CHAT.3.1v0.6\"",
     "Prerequisites": "[\"policy/chat_service_status.serviceState\", \"policy/chat_space_history.historyState\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Conversation history settings for spaces is set to: OFF by default (expected: ALWAYS ON)</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"The following reporting types are disabled: confidential information, discrimination, explicit content, harassment, other, sensitive information, spam\"}]}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CHAT.5.2v0.5\"",
+    "PolicyId": "\"GWS.CHAT.5.2v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: The following reporting types are disabled: confidential information, discrimination, explicit content, harassment, other, sensitive information, spam</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CLASSROOM.1.1v0.5\"",
-    "Prerequisites": "[\"policy/classroom_service_status.serviceState\", \"policy/classroom_class_membership.whoCanJoinClasses\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CLASSROOM.1.2v0.5\"",
-    "Prerequisites": "[\"policy/classroom_service_status.serviceState\", \"policy/classroom_class_membership.whichClassesCanUsersJoin\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CLASSROOM.2.1v0.5\"",
+    "PolicyId": "\"GWS.CLASSROOM.2.1v0.6\"",
     "Prerequisites": "[\"policy/classroom_service_status.serviceState\", \"policy/classroom_api_data_access.enableApiAccess\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -147,34 +129,52 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CLASSROOM.4.1v0.5\"",
+    "PolicyId": "\"GWS.CLASSROOM.4.1v0.6\"",
     "Prerequisites": "[\"policy/classroom_service_status.serviceState\", \"policy/classroom_student_unenrollment.whoCanUnenrollStudents\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CLASSROOM.5.1v0.5\"",
-    "Prerequisites": "[\"policy/classroom_service_status.serviceState\", \"policy/classroom_teacher_permissions.whoCanCreateClasses\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Dominique Harrington's OU\", \"Value\": \"Roster import is set to: ON - CLEVER\"}]}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.CLASSROOM.3.1v0.5\"",
+    "PolicyId": "\"GWS.CLASSROOM.3.1v0.6\"",
     "Prerequisites": "[\"policy/classroom_service_status.serviceState\", \"policy/classroom_roster_import.rosterImportOption\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Alice Ruiz's OU: Roster import is set to: ON - CLEVER</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Which classes can users in your domain join is set to: Classes in allowlisted domains\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CLASSROOM.1.2v0.6\"",
+    "Prerequisites": "[\"policy/classroom_service_status.serviceState\", \"policy/classroom_class_membership.whichClassesCanUsersJoin\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Which classes can users in your domain join is set to: Classes in allowlisted domains</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Who can create classes is set to: all pending and verified teachers\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CLASSROOM.5.1v0.6\"",
+    "Prerequisites": "[\"policy/classroom_service_status.serviceState\", \"policy/classroom_teacher_permissions.whoCanCreateClasses\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Who can create classes is set to: all pending and verified teachers</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Who can join classes in your domain is set to: Users in allowlisted domains\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.CLASSROOM.1.1v0.6\"",
+    "Prerequisites": "[\"policy/classroom_service_status.serviceState\", \"policy/classroom_class_membership.whoCanJoinClasses\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Who can join classes in your domain is set to: Users in allowlisted domains</li></ul>\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.10.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.1v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -183,7 +183,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.14.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.14.1v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -192,7 +192,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.14.2v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.14.2v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -201,7 +201,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.15.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.15.1v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -210,7 +210,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.18.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.18.1v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -219,7 +219,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.18.2v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.18.2v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -228,7 +228,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.18.3v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.18.3v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -237,7 +237,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.6.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.6.1v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -246,7 +246,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.9.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.9.1v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -255,7 +255,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.18.4v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.18.4v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -264,7 +264,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.7.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.7.1v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -273,7 +273,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.8.3v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.8.3v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -282,16 +282,34 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.COMMONCONTROLS.9.2v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.9.2v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.3.1v0.6\"",
+    "Prerequisites": "[\"reports/v1/activities/list\"]",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"No relevant event for the top-level OU in the current logs\"",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.COMMONCONTROLS.3.2v0.6\"",
+    "Prerequisites": "[\"reports/v1/activities/list\"]",
+    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantGroups\": [], \"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.15.2v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.15.2v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -300,7 +318,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.10.3v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.3v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -309,7 +327,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.10.5v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.5v0.6\"",
     "Prerequisites": "[\"policy/security_less_secure_apps.allowLessSecureApps\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -318,240 +336,249 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.5.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.1v0.6\"",
     "Prerequisites": "[\"policy/security_password.allowedStrength\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.8.1v0.5\"",
-    "Prerequisites": "[\"policy/security_super_admin_account_recovery.enableAccountRecovery\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.16.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.16.1v0.6\"",
     "Prerequisites": "[\"policy/enterprise_service_restrictions_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Should\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.3.1v0.5\"",
-    "Prerequisites": "[\"reports/v1/activities/list\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Should\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.3.2v0.5\"",
-    "Prerequisites": "[\"reports/v1/activities/list\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"1-1-1-1 (in 1/1-1/1-1-1)\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}, {\"Name\": \"Devin Morris's OU\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"1-1-1-1 (in 1/1-1/1-1-1)\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}, {\"Name\": \"2SV Exempt\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}, {\"Name\": \"Michelle Wolfe's OU\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}, {\"Name\": \"John Lynch's OU\", \"Value\": \"Enforce password policy at next sign-in is OFF\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.5.4v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.4v0.6\"",
     "Prerequisites": "[\"policy/security_password.enforceRequirementsAtLogin\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Enforce password policy at next sign-in is OFF</li><li>Cool Example Org: Enforce password policy at next sign-in is OFF</li><li>Stephen Evans's OU: Enforce password policy at next sign-in is OFF</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Enforce password policy at next sign-in is OFF</li><li>2SV Exempt: Enforce password policy at next sign-in is OFF</li><li>Christopher Williams's OU: Enforce password policy at next sign-in is OFF</li><li>Cool Example Org: Enforce password policy at next sign-in is OFF</li><li>Heather Alvarez's OU: Enforce password policy at next sign-in is OFF</li></ul>\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"1-1-1-1 (in 1/1-1/1-1-1)\", \"Value\": \"Minimum password length: 8, less than 12\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.5.2v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.2v0.6\"",
     "Prerequisites": "[\"policy/security_password.minimumLength\"]",
     "ReportDetails": "\"The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Minimum password length: 8, less than 12</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"1-1-1-1 (in 1/1-1/1-1-1)\", \"Value\": \"Minimum password length: 8, recommended is at least 15\"}, {\"Name\": \"Tonya Macdonald's OU\", \"Value\": \"Minimum password length: 12, recommended is at least 15\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Minimum password length: 12, recommended is at least 15\"}, {\"Name\": \"Linda Taylor's OU (test)\", \"Value\": \"Minimum password length: 12, recommended is at least 15\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"1-1-1-1 (in 1/1-1/1-1-1)\", \"Value\": \"Minimum password length: 8, recommended is at least 15\"}, {\"Name\": \"2SV Exempt\", \"Value\": \"Minimum password length: 12, recommended is at least 15\"}, {\"Name\": \"Maria Hunt's OU\", \"Value\": \"Minimum password length: 12, recommended is at least 15\"}, {\"Name\": \"Steven Kline's OU\", \"Value\": \"Minimum password length: 12, recommended is at least 15\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Minimum password length: 12, recommended is at least 15\"}, {\"Name\": \"Jesse Perez's OU\", \"Value\": \"Minimum password length: 12, recommended is at least 15\"}]}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.5.3v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.3v0.6\"",
     "Prerequisites": "[\"policy/security_password.minimumLength\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Minimum password length: 8, recommended is at least 15</li><li>Samuel Ayala's OU: Minimum password length: 12, recommended is at least 15</li><li>Cool Example Org: Minimum password length: 12, recommended is at least 15</li><li>Nicole Marshall's OU (test): Minimum password length: 12, recommended is at least 15</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Minimum password length: 8, recommended is at least 15</li><li>2SV Exempt: Minimum password length: 12, recommended is at least 15</li><li>Mark Park's OU: Minimum password length: 12, recommended is at least 15</li><li>Melissa Peters's OU: Minimum password length: 12, recommended is at least 15</li><li>Cool Example Org: Minimum password length: 12, recommended is at least 15</li><li>Tracy Adams's OU: Minimum password length: 12, recommended is at least 15</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"1-1-1-1 (in Nicholas Kramer's OU)\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"1-1-1-1 (in Nicholas Kramer's OU) (group \\\"Charles Allison's group\\\")\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"2SV Exempt\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"Cool Example Org (group \\\"Alyssa Sutton's group\\\")\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"Elizabeth Black's OU (in Nicholas Kramer's OU)\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"Laura Shaffer's OU (test)\", \"Value\": \"User is allowed to trust device.\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"1-1-1-1 (in Caroline Woods's OU)\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"1-1-1-1 (in Caroline Woods's OU) (group \\\"Janet Esparza's group\\\")\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"2SV Exempt\", \"Value\": \"2-step verification (2SV) is not enforced.\"}, {\"Name\": \"Caroline Woods's OU\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"Cool Example Org (group \\\"Lisa Benjamin's group\\\")\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"Melanie Wilson's OU (in Caroline Woods's OU)\", \"Value\": \"User is allowed to trust device.\"}, {\"Name\": \"Stacey Robles's OU\", \"Value\": \"Users cannot enable 2-step verification (2SV).\"}, {\"Name\": \"John Hall's OU\", \"Value\": \"User is allowed to trust device.\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.1.5v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.1.5v0.6\"",
     "Prerequisites": "[\"policy/security_two_step_verification_device_trust.allowTrustingDevice\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>1-1-1-1 (in Wendy Lopez's OU): User is allowed to trust device.</li><li>1-1-1-1 (in Wendy Lopez's OU) (group \\\"Timothy Avila's group\\\"): User is allowed to trust device.</li><li>2SV Exempt: User is allowed to trust device.</li><li>Cool Example Org: User is allowed to trust device.</li><li>Cool Example Org (group \\\"Samantha Smith's group\\\"): User is allowed to trust device.</li><li>Michael Smith's OU (in Wendy Lopez's OU): User is allowed to trust device.</li><li>Brenda Alvarez's OU (test): User is allowed to trust device.</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>1-1-1-1 (in Natasha Todd's OU): User is allowed to trust device.</li><li>1-1-1-1 (in Natasha Todd's OU) (group \\\"Sandra Blackburn's group\\\"): User is allowed to trust device.</li><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Natasha Todd's OU: User is allowed to trust device.</li><li>Cool Example Org: User is allowed to trust device.</li><li>Cool Example Org (group \\\"Christopher Green's group\\\"): User is allowed to trust device.</li><li>Katherine Salazar's OU (in Natasha Todd's OU): User is allowed to trust device.</li><li>Alexander Page's OU: Users cannot enable 2-step verification (2SV).</li><li>Jose Rose's OU: User is allowed to trust device.</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"2SV Exempt\", \"Value\": \"2-step verification (2SV) is not enforced.\"}, {\"Name\": \"Bryan Ramirez's OU\", \"Value\": \"2-step verification (2SV) is not enforced.\"}, {\"Name\": \"Mrs. Michelle Larsen's OU\", \"Value\": \"Users cannot enable 2-step verification (2SV).\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"2SV Exempt\", \"Value\": \"2-step verification (2SV) is not enforced.\"}, {\"Name\": \"William Ballard's OU\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any\\\".\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any\\\".\"}, {\"Name\": \"Cool Example Org (group \\\"Deborah Knapp's group\\\")\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any\\\".\"}, {\"Name\": \"Angela Morgan's OU (in William Ballard's OU)\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any except verification codes via text, phone call\\\".\"}, {\"Name\": \"Robert Huffman's OU\", \"Value\": \"Users cannot enable 2-step verification (2SV).\"}, {\"Name\": \"Eileen Mitchell's OU\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any\\\".\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.1.2v0.5\"",
-    "Prerequisites": "[\"policy/security_two_step_verification_enrollment.allowEnrollment\", \"policy/security_two_step_verification_enforcement.enforcedFrom\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Clinton Ward's OU: 2-step verification (2SV) is not enforced.</li><li>Edward Peters's OU: Users cannot enable 2-step verification (2SV).</li></ul>\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"2SV Exempt\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any\\\".\"}, {\"Name\": \"Justin Thompson's OU\", \"Value\": \"2-step verification (2SV) is not enforced.\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any\\\".\"}, {\"Name\": \"Cool Example Org (group \\\"Michael Anderson's group\\\")\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any\\\".\"}, {\"Name\": \"Jennifer Garcia's OU (in Justin Thompson's OU)\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any except verification codes via text, phone call\\\".\"}, {\"Name\": \"Melanie King's OU\", \"Value\": \"Users cannot enable 2-step verification (2SV).\"}, {\"Name\": \"Stacey Cantrell's OU (test)\", \"Value\": \"Allowed 2-step verification (2SV) method is set to \\\"Any\\\".\"}]}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.1.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.1.1v0.6\"",
     "Prerequisites": "[\"policy/security_two_step_verification_enrollment.allowEnrollment\", \"policy/security_two_step_verification_enforcement_factor.allowedSignInFactorSet\", \"policy/security_two_step_verification_enforcement.enforcedFrom\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>2SV Exempt: Allowed 2-step verification (2SV) method is set to \\\"Any\\\".</li><li>Martin Nicholson's OU: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Allowed 2-step verification (2SV) method is set to \\\"Any\\\".</li><li>Cool Example Org (group \\\"Stephanie Lowe's group\\\"): Allowed 2-step verification (2SV) method is set to \\\"Any\\\".</li><li>Alexa Kim's OU (in Martin Nicholson's OU): Allowed 2-step verification (2SV) method is set to \\\"Any except verification codes via text, phone call\\\".</li><li>Lisa Harmon's OU: Users cannot enable 2-step verification (2SV).</li><li>Mark Wall's OU (test): Allowed 2-step verification (2SV) method is set to \\\"Any\\\".</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Jacob Yang's OU: Allowed 2-step verification (2SV) method is set to \\\"Any\\\".</li><li>Cool Example Org: Allowed 2-step verification (2SV) method is set to \\\"Any\\\".</li><li>Cool Example Org (group \\\"Johnny Hood's group\\\"): Allowed 2-step verification (2SV) method is set to \\\"Any\\\".</li><li>Sara Schneider's OU (in Jacob Yang's OU): Allowed 2-step verification (2SV) method is set to \\\"Any except verification codes via text, phone call\\\".</li><li>Gina Olson's OU: Users cannot enable 2-step verification (2SV).</li><li>David Byrd's OU: Allowed 2-step verification (2SV) method is set to \\\"Any\\\".</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"2SV Exempt\", \"Value\": \"New user enrollment period is NONE\"}, {\"Name\": \"Cool Example Org (group \\\"Michael Leach's group\\\")\", \"Value\": \"New user enrollment period is NONE\"}, {\"Name\": \"Ashlee White's OU\", \"Value\": \"New user enrollment period 14 days (longer than 7 days)\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"2SV Exempt\", \"Value\": \"2-step verification (2SV) is not enforced.\"}, {\"Name\": \"Rachel Johnson's OU\", \"Value\": \"New user enrollment period 180 days (longer than 7 days)\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"New user enrollment period is NONE\"}, {\"Name\": \"Cool Example Org (group \\\"Daniel Mathews's group\\\")\", \"Value\": \"New user enrollment period is NONE\"}, {\"Name\": \"Karen Christian's OU\", \"Value\": \"Users cannot enable 2-step verification (2SV).\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.1.4v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.1.4v0.6\"",
     "Prerequisites": "[\"policy/security_two_step_verification_grace_period.enrollmentGracePeriod\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>2SV Exempt: New user enrollment period is NONE</li><li>Cool Example Org (group \\\"Bailey Campbell's group\\\"): New user enrollment period is NONE</li><li>Todd Cline's OU: New user enrollment period 14 days (longer than 7 days)</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Michael Carr's OU: New user enrollment period 180 days (longer than 7 days)</li><li>Cool Example Org: New user enrollment period is NONE</li><li>Cool Example Org (group \\\"Tracy Sparks's group\\\"): New user enrollment period is NONE</li><li>Thomas Acevedo's OU: Users cannot enable 2-step verification (2SV).</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"2SV Exempt\", \"Value\": \"Verification codes via text and phone call allowed.\"}, {\"Name\": \"Denise Jensen's OU\", \"Value\": \"2-step verification (2SV) is not enforced.\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Verification codes via text and phone call allowed.\"}, {\"Name\": \"Cool Example Org (group \\\"Zoe Price's group\\\")\", \"Value\": \"Verification codes via text and phone call allowed.\"}, {\"Name\": \"Henry Taylor's OU\", \"Value\": \"Users cannot enable 2-step verification (2SV).\"}, {\"Name\": \"Elizabeth Padilla's OU (test)\", \"Value\": \"Verification codes via text and phone call allowed.\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"2SV Exempt\", \"Value\": \"2-step verification (2SV) is not enforced.\"}, {\"Name\": \"Susan Nelson's OU\", \"Value\": \"Verification codes via text and phone call allowed.\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Verification codes via text and phone call allowed.\"}, {\"Name\": \"Cool Example Org (group \\\"Tina Robinson's group\\\")\", \"Value\": \"Verification codes via text and phone call allowed.\"}, {\"Name\": \"Pamela Harris's OU\", \"Value\": \"Users cannot enable 2-step verification (2SV).\"}, {\"Name\": \"Nancy Malone's OU\", \"Value\": \"Verification codes via text and phone call allowed.\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.1.3v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.1.3v0.6\"",
     "Prerequisites": "[\"policy/security_two_step_verification_enrollment.allowEnrollment\", \"policy/security_two_step_verification_enforcement_factor.allowedSignInFactorSet\", \"policy/security_two_step_verification_enforcement.enforcedFrom\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>2SV Exempt: Verification codes via text and phone call allowed.</li><li>Billy Calhoun's OU: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Verification codes via text and phone call allowed.</li><li>Cool Example Org (group \\\"Vanessa Stone's group\\\"): Verification codes via text and phone call allowed.</li><li>Kristin May's OU: Users cannot enable 2-step verification (2SV).</li><li>Joseph Gregory's OU (test): Verification codes via text and phone call allowed.</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>David Franklin's OU: Verification codes via text and phone call allowed.</li><li>Cool Example Org: Verification codes via text and phone call allowed.</li><li>Cool Example Org (group \\\"Richard Valdez's group\\\"): Verification codes via text and phone call allowed.</li><li>Andrew Hall's OU: Users cannot enable 2-step verification (2SV).</li><li>Amanda Davis's OU: Verification codes via text and phone call allowed.</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Robert Jones's OU\", \"Value\": \"Allow password reuse is ON\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"2SV Exempt\", \"Value\": \"2-step verification (2SV) is not enforced.\"}, {\"Name\": \"Edward Thomas's OU\", \"Value\": \"Users cannot enable 2-step verification (2SV).\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.5.5v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.1.2v0.6\"",
+    "Prerequisites": "[\"policy/security_two_step_verification_enrollment.allowEnrollment\", \"policy/security_two_step_verification_enforcement.enforcedFrom\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Adam Adams's OU: Users cannot enable 2-step verification (2SV).</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Don Hobbs's OU\", \"Value\": \"Allow password reuse is ON\"}, {\"Name\": \"Christopher Duffy's OU\", \"Value\": \"Allow password reuse is ON\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.5v0.6\"",
     "Prerequisites": "[\"policy/security_password.allowReuse\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Mr. Alexander Thompson Jr.'s OU: Allow password reuse is ON</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Jenny Berry's OU: Allow password reuse is ON</li><li>Anthony Frost's OU: Allow password reuse is ON</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Kimberly Hernandez's OU\", \"Value\": \"Password reset frequency is 30 days\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Karina Harris's OU\", \"Value\": \"Password reset frequency is 30 days\"}, {\"Name\": \"William Bailey's OU\", \"Value\": \"Password reset frequency is 5184000 seconds\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.5.6v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.5.6v0.6\"",
     "Prerequisites": "[\"policy/security_password.expirationDuration\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Jason Brown's OU: Password reset frequency is 30 days</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Crystal Thompson's OU: Password reset frequency is 30 days</li><li>Joshua Baker's OU: Password reset frequency is 5184000 seconds</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Seth Johnson's OU\", \"Value\": \"The following apps with individual admin control have Takeout enabled: YouTube\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Takeout is enabled for services without an individual admin control.\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"The following apps with individual admin control have Takeout enabled: Blogger, Google Books\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Ann Adams's OU\", \"Value\": \"The following apps with individual admin control have Takeout enabled: YouTube\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Takeout is enabled for services without an individual admin control.\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"The following apps with individual admin control have Takeout enabled: Blogger, Google Books\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.12.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.12.1v0.6\"",
     "Prerequisites": "[\"policy/takeout_service_status.serviceState\", \"policy/blogger_user_takeout.takeoutStatus\", \"policy/books_user_takeout.takeoutStatus\", \"policy/location_history_user_takeout.takeoutStatus\", \"policy/maps_user_takeout.takeoutStatus\", \"policy/pay_user_takeout.takeoutStatus\", \"policy/photos_user_takeout.takeoutStatus\", \"policy/play_user_takeout.takeoutStatus\", \"policy/play_console_user_takeout.takeoutStatus\", \"policy/youtube_user_takeout.takeoutStatus\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Brady Jones's OU: The following apps with individual admin control have Takeout enabled: YouTube</li><li>Cool Example Org: Takeout is enabled for services without an individual admin control.</li><li>Cool Example Org: The following apps with individual admin control have Takeout enabled: Blogger, Google Books</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Kevin Martin's OU: The following apps with individual admin control have Takeout enabled: YouTube</li><li>Cool Example Org: Takeout is enabled for services without an individual admin control.</li><li>Cool Example Org: The following apps with individual admin control have Takeout enabled: Blogger, Google Books</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Melissa Matthews's OU\", \"Value\": \"Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google.\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Robin Taylor's OU\", \"Value\": \"Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google.\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.10.4v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.4v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Brian Dunlap's OU: Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google.</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Rebecca Adams's OU: Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google.</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Todd Davis's OU\", \"Value\": \"Web session duration: 24 hours\"}, {\"Name\": \"Sandra Johnson's OU\", \"Value\": \"Web session duration: 20 hours\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.4.1v0.6\"",
+    "Prerequisites": "[\"policy/security_session_controls.webSessionDuration\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Stanley Clark's OU: Web session duration: 24 hours</li><li>Heather Ray's OU: Web session duration: 20 hours</li></ul>\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Early access apps are ENABLED\"}]}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.16.2v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.16.2v0.6\"",
     "Prerequisites": "[\"policy/early_access_apps_service_status.serviceState\"]",
     "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Early access apps are ENABLED</li></ul>\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Require multi party approval for sensitive admin actions is DISABLED\"}]}",
-    "Criticality": "\"Shall\"",
+    "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.17.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.17.1v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
     "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Require multi party approval for sensitive admin actions is DISABLED</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Users and non-Emily Parker's OU are allowed to recover their accounts.\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Users and non-Susan Keller's OU are allowed to recover their accounts.\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.8.2v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.8.2v0.6\"",
     "Prerequisites": "[\"policy/security_user_account_recovery.enableAccountRecovery\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Users and non-William Richardson's OU are allowed to recover their accounts.</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Users and non-Heather Dunn's OU are allowed to recover their accounts.</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Users can install and run any internal app, even if it's not allowlisted.\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org (group \\\"Mrs. Stephanie Anderson's group\\\")\", \"Value\": \"Super admins are allowed to recover their accounts.\"}, {\"Name\": \"Cool Example Org (group \\\"Amy Wilkinson's group\\\")\", \"Value\": \"Super admins are allowed to recover their accounts.\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.11.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.8.1v0.6\"",
+    "Prerequisites": "[\"policy/security_super_admin_account_recovery.enableAccountRecovery\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org (group \\\"Sara Pierce's group\\\"): Super admins are allowed to recover their accounts.</li><li>Cool Example Org (group \\\"Laurie Berger's group\\\"): Super admins are allowed to recover their accounts.</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Richard Williams's OU\", \"Value\": \"Users can install and run any internal app, even if it's not allowlisted.\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.COMMONCONTROLS.11.1v0.6\"",
     "Prerequisites": "[\"policy/workspace_marketplace_apps_access_options.accessLevel\", \"policy/workspace_marketplace_apps_access_options.allowAllInternalApps\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Users can install and run any internal app, even if it's not allowlisted.</li></ul>\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Erika Krueger's OU (test)\", \"Value\": \"Web session duration: 20 hours\"}]}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.4.1v0.5\"",
-    "Prerequisites": "[\"policy/security_session_controls.webSessionDuration\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Alyssa Oliver's OU (test): Web session duration: 20 hours</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Eric Richardson's OU: Users can install and run any internal app, even if it's not allowlisted.</li></ul>\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"TOGGLE_CAA_ENABLEMENT\": \"DISABLED\"}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.2.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.2.1v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
     "ReportDetails": "\"Requirement not met.\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"disabled_rules\": [\"Drive settings changed\", \"Smarthost failure\"], \"enabled_rules\": [\"Suspicious login\"], \"unknown\": [\"Account suspension warning\", \"App Maker Cloud SQL setup\", \"Apps outage alert\", \"Calendar settings changed\", \"Device compromised\", \"Directory sync cancelled due to safeguard threshold exceeded\", \"Domain data export initiated\", \"Email settings changed\", \"Exchange journaling failure\", \"Gmail potential employee spoofing\", \"Google Operations\", \"Google Voice configuration problem\", \"Government-backed attacks\", \"Leaked password\", \"Malware message detected post-delivery\", \"Mobile settings changed\", \"New user added\", \"Phishing in inboxes due to bad whitelist\", \"Phishing message detected post-delivery\", \"Rate limited recipient\", \"Spike in user-reported spam\", \"Suspended user made active\", \"Suspicious device activity\", \"Suspicious message reported\", \"Suspicious programmatic login\", \"TLS failure\", \"User deleted\", \"User granted Admin privilege\", \"User suspended (Google identity alert)\", \"User suspended (by admin)\", \"User suspended due to suspicious activity\", \"User suspended for spamming\", \"User suspended for spamming through relay\", \"User's Admin privilege revoked\", \"User-reported phishing\", \"[Beta] Client-side encryption service unavailable\"]}",
+    "ActualValue": "{\"disabled_rules\": [\"User granted Admin privilege\", \"User's Admin privilege revoked\"], \"enabled_rules\": [], \"unknown\": [\"Account suspension warning\", \"Calendar settings changed\", \"Device compromised\", \"Domain data export initiated\", \"Drive settings changed\", \"Email settings changed\", \"Gmail potential employee spoofing\", \"Google Operations\", \"Government-backed attacks\", \"Leaked password\", \"Malware message detected post-delivery\", \"Mobile settings changed\", \"Phishing in inboxes due to bad whitelist\", \"Phishing message detected post-delivery\", \"Rate limited recipient\", \"SSO profile added\", \"SSO profile updated\", \"Spike in user-reported spam\", \"Super admin password reset\", \"Suspicious device activity\", \"Suspicious login\", \"Suspicious message reported\", \"Suspicious programmatic login\", \"User suspended (Google identity alert)\", \"User suspended due to suspicious activity\", \"User suspended for spamming\", \"User suspended for spamming through relay\", \"User-reported phishing\"]}",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.13.1v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
-    "ReportDetails": "\"Of the 39 required rules, at least 1 is enabled and 2 are disabled. Unable to determine the state of the 36 remaining required rules. See <a href=\\\"#alerts\\\">System Defined Alerts</a> for more details.\"",
+    "ReportDetails": "\"Of the 30 required rules, at least 0 are enabled and 2 are disabled. Unable to determine the state of the 28 remaining required rules. See <a href=\\\"#alerts\\\">System Defined Alerts</a> for more details.\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "[\"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\", \"monicasilva@example.net\"]",
+    "ActualValue": "[\"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\", \"hardyrobert@example.com\"]",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.6.2v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.6.2v0.6\"",
     "Prerequisites": "[\"directory/v1/users/list\"]",
-    "ReportDetails": "\"The following Bonnie Ryan's OU are configured: tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org, tuckerbrandy@example.org. <i>Note: Exceptions are allowed for \\\"break glass\\\" super admin accounts. \\\"Break glass\\\" accounts can be specified in a config file. 3 break glass accounts are currently configured.<i>\"",
+    "ReportDetails": "\"The following super admins are configured: catherinelewis@example.com, catherinelewis@example.com, catherinelewis@example.com, catherinelewis@example.com, catherinelewis@example.com, catherinelewis@example.com, catherinelewis@example.com, catherinelewis@example.com, catherinelewis@example.com, catherinelewis@example.com. <i>Note: Exceptions are allowed for \\\"break glass\\\" super admin accounts. \\\"Break glass\\\" accounts can be specified in a config file. 3 break glass accounts are currently configured.<i>\"",
     "RequirementMet": "false"
   },
   {
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.COMMONCONTROLS.10.2v0.5\"",
+    "PolicyId": "\"GWS.COMMONCONTROLS.10.2v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
     "ReportDetails": "\"The following services allow access: CALENDAR.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.9v0.6\"",
+    "Prerequisites": "[]",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.10v0.6\"",
+    "Prerequisites": "[]",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Should/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.11v0.6\"",
+    "Prerequisites": "[]",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantGroups\": [], \"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.5.1v0.5\"",
+    "PolicyId": "\"GWS.DRIVEDOCS.5.1v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -560,7 +587,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.1.3v0.5\"",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.3v0.6\"",
     "Prerequisites": "[\"policy/drive_and_docs_external_sharing.externalSharingMode\", \"policy/drive_and_docs_external_sharing.warnForExternalSharing\", \"policy/drive_and_docs_external_sharing.warnForSharingOutsideAllowlistedDomains\", \"policy/drive_and_docs_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -569,133 +596,142 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.1.4v0.5\"",
-    "Prerequisites": "[\"policy/drive_and_docs_external_sharing.externalSharingMode\", \"policy/drive_and_docs_external_sharing.allowNonGoogleInvites\", \"policy/drive_and_docs_external_sharing.allowNonGoogleInvitesInAllowlistedDomains\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.1.7v0.5\"",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.7v0.6\"",
     "Prerequisites": "[\"policy/drive_and_docs_external_sharing.externalSharingMode\", \"policy/drive_and_docs_external_sharing.allowedPartiesForDistributingContent\", \"policy/drive_and_docs_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.2.3v0.5\"",
-    "Prerequisites": "[\"policy/drive_and_docs_shared_drive_creation.allowNonMemberAccess\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.3.1v0.5\"",
-    "Prerequisites": "[\"policy/drive_and_docs_file_security_update.allowUsersToManageUpdate\", \"policy/drive_and_docs_file_security_update.securityUpdate\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.1.2v0.5\"",
-    "Prerequisites": "[\"policy/drive_and_docs_external_sharing.externalSharingMode\", \"policy/drive_and_docs_external_sharing.allowReceivingFilesOutsideAllowlistedDomains\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Should\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.2.1v0.5\"",
-    "Prerequisites": "[\"policy/drive_and_docs_shared_drive_creation.allowManagersToOverrideSettings\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Should\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.2.2v0.5\"",
-    "Prerequisites": "[\"policy/drive_and_docs_shared_drive_creation.allowExternalUserAccess\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Should\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.4.1v0.5\"",
+    "PolicyId": "\"GWS.DRIVEDOCS.4.1v0.6\"",
     "Prerequisites": "[\"policy/drive_and_docs_drive_sdk.enableDriveSdkApiAccess\", \"policy/drive_and_docs_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"James Flowers's OU\", \"Value\": \"Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Jeffrey Liu's OU\", \"Value\": \"Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.1.6v0.5\"",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.6v0.6\"",
     "Prerequisites": "[\"policy/drive_and_docs_external_sharing.accessCheckerSuggestions\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Devin Newton's OU: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li><li>Cool Example Org: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Shane Miller's OU: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li><li>Cool Example Org: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"James White's OU\", \"Value\": \"Viewers and commenters are allowed to download, print, and copy files.\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Amy Moore's OU\", \"Value\": \"When users create items, the default access is set to: the primary target audience can search and find the item.\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.2.4v0.5\"",
-    "Prerequisites": "[\"policy/drive_and_docs_shared_drive_creation.allowedPartiesForDownloadPrintCopy\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Lynn Blake's OU: Viewers and commenters are allowed to download, print, and copy files.</li></ul>\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Adam Hale's OU\", \"Value\": \"When users create items, the default access is set to: the primary target audience can search and find the item.\"}]}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.1.8v0.5\"",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.8v0.6\"",
     "Prerequisites": "[\"policy/drive_and_docs_general_access_default.defaultFileAccess\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Christine Wyatt's OU: When users create items, the default access is set to: the primary target audience can search and find the item.</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Jennifer Daniels's OU: When users create items, the default access is set to: the primary target audience can search and find the item.</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Files owned by users or shared drives can be shared outside of the organization\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Stephanie Morgan's OU\", \"Value\": \"Files owned by users or shared drives can be shared outside of the organization\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Files owned by users or shared drives can be shared with Google accounts in compatible allowlisted domains\"}]}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.1.1v0.5\"",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.1v0.6\"",
     "Prerequisites": "[\"policy/drive_and_docs_external_sharing.externalSharingMode\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Files owned by users or shared drives can be shared outside of the organization</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Amanda Hernandez's OU: Files owned by users or shared drives can be shared outside of the organization</li><li>Cool Example Org: Files owned by users or shared drives can be shared with Google accounts in compatible allowlisted domains</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Wayne Armstrong's OU\", \"Value\": \"Members with manager access can override shared drive settings.\"}]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.2.1v0.6\"",
+    "Prerequisites": "[\"policy/drive_and_docs_shared_drive_creation.allowManagersToOverrideSettings\", \"policy/drive_and_docs_service_status.serviceState\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Linda Jackson's OU: Members with manager access can override shared drive settings.</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Jessica Waller's OU\", \"Value\": \"Users who aren't shared drive members are not allowed to be added to files.\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.2.2v0.6\"",
+    "Prerequisites": "[\"policy/drive_and_docs_shared_drive_creation.allowNonMemberAccess\", \"policy/drive_and_docs_service_status.serviceState\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Linda Harris's OU: Users who aren't shared drive members are not allowed to be added to files.</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"File sharing with allowlisted domains, receiving files permitted.\"}]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.2v0.6\"",
+    "Prerequisites": "[\"policy/drive_and_docs_external_sharing.externalSharingMode\", \"policy/drive_and_docs_external_sharing.allowReceivingFilesOutsideAllowlistedDomains\", \"policy/drive_and_docs_service_status.serviceState\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: File sharing with allowlisted domains, receiving files permitted.</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"File sharing with allowlisted domains, with non-Google users.\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.4v0.6\"",
+    "Prerequisites": "[\"policy/drive_and_docs_external_sharing.externalSharingMode\", \"policy/drive_and_docs_external_sharing.allowNonGoogleInvites\", \"policy/drive_and_docs_external_sharing.allowNonGoogleInvitesInAllowlistedDomains\", \"policy/drive_and_docs_service_status.serviceState\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: File sharing with allowlisted domains, with non-Google users.</li></ul>\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Published web content can be made visible to anyone with a link\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.1.5v0.5\"",
+    "PolicyId": "\"GWS.DRIVEDOCS.1.5v0.6\"",
     "Prerequisites": "[\"policy/drive_and_docs_external_sharing.externalSharingMode\", \"policy/drive_and_docs_external_sharing.allowPublishingFiles\", \"policy/drive_and_docs_service_status.serviceState\"]",
     "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Published web content can be made visible to anyone with a link</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org (group \\\"Bryan Frank's group\\\")\", \"Value\": \"Drive for Desktop is enabled and can be used on any device.\"}, {\"Name\": \"Cool Example Org (group \\\"Kelsey Rodriguez's group\\\")\", \"Value\": \"Drive for Desktop is enabled and can be used on any device.\"}, {\"Name\": \"Cool Example Org (group \\\"Tracey Monroe's group\\\")\", \"Value\": \"Drive for Desktop is enabled and can be used on any device.\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Users are allowed to remove/apply the security update for files they own or manage.\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.DRIVEDOCS.3.1v0.6\"",
+    "Prerequisites": "[\"policy/drive_and_docs_file_security_update.allowUsersToManageUpdate\", \"policy/drive_and_docs_file_security_update.securityUpdate\", \"policy/drive_and_docs_service_status.serviceState\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Users are allowed to remove/apply the security update for files they own or manage.</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org (group \\\"Christopher Carr's group\\\")\", \"Value\": \"Drive for Desktop is enabled and can be used on any device.\"}, {\"Name\": \"Cool Example Org (group \\\"Michelle Booth's group\\\")\", \"Value\": \"Drive for Desktop is enabled and can be used on any device.\"}, {\"Name\": \"Cool Example Org (group \\\"Thomas Osborne's group\\\")\", \"Value\": \"Drive for Desktop is enabled and can be used on any device.\"}]}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.DRIVEDOCS.6.1v0.5\"",
+    "PolicyId": "\"GWS.DRIVEDOCS.6.1v0.6\"",
     "Prerequisites": "[\"policy/drive_and_docs_drive_for_desktop.allowDriveForDesktop\", \"policy/drive_and_docs_drive_for_desktop.restrictToAuthorizedDevices\", \"policy/drive_and_docs_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org (group \\\"Angel Roth's group\\\"): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group \\\"Alexander Reilly's group\\\"): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group \\\"Nicole Cooper's group\\\"): Drive for Desktop is enabled and can be used on any device.</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org (group \\\"Jennifer Rogers's group\\\"): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group \\\"Natasha Nguyen's group\\\"): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group \\\"James Wood's group\\\"): Drive for Desktop is enabled and can be used on any device.</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantGroups\": [], \"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GEMINI.1.1v0.6\"",
+    "Prerequisites": "[\"reports/v1/activities/list\", \"policy/gemini_app_service_status.serviceState\"]",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantGroups\": [], \"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GEMINI.2.1v0.6\"",
+    "Prerequisites": "[\"reports/v1/activities/list\", \"policy/gemini_app_service_status.serviceState\"]",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.18.1v0.6\"",
+    "Prerequisites": "[]",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.18.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.18.2v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -704,16 +740,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.18.2v0.5\"",
-    "Prerequisites": "[]",
-    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "\"\"",
-    "Criticality": "\"Shall/Not-Implemented\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.18.3v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.18.3v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -722,7 +749,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.15.2v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.15.2v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -731,7 +758,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.16.2v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.16.2v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -740,7 +767,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.17.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.17.1v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -749,7 +776,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.5.6v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.5.6v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please check manually.\"",
     "RequirementMet": "false"
@@ -758,7 +785,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.6.5v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.6.5v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -767,7 +794,7 @@
     "ActualValue": "\"\"",
     "Criticality": "\"Should/Not-Implemented\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.7.8v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.7.8v0.6\"",
     "Prerequisites": "[]",
     "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
     "RequirementMet": "false"
@@ -776,70 +803,70 @@
     "ActualValue": "\"No relevant event in the current logs\"",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.GMAIL.16.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.16.1v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
     "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "[{\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.008 seconds: Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.003 seconds: Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.002 seconds: Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.010 seconds: Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}], \"rdata\": []}, {\"domain\": \"kent-clay.com\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.kent-clay.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.009 seconds: Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.kent-clay.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.011 seconds: Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.kent-clay.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.003 seconds: Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.009 seconds: Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.; Server Do53:71.45.161.239@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:brandon13@example.net,  mailto:reports@dmarc.cyber.dhs.gov\"]}]",
+    "ActualValue": "[{\"domain\": \"ford.com\", \"log\": [{\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.ford.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.ford.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:dana26@example.org,  mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:dana26@example.org\"], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:dana26@example.org,  mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:dana26@example.org\"]}, {\"domain\": \"example.org\", \"log\": [{\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}, {\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}], \"rdata\": []}]",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.4.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.4.1v0.6\"",
     "Prerequisites": "[\"directory/v1/domains/list\", \"get_dmarc_records\"]",
-    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org.\"",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org. <a href=\\\"#dns-logs\\\">View DNS logs</a> for more details.\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "[{\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.008 seconds: Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.003 seconds: Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.002 seconds: Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.010 seconds: Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}], \"rdata\": []}, {\"domain\": \"bauer.com\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.bauer.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.009 seconds: Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.bauer.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.011 seconds: Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.bauer.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.003 seconds: Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.009 seconds: Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.; Server Do53:166.52.170.81@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:larryharper@example.net,  mailto:reports@dmarc.cyber.dhs.gov\"]}]",
+    "ActualValue": "[{\"domain\": \"harding-jones.org\", \"log\": [{\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.harding-jones.org\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.harding-jones.org\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:mcdonaldmatthew@example.com,  mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:mcdonaldmatthew@example.com\"], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:mcdonaldmatthew@example.com,  mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:mcdonaldmatthew@example.com\"]}, {\"domain\": \"example.org\", \"log\": [{\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}, {\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}], \"rdata\": []}]",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.4.2v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.4.2v0.6\"",
     "Prerequisites": "[\"directory/v1/domains/list\", \"get_dmarc_records\"]",
-    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org.\"",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org. <a href=\\\"#dns-logs\\\">View DNS logs</a> for more details.\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "[{\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.008 seconds: Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.003 seconds: Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.002 seconds: Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.010 seconds: Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}], \"rdata\": []}, {\"domain\": \"andrews.info\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.andrews.info\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.009 seconds: Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.andrews.info\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.011 seconds: Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.andrews.info\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.003 seconds: Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.009 seconds: Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.; Server Do53:56.135.98.130@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:michael59@example.net,  mailto:reports@dmarc.cyber.dhs.gov\"]}]",
+    "ActualValue": "[{\"domain\": \"silva-anderson.com\", \"log\": [{\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.silva-anderson.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.silva-anderson.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:victoria86@example.net,  mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:victoria86@example.net\"], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:victoria86@example.net,  mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:victoria86@example.net\"]}, {\"domain\": \"example.org\", \"log\": [{\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}, {\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}], \"rdata\": []}]",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.4.3v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.4.3v0.6\"",
     "Prerequisites": "[\"directory/v1/domains/list\", \"get_dmarc_records\"]",
-    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org.\"",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org. <a href=\\\"#dns-logs\\\">View DNS logs</a> for more details.\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "[{\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.008 seconds: Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.003 seconds: Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.002 seconds: Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.010 seconds: Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}], \"rdata\": []}, {\"domain\": \"martin.com\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"_dmarc.martin.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.009 seconds: Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.martin.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.011 seconds: Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.martin.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.003 seconds: Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.009 seconds: Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.; Server Do53:92.59.43.149@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:bradley34@example.net,  mailto:reports@dmarc.cyber.dhs.gov\"]}]",
+    "ActualValue": "[{\"domain\": \"oconnor.com\", \"log\": [{\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.oconnor.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.oconnor.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:orodriguez@example.org,  mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:orodriguez@example.org\"], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.dhs.gov\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DMARC1; p=reject; pct=100; rua=mailto:orodriguez@example.org,  mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:orodriguez@example.org\"]}, {\"domain\": \"example.org\", \"log\": [{\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}, {\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDOMAIN\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"_dmarc.example.org\", \"query_result\": \"Query returned NXDomain\"}], \"rdata\": []}]",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.4.4v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.4.4v0.6\"",
     "Prerequisites": "[\"directory/v1/domains/list\", \"get_dmarc_records\"]",
-    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org.\"",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: example.org. <a href=\\\"#dns-logs\\\">View DNS logs</a> for more details.\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "[{\"domain\": \"example.org\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"google._domainkey.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.006 seconds: Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"google._domainkey.example.org\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.001 seconds: Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"google._domainkey.example.org\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszok yLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHAqC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb 4QIDAQAB\"]}, {\"domain\": \"ruiz.com\", \"log\": [{\"query_method\": \"traditional\", \"query_name\": \"google._domainkey.ruiz.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.006 seconds: Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"google._domainkey.ruiz.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.011 seconds: Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"google._domainkey.ruiz.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_method\": \"traditional\", \"query_name\": \"selector1._domainkey.ruiz.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.016 seconds: Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"selector1._domainkey.ruiz.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.001 seconds: Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"selector1._domainkey.ruiz.com\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_method\": \"traditional\", \"query_name\": \"selector2._domainkey.ruiz.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.003 seconds: Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.\"}, {\"query_method\": \"traditional\", \"query_name\": \"selector2._domainkey.ruiz.com\", \"query_result\": \"Query resulted in exception The resolution lifetime expired after 5.012 seconds: Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.; Server Do53:158.62.100.253@53 answered The DNS operation timed out.\"}, {\"query_method\": \"DoH\", \"query_name\": \"selector2._domainkey.ruiz.com\", \"query_result\": \"Query returned 0 txt records\"}], \"rdata\": []}]",
+    "ActualValue": "[{\"domain\": \"anderson.info\", \"log\": [{\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"google._domainkey.anderson.info\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"google._domainkey.anderson.info\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"selector1._domainkey.anderson.info\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"selector1._domainkey.anderson.info\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [], \"query_method\": \"traditional\", \"query_name\": \"selector2._domainkey.anderson.info\", \"query_result\": \"Query returned 0 txt records\"}, {\"query_answers\": [], \"query_method\": \"DoH\", \"query_name\": \"selector2._domainkey.anderson.info\", \"query_result\": \"Query returned 0 txt records\"}], \"rdata\": []}, {\"domain\": \"example.org\", \"log\": [{\"query_answers\": [\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszok\\\" \\\"yLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHAqC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb\\\" \\\"4QIDAQAB\"], \"query_method\": \"traditional\", \"query_name\": \"google._domainkey.example.org\", \"query_result\": \"Query returned 1 txt records\"}], \"rdata\": [\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlaknWsKvtbTLAxtWSF5sDt+zvQhTXhT7V2QTnhPGlVXotXxL4VscG5cSnWus8rS4itN9ItxtzompUVRZ14b6hO1C+pxYAcl8Zaj6wsjE2vmEAmLHeXjj9EHMzrhfay2A02MJHReszok\\\" \\\"yLKBm+OZ7F4SNWP4SCazXkouOeATNrcIPUZxBV769ewx6ClumvOeHAqC77VxJieBg+7LaORrm23DMtWqdkMUWB/wmfCHO333/u6bY21eCMgiP/f+jSiylKDdY5kERpRU0NiIxlTGUhqROJESnxNUTqbK69CTAOYR6qhwJeT4OCsuE1zu6gxANmZMClIMiM2SuntXwNswb\\\" \\\"4QIDAQAB\"]}]",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.2.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.2.1v0.6\"",
     "Prerequisites": "[\"directory/v1/domains/list\", \"get_dkim_records\"]",
-    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: oconnell.com.\"",
+    "ReportDetails": "\"1 of 2 agency domain(s) found in violation: price.com. <a href=\\\"#dns-logs\\\">View DNS logs</a> for more details.\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"Cool Example Org\": []}",
+    "ActualValue": "{\"Cool Example Org\": [\"103.151.172.109\"]}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.14.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.14.1v0.6\"",
     "Prerequisites": "[\"policy/gmail_email_spam_filter_ip_allowlist.allowedIpAddresses\", \"policy/gmail_service_status.serviceState\"]",
-    "ReportDetails": "\"Email allowlists are disabled in Cool Example Org.\"",
-    "RequirementMet": "true"
+    "ReportDetails": "\"Email allowlists are enabled in Cool Example Org.\"",
+    "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.10.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.10.1v0.6\"",
     "Prerequisites": "[\"policy/gmail_workspace_sync_for_outlook.enableGoogleWorkspaceSyncForMicrosoftOutlook\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -848,7 +875,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.11.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.11.1v0.6\"",
     "Prerequisites": "[\"policy/gmail_auto_forwarding.enableAutoForwarding\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -857,7 +884,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.12.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.12.1v0.6\"",
     "Prerequisites": "[\"policy/gmail_per_user_outbound_gateway.allowUsersToUseExternalSmtpServers\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -866,7 +893,25 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.5.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.13.1v0.6\"",
+    "Prerequisites": "[\"reports/v1/activities/list\"]",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.15.1v0.6\"",
+    "Prerequisites": "[\"policy/gmail_enhanced_pre_delivery_message_scanning.enableImprovedSuspiciousContentDetection\", \"policy/gmail_service_status.serviceState\"]",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.5.1v0.6\"",
     "Prerequisites": "[\"policy/gmail_email_attachment_safety.enableEncryptedAttachmentProtection\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -875,7 +920,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.5.2v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.5.2v0.6\"",
     "Prerequisites": "[\"policy/gmail_email_attachment_safety.enableAttachmentWithScriptsProtection\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -884,7 +929,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.5.3v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.5.3v0.6\"",
     "Prerequisites": "[\"policy/gmail_email_attachment_safety.enableAnomalousAttachmentProtection\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -893,7 +938,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.5.5v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.5.5v0.6\"",
     "Prerequisites": "[\"policy/gmail_email_attachment_safety.anomalousAttachmentProtectionConsequence\", \"policy/gmail_email_attachment_safety.encryptedAttachmentProtectionConsequence\", \"policy/gmail_email_attachment_safety.attachmentWithScriptsProtectionConsequence\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -902,7 +947,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.6.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.6.1v0.6\"",
     "Prerequisites": "[\"policy/gmail_links_and_external_images.enableShortenerScanning\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -911,7 +956,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.6.2v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.6.2v0.6\"",
     "Prerequisites": "[\"policy/gmail_links_and_external_images.enableExternalImageScanning\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -920,7 +965,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.6.3v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.6.3v0.6\"",
     "Prerequisites": "[\"policy/gmail_links_and_external_images.enableAggressiveWarningsOnUntrustedLinks\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -929,7 +974,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.7.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.7.1v0.6\"",
     "Prerequisites": "[\"policy/gmail_spoofing_and_authentication.detectDomainNameSpoofing\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -938,7 +983,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.7.2v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.7.2v0.6\"",
     "Prerequisites": "[\"policy/gmail_spoofing_and_authentication.detectEmployeeNameSpoofing\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -947,7 +992,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.7.3v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.7.3v0.6\"",
     "Prerequisites": "[\"policy/gmail_spoofing_and_authentication.detectDomainSpoofingFromUnauthenticatedSenders\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -956,7 +1001,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.7.4v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.7.4v0.6\"",
     "Prerequisites": "[\"policy/gmail_spoofing_and_authentication.detectUnauthenticatedEmails\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -965,7 +1010,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.7.5v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.7.5v0.6\"",
     "Prerequisites": "[\"policy/gmail_spoofing_and_authentication.detectDomainSpoofingFromUnauthenticatedSenders\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -974,7 +1019,16 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.8.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.7.6v0.6\"",
+    "Prerequisites": "[\"policy/gmail_spoofing_and_authentication.domainSpoofingConsequence\", \"policy/gmail_spoofing_and_authentication.domainNameSpoofingConsequence\", \"policy/gmail_spoofing_and_authentication.employeeNameSpoofingConsequence\", \"policy/gmail_spoofing_and_authentication.groupsSpoofingConsequence\", \"policy/gmail_spoofing_and_authentication.unauthenticatedEmailConsequence\", \"policy/gmail_service_status.serviceState\"]",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.8.1v0.6\"",
     "Prerequisites": "[\"policy/gmail_user_email_uploads.enableMailAndContactsImport\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -983,7 +1037,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.5.4v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.5.4v0.6\"",
     "Prerequisites": "[\"policy/gmail_email_attachment_safety.applyFutureRecommendedSettingsAutomatically\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -992,97 +1046,61 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.6.4v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.6.4v0.6\"",
     "Prerequisites": "[\"policy/gmail_links_and_external_images.applyFutureSettingsAutomatically\", \"policy/gmail_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Joy Mendez's OU\", \"Value\": \"IMAP and POP access are enabled\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"IMAP and POP access are enabled\"}]}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.9.1v0.5\"",
-    "Prerequisites": "[\"policy/gmail_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Mitchell Walsh's OU: IMAP and POP access are enabled</li><li>Cool Example Org: IMAP and POP access are enabled</li></ul>\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Amanda Johnson's OU\", \"Value\": \"Mail delegation is enabled\"}]}",
+    "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.1.1v0.5\"",
-    "Prerequisites": "[\"policy/gmail_mail_delegation.enableMailDelegation\", \"policy/gmail_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Rebecca Steele's OU: Mail delegation is enabled</li></ul>\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Automatically enable all future added settings is set to: disabled\"}]}",
-    "Criticality": "\"Should\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.7.7v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.7.7v0.6\"",
     "Prerequisites": "[\"policy/gmail_spoofing_and_authentication.applyFutureSettingsAutomatically\", \"policy/gmail_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Automatically enable all future added settings is set to: disabled</li></ul>\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
+    "RequirementMet": "true"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org (group \\\"Tina Rose MD's group\\\")\", \"Value\": \"IMAP access is enabled\"}]}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GMAIL.9.1v0.6\"",
+    "Prerequisites": "[\"policy/gmail_service_status.serviceState\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org (group \\\"Ariana Huang's group\\\"): IMAP access is enabled</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Enhanced pre-delivery message scanning is disabled\"}]}",
-    "Criticality": "\"Shall\"",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Susan Ross's OU\", \"Value\": \"Mail delegation is enabled\"}]}",
+    "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.15.1v0.5\"",
-    "Prerequisites": "[\"policy/gmail_enhanced_pre_delivery_message_scanning.enableImprovedSuspiciousContentDetection\", \"policy/gmail_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Enhanced pre-delivery message scanning is disabled</li></ul>\"",
+    "PolicyId": "\"GWS.GMAIL.1.1v0.6\"",
+    "Prerequisites": "[\"policy/gmail_mail_delegation.enableMailDelegation\", \"policy/gmail_service_status.serviceState\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Debbie Nguyen's OU: Mail delegation is enabled</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Warn for external participants is set to disabled\"}]}",
+    "ActualValue": "[\"example.org\", \"bailey.com\"]",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.13.1v0.5\"",
-    "Prerequisites": "[\"reports/v1/activities/list\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Warn for external participants is set to disabled</li></ul>\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"domain, domain name, employee name, groups, unauthenticated spoof emails not removed from inbox\"}]}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.7.6v0.5\"",
-    "Prerequisites": "[\"policy/gmail_spoofing_and_authentication.domainSpoofingConsequence\", \"policy/gmail_spoofing_and_authentication.domainNameSpoofingConsequence\", \"policy/gmail_spoofing_and_authentication.employeeNameSpoofingConsequence\", \"policy/gmail_spoofing_and_authentication.groupsSpoofingConsequence\", \"policy/gmail_spoofing_and_authentication.unauthenticatedEmailConsequence\", \"policy/gmail_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: domain, domain name, employee name, groups, unauthenticated spoof emails not removed from inbox</li></ul>\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "[\"example.org\", \"baker.com\"]",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GMAIL.3.1v0.5\"",
+    "PolicyId": "\"GWS.GMAIL.3.1v0.6\"",
     "Prerequisites": "[\"directory/v1/domains/list\", \"get_spf_records\"]",
-    "ReportDetails": "\"2 of 2 agency domain(s) found in violation: example.org, gibson.com.\"",
+    "ReportDetails": "\"2 of 2 agency domain(s) found in violation: example.org, duarte-willis.com. <a href=\\\"#dns-logs\\\">View DNS logs</a> for more details.\"",
     "RequirementMet": "false"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GROUPS.1.1v0.5\"",
+    "PolicyId": "\"GWS.GROUPS.1.1v0.6\"",
     "Prerequisites": "[\"policy/groups_for_business_service_status.serviceState\", \"policy/groups_for_business_groups_sharing.collaborationCapability\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": []}",
-    "Criticality": "\"Shall\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GROUPS.6.1v0.5\"",
-    "Prerequisites": "[\"policy/groups_for_business_service_status.serviceState\", \"policy/groups_for_business_groups_sharing.ownersCanHideGroups\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GROUPS.2.1v0.5\"",
+    "PolicyId": "\"GWS.GROUPS.1.2v0.6\"",
     "Prerequisites": "[\"policy/groups_for_business_service_status.serviceState\", \"policy/groups_for_business_groups_sharing.ownersCanAllowExternalMembers\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -1091,7 +1109,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GROUPS.3.1v0.5\"",
+    "PolicyId": "\"GWS.GROUPS.1.3v0.6\"",
     "Prerequisites": "[\"policy/groups_for_business_service_status.serviceState\", \"policy/groups_for_business_groups_sharing.ownersCanAllowIncomingMailFromPublic\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -1100,7 +1118,7 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GROUPS.4.1v0.5\"",
+    "PolicyId": "\"GWS.GROUPS.2.1v0.6\"",
     "Prerequisites": "[\"policy/groups_for_business_service_status.serviceState\", \"policy/groups_for_business_groups_sharing.createGroupsAccessLevel\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -1109,43 +1127,52 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.GROUPS.5.1v0.5\"",
+    "PolicyId": "\"GWS.GROUPS.3.1v0.6\"",
     "Prerequisites": "[\"policy/groups_for_business_service_status.serviceState\", \"policy/groups_for_business_groups_sharing.viewTopicsDefaultAccessLevel\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
-    "ActualValue": "\"\"",
-    "Criticality": "\"Shall/Not-Implemented\"",
-    "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.MEET.6.1v0.5\"",
-    "Prerequisites": "[]",
-    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "\"\"",
-    "Criticality": "\"Shall/Not-Implemented\"",
-    "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.MEET.6.2v0.5\"",
-    "Prerequisites": "[]",
-    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
-    "RequirementMet": "false"
-  },
-  {
-    "ActualValue": "\"No relevant event in the current logs\"",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Group may be hidden: Yes\"}]}",
     "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.GROUPS.4.1v0.6\"",
+    "Prerequisites": "[\"policy/groups_for_business_service_status.serviceState\", \"policy/groups_for_business_groups_sharing.ownersCanHideGroups\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Group may be hidden: Yes</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
     "NoSuchEvent": "true",
-    "PolicyId": "\"GWS.MEET.5.1v0.5\"",
+    "PolicyId": "\"GWS.MEET.6.1v0.6\"",
+    "Prerequisites": "[]",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "\"\"",
+    "Criticality": "\"Shall/Not-Implemented\"",
+    "NoSuchEvent": "true",
+    "PolicyId": "\"GWS.MEET.6.2v0.6\"",
+    "Prerequisites": "[]",
+    "ReportDetails": "\"Currently not able to be tested automatically; please manually check.\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantGroups\": [], \"NonCompliantOUs\": []}",
+    "Criticality": "\"Shall\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.MEET.5.1v0.6\"",
     "Prerequisites": "[\"reports/v1/activities/list\"]",
-    "ReportDetails": "\"No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is compliant; manual check recommended.\"",
+    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.MEET.2.1v0.5\"",
+    "PolicyId": "\"GWS.MEET.2.1v0.6\"",
     "Prerequisites": "[\"policy/meet_safety_access.meetingsAllowedToJoin\", \"policy/meet_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
@@ -1154,36 +1181,36 @@
     "ActualValue": "{\"NonCompliantOUs\": []}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.MEET.3.1v0.5\"",
+    "PolicyId": "\"GWS.MEET.3.1v0.6\"",
     "Prerequisites": "[\"policy/meet_safety_host_management.enableHostManagement\", \"policy/meet_service_status.serviceState\"]",
     "ReportDetails": "\"Requirement met in all OUs and groups.\"",
     "RequirementMet": "true"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Tracy Grant's OU\", \"Value\": \"Warning label for external or unidentified meeting participants is: disabled\"}]}",
     "Criticality": "\"Shall\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.MEET.4.1v0.5\"",
+    "PolicyId": "\"GWS.MEET.4.1v0.6\"",
     "Prerequisites": "[\"policy/meet_safety_external_participants.enableExternalLabel\", \"policy/meet_service_status.serviceState\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
-  },
-  {
-    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Cool Example Org\", \"Value\": \"Who can join meetings is set to: all users (including users not signed in with a Google account)\"}]}",
-    "Criticality": "\"Should\"",
-    "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.MEET.1.1v0.5\"",
-    "Prerequisites": "[\"policy/meet_safety_domain.usersAllowedToJoin\", \"policy/meet_service_status.serviceState\"]",
-    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Cool Example Org: Who can join meetings is set to: all users (including users not signed in with a Google account)</li></ul>\"",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Dawn Sparks's OU: Warning label for external or unidentified meeting participants is: disabled</li></ul>\"",
     "RequirementMet": "false"
   },
   {
-    "ActualValue": "{\"NonCompliantOUs\": []}",
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Alexis Williams's OU\", \"Value\": \"Who can join meetings is set to: all users (including users not signed in with a Google account)\"}]}",
     "Criticality": "\"Should\"",
     "NoSuchEvent": "false",
-    "PolicyId": "\"GWS.SITES.1.1v0.5\"",
+    "PolicyId": "\"GWS.MEET.1.1v0.6\"",
+    "Prerequisites": "[\"policy/meet_safety_domain.usersAllowedToJoin\", \"policy/meet_service_status.serviceState\"]",
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Paul Young's OU: Who can join meetings is set to: all users (including users not signed in with a Google account)</li></ul>\"",
+    "RequirementMet": "false"
+  },
+  {
+    "ActualValue": "{\"NonCompliantOUs\": [{\"Name\": \"Kyle Perkins's OU\", \"Value\": \"Service status for Sites is enabled\"}, {\"Name\": \"Cool Example Org\", \"Value\": \"Service status for Sites is enabled\"}]}",
+    "Criticality": "\"Should\"",
+    "NoSuchEvent": "false",
+    "PolicyId": "\"GWS.SITES.1.1v0.6\"",
     "Prerequisites": "[\"policy/sites_service_status.serviceState\"]",
-    "ReportDetails": "\"Requirement met in all OUs and groups.\"",
-    "RequirementMet": "true"
+    "ReportDetails": "\"The following OUs are non-compliant:<ul><li>Anna Shaw's OU: Service status for Sites is enabled</li><li>Cool Example Org: Service status for Sites is enabled</li></ul>\"",
+    "RequirementMet": "false"
   }
 ]
