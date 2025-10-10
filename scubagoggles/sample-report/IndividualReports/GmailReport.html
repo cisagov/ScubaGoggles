@@ -1,764 +1,1740 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Gmail Baseline Report</title>
-        <style>:root {
-    --background-primary: white;
-    --background-secondary: #b9bec2;
-    --test-pass: #d5ebd5;
-    --test-fail: #deb8b8;
-    --test-warning: #fff7d6;
-    --test-other: #ebebf2;
-    --test-deleted-bg: #b2beb5;
-    --test-deleted-color: #6f7478;
-    --cap-even: #0052882d;
-    --cap-hover: #00528850;
-    --header-color: #005288;
-    --note-color: #ee4e04;
-    --header-bottom: black;
-    --link-color: #85B065;
-    --text-color: black;
-    --border-color: black;
-    --toggle-height: 25px;
-    --toggle-width: 46px;
-    --toggle-radius: 18px;
-    --unvisited-link-color: #0000EE;
-    --uuid-color: #424242;
-}
+  <head>
+    <title>Gmail Baseline Report</title>
+    <style>
+      :root {
+        --background-primary: white;
+        --background-secondary: #b9bec2;
+        --test-pass: #d5ebd5;
+        --test-fail: #deb8b8;
+        --test-warning: #fff7d6;
+        --test-other: #ebebf2;
+        --test-deleted-bg: #b2beb5;
+        --test-deleted-color: #6f7478;
+        --cap-even: #0052882d;
+        --cap-hover: #00528850;
+        --header-color: #005288;
+        --note-color: #ee4e04;
+        --header-bottom: black;
+        --link-color: #85b065;
+        --text-color: black;
+        --border-color: black;
+        --toggle-height: 25px;
+        --toggle-width: 46px;
+        --toggle-radius: 18px;
+        --unvisited-link-color: #0000ee;
+        --uuid-color: #424242;
+      }
 
-body {
-    background-color: var(--background-secondary);
-    -webkit-print-color-adjust:exact !important;
-    print-color-adjust:exact !important;
-}
+      html[data-theme="dark"] {
+        --background-primary: #10171d;
+        --background-secondary: #121212;
+        --test-pass: #1c361c;
+        --test-fail: #381919;
+        --test-warning: #524100;
+        --test-other: #414141;
+        --cap-even: #0052882d;
+        --cap-hover: #007ccf50;
+        --test-error-color: #fd885d;
+        --header-color: #b7c8d2;
+        --note-color: #ee4e04;
+        --header-bottom: rgb(221, 221, 221);
+        --link-color: #9bc2a3;
+        --unvisited-link-color: #4da6d1;
+        --text-color: #bdbdbd;
+        --uuid-color: #999999;
+        --border-color: #7b7b7b;
+      }
 
-table {
-    margin: auto;
-    font-size: 12px;
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 1000px;
-}
+      body {
+        background-color: var(--background-secondary);
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color: var(--text-color);
+      }
 
-h3 {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--header-color);
-}
+      .alternating tr:nth-child(even) {
+        background-color: var(--cap-even);
+      }
 
-h4 {
-    text-align: center;
-    justify-content: start;
-    font-size: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--note-color);
-    margin-left:20%;
-    margin-right: 20%;
-    margin-bottom:5px;
-}
+      .show-more {
+        text-align: left;
+        margin-left: 50px;
+        margin-top: 5px;
+      }
 
+      button.show-more {
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        color: var(--unvisited-link-color);
+        text-decoration: underline;
+        cursor: pointer;
+        margin-left: 0;
+      }
 
-.links {
-    display: flex;
-}
+      table {
+        margin: auto;
+        font-size: 12px;
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 1000px;
+      }
 
-header {
-    width: 1000px;
-    margin: auto;
-    border-bottom: 1px solid black;
-    margin-bottom: 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    padding: 5px;
-}
+      .comment-heading {
+        display: block;
+        font-style: italic;
+        margin-top: 10px;
+      }
 
-header h3 {
-    padding: 10px;
-    text-align: center;
-    border-bottom: 5px solid rgba(0, 0, 0, 0);
-    color: var(--header-color);
-    display: table-cell;
-    vertical-align: bottom;
-}
+      h3 {
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--header-color);
+      }
 
-header a {
-    text-decoration: none;
-}
+      h4 {
+        text-align: center;
+        justify-content: start;
+        font-size: 10px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--note-color);
+        margin-left: 20%;
+        margin-right: 20%;
+        margin-bottom: 5px;
+      }
 
-header h3:hover {
-    border-bottom: 5px solid var(--header-color);   
-}
+      .links {
+        display: flex;
+      }
 
-td {
-    padding: 4px;
-    margin: 0px;
-    overflow-wrap: break-word;
-}
+      header {
+        width: 1000px;
+        margin: auto;
+        border-bottom: 1px solid var(--header-bottom);
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        padding: 5px;
+      }
 
-table, th, td {
-    border: 1px solid;
-}
+      header h3 {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 5px solid rgba(0, 0, 0, 0);
+        color: var(--header-color);
+        display: table-cell;
+        vertical-align: bottom;
+      }
 
-main {
-    background-color: white;
-    width: 1100px;
-    margin: auto;
-    position: relative;
-    padding-bottom: 50px;
-}
+      header a {
+        text-decoration: none;
+      }
 
-h1 {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--header-color);
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
+      header h3:hover {
+        border-bottom: 5px solid var(--header-color);
+      }
 
-h2 {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--header-color);
-    font-size: 16px;
-    margin-top: 50px;
-}
+      td {
+        padding: 4px;
+        margin: 0px;
+        overflow-wrap: break-word;
+      }
 
-img {
-    width: 100px;
-}
+      td a {
+        color: var(--header-color);
+      }
 
-.setting {
-    font-style: italic;
-    color: rgba(0, 0, 0, 0.8);
-}
+      table,
+      th,
+      td {
+        border: 1px solid;
+        border-color: var(--border-color);
+      }
 
-a.control_group:link {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--unvisited-link-color);
-    text-decoration: underline;
-}
+      main {
+        background-color: var(--background-primary);
+        width: 1100px;
+        margin: auto;
+        position: relative;
+        padding-bottom: 50px;
+      }
 
-a.control_group:visited {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--link-color);
-}
+      h1 {
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--header-color);
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
 
-a.control_group:hover {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--link-color);
-    text-decoration: none;
-}
+      h2 {
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--header-color);
+        font-size: 16px;
+        margin-top: 50px;
+      }
 
-a.control_group:active {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--link-color);
-    text-decoration: none;
-}
+      img {
+        width: 100px;
+      }
 
-hr {
-    margin: 0.5em;
-    margin-top: 3em;
-}
+      .setting {
+        font-style: italic;
+        color: rgba(0, 0, 0, 0.8);
+      }
 
-p {
-    font-family: Arial, Helvetica, sans-serif;
-    max-width: 50%;
-    text-align: center;
-    margin: auto;
-    font-size: 12px;
-    padding-bottom: 1.5em;
-}</style>
-        <script>/**
- * Adds the red, green, yellow, and gray coloring to the individual report pages.
- */
-const colorRows = () => {
-    let rows = document.querySelectorAll('tr');
-    // consts for the generic results rows
-    const requirementCol = 1;
-    const statusCol = 2;
-    const criticalityCol = 3;
+      a.control_group:link {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--unvisited-link-color);
+        text-decoration: underline;
+      }
 
-    // const for the alerts rows
-    const alertStatusCol = 2;
+      a.control_group:visited {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--link-color);
+      }
 
-    for (let i = 0; i < rows.length; i++) {
-        try {
+      a.control_group:hover {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--link-color);
+        text-decoration: none;
+      }
+
+      a.control_group:active {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--link-color);
+        text-decoration: none;
+      }
+
+      hr {
+        margin: 0.5em;
+        margin-top: 3em;
+      }
+
+      p {
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 50%;
+        text-align: center;
+        margin: auto;
+        font-size: 12px;
+        padding-bottom: 1.5em;
+      }
+
+      #toggle-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      #toggle-text {
+        color: #7b7b7b;
+        margin: 0.313em 3.125em;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 0.875em;
+        padding-bottom: 2px;
+      }
+
+      /* The switch - the box around the slider */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: var(--toggle-width);
+        height: var(--toggle-height);
+        left: 3.125em;
+      }
+
+      /* Hide default HTML checkbox */
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .switch input:focus,
+      .switch input:focus:active,
+      .switch input:focus + .slider {
+        outline: 0.125em solid var(--text-color);
+        border-radius: var(--toggle-height);
+      }
+
+      /* The slider */
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #b9bec2;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: var(--toggle-radius);
+        width: var(--toggle-radius);
+        left: 0.25em;
+        bottom: 0.219em;
+        background-color: white;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background-color: #005288ad;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 0.063em #005288ad;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(var(--toggle-radius));
+        -ms-transform: translateX(var(--toggle-radius));
+        transform: translateX(var(--toggle-radius));
+      }
+
+      .slider.round {
+        border-radius: var(--toggle-height);
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }
+    </style>
+    <script>
+      /**
+       * Adds the red, green, yellow, and gray coloring to the individual report pages.
+       */
+      const colorRows = () => {
+        let rows = document.querySelectorAll("tr");
+        // consts for the generic results rows
+        const requirementCol = 1;
+        const statusCol = 2;
+        const criticalityCol = 3;
+
+        // const for the alerts rows
+        const alertStatusCol = 2;
+
+        for (let i = 0; i < rows.length; i++) {
+          try {
             if (rows[i].children.length == 3) {
-                // This row is in the Alerts table
-                if (rows[i].children[alertStatusCol].innerHTML === "Enabled") {
-                    rows[i].style.background = "var(--test-pass)";
+              // This row is in the Alerts table
+              if (rows[i].children[alertStatusCol]?.innerHTML === "Enabled") {
+                rows[i].style.background = "var(--test-pass)";
+              } else if (
+                rows[i].children[alertStatusCol]?.innerHTML === "Disabled"
+              ) {
+                rows[i].style.background = "var(--test-fail)";
+              } else if (
+                rows[i].children[alertStatusCol]?.innerHTML === "Unknown"
+              ) {
+                rows[i].style.background = "var(--test-other)";
+              }
+            } else {
+              // This row is in one of the generic results rows
+              if (
+                rows[i].children[requirementCol]?.innerHTML.startsWith(
+                  "[DELETED]"
+                )
+              ) {
+                rows[i].style.color = "var(--test-deleted-color)";
+                rows[i].style.background = "var(--test-other)";
+              } else if (rows[i].children[statusCol]?.innerHTML === "Fail") {
+                rows[i].style.background = "var(--test-fail)";
+              } else if (
+                rows[i].children[statusCol]?.innerHTML.includes(
+                  "No events found"
+                )
+              ) {
+                rows[i].style.background = "var(--test-other)";
+              } else if (rows[i].children[statusCol]?.innerHTML === "Warning") {
+                rows[i].style.background = "var(--test-warning)";
+              } else if (rows[i].children[statusCol]?.innerHTML === "Pass") {
+                rows[i].style.background = "var(--test-pass)";
+              } else if (rows[i].children[statusCol]?.innerHTML === "Omitted") {
+                rows[i].style.background = "var(--test-other)";
+              } else if (
+                rows[i].children[statusCol]?.innerHTML === "Incorrect result"
+              ) {
+                if (rows[i].children[criticalityCol]?.innerHTML === "Shall") {
+                  rows[i].style.background =
+                    "linear-gradient(to right, var(--test-fail), var(--test-pass))";
+                } else if (
+                  rows[i].children[criticalityCol]?.innerHTML === "Should"
+                ) {
+                  rows[i].style.background =
+                    "linear-gradient(to right, var(--test-warning), var(--test-pass))";
+                } else {
+                  // This should never happen
+                  console.log(
+                    `Unexpected criticality for incorrect result, ${rows[i].children[criticalityCol]?.innerHTML}.`
+                  );
                 }
-                else if (rows[i].children[alertStatusCol].innerHTML === "Disabled") {
-                    rows[i].style.background = "var(--test-fail)";
-                }
-                else if (rows[i].children[alertStatusCol].innerHTML === "Unknown") {
-                    rows[i].style.background = "var(--test-other)";
-                }
+              } else if (
+                rows[i].children[criticalityCol]?.innerHTML.includes(
+                  "Not-Implemented"
+                )
+              ) {
+                rows[i].style.background = "var(--test-other)";
+              } else if (
+                rows[i].children[criticalityCol]?.innerHTML.includes(
+                  "3rd Party"
+                )
+              ) {
+                rows[i].style.background = "var(--test-other)";
+              } else if (
+                rows[i].children[statusCol]?.innerHTML.includes("Error")
+              ) {
+                rows[i].style.background = "var(--test-fail)";
+                rows[i].querySelectorAll("td")[statusCol].style.borderColor =
+                  "var(--border-color)";
+                rows[i].querySelectorAll("td")[statusCol].style.color =
+                  "#d10000";
+              }
             }
-            else {
-                // This row is in one of the generic results rows
-                if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
-                    rows[i].style.color = "var(--test-deleted-color)";
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[statusCol].innerHTML === "Fail") {
-                    rows[i].style.background = "var(--test-fail)";
-                }
-                else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[statusCol].innerHTML === "Warning") {
-                    rows[i].style.background = "var(--test-warning)";
-                }
-                else if (rows[i].children[statusCol].innerHTML === "Pass") {
-                    rows[i].style.background = "var(--test-pass)";
-                }
-                else if (rows[i].children[statusCol].innerHTML === "Omitted") {
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
-                    rows[i].style.background = "var(--test-fail)";
-                    rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
-                    rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
-                }
-            }
-        }
-        catch (error) {
+          } catch (error) {
             console.error(`Error in colorRows, i = ${i}`);
             console.error(error);
+          }
         }
-    }
-}
+      };
 
-window.addEventListener('DOMContentLoaded', (event) => {
-    colorRows();
-});</script>
-    </head>
-    <body>
-        <main>
-            <header>
-                <a href="../BaselineReports.html"><img src="images/cisa_logo.png" alt="Return to the report summary" title="Return to the report summary"></a>
-                <div class="links">
-                    <a href="https://www.cisa.gov/scuba" target="_blank"><h3 style="width: 210px;">Secure Cloud Business Applications (SCuBA)</h3></a>
-                    <div style="width:10px;"></div>
-                    <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank"><h3 style="width: 100px;">Baseline Documents</h3></a>
-                </div>
-            </header>
-            <h1>Gmail Baseline Report</h1>
-            
-            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/26/2025 16:02:22 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
-            <h2>GMAIL-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#1-Mail-Delegation" target="_blank">Mail Delegation</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.1.1v0.5</td>
-      <td>Mail Delegation SHOULD be disabled.</td>
-      <td>Warning</td>
-      <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Michael Carey's OU: Mail delegation is enabled</li></ul></td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#2-DomainKeys-Identified-Mail" target="_blank">DomainKeys Identified Mail</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.2.1v0.5</td>
-      <td>DKIM SHOULD be enabled for all domains.</td>
-      <td>Warning</td>
-      <td>Should</td>
-      <td>1 of 2 agency domain(s) found in violation: carroll.com.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#3-Sender-Policy-Framework" target="_blank">Sender Policy Framework</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.3.1v0.5</td>
-      <td>An SPF policy SHALL be published for each domain that fails all non-approved senders.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>2 of 2 agency domain(s) found in violation: example.org, carroll.com.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#4-Domain-based-Message-Authentication,-Reporting,-and-Conformance" target="_blank">Domain-based Message Authentication, Reporting, and Conformance</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.4.1v0.5</td>
-      <td>A DMARC policy SHALL be published for every second-level domain.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>1 of 2 agency domain(s) found in violation: example.org.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.4.2v0.5</td>
-      <td>The DMARC message rejection option SHALL be p=reject.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>1 of 2 agency domain(s) found in violation: example.org.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.4.3v0.5</td>
-      <td>The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>1 of 2 agency domain(s) found in violation: example.org.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.4.4v0.5</td>
-      <td>An agency point of contact SHOULD be included for aggregate and failure reports.</td>
-      <td>Warning</td>
-      <td>Should</td>
-      <td>1 of 2 agency domain(s) found in violation: example.org.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#5-Attachment-Protections" target="_blank">Attachment Protections</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.5.1v0.5</td>
-      <td>Protect against encrypted attachments from untrusted senders SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.5.2v0.5</td>
-      <td>Protect against attachments with scripts from untrusted senders SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.5.3v0.5</td>
-      <td>Protect against anomalous attachment types in emails SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.5.4v0.5</td>
-      <td>Google SHOULD be allowed to automatically apply future recommended settings for attachments.</td>
-      <td>Pass</td>
-      <td>Should</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.5.5v0.5</td>
-      <td>Emails flagged by the above attachment protection controls SHALL NOT be kept in inbox.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.5.6v0.5</td>
-      <td>Any third-party or outside application selected for attachment protection SHOULD offer services comparable to those offered by Google Workspace.</td>
-      <td>N/A</td>
-      <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please check manually.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-6 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#6-Links-and-External-Images-Protection" target="_blank">Links and External Images Protection</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.6.1v0.5</td>
-      <td>Identify links behind shortened URLs SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.6.2v0.5</td>
-      <td>Scan linked images SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.6.3v0.5</td>
-      <td>Show warning prompt for any click on links to untrusted domains SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.6.4v0.5</td>
-      <td>Google SHALL be allowed to automatically apply future recommended settings for links and external images.</td>
-      <td>Pass</td>
-      <td>Should</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.6.5v0.5</td>
-      <td>Any third-party or outside application selected for links and external images protection SHOULD offer services comparable to those offered by Google Workspace.</td>
-      <td>N/A</td>
-      <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-7 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#7-Spoofing-and-Authentication-Protection" target="_blank">Spoofing and Authentication Protection</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.7.1v0.5</td>
-      <td>Protect against domain spoofing based on similar domain names SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.7.2v0.5</td>
-      <td>Protect against spoofing of employee names SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.7.3v0.5</td>
-      <td>Protect against inbound emails spoofing your domain SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.7.4v0.5</td>
-      <td>Protect against any unauthenticated emails SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.7.5v0.5</td>
-      <td>Protect your Groups from inbound emails spoofing your domain SHALL be enabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.7.6v0.5</td>
-      <td>Emails flagged by the above spoofing and authentication controls SHALL NOT be kept in inbox.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: domain, domain name, employee name, groups, unauthenticated spoof emails not removed from inbox</li></ul></td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.7.7v0.5</td>
-      <td>Google SHALL be allowed to automatically apply future recommended settings for spoofing and authentication.</td>
-      <td>Warning</td>
-      <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Automatically enable all future added settings is set to: disabled</li></ul></td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.7.8v0.5</td>
-      <td>Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace.</td>
-      <td>N/A</td>
-      <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-8 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#8-User-Email-Uploads" target="_blank">User Email Uploads</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.8.1v0.5</td>
-      <td>User email uploads SHALL be disabled to protect against unauthorized files being introduced into the secured environment.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-9 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#9-POP-and-IMAP-Access-for-Users" target="_blank">POP and IMAP Access for Users</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.9.1v0.5</td>
-      <td>POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Michael Carey's OU: IMAP and POP access are enabled</li><li>Cool Example Org: IMAP and POP access are enabled</li></ul></td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-10 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#10-Google-Workspace-Sync" target="_blank">Google Workspace Sync</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.10.1v0.5</td>
-      <td>Google Workspace Sync SHOULD be disabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-11 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#11-Automatic-Forwarding" target="_blank">Automatic Forwarding</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.11.1v0.5</td>
-      <td>Automatic forwarding SHOULD be disabled, especially to external domains.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-12 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#12-Per-user-Outbound-Gateways" target="_blank">Per-user Outbound Gateways</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.12.1v0.5</td>
-      <td>Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers SHALL be disabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-13 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#13-Unintended-External-Reply-Warning" target="_blank">Unintended External Reply Warning</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.13.1v0.5</td>
-      <td>Unintended external reply warnings SHALL be enabled.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Warn for external participants is set to disabled</li></ul><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-14 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#14-Email-Allowlist" target="_blank">Email Allowlist</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.14.1v0.5</td>
-      <td>An email allowlist SHOULD not be implemented.</td>
-      <td>Pass</td>
-      <td>Should</td>
-      <td>Email allowlists are disabled in Cool Example Org.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-15 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#15-Enhanced-Pre-Delivery-Message-Scanning" target="_blank">Enhanced Pre-Delivery Message Scanning</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.15.1v0.5</td>
-      <td>Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.</td>
-      <td>Fail</td>
-      <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Enhanced pre-delivery message scanning is disabled</li></ul></td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.15.2v0.5</td>
-      <td>Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.</td>
-      <td>N/A</td>
-      <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-16 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#16-Security-Sandbox" target="_blank">Security Sandbox</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.16.1v0.5</td>
-      <td>Security sandbox SHOULD be enabled to provide additional protections for their email messages.</td>
-      <td>No events found</td>
-      <td>Should</td>
-      <td>No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.16.2v0.5</td>
-      <td>Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.</td>
-      <td>N/A</td>
-      <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-17 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#17-Comprehensive-Mail-Storage" target="_blank">Comprehensive Mail Storage</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.17.1v0.5</td>
-      <td>Comprehensive mail storage SHOULD be enabled to allow tracking of information across applications.</td>
-      <td>N/A</td>
-      <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-  </tbody>
-</table><h2>GMAIL-18 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/gmail.md#18-Spam-Filtering" target="_blank">Spam Filtering</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GMAIL.18.1v0.5</td>
-      <td>Domains SHALL NOT be added to lists that bypass spam filters.</td>
-      <td>N/A</td>
-      <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.18.2v0.5</td>
-      <td>Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.</td>
-      <td>N/A</td>
-      <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-    <tr>
-      <td>GWS.GMAIL.18.3v0.5</td>
-      <td>Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.</td>
-      <td>N/A</td>
-      <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
-    </tr>
-  </tbody>
-</table>
-            
-        </main>
-    </body>
+      /**
+       * Toggles light and dark mode.
+       */
+      const toggleDarkMode = () => {
+        const inputToggle = document.getElementById("toggle");
+        if (inputToggle.checked === true) {
+          setDarkMode("true");
+          return;
+        }
+        setDarkMode("false");
+      };
+
+      /**
+       * Returns the value for the given setting from session storage. Returns
+       * undefined if it does not exist.
+       * @param {string} setting sgr_settings option to read
+       */
+      const getSetting = (setting) => {
+        if (!setting) {
+          return undefined;
+        }
+        let reportSettings = sessionStorage.getItem("sgr_settings");
+        if (reportSettings === null || reportSettings === undefined) {
+          return undefined;
+        }
+        return JSON.parse(reportSettings)[setting];
+      };
+
+      /**
+       * Updates the report settings object in session storage.
+       * @param {string} option sgr_settings option to update
+       * @param {string} value update value for sgr_settings option
+       */
+      const updateSettings = (option, value) => {
+        let settings = {};
+        if ("sgr_settings" in sessionStorage) {
+          settings = JSON.parse(sessionStorage.getItem("sgr_settings"));
+        }
+        settings[option] = value;
+        sessionStorage.setItem("sgr_settings", JSON.stringify(settings));
+      };
+
+      /**
+       * Set the report CSS to light mode or dark mode.
+       * @param {string} state true for Dark Mode or false for Light Mode
+       */
+      const setDarkMode = (state) => {
+        const darkModeToggle = document.getElementById("toggle");
+
+        if (state === "true") {
+          document.querySelectorAll("html")[0].dataset.theme = "dark";
+          document.querySelector("#toggle-text").innerHTML = "Dark Mode";
+          updateSettings("darkMode", "true");
+          darkModeToggle.checked = true;
+          return;
+        }
+
+        document.querySelectorAll("html")[0].dataset.theme = "light";
+        document.querySelector("#toggle-text").innerHTML = "Light Mode";
+        updateSettings("darkMode", "false");
+        darkModeToggle.checked = false;
+      };
+
+      /**
+       * Sets the dark mode according to the setting stored in session storage, the
+       * --darkmode CLI arg, and the system preference (in that order of precedence)
+       */
+      const mountDarkMode = () => {
+        // First, check session storage to see if dark mode has already been
+        // enabled or disabled. If it has, this is what should take precedence.
+        // "darkMode" setting will either be "true", "false", or undefined
+        const darkModeSessionVariable = getSetting("darkMode");
+        if (
+          darkModeSessionVariable !== null &&
+          darkModeSessionVariable !== undefined
+        ) {
+          setDarkMode(darkModeSessionVariable);
+          return;
+        }
+
+        // Next, check to see if the user specified the dark mode via the --darkmode
+        // CLI argument. The Python code dynamically inserts the value of that arg
+        // as the "data-darkmode" attribute of the #sgr_settings element. The value
+        // will be a string, either "true" (dark mode is enabled), "false" (disabled),
+        // or "None" (not specified).
+        const cliElement = document.getElementById("sgr_settings");
+        const cliElementValue = cliElement.getAttribute("data-darkmode");
+        if (cliElementValue !== "None") {
+          setDarkMode(cliElementValue);
+          return;
+        }
+
+        // Finally, if the dark mode setting is not found in session storage nor
+        // provided the --darkmode CLI argument, set the dark mode according to the
+        // system preference
+        const mediaQuery = "(prefers-color-scheme: dark)";
+        const systemPrefersDark = window.matchMedia(mediaQuery).matches;
+        setDarkMode(String(systemPrefersDark));
+      };
+
+      /**
+       * Media Query for browser darkMode
+       */
+      const darkModePreference = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      );
+
+      /**
+       * Event listener for broswer darkMode Media Query changes.
+       * Sets the report CSS to light mode or dark mode.
+       */
+      darkModePreference.addEventListener("change", () => {
+        if (
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+        ) {
+          setDarkMode("true");
+        } else {
+          setDarkMode("false");
+        }
+      });
+
+      /**
+       * Truncates the specified DNS table to the specified number of rows.
+       * @param {number} logIndex The index of the table in the list of DNS tables.
+       * @param {number} maxRows The number of rows to truncate the table to.
+       */
+      const truncateDNSTable = (logIndex, maxRows) => {
+        try {
+          const ROW_INCREMENT = 10;
+          let dnsLog = document.querySelectorAll(".dns-logs")[logIndex];
+          let rows = dnsLog.querySelector("table").querySelectorAll("tr");
+          for (let i = 0; i < rows.length; i++) {
+            if (i > maxRows) {
+              rows[i].style.display = "none";
+            } else {
+              rows[i].style.display = "table-row";
+            }
+          }
+          dnsLog.querySelectorAll(".show-more").forEach((e) => e.remove());
+          if (rows.length > maxRows) {
+            let showMoreMessage = document.createElement("p");
+            showMoreMessage.classList.add("show-more");
+            showMoreMessage.innerHTML = `${
+              rows.length - maxRows
+            } rows hidden. `;
+            showMore = document.createElement("button");
+            showMore.innerHTML = "Show more.";
+            showMore.setAttribute("type", "button");
+            showMore.classList.add("show-more");
+            showMore.onclick = () => {
+              truncateDNSTable(logIndex, maxRows + ROW_INCREMENT);
+            };
+            showMoreMessage.appendChild(showMore);
+            dnsLog.appendChild(showMoreMessage);
+          }
+        } catch (error) {
+          console.error(`Error in truncateDNSTable`, error);
+        }
+      };
+
+      /**
+       * Truncates any DNS table that has more than maxRows rows.
+       * @param {number} maxRows The number of rows to truncate the tables to.
+       */
+      const truncateDNSTables = (maxRows) => {
+        try {
+          let dnsLogs = document.querySelectorAll(".dns-logs");
+          for (let i = 0; i < dnsLogs.length; i++) {
+            truncateDNSTable(i, maxRows);
+          }
+        } catch (error) {
+          console.error(`Error in truncateDNSTables`, error);
+        }
+      };
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const MAX_DNS_ENTRIES = 20;
+        colorRows();
+        mountDarkMode();
+        truncateDNSTables(MAX_DNS_ENTRIES);
+      });
+    </script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <a href="../BaselineReports.html"
+          ><img
+            src="images/cisa_logo.png"
+            alt="Return to the report summary"
+            title="Return to the report summary"
+        /></a>
+        <div class="links">
+          <a href="https://www.cisa.gov/scuba" target="_blank"
+            ><h3 style="width: 210px">
+              Secure Cloud Business Applications (SCuBA)
+            </h3></a
+          >
+          <div style="width: 10px"></div>
+          <a
+            href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines"
+            target="_blank"
+            ><h3 style="width: 100px">Baseline Documents</h3></a
+          >
+        </div>
+      </header>
+      <div id="toggle-container">
+        <p id="toggle-text">Light mode</p>
+        <label class="switch">
+          <input
+            id="toggle"
+            type="checkbox"
+            autocomplete="off"
+            onclick="toggleDarkMode()"
+            aria-labelledby="toggle-text"
+          />
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <h1>Gmail Baseline Report</h1>
+
+      <table style="text-align: center">
+        <tr>
+          <th>Customer Name</th>
+          <th>Customer Domain</th>
+          <th>Customer ID</th>
+          <th>Report Date</th>
+          <th>Baseline Version</th>
+          <th>Tool Version</th>
+        </tr>
+        <tr>
+          <td>Cool Example Org</td>
+          <td>example.org</td>
+          <td>ABCDEFG</td>
+          <td>10/10/2025 13:08:59 Pacific Daylight Time</td>
+          <td>0.6</td>
+          <td>v0.6.0</td>
+        </tr>
+      </table>
+      <h2>
+        GMAIL-1
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#1-mail-delegation"
+          target="_blank"
+          >Mail Delegation</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.1.1v0.6</td>
+            <td>Mail Delegation SHOULD be disabled.</td>
+            <td>Warning</td>
+            <td>Should</td>
+            <td>
+              The following OUs are non-compliant:
+              <ul>
+                <li>Terry Hahn's OU: Mail delegation is enabled</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-2
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#2-domainkeys-identified-mail"
+          target="_blank"
+          >DomainKeys Identified Mail</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.2.1v0.6</td>
+            <td>DKIM SHOULD be enabled for all domains.</td>
+            <td>Warning</td>
+            <td>Should</td>
+            <td>
+              1 of 2 agency domain(s) found in violation: benson-young.biz.
+              <a href="#dns-logs">View DNS logs</a> for more details.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-3
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#3-sender-policy-framework"
+          target="_blank"
+          >Sender Policy Framework</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.3.1v0.6</td>
+            <td>
+              An SPF policy SHALL be published for each domain that fails all
+              non-approved senders.
+            </td>
+            <td>Fail</td>
+            <td>Shall</td>
+            <td>
+              2 of 2 agency domain(s) found in violation: example.org,
+              benson-young.biz. <a href="#dns-logs">View DNS logs</a> for more
+              details.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-4
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#4-domain-based-message-authentication--reporting--and-conformance"
+          target="_blank"
+          >Domain-based Message Authentication, Reporting, and Conformance</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.4.1v0.6</td>
+            <td>
+              A DMARC policy SHALL be published at the full domain or the
+              second-level domain for all Google Workspace domains, including
+              user alias domains.
+            </td>
+            <td>Fail</td>
+            <td>Shall</td>
+            <td>
+              1 of 2 agency domain(s) found in violation: example.org.
+              <a href="#dns-logs">View DNS logs</a> for more details.
+            </td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.4.2v0.6</td>
+            <td>The DMARC message rejection option SHALL be p=reject.</td>
+            <td>Fail</td>
+            <td>Shall</td>
+            <td>
+              1 of 2 agency domain(s) found in violation: example.org.
+              <a href="#dns-logs">View DNS logs</a> for more details.
+            </td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.4.3v0.6</td>
+            <td>
+              The DMARC point of contact for aggregate reports SHALL include
+              `reports@dmarc.cyber.dhs.gov`.
+            </td>
+            <td>Fail</td>
+            <td>Shall</td>
+            <td>
+              1 of 2 agency domain(s) found in violation: example.org.
+              <a href="#dns-logs">View DNS logs</a> for more details.
+            </td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.4.4v0.6</td>
+            <td>
+              An agency point of contact SHOULD be included for aggregate and
+              failure reports.
+            </td>
+            <td>Warning</td>
+            <td>Should</td>
+            <td>
+              1 of 2 agency domain(s) found in violation: example.org.
+              <a href="#dns-logs">View DNS logs</a> for more details.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-5
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#5-attachment-protections"
+          target="_blank"
+          >Attachment Protections</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.5.1v0.6</td>
+            <td>
+              Protect against encrypted attachments from untrusted senders SHALL
+              be enabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.5.2v0.6</td>
+            <td>
+              Protect against attachments with scripts from untrusted senders
+              SHALL be enabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.5.3v0.6</td>
+            <td>
+              Protect against anomalous attachment types in emails SHALL be
+              enabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.5.4v0.6</td>
+            <td>
+              Google SHOULD be allowed to automatically apply future recommended
+              settings for attachments.
+            </td>
+            <td>Pass</td>
+            <td>Should</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.5.5v0.6</td>
+            <td>
+              Emails flagged by the above attachment protection controls SHALL
+              NOT be kept in inbox.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.5.6v0.6</td>
+            <td>
+              Any third-party or outside application selected for attachment
+              protection SHOULD offer services comparable to those offered by
+              Google Workspace.
+            </td>
+            <td>N/A</td>
+            <td>Should/Not-Implemented</td>
+            <td>
+              Currently not able to be tested automatically; please check
+              manually.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-6
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#6-links-and-external-images-protection"
+          target="_blank"
+          >Links and External Images Protection</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.6.1v0.6</td>
+            <td>Identify links behind shortened URLs SHALL be enabled.</td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.6.2v0.6</td>
+            <td>Scan linked images SHALL be enabled.</td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.6.3v0.6</td>
+            <td>
+              Show warning prompt for any click on links to untrusted domains
+              SHALL be enabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.6.4v0.6</td>
+            <td>
+              Google SHALL be allowed to automatically apply future recommended
+              settings for links and external images.
+            </td>
+            <td>Pass</td>
+            <td>Should</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.6.5v0.6</td>
+            <td>
+              Any third-party or outside application selected for links and
+              external images protection SHOULD offer services comparable to
+              those offered by Google Workspace.
+            </td>
+            <td>N/A</td>
+            <td>Should/Not-Implemented</td>
+            <td>
+              Currently not able to be tested automatically; please manually
+              check.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-7
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#7-spoofing-and-authentication-protection"
+          target="_blank"
+          >Spoofing and Authentication Protection</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.7.1v0.6</td>
+            <td>
+              Protect against domain spoofing based on similar domain names
+              SHALL be enabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.7.2v0.6</td>
+            <td>
+              Protect against spoofing of employee names SHALL be enabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.7.3v0.6</td>
+            <td>
+              Protect against inbound emails spoofing your domain SHALL be
+              enabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.7.4v0.6</td>
+            <td>
+              Protect against any unauthenticated emails SHALL be enabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.7.5v0.6</td>
+            <td>
+              Protect your Groups from inbound emails spoofing your domain SHALL
+              be enabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.7.6v0.6</td>
+            <td>
+              Emails flagged by the above spoofing and authentication controls
+              SHALL NOT be kept in inbox.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.7.7v0.6</td>
+            <td>
+              Google SHALL be allowed to automatically apply future recommended
+              settings for spoofing and authentication.
+            </td>
+            <td>Pass</td>
+            <td>Should</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.7.8v0.6</td>
+            <td>
+              Any third-party or outside application selected for spoofing and
+              authentication protection SHOULD offer services comparable to
+              those offered by Google Workspace.
+            </td>
+            <td>N/A</td>
+            <td>Should/Not-Implemented</td>
+            <td>
+              Currently not able to be tested automatically; please manually
+              check.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-8
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#8-user-email-uploads"
+          target="_blank"
+          >User Email Uploads</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.8.1v0.6</td>
+            <td>
+              User email uploads SHALL be disabled to protect against
+              unauthorized files being introduced into the secured environment.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-9
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#9-pop-and-imap-access-for-users"
+          target="_blank"
+          >POP and IMAP Access for Users</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.9.1v0.6</td>
+            <td>
+              POP and IMAP access SHALL be disabled to protect sensitive agency
+              or organization emails from being accessed through legacy
+              applications or other third-party mail clients.
+            </td>
+            <td>Fail</td>
+            <td>Shall</td>
+            <td>
+              The following OUs are non-compliant:
+              <ul>
+                <li>
+                  Cool Example Org (group "Thomas Parker's group"): IMAP access
+                  is enabled
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-10
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#10-google-workspace-sync"
+          target="_blank"
+          >Google Workspace Sync</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.10.1v0.6</td>
+            <td>Google Workspace Sync SHOULD be disabled.</td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-11
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#11-automatic-forwarding"
+          target="_blank"
+          >Automatic Forwarding</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.11.1v0.6</td>
+            <td>
+              Automatic forwarding SHOULD be disabled, especially to external
+              domains.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-12
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#12-per-user-outbound-gateways"
+          target="_blank"
+          >Per-user Outbound Gateways</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.12.1v0.6</td>
+            <td>
+              Using a per-user outbound gateway that is a mail server other than
+              the Google Workspace mail servers SHALL be disabled.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-13
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#13-unintended-external-reply-warning"
+          target="_blank"
+          >Unintended External Reply Warning</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.13.1v0.6</td>
+            <td>Unintended external reply warnings SHALL be enabled.</td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>
+              Requirement met in all OUs and groups.<br /><br /><span
+                style="display: block"
+                ><object
+                  data="./images/triangle-exclamation-solid.svg"
+                  alt="Warning icon."
+                  title="Warning"
+                  width="13"
+                  height="13"
+                ></object
+                >&nbsp;Log-based check. See
+                <a
+                  href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md"
+                  >limitations</a
+                >.</span
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-14
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#14-email-allowlist"
+          target="_blank"
+          >Email Allowlist</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.14.1v0.6</td>
+            <td>An email allowlist SHOULD not be implemented.</td>
+            <td>Warning</td>
+            <td>Should</td>
+            <td>Email allowlists are enabled in Cool Example Org.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-15
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#15-enhanced-pre-delivery-message-scanning"
+          target="_blank"
+          >Enhanced Pre-Delivery Message Scanning</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.15.1v0.6</td>
+            <td>
+              Enhanced pre-delivery message scanning SHALL be enabled to prevent
+              phishing.
+            </td>
+            <td>Pass</td>
+            <td>Shall</td>
+            <td>Requirement met in all OUs and groups.</td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.15.2v0.6</td>
+            <td>
+              Any third-party or outside application selected for enhanced
+              pre-delivery message scanning SHOULD offer services comparable to
+              those offered by Google Workspace.
+            </td>
+            <td>N/A</td>
+            <td>Should/Not-Implemented</td>
+            <td>
+              Currently not able to be tested automatically; please manually
+              check.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-16
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#16-security-sandbox"
+          target="_blank"
+          >Security Sandbox</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.16.1v0.6</td>
+            <td>
+              Security sandbox SHOULD be enabled to provide additional
+              protections for their email messages.
+            </td>
+            <td>No events found</td>
+            <td>Should</td>
+            <td>
+              No relevant event in the current logs for the top-level OU, Cool
+              Example Org. While we are unable to determine the state from the
+              logs, the default setting is non-compliant; manual check
+              recommended.<br /><br /><span style="display: block"
+                ><object
+                  data="./images/triangle-exclamation-solid.svg"
+                  alt="Warning icon."
+                  title="Warning"
+                  width="13"
+                  height="13"
+                ></object
+                >&nbsp;Log-based check. See
+                <a
+                  href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md"
+                  >limitations</a
+                >.</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.16.2v0.6</td>
+            <td>
+              Any third-party or outside application selected for security
+              sandbox SHOULD offer services comparable to those offered by
+              Google Workspace.
+            </td>
+            <td>N/A</td>
+            <td>Should/Not-Implemented</td>
+            <td>
+              Currently not able to be tested automatically; please manually
+              check.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-17
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#17-comprehensive-mail-storage"
+          target="_blank"
+          >Comprehensive Mail Storage</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.17.1v0.6</td>
+            <td>
+              Comprehensive mail storage SHOULD be enabled to allow tracking of
+              information across applications.
+            </td>
+            <td>N/A</td>
+            <td>Should/Not-Implemented</td>
+            <td>
+              Currently not able to be tested automatically; please manually
+              check.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>
+        GMAIL-18
+        <a
+          class="control_group"
+          href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/gmail.md#18-spam-filtering"
+          target="_blank"
+          >Spam Filtering</a
+        >
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Control ID</th>
+            <th>Requirement</th>
+            <th>Result</th>
+            <th>Criticality</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GWS.GMAIL.18.1v0.6</td>
+            <td>
+              Domains SHALL NOT be added to lists that bypass spam filters.
+            </td>
+            <td>N/A</td>
+            <td>Shall/Not-Implemented</td>
+            <td>
+              Currently not able to be tested automatically; please manually
+              check.
+            </td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.18.2v0.6</td>
+            <td>
+              Domains SHALL NOT be added to lists that bypass spam filters and
+              hide warnings.
+            </td>
+            <td>N/A</td>
+            <td>Shall/Not-Implemented</td>
+            <td>
+              Currently not able to be tested automatically; please manually
+              check.
+            </td>
+          </tr>
+          <tr>
+            <td>GWS.GMAIL.18.3v0.6</td>
+            <td>
+              Bypass spam filters and hide warnings for all messages from
+              internal and external senders SHALL NOT be enabled.
+            </td>
+            <td>N/A</td>
+            <td>Shall/Not-Implemented</td>
+            <td>
+              Currently not able to be tested automatically; please manually
+              check.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr />
+      <h2 id="dns-logs">DNS Logs</h2>
+      <p>
+        DNS queries ScubaGear made while identifying SPF, DKIM, and DMARC
+        records. Note: if DNS queries unexepectedly return 0 txt records, it may
+        be a sign the system-defualt resolver is unable to resolve the domain
+        names (e.g., due to a split horizon setup).
+      </p>
+      <div class="dns-logs">
+        <h3>SPF</h3>
+        <table class="alternating dns-table">
+          <thead>
+            <tr>
+              <th>Query Name</th>
+              <th>Query Method</th>
+              <th>Summary</th>
+              <th>Answers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>traditional</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>DoH</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;g&#8203;o&#8203;v
+              </td>
+              <td>traditional</td>
+              <td>Query returned 1 txt records</td>
+              <td>
+                v&#8203;=&#8203;s&#8203;p&#8203;f&#8203;1&#8203;
+                &#8203;i&#8203;n&#8203;c&#8203;l&#8203;u&#8203;d&#8203;e&#8203;:&#8203;_&#8203;s&#8203;p&#8203;f&#8203;.&#8203;g&#8203;o&#8203;o&#8203;g&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m&#8203;
+                &#8203;~&#8203;a&#8203;l&#8203;l
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dns-logs">
+        <h3>DKIM</h3>
+        <table class="alternating dns-table">
+          <thead>
+            <tr>
+              <th>Query Name</th>
+              <th>Query Method</th>
+              <th>Summary</th>
+              <th>Answers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                g&#8203;o&#8203;o&#8203;g&#8203;l&#8203;e&#8203;.&#8203;_&#8203;d&#8203;o&#8203;m&#8203;a&#8203;i&#8203;n&#8203;k&#8203;e&#8203;y&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>traditional</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                g&#8203;o&#8203;o&#8203;g&#8203;l&#8203;e&#8203;.&#8203;_&#8203;d&#8203;o&#8203;m&#8203;a&#8203;i&#8203;n&#8203;k&#8203;e&#8203;y&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>DoH</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                s&#8203;e&#8203;l&#8203;e&#8203;c&#8203;t&#8203;o&#8203;r&#8203;1&#8203;.&#8203;_&#8203;d&#8203;o&#8203;m&#8203;a&#8203;i&#8203;n&#8203;k&#8203;e&#8203;y&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>traditional</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                s&#8203;e&#8203;l&#8203;e&#8203;c&#8203;t&#8203;o&#8203;r&#8203;1&#8203;.&#8203;_&#8203;d&#8203;o&#8203;m&#8203;a&#8203;i&#8203;n&#8203;k&#8203;e&#8203;y&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>DoH</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                s&#8203;e&#8203;l&#8203;e&#8203;c&#8203;t&#8203;o&#8203;r&#8203;2&#8203;.&#8203;_&#8203;d&#8203;o&#8203;m&#8203;a&#8203;i&#8203;n&#8203;k&#8203;e&#8203;y&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>traditional</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                s&#8203;e&#8203;l&#8203;e&#8203;c&#8203;t&#8203;o&#8203;r&#8203;2&#8203;.&#8203;_&#8203;d&#8203;o&#8203;m&#8203;a&#8203;i&#8203;n&#8203;k&#8203;e&#8203;y&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>DoH</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                g&#8203;o&#8203;o&#8203;g&#8203;l&#8203;e&#8203;.&#8203;_&#8203;d&#8203;o&#8203;m&#8203;a&#8203;i&#8203;n&#8203;k&#8203;e&#8203;y&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;g&#8203;o&#8203;v
+              </td>
+              <td>traditional</td>
+              <td>Query returned 1 txt records</td>
+              <td>
+                v&#8203;=&#8203;D&#8203;K&#8203;I&#8203;M&#8203;1&#8203;;&#8203;
+                &#8203;k&#8203;=&#8203;r&#8203;s&#8203;a&#8203;;&#8203;
+                &#8203;p&#8203;=&#8203;M&#8203;I&#8203;I&#8203;B&#8203;I&#8203;j&#8203;A&#8203;N&#8203;B&#8203;g&#8203;k&#8203;q&#8203;h&#8203;k&#8203;i&#8203;G&#8203;9&#8203;w&#8203;0&#8203;B&#8203;A&#8203;Q&#8203;E&#8203;F&#8203;A&#8203;A&#8203;O&#8203;C&#8203;A&#8203;Q&#8203;8&#8203;A&#8203;M&#8203;I&#8203;I&#8203;B&#8203;C&#8203;g&#8203;K&#8203;C&#8203;A&#8203;Q&#8203;E&#8203;A&#8203;l&#8203;a&#8203;k&#8203;n&#8203;W&#8203;s&#8203;K&#8203;v&#8203;t&#8203;b&#8203;T&#8203;L&#8203;A&#8203;x&#8203;t&#8203;W&#8203;S&#8203;F&#8203;5&#8203;s&#8203;D&#8203;t&#8203;+&#8203;z&#8203;v&#8203;Q&#8203;h&#8203;T&#8203;X&#8203;h&#8203;T&#8203;7&#8203;V&#8203;2&#8203;Q&#8203;T&#8203;n&#8203;h&#8203;P&#8203;G&#8203;l&#8203;V&#8203;X&#8203;o&#8203;t&#8203;X&#8203;x&#8203;L&#8203;4&#8203;V&#8203;s&#8203;c&#8203;G&#8203;5&#8203;c&#8203;S&#8203;n&#8203;W&#8203;u&#8203;s&#8203;8&#8203;r&#8203;S&#8203;4&#8203;i&#8203;t&#8203;N&#8203;9&#8203;I&#8203;t&#8203;x&#8203;t&#8203;z&#8203;o&#8203;m&#8203;p&#8203;U&#8203;V&#8203;R&#8203;Z&#8203;1&#8203;4&#8203;b&#8203;6&#8203;h&#8203;O&#8203;1&#8203;C&#8203;+&#8203;p&#8203;x&#8203;Y&#8203;A&#8203;c&#8203;l&#8203;8&#8203;Z&#8203;a&#8203;j&#8203;6&#8203;w&#8203;s&#8203;j&#8203;E&#8203;2&#8203;v&#8203;m&#8203;E&#8203;A&#8203;m&#8203;L&#8203;H&#8203;e&#8203;X&#8203;j&#8203;j&#8203;9&#8203;E&#8203;H&#8203;M&#8203;z&#8203;r&#8203;h&#8203;f&#8203;a&#8203;y&#8203;2&#8203;A&#8203;0&#8203;2&#8203;M&#8203;J&#8203;H&#8203;R&#8203;e&#8203;s&#8203;z&#8203;o&#8203;k&#8203;"&#8203;
+                &#8203;"&#8203;y&#8203;L&#8203;K&#8203;B&#8203;m&#8203;+&#8203;O&#8203;Z&#8203;7&#8203;F&#8203;4&#8203;S&#8203;N&#8203;W&#8203;P&#8203;4&#8203;S&#8203;C&#8203;a&#8203;z&#8203;X&#8203;k&#8203;o&#8203;u&#8203;O&#8203;e&#8203;A&#8203;T&#8203;N&#8203;r&#8203;c&#8203;I&#8203;P&#8203;U&#8203;Z&#8203;x&#8203;B&#8203;V&#8203;7&#8203;6&#8203;9&#8203;e&#8203;w&#8203;x&#8203;6&#8203;C&#8203;l&#8203;u&#8203;m&#8203;v&#8203;O&#8203;e&#8203;H&#8203;A&#8203;q&#8203;C&#8203;7&#8203;7&#8203;V&#8203;x&#8203;J&#8203;i&#8203;e&#8203;B&#8203;g&#8203;+&#8203;7&#8203;L&#8203;a&#8203;O&#8203;R&#8203;r&#8203;m&#8203;2&#8203;3&#8203;D&#8203;M&#8203;t&#8203;W&#8203;q&#8203;d&#8203;k&#8203;M&#8203;U&#8203;W&#8203;B&#8203;/&#8203;w&#8203;m&#8203;f&#8203;C&#8203;H&#8203;O&#8203;3&#8203;3&#8203;3&#8203;/&#8203;u&#8203;6&#8203;b&#8203;Y&#8203;2&#8203;1&#8203;e&#8203;C&#8203;M&#8203;g&#8203;i&#8203;P&#8203;/&#8203;f&#8203;+&#8203;j&#8203;S&#8203;i&#8203;y&#8203;l&#8203;K&#8203;D&#8203;d&#8203;Y&#8203;5&#8203;k&#8203;E&#8203;R&#8203;p&#8203;R&#8203;U&#8203;0&#8203;N&#8203;i&#8203;I&#8203;x&#8203;l&#8203;T&#8203;G&#8203;U&#8203;h&#8203;q&#8203;R&#8203;O&#8203;J&#8203;E&#8203;S&#8203;n&#8203;x&#8203;N&#8203;U&#8203;T&#8203;q&#8203;b&#8203;K&#8203;6&#8203;9&#8203;C&#8203;T&#8203;A&#8203;O&#8203;Y&#8203;R&#8203;6&#8203;q&#8203;h&#8203;w&#8203;J&#8203;e&#8203;T&#8203;4&#8203;O&#8203;C&#8203;s&#8203;u&#8203;E&#8203;1&#8203;z&#8203;u&#8203;6&#8203;g&#8203;x&#8203;A&#8203;N&#8203;m&#8203;Z&#8203;M&#8203;C&#8203;l&#8203;I&#8203;M&#8203;i&#8203;M&#8203;2&#8203;S&#8203;u&#8203;n&#8203;t&#8203;X&#8203;w&#8203;N&#8203;s&#8203;w&#8203;b&#8203;"&#8203;
+                &#8203;"&#8203;4&#8203;Q&#8203;I&#8203;D&#8203;A&#8203;Q&#8203;A&#8203;B
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dns-logs">
+        <h3>DMARC</h3>
+        <table class="alternating dns-table">
+          <thead>
+            <tr>
+              <th>Query Name</th>
+              <th>Query Method</th>
+              <th>Summary</th>
+              <th>Answers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                _&#8203;d&#8203;m&#8203;a&#8203;r&#8203;c&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>traditional</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                _&#8203;d&#8203;m&#8203;a&#8203;r&#8203;c&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;c&#8203;o&#8203;m
+              </td>
+              <td>DoH</td>
+              <td>Query returned 0 txt records</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                _&#8203;d&#8203;m&#8203;a&#8203;r&#8203;c&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;o&#8203;r&#8203;g
+              </td>
+              <td>traditional</td>
+              <td>Query returned 1 txt records</td>
+              <td>
+                v&#8203;=&#8203;D&#8203;M&#8203;A&#8203;R&#8203;C&#8203;1&#8203;;&#8203;
+                &#8203;p&#8203;=&#8203;r&#8203;e&#8203;j&#8203;e&#8203;c&#8203;t&#8203;;&#8203;
+                &#8203;p&#8203;c&#8203;t&#8203;=&#8203;1&#8203;0&#8203;0&#8203;;&#8203;
+                &#8203;r&#8203;u&#8203;a&#8203;=&#8203;m&#8203;a&#8203;i&#8203;l&#8203;t&#8203;o&#8203;:&#8203;D&#8203;M&#8203;A&#8203;R&#8203;C&#8203;@&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;o&#8203;r&#8203;g&#8203;,&#8203;
+                &#8203;
+                &#8203;m&#8203;a&#8203;i&#8203;l&#8203;t&#8203;o&#8203;:&#8203;r&#8203;e&#8203;p&#8203;o&#8203;r&#8203;t&#8203;s&#8203;@&#8203;d&#8203;m&#8203;a&#8203;r&#8203;c&#8203;.&#8203;c&#8203;y&#8203;b&#8203;e&#8203;r&#8203;.&#8203;d&#8203;h&#8203;s&#8203;.&#8203;g&#8203;o&#8203;v&#8203;;&#8203;
+                &#8203;r&#8203;u&#8203;f&#8203;=&#8203;m&#8203;a&#8203;i&#8203;l&#8203;t&#8203;o&#8203;:&#8203;d&#8203;m&#8203;a&#8203;r&#8203;c&#8203;-&#8203;f&#8203;o&#8203;r&#8203;e&#8203;n&#8203;s&#8203;i&#8203;c&#8203;s&#8203;@&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;o&#8203;r&#8203;g
+              </td>
+            </tr>
+            <tr>
+              <td>
+                _&#8203;d&#8203;m&#8203;a&#8203;r&#8203;c&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;g&#8203;o&#8203;v
+              </td>
+              <td>traditional</td>
+              <td>Query returned NXDOMAIN</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                _&#8203;d&#8203;m&#8203;a&#8203;r&#8203;c&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;g&#8203;o&#8203;v
+              </td>
+              <td>DoH</td>
+              <td>Query returned NXDomain</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                _&#8203;d&#8203;m&#8203;a&#8203;r&#8203;c&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;g&#8203;o&#8203;v
+              </td>
+              <td>traditional</td>
+              <td>Query returned NXDOMAIN</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                _&#8203;d&#8203;m&#8203;a&#8203;r&#8203;c&#8203;.&#8203;e&#8203;x&#8203;a&#8203;m&#8203;p&#8203;l&#8203;e&#8203;.&#8203;g&#8203;o&#8203;v
+              </td>
+              <td>DoH</td>
+              <td>Query returned NXDomain</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+    <span id="sgr_settings" data-darkmode="None"></span>
+  </body>
 </html>

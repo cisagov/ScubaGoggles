@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Groups for Business Baseline Report</title>
@@ -26,10 +26,51 @@
     --uuid-color: #424242;
 }
 
+html[data-theme='dark'] {
+    --background-primary: #10171D;
+    --background-secondary: #121212;
+    --test-pass: #1C361C;
+    --test-fail: #381919;
+    --test-warning: #524100;
+    --test-other: #414141;
+    --cap-even: #0052882d;
+    --cap-hover: #007ccf50;
+    --test-error-color: #FD885D;
+    --header-color: #b7c8d2;
+    --note-color: #ee4e04;
+    --header-bottom: rgb(221, 221, 221);
+    --link-color: #9bc2a3;
+    --unvisited-link-color: #4da6d1;
+    --text-color: #bdbdbd;
+    --uuid-color: #999999;
+    --border-color: #7b7b7b;
+}
+
 body {
     background-color: var(--background-secondary);
     -webkit-print-color-adjust:exact !important;
     print-color-adjust:exact !important;
+    color: var(--text-color)
+}
+
+.alternating tr:nth-child(even) {
+    background-color: var(--cap-even);
+}
+
+.show-more {
+    text-align: left;
+    margin-left: 50px;
+    margin-top: 5px;
+}
+
+button.show-more {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  color: var(--unvisited-link-color);
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 0;
 }
 
 table {
@@ -38,6 +79,12 @@ table {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 1000px;
+}
+
+.comment-heading {
+    display: block;
+    font-style: italic;
+    margin-top: 10px;
 }
 
 h3 {
@@ -65,8 +112,8 @@ h4 {
 header {
     width: 1000px;
     margin: auto;
-    border-bottom: 1px solid black;
-    margin-bottom: 50px;
+    border-bottom: 1px solid var(--header-bottom);
+    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: end;
@@ -96,12 +143,17 @@ td {
     overflow-wrap: break-word;
 }
 
+td a {
+    color: var(--header-color)
+}
+
 table, th, td {
     border: 1px solid;
+    border-color: var(--border-color);
 }
 
 main {
-    background-color: white;
+    background-color: var(--background-primary);
     width: 1100px;
     margin: auto;
     position: relative;
@@ -168,7 +220,93 @@ p {
     margin: auto;
     font-size: 12px;
     padding-bottom: 1.5em;
-}</style>
+}
+
+#toggle-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#toggle-text {
+    color: #7b7b7b;
+    margin: 0.313em 3.125em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.875em;
+    padding-bottom: 2px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    left: 3.125em;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch input:focus,
+.switch input:focus:active,
+.switch input:focus + .slider {
+    outline: 0.125em solid var(--text-color);
+    border-radius: var(--toggle-height);
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #b9bec2;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: var(--toggle-radius);
+    width: var(--toggle-radius);
+    left: 0.25em;
+    bottom: 0.219em;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #005288ad;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 0.063em #005288ad;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(var(--toggle-radius));
+    -ms-transform: translateX(var(--toggle-radius));
+    transform: translateX(var(--toggle-radius));
+}
+
+.slider.round {
+    border-radius: var(--toggle-height);
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
  */
@@ -186,44 +324,56 @@ const colorRows = () => {
         try {
             if (rows[i].children.length == 3) {
                 // This row is in the Alerts table
-                if (rows[i].children[alertStatusCol].innerHTML === "Enabled") {
+                if (rows[i].children[alertStatusCol]?.innerHTML === "Enabled") {
                     rows[i].style.background = "var(--test-pass)";
                 }
-                else if (rows[i].children[alertStatusCol].innerHTML === "Disabled") {
+                else if (rows[i].children[alertStatusCol]?.innerHTML === "Disabled") {
                     rows[i].style.background = "var(--test-fail)";
                 }
-                else if (rows[i].children[alertStatusCol].innerHTML === "Unknown") {
+                else if (rows[i].children[alertStatusCol]?.innerHTML === "Unknown") {
                     rows[i].style.background = "var(--test-other)";
                 }
             }
             else {
                 // This row is in one of the generic results rows
-                if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
+                if (rows[i].children[requirementCol]?.innerHTML.startsWith("[DELETED]")) {
                     rows[i].style.color = "var(--test-deleted-color)";
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Fail") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Fail") {
                     rows[i].style.background = "var(--test-fail)";
                 }
-                else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
+                else if (rows[i].children[statusCol]?.innerHTML.includes("No events found")) {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Warning") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Warning") {
                     rows[i].style.background = "var(--test-warning)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Pass") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Pass") {
                     rows[i].style.background = "var(--test-pass)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Omitted") {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
+                else if (rows[i].children[statusCol]?.innerHTML === "Incorrect result") {
+                    if (rows[i].children[criticalityCol]?.innerHTML === "Shall") {
+                        rows[i].style.background = "linear-gradient(to right, var(--test-fail), var(--test-pass))";
+                    }
+                    else if (rows[i].children[criticalityCol]?.innerHTML === "Should") {
+                        rows[i].style.background = "linear-gradient(to right, var(--test-warning), var(--test-pass))";
+                    }
+                    else {
+                        // This should never happen
+                        console.log(`Unexpected criticality for incorrect result, ${rows[i].children[criticalityCol]?.innerHTML}.`);
+                    }
+                }
+                else if (rows[i].children[criticalityCol]?.innerHTML.includes("Not-Implemented")) {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
+                else if (rows[i].children[criticalityCol]?.innerHTML.includes("3rd Party")) {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
+                else if (rows[i].children[statusCol]?.innerHTML.includes("Error")) {
                     rows[i].style.background = "var(--test-fail)";
                     rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
                     rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
@@ -237,9 +387,183 @@ const colorRows = () => {
     }
 }
 
-window.addEventListener('DOMContentLoaded', (event) => {
+/**
+ * Toggles light and dark mode.
+ */
+const toggleDarkMode = () => {
+    const inputToggle = document.getElementById("toggle");
+    if (inputToggle.checked === true) {
+        setDarkMode("true");
+        return;
+    }
+    setDarkMode("false");
+}
+
+/**
+ * Returns the value for the given setting from session storage. Returns
+ * undefined if it does not exist.
+ * @param {string} setting sgr_settings option to read
+ */
+const getSetting = (setting) => {
+    if (!setting) {
+        return undefined;
+    }
+    let reportSettings = sessionStorage.getItem("sgr_settings");
+    if (reportSettings === null || reportSettings === undefined) {
+        return undefined;
+    }
+    return JSON.parse(reportSettings)[setting];
+}
+
+/**
+ * Updates the report settings object in session storage.
+ * @param {string} option sgr_settings option to update
+ * @param {string} value update value for sgr_settings option
+ */
+const updateSettings = (option, value) => {
+    let settings = {};
+    if ("sgr_settings" in sessionStorage) {
+        settings = JSON.parse(sessionStorage.getItem("sgr_settings"));
+    }
+    settings[option] = value;
+    sessionStorage.setItem("sgr_settings", JSON.stringify(settings));
+}
+
+/**
+ * Set the report CSS to light mode or dark mode.
+ * @param {string} state true for Dark Mode or false for Light Mode
+ */
+const setDarkMode = (state) => {
+    const darkModeToggle = document.getElementById("toggle");
+
+    if (state === "true") {
+        document.querySelectorAll("html")[0].dataset.theme = "dark";
+        document.querySelector("#toggle-text").innerHTML = "Dark Mode";
+        updateSettings("darkMode", "true");
+        darkModeToggle.checked = true;
+        return;
+    }
+
+    document.querySelectorAll("html")[0].dataset.theme = "light";
+    document.querySelector("#toggle-text").innerHTML = "Light Mode";
+    updateSettings("darkMode", "false");
+    darkModeToggle.checked = false;
+}
+
+/**
+ * Sets the dark mode according to the setting stored in session storage, the
+ * --darkmode CLI arg, and the system preference (in that order of precedence)
+ */
+const mountDarkMode = () => {
+    // First, check session storage to see if dark mode has already been
+    // enabled or disabled. If it has, this is what should take precedence.
+    // "darkMode" setting will either be "true", "false", or undefined
+    const darkModeSessionVariable = getSetting("darkMode");
+    if (
+        darkModeSessionVariable !== null &&
+        darkModeSessionVariable !== undefined
+    ) {
+        setDarkMode(darkModeSessionVariable);
+        return;
+    }
+
+    // Next, check to see if the user specified the dark mode via the --darkmode
+    // CLI argument. The Python code dynamically inserts the value of that arg
+    // as the "data-darkmode" attribute of the #sgr_settings element. The value
+    // will be a string, either "true" (dark mode is enabled), "false" (disabled),
+    // or "None" (not specified).
+    const cliElement = document.getElementById("sgr_settings");
+    const cliElementValue = cliElement.getAttribute("data-darkmode");
+    if (cliElementValue !== "None") {
+        setDarkMode(cliElementValue);
+        return;
+    }
+
+    // Finally, if the dark mode setting is not found in session storage nor
+    // provided the --darkmode CLI argument, set the dark mode according to the
+    // system preference
+    const mediaQuery = "(prefers-color-scheme: dark)";
+    const systemPrefersDark = window.matchMedia(mediaQuery).matches;
+    setDarkMode(String(systemPrefersDark));
+};
+
+/**
+ * Media Query for browser darkMode
+ */
+const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
+
+/**
+ * Event listener for broswer darkMode Media Query changes.
+ * Sets the report CSS to light mode or dark mode.
+ */
+darkModePreference.addEventListener("change", () =>  {
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setDarkMode("true");
+    } else {
+        setDarkMode("false");
+    }
+});
+
+/**
+ * Truncates the specified DNS table to the specified number of rows.
+ * @param {number} logIndex The index of the table in the list of DNS tables.
+ * @param {number} maxRows The number of rows to truncate the table to.
+ */
+const truncateDNSTable = (logIndex, maxRows) => {
+    try {
+        const ROW_INCREMENT = 10;
+        let dnsLog = document.querySelectorAll('.dns-logs')[logIndex];
+        let rows = dnsLog.querySelector('table').querySelectorAll('tr');
+        for (let i = 0; i < rows.length; i++) {
+            if (i > maxRows) {
+                rows[i].style.display = 'none';
+            }
+            else {
+                rows[i].style.display = 'table-row';
+            }
+        }
+        dnsLog.querySelectorAll('.show-more').forEach(e => e.remove());
+        if (rows.length > maxRows) {
+            let showMoreMessage = document.createElement('p');
+            showMoreMessage.classList.add('show-more');
+            showMoreMessage.innerHTML = `${rows.length-maxRows} rows hidden. `;
+            showMore = document.createElement('button');
+            showMore.innerHTML = "Show more.";
+            showMore.setAttribute('type', 'button');
+            showMore.classList.add('show-more');
+            showMore.onclick = () => {truncateDNSTable(logIndex, maxRows+ROW_INCREMENT);};
+            showMoreMessage.appendChild(showMore);
+            dnsLog.appendChild(showMoreMessage);
+        }
+    }
+    catch (error) {
+        console.error(`Error in truncateDNSTable`, error);
+    }
+}
+
+/**
+ * Truncates any DNS table that has more than maxRows rows.
+ * @param {number} maxRows The number of rows to truncate the tables to.
+ */
+const truncateDNSTables = (maxRows) => {
+    try {
+        let dnsLogs = document.querySelectorAll('.dns-logs');
+        for (let i = 0; i < dnsLogs.length; i++) {
+            truncateDNSTable(i, maxRows);
+        }
+    }
+    catch (error) {
+        console.error(`Error in truncateDNSTables`, error);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const MAX_DNS_ENTRIES = 20;
     colorRows();
-});</script>
+    mountDarkMode();
+    truncateDNSTables(MAX_DNS_ENTRIES);
+});
+</script>
     </head>
     <body>
         <main>
@@ -251,10 +575,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank"><h3 style="width: 100px;">Baseline Documents</h3></a>
                 </div>
             </header>
+            <div id="toggle-container">
+    <p id="toggle-text">Light mode</p>
+    <label class="switch">
+        <input id="toggle" type="checkbox" autocomplete="off" onclick="toggleDarkMode()" aria-labelledby="toggle-text">
+        <span class="slider round"></span>
+    </label>
+</div>
             <h1>Groups for Business Baseline Report</h1>
             
-            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/26/2025 16:02:22 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
-            <h2>GROUPS-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/groups.md#1-External-Group-Access" target="_blank">External Group Access</a></h2><table>
+            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>10/10/2025 13:08:59 Pacific Daylight Time</td><td>0.6</td><td>v0.6.0</td></tr></table>
+            <h2>GROUPS-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/groups.md#1-external-group-access" target="_blank">External Group Access</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -266,52 +597,28 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.1.1v0.5</td>
+      <td>GWS.GROUPS.1.1v0.6</td>
       <td>Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
-  </tbody>
-</table><h2>GROUPS-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/groups.md#2-Adding-External-Members" target="_blank">Adding External Members</a></h2><table>
-  <thead>
     <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GROUPS.2.1v0.5</td>
+      <td>GWS.GROUPS.1.2v0.6</td>
       <td>Group owners&#x27; ability to add external members to groups SHOULD be disabled unless necessary for agency mission fulfillment.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
-  </tbody>
-</table><h2>GROUPS-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/groups.md#3-Allowing-Posting-by-External-Members" target="_blank">Allowing Posting by External Members</a></h2><table>
-  <thead>
     <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.GROUPS.3.1v0.5</td>
+      <td>GWS.GROUPS.1.3v0.6</td>
       <td>Group owners&#x27; ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GROUPS-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/groups.md#4-Group-Creation" target="_blank">Group Creation</a></h2><table>
+</table><h2>GROUPS-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/groups.md#2-group-creation" target="_blank">Group Creation</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -323,14 +630,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.4.1v0.5</td>
+      <td>GWS.GROUPS.2.1v0.6</td>
       <td>Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GROUPS-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/groups.md#5-Default-Permissions-for-Viewing-Conversations" target="_blank">Default Permissions for Viewing Conversations</a></h2><table>
+</table><h2>GROUPS-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/groups.md#3-default-permissions-for-viewing-conversations" target="_blank">Default Permissions for Viewing Conversations</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -342,14 +649,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.5.1v0.5</td>
+      <td>GWS.GROUPS.3.1v0.6</td>
       <td>The default permission to view conversations SHOULD be set to All Group Members.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>GROUPS-6 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/groups.md#6-Ability-to-Hide-Groups-from-the-Directory" target="_blank">Ability to Hide Groups from the Directory</a></h2><table>
+</table><h2>GROUPS-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/groups.md#4-ability-to-hide-groups-from-the-directory" target="_blank">Ability to Hide Groups from the Directory</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -361,15 +668,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.GROUPS.6.1v0.5</td>
+      <td>GWS.GROUPS.4.1v0.6</td>
       <td>The Ability for Groups to be Hidden from the Directory SHALL be disabled.</td>
-      <td>Pass</td>
+      <td>Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Group may be hidden: Yes</li></ul></td>
     </tr>
   </tbody>
 </table>
             
+            
         </main>
+        <span id="sgr_settings" data-darkmode="None"></span>
     </body>
 </html>
