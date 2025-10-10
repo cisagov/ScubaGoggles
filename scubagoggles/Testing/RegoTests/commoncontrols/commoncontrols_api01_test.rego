@@ -271,8 +271,7 @@ test_2SVUserEnrollment_Incorrect_1 if {
     failedOU := [{"Name": "thirdOU",
                   "Value": NonComplianceMessage1_1c},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage1_4(1209600,
-                                                   utils.DurationToSeconds("7d"))}]
+                  "Value": NonComplianceMessage1_1a}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -286,7 +285,9 @@ test_2SVUserEnrollment_Incorrect_2 if {
                  {"Name": "seventhOU",
                   "Value": NonComplianceMessage1_1c},
                  {"Name": "sixthOU",
-                  "Value": NonComplianceMessage1_1c},]
+                  "Value": NonComplianceMessage1_1c},
+                 {"Name": "thirdOU",
+                  "Value": NonComplianceMessage1_1a}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -304,7 +305,7 @@ test_2SVDeviceTrust_Incorrect_1 if {
     failedOU := [{"Name": "thirdOU",
                   "Value": NonComplianceMessage1_1c},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage1_5}]
+                  "Value": NonComplianceMessage1_1a}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
