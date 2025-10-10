@@ -317,6 +317,8 @@ test_2SVDeviceTrust_Incorrect_2 if {
                  {"Name": "seventhOU",
                   "Value": NonComplianceMessage1_1c},
                   {"Name": "sixthOU",
-                  "Value": NonComplianceMessage1_1c}]
+                  "Value": NonComplianceMessage1_1c},
+                  {"Name": "thirdOU",
+                   "Value": NonComplianceMessage1_1a}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
