@@ -543,6 +543,9 @@ class PolicyAPI:
 
         start_time = time.time()
 
+        if params is not None and 'pageToken' in params:
+            print(params)
+
         # Google will return the "too many requests" error if the requests come
         # in without any delay between them. The total iterations is limited to
         # 8 because the delay is exponential and after several iterations the
