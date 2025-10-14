@@ -51,7 +51,7 @@ Who can join classes in your domain SHALL be restricted to users in your domain 
 #### GWS.CLASSROOM.1.2v0.6
 Which classes users in your domain can join SHALL be restricted to classes in your domain or allowlisted domains.
 
-- _Rationale:_ Allowing users to join a class in arbitrary domains could allow for data to be exfiltrated to entities outside the control of the organization.
+- _Rationale:_ Allowing users to join classes in arbitrary domains could allow for data to be exfiltrated to entities outside the control of the organization.
 - _Last modified:_ October 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
