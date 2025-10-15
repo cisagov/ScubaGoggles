@@ -7,6 +7,19 @@
 # documentation can be found here:
 # https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md
 
+# The list of GWS SCuBA baselines ScubaGoggles will assess.
+baselines:
+  - calendar
+  - chat
+  - classroom
+  - commoncontrols
+  - drive
+  - gemini
+  - gmail
+  - groups
+  - meet
+  - sites
+
 # These values are necessary for service account authentication:
 # - subjectemail: The email address of the user the service account should act
 #   on behalf of. This user must have the necessary privileges to run
@@ -34,3 +47,9 @@ omitpolicy: {}
 # https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md#annotate-policies
 # for in-depth details.
 annotatepolicy: {}
+
+# If any super admin accounts should be considered "break class accounts" and
+# not counted toward the overall super admin count, configure them here. See
+# https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md#break-glass-accounts
+# for more details.
+breakglassaccounts: []
