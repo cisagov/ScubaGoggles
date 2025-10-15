@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Common Controls Baseline Report</title>
@@ -26,10 +26,51 @@
     --uuid-color: #424242;
 }
 
+html[data-theme='dark'] {
+    --background-primary: #10171D;
+    --background-secondary: #121212;
+    --test-pass: #1C361C;
+    --test-fail: #381919;
+    --test-warning: #524100;
+    --test-other: #414141;
+    --cap-even: #0052882d;
+    --cap-hover: #007ccf50;
+    --test-error-color: #FD885D;
+    --header-color: #b7c8d2;
+    --note-color: #ee4e04;
+    --header-bottom: rgb(221, 221, 221);
+    --link-color: #9bc2a3;
+    --unvisited-link-color: #4da6d1;
+    --text-color: #bdbdbd;
+    --uuid-color: #999999;
+    --border-color: #7b7b7b;
+}
+
 body {
     background-color: var(--background-secondary);
     -webkit-print-color-adjust:exact !important;
     print-color-adjust:exact !important;
+    color: var(--text-color)
+}
+
+.alternating tr:nth-child(even) {
+    background-color: var(--cap-even);
+}
+
+.show-more {
+    text-align: left;
+    margin-left: 50px;
+    margin-top: 5px;
+}
+
+button.show-more {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  color: var(--unvisited-link-color);
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 0;
 }
 
 table {
@@ -38,6 +79,12 @@ table {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 1000px;
+}
+
+.comment-heading {
+    display: block;
+    font-style: italic;
+    margin-top: 10px;
 }
 
 h3 {
@@ -65,8 +112,8 @@ h4 {
 header {
     width: 1000px;
     margin: auto;
-    border-bottom: 1px solid black;
-    margin-bottom: 50px;
+    border-bottom: 1px solid var(--header-bottom);
+    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: end;
@@ -96,12 +143,17 @@ td {
     overflow-wrap: break-word;
 }
 
+td a {
+    color: var(--header-color)
+}
+
 table, th, td {
     border: 1px solid;
+    border-color: var(--border-color);
 }
 
 main {
-    background-color: white;
+    background-color: var(--background-primary);
     width: 1100px;
     margin: auto;
     position: relative;
@@ -168,7 +220,93 @@ p {
     margin: auto;
     font-size: 12px;
     padding-bottom: 1.5em;
-}</style>
+}
+
+#toggle-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#toggle-text {
+    color: #7b7b7b;
+    margin: 0.313em 3.125em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.875em;
+    padding-bottom: 2px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    left: 3.125em;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch input:focus,
+.switch input:focus:active,
+.switch input:focus + .slider {
+    outline: 0.125em solid var(--text-color);
+    border-radius: var(--toggle-height);
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #b9bec2;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: var(--toggle-radius);
+    width: var(--toggle-radius);
+    left: 0.25em;
+    bottom: 0.219em;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #005288ad;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 0.063em #005288ad;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(var(--toggle-radius));
+    -ms-transform: translateX(var(--toggle-radius));
+    transform: translateX(var(--toggle-radius));
+}
+
+.slider.round {
+    border-radius: var(--toggle-height);
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+</style>
         <script>/**
  * Adds the red, green, yellow, and gray coloring to the individual report pages.
  */
@@ -186,44 +324,56 @@ const colorRows = () => {
         try {
             if (rows[i].children.length == 3) {
                 // This row is in the Alerts table
-                if (rows[i].children[alertStatusCol].innerHTML === "Enabled") {
+                if (rows[i].children[alertStatusCol]?.innerHTML === "Enabled") {
                     rows[i].style.background = "var(--test-pass)";
                 }
-                else if (rows[i].children[alertStatusCol].innerHTML === "Disabled") {
+                else if (rows[i].children[alertStatusCol]?.innerHTML === "Disabled") {
                     rows[i].style.background = "var(--test-fail)";
                 }
-                else if (rows[i].children[alertStatusCol].innerHTML === "Unknown") {
+                else if (rows[i].children[alertStatusCol]?.innerHTML === "Unknown") {
                     rows[i].style.background = "var(--test-other)";
                 }
             }
             else {
                 // This row is in one of the generic results rows
-                if (rows[i].children[requirementCol].innerHTML.startsWith("[DELETED]")) {
+                if (rows[i].children[requirementCol]?.innerHTML.startsWith("[DELETED]")) {
                     rows[i].style.color = "var(--test-deleted-color)";
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Fail") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Fail") {
                     rows[i].style.background = "var(--test-fail)";
                 }
-                else if (rows[i].children[statusCol].innerHTML.includes("No events found")) {
+                else if (rows[i].children[statusCol]?.innerHTML.includes("No events found")) {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Warning") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Warning") {
                     rows[i].style.background = "var(--test-warning)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Pass") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Pass") {
                     rows[i].style.background = "var(--test-pass)";
                 }
-                else if (rows[i].children[statusCol].innerHTML === "Omitted") {
+                else if (rows[i].children[statusCol]?.innerHTML === "Omitted") {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[criticalityCol].innerHTML.includes("Not-Implemented")) {
+                else if (rows[i].children[statusCol]?.innerHTML === "Incorrect result") {
+                    if (rows[i].children[criticalityCol]?.innerHTML === "Shall") {
+                        rows[i].style.background = "linear-gradient(to right, var(--test-fail), var(--test-pass))";
+                    }
+                    else if (rows[i].children[criticalityCol]?.innerHTML === "Should") {
+                        rows[i].style.background = "linear-gradient(to right, var(--test-warning), var(--test-pass))";
+                    }
+                    else {
+                        // This should never happen
+                        console.log(`Unexpected criticality for incorrect result, ${rows[i].children[criticalityCol]?.innerHTML}.`);
+                    }
+                }
+                else if (rows[i].children[criticalityCol]?.innerHTML.includes("Not-Implemented")) {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[criticalityCol].innerHTML.includes("3rd Party")) {
+                else if (rows[i].children[criticalityCol]?.innerHTML.includes("3rd Party")) {
                     rows[i].style.background = "var(--test-other)";
                 }
-                else if (rows[i].children[statusCol].innerHTML.includes("Error")) {
+                else if (rows[i].children[statusCol]?.innerHTML.includes("Error")) {
                     rows[i].style.background = "var(--test-fail)";
                     rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
                     rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
@@ -237,9 +387,183 @@ const colorRows = () => {
     }
 }
 
-window.addEventListener('DOMContentLoaded', (event) => {
+/**
+ * Toggles light and dark mode.
+ */
+const toggleDarkMode = () => {
+    const inputToggle = document.getElementById("toggle");
+    if (inputToggle.checked === true) {
+        setDarkMode("true");
+        return;
+    }
+    setDarkMode("false");
+}
+
+/**
+ * Returns the value for the given setting from session storage. Returns
+ * undefined if it does not exist.
+ * @param {string} setting sgr_settings option to read
+ */
+const getSetting = (setting) => {
+    if (!setting) {
+        return undefined;
+    }
+    let reportSettings = sessionStorage.getItem("sgr_settings");
+    if (reportSettings === null || reportSettings === undefined) {
+        return undefined;
+    }
+    return JSON.parse(reportSettings)[setting];
+}
+
+/**
+ * Updates the report settings object in session storage.
+ * @param {string} option sgr_settings option to update
+ * @param {string} value update value for sgr_settings option
+ */
+const updateSettings = (option, value) => {
+    let settings = {};
+    if ("sgr_settings" in sessionStorage) {
+        settings = JSON.parse(sessionStorage.getItem("sgr_settings"));
+    }
+    settings[option] = value;
+    sessionStorage.setItem("sgr_settings", JSON.stringify(settings));
+}
+
+/**
+ * Set the report CSS to light mode or dark mode.
+ * @param {string} state true for Dark Mode or false for Light Mode
+ */
+const setDarkMode = (state) => {
+    const darkModeToggle = document.getElementById("toggle");
+
+    if (state === "true") {
+        document.querySelectorAll("html")[0].dataset.theme = "dark";
+        document.querySelector("#toggle-text").innerHTML = "Dark Mode";
+        updateSettings("darkMode", "true");
+        darkModeToggle.checked = true;
+        return;
+    }
+
+    document.querySelectorAll("html")[0].dataset.theme = "light";
+    document.querySelector("#toggle-text").innerHTML = "Light Mode";
+    updateSettings("darkMode", "false");
+    darkModeToggle.checked = false;
+}
+
+/**
+ * Sets the dark mode according to the setting stored in session storage, the
+ * --darkmode CLI arg, and the system preference (in that order of precedence)
+ */
+const mountDarkMode = () => {
+    // First, check session storage to see if dark mode has already been
+    // enabled or disabled. If it has, this is what should take precedence.
+    // "darkMode" setting will either be "true", "false", or undefined
+    const darkModeSessionVariable = getSetting("darkMode");
+    if (
+        darkModeSessionVariable !== null &&
+        darkModeSessionVariable !== undefined
+    ) {
+        setDarkMode(darkModeSessionVariable);
+        return;
+    }
+
+    // Next, check to see if the user specified the dark mode via the --darkmode
+    // CLI argument. The Python code dynamically inserts the value of that arg
+    // as the "data-darkmode" attribute of the #sgr_settings element. The value
+    // will be a string, either "true" (dark mode is enabled), "false" (disabled),
+    // or "None" (not specified).
+    const cliElement = document.getElementById("sgr_settings");
+    const cliElementValue = cliElement.getAttribute("data-darkmode");
+    if (cliElementValue !== "None") {
+        setDarkMode(cliElementValue);
+        return;
+    }
+
+    // Finally, if the dark mode setting is not found in session storage nor
+    // provided the --darkmode CLI argument, set the dark mode according to the
+    // system preference
+    const mediaQuery = "(prefers-color-scheme: dark)";
+    const systemPrefersDark = window.matchMedia(mediaQuery).matches;
+    setDarkMode(String(systemPrefersDark));
+};
+
+/**
+ * Media Query for browser darkMode
+ */
+const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
+
+/**
+ * Event listener for broswer darkMode Media Query changes.
+ * Sets the report CSS to light mode or dark mode.
+ */
+darkModePreference.addEventListener("change", () =>  {
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setDarkMode("true");
+    } else {
+        setDarkMode("false");
+    }
+});
+
+/**
+ * Truncates the specified DNS table to the specified number of rows.
+ * @param {number} logIndex The index of the table in the list of DNS tables.
+ * @param {number} maxRows The number of rows to truncate the table to.
+ */
+const truncateDNSTable = (logIndex, maxRows) => {
+    try {
+        const ROW_INCREMENT = 10;
+        let dnsLog = document.querySelectorAll('.dns-logs')[logIndex];
+        let rows = dnsLog.querySelector('table').querySelectorAll('tr');
+        for (let i = 0; i < rows.length; i++) {
+            if (i > maxRows) {
+                rows[i].style.display = 'none';
+            }
+            else {
+                rows[i].style.display = 'table-row';
+            }
+        }
+        dnsLog.querySelectorAll('.show-more').forEach(e => e.remove());
+        if (rows.length > maxRows) {
+            let showMoreMessage = document.createElement('p');
+            showMoreMessage.classList.add('show-more');
+            showMoreMessage.innerHTML = `${rows.length-maxRows} rows hidden. `;
+            showMore = document.createElement('button');
+            showMore.innerHTML = "Show more.";
+            showMore.setAttribute('type', 'button');
+            showMore.classList.add('show-more');
+            showMore.onclick = () => {truncateDNSTable(logIndex, maxRows+ROW_INCREMENT);};
+            showMoreMessage.appendChild(showMore);
+            dnsLog.appendChild(showMoreMessage);
+        }
+    }
+    catch (error) {
+        console.error(`Error in truncateDNSTable`, error);
+    }
+}
+
+/**
+ * Truncates any DNS table that has more than maxRows rows.
+ * @param {number} maxRows The number of rows to truncate the tables to.
+ */
+const truncateDNSTables = (maxRows) => {
+    try {
+        let dnsLogs = document.querySelectorAll('.dns-logs');
+        for (let i = 0; i < dnsLogs.length; i++) {
+            truncateDNSTable(i, maxRows);
+        }
+    }
+    catch (error) {
+        console.error(`Error in truncateDNSTables`, error);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const MAX_DNS_ENTRIES = 20;
     colorRows();
-});</script>
+    mountDarkMode();
+    truncateDNSTables(MAX_DNS_ENTRIES);
+});
+</script>
     </head>
     <body>
         <main>
@@ -251,10 +575,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank"><h3 style="width: 100px;">Baseline Documents</h3></a>
                 </div>
             </header>
+            <div id="toggle-container">
+    <p id="toggle-text">Light mode</p>
+    <label class="switch">
+        <input id="toggle" type="checkbox" autocomplete="off" onclick="toggleDarkMode()" aria-labelledby="toggle-text">
+        <span class="slider round"></span>
+    </label>
+</div>
             <h1>Common Controls Baseline Report</h1>
             
-            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>06/26/2025 16:02:22 Pacific Daylight Time</td><td>0.5</td><td>v0.5.0</td></tr></table>
-            <h2>COMMONCONTROLS-1 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#1-Phishing-Resistant-Multifactor-Authentication" target="_blank">Phishing-Resistant Multifactor Authentication</a></h2><table>
+            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>10/10/2025 13:08:58 Pacific Daylight Time</td><td>0.6</td><td>v0.6.0</td></tr></table>
+            <h2>COMMONCONTROLS-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#1-phishing-resistant-multifactor-authentication" target="_blank">Phishing-Resistant Multifactor Authentication</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -266,42 +597,42 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.1.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.1.1v0.6</td>
       <td>Phishing-Resistant MFA SHALL be required for all users.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Matthew Jones's OU: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Cool Example Org (group "Pamela Martinez's group"): Allowed 2-step verification (2SV) method is set to "Any".</li><li>John Bennett's OU (in Matthew Jones's OU): Allowed 2-step verification (2SV) method is set to "Any except verification codes via text, phone call".</li><li>Cheryl Santiago's OU: Users cannot enable 2-step verification (2SV).</li><li>Andrea Davis's OU (test): Allowed 2-step verification (2SV) method is set to "Any".</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Example 2: 2-step verification (2SV) is not enforced.</li><li>Amy Chavez's OU: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Cool Example Org: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Cool Example Org (group "Martin Merritt's group"): Allowed 2-step verification (2SV) method is set to "Any".</li><li>Kristen Bates's OU (in Amy Chavez's OU): Allowed 2-step verification (2SV) method is set to "Any except verification codes via text, phone call".</li><li>Marissa Holmes's OU: Users cannot enable 2-step verification (2SV).</li><li>Christina Ingram's OU: Allowed 2-step verification (2SV) method is set to "Any".</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.1.2v0.5</td>
+      <td>GWS.COMMONCONTROLS.1.2v0.6</td>
       <td>If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL be enforced for all users.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Matthew Jones's OU: 2-step verification (2SV) is not enforced.</li><li>Cheryl Santiago's OU: Users cannot enable 2-step verification (2SV).</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Example 2: 2-step verification (2SV) is not enforced.</li><li>Marissa Holmes's OU: Users cannot enable 2-step verification (2SV).</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.1.3v0.5</td>
+      <td>GWS.COMMONCONTROLS.1.3v0.6</td>
       <td>SMS or Voice as the MFA method SHALL NOT be used.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: Verification codes via text and phone call allowed.</li><li>Matthew Jones's OU: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Verification codes via text and phone call allowed.</li><li>Cool Example Org (group "Pamela Martinez's group"): Verification codes via text and phone call allowed.</li><li>Cheryl Santiago's OU: Users cannot enable 2-step verification (2SV).</li><li>Andrea Davis's OU (test): Verification codes via text and phone call allowed.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Example 2: 2-step verification (2SV) is not enforced.</li><li>Amy Chavez's OU: Verification codes via text and phone call allowed.</li><li>Cool Example Org: Verification codes via text and phone call allowed.</li><li>Cool Example Org (group "Martin Merritt's group"): Verification codes via text and phone call allowed.</li><li>Marissa Holmes's OU: Users cannot enable 2-step verification (2SV).</li><li>Christina Ingram's OU: Verification codes via text and phone call allowed.</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.1.4v0.5</td>
+      <td>GWS.COMMONCONTROLS.1.4v0.6</td>
       <td>Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: New user enrollment period is NONE</li><li>Cool Example Org (group "Pamela Martinez's group"): New user enrollment period is NONE</li><li>Cheryl Santiago's OU: New user enrollment period 14 days (longer than 7 days)</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Example 2: 2-step verification (2SV) is not enforced.</li><li>Amy Chavez's OU: New user enrollment period 180 days (longer than 7 days)</li><li>Cool Example Org: New user enrollment period is NONE</li><li>Cool Example Org (group "Martin Merritt's group"): New user enrollment period is NONE</li><li>Marissa Holmes's OU: Users cannot enable 2-step verification (2SV).</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.1.5v0.5</td>
+      <td>GWS.COMMONCONTROLS.1.5v0.6</td>
       <td>Allow users to trust the device SHALL be disabled.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in Matthew Jones's OU): User is allowed to trust device.</li><li>1-1-1-1 (in Matthew Jones's OU) (group "Jennifer Owens's group"): User is allowed to trust device.</li><li>2SV Exempt: User is allowed to trust device.</li><li>Cool Example Org: User is allowed to trust device.</li><li>Cool Example Org (group "Pamela Martinez's group"): User is allowed to trust device.</li><li>John Bennett's OU (in Matthew Jones's OU): User is allowed to trust device.</li><li>Andrea Davis's OU (test): User is allowed to trust device.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>example (in Amy Chavez's OU): User is allowed to trust device.</li><li>example (in Amy Chavez's OU) (group "Christine Avila's group"): User is allowed to trust device.</li><li>Example 2: 2-step verification (2SV) is not enforced.</li><li>Amy Chavez's OU: User is allowed to trust device.</li><li>Cool Example Org: User is allowed to trust device.</li><li>Cool Example Org (group "Martin Merritt's group"): User is allowed to trust device.</li><li>Kristen Bates's OU (in Amy Chavez's OU): User is allowed to trust device.</li><li>Marissa Holmes's OU: Users cannot enable 2-step verification (2SV).</li><li>Christina Ingram's OU: User is allowed to trust device.</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-2 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#2-Context-aware-Access" target="_blank">Context-aware Access</a></h2><table>
+</table><h2>COMMONCONTROLS-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#2-context-aware-access" target="_blank">Context-aware Access</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -313,14 +644,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.2.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.2.1v0.6</td>
       <td>Policies restricting access to GWS based on signals about enterprise devices SHOULD be implemented.</td>
       <td>Warning</td>
       <td>Should</td>
       <td>Requirement not met.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-3 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#3-Login-Challenges" target="_blank">Login Challenges</a></h2><table>
+</table><h2>COMMONCONTROLS-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#3-login-challenges" target="_blank">Login Challenges</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -332,21 +663,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.3.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.3.1v0.6</td>
       <td>Post-SSO verification SHOULD be enabled for users signing in using the SSO profile for your organization.</td>
-      <td>Pass</td>
+      <td>No events found</td>
       <td>Should</td>
-      <td>Requirement met in all OUs and groups.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
+      <td>No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.3.2v0.5</td>
+      <td>GWS.COMMONCONTROLS.3.2v0.6</td>
       <td>Post-SSO verification SHOULD be enabled for users signing in using other SSO profiles.</td>
-      <td>Pass</td>
+      <td>No events found</td>
       <td>Should</td>
-      <td>Requirement met in all OUs and groups.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
+      <td>No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-4 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#4-User-Session-Duration" target="_blank">User Session Duration</a></h2><table>
+</table><h2>COMMONCONTROLS-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#4-user-session-duration" target="_blank">User Session Duration</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -358,14 +689,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.4.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.4.1v0.6</td>
       <td>Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Andrea Davis's OU (test): Web session duration: 20 hours</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Shelly Garcia's OU: Web session duration: 24 hours</li><li>Christina Ingram's OU: Web session duration: 20 hours</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-5 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#5-Secure-Passwords" target="_blank">Secure Passwords</a></h2><table>
+</table><h2>COMMONCONTROLS-5 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#5-secure-passwords" target="_blank">Secure Passwords</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -377,49 +708,49 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.5.1v0.6</td>
       <td>User password strength SHALL be enforced.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.2v0.5</td>
+      <td>GWS.COMMONCONTROLS.5.2v0.6</td>
       <td>User password length SHALL be at least 12 characters.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Minimum password length: 8, less than 12</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>example (in Example sub OU/Jeff Smith's OU): Minimum password length: 8, less than 12</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.3v0.5</td>
+      <td>GWS.COMMONCONTROLS.5.3v0.6</td>
       <td>User password length SHOULD be at least 15 characters.</td>
       <td>Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Minimum password length: 8, recommended is at least 15</li><li>Matthew Jones's OU: Minimum password length: 12, recommended is at least 15</li><li>Cool Example Org: Minimum password length: 12, recommended is at least 15</li><li>Andrea Davis's OU (test): Minimum password length: 12, recommended is at least 15</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>example (in Example sub OU/Jeff Smith's OU): Minimum password length: 8, recommended is at least 15</li><li>Example 2: Minimum password length: 12, recommended is at least 15</li><li>Amy Chavez's OU: Minimum password length: 12, recommended is at least 15</li><li>Shelly Garcia's OU: Minimum password length: 12, recommended is at least 15</li><li>Cool Example Org: Minimum password length: 12, recommended is at least 15</li><li>Christina Ingram's OU: Minimum password length: 12, recommended is at least 15</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.4v0.5</td>
+      <td>GWS.COMMONCONTROLS.5.4v0.6</td>
       <td>Password policy SHALL be enforced at next sign-in.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>1-1-1-1 (in 1/1-1/1-1-1): Enforce password policy at next sign-in is OFF</li><li>Cool Example Org: Enforce password policy at next sign-in is OFF</li><li>Fernando Rodriguez's OU: Enforce password policy at next sign-in is OFF</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>example (in Example sub OU/Jeff Smith's OU): Enforce password policy at next sign-in is OFF</li><li>Example 2: Enforce password policy at next sign-in is OFF</li><li>Shelly Garcia's OU: Enforce password policy at next sign-in is OFF</li><li>Cool Example Org: Enforce password policy at next sign-in is OFF</li><li>Betty Aguirre's OU: Enforce password policy at next sign-in is OFF</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.5v0.5</td>
+      <td>GWS.COMMONCONTROLS.5.5v0.6</td>
       <td>User passwords SHALL NOT be reused.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Matthew Jones's OU: Allow password reuse is ON</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Amy Chavez's OU: Allow password reuse is ON</li><li>Shelly Garcia's OU: Allow password reuse is ON</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.5.6v0.5</td>
+      <td>GWS.COMMONCONTROLS.5.6v0.6</td>
       <td>User passwords SHALL NOT expire.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Matthew Jones's OU: Password reset frequency is 30 days</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Amy Chavez's OU: Password reset frequency is 30 days</li><li>Shelly Garcia's OU: Password reset frequency is 5184000 seconds</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-6 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#6-Privileged-Accounts" target="_blank">Privileged Accounts</a></h2><table>
+</table><h2>COMMONCONTROLS-6 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#6-privileged-accounts" target="_blank">Privileged Accounts</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -431,21 +762,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.6.1v0.5</td>
-      <td>All administrative accounts SHALL leverage Google Account authentication with phishing-resistant MFA and not the agency&#x27;s authoritative on-premises or federated identity system.</td>
+      <td>GWS.COMMONCONTROLS.6.1v0.6</td>
+      <td>All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication(MFA), not an agency&#x27;s authoritative on-premises or federated identity system.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.6.2v0.5</td>
+      <td>GWS.COMMONCONTROLS.6.2v0.6</td>
       <td>A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following super admins are configured: stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org, stephanieyoung@example.org. <i>Note: Exceptions are allowed for "break glass" super admin accounts. "Break glass" accounts can be specified in a config file. 3 break glass accounts are currently configured.<i></td>
+      <td>The following super admins are configured: scottprince@example.net, scottprince@example.net, scottprince@example.net, scottprince@example.net, scottprince@example.net, scottprince@example.net. <i>Note: Exceptions are allowed for "break glass" super admin accounts. "Break glass" accounts can be specified in a config file. 3 break glass accounts are currently configured.<i></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-7 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#7-Conflicting-Account-Management" target="_blank">Conflicting Account Management</a></h2><table>
+</table><h2>COMMONCONTROLS-7 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#7-conflicting-account-management" target="_blank">Conflicting Account Management</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -457,14 +788,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.7.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.7.1v0.6</td>
       <td>Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed ones.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-8 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#8-Account-Recovery-Options" target="_blank">Account Recovery Options</a></h2><table>
+</table><h2>COMMONCONTROLS-8 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#8-account-recovery-options" target="_blank">Account Recovery Options</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -476,28 +807,28 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.8.1v0.5</td>
-      <td>Account self-recovery for Andrea Davis's OU SHALL be disabled.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
-    </tr>
-    <tr>
-      <td>GWS.COMMONCONTROLS.8.2v0.5</td>
-      <td>Account self-recovery for users and non-Andrea Davis's OU SHALL be disabled.</td>
+      <td>GWS.COMMONCONTROLS.8.1v0.6</td>
+      <td>Account self-recovery for super admins SHALL be disabled.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Users and non-Andrea Davis's OU are allowed to recover their accounts.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org (group "Morgan Johnson's group"): Super admins are allowed to recover their accounts.</li><li>Cool Example Org (group "Dustin Mitchell's group"): Super admins are allowed to recover their accounts.</li></ul></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.8.3v0.5</td>
+      <td>GWS.COMMONCONTROLS.8.2v0.6</td>
+      <td>Account self-recovery for users and non-super admins SHALL be disabled.</td>
+      <td>Fail</td>
+      <td>Shall</td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Users and non-super admins are allowed to recover their accounts.</li></ul></td>
+    </tr>
+    <tr>
+      <td>GWS.COMMONCONTROLS.8.3v0.6</td>
       <td>Ability to add recovery information SHOULD be disabled.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-9 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#9-GWS-Advanced-Protection-Program" target="_blank">GWS Advanced Protection Program</a></h2><table>
+</table><h2>COMMONCONTROLS-9 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#9-gws-advanced-protection-program" target="_blank">GWS Advanced Protection Program</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -509,21 +840,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.9.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.9.1v0.6</td>
       <td>Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Program.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.9.2v0.5</td>
+      <td>GWS.COMMONCONTROLS.9.2v0.6</td>
       <td>All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-10 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#10-App-Access-to-Google-APIs" target="_blank">App Access to Google APIs</a></h2><table>
+</table><h2>COMMONCONTROLS-10 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#10-app-access-to-google-apis" target="_blank">App Access to Google APIs</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -535,42 +866,42 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.10.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.10.1v0.6</td>
       <td>Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.10.2v0.5</td>
+      <td>GWS.COMMONCONTROLS.10.2v0.6</td>
       <td>Agencies SHALL NOT allow users to consent to access to low-risk scopes.</td>
       <td>Fail</td>
       <td>Shall</td>
       <td>The following services allow access: CALENDAR.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.10.3v0.5</td>
+      <td>GWS.COMMONCONTROLS.10.3v0.6</td>
       <td>Agencies SHALL NOT trust unconfigured internal apps.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.10.4v0.5</td>
+      <td>GWS.COMMONCONTROLS.10.4v0.6</td>
       <td>Agencies SHALL NOT allow users to access unconfigured third-party apps.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Matthew Jones's OU: Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google.</li></ul><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
+      <td>The following OUs are non-compliant:<ul><li>Amy Chavez's OU: Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google.</li></ul><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.10.5v0.5</td>
+      <td>GWS.COMMONCONTROLS.10.5v0.6</td>
       <td>Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-11 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#11-Authorized-Google-Marketplace-Apps" target="_blank">Authorized Google Marketplace Apps</a></h2><table>
+</table><h2>COMMONCONTROLS-11 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#11-authorized-google-marketplace-apps" target="_blank">Authorized Google Marketplace Apps</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -582,14 +913,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.11.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.11.1v0.6</td>
       <td>Only approved Google Workspace Marketplace applications SHALL be allowed for installation.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Users can install and run any internal app, even if it's not allowlisted.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Betty Aguirre's OU: Users can install and run any internal app, even if it's not allowlisted.</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-12 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#12-Google-Takeout-Services-for-Users" target="_blank">Google Takeout Services for Users</a></h2><table>
+</table><h2>COMMONCONTROLS-12 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#12-google-takeout-services-for-users" target="_blank">Google Takeout Services for Users</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -601,14 +932,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.12.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.12.1v0.6</td>
       <td>Google Takeout services SHALL be disabled.</td>
       <td>Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Matthew Jones's OU: The following apps with individual admin control have Takeout enabled: YouTube</li><li>Cool Example Org: Takeout is enabled for services without an individual admin control.</li><li>Cool Example Org: The following apps with individual admin control have Takeout enabled: Blogger, Google Books</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Amy Chavez's OU: The following apps with individual admin control have Takeout enabled: YouTube</li><li>Cool Example Org: Takeout is enabled for services without an individual admin control.</li><li>Cool Example Org: The following apps with individual admin control have Takeout enabled: Blogger, Google Books</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-13 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#13-System-defined-Rules" target="_blank">System-defined Rules</a></h2><table>
+</table><h2>COMMONCONTROLS-13 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#13-system-defined-rules" target="_blank">System-defined Rules</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -620,14 +951,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.13.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.13.1v0.6</td>
       <td>Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
-      <td>Of the 39 required rules, at least 1 is enabled and 2 are disabled. Unable to determine the state of the 36 remaining required rules. See <a href="#alerts">System Defined Alerts</a> for more details.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
+      <td>Of the 30 required rules, at least 0 are enabled and 2 are disabled. Unable to determine the state of the 28 remaining required rules. See <a href="#alerts">System Defined Alerts</a> for more details.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-14 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#14-Google-Workspace-Logs" target="_blank">Google Workspace Logs</a></h2><table>
+</table><h2>COMMONCONTROLS-14 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#14-google-workspace-logs" target="_blank">Google Workspace Logs</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -639,21 +970,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.14.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.14.1v0.6</td>
       <td>The following critical logs SHALL be sent to the agency&#x27;s centralized SIEM.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.14.2v0.5</td>
-      <td>Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as dictated by OMB M-21-31.</td>
+      <td>GWS.COMMONCONTROLS.14.2v0.6</td>
+      <td>Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as directed by OMB M-21-31.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-15 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#15-Data-Regions-and-Storage" target="_blank">Data Regions and Storage</a></h2><table>
+</table><h2>COMMONCONTROLS-15 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#15-data-regions-and-storage" target="_blank">Data Regions and Storage</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -665,21 +996,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.15.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.15.1v0.6</td>
       <td>The data storage region SHALL be set to be the United States for all users in the agency&#x27;s GWS environment.</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.15.2v0.5</td>
+      <td>GWS.COMMONCONTROLS.15.2v0.6</td>
       <td>Data SHALL be processed in the region selected for data at rest.</td>
       <td>Pass</td>
       <td>Shall</td>
       <td>Requirement met in all OUs and groups.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-16 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#16-Additional-Google-Services" target="_blank">Additional Google Services</a></h2><table>
+</table><h2>COMMONCONTROLS-16 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#16-additional-google-services" target="_blank">Additional Google Services</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -691,21 +1022,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.16.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.16.1v0.6</td>
       <td>Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.</td>
       <td>Pass</td>
       <td>Should</td>
       <td>Requirement met in all OUs and groups.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.16.2v0.5</td>
+      <td>GWS.COMMONCONTROLS.16.2v0.6</td>
       <td>User access to Early Access apps SHOULD be disabled.</td>
       <td>Warning</td>
       <td>Should</td>
       <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Early access apps are ENABLED</li></ul></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-17 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#17-Multi-Party-Approval" target="_blank">Multi-Party Approval</a></h2><table>
+</table><h2>COMMONCONTROLS-17 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#17-multi-party-approval" target="_blank">Multi-Party Approval</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -717,14 +1048,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.17.1v0.5</td>
-      <td>Require multi party approval for sensitive admin actions SHALL be enabled.</td>
-      <td>Fail</td>
-      <td>Shall</td>
+      <td>GWS.COMMONCONTROLS.17.1v0.6</td>
+      <td>Require multiparty approval for sensitive admin actions SHOULD be enabled.</td>
+      <td>Warning</td>
+      <td>Should</td>
       <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Require multi party approval for sensitive admin actions is DISABLED</li></ul><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-18 <a href="https://github.com/cisagov/scubagoggles/blob/v0.5.0/scubagoggles/baselines/commoncontrols.md#18-Data-Loss-Prevention" target="_blank">Data Loss Prevention</a></h2><table>
+</table><h2>COMMONCONTROLS-18 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/commoncontrols.md#18-data-loss-prevention" target="_blank">Data Loss Prevention</a></h2><table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -736,28 +1067,28 @@ window.addEventListener('DOMContentLoaded', (event) => {
   </thead>
   <tbody>
     <tr>
-      <td>GWS.COMMONCONTROLS.18.1v0.5</td>
+      <td>GWS.COMMONCONTROLS.18.1v0.6</td>
       <td>A custom policy SHALL be configured for Google Drive to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.18.2v0.5</td>
+      <td>GWS.COMMONCONTROLS.18.2v0.6</td>
       <td>A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.18.3v0.5</td>
+      <td>GWS.COMMONCONTROLS.18.3v0.6</td>
       <td>A custom policy SHALL be configured for Gmail to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).</td>
       <td>N/A</td>
       <td>Shall/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr>
-      <td>GWS.COMMONCONTROLS.18.4v0.5</td>
+      <td>GWS.COMMONCONTROLS.18.4v0.6</td>
       <td>The action for the above DLP policies SHOULD be set to block external sharing.</td>
       <td>N/A</td>
       <td>Should/Not-Implemented</td>
@@ -780,16 +1111,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Unknown</td>
     </tr>
     <tr>
-      <td>App Maker Cloud SQL setup</td>
-      <td>A user has requested a Google Cloud SQL instance to be set up for use with App Maker.</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <td>Apps outage alert</td>
-      <td>Alerts about new, updated, or resolved outage on the Google Workspace Status Dashboard.</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
       <td>Calendar settings changed</td>
       <td>An admin has changed Google Workspace Calendar settings.</td>
       <td>Unknown</td>
@@ -800,11 +1121,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Unknown</td>
     </tr>
     <tr>
-      <td>Directory sync cancelled due to safeguard threshold exceeded</td>
-      <td>Directory sync has been automatically cancelled and disabled as the directory sync service detected a possibility to exceed deprovisioning safeguard threshold.</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
       <td>Domain data export initiated</td>
       <td>A Super Administrator for your Google account has started exporting data from your domain.</td>
       <td>Unknown</td>
@@ -812,16 +1128,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     <tr>
       <td>Drive settings changed</td>
       <td>An admin has changed Google Workspace Drive settings.</td>
-      <td>Disabled</td>
+      <td>Unknown</td>
     </tr>
     <tr>
       <td>Email settings changed</td>
       <td>An admin has changed Google Workspace Gmail settings.</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <td>Exchange journaling failure</td>
-      <td>Failures with Exchange journaling that ensures email traffic generated by Microsoft Exchange server users is properly archived in Google Vault.</td>
       <td>Unknown</td>
     </tr>
     <tr>
@@ -832,11 +1143,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     <tr>
       <td>Google Operations</td>
       <td>Provides details about security and privacy issues that affect your Google Workspace services.</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <td>Google Voice configuration problem</td>
-      <td>Auto attendants and ring groups with invalid references may hang up at unexpected times.</td>
       <td>Unknown</td>
     </tr>
     <tr>
@@ -860,11 +1166,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Unknown</td>
     </tr>
     <tr>
-      <td>New user added</td>
-      <td>A new user has been added to the domain.</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
       <td>Phishing in inboxes due to bad whitelist</td>
       <td>Messages classified as spam by Gmail filters delivered to user inboxes due to whitelisting settings in the Google Admin console that override the spam filters.</td>
       <td>Unknown</td>
@@ -880,9 +1181,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Unknown</td>
     </tr>
     <tr>
-      <td>Smarthost failure</td>
-      <td>Alerts if a large number of messages can't be delivered to one of your smart host servers.</td>
-      <td>Disabled</td>
+      <td>SSO profile added</td>
+      <td>Alerts you when a new SSO profile allows users to sign in to Google services through your third-party identity provider.</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <td>SSO profile updated</td>
+      <td>Alerts you when thereâ€™s a change to the SSO profile that allows users to sign in to Google services through your third-party identity provider.</td>
+      <td>Unknown</td>
     </tr>
     <tr>
       <td>Spike in user-reported spam</td>
@@ -890,8 +1196,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Unknown</td>
     </tr>
     <tr>
-      <td>Suspended user made active</td>
-      <td>A suspended user is made active.</td>
+      <td>Super admin password reset</td>
+      <td>Alerts you when the password for a super admin account changes. This admin can manage all features in your Admin console and Admin APIs.</td>
       <td>Unknown</td>
     </tr>
     <tr>
@@ -902,7 +1208,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     <tr>
       <td>Suspicious login</td>
       <td>Google detected a sign-in attempt that doesn't match a user's normal behavior, such as a sign-in from an unusual location.</td>
-      <td>Enabled</td>
+      <td>Unknown</td>
     </tr>
     <tr>
       <td>Suspicious message reported</td>
@@ -915,28 +1221,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <td>Unknown</td>
     </tr>
     <tr>
-      <td>TLS failure</td>
-      <td>Messages requiring Transport Layer Security (TLS) can't be delivered.</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <td>User deleted</td>
-      <td>A user has been deleted from the domain.</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
       <td>User granted Admin privilege</td>
       <td>A user is granted an admin privilege.</td>
-      <td>Unknown</td>
+      <td>Disabled</td>
     </tr>
     <tr>
       <td>User suspended (Google identity alert)</td>
       <td>Google detected suspicious activity and suspended the account.</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <td>User suspended (by admin)</td>
-      <td>An admin has suspended the account.</td>
       <td>Unknown</td>
     </tr>
     <tr>
@@ -957,20 +1248,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
     <tr>
       <td>User's Admin privilege revoked</td>
       <td>A user is revoked of their admin privilege.</td>
-      <td>Unknown</td>
+      <td>Disabled</td>
     </tr>
     <tr>
       <td>User-reported phishing</td>
       <td>A sender has sent messages to your domain that users have classified as phishings.</td>
       <td>Unknown</td>
     </tr>
-    <tr>
-      <td>[Beta] Client-side encryption service unavailable</td>
-      <td>A problem has been detected with your client-side encryption service indicating an outage or misconfigured setting.</td>
-      <td>Unknown</td>
-    </tr>
   </tbody>
 </table>
+            
         </main>
+        <span id="sgr_settings" data-darkmode="None"></span>
     </body>
 </html>
