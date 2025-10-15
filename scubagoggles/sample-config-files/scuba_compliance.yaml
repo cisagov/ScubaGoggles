@@ -1,0 +1,36 @@
+# This is a ScubaGoggles sample configuration file for compliance use.
+# In order to pass/omit certain policy checks made during a ScubaGoggles
+# assessment run, necessary action is required to provide specific values
+# unique to both your organization and GWS tenant in the fields below. Please
+# read and understand the full ScubaGoggles configuration file documentation
+# for both adding additional fields or modifying the fields below. The
+# documentation can be found here:
+# https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md
+
+# These values are necessary for service account authentication:
+# - subjectemail: The email address of the user the service account should act
+#   on behalf of. This user must have the necessary privileges to run
+#   ScubaGoggles (must be a super admin).
+# - customerid: The unique ID assigned to your GWS tenant. See
+#   https://support.google.com/a/answer/10070793 for help finding this.
+subjectemail: ""
+customerid: ""
+
+# The following fields are used to document what organization this
+# configuration file belongs to.
+orgname: Department of Example
+orgunitname: Subdepartment of Example
+
+# The omitpolicy field can be used to exclude policies from the SCuBA
+# assessment results (e.g., for controls that are met using a third party tool
+# or acceptance of risk). See
+# https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md#omit-policies
+# for in-depth details.
+omitpolicy: {}
+
+# Policies can be annotated to mark incorrect results and document plans of
+# action. The annotation is appended in the Details column of the HTML report
+# for the applicable controls. See
+# https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md#annotate-policies
+# for in-depth details.
+annotatepolicy: {}
