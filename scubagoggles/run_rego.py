@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 # This will contain the OPA executable file specification.  It's global because
 # it's only used by opa_eval() and once the executable is found, it's the only
 # one used to run OPA.
-# pylint: disable=global-statement
+# pylint: disable=global-statement,invalid-name
 OPA_EXE = None
 
 # This is used to parse the output of the OPA version command to get the
