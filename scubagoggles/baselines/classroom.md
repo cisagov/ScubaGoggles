@@ -39,20 +39,20 @@ This section covers who has the ability to join classes and what classes the use
 ### Policies
 
 #### GWS.CLASSROOM.1.1v0.6
-Who can join classes in your domain SHALL be set to Users in your domain only.
+Who can join classes in your domain SHALL be restricted to users in your domain or allowlisted domains.
 
-- _Rationale:_ Classes can contain private or otherwise sensitive information. Restricting classes to users in your domain helps prevent data leakage resulting from unauthorized classroom access.
-- _Last modified:_ September 2023
+- _Rationale:_ Classes can contain private or otherwise sensitive information. Restricting access to your classes helps prevent data leakage resulting from unauthorized classroom access.
+- _Last modified:_ October 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.CLASSROOM.1.2v0.6
-Which classes users in your domain can join SHALL be set to Classes in your domain only.
+Which classes users in your domain can join SHALL be restricted to classes in your domain or allowlisted domains.
 
-- _Rationale:_ Allowing users to join a class from outside your domain could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
-- _Last modified:_ January 2025
+- _Rationale:_ Allowing users to join classes in arbitrary domains could allow for data to be exfiltrated to entities outside the control of the organization.
+- _Last modified:_ October 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)

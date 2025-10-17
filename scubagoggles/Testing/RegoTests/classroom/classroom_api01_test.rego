@@ -31,7 +31,7 @@ BadClassroomApi01 := {
         "topOU": {
             "classroom_class_membership": {
                 "whoCanJoinClasses": "ANYONE_IN_DOMAIN",
-                "whichClassesCanUsersJoin": "CLASSES_IN_ALLOWLISTED_DOMAINS"
+                "whichClassesCanUsersJoin": "ANY_GOOGLE_WORKSPACE_CLASS"
             },
             "classroom_service_status": {"serviceState": "ENABLED"}
         },
@@ -40,7 +40,7 @@ BadClassroomApi01 := {
         "thirdOU": {
             "classroom_class_membership": {
                 "whoCanJoinClasses": "ANY_GOOGLE_WORKSPACE_USER",
-                "whichClassesCanUsersJoin": "CLASSES_IN_ALLOWLISTED_DOMAINS"
+                "whichClassesCanUsersJoin": "ANY_GOOGLE_WORKSPACE_CLASS"
             },
         },
         "fourthOU": {
@@ -81,7 +81,7 @@ test_ClassroomAPI_JoinClasses_Incorrect_1 if {
     PolicyId := ClassroomId1_2
     Output := tests with input as BadClassroomApi01
 
-    whichClasses := "Classes in allowlisted domains"
+    whichClasses := "Any Google Workspace class"
     failedOU := [{"Name": "thirdOU",
                  "Value": NonComplianceMessage1_2(whichClasses)},
                  {"Name": "topOU",
