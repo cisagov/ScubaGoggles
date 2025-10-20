@@ -20,14 +20,15 @@ baselines:
   - meet
   - sites
 
-# These values are necessary for service account authentication:
+# Uncomment and fill in the following for automated submissions:
+# subjectemail: ""
+# customerid: ""
+# Those values are necessary for service account authentication:
 # - subjectemail: The email address of the user the service account should act
 #   on behalf of. This user must have the necessary privileges to run
 #   ScubaGoggles (must be a super admin).
 # - customerid: The unique ID assigned to your GWS tenant. See
 #   https://support.google.com/a/answer/10070793 for help finding this.
-subjectemail: ""
-customerid: ""
 
 # The following fields are used to document what organization this
 # configuration file belongs to.
