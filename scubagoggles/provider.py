@@ -119,7 +119,7 @@ class Provider:
         self._missing_policies = set()
         self._dns_client = RobustDNSClient()
         self._domains = None
-        self._domain_aliases = None
+        self._alias_domains = None
 
         self._initialize_services()
         self._top_ou = self.get_toplevel_ou()
@@ -194,21 +194,21 @@ class Provider:
                 self._unsuccessful_calls.add(ApiReference.LIST_DOMAINS.value)
         return self._domains
     
-    def list_domain_aliases(self) -> list:
+    def list_alias_domains(self) -> list:
         """
         Return the customer's domain aliases. Ensures that the domain alias API is called only once.
         """
-        if self._domain_aliases is None:
+        if self._alias_domains is None:
             try:
-                with self._services['directory'].domainAliases() as domain_aliases:
-                    self._domain_aliases = (domain_aliases.list(customer = self._customer_id)
+                with self._services['directory'].domainAliases() as alias_domains:
+                    self._alias_domains = (alias_domains.list(customer = self._customer_id)
                                             .execute().get('domainAliases', []))
-                self.successful_calls.add(ApiReference.LIST_DOMAIN_ALIASES.value)
+                self.successful_calls.add(ApiReference.LIST_ALIAS_DOMAINS.value)
             except Exception as exc:
-                self._domain_aliases = []
-                warnings.warn(f'An exception was thrown by list_domain_aliases: {exc}', RuntimeWarning)
-                self.unsuccessful_calls.add(ApiReference.LIST_DOMAIN_ALIASES.value)
-        return self._domain_aliases
+                self._alias_domains = []
+                warnings.warn(f'An exception was thrown by list_alias_domains: {exc}', RuntimeWarning)
+                self.unsuccessful_calls.add(ApiReference.LIST_ALIAS_DOMAINS.value)
+        return self._alias_domains
 
     def get_spf_records(self, domains: set) -> list:
         """
@@ -285,34 +285,34 @@ class Provider:
         Gets DNS Information for Gmail baseline
         """
         output = {'domains': [], 'spf_records': [], 'dkim_records': [], 'dmarc_records': []}
-        domains = {d['domainName'] for d in self.list_domains()}
+        # Get primary/secondary domains
+        base_domains = {d['domainName'] for d in self.list_domains()}
+        # Get domain aliases
+        domain_aliases = {d['domainAliasName'] for d in self.list_alias_domains()}
+        domains = base_domains.union(domain_aliases)
+
         if len(domains) == 0:
-            log.warning('No domains found, unable to request SPF, DKIM, or DMARC records.')
+            log.warning('No domains or found, unable to request SPF, DKIM, or DMARC records.')
             return output
 
         output['domains'].extend(domains)
 
-        try:
-            output['spf_records'] = self.get_spf_records(domains)
-            self._successful_calls.add('get_spf_records')
-        except Exception as exc:
-            output['spf_records'] = []
-            log.warning('An exception was thrown by get_spf_records: %s', str(exc))
-            self._unsuccessful_calls.add('get_spf_records')
-        try:
-            output['dkim_records'] = self.get_dkim_records(domains)
-            self._successful_calls.add('get_dkim_records')
-        except Exception as exc:
-            output['dkim_records'] = []
-            log.warning('An exception was thrown by get_dkim_records: %s', str(exc))
-            self._unsuccessful_calls.add('get_dkim_records')
-        try:
-            output['dmarc_records'] = self.get_dmarc_records(domains)
-            self._successful_calls.add('get_dmarc_records')
-        except Exception as exc:
-            output['dmarc_records'] = []
-            log.warning('An exception was thrown by get_dmarc_records: %s', str(exc))
-            self._unsuccessful_calls.add('get_dmarc_records')
+        operations = [
+            ('spf_records', self.get_spf_records),
+            ('dkim_records', self.get_dkim_records),
+            ('dmarc_records', self.get_dmarc_records),
+        ]
+
+        for key, fnc in operations:
+            fnc_name = fnc.__name__
+            try:
+                output[key] = fnc(domains)
+                self._successful_calls.add(fnc_name)
+            except Exception as exc:
+                output[key] = []
+                log.warning('An exception was thrown by %s: %s', fnc_name, str(exc))
+                self._unsuccessful_calls.add(fnc_name)
+
         return output
 
     def get_super_admins(self) -> dict:
