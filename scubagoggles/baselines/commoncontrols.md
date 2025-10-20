@@ -41,6 +41,8 @@ This Common Controls baseline document:
 -   Observes industry guidance such as the Center for Internet Security's Google Workspace Foundations benchmark and Google official documentation and white papers; and
 -   Was developed with input from both the Office of Management & Budget (OMB) and Google product managers and security engineers.
 
+If a custom OU or Group has settings that has never been modified from its default state, ScubaGoggles assumes that it inherits the setting from its parent. If ScubaGoggles assesses and reports that a parent OU or Group are not in compliance with the requirements of a control, only the parent OU or Group will be identified in the ScubaGoggles BaselineReports.html. In this situation, we recommend you manually review your GWS security configurations for inherited OUs and Groups with the SCuBA secure baselines as missing results and false negatives are possible. 
+
 ## Key Terminology
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.

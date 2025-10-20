@@ -25,6 +25,8 @@ This document assumes the organization is using GWS Enterprise Plus.
 
 This document does not address, ensure compliance with, or supersede any law, regulation, or other authority.  Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology.  This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
+If a custom OU or Group has settings that has never been modified from its default state, ScubaGoggles assumes that it inherits the setting from its parent. If ScubaGoggles assesses and reports that a parent OU or Group are not in compliance with the requirements of a control, only the parent OU or Group will be identified in the ScubaGoggles BaselineReports.html. In this situation, we recommend you manually review your GWS security configurations for inherited OUs and Groups with the SCuBA secure baselines as missing results and false negatives are possible. 
+
 ## Key Terminology
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
