@@ -35,6 +35,7 @@ NonCompliantOUs1_1 contains {
     ClassroomEnabled(OU)
     whoCanJoin := settings.classroom_class_membership.whoCanJoinClasses
     whoCanJoin != "ANYONE_IN_DOMAIN"
+    whoCanJoin != "ANYONE_IN_ALLOWLISTED_DOMAINS"
 }
 
 tests contains {
@@ -80,6 +81,7 @@ NonCompliantOUs1_2 contains {
     ClassroomEnabled(OU)
     whichClasses := settings.classroom_class_membership.whichClassesCanUsersJoin
     whichClasses != "CLASSES_IN_DOMAIN"
+    whichClasses != "CLASSES_IN_ALLOWLISTED_DOMAINS"
 }
 
 tests contains {
