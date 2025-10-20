@@ -111,6 +111,6 @@ Service Specific Terms.
 #### GWS.GEMINI.2.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini for Workspace**.
-3.  Select **Alpha Gemini features**.
+3.  Select **Alpha Gemini features** -\>  **Alpha features**.
 4.  Ensure **Turn off access to Alpha features in Gemini for Google Workspace** is selected.
 5.  Select **Save**.
