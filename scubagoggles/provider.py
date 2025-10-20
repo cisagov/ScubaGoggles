@@ -119,6 +119,7 @@ class Provider:
         self._missing_policies = set()
         self._dns_client = RobustDNSClient()
         self._domains = None
+        self._domain_aliases = None
 
         self._initialize_services()
         self._top_ou = self.get_toplevel_ou()
@@ -192,6 +193,22 @@ class Provider:
                 warnings.warn(f'An exception was thrown by list_domains: {exc}', RuntimeWarning)
                 self._unsuccessful_calls.add(ApiReference.LIST_DOMAINS.value)
         return self._domains
+    
+    def list_domain_aliases(self) -> list:
+        """
+        Return the customer's domain aliases. Ensures that the domain alias API is called only once.
+        """
+        if self._domain_aliases is None:
+            try:
+                with self._services['directory'].domainAliases() as domain_aliases:
+                    self._domain_aliases = (domain_aliases.list(customer = self._customer_id)
+                                            .execute().get('domainAliases', []))
+                self.successful_calls.add(ApiReference.LIST_DOMAIN_ALIASES.value)
+            except Exception as exc:
+                self._domain_aliases = []
+                warnings.warn(f'An exception was thrown by list_domain_aliases: {exc}', RuntimeWarning)
+                self.unsuccessful_calls.add(ApiReference.LIST_DOMAIN_ALIASES.value)
+        return self._domain_aliases
 
     def get_spf_records(self, domains: set) -> list:
         """
@@ -503,7 +520,6 @@ class Provider:
 
         group_service = self._services['groups']
         directory_service = self._services['directory']
-        domains = {d['domainName'] for d in self.list_domains() if d['verified']}
 
         try:
             # get the group settings for each groups
@@ -511,13 +527,9 @@ class Provider:
 
             with (directory_service.groups() as ds_groups,
                   group_service.groups() as gs_groups):
-                for domain in domains:
-                    group_list = self._get_list(ds_groups,
-                                                'groups',
-                                                domain = domain)
-
-                    group_settings = [gs_groups.get(groupUniqueId = group['email'])
-                                      .execute() for group in group_list]
+                group_list = self._get_list(ds_groups, 'groups', customer = self._customer_id)
+                group_settings = [gs_groups.get(groupUniqueId = group['email'])
+                                  .execute() for group in group_list]
 
             self._successful_calls.add(ApiReference.LIST_GROUPS.value)
             self._successful_calls.add(ApiReference.GET_GROUP.value)
