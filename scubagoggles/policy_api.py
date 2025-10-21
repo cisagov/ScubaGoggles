@@ -296,6 +296,12 @@ class PolicyAPI:
 
     _defaults = {
         'calendar_external_invitations': {'warnOnInvite': True},
+        'calendar_interoperability': {
+            'enableInteroperability': False},
+        'calendar_primary_calendar_max_allowed_external_sharing': {
+            'maxAllowedExternalSharing': 'EXTERNAL_FREE_BUSY_ONLY'},
+        'calendar_secondary_calendar_max_allowed_external_sharing': {
+            'maxAllowedExternalSharing': 'EXTERNAL_ALL_INFO_READ_ONLY'},
         'chat_chat_history': {'allowUserModification': True,
                               'historyOnByDefault': False},
         'chat_external_chat_restriction': {
@@ -315,6 +321,7 @@ class PolicyAPI:
             'warnForSharingOutsideAllowlistedDomains': True},
         'drive_and_docs_general_access_default': {
             'defaultFileAccess': 'LINK_SHARING_PRIVATE'},
+        'gmail_auto_forwarding': {'enableAutoForwarding': True},
         'gmail_workspace_sync_for_outlook': {
             'enableGoogleWorkspaceSyncForMicrosoftOutlook': True},
         'gmail_email_spam_filter_ip_allowlist': {
@@ -322,6 +329,7 @@ class PolicyAPI:
         'gmail_links_and_external_images': {
             'applyFutureSettingsAutomatically': True,
             'enableAggressiveWarningsOnUntrustedLinks': False},
+        'gmail_mail_delegation': {'enableMailDelegation': False},
         'gmail_spoofing_and_authentication': {
             'applyFutureSettingsAutomatically': True},
         'groups_for_business_groups_sharing': {
@@ -335,6 +343,16 @@ class PolicyAPI:
         'security_less_secure_apps': {'allowLessSecureApps': False},
         'security_super_admin_account_recovery': {
             'enableAccountRecovery': False},
+        'security_two_step_verification_device_trust': {
+            'allowTrustingDevice': True},
+        'security_two_step_verification_enforcement': {
+            'enforcedFrom': '1970-01-01T00:00:00Z'},
+        'security_two_step_verification_enforcement_factor': {
+            'allowedSignInFactorSet': 'ALL'},
+        'security_two_step_verification_grace_period': {
+            'enrollmentGracePeriod': "0s"},
+        'security_two_step_verification_enrollment': {
+            'allowEnrollment': True},
         'security_user_account_recovery': {'enableAccountRecovery': False},
         'workspace_marketplace_apps_access_options': {
             'accessLevel': 'ALLOW_ALL',
