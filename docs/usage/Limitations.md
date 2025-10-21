@@ -39,7 +39,7 @@ For all the above limitations, any ScubaGoggles result that is marked as depende
 log events should be viewed with a healthy degree of skepticism as missing results
 and false negatives are possible.
 
-## Parent & Inherited OUs and Groups identified on the ScubaGoggles BaselineReports.html
+## Parent & Inherited OUs and Groups identified on the ScubaGoggles report
 If a custom OU or Group has settings that has never been modified from its default state, ScubaGoggles assumes that it inherits the setting from its parent. If ScubaGoggles assesses and reports that a parent OU or Group are not in compliance with the requirements of a control, only the parent OU or Group will be identified in the ScubaGoggles BaselineReports.html. In this situation, we recommend you manually review your GWS security configurations for inherited OUs and Groups with the SCuBA secure baselines as missing results and false negatives are possible. 
 
 ## Navigation
