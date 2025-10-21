@@ -284,26 +284,34 @@ class Provider:
         """
         Gets DNS Information for Gmail baseline
         """
-        output = {'domains': [], 'spf_records': [], 'dkim_records': [], 'dmarc_records': []}
-        # Get primary/secondary domains
-        base_domains = {d['domainName'] for d in self.list_domains()}
-        # Get domain aliases
-        domain_aliases = {d['domainAliasName'] for d in self.list_alias_domains()}
-        domains = base_domains.union(domain_aliases)
+        output = {
+            'domains': [],
+            'alias_domains': [],
+            'spf_records': [],
+            'dkim_records': [],
+            'dmarc_records': []
+        }
 
-        if len(domains) == 0:
+        # Get primary/secondary domains
+        base_domains = {d['domainName'] for d in self.list_domains() if d.get('verified', True)}
+        # Get domain aliases
+        alias_domains = {d['domainAliasName'] for d in self.list_alias_domains() if d.get('verified', True)}
+        all_domains = base_domains.union(alias_domains)
+
+        if len(all_domains) == 0:
             log.warning('No domains or found, unable to request SPF, DKIM, or DMARC records.')
             return output
 
-        output['domains'].extend(domains)
+        output['domains'].extend(base_domains)
+        output["alias_domains"].extend(alias_domains)
 
         operations = [
-            ('spf_records', self.get_spf_records),
-            ('dkim_records', self.get_dkim_records),
-            ('dmarc_records', self.get_dmarc_records),
+            ('spf_records', self.get_spf_records, base_domains), # only check primary/secondary domains
+            ('dkim_records', self.get_dkim_records, base_domains), # only check primary/secondary domains
+            ('dmarc_records', self.get_dmarc_records, all_domains), # include alias domains for DMARC check
         ]
 
-        for key, fnc in operations:
+        for key, fnc, domains in operations:
             fnc_name = fnc.__name__
             try:
                 output[key] = fnc(domains)
