@@ -1,5 +1,6 @@
 # Limitations
 
+## Log-Based Policy Checks
 While most of the conformance checks done by ScubaGoggles rely on Google's Policy
 API that provides direct access to your GWS settings, some settings are not
 available from this API.  For a few conformance checks where the corresponding
@@ -37,6 +38,9 @@ which in-fact is not the case.
 For all the above limitations, any ScubaGoggles result that is marked as dependent on
 log events should be viewed with a healthy degree of skepticism as missing results
 and false negatives are possible.
+
+## Parent & Inherited OUs and Groups identified on the ScubaGoggles BaselineReports.html
+If a custom OU or Group has settings that has never been modified from its default state, ScubaGoggles assumes that it inherits the setting from its parent. If ScubaGoggles assesses and reports that a parent OU or Group are not in compliance with the requirements of a control, only the parent OU or Group will be identified in the ScubaGoggles BaselineReports.html. In this situation, we recommend you manually review your GWS security configurations for inherited OUs and Groups with the SCuBA secure baselines as missing results and false negatives are possible. 
 
 ## Navigation
 - Return to [Documentation Home](/README.md)
