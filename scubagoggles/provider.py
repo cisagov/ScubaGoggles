@@ -195,6 +195,18 @@ class Provider:
         """
         Generic wrapper around the Google list() API to ensure only a single API call is made. 
         Caches the results for consecutive API calls.
+
+        :param str attribute: Name of the Provider instance attribute used to cache results, e.g. '_domains', '_alias_domains', etc.
+
+        :param Callable open_resource: A callable function that returns a context manager for the target Resource collection,
+                                       e.g. self._services['directory'].domains. Only pass the bound method, _cached_list() will invoke
+                                       the function with open_resource()
+
+        :param str item_key: The key in the API response used to extract the list of items, e.g. 'domains', 'domainAliases', etc.
+
+        :param ApiReference api_reference: The ApiReference enum value corresponding to the API call being made.
+
+        :returns: list of items from the API call.
         """
         if getattr(self, attribute) is None:
             try:
