@@ -12,6 +12,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google.oauth2.service_account import Credentials as SvcCredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
+from scubagoggles.scuba_constants import API_SCOPES
 
 # The class is worth it just for the encapsulation.  It allows the potential
 # of credential refresh multiple times, which may be beneficial during a
@@ -23,17 +24,6 @@ class GwsAuth:
 
     """Generates an Oauth token for accessing Google's APIs
     """
-
-    _base_auth_url = 'https://www.googleapis.com/auth'
-
-    _scopes = (f'{_base_auth_url}/admin.reports.audit.readonly',
-               f'{_base_auth_url}/admin.directory.domain.readonly',
-               f'{_base_auth_url}/admin.directory.orgunit.readonly',
-               f'{_base_auth_url}/admin.directory.user.readonly',
-               f'{_base_auth_url}/admin.directory.group.readonly',
-               f'{_base_auth_url}/admin.directory.customer.readonly',
-               f'{_base_auth_url}/apps.groups.settings',
-               f'{_base_auth_url}/cloud-identity.policies.readonly')
 
     def __init__(self, credentials_path: Path, svc_account_email: str = None):
         """GwsAuth class initialization.
@@ -61,7 +51,7 @@ class GwsAuth:
         if svc_account_email:
             get_credentials = SvcCredentials.from_service_account_file
             self._token = get_credentials(str(credentials_path),
-                                          scopes=self._scopes,
+                                          scopes=API_SCOPES,
                                           subject=svc_account_email)
             return
 
@@ -79,7 +69,7 @@ class GwsAuth:
         # have worked when no browser was available).
         credentials_file = str(self._credentials_path)
         flow = InstalledAppFlow.from_client_secrets_file(credentials_file,
-                                                         self._scopes)
+                                                         API_SCOPES)
 
         try:
             self._token = flow.run_local_server(
@@ -116,7 +106,7 @@ class GwsAuth:
             token = json.load(in_stream)
 
         token_scopes = frozenset(token['scopes'])
-        valid_scopes = frozenset(self._scopes)
+        valid_scopes = frozenset(API_SCOPES)
 
         # Delete the token file if its scopes don't match those defined in
         # this class.  The token file will be recreated in the constructor
@@ -145,7 +135,7 @@ class GwsAuth:
         # refresh the token if it has expired.
         token_file = str(self._token_path)
         self._token = Credentials.from_authorized_user_file(token_file,
-                                                            self._scopes)
+                                                            API_SCOPES)
 
         self._refresh_token()
 
