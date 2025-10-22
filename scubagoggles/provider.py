@@ -199,8 +199,8 @@ class Provider:
         :param str attribute: Name of the Provider instance attribute used to cache results, e.g. '_domains', '_alias_domains', etc.
 
         :param Callable open_resource: A callable function that returns a context manager for the target Resource collection,
-                                       e.g. self._services['directory'].domains. Only pass the bound method, _cached_list() will invoke
-                                       the function with open_resource()
+            e.g. self._services['directory'].domains. Only pass the bound method, _cached_list() will invoke
+            the function with open_resource()
 
         :param str item_key: The key in the API response used to extract the list of items, e.g. 'domains', 'domainAliases', etc.
 
@@ -235,7 +235,7 @@ class Provider:
     
     def list_alias_domains(self) -> list:
         """
-        Return the customer's domain aliases. Ensures that the domain alias API is called only once.
+        Return the customer's alias domains. Ensures that the domain alias API is called only once.
         """
         return self._cached_list(
             attribute = '_alias_domains',
