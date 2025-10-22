@@ -6,6 +6,7 @@ import logging
 import warnings
 from pathlib import Path
 from tqdm import tqdm
+from typing import Callable, ContextManager, Mapping, Optional, Protocol
 
 from googleapiclient.discovery import build
 from google.auth.exceptions import RefreshError
@@ -17,6 +18,13 @@ from scubagoggles.scuba_constants import ApiReference
 from scubagoggles.robust_dns import RobustDNSClient
 
 log = logging.getLogger(__name__)
+
+class _RequestLike(Protocol):
+    def execute(self) -> Mapping[str, object]: ...
+
+class _PaginatedListResource(Protocol):
+    def list(self, **kwargs) -> _RequestLike: ...
+    def list_next(self, prev_request: _RequestLike, prev_response: Mapping[str, object]) -> Optional[_RequestLike]: ...
 
 # pylint: disable=too-many-instance-attributes
 
@@ -176,39 +184,53 @@ class Provider:
                                          version,
                                          cache_discovery = False,
                                          credentials = self._credentials)
+            
+    def _cached_list(
+        self,
+        attribute: str,
+        open_resource: Callable[[], ContextManager[_PaginatedListResource]],
+        item_key: str,
+        api_reference: ApiReference,
+    ) -> list:
+        """
+        Generic wrapper around the Google list() API to ensure only a single API call is made. 
+        Caches the results for consecutive API calls.
+        """
+        if getattr(self, attribute) is None:
+            try:
+                with open_resource() as from_resource:
+                    data = (from_resource.list(customer = self._customer_id)
+                            .execute().get(item_key, []))
+                setattr(self, attribute, data)
+                self._successful_calls.add(api_reference.value)
+            except Exception as exc:
+                setattr(self, attribute, [])
+                warnings.warn(f'An exception was thrown when calling {api_reference.value}: {exc}', RuntimeWarning)
+                self._unsuccessful_calls.add(api_reference.value)
+        return getattr(self, attribute)
 
     def list_domains(self) -> list:
         """
         Return the customer's domains. Ensures that the domains API is called only once and that
         the domains used throughout the provider are consistent.
         """
-        if self._domains is None:
-            try:
-                with self._services['directory'].domains() as domains:
-                    self._domains = (domains.list(customer = self._customer_id)
-                                     .execute()['domains'])
-                self._successful_calls.add(ApiReference.LIST_DOMAINS.value)
-            except Exception as exc:
-                self._domains = []
-                warnings.warn(f'An exception was thrown by list_domains: {exc}', RuntimeWarning)
-                self._unsuccessful_calls.add(ApiReference.LIST_DOMAINS.value)
-        return self._domains
+        return self._cached_list(
+            attribute = '_domains',
+            open_resource = self._services['directory'].domains,
+            item_key = 'domains',
+            api_reference = ApiReference.LIST_DOMAINS,
+        )
     
     def list_alias_domains(self) -> list:
         """
         Return the customer's domain aliases. Ensures that the domain alias API is called only once.
         """
-        if self._alias_domains is None:
-            try:
-                with self._services['directory'].domainAliases() as alias_domains:
-                    self._alias_domains = (alias_domains.list(customer = self._customer_id)
-                                            .execute().get('domainAliases', []))
-                self.successful_calls.add(ApiReference.LIST_ALIAS_DOMAINS.value)
-            except Exception as exc:
-                self._alias_domains = []
-                warnings.warn(f'An exception was thrown by list_alias_domains: {exc}', RuntimeWarning)
-                self.unsuccessful_calls.add(ApiReference.LIST_ALIAS_DOMAINS.value)
-        return self._alias_domains
+        return self._cached_list(
+            attribute = '_alias_domains',
+            open_resource = self._services['directory'].domainAliases,
+            item_key = 'domainAliases',
+            api_reference = ApiReference.LIST_ALIAS_DOMAINS,
+        )
 
     def get_spf_records(self, domains: set) -> list:
         """
@@ -306,9 +328,11 @@ class Provider:
         output["alias_domains"].extend(alias_domains)
 
         operations = [
-            ('spf_records', self.get_spf_records, base_domains), # only check primary/secondary domains
-            ('dkim_records', self.get_dkim_records, base_domains), # only check primary/secondary domains
-            ('dmarc_records', self.get_dmarc_records, all_domains), # include alias domains for DMARC check
+            # Only check primary/secondary domains
+            ('spf_records', self.get_spf_records, base_domains),
+            ('dkim_records', self.get_dkim_records, base_domains),
+            # Check primary/secondary domains and alias domains for the DMARC check
+            ('dmarc_records', self.get_dmarc_records, all_domains),
         ]
 
         for key, fnc, domains in operations:
