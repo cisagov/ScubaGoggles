@@ -45,3 +45,13 @@ OPA_VERSION = 'v1.0.1'
 NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES = (
     0, 13, 18, 36
 )
+
+BASE_AUTH_URL = 'https://www.googleapis.com/auth'
+API_SCOPES = (f'{BASE_AUTH_URL}/admin.reports.audit.readonly',
+              f'{BASE_AUTH_URL}/admin.directory.domain.readonly',
+              f'{BASE_AUTH_URL}/admin.directory.orgunit.readonly',
+              f'{BASE_AUTH_URL}/admin.directory.user.readonly',
+              f'{BASE_AUTH_URL}/admin.directory.group.readonly',
+              f'{BASE_AUTH_URL}/admin.directory.customer.readonly',
+              f'{BASE_AUTH_URL}/apps.groups.settings',
+              f'{BASE_AUTH_URL}/cloud-identity.policies.readonly')
