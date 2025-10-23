@@ -701,8 +701,8 @@ This section determines whether users have POP3 and IMAP access. Doing so allows
 POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
 
 - _Rationale:_ Enabling POP and IMAP access could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. By disabling POP and IMAP access, this risk can be reduced, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 2023
-- _Note:_ POP and IMAP access MAY be enabled on a per-user and per-application basis as needed.
+- _Last modified:_ October 2025
+- _Note:_ IMAP access MAY be enabled on a per-OU or per-group basis when there is a specific need, e.g., to support users that require specialized software for accessibility purposes.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
