@@ -26,6 +26,23 @@ It can also be invoked while overriding the `baselines` parameter.
 scubagoggles gws --config basic_config.yaml -b gmail chat
 ```
 
+### SCuBA Complicance Configuration
+The [SCuBA compliance](../../scubagoggles/sample-config-files/scuba_compliance.yaml)
+is the **recommended starting point** for organizations seeking to meet SCuBA
+compliance checks. This configuration file contains:
+
+- Parameters necessary for service account authentication
+- Additional organizational documentation fields
+- Fields for omitting or annotating ScubaGoggles policy checks
+
+Users are highly encouraged to read all the configuration file documentation
+sections to understand what each field is for and to modify those fields to
+successfully pass ScubaGoggles's SCuBA baseline compliance checks.
+
+This configuration file includes the additional `orgname` and `orgunitname`
+fields for documenting the organization and organizational subunit owner of the
+GWS tenant ScubaGoggles is running against.
+
 ### Omit Policies
 
 In some cases, it may be appropriate to omit specific policies from ScubaGoggles evaluation. For example:
