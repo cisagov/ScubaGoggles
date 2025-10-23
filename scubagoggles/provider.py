@@ -193,8 +193,8 @@ class Provider:
         api_reference: ApiReference,
     ) -> list:
         """
-        Generic wrapper around the Google list() API to ensure only a single API call is made. 
-        Caches the results for consecutive API calls.
+        Generic wrapper around the Google list() API. 
+        Ensures only a single API call is made and caches the results for consecutive API calls.
 
         :param str attribute: Name of the Provider instance attribute used to cache results, e.g. '_domains', '_alias_domains', etc.
 
@@ -202,11 +202,11 @@ class Provider:
             e.g. self._services['directory'].domains. Only pass the bound method, _cached_list() will invoke
             the function with open_resource()
 
-        :param str item_key: The key in the API response used to extract the list of items, e.g. 'domains', 'domainAliases', etc.
+        :param str item_key: The key used in the API request to extract the list of items, e.g. 'domains', 'domainAliases', etc.
 
         :param ApiReference api_reference: The ApiReference enum value corresponding to the API call being made.
 
-        :returns: list of items from the API call.
+        :returns: List of items returned from the target Resource collection.
         """
         if getattr(self, attribute) is None:
             try:
@@ -333,7 +333,7 @@ class Provider:
         all_domains = base_domains.union(alias_domains)
 
         if len(all_domains) == 0:
-            log.warning('No domains or found, unable to request SPF, DKIM, or DMARC records.')
+            log.warning('No domains found, unable to request SPF, DKIM, or DMARC records.')
             return output
 
         output['domains'].extend(base_domains)
