@@ -4,9 +4,9 @@ provider.py is where the GWS api calls are made.
 
 import logging
 import warnings
+from typing import Callable, ContextManager, Mapping, Optional, Protocol
 from pathlib import Path
 from tqdm import tqdm
-from typing import Callable, ContextManager, Mapping, Optional, Protocol
 
 from googleapiclient.discovery import build
 from google.auth.exceptions import RefreshError
@@ -19,12 +19,34 @@ from scubagoggles.robust_dns import RobustDNSClient
 
 log = logging.getLogger(__name__)
 
+# pylint: disable=too-few-public-methods
 class _RequestLike(Protocol):
-    def execute(self) -> Mapping[str, object]: ...
+    """
+    Protocol for googleapiclient request-like objects.
+    """
+    def execute(self) -> Mapping[str, object]:
+        """
+        Execute the HTTP request and return JSON response.
+        """
 
 class _PaginatedListResource(Protocol):
-    def list(self, **kwargs) -> _RequestLike: ...
-    def list_next(self, prev_request: _RequestLike, prev_response: Mapping[str, object]) -> Optional[_RequestLike]: ...
+    """
+    Protocol for googleapiclient Resource collection exposing
+    list() and list_next() methods.
+    """
+    def list(self, **kwargs) -> _RequestLike:
+        """
+        Build a list request for the collection.
+        """
+
+    def list_next(
+        self,
+        prev_request: _RequestLike,
+        prev_response: Mapping[str, object]
+    ) -> Optional[_RequestLike]:
+        """
+        Constructs the next page request for the collection.
+        """
 
 # pylint: disable=too-many-instance-attributes
 
@@ -126,8 +148,8 @@ class Provider:
         self._unsuccessful_calls = set()
         self._missing_policies = set()
         self._dns_client = RobustDNSClient()
-        self._domains = None
-        self._alias_domains = None
+        self._domains = []
+        self._alias_domains = []
 
         self._initialize_services()
         self._top_ou = self.get_toplevel_ou()
@@ -184,7 +206,7 @@ class Provider:
                                          version,
                                          cache_discovery = False,
                                          credentials = self._credentials)
-            
+
     def _cached_list(
         self,
         attribute: str,
@@ -193,22 +215,26 @@ class Provider:
         api_reference: ApiReference,
     ) -> list:
         """
-        Generic wrapper around the Google list() API. 
+        Generic wrapper around the Google list() API.
         Ensures only a single API call is made and caches the results for consecutive API calls.
 
-        :param str attribute: Name of the Provider instance attribute used to cache results, e.g. '_domains', '_alias_domains', etc.
+        :param str attribute: Name of the Provider instance attribute
+            used to cache results, e.g. '_domains', '_alias_domains', etc.
 
-        :param Callable open_resource: A callable function that returns a context manager for the target Resource collection,
-            e.g. self._services['directory'].domains. Only pass the bound method, _cached_list() will invoke
-            the function with open_resource()
+        :param Callable open_resource: A callable function that returns a context manager
+            for the target Resource collection, e.g. self._services['directory'].domains.
+            Only pass the bound method, _cached_list() will invoke the function with
+            open_resource()
 
-        :param str item_key: The key used in the API request to extract the list of items, e.g. 'domains', 'domainAliases', etc.
+        :param str item_key: The key used in the API request to extract the list of items, 
+            e.g. 'domains', 'domainAliases', etc.
 
-        :param ApiReference api_reference: The ApiReference enum value corresponding to the API call being made.
+        :param ApiReference api_reference: The ApiReference enum value corresponding 
+            to the API call being made.
 
         :returns: List of items returned from the target Resource collection.
         """
-        if getattr(self, attribute) is None:
+        if not getattr(self, attribute):
             try:
                 with open_resource() as from_resource:
                     data = (from_resource.list(customer = self._customer_id)
@@ -217,7 +243,10 @@ class Provider:
                 self._successful_calls.add(api_reference.value)
             except Exception as exc:
                 setattr(self, attribute, [])
-                warnings.warn(f'An exception was thrown when calling {api_reference.value}: {exc}', RuntimeWarning)
+                warnings.warn(
+                    f'An exception was thrown when calling {api_reference.value}: {exc}',
+                    RuntimeWarning
+                )
                 self._unsuccessful_calls.add(api_reference.value)
         return getattr(self, attribute)
 
@@ -232,7 +261,7 @@ class Provider:
             item_key = 'domains',
             api_reference = ApiReference.LIST_DOMAINS,
         )
-    
+
     def list_alias_domains(self) -> list:
         """
         Return the customer's alias domains. Ensures that the domain alias API is called only once.
@@ -327,9 +356,15 @@ class Provider:
         }
 
         # Get primary/secondary domains
-        base_domains = {d['domainName'] for d in self.list_domains() if d.get('verified', True)}
+        base_domains = {
+            d['domainName']
+            for d in self.list_domains() if d.get('verified', True)
+        }
         # Get domain aliases
-        alias_domains = {d['domainAliasName'] for d in self.list_alias_domains() if d.get('verified', True)}
+        alias_domains = {
+            d['domainAliasName']
+            for d in self.list_alias_domains() if d.get('verified', True)
+        }
         all_domains = base_domains.union(alias_domains)
 
         if len(all_domains) == 0:

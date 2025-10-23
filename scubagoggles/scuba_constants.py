@@ -6,7 +6,7 @@ Also used to centralize other constant values.
 from enum import Enum
 
 BASE_URL_ADMINSDK = 'https://developers.google.com/admin-sdk'
-BASE_URL_WORKSPACE_ADMIN = 'https://developers.google.com/workspace/admin'
+BASE_URL_WS_ADMIN = 'https://developers.google.com/workspace/admin'
 
 
 class ApiReference(Enum):
@@ -30,7 +30,7 @@ class ApiUrl(Enum):
     LIST_USERS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/users/list'
     LIST_OUS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/orgunits/list'
     LIST_DOMAINS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/domains/list'
-    LIST_ALIAS_DOMAINS = f'{BASE_URL_WORKSPACE_ADMIN}/directory/reference/rest/v1/domainAliases/list'
+    LIST_ALIAS_DOMAINS = f'{BASE_URL_WS_ADMIN}/directory/reference/rest/v1/domainAliases/list'
     LIST_GROUPS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/groups/list'
     LIST_CUSTOMERS = f'{BASE_URL_ADMINSDK}/directory/v1/customer/get'
     LIST_ACTIVITIES = f'{BASE_URL_ADMINSDK}/reports/reference/rest/v1/activities/list'
