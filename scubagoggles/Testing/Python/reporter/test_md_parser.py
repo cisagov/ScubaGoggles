@@ -3,7 +3,7 @@ import re
 import pytest
 
 import scubagoggles as scubagoggles_pkg
-from scubagoggles.reporter.md_parser import MarkdownParser
+from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 
 class TestMarkdownParser:
     """Tests for the MarkdownParser class."""
@@ -15,8 +15,6 @@ class TestMarkdownParser:
     def test_parse_baselines_returns_correct_format(self):
         parser = MarkdownParser(self._baselines_directory())
         result = parser.parse_baselines(["gmail"])
-
-        print(result)
 
         assert isinstance(result, dict)
         assert "gmail" in result
@@ -49,13 +47,33 @@ class TestMarkdownParser:
                 assert id_pattern.match(control["Id"]), f"Invalid Policy ID format: {control['Id']}"
 
     def test_parse_baselines_raises_parser_error_for_missing_policies_section(self):
-        pass
- 
+        snippets_directory = Path(__file__).parent / "BaselineSnippets"
+        parser = MarkdownParser(snippets_directory)
+
+        with pytest.raises(MarkdownParserError):
+            parser.parse_baselines(["missing_policies_section"])
+
     def test_parse_baselines_raises_parser_error_for_product_mismatch(self):
-        pass
+        snippets_directory = Path(__file__).parent / "BaselineSnippets"
+        parser = MarkdownParser(snippets_directory)
+
+        with pytest.raises(MarkdownParserError) as exception_info:
+            parser.parse_baselines(["product_mismatch"])
+
+        msg = str(exception_info.value)
+        # md_parser.py will raise:
+        assert "different product encountered calendar != product_mismatch" in msg
 
     def test_parse_baselines_raises_parser_error_for_group_mismatch(self):
-        pass
+        snippets_directory = Path(__file__).parent / "BaselineSnippets"
+        parser = MarkdownParser(snippets_directory)
+
+        with pytest.raises(MarkdownParserError) as exception_info:
+            parser.parse_baselines(["group_mismatch"])
+
+        msg = str(exception_info.value)
+        # md_parser.py will raise:
+        assert "mismatching group number (2) for group id 1 (External Sharing Options)" in msg
 
     def test_parse_baselines_raises_parser_error_for_invalid_baseline_version(self):
         pass
