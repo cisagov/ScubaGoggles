@@ -33,10 +33,12 @@ NonCompliantOUs1_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(meetAccess))
 } if {
+    trace("Inside If")
     some OU, settings in input.policies
     MeetEnabled(OU)
     meetAccess := settings.meet_safety_domain.usersAllowedToJoin
-    not meetAccess in ["SAME_ORGANIZATION_ONLY", "LOGGED_IN"]
+    trace("meetAccess value:", meetAccess)
+    meetAccess != "ALL"
 }
 
 tests contains {

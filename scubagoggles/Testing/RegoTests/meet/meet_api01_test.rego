@@ -7,11 +7,8 @@ import data.utils.PassTestResult
 GoodMeetApi01 := {
     "policies": {
         "topOU": {
-            "meet_safety_domain": {"usersAllowedToJoin": "SAME_ORGANIZATION_ONLY"},
+            "meet_safety_domain": {"usersAllowedToJoin": "ALL"},
             "meet_service_status": {"serviceState": "ENABLED"}
-        },
-        "nextOU": {
-            "meet_safety_domain": {"usersAllowedToJoin": "LOGGED_IN"},
         }
     },
     "tenant_info": {
@@ -22,8 +19,11 @@ GoodMeetApi01 := {
 BadMeetApi01 := {
     "policies": {
         "topOU": {
-            "meet_safety_domain": {"usersAllowedToJoin": "ALL"},
+            "meet_safety_domain": {"usersAllowedToJoin": "SAME_ORGANIZATION_ONLY"},
             "meet_service_status": {"serviceState": "ENABLED"}
+        },
+        "nextOU": {
+            "meet_safety_domain": {"usersAllowedToJoin": "LOGGED_IN"},
         }
     },
     "tenant_info": {
@@ -43,6 +43,15 @@ test_MeetAPI_UserJoin_Incorrect_1 if {
     Output := tests with input as BadMeetApi01
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALL"))}]
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("SAME_ORGANIZATION_ONLY"))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_MeetAPI_UserJoin_Incorrect_2 if {
+    PolicyId := MeetId1_1
+    Output := tests with input as BadMeetApi01
+
+    failedOU := [{"Name": "topOU",
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("LOGGED_IN"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

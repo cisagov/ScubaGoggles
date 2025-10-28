@@ -39,11 +39,11 @@ This control limits safe meeting access to users with a Google Account or Dialin
 ### Policies
 
 #### GWS.MEET.1.1v0.6
-Meeting access SHOULD be restricted to users signed in with a Google Account or Dialing in using a phone.
+Meeting access SHOULD NOT be restricted to users signed in with a Google Account or Dialing in using a phone.
 
-- _Rationale:_ Allowing users not signed-in to join meetings diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring all users to sign-in.
-- _Last modified:_ June 2023
-- _Note:_ There is a related configuration option shown to the meeting organizer within Google Meet itself, called "Meeting access type." The setting in the admin center restricts at the org-level the types of users able to join meetings. The setting shown to the meeting organizer allows the organizer to specify who, of those permitted to join meetings by the org-wide setting, must ask to join their meeting. This baseline only provides guidance on the org-wide setting; the per-meeting setting MAY be set as each agency sees fit.
+- _Rationale:_ Allowing users not signed-in to join meetings reduces limitations on users to hold a Google account when joining a meeting and prevents users from using their personal google account for joining official meetings via Google Meet.
+- _Last modified:_ October 2025
+- _Note:_ There is a related configuration option shown to the meeting organizer within Google Meet itself, called "Meeting access type." The setting in the admin center restricts at the org-level the types of users able to join meetings. The setting shown to the meeting organizer allows the organizer to specify who, of those permitted to join meetings by the org-wide setting, must ask to join their meeting. The per-meeting setting MAY be set as each agency sees fit.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2, IA-8
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
