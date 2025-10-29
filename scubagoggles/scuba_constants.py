@@ -5,7 +5,8 @@ Also used to centralize other constant values.
 
 from enum import Enum
 
-BASE_URL = 'https://developers.google.com/admin-sdk'
+BASE_URL_ADMINSDK = 'https://developers.google.com/admin-sdk'
+BASE_URL_WS_ADMIN = 'https://developers.google.com/workspace/admin'
 
 
 class ApiReference(Enum):
@@ -15,6 +16,7 @@ class ApiReference(Enum):
     LIST_USERS = 'directory/v1/users/list'
     LIST_OUS = 'directory/v1/orgunits/list'
     LIST_DOMAINS = 'directory/v1/domains/list'
+    LIST_ALIAS_DOMAINS = 'directory/reference/rest/v1/domainAliases/list'
     LIST_GROUPS = 'directory/v1/groups/list'
     LIST_CUSTOMERS = 'directory/v1/customer/get'
     LIST_ACTIVITIES = 'reports/v1/activities/list'
@@ -25,13 +27,14 @@ class ApiUrl(Enum):
     '''
     Enum for mapping code-friendly names of the various API calls to their documentation URLs
     '''
-    LIST_USERS = f'{BASE_URL}/directory/reference/rest/v1/users/list'
-    LIST_OUS = f'{BASE_URL}/directory/reference/rest/v1/orgunits/list'
-    LIST_DOMAINS = f'{BASE_URL}/directory/reference/rest/v1/domains/list'
-    LIST_GROUPS = f'{BASE_URL}/directory/reference/rest/v1/groups/list'
-    LIST_CUSTOMERS = f'{BASE_URL}/directory/v1/customer/get'
-    LIST_ACTIVITIES = f'{BASE_URL}/reports/reference/rest/v1/activities/list'
-    GET_GROUP = f'{BASE_URL}/groups-settings/v1/reference/groups/get'
+    LIST_USERS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/users/list'
+    LIST_OUS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/orgunits/list'
+    LIST_DOMAINS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/domains/list'
+    LIST_ALIAS_DOMAINS = f'{BASE_URL_WS_ADMIN}/directory/reference/rest/v1/domainAliases/list'
+    LIST_GROUPS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/groups/list'
+    LIST_CUSTOMERS = f'{BASE_URL_ADMINSDK}/directory/v1/customer/get'
+    LIST_ACTIVITIES = f'{BASE_URL_ADMINSDK}/reports/reference/rest/v1/activities/list'
+    GET_GROUP = f'{BASE_URL_ADMINSDK}/groups-settings/v1/reference/groups/get'
 
 
 # Dictionary mapping short-hand reference to <a> tags linking to the documentation

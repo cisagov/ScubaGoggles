@@ -22,7 +22,9 @@ ReportDetailsArray(Status, Array1, Array2) := Detail if {
     Detail := Description(Fraction, " agency domain(s) found in violation: ", String)
 }
 
-AllDomains := {Domain | some Domain in input.domains}
+BaseDomains := {Domain | some Domain in input.domains}
+AliasDomains := {Alias | some Alias in input.alias_domains}
+AllDomains := BaseDomains | AliasDomains
 
 LogEvents := utils.GetEvents("gmail_logs")
 
@@ -90,13 +92,13 @@ tests contains {
     "PolicyId": GmailId2_1,
     "Prerequisites": ["directory/v1/domains/list", "get_dkim_records"],
     "Criticality": "Should",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDkim, AllDomains), DNSLink]),
+    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDkim, BaseDomains), DNSLink]),
     "ActualValue": input.dkim_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    DomainsWithoutDkim := AllDomains - DomainsWithDkim
+    DomainsWithoutDkim := BaseDomains - DomainsWithDkim
     Status := count(DomainsWithoutDkim) == 0
 }
 #--
@@ -127,13 +129,13 @@ tests contains {
     "PolicyId": GmailId3_1,
     "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutSpf, AllDomains), DNSLink]),
+    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutSpf, BaseDomains), DNSLink]),
     "ActualValue": DomainsWithoutSpf,
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    DomainsWithoutSpf := AllDomains - DomainsWithSpf
+    DomainsWithoutSpf := BaseDomains - DomainsWithSpf
     Status := count(DomainsWithoutSpf) == 0
 }
 #--
@@ -158,7 +160,11 @@ DomainsWithDmarc contains DmarcRecord.domain if {
 
 tests contains {
     "PolicyId": GmailId4_1,
-    "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
+    "Prerequisites": [
+        "directory/v1/domains/list",
+        "directory/reference/rest/v1/domainAliases/list",
+        "get_dmarc_records"
+    ],
     "Criticality": "Shall",
     "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains), DNSLink]),
     "ActualValue": input.dmarc_records,
