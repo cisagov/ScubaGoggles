@@ -115,5 +115,13 @@ class TestMarkdownParser:
             result = parser.parse_baselines(["invalid_policyid_version"])
             assert "invalid_policyid_version" in result
 
-    def test_parse_baselines_raises_parser_error_for_missing_baseline_description(self):
-        pass
+    def test_parse_baselines_raises_parser_error_for_missing_policy_description(self):
+        snippets_dir = Path(__file__).parent / "BaselineSnippets"
+        parser = MarkdownParser(snippets_dir)
+
+        with pytest.raises(MarkdownParserError) as exception_info:
+            parser.parse_baselines(["missing_policy_description"])
+
+        msg = str(exception_info.value)
+        # md_parser.py will raise:
+        assert "missing description for baseline item 1 for group id 1 (Example Group)" in msg
