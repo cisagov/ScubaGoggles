@@ -38,7 +38,7 @@ class MarkdownParser:
 
     _baseline_re = re.compile(r'####\s*(?P<baseline>GWS\.(?P<product>[^.]+)'
                               r'\.(?P<id>\d+)\.(?P<item>\d+)'
-                              r'(?P<version>v\d+\.?\d*))$')
+                              r'(?P<version>v[^\s]*))$')
 
     # This handles the single exception case where the combined drive
     # and docs product has a product name of "drive", but the baseline

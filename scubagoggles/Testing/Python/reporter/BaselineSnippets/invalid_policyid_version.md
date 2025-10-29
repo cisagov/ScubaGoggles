@@ -1,4 +1,4 @@
-# CISA Google Workspace Secure Configuration Baseline for Google Calendar
+# CISA Google Workspace Secure Configuration Baseline for Testing Invalid Policy ID Versions
 
 # Baseline Policies
 
@@ -8,5 +8,5 @@ This section determines what information is shared from calendars with external 
 
 ### Policies
 
-#### GWS.invalid_baseline_version.1.1vabc
+#### GWS.invalid_policyid_version.1.1__SUFFIX__
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."

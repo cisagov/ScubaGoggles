@@ -47,15 +47,15 @@ class TestMarkdownParser:
                 assert id_pattern.match(control["Id"]), f"Invalid Policy ID format: {control['Id']}"
 
     def test_parse_baselines_raises_parser_error_for_missing_policies_section(self):
-        snippets_directory = Path(__file__).parent / "BaselineSnippets"
-        parser = MarkdownParser(snippets_directory)
+        snippets_dir = Path(__file__).parent / "BaselineSnippets"
+        parser = MarkdownParser(snippets_dir)
 
         with pytest.raises(MarkdownParserError):
             parser.parse_baselines(["missing_policies_section"])
 
     def test_parse_baselines_raises_parser_error_for_product_mismatch(self):
-        snippets_directory = Path(__file__).parent / "BaselineSnippets"
-        parser = MarkdownParser(snippets_directory)
+        snippets_dir = Path(__file__).parent / "BaselineSnippets"
+        parser = MarkdownParser(snippets_dir)
 
         with pytest.raises(MarkdownParserError) as exception_info:
             parser.parse_baselines(["product_mismatch"])
@@ -65,8 +65,8 @@ class TestMarkdownParser:
         assert "different product encountered calendar != product_mismatch" in msg
 
     def test_parse_baselines_raises_parser_error_for_group_mismatch(self):
-        snippets_directory = Path(__file__).parent / "BaselineSnippets"
-        parser = MarkdownParser(snippets_directory)
+        snippets_dir = Path(__file__).parent / "BaselineSnippets"
+        parser = MarkdownParser(snippets_dir)
 
         with pytest.raises(MarkdownParserError) as exception_info:
             parser.parse_baselines(["group_mismatch"])
@@ -75,16 +75,45 @@ class TestMarkdownParser:
         # md_parser.py will raise:
         assert "mismatching group number (2) for group id 1 (External Sharing Options)" in msg
 
-    def test_parse_baselines_raises_parser_error_for_invalid_baseline_version(self):
-        snippets_directory = Path(__file__).parent / "BaselineSnippets"
-        parser = MarkdownParser(snippets_directory)
+    @staticmethod
+    def _render_invalid_suffix(tmp_path: Path, suffix: str) -> Path:
+        md_file = Path(__file__).parent / "BaselineSnippets" / "invalid_policyid_version.md"
+        md_content = md_file.read_text(encoding = "utf-8").replace("__SUFFIX__", suffix)
+        out = tmp_path / "invalid_policyid_version.md"
+        out.write_text(md_content, encoding = "utf-8")
+        return tmp_path
 
-        with pytest.raises(MarkdownParserError) as exception_info:
-            parser.parse_baselines(["invalid_baseline_version"])
+    @pytest.mark.parametrize(
+        ("suffix", "expect_error"),
+        [
+            ("v1.0", False),
+            ("v2", False),
+            ("version1", True),
+            ("v1.0.0.0", True),
+            ("vabc", True),
+            ("v", True),
+            ("v1.a", True),
+        ]
+    )
+    def test_parse_baselines_raises_parser_error_for_invalid_policyid_versions(
+        self,
+        tmp_path: Path,
+        suffix: str,
+        expect_error: bool
+    ):
+        base_dir = self._render_invalid_suffix(tmp_path, suffix)
+        parser = MarkdownParser(base_dir)
 
-        msg = str(exception_info.value)
-        # md_parser.py will raise:
-        assert "invalid baseline version" in msg
+        if expect_error:
+            with pytest.raises(MarkdownParserError) as exception_info:
+                parser.parse_baselines(["invalid_policyid_version"])
+
+            msg = str(exception_info.value)
+            # md_parser.py will raise:
+            assert f"invalid baseline version ({suffix})" in msg
+        else:
+            result = parser.parse_baselines(["invalid_policyid_version"])
+            assert "invalid_policyid_version" in result
 
     def test_parse_baselines_raises_parser_error_for_missing_baseline_description(self):
         pass

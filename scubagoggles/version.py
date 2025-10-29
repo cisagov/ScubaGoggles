@@ -43,7 +43,7 @@ class Version:
 
     _code_root = Path(__file__).parent
 
-    _suffix_regex = r'v(?P<major>\d+)\.?(?P<minor>\d*)'
+    _suffix_regex = r'v(?P<major>\d+)(?:\.(?P<minor>\d+))?$'
 
     suffix_re = re.compile(_suffix_regex, re.IGNORECASE)
 
