@@ -311,7 +311,7 @@ class MarkdownParser:
                                        group_id,
                                        group_name)
 
-                if  not Version.is_valid_suffix(version):
+                if not Version.is_valid_suffix(version):
                     message = f'invalid baseline version ({version})'
                     self._parser_error(md_file,
                                        message,

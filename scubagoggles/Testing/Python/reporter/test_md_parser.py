@@ -76,7 +76,15 @@ class TestMarkdownParser:
         assert "mismatching group number (2) for group id 1 (External Sharing Options)" in msg
 
     def test_parse_baselines_raises_parser_error_for_invalid_baseline_version(self):
-        pass
+        snippets_directory = Path(__file__).parent / "BaselineSnippets"
+        parser = MarkdownParser(snippets_directory)
+
+        with pytest.raises(MarkdownParserError) as exception_info:
+            parser.parse_baselines(["invalid_baseline_version"])
+
+        msg = str(exception_info.value)
+        # md_parser.py will raise:
+        assert "invalid baseline version" in msg
 
     def test_parse_baselines_raises_parser_error_for_missing_baseline_description(self):
         pass
