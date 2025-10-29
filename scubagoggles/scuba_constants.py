@@ -16,7 +16,7 @@ class ApiReference(Enum):
     LIST_USERS = 'directory/v1/users/list'
     LIST_OUS = 'directory/v1/orgunits/list'
     LIST_DOMAINS = 'directory/v1/domains/list'
-    LIST_ALIAS_DOMAINS = '/directory/reference/rest/v1/domainAliases/list'
+    LIST_ALIAS_DOMAINS = 'directory/reference/rest/v1/domainAliases/list'
     LIST_GROUPS = 'directory/v1/groups/list'
     LIST_CUSTOMERS = 'directory/v1/customer/get'
     LIST_ACTIVITIES = 'reports/v1/activities/list'

@@ -162,7 +162,7 @@ tests contains {
     "PolicyId": GmailId4_1,
     "Prerequisites": [
         "directory/v1/domains/list",
-        "/directory/reference/rest/v1/domainAliases/list",
+        "directory/reference/rest/v1/domainAliases/list",
         "get_dmarc_records"
     ],
     "Criticality": "Shall",
