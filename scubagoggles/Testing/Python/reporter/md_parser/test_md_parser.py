@@ -6,7 +6,7 @@ import scubagoggles as scubagoggles_pkg
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 
 class TestMarkdownParser:
-    """Tests for the MarkdownParser class."""
+    """Unit tests for the MarkdownParser class."""
 
     @staticmethod
     def _baselines_directory() -> Path:
@@ -47,14 +47,14 @@ class TestMarkdownParser:
                 assert id_pattern.match(control["Id"]), f"Invalid Policy ID format: {control['Id']}"
 
     def test_parse_baselines_raises_parser_error_for_missing_policies_section(self):
-        snippets_dir = Path(__file__).parent / "BaselineSnippets"
+        snippets_dir = Path(__file__).parent / "snippets"
         parser = MarkdownParser(snippets_dir)
 
         with pytest.raises(MarkdownParserError):
             parser.parse_baselines(["missing_policies_section"])
 
     def test_parse_baselines_raises_parser_error_for_product_mismatch(self):
-        snippets_dir = Path(__file__).parent / "BaselineSnippets"
+        snippets_dir = Path(__file__).parent / "snippets"
         parser = MarkdownParser(snippets_dir)
 
         with pytest.raises(MarkdownParserError) as exception_info:
@@ -65,7 +65,7 @@ class TestMarkdownParser:
         assert "different product encountered calendar != product_mismatch" in msg
 
     def test_parse_baselines_raises_parser_error_for_group_mismatch(self):
-        snippets_dir = Path(__file__).parent / "BaselineSnippets"
+        snippets_dir = Path(__file__).parent / "snippets"
         parser = MarkdownParser(snippets_dir)
 
         with pytest.raises(MarkdownParserError) as exception_info:
@@ -77,7 +77,7 @@ class TestMarkdownParser:
 
     @staticmethod
     def _render_invalid_suffix(tmp_path: Path, suffix: str) -> Path:
-        md_file = Path(__file__).parent / "BaselineSnippets" / "invalid_policyid_version.md"
+        md_file = Path(__file__).parent / "snippets" / "invalid_policyid_version.md"
         md_content = md_file.read_text(encoding = "utf-8").replace("__SUFFIX__", suffix)
         out = tmp_path / "invalid_policyid_version.md"
         out.write_text(md_content, encoding = "utf-8")
@@ -116,7 +116,7 @@ class TestMarkdownParser:
             assert "invalid_policyid_version" in result
 
     def test_parse_baselines_raises_parser_error_for_missing_policy_description(self):
-        snippets_dir = Path(__file__).parent / "BaselineSnippets"
+        snippets_dir = Path(__file__).parent / "snippets"
         parser = MarkdownParser(snippets_dir)
 
         with pytest.raises(MarkdownParserError) as exception_info:
