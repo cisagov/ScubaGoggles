@@ -8,6 +8,42 @@ from scubagoggles.version import Version
 
 class TestReporter:
     """Unit tests for the Reporter class."""
+    def _reporter_factory(
+        self,
+        product: str = "gmail",
+        tenant_id: str = "ABCDEFG",
+        tenant_name: str = "Cool Example Org",
+        tenant_domain: str = "example.org",
+        main_report_name: str = "Baseline Reports",
+        prod_to_fullname: dict = {
+            "gmail": "Gmail"
+        },
+        product_policies: list = [],
+        successful_calls: set = {},
+        unsuccessful_calls: set = {},
+        missing_policies: set = {},
+        dns_logs: dict = {},
+        omissions: dict = {},
+        annotations: dict = {},
+        progress_bar=None,
+    ) -> Reporter:
+        return Reporter(
+            product,
+            tenant_id,
+            tenant_name,
+            tenant_domain,
+            main_report_name,
+            prod_to_fullname,
+            product_policies,
+            successful_calls,
+            unsuccessful_calls,
+            missing_policies,
+            dns_logs,
+            omissions,
+            annotations,
+            progress_bar
+        )
+
     def test_create_html_table_empty(self):
         assert Reporter.create_html_table([]) == ""
 
@@ -145,7 +181,38 @@ class TestReporter:
         assert all(th in html for th in ["Customer Name", "Customer Domain", "Customer ID"])
         assert all(td in html for td in ["Cool Example Org", "example.org", "ABCDEFG"])
         
+    def test_is_control_omitted_returns_true_for_omitted_controls(self):
+        omissions = {
+            "GWS.GMAIL.1.1v0.6": {
+                "rationale": "Accepting risk for now, will reevaluate at a later date.",
+                "expiration": "2035-12-31",
+            },
+            "GWS.GMAIL.1.2v0.6": {
+                "rationale": "Accepting risk for now, will reevaluate at a later date.",
+                "expiration": "2035-12-31",
+            },
+        }
+        reporter = self._reporter_factory(omissions=omissions)
 
+        assert reporter._is_control_omitted("GWS.GMAIL.1.1v0.6") is True
+        assert reporter._is_control_omitted("GWS.GMAIL.1.2v0.6") is True
+
+    def test_is_control_omitted_returns_false_for_controls_with_past_expiration(self):
+        omissions = {
+            "GWS.GMAIL.1.1v0.6": {
+                "rationale": "Accepting risk for now, will reevaluate at a later date.",
+                "expiration": "2020-12-31",
+            },
+            "GWS.GMAIL.1.2v0.6": {
+                "rationale": "Accepting risk for now, will reevaluate at a later date.",
+                "expiration": "2020-12-31",
+            },
+        }
+        reporter = self._reporter_factory(omissions=omissions)
+
+        assert reporter._is_control_omitted("GWS.GMAIL.1.1v0.6") is False
+        assert reporter._is_control_omitted("GWS.GMAIL.1.2v0.6") is False
+        
 
 
 
