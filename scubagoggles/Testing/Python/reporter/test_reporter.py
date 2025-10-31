@@ -212,8 +212,55 @@ class TestReporter:
 
         assert reporter._is_control_omitted("GWS.GMAIL.1.1v0.6") is False
         assert reporter._is_control_omitted("GWS.GMAIL.1.2v0.6") is False
-        
 
+    def test_get_omission_rationale_returns_expected_html_tag(self):
+        omissions = {
+            "GWS.GMAIL.1.1v0.6": {
+                "rationale": "Accepting risk for now, will reevaluate at a later date.",
+                "expiration": "2035-12-31",
+            },
+        }
 
+        reporter = self._reporter_factory(omissions=omissions)
 
+        html = reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
 
+        assert isinstance(html, str)
+        assert re.search(
+            r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification</(?P=tag)>",
+            html,
+        ), "Expected an HTML tag wrapping 'User justification'"
+        assert omissions["GWS.GMAIL.1.1v0.6"]["rationale"] in html
+
+    def test_get_omission_rationale_raises_runtime_error_if_no_omission_found(self):
+        # Default value for omissions is {}
+        reporter = self._reporter_factory()
+
+        with pytest.raises(RuntimeError):
+            reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
+
+    def test_get_omission_rationale_user_justification_not_provided(self, monkeypatch: pytest.MonkeyPatch):
+        omissions = {
+            "GWS.GMAIL.1.1v0.6": {
+                "rationale": "",
+                "expiration": "2035-12-31",
+            },
+        }
+
+        reporter = self._reporter_factory(omissions=omissions)
+
+        warnings = []
+        monkeypatch.setattr(reporter, "_warn", lambda warning: warnings.append(warning))
+
+        html = reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
+
+        assert warnings, "Expected a warning to be logged for missing rationale"
+        assert warnings[0] == (
+            "Config file indicates omitting gws.gmail.1.1v0.6, but no rationale provided."
+        )
+
+        assert isinstance(html, str)
+        assert re.search(
+            r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification not provided</(?P=tag)>",
+            html,
+        ), "Expected a HTML tag wrapping 'User justification not provided'"
