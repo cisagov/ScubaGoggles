@@ -294,6 +294,14 @@ class PolicyAPI:
     # documentation reflects the current default values (i.e., the
     # documented defaults must be kept current with the implementation).
 
+    #epoch time
+    epoch_time = time.time()
+    epoch_time_gmt = time.gmtime(epoch_time)
+    epoch_time_format = time.strftime('%Y-%m-%dT%H:%M:%S', epoch_time_gmt)
+    milliseconds = int((epoch_time - int(epoch_time)) * 1000)
+    epoch_time_str = f"{epoch_time_format}.{milliseconds:03d}Z"
+
+
     _defaults = {
         'calendar_external_invitations': {'warnOnInvite': True},
         'calendar_interoperability': {
@@ -329,7 +337,7 @@ class PolicyAPI:
         'gmail_links_and_external_images': {
             'applyFutureSettingsAutomatically': True,
             'enableAggressiveWarningsOnUntrustedLinks': False},
-        'gmail_mail_delegation': {'enableMailDelegation': True},
+        'gmail_mail_delegation': {'enableMailDelegation': False},
         'gmail_spoofing_and_authentication': {
             'applyFutureSettingsAutomatically': True},
         'groups_for_business_groups_sharing': {
@@ -346,7 +354,7 @@ class PolicyAPI:
         'security_two_step_verification_device_trust': {
             'allowTrustingDevice': True},
         'security_two_step_verification_enforcement': {
-            'enforcedFrom': "2025-06-19T07:19:02.727Z"},
+            'enforcedFrom': f'{epoch_time_str}'},
         'security_two_step_verification_enforcement_factor': {
             'allowedSignInFactorSet': 'ALL'},
         'security_two_step_verification_grace_period': {
