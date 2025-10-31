@@ -182,40 +182,45 @@ class TestReporter:
         assert all(td in html for td in ["Cool Example Org", "example.org", "ABCDEFG"])
         
     def test_is_control_omitted_returns_true_for_omitted_controls(self):
+        GMAIL1_1 = "GWS.GMAIL.1.1v0.6"
+        GMAIL1_2 = "GWS.GMAIL.1.2v0.6"
         omissions = {
-            "GWS.GMAIL.1.1v0.6": {
+            GMAIL1_1: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2035-12-31",
             },
-            "GWS.GMAIL.1.2v0.6": {
+            GMAIL1_2: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2035-12-31",
             },
         }
         reporter = self._reporter_factory(omissions=omissions)
 
-        assert reporter._is_control_omitted("GWS.GMAIL.1.1v0.6") is True
-        assert reporter._is_control_omitted("GWS.GMAIL.1.2v0.6") is True
+        assert reporter._is_control_omitted(GMAIL1_1) is True
+        assert reporter._is_control_omitted(GMAIL1_2) is True
 
     def test_is_control_omitted_returns_false_for_controls_with_past_expiration(self):
+        GMAIL1_1 = "GWS.GMAIL.1.1v0.6"
+        GMAIL1_2 = "GWS.GMAIL.1.2v0.6"
         omissions = {
-            "GWS.GMAIL.1.1v0.6": {
+            GMAIL1_1: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2020-12-31",
             },
-            "GWS.GMAIL.1.2v0.6": {
+            GMAIL1_2: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2020-12-31",
             },
         }
         reporter = self._reporter_factory(omissions=omissions)
 
-        assert reporter._is_control_omitted("GWS.GMAIL.1.1v0.6") is False
-        assert reporter._is_control_omitted("GWS.GMAIL.1.2v0.6") is False
+        assert reporter._is_control_omitted(GMAIL1_1) is False
+        assert reporter._is_control_omitted(GMAIL1_2) is False
 
     def test_get_omission_rationale_returns_expected_html_tag(self):
+        policy = "GWS.GMAIL.1.1v0.6"
         omissions = {
-            "GWS.GMAIL.1.1v0.6": {
+            policy: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2035-12-31",
             },
@@ -223,18 +228,17 @@ class TestReporter:
 
         reporter = self._reporter_factory(omissions=omissions)
 
-        html = reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
+        html = reporter._get_omission_rationale(policy)
 
         assert isinstance(html, str)
         assert re.search(
             r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification</(?P=tag)>",
             html,
         ), "Expected an HTML tag wrapping 'User justification'"
-        assert omissions["GWS.GMAIL.1.1v0.6"]["rationale"] in html
+        assert omissions[policy]["rationale"] in html
 
     def test_get_omission_rationale_raises_runtime_error_if_no_omission_found(self):
-        # Default value for omissions is {}
-        reporter = self._reporter_factory()
+        reporter = self._reporter_factory(omissions={})
 
         with pytest.raises(RuntimeError):
             reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
@@ -264,3 +268,130 @@ class TestReporter:
             r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification not provided</(?P=tag)>",
             html,
         ), "Expected a HTML tag wrapping 'User justification not provided'"
+
+    def test_get_annotation_comment_valid(self):
+        annotations = {
+            "GWS.GMAIL.1.1v0.6": {
+                "incorrectresult": True,
+                "comment": "This control is incorrectly marked as non-compliant due to a known issue.",
+            },
+        }
+
+        reporter = self._reporter_factory(annotations=annotations)
+
+        comment = reporter._get_annotation_comment("GWS.GMAIL.1.1v0.6")
+
+        assert isinstance(comment, str)
+        assert "This control is incorrectly marked as non-compliant due to a known issue." in comment
+
+    def test_get_annotation_comment_invalid(self):
+        policy = "GWS.GMAIL.1.1v0.6"
+
+        # If no policy id found in annotations object
+        reporter = self._reporter_factory(annotations={})
+        assert reporter._get_annotation_comment(policy) is None
+
+        # If the policy id is not assigned a value
+        reporter = self._reporter_factory(annotations={policy: None})
+        assert reporter._get_annotation_comment(policy) is None
+
+        # If no comment is specified
+        reporter = self._reporter_factory(annotations={policy: {"incorrectresult": True}})
+        assert reporter._get_annotation_comment(policy) is None
+
+        # If the comment is None
+        reporter = self._reporter_factory(annotations={policy: {"comment": None}})
+        assert reporter._get_annotation_comment(policy) is None
+
+        # If the comment is an empty string
+        reporter = self._reporter_factory(annotations={policy: {"comment": ""}})
+        assert reporter._get_annotation_comment(policy) is None
+
+    def test_get_remediation_date_valid(self):
+        policy = "GWS.GMAIL.1.1v0.6"
+        annotations = {
+            policy: {
+                "remediationdate": "2035-12-31",
+            }
+        }
+
+        reporter = self._reporter_factory(annotations=annotations)
+        remediation_date = reporter._get_remediation_date(policy)
+        assert remediation_date == "2035-12-31"
+
+    def test_get_remediation_date_invalid(self):
+        # This method simply pulls the remediation date from a policy if it exists.
+        # Its not handling validation to check invalid date formats like YYYY-MM-DD 
+        # or things like delimiting by / instead of -, e.g. 12/31/2035 vs. 12-31-2035.
+        policy = "GWS.GMAIL.1.1v0.6"
+
+        # If no policy id found in annotations object
+        reporter = self._reporter_factory(annotations={})
+        assert reporter._get_remediation_date(policy) is None
+
+        # If the policy id is not assigned a value
+        reporter = self._reporter_factory(annotations={policy: None})
+        assert reporter._get_remediation_date(policy) is None
+
+        # If no remediation date is specified
+        reporter = self._reporter_factory(annotations={policy: {"incorrectresult": True}})
+        assert reporter._get_remediation_date(policy) is None
+
+        # If the remediation date is None
+        reporter = self._reporter_factory(annotations={policy: {"remediationdate": None}})
+        assert reporter._get_remediation_date(policy) is None
+
+        # If the remediation date is an empty string
+        reporter = self._reporter_factory(annotations={policy: {"remediationdate": ""}})
+        assert reporter._get_remediation_date(policy) is None
+
+    def test_is_control_marked_incorrect_valid(self):
+        policy = "GWS.GMAIL.1.1v0.6"
+        annotations = {
+            policy: {
+                "comment": "This control is incorrectly marked as non-compliant due to a known issue.",
+                "incorrectresult": True,
+            }
+        }
+
+        reporter = self._reporter_factory(annotations=annotations)
+        assert reporter._is_control_marked_incorrect(policy) is True
+
+    def test_is_control_marked_incorrect_invalid(self):
+        policy = "GWS.GMAIL.1.1v0.6"
+
+        # If no policy id found in annotations object
+        reporter = self._reporter_factory(annotations={})
+        assert reporter._is_control_marked_incorrect(policy) is False
+
+        # If the policy id is not assigned a value
+        reporter = self._reporter_factory(annotations={policy: {}})
+        assert reporter._is_control_marked_incorrect(policy) is False
+
+        # If no incorrectresult is specified
+        reporter = self._reporter_factory(annotations={policy: {"comment": "Some comment"}})
+        assert reporter._is_control_marked_incorrect(policy) is False
+
+        # If incorrectresult is set to False
+        reporter = self._reporter_factory(annotations={policy: {"incorrectresult": False}})
+        assert reporter._is_control_marked_incorrect(policy) is False
+
+    def test_sanitize_details(self):
+        details = (
+            "Example One<br>Example Two<br>"
+            f"{Reporter._log_based_warning}"
+            '<br><a href="#dns-logs">View DNS logs</a> for more details.'
+        )
+
+        table_data = [{ "Details": details }]
+        reporter = self._reporter_factory()
+        sanitized_data = reporter._sanitize_details([
+            dict(row) for row in table_data
+        ])
+        out = sanitized_data[0]["Details"]
+
+        assert "Example One\nExample Two" in out
+        assert Reporter._log_based_warning not in out
+
+        # DNS log link removed
+        assert "View DNS logs" not in out and "$dns-logs" not in out
