@@ -231,6 +231,7 @@ class MarkdownParser:
 
         return result
 
+    # pylint: disable=too-many-branches
     def _parse_baselines(self,
                          baseline_content: list,
                          md_file: Path,
