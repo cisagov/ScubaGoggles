@@ -1,6 +1,8 @@
 from pathlib import Path
 import re
 import pytest
+import json
+import html as html_lib
 
 import scubagoggles as scubagoggles_pkg
 from scubagoggles.reporter.reporter import Reporter
@@ -45,7 +47,8 @@ class TestReporter:
         )
 
     def test_create_html_table_empty(self):
-        assert Reporter.create_html_table([]) == ""
+        reporter = self._reporter_factory()
+        assert reporter.create_html_table([]) == ""
 
     def test_create_html_table_tenant_info(self):
         rows = [
@@ -59,7 +62,8 @@ class TestReporter:
             }
         ]
 
-        html = Reporter.create_html_table(rows)
+        reporter = self._reporter_factory()
+        html = reporter.create_html_table(rows)
         assert html.startswith("<table")
         assert "<thead>" in html and "<tbody>" in html
         assert html.count("<th>") == 6
@@ -100,7 +104,8 @@ class TestReporter:
             }
         ]
 
-        html = Reporter.create_html_table(rows)
+        reporter = self._reporter_factory()
+        html = reporter.create_html_table(rows)
 
         assert html.startswith("<table")
         assert "<thead>" in html and "<tbody>" in html
@@ -144,6 +149,8 @@ class TestReporter:
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
         (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
 
+        # Patch the actual Reporter class attribute for _reporter_path,
+        # otherwise the local instance returned by _reporter_factory() won't use the temp files.
         monkeypatch.setattr(Reporter, "_reporter_path", tmp, raising=True)
 
         fragments = [
@@ -157,7 +164,8 @@ class TestReporter:
         }
         report_uuid = "123e4567-e89b-12d3-a456-426614174000"
 
-        html = Reporter.build_front_page_html(
+        reporter = self._reporter_factory()
+        html = reporter.build_front_page_html(
             fragments,
             tenant_info,
             report_uuid,
@@ -395,3 +403,113 @@ class TestReporter:
 
         # DNS log link removed
         assert "View DNS logs" not in out and "$dns-logs" not in out
+
+    def test_transform_rego_output_to_individual_reports(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        tmp = tmp_path
+        (tmp / "IndividualReport").mkdir(parents=True)
+        (tmp / "styles").mkdir(parents=True)
+        (tmp / "scripts").mkdir(parents=True)
+        (tmp / "templates").mkdir(parents=True)
+
+        pkg_root = Path(scubagoggles_pkg.__file__).resolve().parent
+        individual_report_template = (pkg_root / "reporter" / "IndividualReport" / "IndividualReportTemplate.html").read_text(encoding="utf-8")
+        (tmp / "IndividualReport" / "IndividualReportTemplate.html").write_text(individual_report_template, encoding="utf-8")
+
+        alerts_descriptions = json.dumps({
+            "Leaked password": "Google detected compromised credentials requiring a reset of the user's password.",
+            "Google Operations": "Provides details about security and privacy issues that affect your Google Workspace services.",
+            "Drive settings changed": "An admin has changed Google Workspace Drive settings.",
+        }, indent=2)
+        (tmp / "IndividualReport" / "AlertsDescriptions.json").write_text(alerts_descriptions, encoding="utf-8")
+
+        dark_mode_toggle_template = (pkg_root / "reporter" / "templates" / "DarkModeToggleTemplate.html").read_text(encoding="utf-8")
+        (tmp / "templates" / "DarkModeToggleTemplate.html").write_text(dark_mode_toggle_template, encoding="utf-8")
+
+        (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
+        (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
+
+        # Patch the actual Reporter class attribute for _reporter_path,
+        # otherwise the local instance returned by _reporter_factory() won't use the temp files.
+        monkeypatch.setattr(Reporter, "_reporter_path", tmp, raising=True)
+
+        reporter = self._reporter_factory(
+            product = "gmail",
+            product_policies = [
+                {
+                    "GroupName": "Mail Delegation",
+                    "GroupNumber": "1",
+                    "Controls": [
+                        {
+                            "Id": "GWS.GMAIL.1.1v0.6",
+                            "Value": "Mail Delegation SHOULD be disabled.",
+                        }
+                    ],
+                }
+            ],
+        )
+
+        test_results = [
+            {
+                "PolicyId": "GWS.GMAIL.1.1v0.6",
+                "Prerequisites": [
+                    "policy/gmail_mail_delegation.enableMailDelegation",
+                    "policy/gmail_service_status.serviceState"
+                ],
+                "Criticality": "Should",
+                "ReportDetails": (
+                    "The following OUs are non-compliant:\n"
+                    "<ul>\n"
+                    "  <li>Terry Hahn's OU: Mail delegation is enabled</li>\n"
+                    "</ul>"
+                ),
+                "ActualValue": { "NonCompliantOUs": ["Terry Hahn's OU"] },
+                "RequirementMet": False,
+                "NoSuchEvent": False,
+            }
+        ]
+
+        out_dir = tmp_path / "GWSBaselineConformance"
+        (out_dir / "IndividualReports").mkdir(parents=True)
+
+        report_stats, json_data = reporter.rego_json_to_ind_reports(
+            test_results,
+            out_dir,
+            darkmode="on",
+        )
+
+        # Check JSON output
+        expected_stats = {
+            "Manual": 0,
+            "Passes": 0,
+            "Errors": 0,
+            "Failures": 0,
+            "Warnings": 1,
+            "Omit": 0,
+            "IncorrectResults": 0,
+        }
+        assert report_stats == expected_stats
+
+        assert isinstance(json_data, list) and len(json_data) == 1
+        group = json_data[0]
+        assert group["GroupName"] == "Mail Delegation"
+        assert group["GroupNumber"] == "1"
+        assert group["GroupReferenceURL"].startswith("https://github.com/cisagov/")
+        assert group["GroupReferenceURL"].endswith("scubagoggles/baselines/gmail.md#1-mail-delegation")
+        assert group["Controls"] == [
+            {
+                "Control ID": "GWS.GMAIL.1.1v0.6",
+                "Requirement": "Mail Delegation SHOULD be disabled.",
+                "Result": "Warning",
+                "Criticality": "Should",
+                "Details": (
+                    "The following OUs are non-compliant:\n"
+                    "<ul>\n"
+                    "  <li>Terry Hahn's OU: Mail delegation is enabled</li>\n"
+                    "</ul>"
+                ),
+                "OmittedEvaluationResult": "N/A",
+                "OmittedEvaluationDetails": "N/A",
+                "IncorrectResult": "N/A",
+                "IncorrectDetails": "N/A",
+            }
+        ]
