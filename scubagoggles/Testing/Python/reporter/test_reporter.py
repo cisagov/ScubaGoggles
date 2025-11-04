@@ -227,46 +227,53 @@ class TestReporter:
             assert reporter._is_control_omitted(policy) is expected
 
     @pytest.mark.parametrize(
-        ("omissions", "pattern", "expects_warning", "expected_error"),
+        "cases",
         [
-            (
-                {
+            {
+                "omissions": {
                     "GWS.GMAIL.1.1v0.6": {
                         "rationale": "Accepting risk for now, will reevaluate at a later date.",
                         "expiration": "2035-12-31",
                     }
                 },
-                r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification</(?P=tag)>",
-                False,
-                None,
-            ),
-            ({}, None, False, RuntimeError),
-            (
-                {
+                "pattern": r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification</(?P=tag)>",
+                "expects_warning": False,
+                "expected_error": None,
+            },
+            {
+                "omissions": {},
+                "pattern": None,
+                "expects_warning": False,
+                "expected_error": RuntimeError,
+            },
+            {
+                "omissions": {
                     "GWS.GMAIL.1.1v0.6": {
                         "rationale": "",
                         "expiration": "2035-12-31",
                     }
                 },
-                r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification not provided</(?P=tag)>",
-                True,
-                None,
-            ),
+                "pattern": r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification not provided</(?P=tag)>",
+                "expects_warning": True,
+                "expected_error": None,
+            },
         ],
     )
     # pylint: disable=protected-access
     def test_get_omission_rationale(
             self,
             monkeypatch: pytest.MonkeyPatch,
-            omissions,
-            pattern,
-            expects_warning,
-            expected_error
+            cases
     ):
         """
         Tests if Reporter._get_omission_rationale() returns the expected HTML tag
         for a given policy and if runtime errors are thrown correctly.
         """
+        omissions = cases["omissions"]
+        pattern = cases["pattern"]
+        expects_warning = cases["expects_warning"]
+        expected_error = cases["expected_error"]
+
         reporter = self._reporter_factory(omissions=omissions)
         warnings = []
         monkeypatch.setattr(reporter, "_warn", warnings.append)
