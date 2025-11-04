@@ -1,10 +1,43 @@
 # Python Unit Testing
 
-## Overview
+This document provides background on how to run the Python unit tests for the `scubagoggles` Python package and covers key `pytest` concepts used in the test suite.
 
-This document tracks the approach and tools used for unit testing the `scubagoggles` Python package. It covers files and tests, as well as key `pytest` concepts leveraged in our test suite.
+We focus on verifying the behavior of `scubagoggles` public class methods and how they interact together. Private helper methods are generally treated as implementation details and should be left untested. However, the exception to this rule is when private methods mutate shared state or encapsulate complex or high-importance logic. These cases warrant direct tests to test their observable behavior.
 
-## Key Pytest Concepts
+## Running Unit Tests
+
+To run all Python unit tests:
+
+```bash
+pytest ./Testing/Python/
+```
+
+To run all tests for a specific file:
+
+```bash
+pytest ./Testing/Python/reporter/test_reporter.py
+```
+
+To run an individual test by name:
+
+```bash
+pytest ./Testing/Python -k test_create_html_table
+```
+
+## Test Naming Conventions
+
+Name each unit test by prefixing `test_` to the corresponding class method's name.
+For example, when testing the `Reporter.create_html_table` method, create `def test_create_html_table():` to keep tests consistent.
+
+### Example Structure
+
+```python
+class TestReporter:
+    def test_create_html_table(self):
+        ...
+```
+
+## Pytest Concepts
 
 ### Fixtures
 
@@ -17,8 +50,6 @@ import pytest
 def sample_data():
     return {"key": "value"}
 ```
-
-Use fixtures by declaring them as arguments in your test functions.
 
 ### Parametrize
 
@@ -43,26 +74,6 @@ The `monkeypatch` fixture lets you modify or mock objects, functions, or environ
 def test_env_var(monkeypatch):
     monkeypatch.setenv("API_KEY", "test-key")
     # test code that uses API_KEY
-```
-
-## Running Unit Tests
-
-To run all Python unit tests:
-
-```bash
-pytest ./Testing/Python/
-```
-
-To run all tests for a specific file:
-
-```bash
-pytest ./Testing/Python/reporter/test_reporter.py
-```
-
-To run an individual test by name:
-
-```bash
-pytest ./Testing/Python -k test_create_html_table
 ```
 
 ## Additional Resources

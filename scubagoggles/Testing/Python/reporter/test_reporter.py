@@ -193,274 +193,218 @@ class TestReporter:
         assert all(th in html for th in ["Customer Name", "Customer Domain", "Customer ID"])
         assert all(td in html for td in ["Cool Example Org", "example.org", "ABCDEFG"])
 
-    def test_is_control_omitted_returns_true_for_omitted_controls(self):
+    @pytest.mark.parametrize(
+        ("omissions", "expected"),
+        [
+            (
+                {
+                    "GWS.GMAIL.1.1v0.6": {
+                        "rationale": "Accepting risk",
+                        "expiration": "2035-12-31"
+                    },
+                },
+                True,
+            ),
+            (
+                {
+                    "GWS.GMAIL.1.1v0.6": {
+                        "rationale": "Accepting risk",
+                        "expiration": "2020-12-31"
+                    },
+                },
+                False,
+            ),
+        ],
+    )
+    # pylint: disable=protected-access
+    def test_is_control_omitted(self, omissions, expected):
         """
-        Tests Reporter._is_control_omitted() returns True for omitted controls
-        with a valid expiration date in the future.
+        Tests if Reporter._is_control_omitted() returns True/false
+        for different expiration dates.
         """
-        gmail_1_1 = "GWS.GMAIL.1.1v0.6"
-        gmail_1_2 = "GWS.GMAIL.1.2v0.6"
-        omissions = {
-            gmail_1_1: {
-                "rationale": "Accepting risk for now, will reevaluate at a later date.",
-                "expiration": "2035-12-31",
-            },
-            gmail_1_2: {
-                "rationale": "Accepting risk for now, will reevaluate at a later date.",
-                "expiration": "2035-12-31",
-            },
-        }
         reporter = self._reporter_factory(omissions=omissions)
+        for policy in omissions:
+            assert reporter._is_control_omitted(policy) is expected
 
-        # pylint: disable=protected-access
-        assert reporter._is_control_omitted(gmail_1_1) is True
-        # pylint: disable=protected-access
-        assert reporter._is_control_omitted(gmail_1_2) is True
-
-    def test_is_control_omitted_returns_false_for_controls_with_past_expiration(self):
-        """
-        Tests Reporter._is_control_omitted() returns False for controls
-        with a past expiration date.
-        """
-        gmail_1_1 = "GWS.GMAIL.1.1v0.6"
-        gmail_1_2 = "GWS.GMAIL.1.2v0.6"
-        omissions = {
-            gmail_1_1: {
-                "rationale": "Accepting risk for now, will reevaluate at a later date.",
-                "expiration": "2020-12-31",
-            },
-            gmail_1_2: {
-                "rationale": "Accepting risk for now, will reevaluate at a later date.",
-                "expiration": "2020-12-31",
-            },
-        }
-        reporter = self._reporter_factory(omissions=omissions)
-
-        # pylint: disable=protected-access
-        assert reporter._is_control_omitted(gmail_1_1) is False
-        # pylint: disable=protected-access
-        assert reporter._is_control_omitted(gmail_1_2) is False
-
-    def test_get_omission_rationale_returns_expected_html_tag(self):
-        """
-        Tests Reporter._get_omission_rationale() returns the expected HTML tag
-        for a given policy.
-        """
-        policy = "GWS.GMAIL.1.1v0.6"
-        omissions = {
-            policy: {
-                "rationale": "Accepting risk for now, will reevaluate at a later date.",
-                "expiration": "2035-12-31",
-            },
-        }
-
-        reporter = self._reporter_factory(omissions=omissions)
-
-        # pylint: disable=protected-access
-        html = reporter._get_omission_rationale(policy)
-
-        assert isinstance(html, str)
-        assert re.search(
-            r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification</(?P=tag)>",
-            html,
-        ), "Expected an HTML tag wrapping 'User justification'"
-        assert omissions[policy]["rationale"] in html
-
-    def test_get_omission_rationale_raises_runtime_error_if_no_omission_found(self):
-        """
-        Tests Reporter._get_omission_rationale() raises a RuntimeError if no
-        omission is found for the given policy.
-        """
-        reporter = self._reporter_factory(omissions={})
-
-        with pytest.raises(RuntimeError):
-            # pylint: disable=protected-access
-            reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
-
-    def test_get_omission_rationale_user_justification_not_provided(
-        self,
-        monkeypatch: pytest.MonkeyPatch
+    @pytest.mark.parametrize(
+        ("omissions", "pattern", "expects_warning", "expected_error"),
+        [
+            (
+                {
+                    "GWS.GMAIL.1.1v0.6": {
+                        "rationale": "Accepting risk for now, will reevaluate at a later date.",
+                        "expiration": "2035-12-31",
+                    }
+                },
+                r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification</(?P=tag)>",
+                False,
+                None,
+            ),
+            ({}, None, False, RuntimeError),
+            (
+                {
+                    "GWS.GMAIL.1.1v0.6": {
+                        "rationale": "",
+                        "expiration": "2035-12-31",
+                    }
+                },
+                r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification not provided</(?P=tag)>",
+                True,
+                None,
+            ),
+        ],
+    )
+    # pylint: disable=protected-access
+    def test_get_omission_rationale(
+            self,
+            monkeypatch: pytest.MonkeyPatch,
+            omissions,
+            pattern,
+            expects_warning,
+            expected_error
     ):
         """
-        Tests Reporter._get_omission_rationale() raises a warning if no
-        rationale is provided.
+        Tests if Reporter._get_omission_rationale() returns the expected HTML tag
+        for a given policy and if runtime errors are thrown correctly.
         """
-        omissions = {
-            "GWS.GMAIL.1.1v0.6": {
-                "rationale": "",
-                "expiration": "2035-12-31",
-            },
-        }
-
         reporter = self._reporter_factory(omissions=omissions)
-
         warnings = []
         monkeypatch.setattr(reporter, "_warn", warnings.append)
 
-        # pylint: disable=protected-access
-        html = reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
+        for policy in omissions:
+            if expected_error:
+                with pytest.raises(expected_error):
+                    reporter._get_omission_rationale(policy)
+                return
 
-        assert warnings, "Expected a warning to be logged for missing rationale"
-        assert warnings[0] == (
-            "Config file indicates omitting gws.gmail.1.1v0.6, but no rationale provided."
-        )
+            html = reporter._get_omission_rationale(policy)
+            assert isinstance(html, str)
 
-        assert isinstance(html, str)
-        assert re.search(
-            r"<(?P<tag>\w+)(?:\s[^>]*)?>User justification not provided</(?P=tag)>",
-            html,
-        ), "Expected a HTML tag wrapping 'User justification not provided'"
+            if expects_warning:
+                assert warnings, "Expected a warning to be logged for missing rationale"
+            else:
+                assert not warnings, "Did not expect any warnings to be logged"
 
-    def test_get_annotation_comment_valid(self):
+            if pattern:
+                assert re.search(
+                    pattern, html
+                ), f"Expected an HTML tag wrapping the rationale for policy {policy}"
+
+            rationale = omissions[policy]["rationale"]
+            if rationale:
+                assert rationale in html
+
+    @pytest.mark.parametrize(
+        ("annotations", "expected"),
+        [
+            (
+                {
+                    "GWS.GMAIL.1.1v0.6": {
+                        "incorrectresult": True,
+                        "comment": "This control is incorrectly marked as non-compliant.",
+                    }
+                },
+                "This control is incorrectly marked as non-compliant.",
+            ),
+            ({}, None),
+            ({"GWS.GMAIL.1.1v0.6": None}, None),
+            ({"GWS.GMAIL.1.1v0.6": {"incorrectresult": True}}, None),
+            ({"GWS.GMAIL.1.1v0.6": {"comment": None}}, None),
+            ({"GWS.GMAIL.1.1v0.6": {"comment": ""}}, None),
+        ],
+    )
+    # pylint: disable=protected-access
+    def test_get_annotation_comment(self, annotations, expected):
         """
-        Tests Reporter._get_annotation_comment() returns the expected comment
-        for a given policy.
+        Tests if Reporter._get_annotation_comment() handles these cases:
+            - returns the expected comment for a given policy
+            - returns None for cases where the annotated policies are
+              declared incorrectly in the config file.
+            - returns None when no comment is specified.
         """
-        annotations = {
-            "GWS.GMAIL.1.1v0.6": {
-                "incorrectresult": True,
-                "comment": "This control is incorrectly marked as non-compliant.",
-            },
-        }
-
         reporter = self._reporter_factory(annotations=annotations)
 
-        # pylint: disable=protected-access
-        comment = reporter._get_annotation_comment("GWS.GMAIL.1.1v0.6")
+        for policy in annotations:
+            comment = reporter._get_annotation_comment(policy)
+            if expected is None:
+                assert comment is None
+            else:
+                assert isinstance(comment, str)
+                assert expected is comment
 
-        assert isinstance(comment, str)
-        assert "This control is incorrectly marked as non-compliant." in comment
-
-    def test_get_annotation_comment_invalid(self):
+    @pytest.mark.parametrize(
+        ("annotations", "expected"),
+        [
+            (
+                {
+                    "GWS.GMAIL.1.1v0.6": {
+                        "remediationdate": "2035-12-31"
+                    }
+                },
+                "2035-12-31",
+            ),
+            ({}, None),
+            ({"GWS.GMAIL.1.1v0.6": None}, None),
+            ({"GWS.GMAIL.1.1v0.6": {"incorrectresult": True}}, None),
+            ({"GWS.GMAIL.1.1v0.6": {"remediationdate": None}}, None),
+            ({"GWS.GMAIL.1.1v0.6": {"remediationdate": ""}}, None),
+        ],
+    )
+    # pylint: disable=protected-access
+    def test_get_remediation_date(self, annotations, expected):
         """
-        Tests Reporter._get_annotation_comment() returns None for cases
-        where the annotated policies are declared incorrectly in the config file.
-        """
-        policy = "GWS.GMAIL.1.1v0.6"
-
-        # If no policy id found in annotations object
-        reporter = self._reporter_factory(annotations={})
-        # pylint: disable=protected-access
-        assert reporter._get_annotation_comment(policy) is None
-
-        # If the policy id is not assigned a value
-        reporter = self._reporter_factory(annotations={policy: None})
-        # pylint: disable=protected-access
-        assert reporter._get_annotation_comment(policy) is None
-
-        # If no comment is specified
-        reporter = self._reporter_factory(annotations={policy: {"incorrectresult": True}})
-        # pylint: disable=protected-access
-        assert reporter._get_annotation_comment(policy) is None
-
-        # If the comment is None
-        reporter = self._reporter_factory(annotations={policy: {"comment": None}})
-        # pylint: disable=protected-access
-        assert reporter._get_annotation_comment(policy) is None
-
-        # If the comment is an empty string
-        reporter = self._reporter_factory(annotations={policy: {"comment": ""}})
-        # pylint: disable=protected-access
-        assert reporter._get_annotation_comment(policy) is None
-
-    def test_get_remediation_date_valid(self):
-        """
-        Tests Reporter._get_remediation_date() returns the expected date
-        for a given policy.
-        """
-        policy = "GWS.GMAIL.1.1v0.6"
-        annotations = {
-            policy: {
-                "remediationdate": "2035-12-31",
-            }
-        }
-
-        reporter = self._reporter_factory(annotations=annotations)
-        # pylint: disable=protected-access
-        remediation_date = reporter._get_remediation_date(policy)
-        assert remediation_date == "2035-12-31"
-
-    def test_get_remediation_date_invalid(self):
-        """
-        Tests Reporter._get_remediation_date() returns None for cases
-        where the remediation date is not properly specified.
+        Tests if Reporter._get_remediation_date() handles these cases:
+            - returns the expected date for a given policy
+            - returns None for cases where the remediation date is 
+              not properly specified.
 
         This method simply pulls the remediation date from a policy if it exists.
         Its not handling validation to check invalid date formats like YYYY-MM-DD
         or things like delimiting by / instead of -, e.g. 12/31/2035 vs. 12-31-2035.
         """
-        policy = "GWS.GMAIL.1.1v0.6"
-
-        # If no policy id found in annotations object
-        reporter = self._reporter_factory(annotations={})
-        # pylint: disable=protected-access
-        assert reporter._get_remediation_date(policy) is None
-
-        # If the policy id is not assigned a value
-        reporter = self._reporter_factory(annotations={policy: None})
-        # pylint: disable=protected-access
-        assert reporter._get_remediation_date(policy) is None
-
-        # If no remediation date is specified
-        reporter = self._reporter_factory(annotations={policy: {"incorrectresult": True}})
-        # pylint: disable=protected-access
-        assert reporter._get_remediation_date(policy) is None
-
-        # If the remediation date is None
-        reporter = self._reporter_factory(annotations={policy: {"remediationdate": None}})
-        # pylint: disable=protected-access
-        assert reporter._get_remediation_date(policy) is None
-
-        # If the remediation date is an empty string
-        reporter = self._reporter_factory(annotations={policy: {"remediationdate": ""}})
-        # pylint: disable=protected-access
-        assert reporter._get_remediation_date(policy) is None
-
-    def test_is_control_marked_incorrect_valid(self):
-        """
-        Tests Reporter._is_control_marked_incorrect() returns True for cases
-        where the control is marked as incorrect.
-        """
-        policy = "GWS.GMAIL.1.1v0.6"
-        annotations = {
-            policy: {
-                "comment": "This control is incorrectly marked as non-compliant.",
-                "incorrectresult": True,
-            }
-        }
-
         reporter = self._reporter_factory(annotations=annotations)
-        # pylint: disable=protected-access
-        assert reporter._is_control_marked_incorrect(policy) is True
 
-    def test_is_control_marked_incorrect_invalid(self):
+        for policy in annotations:
+            remediation_date = reporter._get_remediation_date(policy)
+            if expected is None:
+                assert remediation_date is None
+            else:
+                assert isinstance(remediation_date, str)
+                assert expected is remediation_date
+
+    @pytest.mark.parametrize(
+        ("annotations", "expected"),
+        [
+            (
+                {
+                    "GWS.GMAIL.1.1v0.6": {
+                        "comment": "This control is incorrectly marked as non-compliant.",
+                        "incorrectresult": True,
+                    }
+                },
+                True,
+            ),
+            ({}, False),
+            ({"GWS.GMAIL.1.1v0.6": {}}, False),
+            ({"GWS.GMAIL.1.1v0.6": {"comment": "Some comment"}}, False),
+            ({"GWS.GMAIL.1.1v0.6": {"incorrectresult": False}}, False),
+        ],
+    )
+    # pylint: disable=protected-access
+    def test_is_control_marked_incorrect(self, annotations, expected):
         """
-        Tests Reporter._is_control_marked_incorrect() returns False for invalid cases
-        or when incorrectresult is set to false.
+        Tests if Reporter_is_control_marked_incorrect() handles these cases:
+            - returns True for cases where the control is marked as incorrect
+            - returns False for invalid cases or when incorrectResult
+              is set to false.
         """
-        policy = "GWS.GMAIL.1.1v0.6"
+        reporter = self._reporter_factory(annotations=annotations)
 
-        # If no policy id found in annotations object
-        reporter = self._reporter_factory(annotations={})
-        # pylint: disable=protected-access
-        assert reporter._is_control_marked_incorrect(policy) is False
+        for policy in annotations:
+            is_incorrect = reporter._is_control_marked_incorrect(policy)
+            assert is_incorrect is expected
 
-        # If the policy id is not assigned a value
-        reporter = self._reporter_factory(annotations={policy: {}})
-        # pylint: disable=protected-access
-        assert reporter._is_control_marked_incorrect(policy) is False
-
-        # If no incorrectresult is specified
-        reporter = self._reporter_factory(annotations={policy: {"comment": "Some comment"}})
-        # pylint: disable=protected-access
-        assert reporter._is_control_marked_incorrect(policy) is False
-
-        # If incorrectresult is set to False
-        reporter = self._reporter_factory(annotations={policy: {"incorrectresult": False}})
-        # pylint: disable=protected-access
-        assert reporter._is_control_marked_incorrect(policy) is False
-
-    def test_transform_rego_output_to_individual_reports(
+    def test_rego_json_to_ind_reports(
         self,
         tmp_path: Path,
         monkeypatch: pytest.MonkeyPatch
