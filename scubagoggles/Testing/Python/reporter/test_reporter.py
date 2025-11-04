@@ -13,47 +13,37 @@ from scubagoggles.version import Version
 
 class TestReporter:
     """Unit tests for the Reporter class."""
-    def _reporter_factory(
-        self,
-        product: str = "gmail",
-        tenant_id: str = "ABCDEFG",
-        tenant_name: str = "Cool Example Org",
-        tenant_domain: str = "example.org",
-        main_report_name: str = "Baseline Reports",
-        prod_to_fullname: dict = {
-            "gmail": "Gmail"
-        },
-        product_policies: list = [],
-        successful_calls: set = {},
-        unsuccessful_calls: set = {},
-        missing_policies: set = {},
-        dns_logs: dict = {},
-        omissions: dict = {},
-        annotations: dict = {},
-        progress_bar=None,
-    ) -> Reporter:
-        return Reporter(
-            product,
-            tenant_id,
-            tenant_name,
-            tenant_domain,
-            main_report_name,
-            prod_to_fullname,
-            product_policies,
-            successful_calls,
-            unsuccessful_calls,
-            missing_policies,
-            dns_logs,
-            omissions,
-            annotations,
-            progress_bar
-        )
+    def _reporter_factory(self, **overrides) -> Reporter:
+        defaults = {
+            "product": "gmail",
+            "tenant_id": "ABCDEFG",
+            "tenant_name": "Cool Example Org",
+            "tenant_domain": "example.org",
+            "main_report_name": "Baseline Reports",
+            "prod_to_fullname": {"gmail": "Gmail"},
+            "product_policies": [],
+            "successful_calls": set(),
+            "unsuccessful_calls": set(),
+            "missing_policies": set(),
+            "dns_logs": {},
+            "omissions": {},
+            "annotations": {},
+            "progress_bar": None,
+        }
+        params = {**defaults, **overrides}
+        return Reporter(**params)
 
     def test_create_html_table_empty(self):
+        """
+        Tests Reporter.create_html_table() with an empty list of rows.
+        """
         reporter = self._reporter_factory()
         assert reporter.create_html_table([]) == ""
 
     def test_create_html_table_tenant_info(self):
+        """
+        Tests Reporter.create_html_table() with tenant data.
+        """
         rows = [
             {
                 "Customer Name": "Cool Example Org",
@@ -92,6 +82,9 @@ class TestReporter:
 
 
     def test_create_html_table_control_info(self):
+        """
+        Tests Reporter.create_html_table() with control table data.
+        """
         rows = [
             {
                 "Control ID": "GWS.GMAIL.1.1v0.6",
@@ -133,6 +126,10 @@ class TestReporter:
         assert "Terry Hahn's OU: Mail delegation is enabled" in html
 
     def test_build_front_page_html(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        """
+        Tests Reporter._build_front_page_html() with test data for fragments,
+        tenant_info, report_uuid, and darkmode enabled.
+        """
         tmp = tmp_path
         (tmp / "FrontPageReport").mkdir(parents=True)
         (tmp / "styles").mkdir(parents=True)
@@ -140,13 +137,19 @@ class TestReporter:
         (tmp / "templates").mkdir(parents=True)
 
         pkg_root = Path(scubagoggles_pkg.__file__).resolve().parent
-        front_page_template = pkg_root / "reporter" / "FrontPageReport" / "FrontPageReportTemplate.html"
-        front_page_html = front_page_template.read_text(encoding="utf-8")
-        (tmp / "FrontPageReport" / "FrontPageReportTemplate.html").write_text(front_page_html, encoding="utf-8")
+        front_page_html = (
+            pkg_root / "reporter" / "FrontPageReport" / "FrontPageReportTemplate.html"
+        ).read_text(encoding="utf-8")
+        (tmp / "FrontPageReport" / "FrontPageReportTemplate.html").write_text(
+            front_page_html, encoding="utf-8"
+        )
 
-        dark_mode_toggle_template = pkg_root / "reporter" / "templates" / "DarkModeToggleTemplate.html"
-        dark_mode_toggle_html = dark_mode_toggle_template.read_text(encoding="utf-8")
-        (tmp / "templates" / "DarkModeToggleTemplate.html").write_text(dark_mode_toggle_html, encoding="utf-8")
+        dark_mode_toggle_html = (
+            pkg_root / "reporter" / "templates" / "DarkModeToggleTemplate.html"
+        ).read_text(encoding="utf-8")
+        (tmp / "templates" / "DarkModeToggleTemplate.html").write_text(
+            dark_mode_toggle_html, encoding="utf-8"
+        )
 
         (tmp / "styles" / "FrontPageStyle.css").write_text("main {}\n footer {}", encoding="utf-8")
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
@@ -191,44 +194,56 @@ class TestReporter:
 
         assert all(th in html for th in ["Customer Name", "Customer Domain", "Customer ID"])
         assert all(td in html for td in ["Cool Example Org", "example.org", "ABCDEFG"])
-        
+
     def test_is_control_omitted_returns_true_for_omitted_controls(self):
-        GMAIL1_1 = "GWS.GMAIL.1.1v0.6"
-        GMAIL1_2 = "GWS.GMAIL.1.2v0.6"
+        """
+        Tests Reporter._is_control_omitted() returns True for omitted controls
+        with a valid expiration date in the future.
+        """
+        GMAIL_1_1 = "GWS.GMAIL.1.1v0.6"
+        GMAIL_1_2 = "GWS.GMAIL.1.2v0.6"
         omissions = {
-            GMAIL1_1: {
+            GMAIL_1_1: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2035-12-31",
             },
-            GMAIL1_2: {
+            GMAIL_1_2: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2035-12-31",
             },
         }
         reporter = self._reporter_factory(omissions=omissions)
 
-        assert reporter._is_control_omitted(GMAIL1_1) is True
-        assert reporter._is_control_omitted(GMAIL1_2) is True
+        assert reporter._is_control_omitted(GMAIL_1_1) is True
+        assert reporter._is_control_omitted(GMAIL_1_2) is True
 
     def test_is_control_omitted_returns_false_for_controls_with_past_expiration(self):
-        GMAIL1_1 = "GWS.GMAIL.1.1v0.6"
-        GMAIL1_2 = "GWS.GMAIL.1.2v0.6"
+        """
+        Tests Reporter._is_control_omitted() returns False for controls
+        with a past expiration date.
+        """
+        GMAIL_1_1 = "GWS.GMAIL.1.1v0.6"
+        GMAIL_1_2 = "GWS.GMAIL.1.2v0.6"
         omissions = {
-            GMAIL1_1: {
+            GMAIL_1_1: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2020-12-31",
             },
-            GMAIL1_2: {
+            GMAIL_1_2: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2020-12-31",
             },
         }
         reporter = self._reporter_factory(omissions=omissions)
 
-        assert reporter._is_control_omitted(GMAIL1_1) is False
-        assert reporter._is_control_omitted(GMAIL1_2) is False
+        assert reporter._is_control_omitted(GMAIL_1_1) is False
+        assert reporter._is_control_omitted(GMAIL_1_2) is False
 
     def test_get_omission_rationale_returns_expected_html_tag(self):
+        """
+        Tests Reporter._get_omission_rationale() returns the expected HTML tag
+        for a given policy.
+        """
         policy = "GWS.GMAIL.1.1v0.6"
         omissions = {
             policy: {
@@ -249,12 +264,23 @@ class TestReporter:
         assert omissions[policy]["rationale"] in html
 
     def test_get_omission_rationale_raises_runtime_error_if_no_omission_found(self):
+        """
+        Tests Reporter._get_omission_rationale() raises a RuntimeError if no
+        omission is found for the given policy.
+        """
         reporter = self._reporter_factory(omissions={})
 
         with pytest.raises(RuntimeError):
             reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
 
-    def test_get_omission_rationale_user_justification_not_provided(self, monkeypatch: pytest.MonkeyPatch):
+    def test_get_omission_rationale_user_justification_not_provided(
+        self,
+        monkeypatch: pytest.MonkeyPatch
+    ):
+        """
+        Tests Reporter._get_omission_rationale() raises a warning if no
+        rationale is provided.
+        """
         omissions = {
             "GWS.GMAIL.1.1v0.6": {
                 "rationale": "",
@@ -281,10 +307,14 @@ class TestReporter:
         ), "Expected a HTML tag wrapping 'User justification not provided'"
 
     def test_get_annotation_comment_valid(self):
+        """
+        Tests Reporter._get_annotation_comment() returns the expected comment
+        for a given policy.
+        """
         annotations = {
             "GWS.GMAIL.1.1v0.6": {
                 "incorrectresult": True,
-                "comment": "This control is incorrectly marked as non-compliant due to a known issue.",
+                "comment": "This control is incorrectly marked as non-compliant.",
             },
         }
 
@@ -293,9 +323,13 @@ class TestReporter:
         comment = reporter._get_annotation_comment("GWS.GMAIL.1.1v0.6")
 
         assert isinstance(comment, str)
-        assert "This control is incorrectly marked as non-compliant due to a known issue." in comment
+        assert "This control is incorrectly marked as non-compliant." in comment
 
     def test_get_annotation_comment_invalid(self):
+        """
+        Tests Reporter._get_annotation_comment() returns None for cases
+        where the annotated policies are declared incorrectly in the config file.
+        """
         policy = "GWS.GMAIL.1.1v0.6"
 
         # If no policy id found in annotations object
@@ -319,6 +353,10 @@ class TestReporter:
         assert reporter._get_annotation_comment(policy) is None
 
     def test_get_remediation_date_valid(self):
+        """
+        Tests Reporter._get_remediation_date() returns the expected date
+        for a given policy.
+        """
         policy = "GWS.GMAIL.1.1v0.6"
         annotations = {
             policy: {
@@ -331,9 +369,14 @@ class TestReporter:
         assert remediation_date == "2035-12-31"
 
     def test_get_remediation_date_invalid(self):
-        # This method simply pulls the remediation date from a policy if it exists.
-        # Its not handling validation to check invalid date formats like YYYY-MM-DD 
-        # or things like delimiting by / instead of -, e.g. 12/31/2035 vs. 12-31-2035.
+        """
+        Tests Reporter._get_remediation_date() returns None for cases
+        where the remediation date is not properly specified.
+
+        This method simply pulls the remediation date from a policy if it exists.
+        Its not handling validation to check invalid date formats like YYYY-MM-DD
+        or things like delimiting by / instead of -, e.g. 12/31/2035 vs. 12-31-2035.
+        """
         policy = "GWS.GMAIL.1.1v0.6"
 
         # If no policy id found in annotations object
@@ -357,10 +400,14 @@ class TestReporter:
         assert reporter._get_remediation_date(policy) is None
 
     def test_is_control_marked_incorrect_valid(self):
+        """
+        Tests Reporter._is_control_marked_incorrect() returns True for cases
+        where the control is marked as incorrect.
+        """
         policy = "GWS.GMAIL.1.1v0.6"
         annotations = {
             policy: {
-                "comment": "This control is incorrectly marked as non-compliant due to a known issue.",
+                "comment": "This control is incorrectly marked as non-compliant.",
                 "incorrectresult": True,
             }
         }
@@ -369,6 +416,10 @@ class TestReporter:
         assert reporter._is_control_marked_incorrect(policy) is True
 
     def test_is_control_marked_incorrect_invalid(self):
+        """
+        Tests Reporter._is_control_marked_incorrect() returns False for invalid cases
+        or when incorrectresult is set to false.
+        """
         policy = "GWS.GMAIL.1.1v0.6"
 
         # If no policy id found in annotations object
@@ -388,6 +439,10 @@ class TestReporter:
         assert reporter._is_control_marked_incorrect(policy) is False
 
     def test_sanitize_details(self):
+        """
+        Tests Reporter._sanitize_details() removes HTML tags and
+        DNS info from details.
+        """
         details = (
             "Example One<br>Example Two<br>"
             f"{Reporter._log_based_warning}"
@@ -407,7 +462,14 @@ class TestReporter:
         # DNS log link removed
         assert "View DNS logs" not in out and "$dns-logs" not in out
 
-    def test_transform_rego_output_to_individual_reports(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    def test_transform_rego_output_to_individual_reports(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch
+    ):
+        """
+        Tests Reporter.rego_json_to_ind_reports() with sample rego output data.
+        """
         tmp = tmp_path
         (tmp / "IndividualReport").mkdir(parents=True)
         (tmp / "styles").mkdir(parents=True)
@@ -415,11 +477,19 @@ class TestReporter:
         (tmp / "templates").mkdir(parents=True)
 
         pkg_root = Path(scubagoggles_pkg.__file__).resolve().parent
-        individual_report_template = (pkg_root / "reporter" / "IndividualReport" / "IndividualReportTemplate.html").read_text(encoding="utf-8")
-        (tmp / "IndividualReport" / "IndividualReportTemplate.html").write_text(individual_report_template, encoding="utf-8")
+        individual_report_template = (
+            pkg_root / "reporter" / "IndividualReport" / "IndividualReportTemplate.html"
+        ).read_text(encoding="utf-8")
+        (tmp / "IndividualReport" / "IndividualReportTemplate.html").write_text(
+            individual_report_template, encoding="utf-8"
+        )
 
-        dark_mode_toggle_template = (pkg_root / "reporter" / "templates" / "DarkModeToggleTemplate.html").read_text(encoding="utf-8")
-        (tmp / "templates" / "DarkModeToggleTemplate.html").write_text(dark_mode_toggle_template, encoding="utf-8")
+        dark_mode_toggle_template = (
+            pkg_root / "reporter" / "templates" / "DarkModeToggleTemplate.html"
+        ).read_text(encoding="utf-8")
+        (tmp / "templates" / "DarkModeToggleTemplate.html").write_text(
+            dark_mode_toggle_template, encoding="utf-8"
+        )
 
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
         (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
