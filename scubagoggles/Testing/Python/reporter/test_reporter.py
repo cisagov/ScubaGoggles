@@ -418,13 +418,6 @@ class TestReporter:
         individual_report_template = (pkg_root / "reporter" / "IndividualReport" / "IndividualReportTemplate.html").read_text(encoding="utf-8")
         (tmp / "IndividualReport" / "IndividualReportTemplate.html").write_text(individual_report_template, encoding="utf-8")
 
-        alerts_descriptions = json.dumps({
-            "Leaked password": "Google detected compromised credentials requiring a reset of the user's password.",
-            "Google Operations": "Provides details about security and privacy issues that affect your Google Workspace services.",
-            "Drive settings changed": "An admin has changed Google Workspace Drive settings.",
-        }, indent=2)
-        (tmp / "IndividualReport" / "AlertsDescriptions.json").write_text(alerts_descriptions, encoding="utf-8")
-
         dark_mode_toggle_template = (pkg_root / "reporter" / "templates" / "DarkModeToggleTemplate.html").read_text(encoding="utf-8")
         (tmp / "templates" / "DarkModeToggleTemplate.html").write_text(dark_mode_toggle_template, encoding="utf-8")
 
@@ -497,7 +490,8 @@ class TestReporter:
         assert group["GroupName"] == "Mail Delegation"
         assert group["GroupNumber"] == "1"
         assert group["GroupReferenceURL"].startswith("https://github.com/cisagov/")
-        assert group["GroupReferenceURL"].endswith("scubagoggles/baselines/gmail.md#1-mail-delegation")
+        expected_suffix = "scubagoggles/baselines/gmail.md#1-mail-delegation"
+        assert group["GroupReferenceURL"].endswith(expected_suffix)
         assert group["Controls"] == [
             {
                 "Control ID": "GWS.GMAIL.1.1v0.6",
