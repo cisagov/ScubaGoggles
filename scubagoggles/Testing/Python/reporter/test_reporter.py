@@ -31,97 +31,77 @@ class TestReporter:
         params = {**defaults, **overrides}
         return Reporter(**params)
 
-    def test_create_html_table_empty(self):
+    @pytest.mark.parametrize(
+        "table_data",
+        [
+            [],
+            [
+                {
+                    "Customer Name": "Cool Example Org",
+                    "Customer Domain": "example.org",
+                    "Customer ID": "ABCDEFG",
+                    "Report Date": "10/10/2025 13:08:59 Pacific Daylight Time",
+                    "Baseline Version": "0.6",
+                    "Tool Version": "v0.6.0",
+                }
+            ],
+            [
+                {
+                    "Control ID": "GWS.GMAIL.1.1v0.6",
+                    "Requirement": "Mail Delegation SHOULD be disabled.",
+                    "Result": "Warning",
+                    "Criticality": "Should",
+                    "Details": (
+                        "The following OUs are non-compliant:\n"
+                        "<ul>\n"
+                        "  <li>Terry Hahn's OU: Mail delegation is enabled</li>\n"
+                        "</ul>"
+                    ),
+                },
+                {
+                    "Control ID": "GWS.GMAIL.2.1v0.6",
+                    "Requirement": "DKIM SHOULD be enabled for all domains.",
+                    "Result": "Warning",
+                    "Criticality": "Should",
+                    "Details": (
+                        "The following OUs are non-compliant:\n"
+                        "<ul>\n"
+                        "  <li>Terry Hahn's OU: DKIM is not enabled</li>\n"
+                        "</ul>"
+                    ),
+                },
+            ],
+        ],
+    )
+    def test_create_html_table(self, table_data):
         """
-        Tests Reporter.create_html_table() with an empty list of rows.
+        Tests Reporter.create_html_table() for these cases:
+            - empty list to indicate no table
+            - tenant info table
+            - control info table
         """
         reporter = self._reporter_factory()
-        assert reporter.create_html_table([]) == ""
+        html = reporter.create_html_table(table_data)
 
-    def test_create_html_table_tenant_info(self):
-        """
-        Tests Reporter.create_html_table() with tenant data.
-        """
-        rows = [
-            {
-                "Customer Name": "Cool Example Org",
-                "Customer Domain": "example.org",
-                "Customer ID": "ABCDEFG",
-                "Report Date": "10/10/2025 13:08:59 Pacific Daylight Time",
-                "Baseline Version": "0.6",
-                "Tool Version": "v0.6.0",
-            }
-        ]
-
-        reporter = self._reporter_factory()
-        html = reporter.create_html_table(rows)
-        assert html.startswith("<table")
-        assert "<thead>" in html and "<tbody>" in html
-        assert html.count("<th>") == 6
-        assert html.count("<td>") == 6
-
-        headers = re.findall(r"<th>(.*?)</th>", html, flags=re.S)
-        assert headers == [
-            "Customer Name",
-            "Customer Domain",
-            "Customer ID",
-            "Report Date",
-            "Baseline Version",
-            "Tool Version",
-        ]
-
-        # Check if cell values are correct
-        assert "Cool Example Org" in html
-        assert "example.org" in html
-        assert "ABCDEFG" in html
-        assert "10/10/2025 13:08:59 Pacific Daylight Time" in html
-        assert "0.6" in html
-        assert "v0.6.0" in html
-
-
-    def test_create_html_table_control_info(self):
-        """
-        Tests Reporter.create_html_table() with control table data.
-        """
-        rows = [
-            {
-                "Control ID": "GWS.GMAIL.1.1v0.6",
-                "Requirement": "Mail Delegation SHOULD be disabled.",
-                "Result": "Warning",
-                "Criticality": "Should",
-                "Details": (
-                    "The following OUs are non-compliant:\n"
-                    "<ul>\n"
-                    "  <li>Terry Hahn's OU: Mail delegation is enabled</li>\n"
-                    "</ul>"
-                ),
-            }
-        ]
-
-        reporter = self._reporter_factory()
-        html = reporter.create_html_table(rows)
+        if not table_data:
+            assert html == ""
+            return
 
         assert html.startswith("<table")
         assert "<thead>" in html and "<tbody>" in html
-        assert html.count("<th>") == 5
-        assert html.count("<td>") == 5
+
+        expected_headers = list(table_data[0].keys())
+        assert html.count("<th>") == len(expected_headers)
+        assert html.count("<td>") == len(table_data) * len(expected_headers)
 
         headers = re.findall(r"<th>(.*?)</th>", html, flags=re.S)
-        assert headers == [
-            "Control ID",
-            "Requirement",
-            "Result",
-            "Criticality",
-            "Details"
-        ]
+        assert headers == expected_headers
 
-        # Check if cell values are correct
-        assert "GWS.GMAIL.1.1v0.6" in html
-        assert "Mail Delegation SHOULD be disabled." in html
-        assert "Warning" in html
-        assert "Should" in html
-        assert "The following OUs are non-compliant:" in html
-        assert "Terry Hahn's OU: Mail delegation is enabled" in html
+        for table in table_data:
+            assert list(table.keys()) == expected_headers
+
+            for value in table.values():
+                assert str(value) in html
 
     def test_build_front_page_html(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
         """
