@@ -1,3 +1,6 @@
+"""
+test_reporter tests the Reporter class.
+"""
 from pathlib import Path
 import re
 import pytest

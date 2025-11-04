@@ -1,3 +1,6 @@
+"""
+test_md_parser.py tests the MarkdownParser class.
+"""
 from pathlib import Path
 import re
 import pytest
@@ -13,6 +16,9 @@ class TestMarkdownParser:
         return Path(scubagoggles_pkg.__file__).resolve().parent / "baselines"
 
     def test_parse_baselines_returns_correct_format(self):
+        """
+        Tests the MarkdownParser.parse_baselines() public method for expected output structure.
+        """
         parser = MarkdownParser(self._baselines_directory())
         result = parser.parse_baselines(["gmail"])
 
@@ -47,6 +53,10 @@ class TestMarkdownParser:
                 assert id_pattern.match(control["Id"]), f"Invalid Policy ID format: {control['Id']}"
 
     def test_parse_baselines_raises_parser_error_for_missing_policies_section(self):
+        """
+        Tests if the MarkdownParser.parse_baselines() public method 
+        raises a MarkdownParserError for missing policies section.
+        """
         snippets_dir = Path(__file__).parent / "snippets"
         parser = MarkdownParser(snippets_dir)
 
@@ -54,6 +64,10 @@ class TestMarkdownParser:
             parser.parse_baselines(["missing_policies_section"])
 
     def test_parse_baselines_raises_parser_error_for_product_mismatch(self):
+        """
+        Tests if the MarkdownParser.parse_baselines() public method
+        raises a MarkdownParserError for product mismatch.
+        """
         snippets_dir = Path(__file__).parent / "snippets"
         parser = MarkdownParser(snippets_dir)
 
@@ -65,6 +79,10 @@ class TestMarkdownParser:
         assert "different product encountered calendar != product_mismatch" in msg
 
     def test_parse_baselines_raises_parser_error_for_group_mismatch(self):
+        """
+        Tests if the MarkdownParser.parse_baselines() public method
+        raises a MarkdownParserError for group mismatch.
+        """
         snippets_dir = Path(__file__).parent / "snippets"
         parser = MarkdownParser(snippets_dir)
 
@@ -101,6 +119,10 @@ class TestMarkdownParser:
         suffix: str,
         expect_error: bool
     ):
+        """
+        Tests if the MarkdownParser.parse_baselines() public method
+        raises a MarkdownParserError for invalid policy ID versions.
+        """
         base_dir = self._render_invalid_suffix(tmp_path, suffix)
         parser = MarkdownParser(base_dir)
 
@@ -116,6 +138,10 @@ class TestMarkdownParser:
             assert "invalid_policyid_version" in result
 
     def test_parse_baselines_raises_parser_error_for_missing_policy_description(self):
+        """
+        Tests if the MarkdownParser.parse_baselines() public method
+        raises a MarkdownParserError for missing policy description.
+        """
         snippets_dir = Path(__file__).parent / "snippets"
         parser = MarkdownParser(snippets_dir)
 
