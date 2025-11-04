@@ -236,7 +236,9 @@ class TestReporter:
         }
         reporter = self._reporter_factory(omissions=omissions)
 
+        # pylint: disable=protected-access
         assert reporter._is_control_omitted(gmail_1_1) is False
+        # pylint: disable=protected-access
         assert reporter._is_control_omitted(gmail_1_2) is False
 
     def test_get_omission_rationale_returns_expected_html_tag(self):
