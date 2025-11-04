@@ -332,9 +332,12 @@ class MarkdownParser:
                 for value_line in baseline_content[lines_seen:]:
 
                     if (
-                        self._baseline_re.match(value_line)  # Next baseline, e.g. #### GWS.GMAIL.1.2v1
-                        or self._level2_re.match(value_line) # New group, e.g., ## 2. Group Name
-                        or self._above4_re.match(value_line) # Any header above level 4, e.g., ### Policies
+                        # Next baseline, e.g. #### GWS.GMAIL.1.2v1
+                        self._baseline_re.match(value_line)
+                        # New group, e.g., ## 2. Group Name
+                        or self._level2_re.match(value_line)
+                        # Any header above level 4, e.g., ### Policies
+                        or self._above4_re.match(value_line)
                     ):
                         break
 

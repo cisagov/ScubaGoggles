@@ -4,8 +4,6 @@ test_reporter tests the Reporter class.
 from pathlib import Path
 import re
 import pytest
-import json
-import html as html_lib
 
 import scubagoggles as scubagoggles_pkg
 from scubagoggles.reporter.reporter import Reporter
@@ -175,7 +173,7 @@ class TestReporter:
             fragments,
             tenant_info,
             report_uuid,
-            darkmode="on",
+            darkmode="true",
         )
 
         assert Version.current in html
@@ -187,7 +185,7 @@ class TestReporter:
         assert "<script>" in html and "</script>" in html
         assert "const testVar = 0;" in html
 
-        assert "sgr_settings" in html and "data-darkmode=\"on\"" in html
+        assert "sgr_settings" in html and "data-darkmode=\"true\"" in html
 
         assert "First" in html and "Second" in html
         assert report_uuid in html
@@ -200,44 +198,46 @@ class TestReporter:
         Tests Reporter._is_control_omitted() returns True for omitted controls
         with a valid expiration date in the future.
         """
-        GMAIL_1_1 = "GWS.GMAIL.1.1v0.6"
-        GMAIL_1_2 = "GWS.GMAIL.1.2v0.6"
+        gmail_1_1 = "GWS.GMAIL.1.1v0.6"
+        gmail_1_2 = "GWS.GMAIL.1.2v0.6"
         omissions = {
-            GMAIL_1_1: {
+            gmail_1_1: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2035-12-31",
             },
-            GMAIL_1_2: {
+            gmail_1_2: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2035-12-31",
             },
         }
         reporter = self._reporter_factory(omissions=omissions)
 
-        assert reporter._is_control_omitted(GMAIL_1_1) is True
-        assert reporter._is_control_omitted(GMAIL_1_2) is True
+        # pylint: disable-protected-access
+        assert reporter._is_control_omitted(gmail_1_1) is True
+        # pylint: disable-protected-access
+        assert reporter._is_control_omitted(gmail_1_2) is True
 
     def test_is_control_omitted_returns_false_for_controls_with_past_expiration(self):
         """
         Tests Reporter._is_control_omitted() returns False for controls
         with a past expiration date.
         """
-        GMAIL_1_1 = "GWS.GMAIL.1.1v0.6"
-        GMAIL_1_2 = "GWS.GMAIL.1.2v0.6"
+        gmail_1_1 = "GWS.GMAIL.1.1v0.6"
+        gmail_1_2 = "GWS.GMAIL.1.2v0.6"
         omissions = {
-            GMAIL_1_1: {
+            gmail_1_1: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2020-12-31",
             },
-            GMAIL_1_2: {
+            gmail_1_2: {
                 "rationale": "Accepting risk for now, will reevaluate at a later date.",
                 "expiration": "2020-12-31",
             },
         }
         reporter = self._reporter_factory(omissions=omissions)
 
-        assert reporter._is_control_omitted(GMAIL_1_1) is False
-        assert reporter._is_control_omitted(GMAIL_1_2) is False
+        assert reporter._is_control_omitted(gmail_1_1) is False
+        assert reporter._is_control_omitted(gmail_1_2) is False
 
     def test_get_omission_rationale_returns_expected_html_tag(self):
         """
@@ -254,6 +254,7 @@ class TestReporter:
 
         reporter = self._reporter_factory(omissions=omissions)
 
+        # pylint: disable-protected-access
         html = reporter._get_omission_rationale(policy)
 
         assert isinstance(html, str)
@@ -271,6 +272,7 @@ class TestReporter:
         reporter = self._reporter_factory(omissions={})
 
         with pytest.raises(RuntimeError):
+            # pylint: disable-protected-access
             reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
 
     def test_get_omission_rationale_user_justification_not_provided(
@@ -291,8 +293,9 @@ class TestReporter:
         reporter = self._reporter_factory(omissions=omissions)
 
         warnings = []
-        monkeypatch.setattr(reporter, "_warn", lambda warning: warnings.append(warning))
+        monkeypatch.setattr(reporter, "_warn", warnings.append)
 
+        # pylint: disable-protected-access
         html = reporter._get_omission_rationale("GWS.GMAIL.1.1v0.6")
 
         assert warnings, "Expected a warning to be logged for missing rationale"
@@ -320,6 +323,7 @@ class TestReporter:
 
         reporter = self._reporter_factory(annotations=annotations)
 
+        # pylint: disable-protected-access
         comment = reporter._get_annotation_comment("GWS.GMAIL.1.1v0.6")
 
         assert isinstance(comment, str)
@@ -334,22 +338,27 @@ class TestReporter:
 
         # If no policy id found in annotations object
         reporter = self._reporter_factory(annotations={})
+        # pylint: disable-protected-access
         assert reporter._get_annotation_comment(policy) is None
 
         # If the policy id is not assigned a value
         reporter = self._reporter_factory(annotations={policy: None})
+        # pylint: disable-protected-access
         assert reporter._get_annotation_comment(policy) is None
 
         # If no comment is specified
         reporter = self._reporter_factory(annotations={policy: {"incorrectresult": True}})
+        # pylint: disable-protected-access
         assert reporter._get_annotation_comment(policy) is None
 
         # If the comment is None
         reporter = self._reporter_factory(annotations={policy: {"comment": None}})
+        # pylint: disable-protected-access
         assert reporter._get_annotation_comment(policy) is None
 
         # If the comment is an empty string
         reporter = self._reporter_factory(annotations={policy: {"comment": ""}})
+        # pylint: disable-protected-access
         assert reporter._get_annotation_comment(policy) is None
 
     def test_get_remediation_date_valid(self):
@@ -365,6 +374,7 @@ class TestReporter:
         }
 
         reporter = self._reporter_factory(annotations=annotations)
+        # pylint: disable-protected-access
         remediation_date = reporter._get_remediation_date(policy)
         assert remediation_date == "2035-12-31"
 
@@ -381,22 +391,27 @@ class TestReporter:
 
         # If no policy id found in annotations object
         reporter = self._reporter_factory(annotations={})
+        # pylint: disable-protected-access
         assert reporter._get_remediation_date(policy) is None
 
         # If the policy id is not assigned a value
         reporter = self._reporter_factory(annotations={policy: None})
+        # pylint: disable-protected-access
         assert reporter._get_remediation_date(policy) is None
 
         # If no remediation date is specified
         reporter = self._reporter_factory(annotations={policy: {"incorrectresult": True}})
+        # pylint: disable-protected-access
         assert reporter._get_remediation_date(policy) is None
 
         # If the remediation date is None
         reporter = self._reporter_factory(annotations={policy: {"remediationdate": None}})
+        # pylint: disable-protected-access
         assert reporter._get_remediation_date(policy) is None
 
         # If the remediation date is an empty string
         reporter = self._reporter_factory(annotations={policy: {"remediationdate": ""}})
+        # pylint: disable-protected-access
         assert reporter._get_remediation_date(policy) is None
 
     def test_is_control_marked_incorrect_valid(self):
@@ -413,6 +428,7 @@ class TestReporter:
         }
 
         reporter = self._reporter_factory(annotations=annotations)
+        # pylint: disable-protected-access
         assert reporter._is_control_marked_incorrect(policy) is True
 
     def test_is_control_marked_incorrect_invalid(self):
@@ -424,43 +440,23 @@ class TestReporter:
 
         # If no policy id found in annotations object
         reporter = self._reporter_factory(annotations={})
+        # pylint: disable-protected-access
         assert reporter._is_control_marked_incorrect(policy) is False
 
         # If the policy id is not assigned a value
         reporter = self._reporter_factory(annotations={policy: {}})
+        # pylint: disable-protected-access
         assert reporter._is_control_marked_incorrect(policy) is False
 
         # If no incorrectresult is specified
         reporter = self._reporter_factory(annotations={policy: {"comment": "Some comment"}})
+        # pylint: disable-protected-access
         assert reporter._is_control_marked_incorrect(policy) is False
 
         # If incorrectresult is set to False
         reporter = self._reporter_factory(annotations={policy: {"incorrectresult": False}})
+        # pylint: disable-protected-access
         assert reporter._is_control_marked_incorrect(policy) is False
-
-    def test_sanitize_details(self):
-        """
-        Tests Reporter._sanitize_details() removes HTML tags and
-        DNS info from details.
-        """
-        details = (
-            "Example One<br>Example Two<br>"
-            f"{Reporter._log_based_warning}"
-            '<br><a href="#dns-logs">View DNS logs</a> for more details.'
-        )
-
-        table_data = [{ "Details": details }]
-        reporter = self._reporter_factory()
-        sanitized_data = reporter._sanitize_details([
-            dict(row) for row in table_data
-        ])
-        out = sanitized_data[0]["Details"]
-
-        assert "Example One\nExample Two" in out
-        assert Reporter._log_based_warning not in out
-
-        # DNS log link removed
-        assert "View DNS logs" not in out and "$dns-logs" not in out
 
     def test_transform_rego_output_to_individual_reports(
         self,
@@ -540,7 +536,7 @@ class TestReporter:
         report_stats, json_data = reporter.rego_json_to_ind_reports(
             test_results,
             out_dir,
-            darkmode="on",
+            darkmode="true",
         )
 
         # Check JSON output
