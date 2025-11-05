@@ -8,5 +8,6 @@ This section determines what information is shared from calendars with external 
 
 ### Policies
 
+<!-- md_parser.py expects the file name to match the product name -->
 #### GWS.invalid_policyid_version.1.1__SUFFIX__
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."

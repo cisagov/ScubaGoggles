@@ -11,7 +11,7 @@ from scubagoggles.version import Version
 
 class TestReporter:
     """Unit tests for the Reporter class."""
-    def _reporter_factory(self, **overrides) -> Reporter:
+    def _reporter(self, **overrides) -> Reporter:
         defaults = {
             "product": "gmail",
             "tenant_id": "ABCDEFG",
@@ -80,7 +80,7 @@ class TestReporter:
             - tenant info table
             - control info table
         """
-        reporter = self._reporter_factory()
+        reporter = self._reporter()
         html = reporter.create_html_table(table_data)
 
         if not table_data:
@@ -134,7 +134,7 @@ class TestReporter:
         (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
 
         # Patch the actual Reporter class attribute for _reporter_path,
-        # otherwise the local instance returned by _reporter_factory() won't use the temp files.
+        # otherwise the local instance returned by _reporter() won't use the temp files.
         monkeypatch.setattr(Reporter, "_reporter_path", tmp, raising=True)
 
         fragments = [
@@ -148,7 +148,7 @@ class TestReporter:
         }
         report_uuid = "123e4567-e89b-12d3-a456-426614174000"
 
-        reporter = self._reporter_factory()
+        reporter = self._reporter()
         html = reporter.build_front_page_html(
             fragments,
             tenant_info,
@@ -202,7 +202,7 @@ class TestReporter:
         Tests if Reporter._is_control_omitted() returns True/false
         for different expiration dates.
         """
-        reporter = self._reporter_factory(omissions=omissions)
+        reporter = self._reporter(omissions=omissions)
         for policy in omissions:
             assert reporter._is_control_omitted(policy) is expected
 
@@ -254,7 +254,7 @@ class TestReporter:
         expects_warning = cases["expects_warning"]
         expected_error = cases["expected_error"]
 
-        reporter = self._reporter_factory(omissions=omissions)
+        reporter = self._reporter(omissions=omissions)
         warnings = []
         monkeypatch.setattr(reporter, "_warn", warnings.append)
 
@@ -309,7 +309,7 @@ class TestReporter:
               declared incorrectly in the config file.
             - returns None when no comment is specified.
         """
-        reporter = self._reporter_factory(annotations=annotations)
+        reporter = self._reporter(annotations=annotations)
 
         for policy in annotations:
             comment = reporter._get_annotation_comment(policy)
@@ -349,7 +349,7 @@ class TestReporter:
         Its not handling validation to check invalid date formats like YYYY-MM-DD
         or things like delimiting by / instead of -, e.g. 12/31/2035 vs. 12-31-2035.
         """
-        reporter = self._reporter_factory(annotations=annotations)
+        reporter = self._reporter(annotations=annotations)
 
         for policy in annotations:
             remediation_date = reporter._get_remediation_date(policy)
@@ -385,7 +385,7 @@ class TestReporter:
             - returns False for invalid cases or when incorrectResult
               is set to false.
         """
-        reporter = self._reporter_factory(annotations=annotations)
+        reporter = self._reporter(annotations=annotations)
 
         for policy in annotations:
             is_incorrect = reporter._is_control_marked_incorrect(policy)
@@ -424,10 +424,10 @@ class TestReporter:
         (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
 
         # Patch the actual Reporter class attribute for _reporter_path,
-        # otherwise the local instance returned by _reporter_factory() won't use the temp files.
+        # otherwise the local instance returned by _reporter() won't use the temp files.
         monkeypatch.setattr(Reporter, "_reporter_path", tmp, raising=True)
 
-        reporter = self._reporter_factory(
+        reporter = self._reporter(
             product = "gmail",
             product_policies = [
                 {

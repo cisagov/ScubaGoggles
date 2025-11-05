@@ -10,16 +10,20 @@ from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 
 class TestMarkdownParser:
     """Unit tests for the MarkdownParser class."""
-
-    @staticmethod
-    def _baselines_directory() -> Path:
+    def _baselines_directory(self) -> Path:
         return Path(scubagoggles_pkg.__file__).resolve().parent / "baselines"
+
+    def _snippets_directory(self) -> Path:
+        return Path(__file__).parent / "snippets"
+
+    def _parser(self, base_dir: Path) -> MarkdownParser:
+        return MarkdownParser(base_dir)
 
     def test_parse_baselines_returns_correct_format(self):
         """
         Tests the MarkdownParser.parse_baselines() public method for expected output structure.
         """
-        parser = MarkdownParser(self._baselines_directory())
+        parser = self._parser(self._baselines_directory())
         result = parser.parse_baselines(["gmail"])
 
         assert isinstance(result, dict)
@@ -52,46 +56,53 @@ class TestMarkdownParser:
                 # Confirm policy ID format
                 assert id_pattern.match(control["Id"]), f"Invalid Policy ID format: {control['Id']}"
 
-    def test_parse_baselines_raises_parser_error_for_missing_policies_section(self):
+    @pytest.mark.parametrize(
+        ("snippet_name", "expected_fragment"),
+        [
+            (
+                "missing_policies_section",
+                '"Policies" section missing for group id 1 (Mail Delegation)'
+            ),
+            (
+                "product_mismatch",
+                (
+                    "different product encountered calendar != product_mismatch "
+                    "for group id 1 (External Sharing Options)"
+                )
+            ),
+            (
+                "group_mismatch",
+                "mismatching group number (2) for group id 1 (External Sharing Options)"
+            ),
+            (
+                "duplicate_policy_id",
+                "expected baseline item 2, got item 1 for group id 1 (Example Group)"
+            ),
+            (
+                "duplicate_policy_id_nonconsecutive",
+                "expected baseline item 3, got item 2 for group id 1 (Example Group)"
+            ),
+        ],
+    )
+    def test_parse_baselines_raises_parser_error(
+        self,
+        snippet_name: str,
+        expected_fragment: str,
+    ):
         """
-        Tests if the MarkdownParser.parse_baselines() public method 
-        raises a MarkdownParserError for missing policies section.
+        Tests if MarkdownParser.parse_baselines() handles these cases:
+            - raises a MarkdownParserError for missing policies section
+            - raises a MarkdownParserError for product mismatch
+            - raises a MarkdownParserError for group mismatch
+            - duplicate policy IDs
         """
-        snippets_dir = Path(__file__).parent / "snippets"
-        parser = MarkdownParser(snippets_dir)
-
-        with pytest.raises(MarkdownParserError):
-            parser.parse_baselines(["missing_policies_section"])
-
-    def test_parse_baselines_raises_parser_error_for_product_mismatch(self):
-        """
-        Tests if the MarkdownParser.parse_baselines() public method
-        raises a MarkdownParserError for product mismatch.
-        """
-        snippets_dir = Path(__file__).parent / "snippets"
-        parser = MarkdownParser(snippets_dir)
+        parser = self._parser(self._snippets_directory())
 
         with pytest.raises(MarkdownParserError) as exception_info:
-            parser.parse_baselines(["product_mismatch"])
+            parser.parse_baselines([snippet_name])
 
         msg = str(exception_info.value)
-        # md_parser.py will raise:
-        assert "different product encountered calendar != product_mismatch" in msg
-
-    def test_parse_baselines_raises_parser_error_for_group_mismatch(self):
-        """
-        Tests if the MarkdownParser.parse_baselines() public method
-        raises a MarkdownParserError for group mismatch.
-        """
-        snippets_dir = Path(__file__).parent / "snippets"
-        parser = MarkdownParser(snippets_dir)
-
-        with pytest.raises(MarkdownParserError) as exception_info:
-            parser.parse_baselines(["group_mismatch"])
-
-        msg = str(exception_info.value)
-        # md_parser.py will raise:
-        assert "mismatching group number (2) for group id 1 (External Sharing Options)" in msg
+        assert expected_fragment in msg
 
     @staticmethod
     def _render_invalid_suffix(tmp_path: Path, suffix: str) -> Path:
@@ -142,8 +153,7 @@ class TestMarkdownParser:
         Tests if the MarkdownParser.parse_baselines() public method
         raises a MarkdownParserError for missing policy description.
         """
-        snippets_dir = Path(__file__).parent / "snippets"
-        parser = MarkdownParser(snippets_dir)
+        parser = self._parser(self._snippets_directory())
 
         with pytest.raises(MarkdownParserError) as exception_info:
             parser.parse_baselines(["missing_policy_description"])
