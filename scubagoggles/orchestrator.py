@@ -145,6 +145,7 @@ class Orchestrator:
 
         with Provider(args.customerid,
                       args.credentials,
+                      args.accesstoken,
                       args.subjectemail) as provider:
             provider_dict = provider.call_gws_providers(products, args.quiet)
             provider_dict['successful_calls'] = list(provider.successful_calls)
@@ -603,11 +604,12 @@ class Orchestrator:
             args.outputpath = Path(args.outputpath)
         args.outputpath = args.outputpath.resolve()
 
-        if args.credentials is None:
-            raise UserRuntimeError('Google credentials file path not provided. '
-                'Either save the credentials path using the ScubaGoggles setup '
-                'utility or specify the path using the "--credentials" option.')
-        args.credentials = args.credentials.resolve()
+        if args.accesstoken is not None:
+            if args.credentials is None:
+                raise UserRuntimeError('Google credentials file path not provided. '
+                    'Either save the credentials path using the ScubaGoggles setup '
+                    'utility or specify the path using the "--credentials" option.')
+            args.credentials = args.credentials.resolve()
 
         args.opapath = args.opapath.resolve()
         args.regopath = args.regopath.resolve()
@@ -621,7 +623,7 @@ class Orchestrator:
             raise UserRuntimeError(f'? "{args.opapath}" - OPA executable '
                                    f'missing - {see_docs}') from fnf
 
-        if not args.credentials.exists():
+        if args.accesstoken is not None and not args.credentials.exists():
             raise UserRuntimeError(f'? "{args.credentials}" - Google '
                                    f'credentials file missing - {see_docs}')
 

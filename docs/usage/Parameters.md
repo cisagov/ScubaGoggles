@@ -34,12 +34,15 @@ options:
   -h, --help            show this help message and exit
   --credentials <credentials-JSON-file>, -c <credentials-JSON-file>
                         The location and name of the OAuth / service account credentials json file. Required unless the
-                        credentials path has been saved using the ScubaGoggles setup utility.
+                        credentials path has been saved using the ScubaGoggles setup utility or an access token is
+                        provided.
+  --accesstoken <access-token>
+                        Access token string to be used in lieu of a credentials file. If provided, will take precendence
+                        over the credentials file.
   --baselines <baseline> [<baseline> ...], -b <baseline> [<baseline> ...]
                         A list of one or more abbreviated GWS baseline names that the tool will assess. Defaults to all
                         baselines. Choices: calendar, chat, classroom, commoncontrols, drive, gemini, gmail, groups,
-                        meet, rules, sites.
-
+                        meet, sites.
   --outputpath <directory>, -o <directory>
                         The folder path where both the output JSON & HTML report will be created.
   --outjsonfilename <output-JSON-file>
