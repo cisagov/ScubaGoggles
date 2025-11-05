@@ -11,11 +11,11 @@ from sys import platform
 
 # pylint: skip-file
 
-# The location of the RegoTests directory is where this script is located.
+# The location of the Rego directory is where this script is located.
 # The location of the Rego code is one level up.
 
 test_dir = Path(__file__).parent
-rego_dir = test_dir.parent / 'rego'
+rego_dir = test_dir.parent.parent / 'rego'
 
 gws_baselines = [
     "gmail",
@@ -47,9 +47,9 @@ parser.add_argument('-c', '--controls', type = str, nargs="+",
 default=[], help="Space-separated list of control group numbers to test within a specific baseline."
 "Can only be used when a single baseline is specified. By default all are run.")
 
-parser.add_argument('-o', '--opapath', type=str, default='../..', metavar='',
+parser.add_argument('-o', '--opapath', type=str, default='../../..', metavar='',
 help='The relative path to the directory containing the OPA executable. ' +
-    'Defaults to "../.." the current executing directory.')
+    'Defaults to "../../.." the current executing directory.')
 
 parser.add_argument('-v', action='store_true',
 help='Verbose flag, passed to opa, increases output.')
@@ -90,11 +90,11 @@ for b in args.baselines:
             print(f"\n==== Testing {b} control {c} ====")
             c = c.zfill(2)
             command = (f'{OPA_EXE} test {rego_dir} '
-                       f'{test_dir}/RegoTests/{b}/{b}{c}_test.rego {V_FLAG}')
+                       f'{test_dir}/Rego/{b}/{b}{c}_test.rego {V_FLAG}')
             print(command)
             subprocess.run(command.split(), check=False)
     else:
         print(f"\n==== Testing {b} ====")
-        command = f'{OPA_EXE} test {rego_dir} {test_dir}/RegoTests/{b} {V_FLAG}'
+        command = f'{OPA_EXE} test {rego_dir} {test_dir}/Rego/{b} {V_FLAG}'
         print(command)
         subprocess.run(command.split(), check=False)
