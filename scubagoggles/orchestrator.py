@@ -604,7 +604,7 @@ class Orchestrator:
             args.outputpath = Path(args.outputpath)
         args.outputpath = args.outputpath.resolve()
 
-        if args.accesstoken is not None:
+        if args.accesstoken is None:
             if args.credentials is None:
                 raise UserRuntimeError('Google credentials file path not provided. '
                     'Either save the credentials path using the ScubaGoggles setup '
@@ -623,7 +623,7 @@ class Orchestrator:
             raise UserRuntimeError(f'? "{args.opapath}" - OPA executable '
                                    f'missing - {see_docs}') from fnf
 
-        if args.accesstoken is not None and not args.credentials.exists():
+        if args.accesstoken is None and not args.credentials.exists():
             raise UserRuntimeError(f'? "{args.credentials}" - Google '
                                    f'credentials file missing - {see_docs}')
 
