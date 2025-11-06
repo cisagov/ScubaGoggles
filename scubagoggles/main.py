@@ -73,7 +73,9 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         help='Enable dark mode')
 
     help_msg = ('Access token string to be used in lieu of a credentials file. '
-                'If provided, will take precendence over the credentials file.')
+                'If provided, will take precendence over the credentials file. '
+                'Advanced option; using a credentials file is the recommended '
+                'authentication method.')
     parser.add_argument('--accesstoken',
                         metavar='<access-token>',
                         type=str,

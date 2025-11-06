@@ -38,7 +38,8 @@ options:
                         provided.
   --accesstoken <access-token>
                         Access token string to be used in lieu of a credentials file. If provided, will take precendence
-                        over the credentials file.
+                        over the credentials file. Advanced option; using a credentials file is the recommended
+                        authentication method.
   --baselines <baseline> [<baseline> ...], -b <baseline> [<baseline> ...]
                         A list of one or more abbreviated GWS baseline names that the tool will assess. Defaults to all
                         baselines. Choices: calendar, chat, classroom, commoncontrols, drive, gemini, gmail, groups,
