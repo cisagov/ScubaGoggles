@@ -9,19 +9,19 @@ We focus on verifying the behavior of `scubagoggles` public class methods and ho
 To run all Python unit tests:
 
 ```bash
-pytest ./Testing/Unit/Python/
+pytest ./scubagoggles/Testing/Unit/Python/
 ```
 
 To run all tests for a specific file:
 
 ```bash
-pytest ./Testing/Unit/Python/reporter/test_reporter.py
+pytest ./scubagoggles/Testing/Unit/Python/reporter/test_reporter.py
 ```
 
 To run an individual test by name:
 
 ```bash
-pytest ./Testing/Unit/Python -k test_create_html_table
+pytest ./scubagoggles/Testing/Unit/Python -k test_create_html_table
 ```
 
 ## Test Naming Conventions
