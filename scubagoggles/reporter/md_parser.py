@@ -38,7 +38,7 @@ class MarkdownParser:
 
     _baseline_re = re.compile(r'####\s*(?P<baseline>GWS\.(?P<product>[^.]+)'
                               r'\.(?P<id>\d+)\.(?P<item>\d+)'
-                              r'(?P<version>v\d+\.?\d*))$')
+                              r'(?P<version>v[^\s]*))$')
 
     # This handles the single exception case where the combined drive
     # and docs product has a product name of "drive", but the baseline
@@ -231,6 +231,7 @@ class MarkdownParser:
 
         return result
 
+    # pylint: disable=too-many-branches
     def _parse_baselines(self,
                          baseline_content: list,
                          md_file: Path,
@@ -311,7 +312,7 @@ class MarkdownParser:
                                        group_id,
                                        group_name)
 
-                if  not Version.is_valid_suffix(version):
+                if not Version.is_valid_suffix(version):
                     message = f'invalid baseline version ({version})'
                     self._parser_error(md_file,
                                        message,
@@ -331,7 +332,21 @@ class MarkdownParser:
 
                 for value_line in baseline_content[lines_seen:]:
 
+                    if (
+                        # Next baseline, e.g. #### GWS.GMAIL.1.2v1
+                        self._baseline_re.match(value_line)
+                        # New group, e.g., ## 2. Group Name
+                        or self._level2_re.match(value_line)
+                        # Any header above level 4, e.g., ### Policies
+                        or self._above4_re.match(value_line)
+                    ):
+                        break
+
                     lines_seen += 1
+
+                    # Skip HTML comments
+                    if value_line.startswith("<!--") and value_line.endswith("-->"):
+                        continue
 
                     if not value_line:
                         if not value_lines:
