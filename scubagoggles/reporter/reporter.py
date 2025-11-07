@@ -385,12 +385,96 @@ class Reporter:
             return None
         return self._annotations[control_id]['remediationdate']
 
+    def _get_omission_rationale_plaintext(self, control_id: str) -> str:
+        """
+        Return the plain text rationale indicated in the config file for the
+        indicated control, if provided. If not, return None.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        """
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        if control_id not in self._omissions:
+            return None
+        # If any of the following conditions is true, no rationale was
+        # provided
+        no_rationale = ((self._omissions[control_id] is None) or
+                        ('rationale' not in self._omissions[control_id]) or
+                        (self._omissions[control_id]['rationale'] is None) or
+                        (self._omissions[control_id]['rationale'] == ''))
+        if no_rationale:
+            return None
+        return self._omissions[control_id]['rationale']
+
+    def _get_omission_expiration_date(self, control_id: str) -> str:
+        """
+        Return the omission expiration date in the config file for the
+        indicated control, if provided. If not provided or is empty, return None.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        """
+        # Lowercase for case-insensitive comparison
+        control_id = control_id.lower()
+        if control_id not in self._omissions:
+            return None
+        if self._omissions[control_id] is None:
+            return None
+        # If any of the following conditions is true, no date was
+        # provided
+        no_date = (('expiration' not in self._omissions[control_id]) or
+                   (self._omissions[control_id]['expiration'] is None) or
+                   (self._omissions[control_id]['expiration'] == ''))
+        if no_date:
+            return None
+        raw_date = self._omissions[control_id]['expiration']
+        if isinstance(raw_date, date):
+            return raw_date.strftime('%Y-%m-%d')
+        return raw_date
+
+    def _build_comments_array(self, control_id: str) -> list:
+        """
+        Build an array of comments containing the omission rationale and
+        annotation comment, if provided.
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        :return: list of strings, empty if neither was provided
+        """
+        comments = []
+        rationale = self._get_omission_rationale_plaintext(control_id)
+        if rationale:
+            comments.append(rationale)
+        annotation_comment = self._get_annotation_comment(control_id)
+        if annotation_comment:
+            comments.append(annotation_comment)
+        return comments
+
+    def _build_resolution_date(self, control_id: str) -> str:
+        """
+        Build the resolution date string. Returns the omission expiration date
+        if present, otherwise the annotation remediation date if present,
+        otherwise "N/A".
+        :param control_id: the control ID, e.g., GWS.GMAIL.1.1v1. Case-
+            insensitive.
+        :return: string representing the resolution date or "N/A"
+        """
+        omission_expiration = self._get_omission_expiration_date(control_id)
+        if omission_expiration:
+            return omission_expiration
+        remediation_date = self._get_remediation_date(control_id)
+        if remediation_date:
+            # Ensure it's in yyyy-mm-dd format
+            if isinstance(remediation_date, date):
+                return remediation_date.strftime('%Y-%m-%d')
+            return remediation_date
+        return "N/A"
+
     def _sanitize_details(self, table_data: list) -> list:
         '''
-        Remove HTML elements from the 'Details' column of the results that
-        aren't appropriate for JSON, e.g., icons.
+        Remove HTML elements from the 'Details' and 'OriginalDetails' columns
+        of the results that aren't appropriate for JSON, e.g., icons.
         '''
         for result in table_data:
+            # Sanitize Details
             details = result['Details']
             details = details.replace(self._log_based_warning,
                                       self._log_based_warning_plaintext)
@@ -400,6 +484,15 @@ class Reporter:
             details = details.replace(dns_link, "")
 
             result['Details'] = details
+
+            # Sanitize OriginalDetails if present
+            if 'OriginalDetails' in result:
+                original_details = result['OriginalDetails']
+                original_details = original_details.replace(self._log_based_warning,
+                                                           self._log_based_warning_plaintext)
+                original_details = original_details.replace('<br>', '\n')
+                original_details = original_details.replace(dns_link, "")
+                result['OriginalDetails'] = original_details
         return table_data
 
     def _insert_classroom_warning(self, html: str) -> str:
@@ -786,16 +879,17 @@ class Reporter:
                     report_stats['Errors'] += 1
                     issues_link = (f'<a href="{github_url}/issues" '
                                    'target="_blank">GitHub</a>')
+                    error_details = f'Report issue on {issues_link}'
                     table_data.append({
                         'Control ID': control_id,
                         'Requirement': requirement,
                         'Result': 'Error - Test results missing',
                         'Criticality': '-',
-                        'Details': f'Report issue on {issues_link}',
-                        'OmittedEvaluationResult': 'N/A',
-                        'OmittedEvaluationDetails': 'N/A',
-                        'IncorrectResult': 'N/A',
-                        'IncorrectDetails': 'N/A'
+                        'Details': error_details,
+                        'OriginalResult': 'Error - Test results missing',
+                        'OriginalDetails': error_details,
+                        'Comments': self._build_comments_array(control_id),
+                        'ResolutionDate': self._build_resolution_date(control_id)
                     })
                     log.error('No test results found for Control Id %s',
                               control_id)
@@ -805,8 +899,8 @@ class Reporter:
                     # Handle the case where the control was omitted
                     rationale = self._get_omission_rationale(control_id)
 
-                    omitted_result = 'N/A'
-                    omitted_details = 'N/A'
+                    original_result = None
+                    original_details = None
 
                     report_stats['Omit'] += 1
 
@@ -815,11 +909,12 @@ class Reporter:
                                                         test['Criticality'],
                                                         test['NoSuchEvent'])
                         details = test['ReportDetails']
+                        # Store original before annotation
+                        original_result = result
+                        original_details = details
                         details = self._add_annotation(control_id,
                                                        result,
                                                        details)
-                        omitted_result = result
-                        omitted_details = details
 
                     table_data.append({
                         'Control ID': control_id,
@@ -827,10 +922,10 @@ class Reporter:
                         'Result': 'Omitted',
                         'Criticality': tests[0]['Criticality'],
                         'Details': f'Test omitted by user. {rationale}',
-                        'OmittedEvaluationResult': omitted_result,
-                        'OmittedEvaluationDetails': omitted_details,
-                        'IncorrectResult': 'N/A',
-                        'IncorrectDetails': 'N/A'
+                        'OriginalResult': original_result if original_result else 'N/A',
+                        'OriginalDetails': original_details if original_details else 'N/A',
+                        'Comments': self._build_comments_array(control_id),
+                        'ResolutionDate': self._build_resolution_date(control_id)
                     })
                     continue
 
@@ -845,10 +940,10 @@ class Reporter:
                                            'Result': 'Error',
                                            'Criticality': test['Criticality'],
                                            'Details': failed_details,
-                                           'OmittedEvaluationResult': 'N/A',
-                                           'OmittedEvaluationDetails': 'N/A',
-                                           'IncorrectResult': 'N/A',
-                                           'IncorrectDetails': 'N/A'})
+                                           'OriginalResult': 'Error',
+                                           'OriginalDetails': failed_details,
+                                           'Comments': self._build_comments_array(control_id),
+                                           'ResolutionDate': self._build_resolution_date(control_id)})
                         continue
 
                     if control_id.startswith('GWS.COMMONCONTROLS.13.1'):
@@ -902,10 +997,10 @@ class Reporter:
                             'Result': 'Incorrect result',
                             'Criticality': test['Criticality'],
                             'Details': details,
-                            'OmittedEvaluationResult': 'N/A',
-                            'OmittedEvaluationDetails': 'N/A',
-                            'IncorrectResult': result,
-                            'IncorrectDetails': details_pre_annotation})
+                            'OriginalResult': result,
+                            'OriginalDetails': details_pre_annotation,
+                            'Comments': self._build_comments_array(control_id),
+                            'ResolutionDate': self._build_resolution_date(control_id)})
                         continue
 
                     # This is the typical case, the test result is not
@@ -917,10 +1012,10 @@ class Reporter:
                         'Result': result,
                         'Criticality': test['Criticality'],
                         'Details': details,
-                        'OmittedEvaluationResult': 'N/A',
-                        'OmittedEvaluationDetails': 'N/A',
-                        'IncorrectResult': 'N/A',
-                        'IncorrectDetails': 'N/A'})
+                        'OriginalResult': result,
+                        'OriginalDetails': details_pre_annotation,
+                        'Comments': self._build_comments_array(control_id),
+                        'ResolutionDate': self._build_resolution_date(control_id)})
 
             markdown_group_name = re.sub(r'[^\w\s-]', '-',
                                         baseline_group['GroupName'].lower())
@@ -939,10 +1034,10 @@ class Reporter:
                              f'{markdown_link}</h2>')
 
             json_only = [
-                'OmittedEvaluationResult',
-                'OmittedEvaluationDetails',
-                'IncorrectResult',
-                'IncorrectDetails'
+                'OriginalResult',
+                'OriginalDetails',
+                'Comments',
+                'ResolutionDate'
             ]
             filtered_table_data = [
                 {k: v for k, v in row.items()
