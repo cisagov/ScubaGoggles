@@ -936,14 +936,14 @@ class Reporter:
                         failed_details = self._get_failed_details(
                             failed_prereqs)
                         table_data.append({'Control ID': control_id,
-                                           'Requirement': requirement,
-                                           'Result': 'Error',
-                                           'Criticality': test['Criticality'],
-                                           'Details': failed_details,
-                                           'OriginalResult': 'Error',
-                                           'OriginalDetails': failed_details,
-                                           'Comments': self._build_comments_array(control_id),
-                                           'ResolutionDate': self._build_resolution_date(control_id)})
+                                        'Requirement': requirement,
+                                        'Result': 'Error',
+                                        'Criticality': test['Criticality'],
+                                        'Details': failed_details,
+                                        'OriginalResult': 'Error',
+                                        'OriginalDetails': failed_details,
+                                        'Comments': self._build_comments_array(control_id),
+                                        'ResolutionDate': self._build_resolution_date(control_id)})
                         continue
 
                     if control_id.startswith('GWS.COMMONCONTROLS.13.1'):
