@@ -1,6 +1,8 @@
 """
 reporter.py creates the report html page
 """
+#Must remove pylint disable too many lines when fixing this file.
+# pylint: disable=too-many-lines
 import io
 import logging
 import time
