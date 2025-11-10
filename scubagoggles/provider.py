@@ -4,6 +4,7 @@ provider.py is where the GWS api calls are made.
 
 import logging
 import warnings
+from typing import Callable, ContextManager, Mapping, Optional, Protocol
 from pathlib import Path
 from tqdm import tqdm
 
@@ -17,6 +18,35 @@ from scubagoggles.scuba_constants import ApiReference
 from scubagoggles.robust_dns import RobustDNSClient
 
 log = logging.getLogger(__name__)
+
+# pylint: disable=too-few-public-methods
+class _RequestLike(Protocol):
+    """
+    Protocol for googleapiclient request-like objects.
+    """
+    def execute(self) -> Mapping[str, object]:
+        """
+        Execute the HTTP request and return JSON response.
+        """
+
+class _PaginatedListResource(Protocol):
+    """
+    Protocol for googleapiclient Resource collection exposing
+    list() and list_next() methods.
+    """
+    def list(self, **kwargs) -> _RequestLike:
+        """
+        Build a list request for the collection.
+        """
+
+    def list_next(
+        self,
+        prev_request: _RequestLike,
+        prev_response: Mapping[str, object]
+    ) -> Optional[_RequestLike]:
+        """
+        Constructs the next page request for the collection.
+        """
 
 # pylint: disable=too-many-instance-attributes
 
@@ -118,7 +148,8 @@ class Provider:
         self._unsuccessful_calls = set()
         self._missing_policies = set()
         self._dns_client = RobustDNSClient()
-        self._domains = None
+        self._domains = []
+        self._alias_domains = []
 
         self._initialize_services()
         self._top_ou = self.get_toplevel_ou()
@@ -176,22 +207,71 @@ class Provider:
                                          cache_discovery = False,
                                          credentials = self._credentials)
 
+    def _cached_list(
+        self,
+        attribute: str,
+        open_resource: Callable[[], ContextManager[_PaginatedListResource]],
+        item_key: str,
+        api_reference: ApiReference,
+    ) -> list:
+        """
+        Generic wrapper around the Google list() API.
+        Ensures only a single API call is made and caches the results for consecutive API calls.
+
+        :param str attribute: Name of the Provider instance attribute
+            used to cache results, e.g. '_domains', '_alias_domains', etc.
+
+        :param Callable open_resource: A callable function that returns a context manager
+            for the target Resource collection, e.g. self._services['directory'].domains.
+            Only pass the bound method, _cached_list() will invoke the function with
+            open_resource()
+
+        :param str item_key: The key used in the API request to extract the list of items, 
+            e.g. 'domains', 'domainAliases', etc.
+
+        :param ApiReference api_reference: The ApiReference enum value corresponding 
+            to the API call being made.
+
+        :returns: List of items returned from the target Resource collection.
+        """
+        if not getattr(self, attribute):
+            try:
+                with open_resource() as from_resource:
+                    data = (from_resource.list(customer = self._customer_id)
+                            .execute().get(item_key, []))
+                setattr(self, attribute, data)
+                self._successful_calls.add(api_reference.value)
+            except Exception as exc:
+                setattr(self, attribute, [])
+                warnings.warn(
+                    f'An exception was thrown when calling {api_reference.value}: {exc}',
+                    RuntimeWarning
+                )
+                self._unsuccessful_calls.add(api_reference.value)
+        return getattr(self, attribute)
+
     def list_domains(self) -> list:
         """
         Return the customer's domains. Ensures that the domains API is called only once and that
         the domains used throughout the provider are consistent.
         """
-        if self._domains is None:
-            try:
-                with self._services['directory'].domains() as domains:
-                    self._domains = (domains.list(customer = self._customer_id)
-                                     .execute()['domains'])
-                self._successful_calls.add(ApiReference.LIST_DOMAINS.value)
-            except Exception as exc:
-                self._domains = []
-                warnings.warn(f'An exception was thrown by list_domains: {exc}', RuntimeWarning)
-                self._unsuccessful_calls.add(ApiReference.LIST_DOMAINS.value)
-        return self._domains
+        return self._cached_list(
+            attribute = '_domains',
+            open_resource = self._services['directory'].domains,
+            item_key = 'domains',
+            api_reference = ApiReference.LIST_DOMAINS,
+        )
+
+    def list_alias_domains(self) -> list:
+        """
+        Return the customer's alias domains. Ensures that the domain alias API is called only once.
+        """
+        return self._cached_list(
+            attribute = '_alias_domains',
+            open_resource = self._services['directory'].domainAliases,
+            item_key = 'domainAliases',
+            api_reference = ApiReference.LIST_ALIAS_DOMAINS,
+        )
 
     def get_spf_records(self, domains: set) -> list:
         """
@@ -267,35 +347,51 @@ class Provider:
         """
         Gets DNS Information for Gmail baseline
         """
-        output = {'domains': [], 'spf_records': [], 'dkim_records': [], 'dmarc_records': []}
-        domains = {d['domainName'] for d in self.list_domains()}
-        if len(domains) == 0:
+        output = {
+            'domains': [],
+            'alias_domains': [],
+            'spf_records': [],
+            'dkim_records': [],
+            'dmarc_records': []
+        }
+
+        # Get primary/secondary domains
+        base_domains = {
+            d['domainName']
+            for d in self.list_domains() if d.get('verified', True)
+        }
+        # Get domain aliases
+        alias_domains = {
+            d['domainAliasName']
+            for d in self.list_alias_domains() if d.get('verified', True)
+        }
+        all_domains = base_domains.union(alias_domains)
+
+        if len(all_domains) == 0:
             log.warning('No domains found, unable to request SPF, DKIM, or DMARC records.')
             return output
 
-        output['domains'].extend(domains)
+        output['domains'].extend(base_domains)
+        output["alias_domains"].extend(alias_domains)
 
-        try:
-            output['spf_records'] = self.get_spf_records(domains)
-            self._successful_calls.add('get_spf_records')
-        except Exception as exc:
-            output['spf_records'] = []
-            log.warning('An exception was thrown by get_spf_records: %s', str(exc))
-            self._unsuccessful_calls.add('get_spf_records')
-        try:
-            output['dkim_records'] = self.get_dkim_records(domains)
-            self._successful_calls.add('get_dkim_records')
-        except Exception as exc:
-            output['dkim_records'] = []
-            log.warning('An exception was thrown by get_dkim_records: %s', str(exc))
-            self._unsuccessful_calls.add('get_dkim_records')
-        try:
-            output['dmarc_records'] = self.get_dmarc_records(domains)
-            self._successful_calls.add('get_dmarc_records')
-        except Exception as exc:
-            output['dmarc_records'] = []
-            log.warning('An exception was thrown by get_dmarc_records: %s', str(exc))
-            self._unsuccessful_calls.add('get_dmarc_records')
+        operations = [
+            # Only check primary/secondary domains
+            ('spf_records', self.get_spf_records, base_domains),
+            ('dkim_records', self.get_dkim_records, base_domains),
+            # Check primary/secondary domains and alias domains for the DMARC check
+            ('dmarc_records', self.get_dmarc_records, all_domains),
+        ]
+
+        for key, fnc, domains in operations:
+            fnc_name = fnc.__name__
+            try:
+                output[key] = fnc(domains)
+                self._successful_calls.add(fnc_name)
+            except Exception as exc:
+                output[key] = []
+                log.warning('An exception was thrown by %s: %s', fnc_name, str(exc))
+                self._unsuccessful_calls.add(fnc_name)
+
         return output
 
     def get_super_admins(self) -> dict:
@@ -503,7 +599,6 @@ class Provider:
 
         group_service = self._services['groups']
         directory_service = self._services['directory']
-        domains = {d['domainName'] for d in self.list_domains() if d['verified']}
 
         try:
             # get the group settings for each groups
@@ -511,13 +606,9 @@ class Provider:
 
             with (directory_service.groups() as ds_groups,
                   group_service.groups() as gs_groups):
-                for domain in domains:
-                    group_list = self._get_list(ds_groups,
-                                                'groups',
-                                                domain = domain)
-
-                    group_settings = [gs_groups.get(groupUniqueId = group['email'])
-                                      .execute() for group in group_list]
+                group_list = self._get_list(ds_groups, 'groups', customer = self._customer_id)
+                group_settings = [gs_groups.get(groupUniqueId = group['email'])
+                                  .execute() for group in group_list]
 
             self._successful_calls.add(ApiReference.LIST_GROUPS.value)
             self._successful_calls.add(ApiReference.GET_GROUP.value)
