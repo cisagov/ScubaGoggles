@@ -25,7 +25,7 @@ GetFriendlyValue1_1(Value) := "all users (including users not signed in with a G
     Value == "ALL"
 } else := "users in the same organization" if {
     Value == "SAME_ORGANIZATION_ONLY"
-} else := "logged in users" if {
+} else := "users signed in with a Google account" if {
     Value == "LOGGED_IN"
 } else := Value
 
@@ -33,11 +33,9 @@ NonCompliantOUs1_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(meetAccess))
 } if {
-    trace("Inside If")
     some OU, settings in input.policies
     MeetEnabled(OU)
     meetAccess := settings.meet_safety_domain.usersAllowedToJoin
-    trace("meetAccess value:", meetAccess)
     meetAccess != "ALL"
 }
 
