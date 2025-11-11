@@ -122,7 +122,7 @@ class ScubaArgumentParser:
         for option_name in path_value_options:
             if option_name in args:
                 option_value = getattr(args, option_name)
-                if not isinstance(option_value, Path):
+                if not isinstance(option_value, Path) and option_value is not None:
                     setattr(args, option_name, path_parser(option_value))
 
         if 'omitpolicy' in args:

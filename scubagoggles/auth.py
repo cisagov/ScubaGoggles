@@ -25,7 +25,8 @@ class GwsAuth:
     """Generates an Oauth token for accessing Google's APIs
     """
 
-    def __init__(self, credentials_path: Path, svc_account_email: str = None):
+    def __init__(self, credentials_path: Path, access_token: str = None,
+                 svc_account_email: str = None):
         """GwsAuth class initialization.
 
         The Google credentials are established when the class instance is
@@ -34,12 +35,19 @@ class GwsAuth:
 
         :param credentials_path: path to the Google JSON-format
             credentials file.
+        :param access_token: (optional) access token string that will be used
+            instead of the credentials file.
         :param svc_account_email: (optional) email address for the service
             account.
         """
 
-        credentials_path = Path(credentials_path)
+        self._svc_account_email = svc_account_email
 
+        if access_token is not None:
+            self._token = Credentials(token=access_token, scopes=API_SCOPES)
+            return
+
+        credentials_path = Path(credentials_path)
         if not credentials_path.exists():
             raise FileNotFoundError(f'{credentials_path} - credentials file '
                                     'not found')
@@ -47,7 +55,6 @@ class GwsAuth:
         credentials_dir = credentials_path.parent
         self._credentials_path = credentials_path
 
-        self._svc_account_email = svc_account_email
         if svc_account_email:
             get_credentials = SvcCredentials.from_service_account_file
             self._token = get_credentials(str(credentials_path),
