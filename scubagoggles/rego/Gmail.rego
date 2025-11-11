@@ -118,9 +118,10 @@ DomainsWithSpf contains SpfRecord.domain if {
     some SpfRecord in input.spf_records
     some Rdata in SpfRecord.rdata
     startswith(Rdata, "v=spf1 ")
-    # Ensure that the policy either ends with "-all" or directs to a different SPF policy
+    # Ensure that the policy either ends with "-all", "~all", or directs to a different SPF policy
     true in [
         endswith(Rdata, "-all"),
+        endswith(Rdata, "~all"),
         contains(Rdata, "redirect")
     ]
 }
