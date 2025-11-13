@@ -7,6 +7,9 @@ on:
       types: [submitted]
     branches:
       - 'releases/**'
+    paths:
+      - '**/*.md'
+      - '**/*.mdx'
 jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
