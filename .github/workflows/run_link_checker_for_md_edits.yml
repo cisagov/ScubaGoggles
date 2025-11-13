@@ -1,8 +1,6 @@
 name: Run Link Checker for Markdown Edits
 on:
     workflow_dispatch:
-    pull_request:
-      types: [opened, reopened]
     pull_request_review:
       types: [submitted]
     branches:
