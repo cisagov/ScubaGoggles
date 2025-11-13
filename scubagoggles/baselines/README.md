@@ -1,5 +1,6 @@
 Individual baselines can be visited directly at the links below:
 
+- [Assured Controls](assuredcontrols.md)
 - [Common Controls](commoncontrols.md)
 - [Gemini](gemini.md)
 - [Gmail](gmail.md)
