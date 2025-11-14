@@ -6,6 +6,10 @@ We focus on verifying the behavior of `scubagoggles` public class methods and ho
 
 ## Running Unit Tests
 
+### Prerequisites
+
+Install `pytest` and `pytest-mock` libraries to run the Python unit tests locally. 
+
 To run all Python unit tests:
 
 ```bash
