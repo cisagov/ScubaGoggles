@@ -3,11 +3,7 @@ on:
     workflow_dispatch:
     pull_request_review:
       types: [submitted]
-    branches:
-      - 'releases/**'
-    paths:
-      - '**/*.md'
-      - '**/*.mdx'
+
 jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
