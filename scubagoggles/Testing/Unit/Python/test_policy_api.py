@@ -125,7 +125,51 @@ class TestPolicyAPI:
             - No OUs
         """
         mocker.patch.object(policy_api, "_get_policies_list", return_value=policies_list)
+        # Mock _apply_defaults since it'll be tested separately
         mocker.patch.object(policy_api, "_apply_defaults")
 
         result = policy_api.get_policies()
         assert result == expected
+    
+    @pytest.mark.parametrize(
+        ("api_response, expected"),
+        [
+            # Two OUs
+            (
+                {
+                    "organizationUnits": [
+                        {"orgUnitId": "id:01abc23defgh456", "name": "Root OU", "orgUnitPath": "/Root OU"},
+                        {"orgUnitId": "id:02ijk45lmnop789", "name": "Test OU 1", "orgUnitPath": "/Test OU 1"},
+                    ]
+                },
+                {
+                    "01abc23defgh456": {"name": "Root OU", "path": "/Root OU"},
+                    "02ijk45lmnop789": {"name": "Test OU 1", "path": "/Test OU 1"},
+                },
+            ),
+            # No OUs
+            (
+                {"organizationUnits": []},
+                {},
+            ),
+            # Next page token error
+            (
+                {"organizationUnits": [], "nextPageToken": "abc"},
+                pytest.raises(RuntimeError),
+            ),
+        ]
+    )
+    def test_get_ou(self, policy_api, mocker, api_response, expected):
+        """
+        Tests PolicyAPI._get_ou() for:
+            - Typical response
+            - Empty response
+            - Next page token error
+        """
+        mocker.patch.object(policy_api, "_get", return_value=api_response)
+        if isinstance(expected, type(pytest.raises(Exception))):
+            with expected:
+                policy_api._get_ou()
+        else:
+            result = policy_api._get_ou()
+            assert result == expected
