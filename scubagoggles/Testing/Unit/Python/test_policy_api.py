@@ -41,3 +41,91 @@ class TestPolicyAPI:
         mock_session_close = mocker.patch.object(policy_api._session, "close")
         policy_api.close()
         mock_session_close.assert_called_once()
+    
+    @pytest.mark.parametrize(
+        ("policies_list", "expected"),
+        [
+            # Single OU
+            (
+                [
+                    {
+                        "name": "policies/abc123",
+                        "customer": "customers/C03ymv5su",
+                        "policyQuery": {"orgUnit": "orgUnits/01abc23defgh456", "sortOrder": 1},
+                        "setting": {"type": "settings/gmail_service_status", "value": {"serviceState": "enabled"}},
+                        "type": "SYSTEM",
+                    }
+                ],
+                {
+                    "Root OU": {
+                        "gmail_service_status": {
+                            "serviceState": "enabled",
+                        }
+                    }
+                }
+            ),
+            # Multiple OUs
+            (
+                [
+                    {
+                        "name": "policies/abc123",
+                        "customer": "customers/C03ymv5su",
+                        "policyQuery": {"orgUnit": "orgUnits/01abc23defgh456", "sortOrder": 1},
+                        "setting": {"type": "settings/gmail_service_status", "value": {"serviceState": "enabled"}},
+                        "type": "SYSTEM",
+                    },
+                    {
+                        "name": "policies/def456",
+                        "customer": "customers/C03ymv5su",
+                        "policyQuery": {"orgUnit": "orgUnits/02ijk45lmnop789", "sortOrder": 1},
+                        "setting": {"type": "settings/gmail_service_status", "value": {"serviceState": "disabled"}},
+                        "type": "SYSTEM",
+                    },
+                    {
+                        "name": "policies/ghi789",
+                        "customer": "customers/C03ymv5su",
+                        "policyQuery": {"orgUnit": "orgUnits/01abc23defgh456", "sortOrder": 1},
+                        "setting": {"type": "settings/drive_and_docs_service_status", "value": {"serviceState": "enabled"}},
+                        "type": "SYSTEM",
+                    },
+                ],
+                {
+                    "Root OU": {
+                        "gmail_service_status": {
+                            "serviceState": "enabled",
+                        },
+                        "drive_and_docs_service_status": {
+                            "serviceState": "enabled",
+                        },
+                    },
+                    "Test OU 1": {
+                        "gmail_service_status": {
+                            "serviceState": "disabled",
+                        }
+                    },
+                },
+            ),
+            # No OUs
+            (
+                [],
+                {},
+            ),
+        ]
+    )
+    def test_get_policies(
+        self, 
+        policy_api,
+        mocker,
+        policies_list,
+        expected):
+        """
+        Tests PolicyAPI.get_policies() for these cases:
+            - Single OU
+            - Multiple OUs
+            - No OUs
+        """
+        mocker.patch.object(policy_api, "_get_policies_list", return_value=policies_list)
+        mocker.patch.object(policy_api, "_apply_defaults")
+
+        result = policy_api.get_policies()
+        assert result == expected
