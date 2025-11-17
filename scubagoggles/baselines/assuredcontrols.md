@@ -66,7 +66,7 @@ Agencies SHOULD restrict support access to U.S. Google staff only.
 
 ### Prerequisites
 - Access Approvals requires either Assured Controls or Assured Controls Plus add-ons.
-- Access Management requires the Assured Controls Plus add-on. However, customers who purchased Assured Controls and the Assured Support add-on prior to June 17, 2024 also have access to Access Management
+- Access Management requires the Assured Controls Plus add-on. However, customers who purchased Assured Controls and the Assured Support add-on prior to June 17, 2024 also have access to Access Management.
 
 ### Implementation
 
