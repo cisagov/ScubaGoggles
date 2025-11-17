@@ -46,7 +46,7 @@ Access Approvals SHOULD be enabled.
     - [T1589: Gather Victim Identity Information](https://attack.mitre.org/techniques/T1589/)
 
 #### GWS.ASSUREDCONTROLS.1.2v0.6
-Agencies SHOULD allow access by U.S. Google staff only.
+Agencies SHOULD restrict support access to U.S. Google staff only.
 
 - _Rationale:_ Exposing data to non-U.S. based persons increases the risk of foreign entities accessing sensitive data. Allowing access by U.S. Google staff only restricts the Google staff permitted to provide support to U.S. persons physically located in the U.S. thus, possibly reducing the risk of subjecting sensitive data to foreign entity laws and regulations.
 - _Note:_ This applies to U.S. Federal, executive branch, departments and agencies with Assured Controls Plus licenses. Users without these licenses should carefully consider the tradeoffs, such as increased licensing fees. Additionally, non-government entities may not have the same data sovereignty needs.
