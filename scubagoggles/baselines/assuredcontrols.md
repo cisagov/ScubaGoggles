@@ -1,10 +1,9 @@
 # CISA Google Workspace Secure Configuration Baseline for Assured Controls and Assured Controls Plus
 
-Assured Controls and Assured Controls Plus are paid add-ons within Google Workspace with Enterprise Plus.
-Assured Controls and Assured Controls Plus include options relating to compliance and security.
+Assured Controls and Assured Controls Plus are paid add-ons within Google Workspace relating to compliance and security.
 The Secure Configuration Baseline (SCB) for Assured Controls provides specific policies to strengthen an organization's data security.
 This baseline is intended as guidance for agencies that already have Assured Controls or Assured Controls Plus licenses.
-Users without these licenses should carefully consider the tradeoffs, such as increased licensing fees.
+Users that choose to implement this baseline should carefully consider the tradeoffs involved, including the potential security benefits, usability impacts, and increased licensing fees for the add-on licenses.
 
 The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
