@@ -468,7 +468,7 @@ class Reporter:
             if isinstance(remediation_date, date):
                 return remediation_date.strftime('%Y-%m-%d')
             return remediation_date
-        return "N/A"
+        return None
 
     def _sanitize_details(self, table_data: list) -> list:
         '''
