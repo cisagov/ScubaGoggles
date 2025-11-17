@@ -38,7 +38,7 @@ However, these features require additional licensing and are not available by de
 #### GWS.ASSUREDCONTROLS.1.1v0.6
 Access Approvals SHOULD be enabled.
 
-- _Rationale:_ Unauthorized access to data increases the risk of exposing sensitive data to untrusted entities. Requiring the approval of a Google staff's request to access an organization's data may reduce unauthorized access and unauthorized actions to an organization's data.
+- _Rationale:_ Unauthorized access to data increases the risk of exposing sensitive data to untrusted entities. Requiring the approval of a Google staff's request to access an organization's data may reduce unauthorized access and actions to an organization's data.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -61,8 +61,8 @@ Agencies SHOULD restrict support access to U.S. Google staff only.
 
 - [GWS Admin Help \| Access Approvals: Require Google staff to request approval before viewing support data](https://support.google.com/a/answer/12410469)
 - [GWS Admin Help \| What data is covered by Access Management and Access Approvals?](https://support.google.com/a/answer/10379605)
-- [GWS Admin Help \| Access Management: Limit Google support actions related to your data ](https://support.google.com/a/topic/10404276)
-- [GWS Admin Help \| Access Management: Limit the Google staff who can take support actions related to your data ](https://support.google.com/a/answer/10343878)
+- [GWS Admin Help \| Access Management: Limit Google support actions related to your data](https://support.google.com/a/topic/10404276)
+- [GWS Admin Help \| Access Management: Limit the Google staff who can take support actions related to your data](https://support.google.com/a/answer/10343878)
 
 
 ### Prerequisites
