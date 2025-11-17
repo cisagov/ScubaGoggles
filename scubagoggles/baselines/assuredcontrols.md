@@ -16,7 +16,6 @@ This baseline is based on Google documentation and addresses the following:
 
 This document assumes the organization is using both GWS Enterprise Plus and the Assured Controls Plus add-on.
 
-This document does not address, ensure compliance with, or supersede any law, regulation, or other authority.  Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology.  This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 ## Key Terminology
 
