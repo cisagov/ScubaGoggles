@@ -81,7 +81,7 @@ Agencies SHOULD restrict support access to U.S. Google staff only.
 
 1.  Sign in to the [Google Admin console](https://admin.google.com/) as a super admin.
 2.  Select **Data** -\> **Compliance** -\> **Access Management**.
-3.  Select **Access by U.S. Google Staff Only**.
+3.  Select either **Access by U.S. Google Staff Only** or **Access by CJIS-authorized and IRS 1075-authorized Google staff only**.
 4.  Click **SAVE**.
 
 ## 2. Data Regions Advanced Settings
