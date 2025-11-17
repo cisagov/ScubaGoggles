@@ -637,6 +637,9 @@ class PolicyAPI:
                 orgunit_id = policy['policyQuery']['orgUnit']
                 orgunit_id = orgunit_id.removeprefix('orgUnits/')
                 if orgunit_id not in self._orgunit_id_map:
+                    # This may occur for recently deleted OUs. Just ignore
+                    # any lingering polcies that apply to OUs that no longer
+                    # exist
                     log.debug('Org unit ID not in map, %s', orgunit_id)
                     continue
                 orgunit_data = self._orgunit_id_map[orgunit_id]
