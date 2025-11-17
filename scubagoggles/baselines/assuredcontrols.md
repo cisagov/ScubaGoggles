@@ -1,6 +1,10 @@
 # CISA Google Workspace Secure Configuration Baseline for Assured Controls and Assured Controls Plus
 
-Assured Controls and Assured Controls Plus are paid add-ons within Google Workspace with Enterprise Plus. Assured Controls and Assured Controls Plus include options relating to compliance and security. The Secure Configuration Baseline (SCB) provides specific policies to strengthen an organization's data security.
+Assured Controls and Assured Controls Plus are paid add-ons within Google Workspace with Enterprise Plus.
+Assured Controls and Assured Controls Plus include options relating to compliance and security.
+The Secure Configuration Baseline (SCB) for Assured Controls provides specific policies to strengthen an organization's data security.
+This baseline is intended as guidance for agencies that already have Assured Controls or Assured Controls Plus licenses.
+Users without these licenses should carefully consider the tradeoffs, such as increased licensing fees.
 
 The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
@@ -36,7 +40,6 @@ However, these features require additional licensing and are not available by de
 Access Approvals SHOULD be enabled.
 
 - _Rationale:_ Unauthorized access to data increases the risk of exposing sensitive data to untrusted entities. Requiring the approval of a Google staff's request to access an organization's data may reduce unauthorized access and unauthorized actions to an organization's data.
-- _Note:_ This applies to U.S. Federal, executive branch, departments and agencies with Assured Controls Plus licenses. Users without these licenses should carefully consider the tradeoffs, such as increased licensing fees.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -48,7 +51,6 @@ Access Approvals SHOULD be enabled.
 Agencies SHOULD restrict support access to U.S. Google staff only.
 
 - _Rationale:_ Exposing data to non-U.S. based persons increases the risk of foreign entities accessing sensitive data. Allowing access by U.S. Google staff only restricts the Google staff permitted to provide support to U.S. persons physically located in the U.S. thus, possibly reducing the risk of subjecting sensitive data to foreign entity laws and regulations.
-- _Note:_ This applies to U.S. Federal, executive branch, departments and agencies with Assured Controls Plus licenses. Users without these licenses should carefully consider the tradeoffs, such as increased licensing fees. Additionally, non-government entities may not have the same data sovereignty needs.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -93,7 +95,6 @@ However, these settings only apply to users with the Assured Controls Plus add-o
 Data processing across multiple regions SHOULD be disabled for all Google Workspace products.
 
 -  _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
-- _Note:_ This applies to U.S. Federal, executive branch, departments and agencies with Assured Controls Plus licenses. Users without these licenses should carefully consider the tradeoffs, such as increased licensing fees. Additionally, non-government entities may not have the same data sovereignty needs.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE TTP Mapping:
