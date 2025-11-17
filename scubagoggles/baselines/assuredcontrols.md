@@ -36,7 +36,7 @@ However, these features require additionally licensing and are not available by 
 #### GWS.ASSUREDCONTROLS.1.1v0.6
 Access Approvals SHOULD be enabled.
 
-- _Rationale:_ Unauthorized access to data increases the risk of exposing sensitive data to untrusted entities. Approving a Google staff's request to access an organization's data may reduce unauthorized access and unauthorized actions to an organization's data.
+- _Rationale:_ Unauthorized access to data increases the risk of exposing sensitive data to untrusted entities. Requiring the approval of a Google staff's request to access an organization's data may reduce unauthorized access and unauthorized actions to an organization's data.
 - _Note:_ This applies to U.S. Federal, executive branch, departments and agencies with Assured Controls Plus licenses. Users without these licenses should carefully consider the tradeoffs, such as increased licensing fees.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
