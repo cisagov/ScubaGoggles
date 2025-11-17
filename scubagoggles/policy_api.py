@@ -226,6 +226,7 @@ class PolicyAPI:
         'maps_user_takeout': {'settings': {'takeoutStatus': isEnum}},
         'meet_safety_access': {'settings': {'meetingsAllowedToJoin': isEnum}},
         'meet_safety_domain': {'settings': {'usersAllowedToJoin': isEnum}},
+        'meet_safety_access_type': {'settings': {'access_type': isEnum}},
         'meet_safety_external_participants': {'settings': {
             'enableExternalLabel': isBool}},
         'meet_safety_host_management': {'settings': {
