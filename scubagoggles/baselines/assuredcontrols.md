@@ -96,7 +96,7 @@ Data processing across multiple regions SHOULD be disabled for all Google Worksp
 -  _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
-- MITRE TTP Mapping:
+- MITRE ATT&CK TTP Mapping:
     - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591)
         - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
     - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
