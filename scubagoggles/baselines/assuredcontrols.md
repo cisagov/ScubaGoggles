@@ -50,7 +50,7 @@ Access Approvals SHOULD be enabled.
 #### GWS.ASSUREDCONTROLS.1.2v0.6
 Agencies SHOULD restrict support access to U.S. Google staff only.
 
-- _Rationale:_ Exposing data to non-U.S. based persons increases the risk of foreign entities accessing sensitive data. Allowing access by U.S. Google staff only restricts the Google staff permitted to provide support to U.S. persons physically located in the U.S. thus, possibly reducing the risk of subjecting sensitive data to foreign entity laws and regulations.
+- _Rationale:_ Without this policy, data could be processed by Google personnel not physically located in the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
