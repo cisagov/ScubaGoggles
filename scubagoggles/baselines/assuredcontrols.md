@@ -28,7 +28,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 Google Workspace includes a few mechanisms to control how Google support staff access your organization's data.
 Access Approvals requires Google support staff to request approval before viewing your organization's data.
 Access can also be restricted to specific demographics, such as access by U.S. Google staff only.
-However, these features require additionally licensing and are not available by default with Enterprise Plus.
+However, these features require additional licensing and are not available by default with Enterprise Plus.
 
 ### Policy
 
