@@ -6,6 +6,9 @@
     },
     {
         "pattern":"^mailto:user@company.com"
+    },
+    {
+        "pattern":"^#"
     }
   ],
   "replacementPatterns": [
