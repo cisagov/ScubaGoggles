@@ -2,7 +2,7 @@
   "projectBaseUrl":"/scubagoggles",
   "ignorePatterns": [
     {
-      "pattern": "^admin.google.com"
+      "pattern": "^https://admin.google.com/"
     }
   ],
   "replacementPatterns": [
