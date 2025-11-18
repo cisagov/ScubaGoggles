@@ -15,6 +15,10 @@
     {
       "pattern": "^/",
       "replacement": "{{BASEURL}}/"
+    },
+    {
+        "pattern":"^https://github.com/cisagov/ScubaGoggles/blob/main/",
+        "replacement": "https://github.com/cisagov/ScubaGoggles/tree/main/scubagoggles/"
     }
   ]
 }
