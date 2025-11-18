@@ -3,6 +3,9 @@
   "ignorePatterns": [
     {
       "pattern": "^https://admin.google.com"
+    },
+    {
+        "pattern":"^mailto:user@company.com"
     }
   ],
   "replacementPatterns": [
