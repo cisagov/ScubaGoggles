@@ -19,5 +19,7 @@
       "pattern": "^/",
       "replacement": "{{BASEURL}}/"
     }
-  ]
+  ],
+  "timeout": "30s",
+  "retryCount": 5
 }
