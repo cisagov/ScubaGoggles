@@ -1,0 +1,14 @@
+{
+  "projectBaseUrl":"/scubagoggles",
+  "ignorePatterns": [
+    {
+      "pattern": "^admin.google.com"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "^/",
+      "replacement": "{{BASEURL}}/"
+    }
+  ]
+}
