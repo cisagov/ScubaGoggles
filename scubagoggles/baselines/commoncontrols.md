@@ -311,7 +311,7 @@ Post-SSO verification SHOULD be enabled for users signing in using other SSO pro
 
 - _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
 - _Last modified:_ November 2024
-
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
     - [T1110:001: Brute Force: Password Guessing](https://attack.mitre.org/techniques/T1110/001/)
