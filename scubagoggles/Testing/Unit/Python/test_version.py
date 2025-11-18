@@ -12,7 +12,6 @@ import re
 import tempfile
 from collections import defaultdict
 from pathlib import Path
-from unittest.mock import Mock, patch, mock_open
 
 from scubagoggles.version import Version
 
@@ -25,25 +24,25 @@ class TestVersion:
         Version._baseline_version_map = {}
 
     @pytest.fixture
-    def mock_arguments_check(self):
+    def mock_arguments_check(self, mocker):
         """Fixture for mock arguments with check option."""
-        args = Mock(spec=argparse.Namespace)
+        args = mocker.Mock(spec=argparse.Namespace)
         args.check = True
         args.upgrade = False
         return args
 
     @pytest.fixture
-    def mock_arguments_upgrade(self):
+    def mock_arguments_upgrade(self, mocker):
         """Fixture for mock arguments with upgrade option."""
-        args = Mock(spec=argparse.Namespace)
+        args = mocker.Mock(spec=argparse.Namespace)
         args.check = False
         args.upgrade = "2.0.0"
         return args
 
     @pytest.fixture
-    def mock_arguments_default(self):
+    def mock_arguments_default(self, mocker):
         """Fixture for mock arguments with no options."""
-        args = Mock(spec=argparse.Namespace)
+        args = mocker.Mock(spec=argparse.Namespace)
         args.check = False
         args.upgrade = False
         return args
@@ -52,10 +51,10 @@ class TestVersion:
     def sample_policy_data(self):
         """Fixture providing sample policy ID data for testing."""
         return {
-            'valid_single': 'GWS.CHAT.1.0v1',
-            'valid_multiple': 'GWS.CHAT.1.0v1 and GWS.GMAIL.2.1v2',
-            'invalid_suffix': 'GWS.CHAT.1.0v0',
-            'mixed_valid_invalid': 'GWS.CHAT.1.0v1 and GWS.GMAIL.2.1v0',
+            'valid_single': 'GWS.CHAT.1.1v1',
+            'valid_multiple': 'GWS.CHAT.1.1v1 and GWS.GMAIL.2.1v2',
+            'invalid_suffix': 'GWS.CHAT.1.1v1.',
+            'mixed_valid_invalid': 'GWS.CHAT.1.1v1 and GWS.GMAIL.2.1v0',
             'no_policy_ids': 'This is just regular text with no policy IDs',
             'malformed_policy': 'GWS.INVALID.FORMAT'
         }
@@ -66,8 +65,8 @@ class TestVersion:
         with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
             writer = csv.DictWriter(f, fieldnames=['PolicyId', 'Description'])
             writer.writeheader()
-            writer.writerow({'PolicyId': 'GWS.CHAT.1.0v0', 'Description': 'Test policy'})
-            writer.writerow({'PolicyId': 'GWS.DRIVE.3.0v0', 'Description': 'Another policy'})
+            writer.writerow({'PolicyId': 'GWS.CHAT.1.1v0', 'Description': 'Test policy'})
+            writer.writerow({'PolicyId': 'GWS.DRIVEDOCS.3.0v0', 'Description': 'Another policy'})
             temp_path = Path(f.name)
         
         yield temp_path
@@ -81,10 +80,10 @@ class TestVersion:
         """Fixture creating a temporary Markdown file for testing."""
         content = """# Test Markdown File
         
-This file contains policy IDs like GWS.CHAT.1.0v0 and others.
+This file contains policy IDs like GWS.CHAT.1.1v0 and others.
 Some regular text without policy IDs.
-Another policy: GWS.DRIVE.3.0v0
-Same policy again: GWS.CHAT.1.0v0
+Another policy: GWS.DRIVEDOCS.3.0v0
+Same policy again: GWS.CHAT.1.1v0
 """
         with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
             f.write(content)
@@ -96,23 +95,23 @@ Same policy again: GWS.CHAT.1.0v0
         if temp_path.exists():
             temp_path.unlink()
 
-    def test_command_dispatch_check(self, mock_arguments_check, capsys):
+    def test_command_dispatch_check(self, mock_arguments_check, capsys, mocker):
         """Test command_dispatch with check option."""
-        with patch.object(Version, 'check_versions') as mock_check:
-            Version.command_dispatch(mock_arguments_check)
-            
-            captured = capsys.readouterr()
-            assert 'ScubaGoggles version check' in captured.out
-            mock_check.assert_called_once()
+        mock_check = mocker.patch.object(Version, 'check_versions')
+        Version.command_dispatch(mock_arguments_check)
+        
+        captured = capsys.readouterr()
+        assert 'ScubaGoggles version check' in captured.out
+        mock_check.assert_called_once()
 
-    def test_command_dispatch_upgrade(self, mock_arguments_upgrade, capsys):
+    def test_command_dispatch_upgrade(self, mock_arguments_upgrade, capsys, mocker):
         """Test command_dispatch with upgrade option."""
-        with patch.object(Version, 'set') as mock_set:
-            Version.command_dispatch(mock_arguments_upgrade)
-            
-            captured = capsys.readouterr()
-            assert 'ScubaGoggles version upgrade (2.0.0)' in captured.out
-            mock_set.assert_called_once_with("2.0.0")
+        mock_set = mocker.patch.object(Version, 'set')
+        Version.command_dispatch(mock_arguments_upgrade)
+        
+        captured = capsys.readouterr()
+        assert 'ScubaGoggles version upgrade (2.0.0)' in captured.out
+        mock_set.assert_called_once_with("2.0.0")
 
     def test_command_dispatch_default(self, mock_arguments_default, capsys):
         """Test command_dispatch with no options (default behavior)."""
@@ -122,8 +121,8 @@ Same policy again: GWS.CHAT.1.0v0
         assert Version.with_name in captured.out
 
     @pytest.mark.parametrize("data,expected_success", [
-        ("GWS.CHAT.1.0v0", True),
-        ("GWS.CHAT.1.0v0 and GWS.GMAIL.2.1v0", True),
+        ("GWS.CHAT.1.1v0", True),
+        ("GWS.CHAT.1.1v0 and GWS.GMAIL.2.1v0", True),
         ("No policy IDs here", True),
     ])
     def test_check_version(self, data, expected_success):
@@ -138,70 +137,70 @@ Same policy again: GWS.CHAT.1.0v0
         """Test check_version with consistent version suffixes."""
         
         # First call establishes the baseline
-        success1, errors1 = Version.check_version("GWS.CHAT.1.0v0")
+        success1, errors1 = Version.check_version("GWS.CHAT.1.1v0")
         assert success1 is True
         assert errors1 == {}
         
         # Second call with same suffix should succeed
-        success2, errors2 = Version.check_version("GWS.CHAT.1.0v0")
+        success2, errors2 = Version.check_version("GWS.CHAT.1.1v0")
         assert success2 is True
         assert errors2 == {}
         
         # Third call with different suffix should fail
-        success3, errors3 = Version.check_version("GWS.CHAT.1.0v1")
+        success3, errors3 = Version.check_version("GWS.CHAT.1.1v1")
         assert success3 is False
-        assert "GWS.CHAT.1.0" in errors3
+        assert "GWS.CHAT.1.1" in errors3
 
-    def test_check_versions(self):
+    def test_check_versions(self, mocker):
         """Test check_versions method."""
-        with patch.object(Version, 'check_or_update_readme', return_value=False) as mock_readme, \
-             patch.object(Version, 'check_md') as mock_md, \
-             patch.object(Version, 'check_csv') as mock_csv, \
-             patch('pathlib.Path.glob') as mock_glob, \
-             patch.object(Path, 'is_dir', return_value=True):
+        mock_readme = mocker.patch.object(Version, 'check_or_update_readme', return_value=False)
+        mock_md = mocker.patch.object(Version, 'check_md')
+        mock_csv = mocker.patch.object(Version, 'check_csv')
+        mock_glob = mocker.patch('pathlib.Path.glob')
+        mocker.patch.object(Path, 'is_dir', return_value=True)
             
-            # Mock file paths
-            mock_md_files = [Path('test1.md'), Path('test2.md')]
-            mock_csv_files = [Path('test1.csv'), Path('test2.csv')]
-            
-            # Configure glob to return different results based on pattern
-            def glob_side_effect(pattern):
-                if pattern == '**/*.md':
-                    return mock_md_files
-                elif pattern == '*.csv':
-                    return mock_csv_files
-                return []
-            
-            mock_glob.side_effect = glob_side_effect
-            
-            result = Version.check_versions()
-            
-            mock_readme.assert_called_once_with(False)
-            assert mock_md.call_count == len(mock_md_files)
-            assert mock_csv.call_count == len(mock_csv_files)
-            assert result is False
+        # Mock file paths
+        mock_md_files = [Path('test1.md'), Path('test2.md')]
+        mock_csv_files = [Path('test1.csv'), Path('test2.csv')]
+        
+        # Configure glob to return different results based on pattern
+        def glob_side_effect(pattern):
+            if pattern == '**/*.md':
+                return mock_md_files
+            elif pattern == '*.csv':
+                return mock_csv_files
+            return []
+        
+        mock_glob.side_effect = glob_side_effect
+        
+        result = Version.check_versions()
+        
+        mock_readme.assert_called_once_with(False)
+        assert mock_md.call_count == len(mock_md_files)
+        assert mock_csv.call_count == len(mock_csv_files)
+        assert result is False
 
-    def test_check_versions_update_mode(self):
+    def test_check_versions_update_mode(self, mocker):
         """Test check_versions method in update mode."""
-        with patch.object(Version, 'check_or_update_readme', return_value=True) as mock_readme, \
-             patch.object(Version, 'check_md') as mock_md, \
-             patch.object(Version, 'check_csv') as mock_csv, \
-             patch('pathlib.Path.glob', return_value=[]), \
-             patch.object(Path, 'is_dir', return_value=True):
-            
-            result = Version.check_versions(update=True)
-            
-            mock_readme.assert_called_once_with(True)
-            assert result is True
+        mock_readme = mocker.patch.object(Version, 'check_or_update_readme', return_value=True)
+        mock_md = mocker.patch.object(Version, 'check_md')
+        mock_csv = mocker.patch.object(Version, 'check_csv')
+        mocker.patch('pathlib.Path.glob', return_value=[])
+        mocker.patch.object(Path, 'is_dir', return_value=True)
+        
+        result = Version.check_versions(update=True)
+        
+        mock_readme.assert_called_once_with(True)
+        assert result is True
 
-    def test_check_versions_missing_drift_rules_dir(self):
+    def test_check_versions_missing_drift_rules_dir(self, mocker):
         """Test check_versions when drift-rules directory is missing."""
-        with patch.object(Version, 'check_or_update_readme', return_value=False), \
-             patch('pathlib.Path.glob', return_value=[]), \
-             patch.object(Path, 'is_dir', return_value=False):
-            
-            with pytest.raises(NotADirectoryError):
-                Version.check_versions()
+        mocker.patch.object(Version, 'check_or_update_readme', return_value=False)
+        mocker.patch('pathlib.Path.glob', return_value=[])
+        mocker.patch.object(Path, 'is_dir', return_value=False)
+        
+        with pytest.raises(NotADirectoryError):
+            Version.check_versions()
 
     def test_check_csv_valid(self, temp_csv_file):
         """Test check_csv with valid CSV file."""
@@ -210,7 +209,7 @@ Same policy again: GWS.CHAT.1.0v0
         
         assert result is True
 
-    def test_check_csv_invalid_policy_id(self):
+    def test_check_csv_invalid_policy_id(self, mocker):
         """Test check_csv with invalid policy ID format."""
         with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
             writer = csv.DictWriter(f, fieldnames=['PolicyId', 'Description'])
@@ -219,13 +218,11 @@ Same policy again: GWS.CHAT.1.0v0
             temp_path = Path(f.name)
         
         try:
-            Version._baseline_version_map = {}
+            mock_log = mocker.patch('scubagoggles.version.log')
+            result = Version.check_csv(temp_path)
             
-            with patch('scubagoggles.version.log') as mock_log:
-                result = Version.check_csv(temp_path)
-                
-                assert result is False
-                mock_log.error.assert_called()
+            assert result is False
+            mock_log.error.assert_called()
         finally:
             if temp_path.exists():
                 temp_path.unlink()
@@ -237,12 +234,12 @@ Same policy again: GWS.CHAT.1.0v0
         
         assert result is True
 
-    def test_check_md_invalid_versions(self):
+    def test_check_md_invalid_versions(self, mocker):
         """Test check_md with invalid version suffixes."""
         # Create content with inconsistent version suffixes for the same policy
         content = """This file has policies:
-GWS.CHAT.1.0v0 first occurrence
-GWS.CHAT.1.0v1 second occurrence with different suffix
+GWS.CHAT.1.1v0 first occurrence
+GWS.CHAT.1.1v1 second occurrence with different suffix
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
@@ -250,52 +247,50 @@ GWS.CHAT.1.0v1 second occurrence with different suffix
             temp_path = Path(f.name)
         
         try:
-            Version._baseline_version_map = {}
+            mock_log = mocker.patch('scubagoggles.version.log')
+            result = Version.check_md(temp_path)
             
-            with patch('scubagoggles.version.log') as mock_log:
-                result = Version.check_md(temp_path)
-                
-                assert result is False
-                mock_log.error.assert_called()
+            assert result is False
+            mock_log.error.assert_called()
         finally:
             if temp_path.exists():
                 temp_path.unlink()
 
-    def test_check_or_update_readme_no_file(self):
+    def test_check_or_update_readme_no_file(self, mocker):
         """Test check_or_update_readme when README file doesn't exist."""
-        with patch.object(Path, 'exists', return_value=False):
-            result = Version.check_or_update_readme()
-            assert result is False
+        mocker.patch.object(Path, 'exists', return_value=False)
+        result = Version.check_or_update_readme()
+        assert result is False
 
-    def test_check_or_update_readme_check_mode(self):
+    def test_check_or_update_readme_check_mode(self, mocker):
         """Test check_or_update_readme in check mode."""
         readme_content = "Download ScubaGoggles-v1.0.0 from GitHub"
         
-        with patch.object(Path, 'exists', return_value=True), \
-             patch.object(Path, 'read_text', return_value=readme_content), \
-             patch('scubagoggles.version.log') as mock_log:
-            
-            result = Version.check_or_update_readme(update=False)
-            
-            # Should detect version mismatch and log error
-            mock_log.error.assert_called()
-            assert result is True
+        mocker.patch.object(Path, 'exists', return_value=True)
+        mocker.patch.object(Path, 'read_text', return_value=readme_content)
+        mock_log = mocker.patch('scubagoggles.version.log')
+        
+        result = Version.check_or_update_readme(update=False)
+        
+        # Should detect version mismatch and log error
+        mock_log.error.assert_called()
+        assert result is True
 
-    def test_check_or_update_readme_update_mode(self):
+    def test_check_or_update_readme_update_mode(self, mocker):
         """Test check_or_update_readme in update mode."""
         readme_content = "Download ScubaGoggles-v1.0.0 from GitHub"
         updated_content = f"Download ScubaGoggles-{Version.current} from GitHub"
         
-        with patch.object(Path, 'exists', return_value=True), \
-             patch.object(Path, 'read_text', return_value=readme_content), \
-             patch.object(Path, 'write_text') as mock_write, \
-             patch('scubagoggles.version.log') as mock_log:
-            
-            result = Version.check_or_update_readme(update=True)
-            
-            mock_write.assert_called_once()
-            mock_log.debug.assert_called()
-            assert result is True
+        mocker.patch.object(Path, 'exists', return_value=True)
+        mocker.patch.object(Path, 'read_text', return_value=readme_content)
+        mock_write = mocker.patch.object(Path, 'write_text')
+        mock_log = mocker.patch('scubagoggles.version.log')
+        
+        result = Version.check_or_update_readme(update=True)
+        
+        mock_write.assert_called_once()
+        mock_log.debug.assert_called()
+        assert result is True
 
     @pytest.mark.parametrize("version,should_raise", [
         ("2.0.0", False),
@@ -306,41 +301,41 @@ GWS.CHAT.1.0v1 second occurrence with different suffix
         ("v2.0.0", True),
         ("invalid", True),
     ])
-    def test_set_version_validation(self, version, should_raise):
+    def test_set_version_validation(self, version, should_raise, mocker):
         """Test set method with various version formats."""
         if should_raise:
             with pytest.raises(ValueError):
                 Version.set(version)
         else:
-            with patch.object(Path, 'exists', return_value=True), \
-                 patch.object(Path, 'read_text', return_value="__version__ = '1.0.0'"), \
-                 patch.object(Path, 'write_text') as mock_write, \
-                 patch.object(Version, 'initialize') as mock_init, \
-                 patch.object(Version, 'check_versions') as mock_check:
-                
-                Version.set(version)
-                
-                mock_write.assert_called_once()
-                mock_init.assert_called_once_with(version)
-                mock_check.assert_called_once_with(True)
+            mocker.patch.object(Path, 'exists', return_value=True)
+            mocker.patch.object(Path, 'read_text', return_value="__version__ = '1.0.0'")
+            mock_write = mocker.patch.object(Path, 'write_text')
+            mock_init = mocker.patch.object(Version, 'initialize')
+            mock_check = mocker.patch.object(Version, 'check_versions')
+            
+            Version.set(version)
+            
+            mock_write.assert_called_once()
+            mock_init.assert_called_once_with(version)
+            mock_check.assert_called_once_with(True)
 
-    def test_set_missing_init_file(self):
+    def test_set_missing_init_file(self, mocker):
         """Test set method when __init__.py file is missing."""
-        with patch.object(Path, 'exists', return_value=False):
-            with pytest.raises(FileNotFoundError):
-                Version.set("2.0.0")
+        mocker.patch.object(Path, 'exists', return_value=False)
+        with pytest.raises(FileNotFoundError):
+            Version.set("2.0.0")
 
-    def test_set_no_changes_needed(self):
+    def test_set_no_changes_needed(self, mocker):
         """Test set method when no changes are needed."""
         current_content = "__version__ = '2.0.0'"
         
-        with patch.object(Path, 'exists', return_value=True), \
-             patch.object(Path, 'read_text', return_value=current_content), \
-             patch('scubagoggles.version.log') as mock_log:
-            
-            Version.set("2.0.0")
-            
-            mock_log.error.assert_called_with('? ScubaGoggles version set - no changes made')
+        mocker.patch.object(Path, 'exists', return_value=True)
+        mocker.patch.object(Path, 'read_text', return_value=current_content)
+        mock_log = mocker.patch('scubagoggles.version.log')
+        
+        Version.set("2.0.0")
+        
+        mock_log.error.assert_called_with('? ScubaGoggles version set - no changes made')
 
     @pytest.mark.parametrize("suffix,expected", [
         ("v1", True),
@@ -358,24 +353,24 @@ GWS.CHAT.1.0v1 second occurrence with different suffix
         result = Version.is_valid_suffix(suffix)
         assert result == expected
 
-    def test_log_version_errors(self):
+    def test_log_version_errors(self, mocker):
         """Test log_version_errors static method."""
         errors = {
-            "GWS.CHAT.1.0": ["v1", "v0", "v2"],
+            "GWS.CHAT.1.1": ["v1", "v0", "v2"],
             "GWS.GMAIL.2.1": ["v2", "v1"]
         }
         
-        with patch('scubagoggles.version.log') as mock_log:
-            Version.log_version_errors(42, errors)
-            
-            # Should log error for each policy ID
-            assert mock_log.error.call_count == len(errors)
-            
-            # Check that line number and policy details are included
-            for call in mock_log.error.call_args_list:
-                args = call[0]
-                assert 42 in args  # line number
-                assert any(policy_id in str(args) for policy_id in errors.keys())
+        mock_log = mocker.patch('scubagoggles.version.log')
+        Version.log_version_errors(42, errors)
+        
+        # Should log error for each policy ID
+        assert mock_log.error.call_count == len(errors)
+        
+        # Check that line number and policy details are included
+        for call in mock_log.error.call_args_list:
+            args = call[0]
+            assert 42 in args  # line number
+            assert any(policy_id in str(args) for policy_id in errors.keys())
 
     def test_initialize_method(self):
         """Test initialize class method."""
@@ -419,7 +414,7 @@ GWS.CHAT.1.0v1 second occurrence with different suffix
         assert suffix_match_minor.group('minor') == '5'
         
         # Test version regex
-        version_match = Version.version_re.match("GWS.CHAT.1.0v1")
+        version_match = Version.version_re.match("GWS.CHAT.1.1v1")
         assert version_match is not None
-        assert version_match.group('policy_id') == 'GWS.CHAT.1.0'
+        assert version_match.group('policy_id') == 'GWS.CHAT.1.1'
         assert version_match.group('sfx') == 'v1'
