@@ -1,0 +1,23 @@
+{
+  "projectBaseUrl":"/scubagoggles",
+  "ignorePatterns": [
+    {
+      "pattern": "^https://admin.google.com"
+    },
+    {
+        "pattern":"^https://github.com/cisagov/ScubaGoggles/blob/main*"
+    },
+    {
+        "pattern":"^mailto:user@company.com"
+    },
+    {
+        "pattern":"^#"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "^/",
+      "replacement": "{{BASEURL}}/"
+    }
+  ]
+}
