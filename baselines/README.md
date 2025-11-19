@@ -1,5 +1,6 @@
 Individual baselines can be visited directly at the links below:
 
+- [Assured Controls](/scubagoggles/baselines/assuredcontrols.md)
 - [Common Controls](/scubagoggles/baselines/commoncontrols.md)
 - [Gemini](/scubagoggles/baselines/gemini.md)
 - [Gmail](/scubagoggles/baselines/gmail.md)
