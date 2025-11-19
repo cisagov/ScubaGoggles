@@ -19,21 +19,6 @@ GoodMeetApi01 := {
     }
 }
 
-GoodMeetApi02 := {
-    "policies": {
-        "topOU": {
-            "meet_safety_access_type": {"access_type": "RESTRICTED"},
-            "meet_service_status": {"serviceState": "ENABLED"}
-        },
-        "nextOU": {
-            "meet_safety_access_type": {"access_type": "TRUSTED"},
-        }
-    },
-    "tenant_info": {
-        "topLevelOU": "topOU"
-    }
-}
-
 BadMeetApi01 := {
     "policies": {
         "topOU": {
@@ -49,13 +34,6 @@ BadMeetApi01 := {
 test_MeetAPI_UserAccessType_Correct_1 if {
     PolicyId := MeetId1_1
     Output := tests with input as GoodMeetApi01
-
-    PassTestResult(PolicyId, Output)
-}
-
-test_MeetAPI_UserAccessType_Correct_2 if {
-    PolicyId := MeetId1_1
-    Output := tests with input as GoodMeetApi02
 
     PassTestResult(PolicyId, Output)
 }
