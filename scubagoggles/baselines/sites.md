@@ -8,7 +8,7 @@ The CISA SCuBA SCBs for GWS help secure federal information assets stored within
 
 For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
-This baseline is based on Google documentation available at [Google Workspace Admin Help: Sites](https://support.google.com/a/topic/6385920?hl=en&ref_topic=9197) and addresses the following:
+This baseline is based on Google documentation available at [Google Workspace Admin Help: Sites](https://support.google.com/sites/?sjid=11348526400392778786-NA#topic=7184580) and addresses the following:
 
 -   [Sites Service Status](#1-sites-service-status)
 
