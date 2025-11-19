@@ -58,7 +58,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                             help=help_msg)
     else:
         help_msg += ('Required unless the credentials path '
-            'has been saved using the ScubaGoggles setup utility.')
+            'has been saved using the ScubaGoggles setup utility or an access token is provided.')
         parser.add_argument('--credentials',
                             '-c',
                             metavar='<credentials-JSON-file>',
@@ -71,6 +71,16 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar='<dark-mode>',
                         choices=('true', 'false'),
                         help='Enable dark mode')
+
+    help_msg = ('Access token string to be used in lieu of a credentials file. '
+                'If provided, will take precendence over the credentials file. '
+                'Advanced option; using a credentials file is the recommended '
+                'authentication method.')
+    parser.add_argument('--accesstoken',
+                        metavar='<access-token>',
+                        type=str,
+                        default=None,
+                        help=help_msg)
 
     help_msg = ('A list of one or more abbreviated GWS baseline names that the '
                 'tool will assess. Defaults to all baselines. '
