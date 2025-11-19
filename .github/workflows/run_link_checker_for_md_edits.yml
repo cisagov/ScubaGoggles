@@ -14,4 +14,3 @@ jobs:
         config-file: 'mlc_config.json'
         use-quiet-mode: 'yes'
         use-verbose-mode: 'yes'
-        check-modified-files-only: 'yes'
