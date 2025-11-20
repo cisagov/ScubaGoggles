@@ -39,9 +39,9 @@ This control limits safe meeting access to users with a Google Account or Dialin
 ### Policies
 
 #### GWS.MEET.1.1v0.6
-Meeting access SHALL be restricted at the organization level to users within the organization and invited users.
+External users who were not explicitly invited SHALL be required to ask to join.
 
-- _Rationale:_ Allowing users not within the organization or those not on the invite list to join meetings diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring users outside the organization or without an invitation to require organizer permission to join.
+- _Rationale:_ Allowing users not within the organization or those not on the invite list to join meetings without asking diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring users outside the organization or without an invitation to require organizer permission to join.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2, IA-8
 - MITRE ATT&CK TTP Mapping

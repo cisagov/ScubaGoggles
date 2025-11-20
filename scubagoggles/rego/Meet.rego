@@ -18,7 +18,7 @@ LogEvents := utils.GetEvents("meet_logs")
 
 MeetId1_1 := utils.PolicyIdWithSuffix("GWS.MEET.1.1")
 
-NonComplianceMessage1_1(value) := sprintf("Who can join meetings is set to: %s",
+NonComplianceMessage1_1(value) := sprintf("Who can join meetings without asking is set to: %s",
                                           [value])
 
 GetFriendlyValue1_1(Value) := "anyone" if {
@@ -42,7 +42,7 @@ NonCompliantOUs1_1 contains {
 tests contains {
     "PolicyId": MeetId1_1,
     "Prerequisites": [
-        "policy/settings.meet_safety_access_type.access_type",
+        "policy/meet_safety_access_type.access_type",
         "policy/meet_service_status.serviceState"
     ],
     "Criticality": "Shall",
