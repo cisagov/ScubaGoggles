@@ -66,8 +66,9 @@ To configure the settings for Domain Meet safety settings:
 #### GWS.MEET.1.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
-3.  Select **Meet safety settings** -\> **Domain**.
-4.  Select **Only users from your organization or users dialing in using a phone** or **Users signed in with a Google account or dialing in using a phone**.
+3.  Select **Meet safety settings** -\> **Access Type**.
+4.  In **Meeting access type (subject to restrictions set in Domain)** 
+4.  Select **Trusted** or **Restricted**.
 5.  Select **Save**.
 
 
