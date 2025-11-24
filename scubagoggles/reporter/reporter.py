@@ -1,7 +1,8 @@
 """
 reporter.py creates the report html page
 """
-
+#Must remove pylint disable too many lines when fixing this file.
+# pylint: disable=too-many-lines
 import io
 import logging
 import time
@@ -20,8 +21,7 @@ log = logging.getLogger(__name__)
 
 # Nine instance attributes is reasonable in this case.
 # pylint: disable=too-many-instance-attributes
-#Must remove pylint disable too many lines when fixing this file.
-# pylint: disable=too-many-lines
+
 class Reporter:
 
     """The Reporter class generates the HTML files containing the conformance
@@ -298,8 +298,8 @@ class Reporter:
                 return True
             # The expiration date is passed, don't omit the policy
             warning = (f'Config file indicates omitting {control_id}, but '
-                    f'the provided expiration date, {raw_date}, has passed. '
-                    'Control will not be omitted.')
+                       f'the provided expiration date, {raw_date}, has passed. '
+                       'Control will not be omitted.')
             self._warn(warning)
         return False
 
@@ -934,15 +934,15 @@ class Reporter:
                                                        details)
 
                     table_data.append({
-                        'Control ID': control_id,
-                        'Requirement': requirement,
-                        'Result': 'Omitted',
-                        'Criticality': tests[0]['Criticality'],
-                        'Details': f'Test omitted by user. {rationale}',
-                        'OriginalResult': original_result if original_result else 'N/A',
-                        'OriginalDetails': original_details if original_details else 'N/A',
-                        'Comments': self._build_comments_array(control_id),
-                        'ResolutionDate': self._build_resolution_date(control_id)
+                    'Control ID': control_id,
+                    'Requirement': requirement,
+                    'Result': 'Omitted',
+                    'Criticality': tests[0]['Criticality'],
+                    'Details': f'Test omitted by user. {rationale}',
+                    'OriginalResult': original_result if original_result else 'N/A',
+                    'OriginalDetails': original_details if original_details else 'N/A',
+                    'Comments': self._build_comments_array(control_id),
+                    'ResolutionDate': self._build_resolution_date(control_id)
                     })
                     continue
 
