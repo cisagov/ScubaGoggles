@@ -484,6 +484,7 @@ class Reporter:
 
             dns_link = "<a href=\"#dns-logs\">View DNS logs</a> for more details."
             details = details.replace(dns_link, "")
+            details = self._convert_html_lists_to_plaintext(details)
 
             result['Details'] = details
 
@@ -494,8 +495,22 @@ class Reporter:
                                                            self._log_based_warning_plaintext)
                 original_details = original_details.replace('<br>', '\n')
                 original_details = original_details.replace(dns_link, "")
+                original_details = self._convert_html_lists_to_plaintext(original_details)
                 result['OriginalDetails'] = original_details
         return table_data
+
+    def _convert_html_lists_to_plaintext(self, text: str) -> str:
+        """
+        Convert simple HTML unordered list tags to plaintext bullets so they do
+        not leak into Details or OriginalDetails.
+        """
+        if not isinstance(text, str):
+            return text
+        text = text.replace('<ul>', ' ')
+        text = text.replace('</ul>', '')
+        text = text.replace('<li>', '\n- ')
+        text = text.replace('</li>', ' ')
+        return text.strip()
 
     def _insert_classroom_warning(self, html: str) -> str:
         """
