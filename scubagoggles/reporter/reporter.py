@@ -1069,6 +1069,6 @@ class Reporter:
             json_data.append(results_data)
         html = self._build_report_html(fragments, rules_data, darkmode)
         with open(f'{out_path}/IndividualReports/{ind_report_name}.html',
-                  mode='w', encoding='UTF-8') as html_file:
+                        mode='w', encoding='UTF-8') as html_file:
             html_file.write(html)
         return [report_stats, json_data]
