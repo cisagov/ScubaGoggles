@@ -37,14 +37,14 @@ NonCompliantOUs1_1 contains {
 } if {
     some OU, settings in input.policies
     MeetEnabled(OU)
-    meetAccess := settings.meet_joining.allowed_audience
+    meetAccess := settings.meet_meet_joining.allowed_audience
     not meetAccess in ["TRUSTED", "RESTRICTED"]
 }
 
 tests contains {
     "PolicyId": MeetId1_1,
     "Prerequisites": [
-        "policy/meet_joining.allowed_audience",
+        "policy/meet_meet_joining.allowed_audience",
         "policy/meet_service_status.serviceState"
     ],
     "Criticality": "Shall",
