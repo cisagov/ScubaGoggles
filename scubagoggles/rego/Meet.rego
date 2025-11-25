@@ -27,7 +27,9 @@ GetFriendlyValue1_1(Value) := "anyone" if {
     Value == "TRUSTED"
 } else := "invited users only" if {
     Value == "RESTRICTED"
-} else := Value
+} else := "unspecified" if {
+    Value == "ALLOWED_AUDIENCE_UNSPECIFIED"
+ } else := Value
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
@@ -35,14 +37,14 @@ NonCompliantOUs1_1 contains {
 } if {
     some OU, settings in input.policies
     MeetEnabled(OU)
-    meetAccess := settings.meet_safety_access_type.access_type
+    meetAccess := settings.meet_joining
     not meetAccess in ["TRUSTED", "RESTRICTED"]
 }
 
 tests contains {
     "PolicyId": MeetId1_1,
     "Prerequisites": [
-        "policy/meet_safety_access_type.access_type",
+        "policy/meet_joining",
         "policy/meet_service_status.serviceState"
     ],
     "Criticality": "Shall",
