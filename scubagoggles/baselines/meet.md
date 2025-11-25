@@ -34,7 +34,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## 1. Meeting Access
 
-This control limits safe meeting access to users with a Google Account or Dialing in using a phone.
+This control limits external users not explicitly invited to the meeting from joining without permission.
 
 ### Policies
 
@@ -61,15 +61,15 @@ External users who were not explicitly invited SHALL be required to ask to join.
 
 ### Implementation
 
-To configure the settings for Domain Meet safety settings:
+To configure the settings for Access type Meet safety settings:
 
 #### GWS.MEET.1.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Access Type**.
 4.  In **Meeting access type (subject to restrictions set in Domain)** 
-4.  Select **Trusted** or **Restricted**.
-5.  Select **Save**.
+5.  Select **Trusted** or **Restricted**.
+6.  Select **Save**.
 
 
 ## 2. Internal Access to External Meetings
