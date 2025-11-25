@@ -7,11 +7,11 @@ import data.utils.PassTestResult
 GoodMeetApi01 := {
     "policies": {
         "topOU": {
-            "meet_joining": {"access_type": "TRUSTED"},
+            "meet_joining": {"allowed_audience": "TRUSTED"},
             "meet_service_status": {"serviceState": "ENABLED"}
         },
         "nextOU": {
-            "meet_joining": {"access_type": "RESTRICTED"},
+            "meet_joining": {"allowed_audience": "RESTRICTED"},
         }
     },
     "tenant_info": {
@@ -22,7 +22,7 @@ GoodMeetApi01 := {
 BadMeetApi01 := {
     "policies": {
         "topOU": {
-            "meet_joining": {"access_type": "OPEN"},
+            "meet_joining": {"allowed_audience": "OPEN"},
             "meet_service_status": {"serviceState": "ENABLED"}
         }
     },
