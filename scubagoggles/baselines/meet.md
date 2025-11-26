@@ -67,9 +67,8 @@ To configure the settings for Access type Meet safety settings:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Access Type**.
-4.  In **Meeting access type (subject to restrictions set in Domain)** 
-5.  Select **Trusted** or **Restricted**.
-6.  Select **Save**.
+4.  In **Meeting access type (subject to restrictions set in Domain)**, select **Trusted** or **Restricted**.
+5.  Select **Save**.
 
 
 ## 2. Internal Access to External Meetings
