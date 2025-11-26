@@ -6,11 +6,8 @@ following the ScubaGoggles testing framework patterns.
 
 import argparse
 import csv
-import logging
 import pytest
-import re
 import tempfile
-from collections import defaultdict
 from pathlib import Path
 
 from scubagoggles.version import Version
@@ -77,23 +74,10 @@ class TestVersion:
 
     @pytest.fixture
     def temp_md_file(self):
-        """Fixture creating a temporary Markdown file for testing."""
-        content = """# Test Markdown File
-        
-This file contains policy IDs like GWS.CHAT.1.1v0 and others.
-Some regular text without policy IDs.
-Another policy: GWS.DRIVEDOCS.3.0v0
-Same policy again: GWS.CHAT.1.1v0
-"""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
-            f.write(content)
-            temp_path = Path(f.name)
-        
-        yield temp_path
-        
-        # Cleanup
-        if temp_path.exists():
-            temp_path.unlink()
+        """Fixture providing path to test markdown file."""
+        # Get the path to the test markdown file relative to this test file
+        test_file_path = Path(__file__).parent / "snippets" / "test_markdown_file.md"
+        return test_file_path
 
     def test_command_dispatch_check(self, mock_arguments_check, capsys, mocker):
         """Test command_dispatch with check option."""
@@ -236,25 +220,14 @@ Same policy again: GWS.CHAT.1.1v0
 
     def test_check_md_invalid_versions(self, mocker):
         """Test check_md with invalid version suffixes."""
-        # Create content with inconsistent version suffixes for the same policy
-        content = """This file has policies:
-GWS.CHAT.1.1v0 first occurrence
-GWS.CHAT.1.1v1 second occurrence with different suffix
-"""
+        # Use the test markdown file with inconsistent version suffixes
+        test_file_path = Path(__file__).parent / "snippets" / "test_markdown_invalid.md"
         
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
-            f.write(content)
-            temp_path = Path(f.name)
+        mock_log = mocker.patch('scubagoggles.version.log')
+        result = Version.check_md(test_file_path)
         
-        try:
-            mock_log = mocker.patch('scubagoggles.version.log')
-            result = Version.check_md(temp_path)
-            
-            assert result is False
-            mock_log.error.assert_called()
-        finally:
-            if temp_path.exists():
-                temp_path.unlink()
+        assert result is False
+        mock_log.error.assert_called()
 
     def test_check_or_update_readme_no_file(self, mocker):
         """Test check_or_update_readme when README file doesn't exist."""
