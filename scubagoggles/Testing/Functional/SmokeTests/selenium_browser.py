@@ -79,3 +79,12 @@ class Browser:
             The URL of the page currently loaded in the browser
         """
         return self.driver.current_url
+
+    def execute_script(self, script):
+        """
+        Executes JavaScript code snippet in the current context of a
+        selected frame or window.
+
+        :param script: function to be called against driver instance
+        """
+        return self.driver.execute_script(script)

@@ -8,13 +8,13 @@ on:
     types: [submitted]
   push:
     # These paths are primarily for workflow testing purposes
-    paths:
-      - ".github/workflows/run_smoke_test.yml"
-      - ".github/actions/setup-dependencies-windows/action.yml"
-      - ".github/actions/setup-dependencies-macos/action.yml"
-    branches:
-      - "main"
-      - "*smoketest*"
+    # paths:
+    #   - ".github/workflows/run_smoke_test.yml"
+    #   - ".github/actions/setup-dependencies-windows/action.yml"
+    #   - ".github/actions/setup-dependencies-macos/action.yml"
+    # branches:
+    #   - "main"
+    #   - "*smoketest*"
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -50,7 +50,6 @@ jobs:
             operatingsystem_val="${{ inputs.operating-system }}"
             pythonversion_val="${{ inputs.python-version }}"
             opaversion_val="${{ inputs.opa-version }}"
-
           # Default values for other events
           else
             operatingsystem_val="['windows-latest', 'macos-latest', 'ubuntu-latest']"
@@ -60,7 +59,6 @@ jobs:
           echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
           echo "python-version=$pythonversion_val" >> "$GITHUB_OUTPUT"
           echo "opa-version=$opaversion_val" >> "$GITHUB_OUTPUT"
-
   smoke-test:
     needs: configuration
     strategy:
@@ -71,6 +69,8 @@ jobs:
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.operating-system }}
+    outputs:
+      baseline-path: ${{ steps.baselinepath.outputs.cachepath }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -96,7 +96,7 @@ jobs:
           operating-system: "windows"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
-      
+
       - name: Setup Dependencies (ubuntu)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
         uses: ./.github/actions/setup-dependencies-macos
@@ -113,7 +113,51 @@ jobs:
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
-      - name: Run ScubaGoggles and check for correct output
+      - name: Run ScubaGoggles and check for correct output (windows | macOs)
+        if: ${{ matrix.operating-system == 'windows-latest' ||  matrix.operating-system == 'macos-latest'}}
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+
+      - name: Run ScubaGoggles and check for correct output (ubuntu)
+        if: ${{ matrix.operating-system == 'ubuntu-latest' }}
+        id: baselinepath
+        run: |
+          ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
+          pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+          FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
+          echo "cachepath=$FOUNDIT" >> $GITHUB_OUTPUT
+
+      - name: Cache the output directory
+        id: baseline
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/scubagoggles
+          key: ${{ runner.os }}-baseline-${{ steps.baselinepath.outputs.cachepath }}
+
+  lhci:
+    runs-on: ubuntu-latest
+    needs: smoke-test
+    permissions:
+      contents: write
+    if: ${{ always() }}
+    steps:
+      - name: Restore cached baseline folder
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            /home/runner/scubagoggles
+          key: ${{ runner.os }}-baseline-${{ steps.baselinepath.outputs.cachepath }}
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.15.x
+          lhci autorun --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
