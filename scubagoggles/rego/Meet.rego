@@ -18,16 +18,18 @@ LogEvents := utils.GetEvents("meet_logs")
 
 MeetId1_1 := utils.PolicyIdWithSuffix("GWS.MEET.1.1")
 
-NonComplianceMessage1_1(value) := sprintf("Who can join meetings is set to: %s",
+NonComplianceMessage1_1(value) := sprintf("Who can join meetings without asking is set to: %s",
                                           [value])
 
-GetFriendlyValue1_1(Value) := "all users (including users not signed in with a Google account)" if {
-    Value == "ALL"
+GetFriendlyValue1_1(Value) := "anyone" if {
+    Value == "OPEN"
 } else := "users in the same organization" if {
-    Value == "SAME_ORGANIZATION_ONLY"
-} else := "logged in users" if {
-    Value == "LOGGED_IN"
-} else := Value
+    Value == "TRUSTED"
+} else := "invited users only" if {
+    Value == "RESTRICTED"
+} else := "unspecified" if {
+    Value == "ALLOWED_AUDIENCE_UNSPECIFIED"
+ } else := Value
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
@@ -35,17 +37,17 @@ NonCompliantOUs1_1 contains {
 } if {
     some OU, settings in input.policies
     MeetEnabled(OU)
-    meetAccess := settings.meet_safety_domain.usersAllowedToJoin
-    not meetAccess in ["SAME_ORGANIZATION_ONLY", "LOGGED_IN"]
+    meetAccess := settings.meet_meet_joining.allowedAudience
+    not meetAccess in ["TRUSTED", "RESTRICTED"]
 }
 
 tests contains {
     "PolicyId": MeetId1_1,
     "Prerequisites": [
-        "policy/meet_safety_domain.usersAllowedToJoin",
+        "policy/meet_meet_joining.allowedAudience",
         "policy/meet_service_status.serviceState"
     ],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
