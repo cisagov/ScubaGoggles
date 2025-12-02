@@ -248,9 +248,69 @@ const truncateDNSTables = (maxRows) => {
     }
 }
 
+
+/**
+ * Apply scope attributes to columns and rows
+ */
+const applyScopeAttributes = () => {
+    try {
+
+        const tables = document.querySelectorAll("table")
+
+        for (let table of tables) {
+            console.log('tables: ', tables)
+
+            let tbody = table.querySelector("tbody")
+
+            if (!tbody) throw new Error(
+                `Invalid HTML structure, <table id='${tables[table].getAttribute("id")}'> does not have a <tbody> tag.`
+            )
+
+            let cols, rows;
+
+            if (tbody.children && tbody.children.length > 1) {
+
+                if (table.querySelectorAll("thead > tr > th")) {
+                    cols = table.querySelectorAll("thead > tr > th")
+                }
+
+                else if (tbody.children[0].querySelectorAll("th")) {
+                    cols = tbody.children[0].querySelectorAll("th")
+                }
+
+                for (let col of cols) {
+                    col.setAttribute("scope", "col")
+                }
+
+                let trIdx = (table.classList.contains("caps_table")) ? 1 : 0
+
+                rows = tbody.children
+
+                for (let row of rows) {
+                    if (row.children[trIdx].localName === 'td') {
+                       row.children[trIdx].setAttribute("scope", "row")
+                    }
+                }
+
+            }
+
+            else throw new Error(
+                `Unable to apply scope attributes to columns/rows,
+                <tbody> of <table id='${tables[table].getAttribute("id")}'> does not contain children or has no rows.`
+            )
+
+        }
+
+    } catch (error) {
+        console.error(`Error applying scope attributes: ${error}`)
+    }
+}
+
+
 window.addEventListener('DOMContentLoaded', () => {
     const MAX_DNS_ENTRIES = 20;
     colorRows();
+    applyScopeAttributes();
     mountDarkMode();
     truncateDNSTables(MAX_DNS_ENTRIES);
 });
