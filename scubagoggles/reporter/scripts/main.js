@@ -258,7 +258,6 @@ const applyScopeAttributes = () => {
         const tables = document.querySelectorAll("table")
 
         for (let table of tables) {
-            console.log('tables: ', tables)
 
             let tbody = table.querySelector("tbody")
 
