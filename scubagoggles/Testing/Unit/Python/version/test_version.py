@@ -6,19 +6,20 @@ following the ScubaGoggles testing framework patterns.
 
 import argparse
 import csv
-import pytest
 import tempfile
 from pathlib import Path
+
+import pytest
 
 from scubagoggles.version import Version
 
 
-class TestVersion:
+class TestVersion:  # pylint: disable=too-many-public-methods
     """Test class for the Version class methods."""
-    
+
     def setup_method(self):
         """Setup method to ensure clean state for each test."""
-        Version._baseline_version_map = {}
+        Version._baseline_version_map = {}  # pylint: disable=protected-access
 
     @pytest.fixture
     def mock_arguments_check(self, mocker):
@@ -65,9 +66,9 @@ class TestVersion:
             writer.writerow({'PolicyId': 'GWS.CHAT.1.1v0', 'Description': 'Test policy'})
             writer.writerow({'PolicyId': 'GWS.DRIVEDOCS.3.0v0', 'Description': 'Another policy'})
             temp_path = Path(f.name)
-        
+
         yield temp_path
-        
+
         # Cleanup
         if temp_path.exists():
             temp_path.unlink()
@@ -83,7 +84,7 @@ class TestVersion:
         """Test command_dispatch with check option."""
         mock_check = mocker.patch.object(Version, 'check_versions')
         Version.command_dispatch(mock_arguments_check)
-        
+
         captured = capsys.readouterr()
         assert 'ScubaGoggles version check' in captured.out
         mock_check.assert_called_once()
@@ -92,7 +93,7 @@ class TestVersion:
         """Test command_dispatch with upgrade option."""
         mock_set = mocker.patch.object(Version, 'set')
         Version.command_dispatch(mock_arguments_upgrade)
-        
+
         captured = capsys.readouterr()
         assert 'ScubaGoggles version upgrade (2.0.0)' in captured.out
         mock_set.assert_called_once_with("2.0.0")
@@ -100,7 +101,7 @@ class TestVersion:
     def test_command_dispatch_default(self, mock_arguments_default, capsys):
         """Test command_dispatch with no options (default behavior)."""
         Version.command_dispatch(mock_arguments_default)
-        
+
         captured = capsys.readouterr()
         assert Version.with_name in captured.out
 
@@ -112,24 +113,24 @@ class TestVersion:
     def test_check_version(self, data, expected_success):
         """Test check_version method with various input data."""
         success, errors = Version.check_version(data)
-        
+
         assert success == expected_success
         if not expected_success:
             assert len(errors) > 0
 
     def test_check_version_consistent_suffixes(self):
         """Test check_version with consistent version suffixes."""
-        
+
         # First call establishes the baseline
         success1, errors1 = Version.check_version("GWS.CHAT.1.1v0")
         assert success1 is True
-        assert errors1 == {}
-        
+        assert not errors1
+
         # Second call with same suffix should succeed
         success2, errors2 = Version.check_version("GWS.CHAT.1.1v0")
         assert success2 is True
-        assert errors2 == {}
-        
+        assert not errors2
+
         # Third call with different suffix should fail
         success3, errors3 = Version.check_version("GWS.CHAT.1.1v1")
         assert success3 is False
@@ -142,23 +143,23 @@ class TestVersion:
         mock_csv = mocker.patch.object(Version, 'check_csv')
         mock_glob = mocker.patch('pathlib.Path.glob')
         mocker.patch.object(Path, 'is_dir', return_value=True)
-            
+
         # Mock file paths
         mock_md_files = [Path('test1.md'), Path('test2.md')]
         mock_csv_files = [Path('test1.csv'), Path('test2.csv')]
-        
+
         # Configure glob to return different results based on pattern
         def glob_side_effect(pattern):
             if pattern == '**/*.md':
                 return mock_md_files
-            elif pattern == '*.csv':
+            if pattern == '*.csv':
                 return mock_csv_files
             return []
-        
+
         mock_glob.side_effect = glob_side_effect
-        
+
         result = Version.check_versions()
-        
+
         mock_readme.assert_called_once_with(False)
         assert mock_md.call_count == len(mock_md_files)
         assert mock_csv.call_count == len(mock_csv_files)
@@ -167,13 +168,13 @@ class TestVersion:
     def test_check_versions_update_mode(self, mocker):
         """Test check_versions method in update mode."""
         mock_readme = mocker.patch.object(Version, 'check_or_update_readme', return_value=True)
-        mock_md = mocker.patch.object(Version, 'check_md')
-        mock_csv = mocker.patch.object(Version, 'check_csv')
+        mocker.patch.object(Version, 'check_md')
+        mocker.patch.object(Version, 'check_csv')
         mocker.patch('pathlib.Path.glob', return_value=[])
         mocker.patch.object(Path, 'is_dir', return_value=True)
-        
+
         result = Version.check_versions(update=True)
-        
+
         mock_readme.assert_called_once_with(True)
         assert result is True
 
@@ -182,15 +183,15 @@ class TestVersion:
         mocker.patch.object(Version, 'check_or_update_readme', return_value=False)
         mocker.patch('pathlib.Path.glob', return_value=[])
         mocker.patch.object(Path, 'is_dir', return_value=False)
-        
+
         with pytest.raises(NotADirectoryError):
             Version.check_versions()
 
     def test_check_csv_valid(self, temp_csv_file):
         """Test check_csv with valid CSV file."""
-        
+
         result = Version.check_csv(temp_csv_file)
-        
+
         assert result is True
 
     def test_check_csv_invalid_policy_id(self, mocker):
@@ -200,11 +201,11 @@ class TestVersion:
             writer.writeheader()
             writer.writerow({'PolicyId': 'INVALID.FORMAT', 'Description': 'Invalid policy'})
             temp_path = Path(f.name)
-        
+
         try:
             mock_log = mocker.patch('scubagoggles.version.log')
             result = Version.check_csv(temp_path)
-            
+
             assert result is False
             mock_log.error.assert_called()
         finally:
@@ -213,19 +214,19 @@ class TestVersion:
 
     def test_check_md_valid(self, temp_md_file):
         """Test check_md with valid Markdown file."""
-        
+
         result = Version.check_md(temp_md_file)
-        
+
         assert result is True
 
     def test_check_md_invalid_versions(self, mocker):
         """Test check_md with invalid version suffixes."""
         # Use the test markdown file with inconsistent version suffixes
         test_file_path = Path(__file__).parent / "snippets" / "test_markdown_invalid.md"
-        
+
         mock_log = mocker.patch('scubagoggles.version.log')
         result = Version.check_md(test_file_path)
-        
+
         assert result is False
         mock_log.error.assert_called()
 
@@ -238,13 +239,13 @@ class TestVersion:
     def test_check_or_update_readme_check_mode(self, mocker):
         """Test check_or_update_readme in check mode."""
         readme_content = "Download ScubaGoggles-v1.0.0 from GitHub"
-        
+
         mocker.patch.object(Path, 'exists', return_value=True)
         mocker.patch.object(Path, 'read_text', return_value=readme_content)
         mock_log = mocker.patch('scubagoggles.version.log')
-        
+
         result = Version.check_or_update_readme(update=False)
-        
+
         # Should detect version mismatch and log error
         mock_log.error.assert_called()
         assert result is True
@@ -252,15 +253,14 @@ class TestVersion:
     def test_check_or_update_readme_update_mode(self, mocker):
         """Test check_or_update_readme in update mode."""
         readme_content = "Download ScubaGoggles-v1.0.0 from GitHub"
-        updated_content = f"Download ScubaGoggles-{Version.current} from GitHub"
-        
+
         mocker.patch.object(Path, 'exists', return_value=True)
         mocker.patch.object(Path, 'read_text', return_value=readme_content)
         mock_write = mocker.patch.object(Path, 'write_text')
         mock_log = mocker.patch('scubagoggles.version.log')
-        
+
         result = Version.check_or_update_readme(update=True)
-        
+
         mock_write.assert_called_once()
         mock_log.debug.assert_called()
         assert result is True
@@ -285,9 +285,9 @@ class TestVersion:
             mock_write = mocker.patch.object(Path, 'write_text')
             mock_init = mocker.patch.object(Version, 'initialize')
             mock_check = mocker.patch.object(Version, 'check_versions')
-            
+
             Version.set(version)
-            
+
             mock_write.assert_called_once()
             mock_init.assert_called_once_with(version)
             mock_check.assert_called_once_with(True)
@@ -301,13 +301,13 @@ class TestVersion:
     def test_set_no_changes_needed(self, mocker):
         """Test set method when no changes are needed."""
         current_content = "__version__ = '2.0.0'"
-        
+
         mocker.patch.object(Path, 'exists', return_value=True)
         mocker.patch.object(Path, 'read_text', return_value=current_content)
         mock_log = mocker.patch('scubagoggles.version.log')
-        
+
         Version.set("2.0.0")
-        
+
         mock_log.error.assert_called_with('? ScubaGoggles version set - no changes made')
 
     @pytest.mark.parametrize("suffix,expected", [
@@ -332,25 +332,25 @@ class TestVersion:
             "GWS.CHAT.1.1": ["v1", "v0", "v2"],
             "GWS.GMAIL.2.1": ["v2", "v1"]
         }
-        
+
         mock_log = mocker.patch('scubagoggles.version.log')
         Version.log_version_errors(42, errors)
-        
+
         # Should log error for each policy ID
         assert mock_log.error.call_count == len(errors)
-        
+
         # Check that line number and policy details are included
         for call in mock_log.error.call_args_list:
             args = call[0]
             assert 42 in args  # line number
-            assert any(policy_id in str(args) for policy_id in errors.keys())
+            assert any(policy_id in str(args) for policy_id in errors)
 
     def test_initialize_method(self):
         """Test initialize class method."""
         test_version = "3.5.7"
-        
+
         Version.initialize(test_version)
-        
+
         assert Version.current == f"v{test_version}"
         assert Version.number == test_version
         assert Version.with_name == f"{Version.name} v{test_version}"
@@ -370,7 +370,7 @@ class TestVersion:
         assert isinstance(Version.minor, int)
         assert isinstance(Version.build, int)
         assert isinstance(Version.suffix, str)
-        assert isinstance(Version._code_root, Path)
+        assert isinstance(Version._code_root, Path)  # pylint: disable=protected-access
         assert hasattr(Version, 'suffix_re')
         assert hasattr(Version, 'version_re')
 
@@ -380,12 +380,12 @@ class TestVersion:
         suffix_match = Version.suffix_re.match("v1")
         assert suffix_match is not None
         assert suffix_match.group('major') == '1'
-        
+
         suffix_match_minor = Version.suffix_re.match("v2.5")
         assert suffix_match_minor is not None
         assert suffix_match_minor.group('major') == '2'
         assert suffix_match_minor.group('minor') == '5'
-        
+
         # Test version regex
         version_match = Version.version_re.match("GWS.CHAT.1.1v1")
         assert version_match is not None
