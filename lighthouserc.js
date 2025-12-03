@@ -1,7 +1,7 @@
 module.exports = {
   ci: {
     collect: {
-      staticDistDir: './GWSBaselineConformance',
+      staticDistDir: './',
     },
     upload: {
       target: 'temporary-public-storage',
