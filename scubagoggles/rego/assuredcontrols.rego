@@ -27,6 +27,18 @@ if {
     LastEvent.NewValue == "false"
 }
 
+NonCompliantGroups1_1 contains {
+    "Name": Group,
+    "Value": "Access approvals is disabled.",
+}
+if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, "Access Approvals enabled", Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+}
+
 tests contains {
     "PolicyId": AssuredControlsId1_1,
     "Prerequisites": ["reports/v1/activities/list"],
@@ -47,8 +59,8 @@ tests contains {
     "PolicyId": AssuredControlsId1_1,
     "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, NonCompliantGroups1_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1, "NonCompliantGroups": NonCompliantGroups1_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -56,7 +68,11 @@ if {
     SettingName := "Access Approvals enabled"
     Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
     count(Events) > 0
-    Status := count(NonCompliantOUs1_1) == 0
+    Conditions := {
+        count(NonCompliantOUs1_1) == 0,
+        count(NonCompliantGroups1_1) == 0
+    }
+    Status := (false in Conditions) == false
 }
 #--
 
