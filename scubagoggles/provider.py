@@ -62,6 +62,11 @@ EVENTS = {
         'CREATE_APPLICATION_SETTING',
         'DELETE_APPLICATION_SETTING'
     ],
+    'assuredcontrols': [
+        'CREATE_APPLICATION_SETTING',
+        'CHANGE_APPLICATION_SETTING',
+        'DELETE_APPLICATION_SETTING'
+    ],
     'commoncontrols': [
         'CREATE_APPLICATION_SETTING',
         'CHANGE_APPLICATION_SETTING',
@@ -433,7 +438,8 @@ class Provider:
 
         try:
             with self._services['directory'].orgunits() as orgunits:
-                response = orgunits.list(customerId=self._customer_id).execute()
+                response = orgunits.list(customerId=self._customer_id,
+                                         type='allIncludingParent').execute()
             self._successful_calls.add(ApiReference.LIST_OUS.value)
             if 'organizationUnits' not in response:
                 return {}
@@ -532,6 +538,7 @@ class Provider:
         prod_to_app_name_values = {
             'calendar': ['Calendar'],
             'chat': ['Google Chat', 'Google Workspace Marketplace'],
+            'assuredcontrols': ['Access Approvals', "Access Management"],
             'commoncontrols': [
                 'Security',
                 'Google Workspace Marketplace',

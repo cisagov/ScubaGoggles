@@ -3,6 +3,7 @@ package assuredcontrols
 import future.keywords
 import data.utils
 
+LogEvents := utils.GetEvents("assuredcontrols_logs")
 
 ########################
 # GWS.ASSUREDCONTROLS.1 #
@@ -14,14 +15,48 @@ import data.utils
 
 AssuredControlsId1_1 := utils.PolicyIdWithSuffix("GWS.ASSUREDCONTROLS.1.1")
 
+NonCompliantOUs1_1 contains {
+    "Name": OU,
+    "Value": "Access approvals is disabled.",
+}
+if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, "Access Approvals enabled", OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "false"
+}
+
 tests contains {
     "PolicyId": AssuredControlsId1_1,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Prerequisites": ["reports/v1/activities/list"],
+    "Criticality": "Should",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    SettingName := "Access Approvals enabled"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": AssuredControlsId1_1,
+    "Prerequisites": ["reports/v1/activities/list"],
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    SettingName := "Access Approvals enabled"
+    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
+    count(Events) > 0
+    Status := count(NonCompliantOUs1_1) == 0
 }
 #--
 
@@ -81,6 +116,14 @@ if {
 #--
 
 AssuredControlsId2_1 := utils.PolicyIdWithSuffix("GWS.ASSUREDCONTROLS.2.1")
+
+# CalendarNonRegionalizedFunctionalityStateSettingsProto
+# DocsNonRegionalizedFunctionalityStateSettingsProto
+# DocsNonRegionalizedFunctionalityStateSettingsProto
+# GmailNonRegionalizedFunctionalityStateSettingsProto
+# ChatNonRegionalizedFunctionalityStateSettingsProto
+# MeetNonRegionalizedFunctionalityStateSettingsProto
+# GeminiNonRegionalizedFunctionalityStateSettingsProto
 
 tests contains {
     "PolicyId": AssuredControlsId2_1,
