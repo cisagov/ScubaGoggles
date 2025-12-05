@@ -538,7 +538,7 @@ class Provider:
         prod_to_app_name_values = {
             'calendar': ['Calendar'],
             'chat': ['Google Chat', 'Google Workspace Marketplace'],
-            'assuredcontrols': ['Access Approvals', "Access Management"],
+            'assuredcontrols': ['Access Approvals', "Data regions"],
             'commoncontrols': [
                 'Security',
                 'Google Workspace Marketplace',
