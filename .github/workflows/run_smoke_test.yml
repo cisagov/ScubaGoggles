@@ -119,7 +119,7 @@ jobs:
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
           python --version
           pwd
-          ls -F /home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/scubagoggles/
+          ls -F /home/runner/work/ScubaGoggles/ScubaGoggles/
           # python /home/runner/work/ScubaGoggles/ScubaGoggles/build/lib/scubagoggles/Testing/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import get_output_path; print("ouput_path: ",get_output_path())"
           # ls -la
           # echo "List all in runner @ /home/runner/work/ScubaGoggles/ScubaGoggles/: "
