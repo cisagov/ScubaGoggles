@@ -8,13 +8,13 @@ on:
     types: [submitted]
   push:
     # These paths are primarily for workflow testing purposes
-    paths:
-      - ".github/workflows/run_smoke_test.yml"
-      - ".github/actions/setup-dependencies-windows/action.yml"
-      - ".github/actions/setup-dependencies-macos/action.yml"
-    branches:
-      - "main"
-      - "*smoketest*"
+    # paths:
+    #   - ".github/workflows/run_smoke_test.yml"
+    #   - ".github/actions/setup-dependencies-windows/action.yml"
+    #   - ".github/actions/setup-dependencies-macos/action.yml"
+    # branches:
+    #   - "main"
+    #   - "*smoketest*"
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -96,7 +96,7 @@ jobs:
           operating-system: "windows"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
-      
+
       - name: Setup Dependencies (ubuntu)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
         uses: ./.github/actions/setup-dependencies-macos
@@ -117,3 +117,40 @@ jobs:
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+          python --version
+          pwd
+          ls -F /home/runner/work/ScubaGoggles/ScubaGoggles/
+          # python /home/runner/work/ScubaGoggles/ScubaGoggles/build/lib/scubagoggles/Testing/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import get_output_path; print("ouput_path: ",get_output_path())"
+          # ls -la
+          # echo "List all in runner @ /home/runner/work/ScubaGoggles/ScubaGoggles/: "
+          # ls -F /home/runner/work/ScubaGoggles/ScubaGoggles/
+          echo "List all in runner @ /home/runner/work/ScubaGoggles/ScubaGoggles/build: "
+          ls -F /home/runner/work/ScubaGoggles/ScubaGoggles/build
+          echo "List all in runner @ /home/runner/work/ScubaGoggles/ScubaGoggles/build/lib/scubagoggles/: "
+          ls -F /home/runner/work/ScubaGoggles/ScubaGoggles/build/lib/scubagoggles/
+          # echo "List all in runner @ ./: "
+          # ls -F ./
+          echo "List all in runner @ ./build: "
+          ls -F ./build
+          # echo "List all in runner @ ./build/lib/scubagoggles/: "
+          # ls -F ./build/lib/scubagoggles/
+          ls -F ./build/lib/scubagoggles/Testing/Functional
+          python ./build/lib/scubagoggles/Testing/Functional/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import get_output_path; print("ouput_path: ",get_output_path())"
+          MATCHING_PATH=$(find . | grep -E "^GWSBaselineConformance_*")
+          echo "matched_files=$MATCHING_PATH" >> $GITHUB_OUTPUT
+
+
+      - name: Find directory by regex
+        id: find_path
+        run: |
+          echo "List all ./: "
+          ls -F ./
+          echo "List all ./scubagoggles: "
+          ls -F ./scubagoggles
+          MATCHING_PATH=$(find . | grep -E "^GWSBaselineConformance_*")
+          echo "matched_files=$MATCHING_PATH" >> $GITHUB_OUTPUT
+
+      - name: Use matched directory
+        run: |
+          echo "Files found: ${{ steps.find_path.outputs.matched_files }}"
+          MATCHING_PATH=$(find . | grep -E "^GWSBaselineConformance_*")
