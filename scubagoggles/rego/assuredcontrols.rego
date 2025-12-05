@@ -240,7 +240,6 @@ tests contains {
     "RequirementMet": Status,
     "NoSuchEvent": false
 } if {
-    DefaultSafe := false
     not NoSuchEvent2_1
     Conditions := {
         count(NonCompliantOUs2_1) == 0,
