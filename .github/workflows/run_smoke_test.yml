@@ -132,8 +132,10 @@ jobs:
           # ls -F ./
           echo "List all in runner @ ./build: "
           ls -F ./build
-          echo "List all in runner @ ./build/lib/scubagoggles/: "
-          ls -F ./build/lib/scubagoggles/
+          # echo "List all in runner @ ./build/lib/scubagoggles/: "
+          # ls -F ./build/lib/scubagoggles/
+          ls -F ./build/lib/scubagoggles/Testing
+          python ./build/lib/scubagoggles/Testing/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import get_output_path; print("ouput_path: ",get_output_path())"
           MATCHING_PATH=$(find . | grep -E "^GWSBaselineConformance_*")
           echo "matched_files=$MATCHING_PATH" >> $GITHUB_OUTPUT
 
