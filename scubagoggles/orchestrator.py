@@ -92,6 +92,7 @@ class Orchestrator:
         'meet',
         'sites',
         'commoncontrols',
+        'assuredcontrols',
         'classroom',
         'gemini'
     ]
@@ -104,6 +105,7 @@ class Orchestrator:
         'meet': 'Google Meet',
         'sites': 'Google Sites',
         'commoncontrols': 'Common Controls',
+        'assuredcontrols': 'Assured Controls',
         'classroom': 'Google Classroom',
         'gemini': 'Gemini'
     }

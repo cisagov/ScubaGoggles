@@ -33,7 +33,7 @@ Access Approvals requires Google support staff to request approval before viewin
 Access can also be restricted to specific demographics, such as access by U.S. Google staff only.
 However, these features require additional licensing and are not available by default with Enterprise Plus.
 
-### Policy
+### Policies
 
 #### GWS.ASSUREDCONTROLS.1.1v0.6
 Access Approvals SHOULD be enabled.
