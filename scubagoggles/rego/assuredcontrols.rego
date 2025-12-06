@@ -93,7 +93,7 @@ GetFriendlyValueAccessManagement(Value) := "No preference" if {
 } else := Value
 
 NonComplianceMessage1_2(Value) := concat(" ", [
-    "Access management policy is set to ",
+    "Access management policy is set to",
     GetFriendlyValueAccessManagement(Value)
 ])
 
