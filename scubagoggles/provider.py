@@ -130,7 +130,8 @@ class Provider:
                  customer_id: str,
                  credentials_file: Path,
                  access_token: str = None,
-                 svc_account_email: str = None):
+                 svc_account_email: str = None,
+                 dns_resolvers: list = None):
 
         """Initialize the Provider.
 
@@ -141,6 +142,8 @@ class Provider:
             instead of the credentials file.
         :param svc_account_email: (optional) email address for the service
             account.
+        :param dns_resolvers: (optional) list of DNS resolvers that should be
+            used for DNS queries.
         """
 
         self._gws_auth = GwsAuth(credentials_file, access_token, svc_account_email)
@@ -150,7 +153,7 @@ class Provider:
         self._successful_calls = set()
         self._unsuccessful_calls = set()
         self._missing_policies = set()
-        self._dns_client = RobustDNSClient()
+        self._dns_client = RobustDNSClient(dns_resolvers)
         self._domains = []
         self._alias_domains = []
 
