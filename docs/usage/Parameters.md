@@ -77,10 +77,15 @@ options:
                         The name of the Rego output json in --outputpath. Defaults to TestResults.
   --outputreportfilename
                         The name of the main html file homepage created in --outputpath. Defaults to BaselineReports.
+  --preferreddnsresolvers <dns-resolvers>
+                        IP addresses of DNS resolvers that should be used to retrieve any DNS records required by
+                        specific SCuBA policies. Optional; if not provided, the system default will be used.
   --quiet               This switch suppresses automatically launching a web browser to open the html report output and
                         the loading bar output.
   --silencebodwarnings  This switch suppresses warning relating to requirements specific to BOD compliance (e.g.,
                         documenting OrgName in the config file).
+  --skipdoh             If true, do not fallback to DoH should the traditional DNS requests fail when retrieving any DNS
+                        records required by specific SCuBA policies.
   --numberofuuidcharacterstotruncate <number>
                         Controls how many characters will be truncated from the report UUID when appended to the end of
                         outjsonfilename. Valid values are 0, 13, 18, 36. Defaults to 18.

@@ -205,6 +205,15 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar='',
                         help=help_msg)
 
+    help_msg = ('IP addresses of DNS resolvers that should be used to retrieve '
+                'any DNS records required by specific SCuBA policies. Optional; '
+                'if not provided, the system default will be used.')
+    parser.add_argument('--preferreddnsresolvers',
+                        default=None,
+                        nargs='+',
+                        metavar='<dns-resolvers>',
+                        help=help_msg)
+
     help_msg = ('This switch suppresses automatically launching a web '
                 'browser to open the html report output and the loading '
                 'bar output.')
@@ -216,6 +225,13 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     parser.add_argument('--silencebodwarnings',
                         action='store_true',
                         help=help_msg)
+
+    help_msg = ('If true, do not fallback to DoH should the traditional DNS '
+                'requests fail when retrieving any DNS records required by '
+                'specific SCuBA policies.')
+    parser.add_argument('--skipdoh',
+                       action='store_true',
+                       help=help_msg)
 
     default_uuid_chars_to_truncate = 18
     help_msg = ('Controls how many characters will be truncated '
