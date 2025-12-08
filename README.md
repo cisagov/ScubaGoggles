@@ -52,6 +52,7 @@ We use a three-step process:
 
 ### Troubleshooting
 - [Not Authorized to Access This Resource](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#not-authorized-to-access-this-resource)
+- [macOS: Certificate Verification Error](https://github.com/cisagov/ScubaGoggles/blob/rl-getopa-macos-certs/docs/troubleshooting/Troubleshooting.md#macOS-certificate-verification-error)
 - [WinError 10013 Permission Error](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#windows--winerror-10013-permission-error)
 - [Unable to view HTML report due to environment limitations](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#unable-to-view-html-report-due-to-environment-limitations)
 
