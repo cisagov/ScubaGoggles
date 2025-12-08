@@ -78,7 +78,7 @@ The output will resemble the following:
                 ]
             }
         ]
-    },...
+    },
 ```
 
 ## ScubaGoggles lists failures for the SPF, DKIM, and DMARC policies (GWS.GMAIL.2 through GWS.GMAIL.4) even though you have published the applicable DNS records
@@ -100,7 +100,7 @@ returned by a public lookup tool. If they differ, then ScubaGoggles is impacted 
 ScubaGoggles includes the `preferreddnsresolvers` commandline argument, which allows users to specify which DNS
 resolvers should be used to retrieve the DNS records ScubaGoggles needs. If the system-default resolver is unable to
 retrieve the SPF, DKIM, or DMARC records, the user can provide the IP address of one that can, such as a public DNS
-resolver. For example: `scubagoggles gws --preferreddnsresolvers 8.8.8.8`. Note however, that some systems block DNS queries to DNS resolvers that are not approved for use on the system. If that is the case, ScubaGoggles will not be able to resolve the DNS queries unless the user provides a DNS resolver that is approved for use on their network.
+resolver. For example: `scubagoggles gws --preferreddnsresolvers 8.8.8.8 8.8.4.4`. Note however, that some systems block DNS queries to DNS resolvers that are not approved for use on the system. If that is the case, ScubaGoggles will not be able to resolve the DNS queries unless the user provides a DNS resolver that is approved for use on their network.
 
 ## Navigation
 - Return to [Documentation Home](/README.md)
