@@ -6,7 +6,17 @@ import requests
 
 class RobustDNSClient:
     '''Class used to run robust DNS queries.'''
-    def __init__(self):
+    def __init__(self, dns_resolvers: list = None):
+        """
+        Initialize the DNS client.
+
+        :param dns_resolvers: (optional) list of DNS resolvers that should be
+            used for DNS queries.
+        """
+        self.resolver = dns.resolver.Resolver()
+        if dns_resolvers:
+            self.resolver.nameservers = dns_resolvers
+
         # doh_server is a variable used to indicate the preferred DoH server.
         # Initialize to empty string to indicate that we don't yet know the
         # preferred server. Will be set when the Select-DohServer function is
@@ -64,7 +74,7 @@ class RobustDNSClient:
             try_number += 1
             try:
                 # No exception was thrown, we got our answer, so break out of the retry loop
-                response = dns.resolver.resolve(qname, "TXT")
+                response = self.resolver.resolve(qname, "TXT")
                 for answer in response:
                     answers.append(answer.to_text().strip('"')) # Strip
                     # the quotes because the actual response comes wrapped in
