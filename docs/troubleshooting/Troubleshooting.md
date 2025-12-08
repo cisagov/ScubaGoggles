@@ -81,5 +81,26 @@ The output will resemble the following:
     },...
 ```
 
+## ScubaGoggles lists failures for the SPF, DKIM, and DMARC policies (GWS.GMAIL.2 through GWS.GMAIL.4) even though you have published the applicable DNS records
+
+### Most common cause
+ScubaGoggles uses the system-default DNS resolver to resolve the SPF, DKIM, and DMARC records, so its visibility is only
+as good as your default DNS resolver’s visibility. One issue users sometimes run into is something called split-horizon
+DNS, where a DNS request made from inside the network is returned different results than one made from outside the
+network. In cases such as this, ScubaGoggles might report failures for the above policies because the DNS resolver did
+not return the SPF, DKIM, or DMARC records.
+
+### Diagnosing the issue
+ScubaGoggles includes appends logs of all DNS queries made to the end of the Gmail baseline report. Review the answers
+ScubaGoggles received, are they different than expected? When split-horizon is at play, the DNS resolvers often return
+no answer or NXDOMAIN, though that is entirely dependent on your network setup. Compare the answers received with those
+returned by a public lookup tool. If they differ, then ScubaGoggles is impacted by split-horizon DNS.
+
+### Resolving the issue
+ScubaGoggles includes the `preferreddnsresolvers` commandline argument, which allows users to specify which DNS
+resolvers should be used to retrieve the DNS records ScubaGoggles needs. If the system-default resolver is unable to
+retrieve the SPF, DKIM, or DMARC records, the user can provide the IP address of one that can, such as a public DNS
+resolver. For example: `scubagoggles gws --preferreddnsresolvers 8.8.8.8`. Note however, that some systems block DNS queries to DNS resolvers that are not approved for use on the system. If that is the case, ScubaGoggles will not be able to resolve the DNS queries unless the user provides a DNS resolver that is approved for use on their network.
+
 ## Navigation
 - Return to [Documentation Home](/README.md)
