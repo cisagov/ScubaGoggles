@@ -50,7 +50,6 @@ jobs:
             operatingsystem_val="${{ inputs.operating-system }}"
             pythonversion_val="${{ inputs.python-version }}"
             opaversion_val="${{ inputs.opa-version }}"
-
           # Default values for other events
           else
             operatingsystem_val="['windows-latest', 'macos-latest', 'ubuntu-latest']"
@@ -60,7 +59,6 @@ jobs:
           echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
           echo "python-version=$pythonversion_val" >> "$GITHUB_OUTPUT"
           echo "opa-version=$opaversion_val" >> "$GITHUB_OUTPUT"
-
   smoke-test:
     needs: configuration
     strategy:
@@ -71,6 +69,8 @@ jobs:
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.operating-system }}
+    outputs:
+      path_output: ${{ steps.set_output.outputs.mypath }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -114,49 +114,37 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run ScubaGoggles and check for correct output
+        id: set_output
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
-          python --version
-          pwd
-          # echo "List all in runner @ ./: "
-          # ls -F ./
-          # echo "List all in runner @ ./build: "
-          # ls -F ./build
-          # echo "List all in runner @ ./build/lib/scubagoggles/: "
-          # ls -F ./build/lib/scubagoggles/
-          # ls -F ./build/lib/scubagoggles/Testing/Functional
-          # ls -F ./build/lib/scubagoggles/Testing/Functional/SmokeTests/
+          # echo "List all in runner @ /home/runner/scubagoggles: "
+          # ls /home/runner/scubagoggles
           echo "Output path attempt: "
-          python ./scubagoggles/Testing/Functional/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import *; get_output_path()"
+          # python ./scubagoggles/Testing/Functional/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import *; dir_path=get_output_path(); print(dir_path)"
+          # PATH_OUTPUT=$(python ./scubagoggles/Testing/Functional/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import *; get_output_path()")
+          # echo "matched_path=$PATH_OUTPUT" >> $GITHUB_OUTPUT
+          # find /home/runner/scubagoggles -mindepth 1 -type d -exec sh -c 'ls -f "{}" | grep -q .' \; -print
+          FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
+          echo $FOUNDIT
+          echo "mypath=$FOUNDIT" >> "$GITHUB_OUTPUT"
+          # MATCHING_PATH=$(find /home/runner/scubagoggles -path "GWSBaselineConformance_*/" -type d)
+          # echo "matched_files=$MATCHING_PATH" >> $GITHUB_OUTPUT
           # MATCHING_PATH=$(find . | grep -E "^GWSBaselineConformance_*")
           # echo "matched_files=$MATCHING_PATH" >> $GITHUB_OUTPUT
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        run: |
-          echo "List all upload artifact ./: "
-          ls -F ./
+  lhci:
+    runs-on: ubuntu-latest
+    needs: smoke-test
+    if: ${{ always() }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
         with:
-          name: dist-build
-          path: /dist
-      - name: Download Artifact
-        uses: actions/download-artifact@v5
-        with:
-          name: dist-build
-          path: /dist
+          node-version: 18.x
+      - name: run Lighthouse CI
         run: |
-          echo "List all download artifact ./: "
-          ls -F ./
-      - name: Find directory by regex
-        id: find_path
-        run: |
-          echo "List all ./: "
-          ls -F ./
-          # echo "List all ./scubagoggles: "
-          # ls -F ./scubagoggles
-          # MATCHING_PATH=$(find . | grep -E "^GWSBaselineConformance_*")
-          # echo "matched_files=$MATCHING_PATH" >> $GITHUB_OUTPUT
-      - name: Use matched directory
-        run: |
-          echo "Files found: ${{ steps.find_path.outputs.matched_files }}"
-          MATCHING_PATH=$(find . | grep -E "^GWSBaselineConformance_*")
+          echo "${{ steps.set_output.outputs.mypath }}"
+          echo "List all in runner @ /home/runner/scubagoggles: "
+          npm install -g @lhci/cli@0.15.x
+          lhci collect --collect.staticDistDir="${{ steps.set_output.outputs.mypath }}" --upload.target=temporary-public-storage
