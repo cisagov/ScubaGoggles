@@ -6,16 +6,20 @@ import requests
 
 class RobustDNSClient:
     '''Class used to run robust DNS queries.'''
-    def __init__(self, dns_resolvers: list = None):
+    def __init__(self, dns_resolvers: list = None, skip_doh: bool = False):
         """
         Initialize the DNS client.
 
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
+        :param skip_doh: (optional) whether or not failed DNS queries should be
+            retried over DoH.
         """
         self.resolver = dns.resolver.Resolver()
         if dns_resolvers:
             self.resolver.nameservers = dns_resolvers
+
+        self.skip_doh = skip_doh
 
         # doh_server is a variable used to indicate the preferred DoH server.
         # Initialize to empty string to indicate that we don't yet know the
@@ -47,7 +51,7 @@ class RobustDNSClient:
         results['log_entries'].extend(trad_result['log_entries'])
         results['errors'].extend(trad_result['errors'])
 
-        if len(results['answers']) == 0:
+        if len(results['answers']) == 0 and not self.skip_doh:
             # The traditional DNS query(ies) failed. Retry with DoH
             doh_result = self.doh_query(qname, max_tries)
             results['answers'].extend(doh_result['answers'])

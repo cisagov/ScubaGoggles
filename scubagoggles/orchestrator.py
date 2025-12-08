@@ -147,9 +147,10 @@ class Orchestrator:
 
         with Provider(args.customerid,
                       args.credentials,
-                      args.accesstoken,
-                      args.subjectemail,
-                      args.preferreddnsresolvers) as provider:
+                      access_token=args.accesstoken,
+                      svc_account_email=args.subjectemail,
+                      dns_resolvers=args.preferreddnsresolvers,
+                      skip_doh=args.skipdoh) as provider:
             provider_dict = provider.call_gws_providers(products, args.quiet)
             provider_dict['successful_calls'] = list(provider.successful_calls)
             provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
