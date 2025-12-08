@@ -129,9 +129,11 @@ class Provider:
     def __init__(self,
                  customer_id: str,
                  credentials_file: Path,
+                 *, # everything after this is keyword-only
                  access_token: str = None,
                  svc_account_email: str = None,
-                 dns_resolvers: list = None):
+                 dns_resolvers: list = None,
+                 skip_doh: bool = False):
 
         """Initialize the Provider.
 
@@ -144,6 +146,8 @@ class Provider:
             account.
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
+        :param skip_doh: (optional) whether or not failed DNS queries should be
+            retried over DoH.
         """
 
         self._gws_auth = GwsAuth(credentials_file, access_token, svc_account_email)
@@ -153,7 +157,7 @@ class Provider:
         self._successful_calls = set()
         self._unsuccessful_calls = set()
         self._missing_policies = set()
-        self._dns_client = RobustDNSClient(dns_resolvers)
+        self._dns_client = RobustDNSClient(dns_resolvers, skip_doh)
         self._domains = []
         self._alias_domains = []
 
