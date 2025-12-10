@@ -155,16 +155,6 @@ If receiving external files isn’t allowed, then users in your organization SHO
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.12v0.6
-If external sharing files externally or recieving external files is allowed, then the "Highlight External Files" setting SHALL be enabled.
-
-- _Rationale:_ If users are able to  share files externally and/or recieve files owned by an external individual, enabling this setting ensures that users are made aware that external users can see/edit the document via the label.
-- _Last modified:_ December 2025
-- Insert NIST Mapping Here
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
-
 
 ### Resources
 
@@ -219,7 +209,7 @@ To configure the settings for Sharing options:
 2.  Select **When users in your organization create items, the default access will be -\> Private to the owner.**
 
 #### GWS.DRIVEDOCS.1.9v0.6 Instructions
-1.  Select **Sharing settings -\> Sharing options**
+1.  Select **Sharing settings -\> Highlight External Files**
 2.  Select **Highlight external files**
 3.  Check the **Highlight external Files** box to turn on the indicator.
 4.  Select **Save**.
