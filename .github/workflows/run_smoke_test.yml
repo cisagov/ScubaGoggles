@@ -70,7 +70,7 @@ jobs:
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.operating-system }}
     outputs:
-      path_output: ${{ steps.set_output.outputs.mypath }}
+      missingoutput: ${{ steps.step7.outputs.mypath }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -114,7 +114,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run ScubaGoggles and check for correct output
-        id: set_output
+        id: step7
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
@@ -144,7 +144,9 @@ jobs:
           node-version: 18.x
       - name: run Lighthouse CI
         run: |
-          echo "${{ steps.set_output.outputs.mypath }}"
+          echo "Got:"
+          echo ${{ needs.smoke-test.outputs.missingoutput }}
           echo "List all in runner @ /home/runner/scubagoggles: "
+          ls /home/runner/scubagoggles
           npm install -g @lhci/cli@0.15.x
-          lhci collect --collect.staticDistDir="${{ steps.set_output.outputs.mypath }}" --upload.target=temporary-public-storage
+          lhci collect --collect.staticDistDir=${{ needs.smoke-test.outputs.missingoutput }} --upload.target=temporary-public-storage
