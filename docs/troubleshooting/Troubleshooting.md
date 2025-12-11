@@ -86,12 +86,12 @@ The output will resemble the following:
 ### Most common cause
 ScubaGoggles uses the system-default DNS resolver to resolve the SPF, DKIM, and DMARC records, so its visibility is only
 as good as your default DNS resolver’s visibility. One issue users sometimes run into is something called split-horizon
-DNS, where a DNS request made from inside the network is returned different results than one made from outside the
+DNS, where a DNS request made from inside the network returns different results than one made from outside the
 network. In cases such as this, ScubaGoggles might report failures for the above policies because the DNS resolver did
 not return the SPF, DKIM, or DMARC records.
 
 ### Diagnosing the issue
-ScubaGoggles includes appends logs of all DNS queries made to the end of the Gmail baseline report. Review the answers
+ScubaGoggles appends logs of all DNS queries made to the end of the Gmail baseline report. Review the answers
 ScubaGoggles received, are they different than expected? When split-horizon is at play, the DNS resolvers often return
 no answer or NXDOMAIN, though that is entirely dependent on your network setup. Compare the answers received with those
 returned by a public lookup tool. If they differ, then ScubaGoggles is impacted by split-horizon DNS.
