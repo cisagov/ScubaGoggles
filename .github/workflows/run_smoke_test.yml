@@ -128,7 +128,7 @@ jobs:
       - name: Save the output directory
         uses: actions/upload-artifact@v4
         with:
-          name: $FOUNDIT
+          name: baseline_folder
           path: /home/runner/scubagoggles
 
   lhci:
@@ -138,8 +138,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v5
         with:
-          name: $FOUNDIT
-      - uses: actions/checkout@v3
+          name: baseline_folder
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
@@ -148,7 +147,9 @@ jobs:
         run: |
           echo "Got:" + $FOUNDIT
           echo ${{ needs.smoke-test.outputs.missingoutput }}
-          echo "List all in runner @ /home/runner/scubagoggles: "
-          ls /home/runner/scubagoggles
+          # echo "List all in runner @ /home/runner/scubagoggles: "
+          # ls /home/runner/scubagoggles
+          echo "List all in runner @ ./: "
+          ls ./
           npm install -g @lhci/cli@0.15.x
           lhci collect --collect.staticDistDir=${{ needs.smoke-test.outputs.missingoutput }} --upload.target=temporary-public-storage
