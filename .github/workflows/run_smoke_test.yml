@@ -115,7 +115,6 @@ jobs:
 
       - name: Run ScubaGoggles and check for correct output
         id: step7
-        uses: actions/upload-artifact@v4
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
