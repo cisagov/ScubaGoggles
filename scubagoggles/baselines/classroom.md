@@ -30,6 +30,8 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../../README.md#quick-start-guide) for help getting started.
+
 # Baseline Policies
 
 ## 1. Class Membership
@@ -41,6 +43,8 @@ This section covers who has the ability to join classes and what classes the use
 #### GWS.CLASSROOM.1.1v0.6
 Who can join classes in your domain SHALL be restricted to users in your domain or allowlisted domains.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Classes can contain private or otherwise sensitive information. Restricting access to your classes helps prevent data leakage resulting from unauthorized classroom access.
 - _Last modified:_ October 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
@@ -50,6 +54,8 @@ Who can join classes in your domain SHALL be restricted to users in your domain 
 
 #### GWS.CLASSROOM.1.2v0.6
 Which classes users in your domain can join SHALL be restricted to classes in your domain or allowlisted domains.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing users to join classes in arbitrary domains could allow for data to be exfiltrated to entities outside the control of the organization.
 - _Last modified:_ October 2025
@@ -91,6 +97,8 @@ This section covers policies related to the Google Classroom API.
 #### GWS.CLASSROOM.2.1v0.6
 Users SHALL NOT be able to authorize apps to access their Google Classroom data.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Allowing ordinary users to authorize apps to have access to classroom data opens a possibility for data loss. Allowing only admins to authorize apps reduces this risk.
 - _Last modified:_ September 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(10)
@@ -126,6 +134,8 @@ This section covers policies related to importing rosters from Clever.
 #### GWS.CLASSROOM.3.1v0.6
 Roster import with Clever SHOULD be turned off.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ If your organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into your organization's environment. If your organization does use Clever, then roster imports may be enabled.
 - _Last modified:_ September 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
@@ -159,6 +169,8 @@ This section covers policies related to unenrolling a student from a class.
 #### GWS.CLASSROOM.4.1v0.6
 Only teachers SHALL be allowed to unenroll students from classes.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Allowing students to unenroll themselves creates the opportunity for data loss or other inconsistencies, especially for K-12 classrooms. Restricting this ability to teachers mitigates this risk.
 - _Last modified:_ September 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(10)
@@ -191,6 +203,8 @@ The first time users sign in to Classroom, they self-identify as either a studen
 
 #### GWS.CLASSROOM.5.1v0.6
 Class creation SHALL be restricted to verified teachers only.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing pending teachers to create classes potentially allows students to impersonate teachers and exploit the trusted relationship between teacher and student, e.g., to phish sensitive information from the students. Restricting class creation to verified teachers reduces this risk.
 - _Last modified:_ June 2024

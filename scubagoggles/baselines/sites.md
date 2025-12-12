@@ -26,6 +26,8 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../../README.md#quick-start-guide) for help getting started.
+
 # Baseline Policies
 
 ## 1. Sites Service Status
@@ -36,6 +38,8 @@ This section covers whether users are able to access Google Sites.
 
 #### GWS.SITES.1.1v0.6
 Sites Service SHOULD be disabled for all users.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Google Sites can increase the attack surface of Google Workspace. Disabling this feature unless it is needed conforms to the principle of least functionality.
 - _Last modified:_ July 2023

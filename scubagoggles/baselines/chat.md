@@ -28,6 +28,10 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../../README.md#quick-start-guide) for help getting started.
+
+**Log-Based Check**: This indicator means that the policy will be checked via logs in ScubaGoggles.
+
 # Baseline Policies
 
 ## 1. Chat History
@@ -39,6 +43,8 @@ This section covers chat history retention for users within the organization and
 #### GWS.CHAT.1.1v0.6
 Chat history SHALL be enabled for information traceability.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations and details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, SC-7(10)
@@ -48,6 +54,8 @@ Chat history SHALL be enabled for information traceability.
 
 #### GWS.CHAT.1.2v0.6
 Users SHALL NOT be allowed to change their history setting.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Altering the history settings in Google Chat can potentially allow users to obfuscate the sharing of sensitive information via Chat. This policy ensures that all chat histories are preserved, enhancing data security and promoting accountability among users.
 - _Last modified:_ July 2023
@@ -91,6 +99,8 @@ This section covers what types of files users are allowed to share external to t
 #### GWS.CHAT.2.1v0.6
 External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Enabling external file sharing in Google Chat opens an additional avenue for data loss, one that may not be as rigorously monitored or protected as traditional collaboration channels, such as email. This policy limits the potential for unauthorized or accidental sharing.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
@@ -126,6 +136,8 @@ This section covers whether chat history is retained by default for users within
 #### GWS.CHAT.3.1v0.6
 Space history SHOULD be enabled for traceability of information.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations. Details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, SC-7(10)
@@ -160,6 +172,8 @@ This section permits users to send Chat messages outside of their organization, 
 
 #### GWS.CHAT.4.1v0.6
 External Chat messaging SHALL be restricted to allowlisted domains only.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing external chat messaging in Google Chat to unrestricted domains opens additional avenues for data exfiltration, increasing the risk of data leakage. By restricting external chat messaging to allowlisted domains only, the risk of sensitive information being distributed outside the organization without explicit consent and approval is minimized.
 - _Last modified:_ November 2023
@@ -208,6 +222,9 @@ This section covers the content reporting functionality, a feature that allows u
 #### GWS.CHAT.5.1v0.6
 Chat content reporting SHALL be enabled for all conversation types.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+
 - _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies help ensure that their users are able to report risky messages regardless of the conversation type.
 - _Last modified:_ February 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IR-6
@@ -216,6 +233,9 @@ Chat content reporting SHALL be enabled for all conversation types.
 
 #### GWS.CHAT.5.2v0.6
 All reporting message categories SHOULD be selected.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
 
 - _Rationale:_ Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
 - _Last modified:_ February 2024

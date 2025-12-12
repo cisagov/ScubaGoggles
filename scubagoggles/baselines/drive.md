@@ -29,6 +29,12 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../../README.md#quick-start-guide) for help getting started.
+
+**Log-Based Check**: This indicator means that the policy will be checked via logs in ScubaGoggles.
+
+**Manual**: This indicator means that the policy requires manual verification of configuration settings.
+
 # Baseline Policies
 
 ## 1. Sharing Outside the Organization
@@ -39,6 +45,8 @@ This section covers whether users can share files outside of the organization, w
 
 #### GWS.DRIVEDOCS.1.1v0.6
 External sharing SHALL be restricted to allowlisted domains.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk of inadvertent of data leakage.
 - _Last modified:_ August 2025
@@ -54,6 +62,8 @@ External sharing SHALL be restricted to allowlisted domains.
 #### GWS.DRIVEDOCS.1.2v0.6
 Receiving files from outside of allowlisted domains SHOULD be disabled.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce the risk of data loss or falling victim to external threats.
 - _Last modified:_ August 2025
 - _Note:_ This policy is only applicable if external sharing is set to **ALLOWLISTED DOMAINS**.
@@ -64,6 +74,8 @@ Receiving files from outside of allowlisted domains SHOULD be disabled.
 
 #### GWS.DRIVEDOCS.1.3v0.6
 Warnings SHALL be enabled when a user is attempting to share with someone not in allowlisted domains.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users may not always be aware a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
 - _Last modified:_ August 2025
@@ -76,6 +88,8 @@ Warnings SHALL be enabled when a user is attempting to share with someone not in
 #### GWS.DRIVEDOCS.1.4v0.6
 If sharing outside of the organization, then agencies SHOULD disable sharing of files with individuals who are not using a Google account.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ August 2025
 - _Note:_ This policy is only applicable if external sharing is set to **ON**.
@@ -87,6 +101,8 @@ If sharing outside of the organization, then agencies SHOULD disable sharing of 
 #### GWS.DRIVEDOCS.1.5v0.6
 Any OUs that do allow external sharing SHOULD disable making content available to anyone with the link.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of a potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8
@@ -96,6 +112,8 @@ Any OUs that do allow external sharing SHOULD disable making content available t
 
 #### GWS.DRIVEDOCS.1.6v0.6
 Agencies SHALL set access checking to recipients only.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients.
 - _Last modified:_ June 2024
@@ -107,6 +125,8 @@ Agencies SHALL set access checking to recipients only.
 #### GWS.DRIVEDOCS.1.7v0.6
 Users SHOULD NOT be allowed to upload or move content to shared drives owned by another organization.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Once a document is moved outside the organization's drives, the organization no longer has control over the dissemination of the document. By not allowing users to distribute content to external shared drives, the organization maintains more control over the document.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
@@ -116,6 +136,8 @@ Users SHOULD NOT be allowed to upload or move content to shared drives owned by 
 
 #### GWS.DRIVEDOCS.1.8v0.6
 Private to owner SHALL be the default access level for newly created items.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent overly broad accidental sharing of information.
 - _Last modified:_ August 2025
@@ -128,6 +150,8 @@ Private to owner SHALL be the default access level for newly created items.
 #### GWS.DRIVEDOCS.1.9v0.6
 Out-of-Domain file-level warnings SHALL be enabled.
 
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs19v06-instructions)
+
 - _Rationale:_ By implementing Out-of-Domain file-level warnings, the feature can help users identify potentially risky files and avoid phishing scams when working with files shared from outside your organization.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
@@ -138,6 +162,8 @@ Out-of-Domain file-level warnings SHALL be enabled.
 #### GWS.DRIVEDOCS.1.10v0.6
 If external sharing isn't allowed, then forms owned by users within your organization SHOULD NOT be able to accept responses from anyone with the link outside the organization.
 
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs110v06-instructions)
+
 - _Rationale:_ If external sharing isn't allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
@@ -147,6 +173,8 @@ If external sharing isn't allowed, then forms owned by users within your organiz
 
 #### GWS.DRIVEDOCS.1.11v0.6
 If receiving external files isn’t allowed, then users in your organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of your organization.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs111v06-instructions)
 
 - _Rationale:_ If receiving external files isn't allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight.
 - _Last modified:_ August 2025
@@ -235,6 +263,8 @@ This section covers whether users can create new shared drives to share with oth
 #### GWS.DRIVEDOCS.2.1v0.6
 Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Allowing users who are not the drive owner to override settings violates the principle of least privilege. This policy reduces the risk of drive settings being modified by unauthorized individuals.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
@@ -243,6 +273,8 @@ Agencies SHOULD NOT allow members with manager access to override shared drive c
 
 #### GWS.DRIVEDOCS.2.2v0.6
 Agencies SHALL allow users who are not shared drive members to be added to files.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as drive members, potentially exposing all drive files and increasing the risk of sensitive content exposure. By disallowing the sharing of these individual files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
 - _Last modified:_ July 2023
@@ -285,6 +317,8 @@ This section covers whether a security update issued by Google will be applied t
 #### GWS.DRIVEDOCS.3.1v0.6
 Agencies SHALL enable the security update for Drive files.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ By not enabling the update to the resource key security update a user could potentially gain unauthorized access to files. Enabling this security update decreases risk of unauthorized access and data spillage by controlling access to files in Google Drive.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
@@ -319,6 +353,8 @@ This section covers whether users have access to Google Drive with the Drive SDK
 
 #### GWS.DRIVEDOCS.4.1v0.6
 Agencies SHOULD disable Drive SDK access.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ The Drive SDK allows third-party applications to access Drive data, potentially leading to unintentional information sharing and data leakage. By disabling the Drive SDK you can decrease the risk of internal documents from being distributed outside the organization without explicit consent and approval.
 - _Last modified:_ January 2024
@@ -356,6 +392,9 @@ This section covers whether users can use add-ons in file editors within Google 
 #### GWS.DRIVEDOCS.5.1v0.6
 Agencies SHALL disable Add-Ons.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+
 - _Rationale:_ Google Docs Add-Ons, depending on their permissions, can present a security risk, including potential exposure of sensitive content. By disabling unapproved add-ons and preventing their sharing, the risk of data leakage can be significantly reduced.
 - _Last modified:_ January 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
@@ -391,6 +430,8 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 
 #### GWS.DRIVEDOCS.6.1v0.6
 Google Drive for Desktop SHALL be enabled only for authorized devices.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
 - _Last modified:_ August 2025
