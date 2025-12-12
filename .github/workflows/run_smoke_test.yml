@@ -136,6 +136,9 @@ jobs:
     needs: smoke-test
     if: ${{ always() }}
     steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: $FOUNDIT
       - uses: actions/checkout@v3
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
@@ -143,7 +146,7 @@ jobs:
           node-version: 18.x
       - name: run Lighthouse CI
         run: |
-          echo "Got:"
+          echo "Got:" + $FOUNDIT
           echo ${{ needs.smoke-test.outputs.missingoutput }}
           echo "List all in runner @ /home/runner/scubagoggles: "
           ls /home/runner/scubagoggles
