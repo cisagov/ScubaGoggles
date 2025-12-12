@@ -115,23 +115,23 @@ jobs:
 
       - name: Run ScubaGoggles and check for correct output
         id: step7
+        uses: actions/upload-artifact@v4
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+          mkdir my_folder
           echo "List all in runner @ /home/runner/scubagoggles: "
           ls /home/runner/scubagoggles
           echo "Output path attempt: "
-          # python ./scubagoggles/Testing/Functional/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import *; dir_path=get_output_path(); print(dir_path)"
-          # PATH_OUTPUT=$(python ./scubagoggles/Testing/Functional/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import *; get_output_path()")
-          # echo "matched_path=$PATH_OUTPUT" >> $GITHUB_OUTPUT
-          # find /home/runner/scubagoggles -mindepth 1 -type d -exec sh -c 'ls -f "{}" | grep -q .' \; -print
-          FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
           echo $FOUNDIT
           echo "mypath=$FOUNDIT" >> "$GITHUB_OUTPUT"
-          # MATCHING_PATH=$(find /home/runner/scubagoggles -path "GWSBaselineConformance_*/" -type d)
-          # echo "matched_files=$MATCHING_PATH" >> $GITHUB_OUTPUT
-          # MATCHING_PATH=$(find . | grep -E "^GWSBaselineConformance_*")
-          # echo "matched_files=$MATCHING_PATH" >> $GITHUB_OUTPUT
+
+      - name: Save the output directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: $FOUNDIT
+          path: /home/runner/scubagoggles
+
   lhci:
     runs-on: ubuntu-latest
     needs: smoke-test
