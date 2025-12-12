@@ -8,13 +8,13 @@ on:
     types: [submitted]
   push:
     # These paths are primarily for workflow testing purposes
-    paths:
-      - ".github/workflows/run_smoke_test.yml"
-      - ".github/actions/setup-dependencies-windows/action.yml"
-      - ".github/actions/setup-dependencies-macos/action.yml"
-    branches:
-      - "main"
-      - "*smoketest*"
+    # paths:
+    #   - ".github/workflows/run_smoke_test.yml"
+    #   - ".github/actions/setup-dependencies-windows/action.yml"
+    #   - ".github/actions/setup-dependencies-macos/action.yml"
+    # branches:
+    #   - "main"
+    #   - "*smoketest*"
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -50,7 +50,6 @@ jobs:
             operatingsystem_val="${{ inputs.operating-system }}"
             pythonversion_val="${{ inputs.python-version }}"
             opaversion_val="${{ inputs.opa-version }}"
-
           # Default values for other events
           else
             operatingsystem_val="['windows-latest', 'macos-latest', 'ubuntu-latest']"
@@ -60,7 +59,6 @@ jobs:
           echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
           echo "python-version=$pythonversion_val" >> "$GITHUB_OUTPUT"
           echo "opa-version=$opaversion_val" >> "$GITHUB_OUTPUT"
-
   smoke-test:
     needs: configuration
     strategy:
@@ -71,6 +69,8 @@ jobs:
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.operating-system }}
+    outputs:
+      missingoutput: ${{ steps.step7.outputs.mypath }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -96,7 +96,7 @@ jobs:
           operating-system: "windows"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
-      
+
       - name: Setup Dependencies (ubuntu)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
         uses: ./.github/actions/setup-dependencies-macos
@@ -114,6 +114,42 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run ScubaGoggles and check for correct output
+        id: step7
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+          mkdir my_folder
+          echo "List all in runner @ /home/runner/scubagoggles: "
+          ls /home/runner/scubagoggles
+          echo "Output path attempt: "
+          echo $FOUNDIT
+          echo "mypath=$FOUNDIT" >> "$GITHUB_OUTPUT"
+
+      - name: Save the output directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline_folder
+          path: /home/runner/scubagoggles
+
+  lhci:
+    runs-on: ubuntu-latest
+    needs: smoke-test
+    if: ${{ always() }}
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: baseline_folder
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: run Lighthouse CI
+        run: |
+          echo "Got:" + $FOUNDIT
+          echo ${{ needs.smoke-test.outputs.missingoutput }}
+          # echo "List all in runner @ /home/runner/scubagoggles: "
+          # ls /home/runner/scubagoggles
+          echo "List all in runner @ ./: "
+          ls ./
+          npm install -g @lhci/cli@0.15.x
+          lhci collect --collect.staticDistDir=./ --upload.target=temporary-public-storage --outputDir=./
