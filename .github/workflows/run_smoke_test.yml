@@ -118,8 +118,8 @@ jobs:
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
-          # echo "List all in runner @ /home/runner/scubagoggles: "
-          # ls /home/runner/scubagoggles
+          echo "List all in runner @ /home/runner/scubagoggles: "
+          ls /home/runner/scubagoggles
           echo "Output path attempt: "
           # python ./scubagoggles/Testing/Functional/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import *; dir_path=get_output_path(); print(dir_path)"
           # PATH_OUTPUT=$(python ./scubagoggles/Testing/Functional/SmokeTests/smoke_test_utils.py -c "from smoke_test_utils import *; get_output_path()")
