@@ -152,4 +152,4 @@ jobs:
           echo "List all in runner @ ./: "
           ls ./
           npm install -g @lhci/cli@0.15.x
-          lhci collect --collect.staticDistDir=./ --upload.target=temporary-public-storage
+          lhci collect --collect.staticDistDir=./ --upload.target=temporary-public-storage --outputDir=./
