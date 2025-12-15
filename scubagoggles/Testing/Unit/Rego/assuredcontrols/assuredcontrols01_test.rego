@@ -1,5 +1,6 @@
 package assuredcontrols
 import future.keywords
+import data.utils.FailTestNoEvent
 import data.utils.PassTestResult
 import data.utils.FailTestOUNonCompliant
 
@@ -28,11 +29,7 @@ test_Assuredcontrols_1_1_Correct_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Assuredcontrols_1_1_Incorrect_V1 if {
@@ -55,12 +52,9 @@ test_Assuredcontrols_1_1_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails ==
-        "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Access approvals is disabled.</li></ul>"
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Access approvals is disabled."}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Assuredcontrols_1_1_Incorrect_V2 if {
@@ -73,15 +67,7 @@ test_Assuredcontrols_1_1_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. ",
-        "While we are unable to determine the state from the logs, the default setting is ",
-        "non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 #--
 

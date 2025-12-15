@@ -1,5 +1,8 @@
 package assuredcontrols
 import future.keywords
+import data.utils.FailTestNoEvent
+import data.utils.PassTestResult
+import data.utils.FailTestOUNonCompliant
 
 #
 # GWS.ASSUREDCONTROLS.2.1
@@ -82,11 +85,7 @@ BaseInput := {
 test_Assuredcontrols2_1_Correct_V1 if {
     PolicyId := AssuredControlsId2_1
     Output := tests with input as BaseInput
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    PassTestResult(PolicyId, Output)
 }
 
 test_Assuredcontrols2_1_Incorrect_V1 if {
@@ -103,14 +102,9 @@ test_Assuredcontrols2_1_Incorrect_V1 if {
         }
     ])
     Output := tests with input as Input
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Features that may process data across ",
-        "multiple regions are enabled for Calendar</li></ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Features that may process data across multiple regions are enabled for Calendar"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Assuredcontrols2_1_Incorrect_V2 if {
@@ -129,14 +123,9 @@ test_Assuredcontrols2_1_Incorrect_V2 if {
         }
     ])
     Output := tests with input as Input
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul><li>Test Top-Level OU: Features that may process data across ",
-        "multiple regions are enabled for Calendar, Docs</li></ul>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                 "Value": "Features that may process data across multiple regions are enabled for Calendar, Docs"}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Assuredcontrols2_1_Incorrect_V3 if {
@@ -149,14 +138,7 @@ test_Assuredcontrols2_1_Incorrect_V3 if {
         },
     ])
     Output := tests with input as Input
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to ",
-        "determine the state from the logs, the default setting is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 
 test_Assuredcontrols2_1_Incorrect_V4 if {
@@ -170,13 +152,6 @@ test_Assuredcontrols2_1_Incorrect_V4 if {
         }
     ])
     Output := tests with input as Input
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "No relevant event in the current logs for the top-level OU, Test Top-Level OU. While we are unable to ",
-        "determine the state from the logs, the default setting is non-compliant; manual check recommended."
-    ])
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
 }
 #--
