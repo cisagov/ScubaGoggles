@@ -87,6 +87,50 @@ In some cases, it may be appropriate to specify the number of break glass accoun
 
 The `breakglassaccounts` top-level key, shown in this [example ScubaGoggles configuration file](../../scubagoggles/sample-config-files/break_glass_accounts.yaml), allows the user to specify the break glass accounts to exclude from the admin count. The number of break glass accounts will be shown on the ScubaGoggles report. 
 
+### DNS Configuration
+The following SCuBA polices depend on the capability to make DNS requests:
+- GWS.GMAIL.2.1v0.6
+- GWS.GMAIL.3.1v0.6
+- GWS.GMAIL.4.1v0.6
+- GWS.GMAIL.4.2v0.6
+- GWS.GMAIL.4.3v0.6
+- GWS.GMAIL.4.4v0.6
+
+In some cases, it can be helpful to control where those DNS requests are
+sent to (see [ScubaGoggles lists failures for the SPF, DKIM, and DMARC policies (GWS.GMAIL.2 through GWS.GMAIL.4) even though you have published the applicable DNS records](/docs/troubleshooting/Troubleshooting.md#scubagoggles-lists-failures-for-the-spf-dkim-and-dmarc-policies-gwsgmail2-through-gwsgmail4-even-though-you-have-published-the-applicable-dns-records)). ScubaGoggles provides two options for
+configuring how DNS queries are made: `preferreddnsresolvers` and `skipdoh`.
+
+#### preferreddnsresolvers
+IP addresses of DNS resolvers that should be used to retrieve any DNS records
+required by the specific SCuBA policies listed above. Optional; if not provided,
+the system default will be used.
+
+Example config file usage:
+```
+preferreddnsresolvers:
+    - 8.8.8.8
+    - 8.8.4.4
+```
+
+Example CLI usage:
+```
+scubagoggles gws --preferreddnsresolvers 8.8.8.8 8.8.4.4
+```
+
+#### skipdoh
+If true, do not fallback to DoH should the traditional DNS requests fail when
+retrieving any DNS records required by the specific SCuBA policies listed above.
+
+Example config file usage:
+```
+skipdoh: true
+```
+
+Example CLI usage:
+```
+scubagoggles gws --skipdoh
+```
+
 ## Navigation
 - Continue to [Usage: Examples](Examples.md)
 - Return to [Documentation Home](/README.md)
