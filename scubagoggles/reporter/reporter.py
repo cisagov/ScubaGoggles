@@ -954,10 +954,10 @@ class Reporter:
                             failed_prereqs)
                         table_data.append({'Control ID': control_id,
                                         'Requirement': requirement,
-                                        'Result': 'Error',
+                                        'Result': 'Error - Test results missing',
                                         'Criticality': test['Criticality'],
                                         'Details': failed_details,
-                                        'OriginalResult': 'Error',
+                                        'OriginalResult': 'Error - Test results missing',
                                         'OriginalDetails': failed_details,
                                         'Comments': self._build_comments_array(control_id),
                                         'ResolutionDate': self._build_resolution_date(control_id)})
