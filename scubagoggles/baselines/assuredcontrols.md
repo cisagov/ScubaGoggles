@@ -24,6 +24,10 @@ This document assumes the organization is using both GWS Enterprise Plus and the
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../README.md) for help getting started.
+
+**Log-Based Check**: This indicator means that the policy will be checked via logs in ScubaGoggles.
+
 # Baseline Policies
 
 ## 1. Google Support Staff Data Access
@@ -38,6 +42,9 @@ However, these features require additional licensing and are not available by de
 #### GWS.ASSUREDCONTROLS.1.1v0.6
 Access Approvals SHOULD be enabled.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+
 - _Rationale:_ Unauthorized access to data increases the risk of exposing sensitive data to untrusted entities. Requiring the approval of a Google staff's request to access an organization's data may reduce unauthorized access and actions to an organization's data.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
@@ -48,6 +55,8 @@ Access Approvals SHOULD be enabled.
 
 #### GWS.ASSUREDCONTROLS.1.2v0.6
 Agencies SHOULD restrict support access to U.S. Google staff only.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Without this policy, data could be processed by Google personnel not physically located in the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
 - _Last modified:_ November 2025
@@ -92,6 +101,9 @@ However, these settings only apply to users with the Assured Controls Plus add-o
 
 #### GWS.ASSUREDCONTROLS.2.1v0.6
 Data processing across multiple regions SHOULD be disabled for all Google Workspace products.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
 
 -  _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
 - _Last modified:_ November 2025
