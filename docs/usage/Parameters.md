@@ -72,7 +72,7 @@ options:
   --outputproviderfilename <name>
                         The name of the Provider output json in --outputpath. Defaults to ProviderSettingsExport.
   --outputactionplanfilename <name>
-                        The name of the Actions Plan output csv in --outputpath. Defaults to ActionsPlan.
+                        The name of the Actions Plan output csv in --outputpath. Defaults to ActionPlan.
   --outputregofilename <name>
                         The name of the Rego output json in --outputpath. Defaults to TestResults.
   --outputreportfilename
