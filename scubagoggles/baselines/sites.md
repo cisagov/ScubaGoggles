@@ -38,7 +38,8 @@ This section covers whether users are able to access Google Sites.
 Sites Service SHOULD be disabled for all users.
 
 - _Rationale:_ Google Sites can increase the attack surface of Google Workspace. Disabling this feature unless it is needed conforms to the principle of least functionality.
-- _Last modified:_ July 2023
+- _Last modified:_ December 2025
+- _Note:_ Sites MAY be enabled on a per-group and per-OU basis.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1526: Cloud Service Discovery](https://attack.mitre.org/techniques/T1526/)
