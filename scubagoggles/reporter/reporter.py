@@ -520,13 +520,26 @@ class Reporter:
         :param html: The HTML string representing the report.
         """
 
-        classroom_notification = ('<h4>Note: Google Classroom is not available '
-                                  'by default in GWS but as an additional '
-                                  'Google Service.</h4>')
+        classroom_note = ('<h4>Note: Google Classroom is not available '
+                          'by default in GWS but as an additional '
+                          'Google Service.</h4>')
+        assuredcontrols_note = ('<h4>Note: Assured Controls and Assured '
+                                'Controls Plus are paid add-ons with Google '
+                                'Workspace. This baseline is intended as '
+                                'guidance for agencies that already have '
+                                'these add-ons. Users that choose to implement '
+                                'this baseline should carefully consider the '
+                                'tradeoffs involved, including the potential '
+                                'security benefits, usability impacts, and '
+                                'increased licensing fees for the add-on '
+                                'licenses.</h4>')
 
         if self._full_name == 'Google Classroom':
             html = html.replace('{{WARNING_NOTIFICATION}}',
-                                classroom_notification)
+                                classroom_note)
+        elif self._full_name == 'Assured Controls':
+            html = html.replace('{{WARNING_NOTIFICATION}}',
+                                assuredcontrols_note)
         else:
             html = html.replace('{{WARNING_NOTIFICATION}}', '')
         return html

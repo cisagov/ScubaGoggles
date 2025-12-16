@@ -90,6 +90,8 @@ class PolicyAPI:
     # whether a reducer is needed.
 
     _expectedPolicySettings = {
+        'access_management_user_scoping': {'settings': {
+            'accessManagementRegime': isEnum}},
         'analytics_service_status': {'settings': {'serviceState': isState}},
         'applied_digital_skills_service_status': {'settings': {
             'serviceState': isState}},
@@ -295,6 +297,8 @@ class PolicyAPI:
     # documented defaults must be kept current with the implementation).
 
     _defaults = {
+        'access_management_user_scoping': {
+            'accessManagementRegime': 'PREFERENCE_UNSPECIFIED'},
         'calendar_external_invitations': {'warnOnInvite': True},
         'calendar_interoperability': {
             'enableInteroperability': False},
