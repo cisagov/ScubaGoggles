@@ -45,9 +45,11 @@ This Common Controls baseline document:
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../README.md) for help getting started.
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [our documentation](../../README.md) for help getting started.
 
-**Log-Based Check**: This indicator means that the policy will be checked via logs in ScubaGoggles.
+**Configurable**: This indicator means that the policy can be customized via config file.
+
+**Log-Based Check**: This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
 
 **Manual**: This indicator means that the policy requires manual verification of configuration settings.
 
@@ -241,7 +243,7 @@ To enforce a device policy that requires company-owned devices, Google needs a l
 Policies restricting access to GWS based on signals about enterprise devices SHOULD be implemented.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on user/device attributes.
 - _Last modified:_ July 2023
@@ -317,7 +319,7 @@ Google Workspace handles post-SSO verification for profiles assigned org-wide as
 Post-SSO verification SHOULD be enabled for users signing in using the SSO profile for your organization.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
 - _Last modified:_ January 2025
@@ -332,7 +334,7 @@ Post-SSO verification SHOULD be enabled for users signing in using the SSO profi
 Post-SSO verification SHOULD be enabled for users signing in using other SSO profiles.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
 - _Last modified:_ November 2024
@@ -573,6 +575,7 @@ All administrative accounts SHALL be provisioned as cloud-only accounts separate
 A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)
 
 - _Rationale:_ The super admin role provides unfettered access to the workspace. Properly managing the number of users with this level of access makes workspace compromise more challenging. However, having too few accounts can be problematic as it increases the risk of losing admin access entirely (e.g., if a super admin forgets their password); having between 2 and 4 balances these two concerns.
 - _Last modified:_ July 2023
@@ -763,7 +766,7 @@ This control enforces more secure protection of highly privileged, senior execut
 #### GWS.COMMONCONTROLS.9.1v0.6
 Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Program.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols91v06-instructions)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#policy-group-9-instructions)
 
 - _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - _Last modified:_ July 2023
@@ -779,7 +782,7 @@ Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Prog
 #### GWS.COMMONCONTROLS.9.2v0.6
 All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols92v06-instructions)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#policy-group-9-instructions)
 
 - _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - _Last modified:_ July 2023
@@ -841,7 +844,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
 Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with policy 10.1.
 - _Last modified:_ July 2023
@@ -858,7 +861,7 @@ Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 Agencies SHALL NOT trust unconfigured internal apps.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
 - _Last modified:_ July 2023
@@ -875,7 +878,7 @@ Agencies SHALL NOT trust unconfigured internal apps.
 Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ External apps may contain vulnerabilities and malicious content. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
 - _Last modified:_ July 2023
@@ -1083,7 +1086,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
 - _Last modified:_ January 2025
@@ -1214,7 +1217,7 @@ The data storage region SHALL be set to be the United States for all users in th
 Data SHALL be processed in the region selected for data at rest.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
 - _Last modified:_ January 2025
@@ -1326,7 +1329,7 @@ This section covers whether multiple super admins need to approve changes to spe
 Require multiparty approval for sensitive admin actions SHOULD be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale_: Changes to sensitive admin settings such as disabling 2-step verification could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
 - _Last modified:_ August 2025

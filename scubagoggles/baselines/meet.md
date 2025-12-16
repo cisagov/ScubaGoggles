@@ -30,7 +30,9 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../README.md) for help getting started.
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [our documentation](../../README.md) for help getting started.
+
+**Log-Based Check**: This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
 
 **Manual**: This indicator means that the policy requires manual verification of configuration settings.
 
@@ -214,6 +216,7 @@ This section covers who domain users are allowed to receive a 1:1 call from.
 Incoming calls SHALL be restricted to contacts and other users in the organization.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Calls could potentially be used to pass sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ March 2024

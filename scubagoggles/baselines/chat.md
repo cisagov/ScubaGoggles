@@ -28,9 +28,9 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../README.md) for help getting started.
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [our documentation](../../README.md) for help getting started.
 
-**Log-Based Check**: This indicator means that the policy will be checked via logs in ScubaGoggles.
+**Log-Based Check**: This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
 
 # Baseline Policies
 
@@ -223,7 +223,7 @@ This section covers the content reporting functionality, a feature that allows u
 Chat content reporting SHALL be enabled for all conversation types.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies help ensure that their users are able to report risky messages regardless of the conversation type.
 - _Last modified:_ February 2024
@@ -235,7 +235,7 @@ Chat content reporting SHALL be enabled for all conversation types.
 All reporting message categories SHOULD be selected.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Users may be uncertain what kind of messages should be reported. Enabling all message categories can help users infer which types of messages should be reported.
 - _Last modified:_ February 2024

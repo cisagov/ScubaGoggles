@@ -23,7 +23,9 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../README.md) for help getting started.
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [our documentation](../../README.md) for help getting started.
+
+**Log-Based Check**: This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
 
 # Baseline Policies
 
@@ -48,6 +50,7 @@ for more details on configuring these additional services.
 Gemini app user access SHALL be set to OFF for everyone without a license.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Only Gemini data for users with the appropriate license will be
 protected by the Google Workspace Terms of Service. Data for users without the
@@ -92,6 +95,7 @@ production data in connection with Pre-GA Offerings.
 Alpha Gemini features SHALL be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Allowing access to alpha features may expose users to features that
 have not yet been fully vetted and may still need to undergo robust testing to ensure

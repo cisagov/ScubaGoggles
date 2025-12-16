@@ -24,9 +24,9 @@ This document assumes the organization is using both GWS Enterprise Plus and the
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../README.md) for help getting started.
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [our documentation](../../README.md) for help getting started.
 
-**Log-Based Check**: This indicator means that the policy will be checked via logs in ScubaGoggles.
+**Log-Based Check**: This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
 
 # Baseline Policies
 
@@ -43,7 +43,7 @@ However, these features require additional licensing and are not available by de
 Access Approvals SHOULD be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Unauthorized access to data increases the risk of exposing sensitive data to untrusted entities. Requiring the approval of a Google staff's request to access an organization's data may reduce unauthorized access and actions to an organization's data.
 - _Last modified:_ November 2025
@@ -103,7 +103,7 @@ However, these settings only apply to users with the Assured Controls Plus add-o
 Data processing across multiple regions SHOULD be disabled for all Google Workspace products.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 -  _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
 - _Last modified:_ November 2025

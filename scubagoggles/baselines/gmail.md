@@ -42,11 +42,11 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [Quick Start Guide](../../README.md) for help getting started.
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [our documentation](../../README.md) for help getting started.
 
 **Configurable**: This indicator means that the policy can be customized via config file.
 
-**Log-Based Check**: This indicator means that the policy will be checked via logs in ScubaGoggles.
+**Log-Based Check**: This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
 
 **Manual**: This indicator means that the policy requires manual verification of configuration settings.
 
@@ -930,7 +930,7 @@ This section determines whether users are prompted with a warning for messages t
 Unintended external reply warnings SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Unintended external reply warnings can help reduce the risk of exposing sensitive information in replies to external messages. Enabling these warnings reminds users to treat external messages with caution, reducing this risk and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ June 2024
@@ -1073,7 +1073,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 Security sandbox SHOULD be enabled to provide additional protections for their email messages.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Without a security sandbox, emails with malicious content could potentially interact directly with the users' systems, posing a risk. By enabling the security sandbox, additional protections are provided for email messages, reducing this risk and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
