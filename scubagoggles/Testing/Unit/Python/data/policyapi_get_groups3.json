@@ -1,0 +1,107 @@
+{
+  "comment": "tests construction of group_id_map in PolicyAPI; 2 responses",
+  "responses": [
+    {
+      "kind": "admin#directory#groups",
+      "groups": [
+        {
+          "id": "00nmf14n3jmlbdu",
+          "name": "AI DLP Test"
+        },
+        {
+          "id": "03oy7u293r1pgxf",
+          "name": "CISA VM Team"
+        },
+        {
+          "id": "0206ipza2q1azh5",
+          "name": "Classroom Teachers"
+        },
+        {
+          "id": "04h042r028q8apg",
+          "name": "eyesgroup"
+        },
+        {
+          "id": "02y3w247347wbks",
+          "name": "Intune Users"
+        },
+        {
+          "id": "01664s553blj2nq",
+          "name": "#junkgroup"
+        },
+        {
+          "id": "0319y80a1pvou5v",
+          "name": "Even More Secret Group"
+        },
+        {
+          "id": "00kgcv8k1hs05fy",
+          "name": "SCB Feedback"
+        },
+        {
+          "id": "00lnxbz9168dtgx",
+          "name": "Techncial Content Owners (Internal)"
+        }
+      ],
+      "nextPageToken": "AUdqofHs4_xKcy-HKSs"
+    },
+    {
+      "groups": [
+        {
+          "id": "00gjdgxs0jy4ar3",
+          "name": "Security Group"
+        },
+        {
+          "id": "02u6wntf4co42dm",
+          "name": "Secret Group"
+        },
+        {
+          "id": "03mzq4wv2ss2jml",
+          "name": "test-alias-domains-are-added-to-group-info"
+        },
+        {
+          "id": "030j0zll1d0gajt",
+          "name": "Test Hide 2"
+        },
+        {
+          "id": "02xcytpi2smgulh",
+          "name": "Test Group"
+        },
+        {
+          "id": "0206ipza0o6vlal",
+          "name": "Test Google Services"
+        },
+        {
+          "id": "019c6y181lsgu1p",
+          "name": "Test group without any settings modified"
+        },
+        {
+          "id": "025b2l0r1gxcd5o",
+          "name": "Test Hiding"
+        },
+        {
+          "id": "045jfvxd4j2cq8t",
+          "name": "TH-HUNT"
+        }
+      ]
+    }
+  ],
+  "results": {
+    "00nmf14n3jmlbdu": "AI DLP Test",
+    "03oy7u293r1pgxf": "CISA VM Team",
+    "0206ipza2q1azh5": "Classroom Teachers",
+    "04h042r028q8apg": "eyesgroup",
+    "02y3w247347wbks": "Intune Users",
+    "01664s553blj2nq": "#junkgroup",
+    "0319y80a1pvou5v": "Even More Secret Group",
+    "00kgcv8k1hs05fy": "SCB Feedback",
+    "00lnxbz9168dtgx": "Techncial Content Owners (Internal)",
+    "00gjdgxs0jy4ar3": "Security Group",
+    "02u6wntf4co42dm": "Secret Group",
+    "03mzq4wv2ss2jml": "test-alias-domains-are-added-to-group-info",
+    "030j0zll1d0gajt": "Test Hide 2",
+    "02xcytpi2smgulh": "Test Group",
+    "0206ipza0o6vlal": "Test Google Services",
+    "019c6y181lsgu1p": "Test group without any settings modified",
+    "025b2l0r1gxcd5o": "Test Hiding",
+    "045jfvxd4j2cq8t": "TH-HUNT"
+  }
+}

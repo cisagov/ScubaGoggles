@@ -6,6 +6,15 @@ We focus on verifying the behavior of `scubagoggles` public class methods and ho
 
 ## Running Unit Tests
 
+### Prerequisites
+
+Running unit tests locally requires `pytest` and associated packages.  You
+can install them with using `pip`.
+
+```bash
+pip install -r requirements.txt
+```
+
 To run all Python unit tests:
 
 ```bash

@@ -1,0 +1,394 @@
+{
+  "comment": "tests get_policies() in PolicyAPI, merge reduction",
+  "orgunits": {
+    "03ph8a2z2dvk5ts": {
+      "name": "topOU",
+      "path": "/"
+    },
+    "03ph8a2z35ltz5g": {
+      "name": "subOU",
+      "path": "/subOU"
+    },
+    "03ph8a2z1edfqxd": {
+      "name": "secondOU",
+      "path": "/secondOU"
+    },
+    "03ph8a2z3oekqyk": {
+      "name": "1-1-1-1",
+      "path": "/1/1-1/1-1-1/1-1-1-1"
+    }
+  },
+  "groups": {
+    "02xcytpi2smgulh": "group1",
+    "019c6y181lsgu1p": "group2"
+  },
+  "defaults": {
+    "groups_for_business_groups_sharing": {
+        "collaborationCapability": "DOMAIN_USERS_ONLY",
+        "createGroupsAccessLevel": "USERS_IN_DOMAIN",
+        "newGroupsAreHidden": false,
+        "ownersCanAllowExternalMembers": false,
+        "ownersCanAllowIncomingMailFromPublic": true,
+        "ownersCanHideGroups": false,
+        "viewTopicsDefaultAccessLevel": "DOMAIN_USERS"}
+    },
+  "service_status": [
+    "chat",
+    "drive_and_docs",
+    "gmail"
+  ],
+  "responses": [
+    {
+      "policies": [
+        {
+          "name": "policies/axp3f257c243vrgabojnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": false
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c26mjo6eekjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00025
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": true
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c3bpbigfbwjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00075
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": true
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/ahp3f257c2c7p5gpcwjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 201.00048
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": false
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c3pmrbp5asjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z35ltz5g",
+            "sortOrder": 202.00002
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": true
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c2l6hlozdgjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z1edfqxd",
+            "sortOrder": 202
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": false
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/axp3f257c2v67spzegjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00161
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": true
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c3d2dk6tecjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00222
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": false
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/ahp3f257c23mlpuvcwjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "group": "groups/02xcytpi2smgulh",
+            "sortOrder": 399.00027
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": true
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c3x2xivobcjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "group": "groups/019c6y181lsgu1p",
+            "sortOrder": 399.00013
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": true
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c3x2xivobcjnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "testing comment": "NOTE atypical group name",
+            "group": "WORKSPACE_ALL_ADMIN_GROUP",
+            "sortOrder": 2
+          },
+          "setting": {
+            "type": "settings/chat.space_history",
+            "value": {
+              "historyState": "DEFAULT_HISTORY_ON"
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c2c7p5gpcwy4pl4rvadcw",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 201.00048
+          },
+          "setting": {
+            "type": "settings/chat.chat_history",
+            "value": {
+              "historyOnByDefault": true
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c2pnhwhjboy4pl4rvadac",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "testing comment": "sub-orgunit",
+            "orgUnit": "orgUnits/03ph8a2z3oekqyk",
+            "sortOrder": 205.00001
+          },
+          "setting": {
+            "type": "settings/chat.service_status",
+            "value": {
+              "serviceState": "DISABLED"
+            }
+          },
+          "type": "ADMIN"
+        }
+      ],
+      "nextPageToken": "AUdqofHs4_xKcy-HKSs"
+    },
+    {
+      "policies": [
+        {
+          "name": "policies/ahp3f257c2c7p5gpcwy4pl4rvadcw",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 202
+          },
+          "setting": {
+            "type": "settings/chat.chat_history",
+            "value": {
+              "allowUserModification": false
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c2c7p5gpcwy4pl4rvadcw",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00048
+          },
+          "setting": {
+            "type": "settings/chat.chat_history",
+            "value": {
+              "historyOnByDefault": false,
+              "allowUserModification": true
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c3uo74hbesy4pl4rvadac",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 201.00087
+          },
+          "setting": {
+            "type": "settings/chat.service_status",
+            "value": {
+              "serviceState": "ENABLED"
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c26j53pgc22nz4nkz4aqc",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 201.00075
+          },
+          "setting": {
+            "type": "settings/groups_for_business.service_status",
+            "value": {
+              "serviceState": "ENABLED"
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+        "name": "policies/awd5vxv7ckojjohaegy4pl4rvaddg",
+        "customer": "customers/C027ru8g4",
+        "policyQuery": {
+            "sortOrder": 101.00125
+        },
+        "setting": {
+            "testing comment": "NOTE no orgunit!",
+            "type": "settings/chat.chat_file_sharing",
+            "value": {
+                "externalFileSharing": "ALL_FILES",
+                "internalFileSharing": "ALL_FILES"
+            }
+        },
+        "type": "SYSTEM"
+        }
+      ]
+    }
+  ],
+  "results": {
+    "topOU (group \"group1\")": {
+      "security_super_admin_account_recovery": {
+        "enableAccountRecovery": true
+      }
+    },
+    "topOU (group \"group2\")": {
+      "security_super_admin_account_recovery": {
+        "enableAccountRecovery": true
+      }
+    },
+    "subOU": {
+      "security_super_admin_account_recovery": {
+        "enableAccountRecovery": true
+      }
+    },
+    "secondOU": {
+      "security_super_admin_account_recovery": {
+        "enableAccountRecovery": false
+      }
+    },
+    "topOU": {
+      "chat_chat_history": {
+        "allowUserModification": false,
+        "historyOnByDefault": true
+      },
+      "chat_chat_file_sharing": {
+        "externalFileSharing": "ALL_FILES",
+        "internalFileSharing": "ALL_FILES"
+      },
+      "chat_service_status": {
+        "serviceState": "ENABLED"
+      },
+      "groups_for_business_service_status": {
+        "serviceState": "ENABLED"
+      },
+      "security_super_admin_account_recovery": {
+        "enableAccountRecovery": false
+      },
+      "drive_and_docs_service_status": {
+        "serviceState": "DISABLED"
+      },
+      "gmail_service_status": {
+        "serviceState": "DISABLED"
+      },
+      "groups_for_business_groups_sharing": {
+        "collaborationCapability": "DOMAIN_USERS_ONLY",
+        "createGroupsAccessLevel": "USERS_IN_DOMAIN",
+        "newGroupsAreHidden": false,
+        "ownersCanAllowExternalMembers": false,
+        "ownersCanAllowIncomingMailFromPublic": true,
+        "ownersCanHideGroups": false,
+        "viewTopicsDefaultAccessLevel": "DOMAIN_USERS"
+      }
+    },
+    "topOU (group \"WORKSPACE_ALL_ADMIN_GROUP\")": {
+      "chat_space_history": {
+        "historyState": "DEFAULT_HISTORY_ON"
+      }
+    },
+    "1-1-1-1 (in 1/1-1/1-1-1)": {
+      "chat_service_status": {
+        "serviceState": "DISABLED"
+      }
+    }
+  }
+}

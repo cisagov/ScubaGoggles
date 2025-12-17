@@ -1,0 +1,289 @@
+{
+  "comment": "tests get_policies() in PolicyAPI, two response pages",
+  "orgunits": {
+    "03ph8a2z2dvk5ts": {
+      "name": "topOU",
+      "path": "/"
+    }
+  },
+  "groups": {},
+  "defaults": {
+    "drive_and_docs_external_sharing": {
+      "accessCheckerSuggestions": "RECIPIENTS_OR_AUDIENCE_OR_PUBLIC",
+      "allowNonGoogleInvites": true,
+      "allowNonGoogleInvitesInAllowlistedDomains": false,
+      "allowPublishingFiles": true,
+      "allowReceivingExternalFiles": true,
+      "allowReceivingFilesOutsideAllowlistedDomains": true,
+      "allowedPartiesForDistributingContent": "ALL_ELIGIBLE_USERS",
+      "externalSharingMode": "ALLOWED",
+      "warnForExternalSharing": true,
+      "warnForSharingOutsideAllowlistedDomains": true}
+    },
+  "service_status": [
+    "chat",
+    "drive_and_docs",
+    "gmail"
+  ],
+  "responses": [
+    {
+      "policies": [
+        {
+          "name": "policies/axp3f257c243vrgabojnvrfpuefam",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101
+          },
+          "setting": {
+            "type": "settings/security.super_admin_account_recovery",
+            "value": {
+              "enableAccountRecovery": false
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c243vrgabojnvrfpueffm",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101
+          },
+          "setting": {
+            "type": "settings/security.two_step_verification_enrollment",
+            "value": {
+              "allowEnrollment": true
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c243vrgabp76r2hb2qgew",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101
+          },
+          "setting": {
+            "type": "settings/calendar.primary_calendar_max_allowed_external_sharing",
+            "value": {
+              "maxAllowedExternalSharing": "EXTERNAL_FREE_BUSY_ONLY"
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c243vrgabp76r2hb2qgey",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101
+          },
+          "setting": {
+            "type": "settings/calendar.secondary_calendar_max_allowed_external_sharing",
+            "value": {
+              "maxAllowedExternalSharing": "EXTERNAL_ALL_INFO_READ_ONLY"
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c243vrgabpezjp4byykto",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101
+          },
+          "setting": {
+            "type": "settings/gmail.user_email_uploads",
+            "value": {
+              "enableMailAndContactsImport": true
+            }
+          },
+          "type": "SYSTEM"
+        }
+      ],
+      "nextPageToken": "AUdqofHs4_xKcy-HKSs"
+    },
+    {
+      "policies": [
+        {
+          "name": "policies/axp3f257c2n4t57edknjfewmr4kwm",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00104
+          },
+          "setting": {
+            "type": "settings/meet.meet_polls",
+            "value": {
+              "enabled": true
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c2n4t57edknjfewmr4kwo",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00104
+          },
+          "setting": {
+            "type": "settings/meet.meet_joining",
+            "value": {
+              "allowedAudience": "TRUSTED"
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c2n4t57edknjfewmr4roy",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00104
+          },
+          "setting": {
+            "type": "settings/meet.meet_joining",
+            "value": {
+              "unexpectedSetting": true
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c3dlbz7scxklpmh2ymcgi",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00107
+          },
+          "setting": {
+            "type": "settings/data_regions.data_processing_region",
+            "value": {
+              "limitToStorageRegion": false
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c3dlbz7scxklpmh2ymcgk",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00107
+          },
+          "setting": {
+            "type": "settings/data_regions.data_at_rest_region",
+            "value": {
+              "region": "ANY_REGION"
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/axp3f257c2op7ruobtezjp4byykr4",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 101.00112
+          },
+          "setting": {
+            "type": "settings/gmail.enhanced_pre_delivery_message_scanning",
+            "value": {
+              "enableImprovedSuspiciousContentDetection": true
+            }
+          },
+          "type": "SYSTEM"
+        },
+        {
+          "name": "policies/ahp3f257c3uo74hbesy4pl4rvadac",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 201.00087
+          },
+          "setting": {
+            "type": "settings/chat.service_status",
+            "value": {
+              "serviceState": "ENABLED"
+            }
+          },
+          "type": "ADMIN"
+        },
+        {
+          "name": "policies/ahp3f257c26j53pgc22nz4nkz4aqc",
+          "customer": "customers/C03ymv5su",
+          "policyQuery": {
+            "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+            "sortOrder": 201.00075
+          },
+          "setting": {
+            "type": "settings/drive_and_docs.service_status",
+            "value": {
+              "serviceState": "ENABLED"
+            }
+          },
+          "type": "ADMIN"
+        }
+      ]
+    }
+  ],
+  "results": {
+    "topOU": {
+      "security_super_admin_account_recovery": {
+        "enableAccountRecovery": false
+      },
+      "security_two_step_verification_enrollment": {
+        "allowEnrollment": true
+      },
+      "calendar_primary_calendar_max_allowed_external_sharing": {
+        "maxAllowedExternalSharing": "EXTERNAL_FREE_BUSY_ONLY"
+      },
+      "calendar_secondary_calendar_max_allowed_external_sharing": {
+        "maxAllowedExternalSharing": "EXTERNAL_ALL_INFO_READ_ONLY"
+      },
+      "drive_and_docs_external_sharing": {
+        "accessCheckerSuggestions": "RECIPIENTS_OR_AUDIENCE_OR_PUBLIC",
+        "allowNonGoogleInvites": true,
+        "allowNonGoogleInvitesInAllowlistedDomains": false,
+        "allowPublishingFiles": true,
+        "allowReceivingExternalFiles": true,
+        "allowReceivingFilesOutsideAllowlistedDomains": true,
+        "allowedPartiesForDistributingContent": "ALL_ELIGIBLE_USERS",
+        "externalSharingMode": "ALLOWED",
+        "warnForExternalSharing": true,
+        "warnForSharingOutsideAllowlistedDomains": true
+      },
+      "gmail_user_email_uploads": {
+        "enableMailAndContactsImport": true
+      },
+      "meet_meet_polls": {
+        "enabled": true
+      },
+      "meet_meet_joining": {
+        "allowedAudience": "TRUSTED"
+      },
+      "data_regions_data_processing_region": {
+        "limitToStorageRegion": false
+      },
+      "data_regions_data_at_rest_region": {
+        "region": "ANY_REGION"
+      },
+      "gmail_enhanced_pre_delivery_message_scanning": {
+        "enableImprovedSuspiciousContentDetection": true
+      },
+      "chat_service_status": {
+        "serviceState": "ENABLED"
+      },
+      "drive_and_docs_service_status": {
+        "serviceState": "ENABLED"
+      },
+      "gmail_service_status": {
+        "serviceState": "DISABLED"
+      }
+    }
+  }
+}
