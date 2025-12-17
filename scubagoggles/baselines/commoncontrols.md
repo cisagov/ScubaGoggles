@@ -45,7 +45,7 @@ This Common Controls baseline document:
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See the [our documentation](../../README.md) for help getting started.
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
 **Configurable**: This indicator means that the policy can be customized via config file.
 
