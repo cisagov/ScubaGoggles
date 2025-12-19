@@ -1,0 +1,62 @@
+{
+  "comment": "tests max reduction for Policy API",
+  "orgunits": {
+    "03ph8a2z2dvk5ts": {
+      "name": "DHS-CISA",
+      "path": "/"
+    }
+  },
+  "groups": {},
+  "policies": [
+    {
+      "name": "policies/axp3f257c243vrgabpezjp4byykto",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z2dvk5ts')) && entity.licenses.exists(license, license in ['/product/Google-Apps/sku/1010020020'])",
+        "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+        "sortOrder": 101
+      },
+      "setting": {
+        "type": "settings/gmail.user_email_uploads",
+        "value": {
+          "enableMailAndContactsImport": true
+        }
+      },
+      "type": "SYSTEM"
+    },
+    {
+      "name": "policies/ahp3f257c2c7p5gpcxezjp4byykto",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z2dvk5ts')) && entity.licenses.exists(license, license in ['/product/Google-Apps/sku/1010020020'])",
+        "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+        "sortOrder": 201.00049
+      },
+      "setting": {
+        "type": "settings/gmail.user_email_uploads",
+        "value": {
+          "enableMailAndContactsImport": false
+        }
+      },
+      "type": "ADMIN"
+    }
+  ],
+  "results": {
+    "DHS-CISA/gmail_user_email_uploads": {
+      "name": "policies/ahp3f257c2c7p5gpcxezjp4byykto",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z2dvk5ts')) && entity.licenses.exists(license, license in ['/product/Google-Apps/sku/1010020020'])",
+        "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+        "sortOrder": 201.00049
+      },
+      "setting": {
+        "type": "settings/gmail.user_email_uploads",
+        "value": {
+          "enableMailAndContactsImport": false
+        }
+      },
+      "type": "ADMIN"
+    }
+  }
+}

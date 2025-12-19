@@ -1,0 +1,150 @@
+{
+  "comment": "tests merge reduction for Policy API",
+  "orgunits": {
+    "03ph8a2z2dvk5ts": {
+      "name": "DHS-CISA",
+      "path": "/"
+    },
+    "03ph8a2z35ltz5g": {
+      "name": "Alden's test OU",
+      "path": "/Alden's test OU"
+    },
+    "03ph8a2z1edfqxd": {
+      "name": "super admins (test)",
+      "path": "/super admins (test)"
+    }
+  },
+  "groups": {},
+  "policies": [
+    {
+      "name": "policies/axp3f257c243vrgabojnvrfpuefam",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z2dvk5ts'))",
+        "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+        "sortOrder": 101
+      },
+      "setting": {
+        "type": "settings/security.super_admin_account_recovery",
+        "value": {
+          "enableAccountRecovery": false
+        }
+      },
+      "type": "SYSTEM"
+    },
+    {
+      "name": "policies/ahp3f257c2c7p5gpcwjnvrfpuefam",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z2dvk5ts'))",
+        "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+        "sortOrder": 201.00049
+      },
+      "setting": {
+        "type": "settings/security.super_admin_account_recovery",
+        "value": {
+          "enableAccountRecovery": false
+        }
+      },
+      "type": "ADMIN"
+    },
+    {
+      "name": "policies/ahp3f257c3pmrbp5asjnvrfpuefam",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z35ltz5g'))",
+        "orgUnit": "orgUnits/03ph8a2z35ltz5g",
+        "sortOrder": 202
+      },
+      "setting": {
+        "type": "settings/security.super_admin_account_recovery",
+        "value": {
+          "enableAccountRecovery": false
+        }
+      },
+      "type": "ADMIN"
+    },
+    {
+      "name": "policies/ahp3f257c2l6hlozdgjnvrfpuefam",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z1edfqxd'))",
+        "orgUnit": "orgUnits/03ph8a2z1edfqxd",
+        "sortOrder": 202
+      },
+      "setting": {
+        "type": "settings/security.super_admin_account_recovery",
+        "value": {
+          "enableAccountRecovery": false
+        }
+      },
+      "type": "ADMIN"
+    },
+    {
+      "name": "policies/axp3f257c3d2dk6tecjnvrfpuefam",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z2dvk5ts'))",
+        "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+        "sortOrder": 101.00213
+      },
+      "setting": {
+        "type": "settings/security.super_admin_account_recovery",
+        "value": {
+          "enableAccountRecovery": false
+        }
+      },
+      "type": "SYSTEM"
+    }
+  ],
+  "results": {
+    "Alden's test OU/security_super_admin_account_recovery": {
+      "name": "policies/ahp3f257c3pmrbp5asjnvrfpuefam",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z35ltz5g'))",
+        "orgUnit": "orgUnits/03ph8a2z35ltz5g",
+        "sortOrder": 202
+      },
+      "setting": {
+        "type": "settings/security.super_admin_account_recovery",
+        "value": {
+          "enableAccountRecovery": false
+        }
+      },
+      "type": "ADMIN"
+    },
+    "super admins (test)/security_super_admin_account_recovery": {
+      "name": "policies/ahp3f257c2l6hlozdgjnvrfpuefam",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z1edfqxd'))",
+        "orgUnit": "orgUnits/03ph8a2z1edfqxd",
+        "sortOrder": 202
+      },
+      "setting": {
+        "type": "settings/security.super_admin_account_recovery",
+        "value": {
+          "enableAccountRecovery": false
+        }
+      },
+      "type": "ADMIN"
+    },
+    "DHS-CISA/security_super_admin_account_recovery": {
+      "name": "policies/ahp3f257c2c7p5gpcwjnvrfpuefam",
+      "customer": "customers/C03ymv5su",
+      "policyQuery": {
+        "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z2dvk5ts'))",
+        "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+        "sortOrder": 201.00049
+      },
+      "setting": {
+        "type": "settings/security.super_admin_account_recovery",
+        "value": {
+          "enableAccountRecovery": false
+        }
+      },
+      "type": "ADMIN"
+    }
+  }
+}

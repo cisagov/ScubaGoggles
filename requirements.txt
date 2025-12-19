@@ -1,6 +1,8 @@
-# This package is used for software development and is not needed by
+# These packages are used for software development and are not needed by
 # the Scubagoggles users:
 build
+pytest>=9
+pytest-mock
 
 # There are many Python versions for users to install for ScubaGoggles, and
 # because of this, it is too restrictive to limit versions of the dependent

@@ -1,0 +1,64 @@
+{
+  "comment": "apply subset of default values",
+  "defaults": {
+    "drive_and_docs_external_sharing": {
+      "accessCheckerSuggestions": "RECIPIENTS_OR_AUDIENCE_OR_PUBLIC",
+      "allowNonGoogleInvites": true,
+      "allowNonGoogleInvitesInAllowlistedDomains": false,
+      "allowPublishingFiles": true,
+      "allowReceivingExternalFiles": true,
+      "allowReceivingFilesOutsideAllowlistedDomains": true,
+      "allowedPartiesForDistributingContent": "ALL_ELIGIBLE_USERS",
+      "externalSharingMode": "ALLOWED",
+      "warnForExternalSharing": true,
+      "warnForSharingOutsideAllowlistedDomains": true}
+    },
+  "service_status": [
+    "chat",
+    "drive_and_docs",
+    "gmail"
+  ],
+  "policies": {
+    "topOU": {
+      "drive_and_docs_service_status": {
+        "serviceState": "ENABLED"
+      },
+      "chat_service_status": {
+        "serviceState": "ENABLED"
+      },
+      "drive_and_docs_external_sharing": {
+        "allowReceivingExternalFiles": true,
+        "warnForSharingOutsideAllowlistedDomains": true,
+        "allowNonGoogleInvitesInAllowlistedDomains": true,
+        "allowNonGoogleInvites": false,
+        "allowPublishingFiles": true,
+        "accessCheckerSuggestions": "RECIPIENTS_ONLY"
+      }
+    }
+  },
+  "results": {
+    "topOU": {
+      "chat_service_status": {
+        "serviceState": "ENABLED"
+      },
+      "drive_and_docs_service_status": {
+        "serviceState": "ENABLED"
+      },
+      "gmail_service_status": {
+        "serviceState": "DISABLED"
+      },
+      "drive_and_docs_external_sharing": {
+        "accessCheckerSuggestions": "RECIPIENTS_ONLY",
+        "allowNonGoogleInvites": false,
+        "allowNonGoogleInvitesInAllowlistedDomains": true,
+        "allowPublishingFiles": true,
+        "allowReceivingExternalFiles": true,
+        "allowReceivingFilesOutsideAllowlistedDomains": true,
+        "allowedPartiesForDistributingContent": "ALL_ELIGIBLE_USERS",
+        "externalSharingMode": "ALLOWED",
+        "warnForExternalSharing": true,
+        "warnForSharingOutsideAllowlistedDomains": true
+      }
+    }
+  }
+}
