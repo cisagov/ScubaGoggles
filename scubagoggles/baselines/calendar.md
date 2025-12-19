@@ -27,6 +27,10 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
+
+**Manual**: This indicator means that the policy requires manual verification of configuration settings.
+
 # Baseline Policies
 
 ## 1. External Sharing Options
@@ -38,6 +42,8 @@ This section determines what information is shared from calendars with external 
 #### GWS.CALENDAR.1.1v0.6
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)(a)
@@ -46,6 +52,8 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
 
 #### GWS.CALENDAR.1.2v0.6
 External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)."
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
 - _Last modified:_ July 2023
@@ -92,6 +100,8 @@ This section determines whether users are warned when inviting one or more guest
 #### GWS.CALENDAR.2.1v0.6
 External invitations warnings SHALL be enabled to prompt users before sending invitations.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Users may inadvertently include external guests in calendar event invitations, potentially resulting in data leakage. Warning users when external participants are included can help reduce this risk.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AT-2b
@@ -134,6 +144,8 @@ Due to the added complexity and attack surface associated with configuring Calen
 #### GWS.CALENDAR.3.1v0.6
 Calendar Interop SHOULD be disabled.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Enabling Calendar interop adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature unless required by the organization conforms to the principle of least functionality.
 - _Last modified:_ July 2023
 - Notes
@@ -145,6 +157,8 @@ Calendar Interop SHOULD be disabled.
 
 #### GWS.CALENDAR.3.2v0.6
 Microsoft 365 (Graph API) SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscalendar32v06-instructions)
 
 - _Rationale:_ Basic authentication is a deprecated and risk-prone authentication method. Using OAuth 2.0 helps reduce the risk of credential compromise.
 - _Last modified:_ August 2025
@@ -197,6 +211,8 @@ This section covers whether or not the paid appointment booking feature is enabl
 
 #### GWS.CALENDAR.4.1v0.6
 Appointment Schedule with Payments SHALL be disabled.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Enabling paid appointments adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature conforms to the principle of least functionality.
 - _Last modified:_ July 2023

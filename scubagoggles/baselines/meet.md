@@ -30,6 +30,12 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
+
+**Log-Based Check**: This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
+
+**Manual**: This indicator means that the policy requires manual verification of configuration settings.
+
 # Baseline Policies
 
 ## 1. Meeting Access
@@ -40,6 +46,8 @@ This control limits external users not explicitly invited to the meeting from jo
 
 #### GWS.MEET.1.1v0.6
 External users who were not explicitly invited SHALL be required to ask to join.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing users not within the organization or those not on the invite list to join meetings without asking diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring users outside the organization or without an invitation to require organizer permission to join.
 - _Last modified:_ November 2025
@@ -79,6 +87,8 @@ This control determines which meetings users within the agency's organization ca
 
 #### GWS.MEET.2.1v0.6
 Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace tenant or organization.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Contact with unmanaged users can pose the risk of data leakage and other security threats. This policy reduces such contact by not allowing agency users to join meetings created by users' personal accounts.
 - _Last modified:_ September 2023
@@ -120,6 +130,8 @@ Note: When this feature is not enabled, any attendee that is a member of the hos
 #### GWS.MEET.3.1v0.6
 Host Management meeting features SHALL be enabled.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ With host management disabled, any internal participant is able to take control of meetings, performing actions such as recording the meeting, disabling or enabling the chat, and ending the meeting. When enabled, these options are only available to meeting hosts.
 - _Last modified:_ January 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
@@ -159,6 +171,8 @@ This control provides a warning label for any participating a meeting who is not
 
 #### GWS.MEET.4.1v0.6
 Warn for external participants SHALL be enabled.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users may inadvertently include external users or not be aware that external users are present. When enabled, external or unidentified participants in a meeting are given a label. This increases situational awareness amongst meeting participants and can help prevent inadvertent data leakage.
 - _Last modified:_ September 2023
@@ -201,6 +215,9 @@ This section covers who domain users are allowed to receive a 1:1 call from.
 #### GWS.MEET.5.1v0.6
 Incoming calls SHALL be restricted to contacts and other users in the organization.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
+
 - _Rationale:_ Calls could potentially be used to pass sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ March 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8, SC-15a
@@ -239,6 +256,8 @@ This section covers Google Meet video settings such as automatic video recording
 #### GWS.MEET.6.1v0.6
 Automatic recordings for Google Meet SHALL be disabled.
 
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet61v06-instructions)
+
 - _Rationale:_ Automatic recordings could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024
 - _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
@@ -250,6 +269,8 @@ Automatic recordings for Google Meet SHALL be disabled.
 
 #### GWS.MEET.6.2v0.6
 Automatic transcripts for Google Meet SHALL be disabled.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet62v06-instructions)
 
 - _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024

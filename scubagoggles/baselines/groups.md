@@ -27,6 +27,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
 # Baseline Policies
 
@@ -39,6 +40,8 @@ These settings are addressed in the following policies.
 #### GWS.GROUPS.1.1v0.6
 Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
@@ -47,6 +50,8 @@ Group access from outside the organization SHALL be disabled unless explicitly g
 
 #### GWS.GROUPS.1.2v0.6
 Group owners' ability to add external members to groups SHOULD be disabled unless necessary for agency mission fulfillment.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
 - _Last modified:_ July 2023
@@ -59,6 +64,8 @@ Group owners' ability to add external members to groups SHOULD be disabled unles
 
 #### GWS.GROUPS.1.3v0.6
 Group owners' ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing external users to post opens the door for phishing or other malicious activity to be shared via Groups. Restricting posting by non-group members reduces this risk.
 - _Last modified:_ July 2023
@@ -113,6 +120,8 @@ This section covers who has the ability to create a new group within the organiz
 #### GWS.GROUPS.2.1v0.6
 Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.
 
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
 - _Rationale:_ Many settings for Google Workspace products can be set at the Group level. Allowing unrestricted group creation complicates setting management and opens channels of unmanaged communication.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(10)
@@ -149,6 +158,8 @@ This section covers the default permissions assigned to the viewing of conversat
 
 #### GWS.GROUPS.3.1v0.6
 The default permission to view conversations SHOULD be set to All Group Members.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace organization. Restricting access to group members reduces the risk of data loss.
 - _Last modified:_ July 2023
@@ -188,6 +199,8 @@ This section covers whether or not the owner of a group can hide the group from 
 
 #### GWS.GROUPS.4.1v0.6
 The Ability for Groups to be Hidden from the Directory SHALL be disabled.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Hidden groups are not visible, even to admins, in the list of groups found at groups.google.com, though they are still visible on the directory page on admin.google.com. As such, allowing for hidden groups increases the risk of groups being created without admin oversight.
 - _Last modified:_ July 2023
