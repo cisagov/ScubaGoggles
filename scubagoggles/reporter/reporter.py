@@ -584,6 +584,11 @@ class Reporter:
 
         html = html.replace('{{MAIN_JS}}', f'<script>{javascript}</script>')
 
+        meta_tag_template = self._reporter_path / 'templates/MetaTagTemplate.html'
+        meta_tag = meta_tag_template.read_text(encoding='utf-8')
+
+        html = html.replace('{{META_TAG}}', meta_tag)
+
         dark_mode_toggle_template = self._reporter_path / 'templates/DarkModeToggleTemplate.html'
         dark_mode_toggle_button = dark_mode_toggle_template.read_text(encoding='utf-8')
         html = html.replace('{{DARK_MODE_TOGGLE}}', dark_mode_toggle_button)
