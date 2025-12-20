@@ -75,7 +75,38 @@ class TestProvider:
             assert provider._services[key] is mock_service
         assert provider._services["directory"] is mock_directory
 
-    def test_list_domains(self, mocker, mock_build):
+    @pytest.mark.parametrize(
+        ("api_response", "expected_domains"),
+        [
+            (
+                {
+                    "domains": [
+                        {"domainName": "example.com", "verified": True},
+                        {"domainName": "test.org", "verified": False},
+                    ]
+                },
+                [
+                    {"domainName": "example.com", "verified": True},
+                    {"domainName": "test.org", "verified": False},
+                ],
+            ),
+            (
+                { "domains": [] },
+                [],
+            ),
+            (
+                {},
+                [],
+            ),
+        ]
+    )
+    def test_list_domains(
+        self,
+        mocker,
+        mock_build,
+        api_response,
+        expected_domains
+    ):
         """
         Docstring for test_list_domains
         
@@ -91,35 +122,158 @@ class TestProvider:
         domains_ctx_manager.__enter__.return_value = mock_domains
         domains_ctx_manager.__exit__.return_value = False
         directory.domains.return_value = domains_ctx_manager
-
-        mock_domains.list.return_value.execute.return_value = {
-            "domains": [
-                {"domainName": "example.com", "verified": True},
-                {"domainName": "test.org", "verified": False},
-            ]
-        }
+        mock_domains.list.return_value.execute.return_value = api_response
 
         result = provider.list_domains()
-        assert result == [
-            {"domainName": "example.com", "verified": True},
-            {"domainName": "test.org", "verified": False},
-        ]
+        assert result == expected_domains
 
-    def test_list_alias_domains(self):
+    @pytest.mark.parametrize(
+        ("api_response", "expected_aliases"),
+        [
+            (
+                {
+                    "domainAliases": [
+                        {"domainAliasName": "alias1.com", "verified": True},
+                        {"domainAliasName": "alias2.org", "verified": False},
+                    ]
+                },
+                [
+                    {"domainAliasName": "alias1.com", "verified": True},
+                    {"domainAliasName": "alias2.org", "verified": False},
+                ],
+            ),
+            (
+                { "domainAliases": [] },
+                [],
+            ),
+            (
+                {},
+                [],
+            ),
+        ]
+    )
+    def test_list_alias_domains(
+        self,
+        mocker,
+        mock_build,
+        api_response,
+        expected_aliases
+    ):
         """
         Docstring for test_list_alias_domains
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
 
-    def test_get_spf_records(self):
+        directory = mocker.Mock()
+        provider._services["directory"] = directory
+
+        mock_aliases = mocker.Mock()
+        alias_ctx_manager = mocker.MagicMock()
+        alias_ctx_manager.__enter__.return_value = mock_aliases
+        alias_ctx_manager.__exit__.return_value = False
+        directory.domainAliases.return_value = alias_ctx_manager
+        mock_aliases.list.return_value.execute.return_value = api_response
+
+        result = provider.list_alias_domains()
+        assert result == expected_aliases
+
+    @pytest.mark.parametrize(
+        ("domains", "rdata", "expected_spf_records"),
+        [
+            # Multiple domains with SPF records returned
+            (
+                { "example.com" },
+                {
+                    "example.com": {
+                        "answers": ["v=spf1 include:_spf.google.com ~all"],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": "example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": ["v=spf1 include:_spf.google.com ~all"],
+                            }
+                        ],
+                    }
+                },
+                [
+                    {
+                        "domain": "example.com",
+                        "rdata": ["v=spf1 include:_spf.google.com ~all"],
+                        "log": [
+                            {
+                                "query_name": "example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": ["v=spf1 include:_spf.google.com ~all"],
+                            }
+                        ],
+                    }
+                ]
+            ),
+            # No SPF records returned
+            (
+                { "nodata.com" },
+                {
+                    "nodata.com": {
+                        "answers": [],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": "nodata.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 0 txt records",
+                                "query_answers": [],
+                            }
+                        ],
+                    }
+                },
+                [
+                    {
+                        "domain": "nodata.com",
+                        "rdata": [],
+                        "log": [
+                            {
+                                "query_name": "nodata.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 0 txt records",
+                                "query_answers": [],
+                            }
+                        ],
+                    },
+                ]
+            ),
+        ]
+    )
+    def test_get_spf_records(
+        self,
+        mocker,
+        mock_build,
+        domains,
+        rdata,
+        expected_spf_records
+    ):
         """
         Docstring for test_get_spf_records
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
+
+        def query_side_effect(domain):
+            return rdata[domain]
+        mock_query = mocker.patch.object(
+            provider._dns_client, "query", side_effect=query_side_effect
+        )
+
+        result = provider.get_spf_records(domains)
+        sorted_result = sorted(result, key=lambda x: x["domain"])
+        sorted_expected = sorted(expected_spf_records, key=lambda x: x["domain"])
+        assert sorted_result == sorted_expected
+        assert mock_query.call_count == len(domains)
 
     def test_get_dkim_records(self):
         """
