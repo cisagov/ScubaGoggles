@@ -61,9 +61,7 @@ In some cases, it may be appropriate to omit specific policies from ScubaGoggles
 - When a policy is implemented by a third-party service that ScubaGoggles does not audit.
 - When a policy is not applicable to your organization (e.g., policy GWS.GMAIL.4.3, which is only applicable to federal, executive branch, departments and agencies).
 
-The `omitpolicy` top-level key, shown in this [example ScubaGoggles
-configuration file](../../scubagoggles/sample-config-files/omit_policies.yaml),
-allows the user to specify the policies that should be omitted from the
+The `omitpolicy` top-level key allows the user to specify the policies that should be omitted from the
 ScubaGoggles report. Omitted policies will show up as "Omitted" in the HTML
 report and will be colored gray. Omitting policies must only be done if the
 omissions are approved within an organization's security risk management
