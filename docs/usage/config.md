@@ -43,6 +43,18 @@ This configuration file includes the additional `orgname` and `orgunitname`
 fields for documenting the organization and organizational subunit owner of the
 GWS tenant ScubaGoggles is running against.
 
+### Full Configuration Reference
+
+The [full config file](../../scubagoggles/sample-config-files) shows **all available parameters** supported by ScubaGoggles specified in the config file. This serves as a complete reference for all possible configuration options. Any parameter may be commented out - if not specified or commented out, ScubaGoggles will supply the default value unless overridden on the command line.
+
+**Note**: Default values do not apply to authentication parameters
+
+```
+ScubaGoggles can be invoked with this config file:
+```
+scubagoggles gws --config full_config.yaml
+```
+
 ### Omit Policies
 
 In some cases, it may be appropriate to omit specific policies from ScubaGoggles evaluation. For example:
@@ -71,7 +83,7 @@ documented in the config file, though this warning can be silenced with the `-si
 - Allow users to identify incorrect results
 - Help contextualize results
 
-The `annotatepolicy` top-level key, shown in this [example ScubaGoggles configuration file](../../scubagoggles/sample-config-files/annotate_policies.yaml), allows the user to specify the policies that should be annotated.
+The `annotatepolicy` top-level key allows the user to specify the policies that should be annotated.
 
 For each annotated policy, the config file allows you to indicate the following:
 - `incorrectresult`: Boolean, whether or not to mark the result incorrect. Optional, defaults to false.
@@ -85,7 +97,7 @@ For each annotated policy, the config file allows you to indicate the following:
 In some cases, it may be appropriate to specify the number of break glass accounts to be omitted from the total admin count. For example:
 - When a policy is looking for the total number of break glass accounts (e.g. policy GWS.COMMONCONTROLS.6.2).
 
-The `breakglassaccounts` top-level key, shown in this [example ScubaGoggles configuration file](../../scubagoggles/sample-config-files/break_glass_accounts.yaml), allows the user to specify the break glass accounts to exclude from the admin count. The number of break glass accounts will be shown on the ScubaGoggles report. 
+The `breakglassaccounts` top-level key allows the user to specify the break glass accounts to exclude from the admin count. The number of break glass accounts will be shown on the ScubaGoggles report. 
 
 ### DNS Configuration
 The following SCuBA polices depend on the capability to make DNS requests:
