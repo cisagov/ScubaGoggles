@@ -122,6 +122,8 @@ outputreportfilename: BaselineReports
 # - Add references to supporting documentation or evidence.
 # - Explain compensating controls or mitigating factors.
 # - Note planned improvements or future implementation details.
+baselines: [gmail, commoncontrols]
+
 AnnotatePolicy:
   # -------------------------------------
   # ANNOTATE POLICY : GMAIL SAMPLE
@@ -165,6 +167,7 @@ omitpolicy:
   GWS.GMAIL.1.1v0.6:
     rationale: "Accepting risk for now, will reevaluate at a later date."
     expiration: "2025-12-31"
+  
   # -------------------------------------
   # OMIT POLICY : COMMONCONTROLS SAMPLE
   # -------------------------------------
@@ -172,6 +175,7 @@ omitpolicy:
   GWS.COMMONCONTROLS.18.1v0.6:
     rationale: &DLPRationale "The DLP capability required by the baselines is implemented by third party product, [x],
       which ScubaGoggles does not have the ability to check."
+ 
   # A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
   GWS.COMMONCONTROLS.18.2v0.6:
     rationale: *DLPRationale
