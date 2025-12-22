@@ -11,21 +11,6 @@ repo and are discussed below. When executing ScubaGoggles, only a single config
 file can be read in; we recommend looking through the following examples and
 constructing a config file that best suits your use case.
 
-### Basic Usage
-
-The [basic use](../../scubagoggles/sample-config-files/basic_config.yaml) example
-config file specifies the `outpath`, `baselines`, and `quiet` parameters.
-
-ScubaGoggles can be invoked with this config file:
-```
-scubagoggles gws --config basic_config.yaml
-```
-
-It can also be invoked while overriding the `baselines` parameter.
-```
-scubagoggles gws --config basic_config.yaml -b gmail chat
-```
-
 ### SCuBA Complicance Configuration
 The [SCuBA compliance](../../scubagoggles/sample-config-files/scuba_compliance.yaml)
 is the **recommended starting point** for organizations seeking to meet SCuBA
