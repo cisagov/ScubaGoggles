@@ -60,7 +60,7 @@ outputregofilename: TestResults
 outputreportfilename: BaselineReports
 
 # This field is used to asssign IP addresses of DNS resolvers that should be used to retrieve any DNS records required by specific SCuBA policies. Optional; if not provided, the system default will be used. Example: --preferreddnsresolvers 8.8.8.8 8.8.4.4
---preferreddnsresolvers [dns-resolvers]
+# preferreddnsresolvers [dns-resolvers]
 
 # This field is used to suppresses automatically launching a web browser to open the html report output and the loading bar output.
 # quiet
@@ -88,9 +88,9 @@ outputreportfilename: BaselineReports
 # YAML configuration demonstrating specifiying break glass accounts to be
 # exempt from from an admin count.
 
-baselines: [commoncontrols]
+# baselines: [commoncontrols]
 
-breakglassaccounts: [admin@example.org, admin2@example.org]
+# breakglassaccounts: [admin@example.org, admin2@example.org]
 
 # ============================
 # DNS CONFIGURATION
@@ -98,12 +98,12 @@ breakglassaccounts: [admin@example.org, admin2@example.org]
 # This is for the Gmail product. In some cases, it can be helpful to control where those DNS requests are sent to. ScubaGoggles provides two options for configuring how DNS queries are made: preferreddnsresolvers and skipdoh.
 
 # Use this field to control what DNS resolver is used to fetch the SPF, DKIM, and DMARC records
-preferreddnsresolvers:
-    - 8.8.8.8
-    - 8.8.4.4
+# preferreddnsresolvers:
+#     - 8.8.8.8
+#     - 8.8.4.4
 
 # Use this field to assign true, to not fallback to DoH should the traditional DNS requests fail when retrieving any DNS records required by the specific SCuBA policies listed above.
-skipdoh: true
+# skipdoh: true
 
 # =============================
 # ANNOTATE SECTION : ANNOTATE POLICIES
@@ -155,22 +155,20 @@ AnnotatePolicy:
 # - The policy is not applicable to the organization's environment.
 # - The policy is met using a third-party tool or solution that is not assessed by ScubaGoggles.
 # - The policy is an acceptable risk that has been documented and approved by the organization.
-OmitPolicy:
+baselines: [gmail, commoncontrols]
 
+omitpolicy:
   # -------------------------------------
   # OMIT POLICY : GMAIL SAMPLE
   # -------------------------------------
   # Mail Delegation SHOULD be disabled.
-omitpolicy:
   GWS.GMAIL.1.1v0.6:
     rationale: "Accepting risk for now, will reevaluate at a later date."
     expiration: "2025-12-31"
-
   # -------------------------------------
   # OMIT POLICY : COMMONCONTROLS SAMPLE
   # -------------------------------------
   # A custom policy SHALL be configured for Google Drive to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
-omitpolicy:
   GWS.COMMONCONTROLS.18.1v0.6:
     rationale: &DLPRationale "The DLP capability required by the baselines is implemented by third party product, [x],
       which ScubaGoggles does not have the ability to check."
