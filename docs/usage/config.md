@@ -49,7 +49,6 @@ The [full config file](../../scubagoggles/sample-config-files) shows **all avail
 
 **Note**: Default values do not apply to authentication parameters
 
-```
 ScubaGoggles can be invoked with this config file:
 ```
 scubagoggles gws --config full_config.yaml
