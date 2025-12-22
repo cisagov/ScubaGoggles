@@ -54,6 +54,7 @@ ScubaGoggles can be invoked with this config file:
 scubagoggles gws --config full_config.yaml
 ```
 
+
 ### Omit Policies
 
 In some cases, it may be appropriate to omit specific policies from ScubaGoggles evaluation. For example:
