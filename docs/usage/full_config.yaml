@@ -14,18 +14,18 @@ Description: |
 
 # The list of GWS Product/SCuBA baselines ScubaGoggles will assess. ScubaGoggles defaults to run against all baselines.
 # For a list of acceptable values, See https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Parameters.md#usage-parameters
- baselines:
-  - assuredcontrols,
-  - calendar
-  - chat
-  - classroom
-  - commoncontrols
-  - drive
-  - gemini
-  - gmail
-  - groups
-  - meet
-  - sites
+ # baselines:
+ # - assuredcontrols,
+ # - calendar
+ # - chat
+ # - classroom
+ # - commoncontrols
+ # - drive
+ # - gemini
+ # - gmail
+ # - groups
+ # - meet
+ # - sites
 
 # This field is used to authenticate via access token string to be used in lieu of a credentials file. If provided, will take precendence over the credentials file. Advanced option; using a credentials file is the recommended authentication method.
 # accesstoken: [access-token]
