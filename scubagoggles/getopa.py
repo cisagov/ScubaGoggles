@@ -12,7 +12,7 @@ import sys
 from hashlib import sha256
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin, urlsplit
 from urllib.request import Request, urlcleanup, urlopen, urlretrieve
 
@@ -90,8 +90,17 @@ def download_opa(opa_dir: Path,
         log.debug('Querying latest version from OPA: %s', latest_version_url)
         request = Request(latest_version_url)
 
-        with urlopen(request) as response:
-            version = urlsplit(response.url).path.split('/')[-1]
+        try:
+            with urlopen(request) as response:
+                version = urlsplit(response.url).path.split('/')[-1]
+        except URLError as ue:
+            if 'CERTIFICATE_VERIFY_FAILED' not in str(ue):
+                raise
+            macos_cert_error()
+            # pylint: disable-next=raise-missing-from
+            raise UserRuntimeError('Certificate Verification Error with '
+                                   f'URL {latest_version_url}')
+
         log.debug('  Version returned: %s', version)
 
         if not version_re.match(version):
@@ -135,6 +144,13 @@ def download_opa(opa_dir: Path,
                                    f'version {version} - check version')
         raise UserRuntimeError('Failure downloading OPA executable') \
             from http_error
+    except URLError as ue:
+        if 'CERTIFICATE_VERIFY_FAILED' not in str(ue):
+            raise
+        macos_cert_error()
+        # pylint: disable-next=raise-missing-from
+        raise UserRuntimeError('Certificate Verification Error with '
+                                f'URL {download_url}')
     finally:
         urlcleanup()
 
@@ -258,3 +274,28 @@ def verify_opa(download_url: str, opa_exe_file: Path):
     log.debug('  Actual hash value:   %s', file_hash_value)
 
     return file_hash_value == expected_value
+
+def macos_cert_error():
+
+    """Handles a "certificate verification error" in the macOS environment
+    by checking whether the certificate installation command file exists
+    and notifying the user.  Python on macOS uses its own copy of OpenSSL
+    and relies on the root certificates in the "certifi" package.  If this
+    package is not installed, it's likely the user will encounter this
+    certificate error.
+    """
+
+    os_type = platform.system().lower()
+    if os_type != 'darwin':
+        return
+
+    python_version = sys.version_info
+    certificate_script = Path('/Applications/Python '
+                              f'{python_version.major}.'
+                              f'{python_version.minor}',
+                              'install_certificates.command')
+
+    if certificate_script.exists():
+        log.error('Certificate Verification Error')
+        log.error('Have you tried the following:')
+        log.error('  %s', certificate_script)
