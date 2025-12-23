@@ -118,7 +118,6 @@ jobs:
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
-          ls /home/runner/scubagoggles
           FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
           echo $FOUNDIT
           echo "newpath=$FOUNDIT" >> $GITHUB_OUTPUT
@@ -146,8 +145,6 @@ jobs:
           node-version: 18.x
       - name: run Lighthouse CI
         run: |
-          echo "here: "
-          echo ${{ runner.os }}-baseline-${{ steps.baseoutput.outputs.newpath }}
           npm install -g @lhci/cli@0.15.x
           lhci autorun --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
         env:
