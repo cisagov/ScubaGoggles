@@ -125,6 +125,9 @@ jobs:
 
   lhci:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
     needs: smoke-test
     if: ${{ always() }}
     steps:
