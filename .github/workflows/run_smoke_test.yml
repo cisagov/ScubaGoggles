@@ -115,7 +115,7 @@ jobs:
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
-
+          ls /home/runner/scubagoggles
       - name: Cache the output directory
         id: baseline
         uses: actions/cache@v4
@@ -145,6 +145,7 @@ jobs:
         run: |
           npm install -g @lhci/cli@0.15.x
           lhci autorun --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
+          set e+
           gh cache delete ${{ runner.os }}-baseline
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
