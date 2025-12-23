@@ -2,7 +2,7 @@
 test_provider tests the Provider class.
 """
 import pytest
-from scubagoggles.provider import Provider
+from scubagoggles.provider import Provider, SELECTORS
 
 class TestProvider:
     @pytest.fixture
@@ -180,7 +180,7 @@ class TestProvider:
         assert result == expected_aliases
 
     @pytest.mark.parametrize(
-        ("domains", "rdata", "expected_spf_records"),
+        ("domains", "query_response", "expected_spf_records"),
         [
             # Multiple domains with SPF records returned
             (
@@ -214,18 +214,18 @@ class TestProvider:
                     }
                 ]
             ),
-            # No SPF records returned
+            # Non-existant domain (NXDOMAIN)
             (
-                { "nodata.com" },
+                { "example.com" },
                 {
-                    "nodata.com": {
+                    "example.com": {
                         "answers": [],
                         "nxdomain": False,
                         "log_entries": [
                             {
-                                "query_name": "nodata.com",
+                                "query_name": "example.com",
                                 "query_method": "traditional",
-                                "query_result": "Query returned 0 txt records",
+                                "query_result": "Query returned NXDOMAIN",
                                 "query_answers": [],
                             }
                         ],
@@ -233,13 +233,13 @@ class TestProvider:
                 },
                 [
                     {
-                        "domain": "nodata.com",
+                        "domain": "example.com",
                         "rdata": [],
                         "log": [
                             {
-                                "query_name": "nodata.com",
+                                "query_name": "example.com",
                                 "query_method": "traditional",
-                                "query_result": "Query returned 0 txt records",
+                                "query_result": "Query returned NXDOMAIN",
                                 "query_answers": [],
                             }
                         ],
@@ -253,7 +253,7 @@ class TestProvider:
         mocker,
         mock_build,
         domains,
-        rdata,
+        query_response,
         expected_spf_records
     ):
         """
@@ -264,7 +264,7 @@ class TestProvider:
         provider = self._provider(mocker, mock_build)
 
         def query_side_effect(domain):
-            return rdata[domain]
+            return query_response[domain]
         mock_query = mocker.patch.object(
             provider._dns_client, "query", side_effect=query_side_effect
         )
@@ -275,13 +275,212 @@ class TestProvider:
         assert sorted_result == sorted_expected
         assert mock_query.call_count == len(domains)
 
-    def test_get_dkim_records(self):
+    @pytest.mark.parametrize(
+        ("domains", "query_response", "expected_dkim_records"),
+        [
+            # DKIM found on first selector
+            (
+                { "example.com" },
+                {
+                    f"{SELECTORS[0]}._domainkey.example.com": {
+                        "answers": [
+                            "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                        ],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": f"{SELECTORS[0]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": [
+                                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                                ],
+                            },
+                        ],
+                    },
+                },
+                [
+                    {
+                    "domain": "example.com",
+                        "rdata": [
+                            "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                        ],
+                        "log": [
+                            {
+                                "query_name": f"{SELECTORS[0]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": [
+                                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                                ],
+                            },
+                        ],
+                    }
+                ],
+            ),
+            # DKIM found on second selector
+            (
+                { "example.com" },
+                {
+                    f"{SELECTORS[0]}._domainkey.example.com": {
+                        "answers": [],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": f"{SELECTORS[0]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                        ],
+                    },
+                    f"{SELECTORS[1]}._domainkey.example.com": {
+                        "answers": [
+                            "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                        ],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": f"{SELECTORS[1]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": [
+                                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                                ],
+                            },
+                        ],
+                    },
+                },
+                [
+                    {
+                        "domain": "example.com",
+                        "rdata": [
+                            "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                        ],
+                        "log": [
+                            {
+                                "query_name": f"{SELECTORS[1]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": [
+                                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                                ],
+                            },
+                        ],
+                    }
+                ]
+            ),
+            # No DKIM across all selectors
+            (
+                { "example.com" },
+                {
+                    f"{SELECTORS[0]}._domainkey.example.com": {
+                        "answers": [],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": f"{SELECTORS[0]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                        ],
+                    },
+                    f"{SELECTORS[1]}._domainkey.example.com": {
+                        "answers": [],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": f"{SELECTORS[1]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                        ],
+                    },
+                    f"{SELECTORS[2]}._domainkey.example.com": {
+                        "answers": [],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": f"{SELECTORS[2]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                        ],
+                    },
+                },
+                [
+                    {
+                        "domain": "example.com",
+                        "rdata": [],
+                        "log": [
+                            {
+                                "query_name": f"{SELECTORS[0]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                            {
+                                "query_name": f"{SELECTORS[0]}._domainkey.example.com",
+                                "query_method": "DoH",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                            {
+                                "query_name": f"{SELECTORS[1]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                            {
+                                "query_name": f"{SELECTORS[1]}._domainkey.example.com",
+                                "query_method": "DoH",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                            {
+                                "query_name": f"{SELECTORS[2]}._domainkey.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                            {
+                                "query_name": f"{SELECTORS[2]}._domainkey.example.com",
+                                "query_method": "DoH",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                        ]
+                    }
+                ]
+            )
+        ],
+    )
+    def test_get_dkim_records(
+        self,
+        mocker,
+        mock_build,
+        domains,
+        query_responses,
+        expected_dkim_records
+    ):
         """
         Docstring for test_get_dkim_records
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
+
+        def query_side_effect(qname):
+            return query_responses.get(qname, { 
+                "answer": [],
+                "nxdomain": False,
+                "log_entries": [] }
+            )
+
+        
 
     def test_get_dmarc_records(self):
         """
