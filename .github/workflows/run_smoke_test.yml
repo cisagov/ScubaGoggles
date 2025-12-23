@@ -118,6 +118,7 @@ jobs:
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+          if [[ "{{ runner.os }}" == "Linux" ]]; then
           FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
           echo $FOUNDIT
           echo "newpath=$FOUNDIT" >> $GITHUB_OUTPUT
