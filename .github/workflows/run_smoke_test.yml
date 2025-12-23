@@ -125,6 +125,7 @@ jobs:
           else
             echo "Skipping to next"
           fi
+        shell: bash
       - name: Cache the output directory
         id: baseline
         uses: actions/cache@v4
