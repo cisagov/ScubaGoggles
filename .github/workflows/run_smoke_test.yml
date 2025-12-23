@@ -113,20 +113,19 @@ jobs:
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
-      - name: Run ScubaGoggles and check for correct output for Windows
-        if: ${{ matrix.operating-system == 'windows-latest' }}
-        run: |
-          ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
-          pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
-
-      - name: Run ScubaGoggles and check for correct output non-Windows
+      - name: Run ScubaGoggles and check for correct output
         id: baseoutput
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
-          FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
-          echo $FOUNDIT
-          echo "newpath=$FOUNDIT" >> $GITHUB_OUTPUT
+          if [ ${{ runner.os }} != "Windows" ]; then
+            FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
+            echo $FOUNDIT
+            echo "newpath=$FOUNDIT" >> $GITHUB_OUTPUT
+          else
+            echo "Skipping to next"
+          fi
+        shell: bash
       - name: Cache the output directory
         id: baseline
         uses: actions/cache@v4
