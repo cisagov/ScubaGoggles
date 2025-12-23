@@ -144,7 +144,6 @@ jobs:
       - name: run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.15.x
-          lhci collect
           lhci autorun --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
           gh cache delete ${{ runner.os }}-baseline
         env:
@@ -152,3 +151,4 @@ jobs:
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
           GH_TOKEN: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
           GH_REPO: ${{ github.repository }}
+          BRANCH: refs/pull/${{ github.event.pull_request.number }}
