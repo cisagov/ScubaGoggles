@@ -276,7 +276,7 @@ class TestProvider:
         assert mock_query.call_count == len(domains)
 
     @pytest.mark.parametrize(
-        ("domains", "query_response", "expected_dkim_records"),
+        ("domains", "query_responses", "expected_dkim_records"),
         [
             # DKIM found on first selector
             (
@@ -291,6 +291,14 @@ class TestProvider:
                             {
                                 "query_name": f"{SELECTORS[0]}._domainkey.example.com",
                                 "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": [
+                                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                                ],
+                            },
+                            {
+                                "query_name": f"{SELECTORS[0]}._domainkey.example.com",
+                                "query_method": "DoH",
                                 "query_result": "Query returned 1 txt records",
                                 "query_answers": [
                                     "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
@@ -332,6 +340,12 @@ class TestProvider:
                                 "query_result": "Query returned NXDOMAIN",
                                 "query_answers": [],
                             },
+                            {
+                                "query_name": f"{SELECTORS[0]}._domainkey.example.com",
+                                "query_method": "DoH",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
                         ],
                     },
                     f"{SELECTORS[1]}._domainkey.example.com": {
@@ -343,6 +357,14 @@ class TestProvider:
                             {
                                 "query_name": f"{SELECTORS[1]}._domainkey.example.com",
                                 "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": [
+                                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
+                                ],
+                            },
+                            {
+                                "query_name": f"{SELECTORS[1]}._domainkey.example.com",
+                                "query_method": "DoH",
                                 "query_result": "Query returned 1 txt records",
                                 "query_answers": [
                                     "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."
@@ -384,6 +406,12 @@ class TestProvider:
                                 "query_result": "Query returned NXDOMAIN",
                                 "query_answers": [],
                             },
+                            {
+                                "query_name": f"{SELECTORS[0]}._domainkey.example.com",
+                                "query_method": "DoH",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
                         ],
                     },
                     f"{SELECTORS[1]}._domainkey.example.com": {
@@ -396,6 +424,12 @@ class TestProvider:
                                 "query_result": "Query returned NXDOMAIN",
                                 "query_answers": [],
                             },
+                            {
+                                "query_name": f"{SELECTORS[1]}._domainkey.example.com",
+                                "query_method": "DoH",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
                         ],
                     },
                     f"{SELECTORS[2]}._domainkey.example.com": {
@@ -405,6 +439,12 @@ class TestProvider:
                             {
                                 "query_name": f"{SELECTORS[2]}._domainkey.example.com",
                                 "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                            {
+                                "query_name": f"{SELECTORS[2]}._domainkey.example.com",
+                                "query_method": "DoH",
                                 "query_result": "Query returned NXDOMAIN",
                                 "query_answers": [],
                             },
@@ -474,13 +514,39 @@ class TestProvider:
         provider = self._provider(mocker, mock_build)
 
         def query_side_effect(qname):
-            return query_responses.get(qname, { 
-                "answer": [],
+            return query_responses.get(qname, {
+                "answers": [],
                 "nxdomain": False,
-                "log_entries": [] }
-            )
+                "log_entries": []
+            })
 
-        
+        mock_query = mocker.patch.object(
+            provider._dns_client,
+            "query",
+            side_effect=query_side_effect
+        )
+
+        result = provider.get_dkim_records(domains)
+        result_map = {
+            item["domain"]: {
+                "rdata": item["rdata"],
+                "log": item["log"]
+            }
+            for item in result
+        }
+
+        for expected in expected_dkim_records:
+            domain = expected["domain"]
+            assert domain in result_map
+            assert result_map[domain]["rdata"] == expected["rdata"]
+            
+            result_log = result_map[domain]["log"]
+            for expected_log in expected.get("log", []):
+                assert expected_log in result_log, \
+                f"Log entry {expected_log} not found for domain {domain}: {expected_log}"
+
+        assert mock_query.call_count >= len(domains)
+
 
     def test_get_dmarc_records(self):
         """
