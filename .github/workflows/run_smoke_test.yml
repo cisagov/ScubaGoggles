@@ -114,13 +114,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run ScubaGoggles and check for correct output (windows)
-        if: ${{ matrix.operating-system == 'windows-latest' }}
+        if: ${{ matrix.operating-system == 'windows-latest' ||  matrix.operating-system == 'macos-latest'}}
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
 
       - name: Run ScubaGoggles and check for correct output
-        if: ${{ matrix.operating-system != 'windows-latest' }}
+        if: ${{ matrix.operating-system == 'ubuntu-latest' }}
         id: baseoutput
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
