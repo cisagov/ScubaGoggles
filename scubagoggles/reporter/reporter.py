@@ -222,6 +222,11 @@ class Reporter:
 
         html = html.replace('{{MAIN_JS}}', f'<script>{javascript}</script>')
 
+        meta_tag_template = cls._reporter_path / 'templates/MetaTagTemplate.html'
+        meta_tag = meta_tag_template.read_text(encoding='utf-8')
+
+        html = html.replace('{{META_TAG}}', meta_tag)
+
         dark_mode_toggle_template = cls._reporter_path / 'templates/DarkModeToggleTemplate.html'
         dark_mode_toggle_button = dark_mode_toggle_template.read_text(encoding='utf-8')
 
@@ -579,6 +584,11 @@ class Reporter:
 
         html = html.replace('{{MAIN_JS}}', f'<script>{javascript}</script>')
 
+        meta_tag_template = self._reporter_path / 'templates/MetaTagTemplate.html'
+        meta_tag = meta_tag_template.read_text(encoding='utf-8')
+
+        html = html.replace('{{META_TAG}}', meta_tag)
+
         dark_mode_toggle_template = self._reporter_path / 'templates/DarkModeToggleTemplate.html'
         dark_mode_toggle_button = dark_mode_toggle_template.read_text(encoding='utf-8')
         html = html.replace('{{DARK_MODE_TOGGLE}}', dark_mode_toggle_button)
@@ -662,7 +672,7 @@ class Reporter:
             "DKIM, and DMARC records. Note: if DNS queries unexepectedly "
             "return 0 txt records, it may be a sign the system-defualt "
             "resolver is unable to resolve the domain names (e.g., due to a "
-            "split horizon setup).</p>") 
+            "split horizon setup).</p>")
         for log_type in self._dns_logs:
             log_html += "<div class='dns-logs'>"
             log_html += f"<h3>{log_type.upper()}</h3>"

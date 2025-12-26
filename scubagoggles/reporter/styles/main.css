@@ -42,6 +42,8 @@ html[data-theme='dark'] {
     --border-color: #7b7b7b;
 }
 
+html { overflow-x: hidden; }
+
 body {
     background-color: var(--background-secondary);
     -webkit-print-color-adjust:exact !important;
@@ -130,7 +132,7 @@ header a {
 }
 
 header h3:hover {
-    border-bottom: 5px solid var(--header-color);   
+    border-bottom: 5px solid var(--header-color);
 }
 
 td {
