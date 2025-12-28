@@ -153,10 +153,15 @@ if {
 GmailId4_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.1")
 
 # Not applicable at OU or Group level
+# Per RFC 7489, if multiple DMARC records are found for a domain, stop processing
+# Only accept domains with exactly ONE valid DMARC record
 DomainsWithDmarc contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
-    some Rdata in DmarcRecord.rdata
-    startswith(Rdata, "v=DMARC1;")
+    ValidDmarcRecords := [Rdata |
+        some Rdata in DmarcRecord.rdata
+        startswith(Rdata, "v=DMARC1;")
+    ]
+    count(ValidDmarcRecords) == 1
 }
 
 tests contains {
@@ -185,9 +190,15 @@ if {
 GmailId4_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.2")
 
 # Not applicable at OU or Group level
+# Per RFC 7489, only process domains with exactly one DMARC record
 DomainsWithPreject contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
-    some Rdata in DmarcRecord.rdata
+    ValidDmarcRecords := [Rdata |
+        some Rdata in DmarcRecord.rdata
+        startswith(Rdata, "v=DMARC1;")
+    ]
+    count(ValidDmarcRecords) == 1
+    some Rdata in ValidDmarcRecords
     contains(Rdata, "p=reject;")
 }
 
@@ -213,9 +224,15 @@ if {
 GmailId4_3 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.3")
 
 # Not applicable at OU or Group level
+# Per RFC 7489, only process domains with exactly one DMARC record
 DomainsWithDHSContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
-    some Rdata in DmarcRecord.rdata
+    ValidDmarcRecords := [Rdata |
+        some Rdata in DmarcRecord.rdata
+        startswith(Rdata, "v=DMARC1;")
+    ]
+    count(ValidDmarcRecords) == 1
+    some Rdata in ValidDmarcRecords
     contains(Rdata, "mailto:reports@dmarc.cyber.dhs.gov")
 }
 
@@ -241,9 +258,15 @@ if {
 GmailId4_4 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.4")
 
 # Not applicable at OU or Group level
+# Per RFC 7489, only process domains with exactly one DMARC record
 DomainsWithAgencyContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
-    some Rdata in DmarcRecord.rdata
+    ValidDmarcRecords := [Rdata |
+        some Rdata in DmarcRecord.rdata
+        startswith(Rdata, "v=DMARC1;")
+    ]
+    count(ValidDmarcRecords) == 1
+    some Rdata in ValidDmarcRecords
     count(split(Rdata, "@")) >= 3
 }
 
