@@ -24,7 +24,7 @@ test_2_1_Correct_V1 if {
         ]},
         "policies": {
             "topOU": {
-                "gemini_app_service_status": {"serviceState": "ENABLED"}
+                "gemini_for_workspace_service_status": {"serviceState": "ENABLED"}
             }
         },
         "tenant_info": {
@@ -60,7 +60,7 @@ test_2_1_Correct_V2 if {
         ]},
         "policies": {
             "topOU": {
-                "gemini_app_service_status": {"serviceState": "DISABLED"}
+                "gemini_for_workspace_service_status": {"serviceState": "DISABLED"}
             }
         },
         "tenant_info": {
@@ -122,7 +122,7 @@ test_2_1_Correct_V3 if {
         ]},
         "policies": {
             "topOU": {
-                "gemini_app_service_status": {"serviceState": "ENABLED"}
+                "gemini_for_workspace_service_status": {"serviceState": "ENABLED"}
             }
         },
         "tenant_info": {
@@ -159,7 +159,7 @@ test_2_1_Incorrect_V1 if {
         ]},
         "policies": {
             "topOU": {
-                "gemini_app_service_status": {"serviceState": "ENABLED"}
+                "gemini_for_workspace_service_status": {"serviceState": "ENABLED"}
             }
         },
         "tenant_info": {
@@ -212,7 +212,7 @@ test_2_1_Incorrect_V2 if {
         ]},
         "policies": {
             "topOU": {
-                "gemini_app_service_status": {"serviceState": "ENABLED"}
+                "gemini_for_workspace_service_status": {"serviceState": "ENABLED"}
             }
         },
         "tenant_info": {
