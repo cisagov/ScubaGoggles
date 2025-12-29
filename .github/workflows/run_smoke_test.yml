@@ -27,7 +27,7 @@ on:
         description: "Choose python version(s), format must be an array of strings:"
         required: true
         type: string
-        default: "['3.10']"
+        default: "['3.10', '3.14']"
       opa-version:
         description: "Choose OPA version"
         required: true
@@ -54,7 +54,7 @@ jobs:
           # Default values for other events
           else
             operatingsystem_val="['windows-latest', 'macos-latest', 'ubuntu-latest']"
-            pythonversion_val="['3.10']"
+            pythonversion_val="['3.10', '3.14']"
             opaversion_val="latest"
           fi
           echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
@@ -73,10 +73,10 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Python v${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
@@ -96,7 +96,7 @@ jobs:
           operating-system: "windows"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
-      
+
       - name: Setup Dependencies (ubuntu)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
         uses: ./.github/actions/setup-dependencies-macos
