@@ -547,22 +547,248 @@ class TestProvider:
 
         assert mock_query.call_count >= len(domains)
 
-
-    def test_get_dmarc_records(self):
+    @pytest.mark.parametrize(
+        ("domains", "query_responses", "expected_dmarc_records"),
+        [
+            # DMARC record exists
+            (
+                { "example.com" },
+                {
+                    "_dmarc.example.com": {
+                        "answers": ["v=DMARC1; p=none"],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": "_dmarc.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": ["v=DMARC1; p=none"],
+                            },
+                        ]
+                    },
+                },
+                [
+                    {
+                        "domain": "example.com",
+                        "rdata": ["v=DMARC1; p=none"],
+                        "log": [
+                            {
+                                "query_name": "_dmarc.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": ["v=DMARC1; p=none"],
+                            },
+                        ],
+                    }
+                ]
+            ),
+            # DMARC record missiong for subdomain, but present on parent domain
+            (
+                {"sub.example.com"},
+                {
+                    "_dmarc.sub.example.com": {
+                        "answers": [],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": "_dmarc.sub.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            }
+                        ],
+                    },
+                    "_dmarc.example.com": {
+                        "answers": ["v=DMARC1; p=reject"],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": "_dmarc.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": ["v=DMARC1; p=reject"],
+                            }
+                        ],
+                    },
+                },
+                [
+                    {
+                        "domain": "sub.example.com",
+                        "rdata": ["v=DMARC1; p=reject"],
+                        "log": [
+                            {
+                                "query_name": "_dmarc.sub.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                            {
+                                "query_name": "_dmarc.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned 1 txt records",
+                                "query_answers": ["v=DMARC1; p=reject"],
+                            },
+                        ],
+                    }
+                ],
+            ),
+            # No DMARC records found for either sub/parent domain
+            (
+                {"example.com"},
+                {
+                    "_dmarc.example.com": {
+                        "answers": [],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": "_dmarc.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            }
+                        ],
+                    },
+                    "_dmarc.sub.example.com": {
+                        "answers": [],
+                        "nxdomain": False,
+                        "log_entries": [
+                            {
+                                "query_name": "_dmarc.sub.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            }
+                        ],
+                    },
+                },
+                [
+                    {
+                        "domain": "example.com",
+                        "rdata": [],
+                        "log": [
+                            {
+                                "query_name": "_dmarc.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            },
+                            {
+                                "query_name": "_dmarc.example.com",
+                                "query_method": "traditional",
+                                "query_result": "Query returned NXDOMAIN",
+                                "query_answers": [],
+                            }
+                        ],
+                    }
+                ],
+            )
+        ]
+    )
+    def test_get_dmarc_records(
+        self,
+        mocker,
+        mock_build,
+        domains,
+        query_responses,
+        expected_dmarc_records
+    ):
         """
         Docstring for test_get_dmarc_records
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
 
-    def test_get_dnsinfo(self):
+        def query_side_effect(qname):
+            return query_responses.get(qname, {
+                "answers": [],
+                "nxdomain": False,
+                "log_entries": []
+            })
+        
+        mock_query = mocker.patch.object(
+            provider._dns_client,
+            "query",
+            side_effect=query_side_effect
+        )
+
+        result = provider.get_dmarc_records(domains)
+
+        sorted_result = sorted(result, key=lambda x: x["domain"])
+        sorted_expected = sorted(expected_dmarc_records, key=lambda x: x["domain"])
+        assert sorted_result == sorted_expected
+        assert mock_query.call_count >= len(domains)
+
+    def test_get_dnsinfo(self, mocker, mock_build):
         """
-        Docstring for test_get_dnsinfo
+        Verify if get_dnsinfo() collects verified base and alias domains,
+        calls the respective methods (get_spf_records, get_dkim_records, etc.),
+        then returns aggregated results in the expected key format.
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
+
+        mock_base_domains = [
+            {"domainName": "example.com", "verified": True},
+            {"domainName": "unverified.com", "verified": False},
+        ]
+
+        mock_alias_domains = [
+            {"domainAliasName": "alias.com", "verified": True}
+        ]
+
+        mocker.patch.object(provider, "list_domains", return_value=mock_base_domains)
+        mocker.patch.object(provider, "list_alias_domains", return_value=mock_alias_domains)
+
+        spf_output = [
+            {
+                "domain": "example.com",
+                "rdata": ["v=spf1 include:_spf.google.com ~all"],
+                "log": []
+            }
+        ]
+
+        dkim_output = [
+            {
+                "domain": "example.com",
+                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."],
+                "log": []
+            },
+        ]
+
+        dmarc_output = [
+            {
+                "domain": "example.com",
+                "rdata": ["v=DMARC1; p=none"],
+                "log": []
+            },
+            {
+                "domain": "alias.com",
+                "rdata": ["v=DMARC1; p=none"],
+                "log": []
+            }
+        ]
+
+        spf_mock = mocker.patch.object(provider, "get_spf_records", return_value=spf_output)
+        spf_mock.__name__ = "get_spf_records"
+        dkim_mock = mocker.patch.object(provider, "get_dkim_records", return_value=dkim_output)
+        dkim_mock.__name__ = "get_dkim_records"
+        dmarc_mock = mocker.patch.object(provider, "get_dmarc_records", return_value=dmarc_output)
+        dmarc_mock.__name__ = "get_dmarc_records"
+
+        result = provider.get_dnsinfo()
+
+        assert result["domains"] == ["example.com"]
+        assert result["alias_domains"] == ["alias.com"]
+        assert result["spf_records"] == spf_output
+        assert result["dkim_records"] == dkim_output
+        assert result["dmarc_records"] == dmarc_output
+
+        # Verify DNS methods are added to successful calls
+        assert "get_spf_records" in provider._successful_calls
+        assert "get_dkim_records" in provider._successful_calls
+        assert "get_dmarc_records" in provider._successful_calls
 
     def test_get_super_admins(self):
         """
