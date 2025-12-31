@@ -3,6 +3,7 @@ test_provider tests the Provider class.
 """
 import pytest
 from scubagoggles.provider import Provider, SELECTORS
+from scubagoggles.scuba_constants import ApiReference
 
 class TestProvider:
     @pytest.fixture
@@ -719,7 +720,58 @@ class TestProvider:
         assert sorted_result == sorted_expected
         assert mock_query.call_count >= len(domains)
 
-    def test_get_dnsinfo(self, mocker, mock_build):
+    @pytest.mark.parametrize(
+        "cases",
+        [
+            # Case with verified base and alias domains
+            {
+                "base_domains": [
+                    {"domainName": "example.com", "verified": True},
+                    {"domainName": "unverified.com", "verified": False},
+                ],
+                "alias_domains": [
+                    {"domainAliasName": "alias.com", "verified": True}
+                ],
+                "spf_output": [
+                    {
+                        "domain": "example.com",
+                        "rdata": ["v=spf1 include:_spf.google.com ~all"],
+                        "log": []
+                    }
+                ],
+                "dkim_output": [
+                    {
+                        "domain": "example.com",
+                        "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."],
+                        "log": []
+                    },
+                ],
+                "dmarc_output": [
+                    {
+                        "domain": "example.com",
+                        "rdata": ["v=DMARC1; p=none"],
+                        "log": []
+                    },
+                    {
+                        "domain": "alias.com",
+                        "rdata": ["v=DMARC1; p=none"],
+                        "log": []
+                    }
+                ],
+                "expected_calls": True
+            },
+            # Case where no verified domains exist
+            {
+                "base_domains": [],
+                "alias_domains": [],
+                "spf_output": [],
+                "dkim_output": [],
+                "dmarc_output": [],
+                "expected_calls": False
+            },
+        ],
+    )
+    def test_get_dnsinfo(self, mocker, mock_build, cases):
         """
         Verify if get_dnsinfo() collects verified base and alias domains,
         calls the respective methods (get_spf_records, get_dkim_records, etc.),
@@ -729,46 +781,15 @@ class TestProvider:
         """
         provider = self._provider(mocker, mock_build)
 
-        mock_base_domains = [
-            {"domainName": "example.com", "verified": True},
-            {"domainName": "unverified.com", "verified": False},
-        ]
+        base_domains = cases["base_domains"]
+        alias_domains = cases["alias_domains"]
+        spf_output = cases["spf_output"]
+        dkim_output = cases["dkim_output"]
+        dmarc_output = cases["dmarc_output"]
+        expected_calls = cases["expected_calls"]
 
-        mock_alias_domains = [
-            {"domainAliasName": "alias.com", "verified": True}
-        ]
-
-        mocker.patch.object(provider, "list_domains", return_value=mock_base_domains)
-        mocker.patch.object(provider, "list_alias_domains", return_value=mock_alias_domains)
-
-        spf_output = [
-            {
-                "domain": "example.com",
-                "rdata": ["v=spf1 include:_spf.google.com ~all"],
-                "log": []
-            }
-        ]
-
-        dkim_output = [
-            {
-                "domain": "example.com",
-                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."],
-                "log": []
-            },
-        ]
-
-        dmarc_output = [
-            {
-                "domain": "example.com",
-                "rdata": ["v=DMARC1; p=none"],
-                "log": []
-            },
-            {
-                "domain": "alias.com",
-                "rdata": ["v=DMARC1; p=none"],
-                "log": []
-            }
-        ]
+        mocker.patch.object(provider, "list_domains", return_value=base_domains)
+        mocker.patch.object(provider, "list_alias_domains", return_value=alias_domains)
 
         spf_mock = mocker.patch.object(provider, "get_spf_records", return_value=spf_output)
         spf_mock.__name__ = "get_spf_records"
@@ -779,32 +800,184 @@ class TestProvider:
 
         result = provider.get_dnsinfo()
 
-        assert result["domains"] == ["example.com"]
-        assert result["alias_domains"] == ["alias.com"]
-        assert result["spf_records"] == spf_output
-        assert result["dkim_records"] == dkim_output
-        assert result["dmarc_records"] == dmarc_output
+        if expected_calls:
+            assert result["domains"] == ["example.com"]
+            assert result["alias_domains"] == ["alias.com"]
+            assert result["spf_records"] == spf_output
+            assert result["dkim_records"] == dkim_output
+            assert result["dmarc_records"] == dmarc_output
 
-        # Verify DNS methods are added to successful calls
-        assert "get_spf_records" in provider._successful_calls
-        assert "get_dkim_records" in provider._successful_calls
-        assert "get_dmarc_records" in provider._successful_calls
+            # Verify DNS methods are added to successful calls
+            assert "get_spf_records" in provider._successful_calls
+            assert "get_dkim_records" in provider._successful_calls
+            assert "get_dmarc_records" in provider._successful_calls
+        else:
+            assert result["domains"] == []
+            assert result["alias_domains"] == []
+            assert result["spf_records"] == []
+            assert result["dkim_records"] == []
+            assert result["dmarc_records"] == []
 
-    def test_get_super_admins(self):
+            spf_mock.assert_not_called()
+            dkim_mock.assert_not_called()
+            dmarc_mock.assert_not_called()
+
+    @pytest.mark.parametrize(
+        "cases",
+        [
+            {
+                "user_list": [
+                    {
+                        "orgUnitPath": "/",
+                        "primaryEmail": "firstlast@example.com",
+                    },
+                    {
+                        "orgUnitPath": "/Sub-OU",
+                        "primaryEmail": "firstlast1@example.com",
+                    }
+                ],
+                "get_list_raises": None,
+                "expected": {
+                    "super_admins": [
+                        {
+                            "primaryEmail": "firstlast@example.com",
+                            "orgUnitPath": "",
+                        },
+                        {
+                            "primaryEmail": "firstlast1@example.com",
+                            "orgUnitPath": "Sub-OU",
+                        }
+                    ]
+                },
+                "expect_success_call": True,
+            },
+        ]
+    )
+    def test_get_super_admins(
+        self,
+        mocker,
+        mock_build,
+        cases
+    ):
         """
         Docstring for test_get_super_admins
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
 
-    def test_get_ous(self):
+        users_resource = mocker.Mock(name="users_resource")
+        users_ctx_manager = mocker.MagicMock(name="users_ctx_manager")
+        users_ctx_manager.__enter__.return_value = users_resource
+        users_ctx_manager.__exit__.return_value = False
+
+        # users() context manager returns users resource passed into _get_list
+        provider._services["directory"].users.return_value = users_ctx_manager
+
+        # Patch _get_list for API success/fail cases
+        get_list_mock = mocker.patch.object(Provider, "_get_list", autospec=True)
+        if cases["get_list_raises"]:
+            get_list_mock.side_effect = cases["get_list_raises"]
+        else:
+            get_list_mock.return_value = cases["user_list"]
+
+        result = provider.get_super_admins()
+        assert result == cases["expected"]
+
+        if cases["expect_success_call"]:
+            assert ApiReference.LIST_USERS.value in provider._successful_calls
+            assert ApiReference.LIST_USERS.value not in provider._unsuccessful_calls
+
+            get_list_mock.assert_called_once()
+            resource_arg, item_arg = get_list_mock.call_args.args[:2]
+            assert resource_arg is users_resource
+            assert item_arg == "users"
+            # "test_customer" is the default customer specified in _provider() above 
+            assert get_list_mock.call_args.kwargs["customer"] == "test_customer"
+            assert get_list_mock.call_args.kwargs["query"] == "isAdmin=True"
+        else:
+            assert ApiReference.LIST_USERS.value not in provider._successful_calls
+            assert ApiReference.LIST_USERS.value in provider._unsuccessful_calls
+
+    @pytest.mark.parametrize(
+        "cases",
+        [
+            # Multiple OUs returned
+            {
+                "api_response": {
+                    "organizationUnits": [
+                        { "orgUnitPath": "/", "name": "Root OU" },
+                        { "orgUnitPath": "/Sub-OU1", "name": "Sub OU 1" },
+                        { "orgUnitPath": "/Sub-OU2", "name": "Sub OU 2" },
+                    ]
+                },
+                "expected": {
+                    "organizationUnits": [
+                        { "orgUnitPath": "/", "name": "Root OU" },
+                        { "orgUnitPath": "/Sub-OU1", "name": "Sub OU 1" },
+                        { "orgUnitPath": "/Sub-OU2", "name": "Sub OU 2" },
+                    ]
+                },
+                "raises": None,
+                "expect_success_call": True,
+            },
+            # No OUs returned
+            {
+                "api_response": {},
+                "expected": {},
+                "raises": None,
+                "expect_success_call": True,
+            },
+            # API raises exception
+            {
+                "api_response": None,
+                "expected": {},
+                "raises": Exception("API error"),
+                "expect_success_call": False,
+            },
+        ]
+    )
+    def test_get_ous(self, mocker, mock_build, cases):
         """
         Docstring for test_get_ous
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
+
+        # Clear calls since get_toplevel_ou is called during provider initialization.
+        # get_toplevel_ou calls the same ApiReference.LIST_OUS, so it'll be listed
+        # under successful_calls prior to get_ous() being called.
+        provider._successful_calls.clear()
+        provider._unsuccessful_calls.clear()
+
+        orgunits_resource = mocker.Mock(name="orgunits_resource")
+        orgunits_ctx_manager = mocker.MagicMock(name="orgunits_ctx_manager")
+        orgunits_ctx_manager.__enter__.return_value = orgunits_resource
+        orgunits_ctx_manager.__exit__.return_value = False
+
+        provider._services["directory"].orgunits.return_value = orgunits_ctx_manager
+
+        if cases["raises"] is not None:
+            orgunits_resource.list.return_value.execute.side_effect = cases["raises"]
+
+            with pytest.warns(RuntimeWarning, match="Exception thrown while getting top level OU"):
+                result = provider.get_ous()
+        else:
+            orgunits_resource.list.return_value.execute.return_value = cases["api_response"]
+            result = provider.get_ous()
+        
+        assert result == cases["expected"]
+
+        if cases["expect_success_call"]:
+            assert ApiReference.LIST_OUS.value in provider._successful_calls
+            assert ApiReference.LIST_OUS.value not in provider._unsuccessful_calls
+
+            # If successful, verify API was called with correct parameters
+            orgunits_resource.list.assert_called_once_with(customerId="test_customer")
+        else:
+            assert ApiReference.LIST_OUS.value not in provider._successful_calls
+            assert ApiReference.LIST_OUS.value in provider._unsuccessful_calls
 
     def test_get_toplevel_ou(self):
         """
