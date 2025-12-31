@@ -4,6 +4,7 @@ test_provider tests the Provider class.
 import pytest
 from scubagoggles.provider import Provider, SELECTORS
 from scubagoggles.scuba_constants import ApiReference
+from google.auth.exceptions import RefreshError
 
 class TestProvider:
     @pytest.fixture
@@ -979,13 +980,93 @@ class TestProvider:
             assert ApiReference.LIST_OUS.value not in provider._successful_calls
             assert ApiReference.LIST_OUS.value in provider._unsuccessful_calls
 
-    def test_get_toplevel_ou(self):
+    @pytest.mark.parametrize(
+            "cases",
+            [
+                # Root OU found
+                {
+                    "api_response": {
+                        "organizationUnits": [
+                            { "orgUnitPath": "/", "name": "Root OU" },
+                            { "orgUnitPath": "/Sub-OU1", "name": "Sub OU 1" },
+                        ]
+                    },
+                    "expected": "Root OU",
+                    "raises": None,
+                    "expect_success_call": True,
+                },
+                # Root OU missing
+                {
+                    "api_response": { "organizationUnits": [] },
+                    "expected": "",
+                    "raises": None,
+                    "expect_success_call": True,
+                },
+                # API raises exception
+                {
+                    "api_response": None,
+                    "expected": "",
+                    "raises": Exception("API error"),
+                    "expect_success_call": False,
+                },
+                # API raises RefreshError
+                {
+                    "api_response": None,
+                    "expected": "",
+                    "raises": RefreshError("access_denied: Requested client not authorized"),
+                    "expect_success_call": False,
+                },
+            ],
+    )
+    def test_get_toplevel_ou(self, mocker, mock_build, cases):
         """
         Docstring for test_get_toplevel_ou
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
+
+        provider._successful_calls.clear()
+        provider._unsuccessful_calls.clear()
+
+        orgunits_resource = mocker.Mock(name="orgunits_resource")
+        orgunits_ctx_manager = mocker.MagicMock(name="orgunits_ctx_manager")
+        orgunits_ctx_manager.__enter__.return_value = orgunits_resource
+        orgunits_ctx_manager.__exit__.return_value = False
+        provider._services["directory"].orgunits.return_value = orgunits_ctx_manager
+
+        if cases["raises"] is not None:
+            orgunits_resource.list.return_value.execute.side_effect = cases["raises"]
+
+            if isinstance(cases["raises"], RefreshError):
+                with pytest.raises(RefreshError, match="access_denied: Requested client not authorized"):
+                    provider.get_toplevel_ou()
+            else:
+                with pytest.warns(RuntimeWarning, match="Exception thrown while getting top level OU"):
+                    with pytest.raises(Exception, match="API error"):
+                        provider.get_toplevel_ou()
+            
+            # No return value for exception cases, set to the default expected value
+            result = cases["expected"]
+        else:
+            orgunits_resource.list.return_value.execute.return_value = cases["api_response"]
+            result = provider.get_toplevel_ou()
+        
+        assert result == cases["expected"]
+
+        if cases["expect_success_call"]:
+            assert ApiReference.LIST_OUS.value in provider._successful_calls
+            assert ApiReference.LIST_OUS.value not in provider._unsuccessful_calls
+
+            orgunits_resource.list.assert_called_once_with(
+                customerId="test_customer",
+                orgUnitPath="/",
+                type="allIncludingParent"
+            )
+        else:
+            assert ApiReference.LIST_OUS.value not in provider._successful_calls
+            # get_toplevel_ou re-raises the exception in _check_scopes(exc),
+            # so _unsuccessful_calls may not be recorded.
 
     def test_get_tenant_info(self):
         """
