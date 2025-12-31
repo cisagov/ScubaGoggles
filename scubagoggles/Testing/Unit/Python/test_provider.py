@@ -1068,13 +1068,45 @@ class TestProvider:
             # get_toplevel_ou re-raises the exception in _check_scopes(exc),
             # so _unsuccessful_calls may not be recorded.
 
-    def test_get_tenant_info(self):
+    @pytest.mark.parametrize(
+        "cases",
+        [
+            {
+                "customer_execute": { "id": "C012345" },
+                "customer_raises": None,
+                "domains": [{ "domainName": "example.com", "isPrimary": True }],
+                "domains_raises": None,
+                "top_ou": "Root OU",
+                "expected": {
+                    "customer_id": "C012345",
+                    "domain": "example.com",
+                    "toplevelOU": "Root OU",
+                },
+            }
+        ]
+    )
+    def test_get_tenant_info(self, mocker, mock_build, cases):
         """
         Docstring for test_get_tenant_info
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
+
+        provider._successful_calls.clear()
+        provider._unsuccessful_calls.clear()
+        provider._top_ou = cases["top_ou"]
+
+        customers_resource = mocker.Mock(name="customers_resource")
+        provider._services["directory"].customers.return_value = customers_resource
+
+        get_request = mocker.Mock(name="customers_get_request")
+        customers_resource.get.return_value = get_request
+
+        if cases["customer_raises"] is not None:
+            get_request.execute.side_effect = cases["customer_raises"]
+        else:
+            get_request.execute.return_value = cases["customer_execute"]
 
     def test_get_gws_logs(self):
         """
