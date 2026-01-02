@@ -118,7 +118,6 @@ outputreportfilename: BaselineReports
 # - Add references to supporting documentation or evidence.
 # - Explain compensating controls or mitigating factors.
 # - Note planned improvements or future implementation details.
-baselines: [gmail, commoncontrols]
 
 AnnotatePolicy:
   # -------------------------------------
@@ -153,7 +152,6 @@ AnnotatePolicy:
 # - The policy is not applicable to the organization's environment.
 # - The policy is met using a third-party tool or solution that is not assessed by ScubaGoggles.
 # - The policy is an acceptable risk that has been documented and approved by the organization.
-baselines: [gmail, commoncontrols]
 
 omitpolicy:
   # -------------------------------------
@@ -182,4 +180,5 @@ omitpolicy:
 # anchor allows you to configure multiple omissions that share the same rationale
 
 # without repeating yourself.
+
 
