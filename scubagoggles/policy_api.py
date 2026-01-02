@@ -15,7 +15,10 @@ from pathlib import Path
 from random import random
 from time import sleep
 
-from google.auth.transport.requests import AuthorizedSession
+# Required for unit testing:
+# pylint: disable=consider-using-from-import
+
+import google.auth.transport.requests as requests
 
 from scubagoggles.auth import GwsAuth
 
@@ -44,7 +47,8 @@ class PolicyAPI:
     # Google's "enum" type is essentially the string name for the enumeration
     # member.  It must be all alphanumeric characters with possible underscores.
 
-    isEnum = lambda x: isinstance(x, str) and re.match(r'^[A-Z0-9_]+$', x)
+    isEnum = lambda x: (isinstance(x, str)
+                        and re.match(r'^[A-Z0-9_]+$', x) is not None)
 
     isInt = lambda x: isinstance(x, int)
 
@@ -55,12 +59,13 @@ class PolicyAPI:
 
     isString = lambda x: isinstance(x, str)
 
-    isDuration = lambda x: isinstance(x, str) and re.match(r'(?i)^\d+[hms]$', x)
+    isDuration = lambda x: (isinstance(x, str)
+                            and re.match(r'(?i)^\d+[hms]$', x) is not None)
 
     isTimestamp = lambda x: (isinstance(x, str)
                              and re.match(r'(?i)^\d{4}(?:-\d{2}){2}T\d{2}'
                                           r'(?::\d{2}){2}(?:\.\d+)?z$',
-                                          x))
+                                          x) is not None)
 
     # There may be duplicate policies returned for an orgunit/group and
     # section.  The policies must be "reduced" to single settings using
@@ -131,6 +136,7 @@ class PolicyAPI:
             'allowAccess': isBool,
             'whoCanManageGuardianAccess': isEnum}},
         'classroom_roster_import': {'settings': {'rosterImportOption': isEnum}},
+        'classroom_service_status': {'settings': {'serviceState': isState}},
         'classroom_student_unenrollment': {'settings': {
             'whoCanUnenrollStudents': isEnum}},
         'classroom_teacher_permissions': {'settings': {
@@ -373,7 +379,7 @@ class PolicyAPI:
 
         # Google's AuthorizedSession is currently being used because this
         # API is not available in the Google API Client interface.
-        self._session = AuthorizedSession(gws_auth.credentials)
+        self._session = requests.AuthorizedSession(gws_auth.credentials)
 
         self._top_orgunit = top_orgunit
 
@@ -707,7 +713,7 @@ class PolicyAPI:
 
             # If there is a reducer associated with this policy, it will
             # be invoked.
-            reduce_name = expected_settings.get('reduce_method')
+            reduce_name = expected_settings.get('reducer')
 
             if reduce_name:
                 reduce_method = getattr(self, reduce_name)

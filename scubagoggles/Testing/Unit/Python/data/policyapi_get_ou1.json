@@ -1,0 +1,21 @@
+{
+  "comment": "tests construction of orgunit_id_map in PolicyAPI",
+  "response": {
+    "organizationUnits": [
+      {"orgUnitId": "id:01abc23defgh456", "name": "Root OU",
+       "orgUnitPath": "/Root OU"},
+      {"orgUnitId": "id:02ijk45lmnop789", "name": "Test OU 1",
+       "orgUnitPath": "/Test OU 1"},
+      {"orgUnitId": "id:03ph8a2z3oekqyk", "name": "1-1-1-1",
+                        "orgUnitPath": "/1/1-1/1-1-1/1-1-1-1"}
+    ]
+  },
+  "results": {
+    "01abc23defgh456": {"name": "Root OU",
+                        "path": "/Root OU"},
+    "02ijk45lmnop789": {"name": "Test OU 1",
+                        "path": "/Test OU 1"},
+    "03ph8a2z3oekqyk": {"name": "1-1-1-1",
+                        "path": "/1/1-1/1-1-1/1-1-1-1"}
+  }
+}
