@@ -11,7 +11,7 @@ repo and are discussed below. When executing ScubaGoggles, only a single config
 file can be read in; we recommend looking through the following examples and
 constructing a config file that best suits your use case.
 
-### SCuBA Complicance Configuration
+### SCuBA Compliance Configuration
 The [SCuBA compliance](../../scubagoggles/sample-config-files/scuba_compliance.yaml)
 is the **recommended starting point** for organizations seeking to meet SCuBA
 compliance checks. This configuration file contains:
