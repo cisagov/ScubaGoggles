@@ -69,7 +69,6 @@ outputreportfilename: BaselineReports
 # silencebodwarnings
 
 # This field is used to if true, to not fallback to DoH should the traditional DNS requests fail when retrieving any DNS records required by specific SCuBA policies.
-# skipdoh: 
 
 # This field is used to asssign  how many characters will be truncated from the report UUID when appended to the end of outjsonfilename. Valid values are 0, 13, 18, 36. Defaults to 18.
 # numberofuuidcharacterstotruncate: [number]
