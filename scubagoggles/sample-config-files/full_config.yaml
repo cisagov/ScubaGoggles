@@ -8,7 +8,7 @@ Description: |
   Any exemptions and their risks should be carefully considered and
   documented as part of an organization's cybersecurity risk management program process and practices.
   In order to pass/omit certain policy checks made during a ScubaGoggles assessment run, necessary action
-  is required to provide specific values unique to both your organization and GW tenant in the fields below.
+  is required to provide specific values unique to both your organization and GWS tenant in the fields below.
   Please read and understand the full ScubaGoggles configuration file documentation for both adding additional fields or modifying the fields below.
   The documentation can be found here: https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md
 
