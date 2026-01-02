@@ -30,9 +30,6 @@ baselines:
 # This field is used to authenticate via access token string to be used in lieu of a credentials file. If provided, will take precendence over the credentials file. Advanced option; using a credentials file is the recommended authentication method.
 # accesstoken: [access-token]
 
-# This field is used to assign the local file path to a YAML formatted configuration file to be run with ScubaGoggles. Configuration file fields can be used in place of command-line parameters. Additional parameters and variables not available on the command line can also be included in the file that will be provided to the tool for use in specific tests.
-# config: [YAML-config-file]
-
 # This field is used to asssign the email address of a user the service account should act on behalf of. This user must have the necessary privileges to run scubagoggles. Only applicable when using a service account.
 # subjectemail: [email-address]
 
@@ -185,3 +182,4 @@ omitpolicy:
 # anchor allows you to configure multiple omissions that share the same rationale
 
 # without repeating yourself.
+
