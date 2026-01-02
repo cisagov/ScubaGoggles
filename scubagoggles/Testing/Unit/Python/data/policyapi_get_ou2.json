@@ -1,0 +1,7 @@
+{
+  "comment": "tests no orgunits returned",
+  "response": {
+    "organizationUnits": []
+  },
+  "results": {}
+}
