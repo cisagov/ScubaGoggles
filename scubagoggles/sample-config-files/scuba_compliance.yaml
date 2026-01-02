@@ -8,17 +8,18 @@
 # https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md
 
 # The list of GWS SCuBA baselines ScubaGoggles will assess.
-baselines:
-  - calendar
-  - chat
-  - classroom
-  - commoncontrols
-  - drive
-  - gemini
-  - gmail
-  - groups
-  - meet
-  - sites
+baselines: 
+- assuredcontrols
+- calendar
+- chat
+- classroom
+- commoncontrols
+- drive
+- gemini
+- gmail
+- groups
+- meet
+- sites
 
 # Uncomment and fill in the following for automated submissions:
 # subjectemail: ""
