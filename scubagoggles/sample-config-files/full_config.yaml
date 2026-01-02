@@ -56,9 +56,6 @@ outputactionplanfilename: ActionPlan
 outputregofilename: TestResults
 outputreportfilename: BaselineReports
 
-# This field is used to asssign IP addresses of DNS resolvers that should be used to retrieve any DNS records required by specific SCuBA policies. Optional; if not provided, the system default will be used. Example: --preferreddnsresolvers 8.8.8.8 8.8.4.4
-# preferreddnsresolvers [dns-resolvers]
-
 # This field is used to suppresses automatically launching a web browser to open the html report output and the loading bar output.
 # quiet
 
@@ -79,18 +76,19 @@ outputreportfilename: BaselineReports
 # =======================
 # BREAK GLASS ACCOUNTS
 # =======================
-# This is for the Common Controls product. In some cases, it may be appropriate to specify the number of break glass accounts to be omitted from the total admin count. For example: When a policy is looking for the total number of break glass accounts (e.g. policy GWS.COMMONCONTROLS.6.2).
+# This is for the Common Controls product. In some cases, it may be appropriate to specify the number of break glass accounts to be omitted from the total admin count. For example: When a policy is looking for the total number of break glass accounts in policy GWS.COMMONCONTROLS.6.2.
 
 # YAML configuration demonstrating specifiying break glass accounts to be
 # exempt from from an admin count.
-
-# baselines: [commoncontrols]
 
 # breakglassaccounts: [admin@example.org, admin2@example.org]
 
 # ============================
 # DNS CONFIGURATION
 # ============================
+# This field is used to asssign IP addresses of DNS resolvers that should be used to retrieve any DNS records required by specific SCuBA policies. Optional; if not provided, the system default will be used. Example: --preferreddnsresolvers 8.8.8.8 8.8.4.4
+# preferreddnsresolvers [dns-resolvers]
+
 # This is for the Gmail product. In some cases, it can be helpful to control where those DNS requests are sent to. ScubaGoggles provides two options for configuring how DNS queries are made: preferreddnsresolvers and skipdoh.
 
 # Use this field to control what DNS resolver is used to fetch the SPF, DKIM, and DMARC records
@@ -180,5 +178,6 @@ omitpolicy:
 # anchor allows you to configure multiple omissions that share the same rationale
 
 # without repeating yourself.
+
 
 
