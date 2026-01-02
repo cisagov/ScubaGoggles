@@ -192,21 +192,21 @@ class Reporter:
         indicator_name = indicator.get('name', '')
         color = indicator.get('color', '#6C757D')
         link_url = indicator.get('link', None)
-        
+
         # Determine text color based on background color brightness
         # Simple heuristic: if color is light (like #F6E8E5), use black text
         if color and color.upper() in ['#F6E8E5', '#FFF7D6']:
             text_color = 'black'
         else:
             text_color = 'white'
-        
+
         # Get description from definitions if available
         indicator_info = self._indicator_definitions.get(
             indicator_name,
             {'description': indicator_name}
         )
         description = indicator_info.get('description', indicator_name)
-        
+
         # Convert relative links to absolute GitHub URLs
         if link_url:
             if link_url.startswith('#'):
@@ -217,23 +217,28 @@ class Reporter:
                     product = getattr(self, '_product', '')
                     if product:
                         baseline_file = f'{product}.md'
-                        link_url = f'{github_url}/blob/{Version.current}/scubagoggles/baselines/{baseline_file}{link_url}'
+                        baseline_path = (f'{github_url}/blob/{Version.current}/'
+                                       f'scubagoggles/baselines/{baseline_file}'
+                                       f'{link_url}')
+                        link_url = baseline_path
                     else:
-                        link_url = f'{github_url}/blob/{Version.current}/scubagoggles/baselines/{link_url}'
+                        baseline_path = (f'{github_url}/blob/{Version.current}/'
+                                       f'scubagoggles/baselines/{link_url}')
+                        link_url = baseline_path
             elif link_url.startswith('../'):
                 # Relative path - convert to GitHub blob URL
                 if github_url:
                     # Remove '../' and convert to GitHub path
                     path = link_url.replace('../', '')
                     link_url = f'{github_url}/blob/{Version.current}/{path}'
-        
+
         # Create a badge with inline styling
         badge_style = (f'background-color: {color}; color: {text_color}; '
                       f'padding: 2px 8px; border-radius: 3px; '
                       f'font-size: 0.85em; margin-right: 5px; '
                       f'display: inline-block; white-space: nowrap; '
                       f'font-weight: 500;')
-        
+
         if link_url:
             # Add link styling
             badge_style += ' text-decoration: none;'
@@ -252,7 +257,8 @@ class Reporter:
         """
         Renders a list of indicators as HTML badges.
 
-        :param indicators: List of indicator dictionaries with 'name', optionally 'color', and optionally 'link'
+        :param indicators: List of indicator dictionaries with 'name',
+            optionally 'color', and optionally 'link'
         :return: HTML string containing all badges
         """
         if not indicators:
@@ -297,30 +303,34 @@ class Reporter:
         :return: HTML string for the legend
         """
         all_indicators = self._collect_all_indicators()
-        
+
         if not all_indicators:
             return ''
-        
-        legend_html = '<div class="indicator-legend" style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">'
+
+        legend_html = ('<div class="indicator-legend" style="margin: 20px 0; '
+                      'padding: 15px; background-color: #f8f9fa; '
+                      'border-radius: 5px;">')
         legend_html += '<h3 style="margin-top: 0;">Policy Indicators</h3>'
         legend_html += '<div style="display: flex; flex-wrap: wrap; gap: 15px;">'
-        
+
         # Sort indicators for consistent display
         github_url = self._github_url
         for indicator_name in sorted(all_indicators.keys()):
             indicator_info = all_indicators[indicator_name]
-            indicator_dict = {'name': indicator_name, 'color': indicator_info['color']}
+            indicator_dict = {'name': indicator_name,
+                           'color': indicator_info['color']}
             # Try to find a link for this indicator from the actual controls
-            # For legend, we'll use a link to the baseline document if it's a key-terminology link
+            # For legend, we'll use a link to the baseline document if it's
+            # a key-terminology link
             if indicator_name in ['Automated Check', 'Manual', 'Configurable']:
                 # These typically link to #key-terminology in the baseline
-                indicator_dict['link'] = f'#key-terminology'
+                indicator_dict['link'] = '#key-terminology'
             badge = self._render_indicator_badge(indicator_dict, github_url)
-            legend_html += (f'<div style="display: flex; align-items: center; gap: 8px;">'
-                          f'{badge}'
+            legend_html += (f'<div style="display: flex; align-items: center; '
+                          f'gap: 8px;">{badge}'
                           f'<span>{indicator_info["description"]}</span>'
                           f'</div>')
-        
+
         legend_html += '</div></div>'
         return legend_html
 
@@ -794,7 +804,7 @@ class Reporter:
 
         # Add indicator legend after metadata
         indicator_legend = self._build_indicator_legend()
-        
+
         collected = ''.join(fragments)
 
         html = html.replace('{{TABLES}}', indicator_legend + collected)
@@ -1044,6 +1054,7 @@ class Reporter:
                     self._warn(warning)
         return details
 
+    # pylint: disable-next=too-many-branches
     def rego_json_to_ind_reports(self,
                                  test_results: list,
                                  out_path: str,

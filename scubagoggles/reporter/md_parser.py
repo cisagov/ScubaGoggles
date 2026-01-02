@@ -43,9 +43,12 @@ class MarkdownParser:
     # Regular expression to match badge indicators like:
     # [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
     # [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](...)
-    # Captures: indicator name (group 1), color code (group 2, 6 hex digits), and link URL (group 3)
+    # Captures: indicator name (group 1), color code (group 2, 6 hex digits),
+    # and link URL (group 3)
     # Uses non-greedy match to capture everything up to the last dash before the color
-    _badge_re = re.compile(r'\[!\[([^\]]+)\]\(https://img\.shields\.io/badge/.+?-([A-Fa-f0-9]{6})\)\]\(([^\)]*)\)')
+    _badge_pattern = (r'\[!\[([^\]]+)\]\(https://img\.shields\.io/badge/.+?-'
+                     r'([A-Fa-f0-9]{6})\)\]\(([^\)]*)\)')
+    _badge_re = re.compile(_badge_pattern)
 
     # This handles the single exception case where the combined drive
     # and docs product has a product name of "drive", but the baseline
