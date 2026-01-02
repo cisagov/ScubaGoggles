@@ -1,6 +1,6 @@
 # The following fields are used to document what organization this configuration file belongs to.
 orgname: Department of Example
-OrgUnitName: Subdepartment of Example
+orgunitname: Subdepartment of Example
 
 # The Description field is used to provide a detailed description of the configuration file.
 Description: |
