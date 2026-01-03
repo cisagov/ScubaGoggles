@@ -1071,18 +1071,54 @@ class TestProvider:
     @pytest.mark.parametrize(
         "cases",
         [
+            # Primary domain found
             {
                 "customer_execute": { "id": "C012345" },
-                "customer_raises": None,
+                "customer_side_effect": None,
                 "domains": [{ "domainName": "example.com", "isPrimary": True }],
-                "domains_raises": None,
-                "top_ou": "Root OU",
                 "expected": {
-                    "customer_id": "C012345",
+                    "ID": "C012345",
                     "domain": "example.com",
-                    "toplevelOU": "Root OU",
+                    "topLevelOU": "Root OU",
                 },
-            }
+                "expect_warning": False,
+            },
+            # No primary domain found
+            {
+                "customer_execute": { "id": "C012345" },
+                "customer_side_effect": None,
+                "domains": [{ "domainName": "example.com", "isPrimary": False }],
+                "expected": {
+                    "ID": "C012345",
+                    "domain": "Error Retrieving",
+                    "topLevelOU": "Root OU",
+                },
+                "expect_warning": False,
+            },
+            # get customers throws Exception
+            {
+                "customer_execute": None,
+                "customer_side_effect": Exception("API error"),
+                "domains": [ { "domainName": "example.com", "isPrimary": True }],
+                "expected": {
+                    "ID": "",
+                    "domain": "Error Retrieving",
+                    "topLevelOU": "Root OU",
+                },
+                "expect_warning": True,
+            },
+            # get customers throws RefreshError
+            {
+                "customer_execute": None,
+                "customer_side_effect": RefreshError("access_denied: Requested client not authorized"),
+                "domains": [ { "domainName": "example.com", "isPrimary": True }],
+                "expected": {
+                    "ID": "",
+                    "domain": "Error Retrieving",
+                    "topLevelOU": "Root OU",
+                },
+                "expect_warning": True,
+            },
         ]
     )
     def test_get_tenant_info(self, mocker, mock_build, cases):
@@ -1095,26 +1131,199 @@ class TestProvider:
 
         provider._successful_calls.clear()
         provider._unsuccessful_calls.clear()
-        provider._top_ou = cases["top_ou"]
+        provider._top_ou = "Root OU"
 
         customers_resource = mocker.Mock(name="customers_resource")
         provider._services["directory"].customers.return_value = customers_resource
-
         get_request = mocker.Mock(name="customers_get_request")
         customers_resource.get.return_value = get_request
 
-        if cases["customer_raises"] is not None:
-            get_request.execute.side_effect = cases["customer_raises"]
+        if cases["customer_side_effect"] is not None:
+            get_request.execute.side_effect = cases["customer_side_effect"]
         else:
             get_request.execute.return_value = cases["customer_execute"]
+        
+        # We're not testing list_domains, mock with parametrized value
+        mocker.patch.object(provider, "list_domains", return_value=cases["domains"])
 
-    def test_get_gws_logs(self):
+        if cases["expect_warning"]:
+            with pytest.warns(RuntimeWarning, match="Exception thrown while retrieving customer list"):
+                with pytest.raises(UnboundLocalError):
+                    provider.get_tenant_info()
+            
+            assert ApiReference.LIST_CUSTOMERS.value in provider._unsuccessful_calls
+        else:
+            result = provider.get_tenant_info()
+            assert result == cases["expected"]
+            assert ApiReference.LIST_CUSTOMERS.value not in provider._unsuccessful_calls
+
+        customers_resource.get.assert_called_once_with(customerKey="test_customer")
+        get_request.execute.assert_called_once()
+    
+    @pytest.mark.parametrize(
+        "cases",
+        [
+            # Non-matching event
+            {
+                "products": ["gmail", "drive"],
+                "event": "SOME_OTHER_EVENT",
+                "reports": [
+                    { "id": "meet", "events": [] },
+                    { "id": "classroom", "events": [] },
+                ],
+                "expected": {
+                    "gmail": [
+                        { "id": "meet", "events": [] },
+                        { "id": "classroom", "events": [] },
+                    ],
+                    "drive": [
+                        { "id": "meet", "events": [] },
+                        { "id": "classroom", "events": [] },
+                    ],
+                },
+                "expect_warning": False,
+            },
+            # CHANGE_APPLICATION_SETTING with matching apps
+            {
+                "products": ["gmail", "drive"],
+                "event": "CHANGE_APPLICATION_SETTING",
+                "reports": [
+                    {
+                        "id": "gmail",
+                        "events": [
+                            {
+                                "parameters": [
+                                    { "name": "APPLICATION_NAME", "value": "Gmail"},
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "drive",
+                        "events": [
+                            {
+                                "parameters": [
+                                    { "name": "APPLICATION_NAME", "value": "Drive and Docs"},
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "no_match",
+                        "events": [
+                            {
+                                "parameters": [
+                                    { "name": "APPLICATION_NAME", "value": "Calendar"},
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "expected": {
+                    "gmail": [
+                        {
+                            "id": "gmail",
+                            "events": [
+                                {
+                                    "parameters": [
+                                        { "name": "APPLICATION_NAME", "value": "Gmail"},
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "drive": [
+                        {
+                            "id": "drive",
+                            "events": [
+                                {
+                                    "parameters": [
+                                        { "name": "APPLICATION_NAME", "value": "Drive and Docs"},
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                },
+                "expect_warning": False,
+            },
+            # DELETE_APPLICATION_SETTING with only marketplace app
+            {
+                "products": ["commoncontrols", "gmail"],
+                "event": "DELETE_APPLICATION_SETTING",
+                "reports": [
+                    {
+                        "id": "marketplace",
+                        "events": [
+                            {
+                                "parameters": [
+                                    { "name": "APPLICATION_NAME", "value": "Google Workspace Marketplace"},
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "expected": {
+                    "gmail": [],
+                    "commoncontrols": [
+                        {
+                            "id": "marketplace",
+                            "events": [
+                                {
+                                    "parameters": [
+                                        { "name": "APPLICATION_NAME", "value": "Google Workspace Marketplace"},
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                "expect_warning": False,
+            },
+            # Exception thrown when trying to retrieve logs
+            {
+                "products": ["gmail", "drive"],
+                "event": "CHANGE_APPLICATION_SETTING",
+                "reports": [{}],
+                "expected": {
+                    "gmail": [],
+                    "drive": [],
+                },
+                "expect_warning": True,
+            },
+        ]
+    )
+    def test_get_gws_logs(self, mocker, mock_build, cases):
         """
         Docstring for test_get_gws_logs
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
+
+        activities_resource = mocker.Mock(name="activities_resource")
+        activities_ctx_manager = mocker.MagicMock(name="activities_ctx_manager")
+        activities_ctx_manager.__enter__.return_value = activities_resource
+        activities_ctx_manager.__exit__.return_value = False
+        provider._services["reports"].activities.return_value = activities_ctx_manager
+
+        get_list = mocker.patch.object(Provider, "_get_list", return_value=cases["reports"])
+
+        if cases["expect_warning"]:
+            with pytest.warns(RuntimeWarning, match="An exception was thrown while getting the logs"):
+                result = provider.get_gws_logs(products=cases["products"], event=cases["event"])
+        else:
+            result = provider.get_gws_logs(products=cases["products"], event=cases["event"])
+
+        assert result == cases["expected"]
+
+        get_list.assert_called_once_with(
+            activities_resource,
+            "items",
+            userKey="all",
+            applicationName="admin",
+            eventName=cases["event"]
+        )
 
     def test_get_group_settings(self):
         """
