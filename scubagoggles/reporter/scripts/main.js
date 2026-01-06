@@ -103,6 +103,7 @@ const getSetting = (setting) => {
     if (reportSettings === null || reportSettings === undefined) {
         return undefined;
     }
+    console.log(reportSettings)
     return JSON.parse(reportSettings)[setting];
 }
 
@@ -130,6 +131,7 @@ const setDarkMode = (state) => {
     if (state === "true") {
         document.querySelectorAll("html")[0].dataset.theme = "dark";
         document.querySelector("#toggle-text").innerHTML = "Dark Mode";
+        document.querySelector("#toggle-text").classList.add("dark");
         updateSettings("darkMode", "true");
         darkModeToggle.checked = true;
         return;
@@ -137,6 +139,7 @@ const setDarkMode = (state) => {
 
     document.querySelectorAll("html")[0].dataset.theme = "light";
     document.querySelector("#toggle-text").innerHTML = "Light Mode";
+    document.querySelector("#toggle-text").classList.remove("dark");
     updateSettings("darkMode", "false");
     darkModeToggle.checked = false;
 }
@@ -248,9 +251,99 @@ const truncateDNSTables = (maxRows) => {
     }
 }
 
+/**
+ * Apply scope attributes to columns and rows
+ */
+const applyScopeAttributes = () => {
+    try {
+
+        const tables = document.querySelectorAll("table")
+
+        for (let table of tables) {
+
+            let tbody = table.querySelector("tbody")
+
+            if (!tbody) throw new Error(
+                `Invalid HTML structure, <table id='${tables[table].getAttribute("id")}'> does not have a <tbody> tag.`
+            )
+
+            let cols, rows;
+
+            if (tbody.children && tbody.children.length > 1) {
+
+                if (table.querySelectorAll("thead > tr > th")) {
+                    cols = table.querySelectorAll("thead > tr > th")
+                }
+
+                else if (tbody.children[0].querySelectorAll("th")) {
+                    cols = tbody.children[0].querySelectorAll("th")
+                }
+
+                for (let col of cols) {
+                    col.setAttribute("scope", "col")
+                }
+
+                let trIdx = (table.classList.contains("caps_table")) ? 1 : 0
+
+                rows = tbody.children
+
+                for (let row of rows) {
+                    if (row.children[trIdx].localName === 'td') {
+                       row.children[trIdx].setAttribute("scope", "row")
+                    }
+                }
+
+            }
+
+            else throw new Error(
+                `Unable to apply scope attributes to columns/rows,
+                <tbody> of <table id='${tables[table].getAttribute("id")}'> does not contain children or has no rows.`
+            )
+
+        }
+
+    } catch (error) {
+        console.error(`Error applying scope attributes: ${error}`)
+    }
+}
+
+function redaction() {
+    const cliElement = document.getElementById("sgr_settings");
+    const cliElementValue = cliElement.getAttribute("data-redaction");
+
+    if (cliElementValue !== "None" && cliElementValue == "true") {
+        try {
+            const identityTable = document.querySelectorAll("table")[0]
+
+            let tbody = identityTable.querySelector("tbody")
+
+            if (!tbody) throw new Error(
+                `Invalid HTML structure, <table id='${identityTable.getAttribute("id")}'> does not have a <tbody> tag.`
+            )
+
+            if (tbody.children[1].children) {
+                console.log('found identification row: ', tbody.children[1].children)
+                let identityData = tbody.children[1].children
+
+                for (let cell of identityData) {
+                    cell.classList.add('redact')
+                }
+
+            }
+
+        } catch (error) {
+            console.error(`Error redacting `)
+        }
+        return;
+    }
+
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     const MAX_DNS_ENTRIES = 20;
     colorRows();
+    applyScopeAttributes();
     mountDarkMode();
     truncateDNSTables(MAX_DNS_ENTRIES);
+    redaction();
 });
