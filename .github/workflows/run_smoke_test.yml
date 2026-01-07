@@ -2,8 +2,6 @@ name: Run Smoke Test
 on:
   pull_request:
     types: [opened, reopened]
-    branches:
-      - "main"
   pull_request_review:
     types: [submitted]
   push:
@@ -96,7 +94,7 @@ jobs:
           operating-system: "windows"
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
-      
+
       - name: Setup Dependencies (ubuntu)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
         uses: ./.github/actions/setup-dependencies-macos

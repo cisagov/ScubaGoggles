@@ -2,18 +2,8 @@ name: Run OPA Tests
 on:
   # Run tests on each commit, newly opened/reopened PR, and
   # PR review submission (e.g. approval)
+  workflow_call:
   workflow_dispatch:
-  push:
-    paths:
-      - "**.rego"
-  pull_request:
-    types: [opened, reopened]
-    branches:
-      - "main"
-    paths:
-      - "**.rego"
-  pull_request_review:
-    types: [submitted]
 
 jobs:
   Run-OPA-Tests:
