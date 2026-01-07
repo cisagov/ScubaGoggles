@@ -15,5 +15,5 @@ jobs:
     - uses: tcort/github-action-markdown-link-check@v1
       with:
         config-file: 'mlc_config.json'
-        use-quiet-mode: 'yes'
+        use-quiet-mode: 'no'
         use-verbose-mode: 'yes'

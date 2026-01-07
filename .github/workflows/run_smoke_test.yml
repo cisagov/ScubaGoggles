@@ -1,20 +1,21 @@
 name: Run Smoke Test
+permissions:
+  contents: write        # For checkout and comparing commits
+  pull-requests: write  # For creating/updating PR comments
 on:
   pull_request:
     types: [opened, reopened]
-    branches:
-      - "main"
   pull_request_review:
     types: [submitted]
   push:
-    # These paths are primarily for workflow testing purposes
-    paths:
-      - ".github/workflows/run_smoke_test.yml"
-      - ".github/actions/setup-dependencies-windows/action.yml"
-      - ".github/actions/setup-dependencies-macos/action.yml"
-    branches:
-      - "main"
-      - "*smoketest*"
+    # # These paths are primarily for workflow testing purposes
+    # paths:
+    #   - ".github/workflows/run_smoke_test.yml"
+    #   - ".github/actions/setup-dependencies-windows/action.yml"
+    #   - ".github/actions/setup-dependencies-macos/action.yml"
+    # branches:
+    #   - "main"
+    #   - "*smoketest*"
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -113,6 +114,14 @@ jobs:
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
+      - name: Install Pytest Coverage dependencies
+        run: |
+          pip install pytest pytest-cov
+
+      - name: Install pip-audit
+        run: |
+          python -m pip install .
+
       - name: Run ScubaGoggles and check for correct output (windows | macOs)
         if: ${{ matrix.operating-system == 'windows-latest' ||  matrix.operating-system == 'macos-latest'}}
         run: |
@@ -128,6 +137,21 @@ jobs:
           FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
           echo "cachepath=$FOUNDIT" >> $GITHUB_OUTPUT
 
+      - name: Pytest Coverage Repository
+        run: |
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=src ./scubagoggles/Testing/Unit/Python | tee pytest-coverage.txt
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
+
+      - name: Vulnerability Scan
+        uses: pypa/gh-action-pip-audit@v1.1.0
+        with:
+          inputs: requirements.txt
+
       - name: Cache the output directory
         id: baseline
         uses: actions/cache@v4
@@ -142,6 +166,12 @@ jobs:
       contents: write
     if: ${{ always() }}
     steps:
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
       - name: Restore cached baseline folder
         uses: actions/cache/restore@v4
         with:
@@ -149,15 +179,11 @@ jobs:
             /home/runner/scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.baselinepath.outputs.cachepath }}
 
-      - name: Use Node.js 20.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
-
       - name: Run Lighthouse CI
         run: |
+          FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
           npm install -g @lhci/cli@0.15.x
-          lhci autorun --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
+          lhci autorun --config=/$FOUNDIT/lighthouserc.json --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
