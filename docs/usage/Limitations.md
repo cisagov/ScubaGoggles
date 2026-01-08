@@ -9,7 +9,7 @@ using [GWS Admin log events](https://support.google.com/a/answer/4579579?hl=en).
 
 All tests that rely on the reports API will be marked in the HTML report like so:
 
-![image](https://github.com/user-attachments/assets/4f40fe87-fbfb-4669-9b71-c7a4c5079da1)
+![image](../images/limitations.png)
 
 
 There are several key limitations associated with the log-based checks:

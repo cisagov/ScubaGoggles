@@ -29,19 +29,6 @@ class Reporter:
     """
 
     _github_url = 'https://github.com/cisagov/scubagoggles'
-    _limitations_url = f"{_github_url}/blob/main/docs/usage/Limitations.md"
-    _warning_icon = ('<object data="./images/triangle-exclamation-solid.svg" '
-                     'alt="Warning icon." title="Warning" width="13" height="13">'
-                     '</object>')
-    # "&nbsp;" just adds a bit of horizontal whitespace
-    # between the warning icon and the text.
-    _log_based_warning = (f'<span style="display: block;">{_warning_icon}'
-                          f'&nbsp;Log-based check. See <a href="{_limitations_url}">'
-                          'limitations</a>.</span>')
-    # Plaintext version of the above warning
-    _log_based_warning_plaintext = ('Warning: log-based check. See documentation '
-                                    'in ScubaGoggles GitHub repository for '
-                                    'limitations.')
 
     _reporter_path = Path(__file__).parent
 
@@ -665,8 +652,6 @@ class Reporter:
         for result in table_data:
             # Sanitize Details
             details = result['Details']
-            details = details.replace(self._log_based_warning,
-                                      self._log_based_warning_plaintext)
             details = details.replace('<br>', '\n')
 
             dns_link = "<a href=\"#dns-logs\">View DNS logs</a> for more details."
@@ -678,8 +663,6 @@ class Reporter:
             # Sanitize OriginalDetails if present
             if 'OriginalDetails' in result:
                 original_details = result['OriginalDetails']
-                original_details = original_details.replace(self._log_based_warning,
-                                                           self._log_based_warning_plaintext)
                 original_details = original_details.replace('<br>', '\n')
                 original_details = original_details.replace(dns_link, "")
                 original_details = self._convert_html_lists_to_plaintext(original_details)
@@ -1182,22 +1165,6 @@ class Reporter:
                                                     test['NoSuchEvent'])
 
                     details = test['ReportDetails']
-
-                    reports_api_link = ApiReference.LIST_ACTIVITIES.value
-                    if reports_api_link in test['Prerequisites']:
-                        # If the test depends on the reports API, append a
-                        # warning about the API's limitations to the details
-                        # column.
-                        if not details.endswith('</ul>'):
-                            # If the details ends with a list (e.g., "The
-                            # following OUs are non-compliant:..."), there will
-                            # already be enough whitespace between the list and
-                            # this warning. But if it doesn't end with a list,
-                            # e.g., "Requirement met in all OUs and groups.",
-                            # insert some additional whitespace for improved
-                            # readability.
-                            details += '<br><br>'
-                        details += self._log_based_warning
 
                     # Append annotation if applicable
                     details_pre_annotation = details
