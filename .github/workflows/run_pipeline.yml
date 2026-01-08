@@ -12,13 +12,13 @@ permissions: read-all
 jobs:
   pylint-yml:
     name: Pylint
-    uses: .github/workflows/pylint.yml
+    uses: ./.github/workflows/pylint.yml
   opa-yml:
     name: Run OPA Tests
-    uses: .github/workflows/run_opa_tests.yml
+    uses: ./.github/workflows/run_opa_tests.yml
   # smoke-test-yml:
   #   name: Run Smoke Tests
   #   uses: ./.github/workflows/run_smoke_test.yml
   md-check-yml:
     name: Run Markdown Link Check
-    uses: .github/workflows/run_link_checker_for_md_edits.yml
+    uses: ./.github/workflows/run_link_checker_for_md_edits.yml
