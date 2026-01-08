@@ -40,6 +40,16 @@ class MarkdownParser:
                               r'\.(?P<id>\d+)\.(?P<item>\d+)'
                               r'(?P<version>v[^\s]*))$')
 
+    # Regular expression to match badge indicators like:
+    # [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+    # [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](...)
+    # Captures: indicator name (group 1), color code (group 2, 6 hex digits),
+    # and link URL (group 3)
+    # Uses non-greedy match to capture everything up to the last dash before the color
+    _badge_pattern = (r'\[!\[([^\]]+)\]\(https://img\.shields\.io/badge/.+?-'
+                     r'([A-Fa-f0-9]{6})\)\]\(([^\)]*)\)')
+    _badge_re = re.compile(_badge_pattern)
+
     # This handles the single exception case where the combined drive
     # and docs product has a product name of "drive", but the baseline
     # identifiers are "drivedocs" (e.g., GWS.DRIVEDOCS.1.8). Arggh.
@@ -329,6 +339,8 @@ class MarkdownParser:
 
                 prev_item = item
                 value_lines = []
+                indicators = []
+                found_requirement_end = False
 
                 for value_line in baseline_content[lines_seen:]:
 
@@ -348,9 +360,40 @@ class MarkdownParser:
                     if value_line.startswith("<!--") and value_line.endswith("-->"):
                         continue
 
+                    # Check if this line contains badge indicators
+                    # Extract indicator name, color, and link URL from badge markdown
+                    badge_matches = self._badge_re.findall(value_line)
+                    if badge_matches:
+                        # badge_matches is a list of tuples: (indicator_name, color_code, link_url)
+                        for match in badge_matches:
+                            indicator_name = match[0]
+                            color_code = match[1] if len(match) > 1 else None
+                            link_url = match[2] if len(match) > 2 else None
+                            indicator_dict = {'name': indicator_name}
+                            if color_code:
+                                indicator_dict['color'] = f'#{color_code}'
+                            if link_url:
+                                indicator_dict['link'] = link_url
+                            indicators.append(indicator_dict)
+                        # Don't include the badge line in the requirement value
+                        # Mark that we've found badges (requirement text is done)
+                        found_requirement_end = True
+                        continue
+
                     if not value_line:
+                        # If we've already found badges, we're done
+                        if found_requirement_end:
+                            break
+                        # If we haven't found requirement text yet, skip empty lines
                         if not value_lines:
                             continue
+                        # If we have requirement text but no badges yet, this might be
+                        # a separator before badges, so continue to look for badges
+                        found_requirement_end = True
+                        continue
+
+                    # If we've already found badges, don't add more to requirement
+                    if found_requirement_end:
                         break
 
                     value_lines.append(value_line)
@@ -366,6 +409,8 @@ class MarkdownParser:
                                        group_name)
 
                 control = {'Id': baseline, 'Value': value}
+                if indicators:
+                    control['Indicators'] = indicators
                 group['Controls'].append(control)
 
                 policy_id = baseline.removesuffix(version)
