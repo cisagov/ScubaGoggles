@@ -13,7 +13,7 @@ from datetime import datetime, date
 from html import escape
 from pathlib import Path
 
-from scubagoggles.scuba_constants import API_LINKS, ApiReference
+from scubagoggles.scuba_constants import API_LINKS
 from scubagoggles.version import Version
 
 log = logging.getLogger(__name__)
