@@ -1,6 +1,7 @@
 name: Run Link Checker for Markdown Edits
 on:
     workflow_dispatch:
+    workflow_call:
 
 jobs:
   markdown-link-check:
