@@ -1325,25 +1325,172 @@ class TestProvider:
             eventName=cases["event"]
         )
 
-    def test_get_group_settings(self):
+    @pytest.mark.parametrize(
+        "cases",
+        [
+            # Multiple groups returned
+            (
+                {
+                    "groups_list_return": [
+                        { "email": "user1.example.com" },
+                        { "email": "user2.example.com" },
+                    ],
+                    "directory_side_effect": None,
+                    "groups_side_effect": None,
+                    "groups_expected": [
+                        {
+                            "kind": "groupsSettings#groups",
+                            "email": "g1@scubagws.org",
+                            "name": "Group 1",
+                            "whoCanJoin": "INVITED_CAN_JOIN",
+                        },
+                        {
+                            "kind": "groupsSettings#groups",
+                            "email": "g2@scubagws.org",
+                            "name": "Group 2",
+                            "whoCanJoin": "INVITED_CAN_JOIN",
+                        },
+                    ]
+                }
+            ),
+            # No groups returned
+            (
+                {
+                    "groups_list_return": [],
+                    "directory_side_effect": None,
+                    "groups_side_effect": None,
+                    "groups_expected": []
+                }
+            ),
+            # Exception thrown when retrieving groups from Directory API
+            (
+                {
+                    "groups_list_return": None,
+                    "directory_side_effect": Exception("API error"),
+                    "groups_side_effect": None,
+                    "groups_expected": []
+                }
+            ),
+            # Exception thrown when retrieving group settings from Groups Settings API
+            (
+                {
+                    "groups_list_return": [
+                        { "email": "user1.example.com" },
+                    ],
+                    "directory_side_effect": None,
+                    "groups_side_effect": Exception("API error"),
+                    "groups_expected": []
+                }
+            ),
+        ],
+    )
+    def test_get_group_settings(self, mocker, mock_build, cases):
         """
         Docstring for test_get_group_settings
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
 
+        directory_service = provider._services["directory"]
+        groups_service = provider._services["groups"]
+
+        ds_groups_resource = mocker.Mock(name="ds_groups_resource")
+        ds_ctx_manager = mocker.MagicMock(name="ds_ctx_manager")
+        ds_ctx_manager.__enter__.return_value = ds_groups_resource
+        ds_ctx_manager.__exit__.return_value = False
+        directory_service.groups.return_value = ds_ctx_manager
+
+        gs_groups_resource = mocker.Mock(name="gs_groups_resource")
+        gs_ctx_manager = mocker.MagicMock(name="gs_ctx_manager")
+        gs_ctx_manager.__enter__.return_value = gs_groups_resource
+        gs_ctx_manager.__exit__.return_value = False
+        groups_service.groups.return_value = gs_ctx_manager
+
+        get_list_mock = mocker.patch.object(Provider, "_get_list")
+        get_list_mock.side_effect = cases["directory_side_effect"] or None
+        get_list_mock.return_value = cases["groups_list_return"]
+
+        gs_get_request = mocker.Mock(name="gs_get_request")
+        if cases["groups_side_effect"] is not None:
+            gs_get_request.execute.side_effect = cases["groups_side_effect"]
+        else:
+            gs_get_request.execute.side_effect = cases["groups_expected"]
+        
+        gs_groups_resource.get.return_value = gs_get_request
+
+        warning_expected = (cases["directory_side_effect"] is not None or
+                            cases["groups_side_effect"] is not None)
+        
+        if warning_expected:
+            with pytest.warns(
+                RuntimeWarning,
+                match="Exception thrown while getting group settings; outputs will be incorrect"
+            ):
+                result = provider.get_group_settings()
+            
+            assert result == { "group_settings": [] }
+            assert ApiReference.LIST_GROUPS.value not in provider._successful_calls
+            assert ApiReference.GET_GROUP.value not in provider._successful_calls
+            assert ApiReference.LIST_GROUPS.value in provider._unsuccessful_calls
+            assert ApiReference.GET_GROUP.value in provider._unsuccessful_calls
+        else:
+            result = provider.get_group_settings()
+            assert result == { "group_settings": cases["groups_expected"] }
+            assert ApiReference.LIST_GROUPS.value in provider._successful_calls
+            assert ApiReference.GET_GROUP.value in provider._successful_calls
+            assert ApiReference.LIST_GROUPS.value not in provider._unsuccessful_calls
+            assert ApiReference.GET_GROUP.value not in provider._unsuccessful_calls
+
+            assert gs_groups_resource.get.call_count == len(cases["groups_list_return"])
+            for group in cases["groups_list_return"]:
+                gs_groups_resource.get.assert_any_call(groupUniqueId=group["email"])
+            assert gs_get_request.execute.call_count == len(cases["groups_list_return"])
+
+        get_list_mock.assert_called_once_with(
+            ds_groups_resource,
+            "groups",
+            customer="test_customer"
+        )
+
+    @pytest.mark.parametrize(
+        "cases",
+        [
+            (
+                {
+                    "products": ["gmail"],
+                    "scenario": None,
+                }
+            ),
+            (
+                {
+                    "products": ["commoncontrols", "groups"],
+                    "scenario": None,
+                }
+            ),
+            (
+                {
+                    "products": ["gmail"],
+                    "scenario": "tenant_data",
+                }
+            ),
+            (
+                {
+                    "products": ["gmail"],
+                    "scenario": "logs",
+                }
+            ),
+            (
+                {
+                    "products": ["gmail"],
+
+                }
+            ),
+        ],
+    )
     def test_call_gws_providers(self):
         """
         Docstring for test_call_gws_providers
-        
-        :param self: Description
-        """
-        pass
-
-    def test_get_list(self):
-        """
-        Docstring for test_get_list
         
         :param self: Description
         """
