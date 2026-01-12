@@ -43,7 +43,10 @@ class ScubaArgumentParser:
 
         if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
             args.breakglassaccounts = []
-
+            
+        if 'excludesite' not in args or args.excludesite is None:
+                args.excludesite = []
+                
         if not 'config' in args or not args.config:
             return args
 

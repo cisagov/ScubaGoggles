@@ -1,0 +1,11 @@
+# YAML configuration demonstrating omitting policies from ScubaGoggles evaluation.
+# Any omitted policies should be carefully considered and documented as part of an
+# organization's cybersecurity risk management program process and practices.
+baselines: [sites]
+excludesite:
+  - "John Doe's Test OU v2"
+  - "John Doe's Test OU v1"
+excludegroup:
+  - "test group 1"
+ 
+

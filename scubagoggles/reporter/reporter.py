@@ -60,6 +60,7 @@ class Reporter:
                  dns_logs: dict,
                  omissions: dict,
                  annotations: dict,
+                 omit_ou: dict,
                  progress_bar=None):
         """Reporter class initialization
 
@@ -79,6 +80,8 @@ class Reporter:
         :param omissions: dict with the omissions specified in the config
             file (empty dict if none omitted)
         :param annotations: dict with the annotations specified in the config
+            file (empty dict if none provided)
+        :param excludesite: dict with the exclude groups or ous specified in the config
             file (empty dict if none provided)
         :param progress_bar: Optional TQDM instance. If provided, the
             progress bar will be cleared before any warnings are printed
@@ -108,6 +111,14 @@ class Reporter:
             # Lowercase all the keys for case-insensitive comparisons
             key.lower(): value for key, value in annotations.items()
         }
+        k = "sites"
+        v = omit_ou
+        omit_ou_d = {k: v}
+        self._excludesite = {
+            # Lowercase all the keys for case-insensitive comparisons
+            key.lower(): value for key, value in omit_ou_d.items()
+        }
+        
         self.progress_bar = progress_bar
         self.rules_table = None
         self.annotated_failed_policies = {}

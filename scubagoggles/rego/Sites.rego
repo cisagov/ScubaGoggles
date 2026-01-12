@@ -19,6 +19,9 @@ SitesId1_1 := utils.PolicyIdWithSuffix("GWS.SITES.1.1")
 
 NonComplianceMessage1_1 := "Service status for Sites is enabled"
 
+ExcludedOUs := {ou | some ou in input.omit_ou}
+ExcludedGroups := {group | some group in input.omit_group}
+
 NonCompliantOUs1_1  contains {
     "Name": OU,
     "Value": NonComplianceMessage1_1
@@ -26,6 +29,8 @@ NonCompliantOUs1_1  contains {
 if {
     some OU, settings in input.policies
     SitesEnabled(OU)
+    not OU in ExcludedOUs
+    not settings.group in ExcludedGroups
 }
 
 tests contains {

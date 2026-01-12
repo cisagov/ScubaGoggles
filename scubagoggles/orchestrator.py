@@ -144,7 +144,7 @@ class Orchestrator:
         args = self._args
         products = args.baselines
         break_glass_accounts = args.breakglassaccounts
-
+        omit_ou = args.excludesite
         with Provider(args.customerid,
                       args.credentials,
                       access_token=args.accesstoken,
@@ -159,6 +159,7 @@ class Orchestrator:
         provider_dict['baseline_suffix'] = self._md_parser.default_version
         provider_dict['baseline_versions'] = self._md_parser.policy_version_map
         provider_dict['break_glass_accounts'] = break_glass_accounts
+        provider_dict['omit_ou'] = omit_ou
         provider_dict['report_uuid'] = args.report_uuid
 
         out_jsonfile = args.outputpath / args.outputproviderfilename
@@ -399,7 +400,11 @@ class Orchestrator:
         annotations = {}
         if 'annotatepolicy' in args and args.annotatepolicy is not None:
             annotations = args.annotatepolicy
-
+        
+        omit_ou = {}
+        if 'excludesite' in args and args.excludesite is not None:
+            omit_ou = args.excludesite
+            
         # Begin Creating the individual report files
         summary = {}
         results = {}
