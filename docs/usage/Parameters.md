@@ -97,7 +97,7 @@ options:
   --darkmode            <boolean>
                         Enable dark mode styles for the report output
   --reportredaction     <boolean>
-                        Enable identifcation information redaction styles for the report output
+                        Enable identification information redaction styles for the report output
 Cached Mode options:
   --runcached           This switch when added will run in the tool in "RunCached mode". When combined with --skipexport
                         allows the user to skip authentication and provider export.

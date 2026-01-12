@@ -103,7 +103,6 @@ const getSetting = (setting) => {
     if (reportSettings === null || reportSettings === undefined) {
         return undefined;
     }
-    console.log(reportSettings)
     return JSON.parse(reportSettings)[setting];
 }
 
@@ -307,6 +306,11 @@ const applyScopeAttributes = () => {
     }
 }
 
+
+/**
+ * Apply redaction to identification information in reports
+ * based on the --reportredaction (-rr) CLI arg
+ */
 function redaction() {
     const cliElement = document.getElementById("sgr_settings");
     const cliElementValue = cliElement.getAttribute("data-redaction");
@@ -322,7 +326,6 @@ function redaction() {
             )
 
             if (tbody.children[1].children) {
-                console.log('found identification row: ', tbody.children[1].children)
                 let identityData = tbody.children[1].children
 
                 for (let cell of identityData) {
@@ -332,7 +335,7 @@ function redaction() {
             }
 
         } catch (error) {
-            console.error(`Error redacting `)
+            console.error(`Error redacting identification information`)
         }
         return;
     }
