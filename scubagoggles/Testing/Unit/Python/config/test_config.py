@@ -20,22 +20,14 @@ class TestUserConfig:
         return tmp_path
 
     @pytest.fixture
-    def valid_config_content(self):
-        """Fixture providing valid configuration content."""
-        return """scubagoggles:
-  opa_dir: ~/.scubagoggles
-  output_dir: ./output
-  credentials: /path/to/credentials.json
-"""
+    def valid_config_file(self):
+        """Fixture providing path to valid configuration file."""
+        return Path(__file__).parent / "snippets" / "custom_config.yaml"
 
     @pytest.fixture
-    def invalid_config_content(self):
-        """Fixture providing configuration content with invalid keys."""
-        return """scubagoggles:
-  opa_dir: ~/.scubagoggles
-  invalid_key: some_value
-  output_dir: ./output
-"""
+    def invalid_config_file(self):
+        """Fixture providing path to invalid configuration file."""
+        return Path(__file__).parent / "snippets" / "invalid_config.yaml"
 
     def test_default_config_file_is_used(self, mocker):
         """Test that the default config file path is used when no config is provided."""
@@ -51,19 +43,15 @@ class TestUserConfig:
         assert config.config_path == expected_default
         assert config.file_exists is False
 
-    def test_if_custom_config_file_is_used(self, temp_dir, valid_config_content, mocker):
+    def test_if_custom_config_file_is_used(self, valid_config_file, mocker):
         """Test that a custom config file is used when provided."""
         # Mock the _transition_config_file to avoid legacy file checks
         mocker.patch.object(UserConfig, '_transition_config_file')
 
-        # Create a custom config file
-        custom_config_path = temp_dir / "custom_config.yaml"
-        custom_config_path.write_text(valid_config_content)
-
-        config = UserConfig(config_file=str(custom_config_path))
+        config = UserConfig(config_file=str(valid_config_file))
 
         # Verify the custom config file path is used
-        assert config.config_path == custom_config_path
+        assert config.config_path == valid_config_file
         assert config.file_exists is True
         # Verify config values are loaded from the custom file
         assert config.output_dir == Path('./output').expanduser()
@@ -117,18 +105,14 @@ class TestUserConfig:
         assert str(new_config.output_dir) == '/custom/output'
         assert str(new_config.credentials_file) == '/path/to/creds.json'
 
-    def test_validate_raises_key_error(self, temp_dir, invalid_config_content, mocker):
+    def test_validate_raises_key_error(self, invalid_config_file, mocker):
         """Test that _validate raises KeyError for invalid configuration keys."""
         # Mock the _transition_config_file to avoid legacy file checks
         mocker.patch.object(UserConfig, '_transition_config_file')
 
-        # Create a config file with invalid keys
-        invalid_config_path = temp_dir / "invalid_config.yaml"
-        invalid_config_path.write_text(invalid_config_content)
-
         # Verify that creating UserConfig with invalid keys raises KeyError
         with pytest.raises(KeyError) as exc_info:
-            UserConfig(config_file=str(invalid_config_path))
+            UserConfig(config_file=str(invalid_config_file))
 
         # Verify the error message contains the invalid key
         assert 'invalid_key' in str(exc_info.value)
