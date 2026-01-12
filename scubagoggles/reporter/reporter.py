@@ -296,9 +296,9 @@ class Reporter:
 
         legend_html = ('<div class="indicator-legend" style="margin: 20px 0; '
                       'padding: 15px; background-color: #f8f9fa; '
-                      'border-radius: 5px;">')
+                      'border-radius: 5px; margin-left: 50px; margin-right: 50px">')
         legend_html += '<h3 style="margin-top: 0;">Policy Indicators</h3>'
-        legend_html += '<div style="display: flex; flex-wrap: wrap; gap: 15px;">'
+        legend_html += '<ul style="list-style: none; padding-left: 0; margin: 0; padding-bottom: 0;">'
 
         # Sort indicators for consistent display
         github_url = self._github_url
@@ -313,12 +313,12 @@ class Reporter:
                 # These typically link to #key-terminology in the baseline
                 indicator_dict['link'] = '#key-terminology'
             badge = self._render_indicator_badge(indicator_dict, github_url)
-            legend_html += (f'<div style="display: flex; align-items: center; '
-                          f'gap: 8px;">{badge}'
+            legend_html += (f'<li style="display: flex; align-items: center; '
+                          f'gap: 8px; margin-bottom: 10px;">{badge}'
                           f'<span>{indicator_info["description"]}</span>'
-                          f'</div>')
+                          f'</li>')
 
-        legend_html += '</div></div>'
+        legend_html += '</ul></div>'
         return legend_html
 
     @staticmethod
