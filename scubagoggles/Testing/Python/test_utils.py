@@ -34,14 +34,6 @@ class TestUtils:
         assert utils.create_key_to_list(keys) == expected
 
 
-
-    #@pytest.mark.parametrize(
-    #    
-    #)
-    def test_check_versions(self):
-        assert 1 == 1
-
-
     @pytest.mark.parametrize(
         "dict1, dict2, expected",
         [
@@ -69,7 +61,7 @@ class TestUtils:
             ["Testing", "Python", "testing_directory", "secondary_directory", "plain_file_2.txt"]),
         ]
     )
-    def test_real_abs_path(self, base_filename, rel_segments):
+    def test_rel_abs_path(self, base_filename, rel_segments):
         # build relative path
         rel_path = os.path.join(*rel_segments)
         cwd_path = Path.cwd()
@@ -84,7 +76,7 @@ class TestUtils:
             ("pyyaml", True),
             ("requests", True),
             ("tqdm", True),
-            ("polars", False) #polars
+            ("polars", False)
         ]
     )
     def test_get_package_version(self, package, included):
@@ -92,16 +84,61 @@ class TestUtils:
             v = version(package)
             assert v == utils.get_package_version(package)
         else:
-            with pytest.raises(Exception):
+            with pytest.raises(PackageNotFoundError):
                 utils.get_package_version(package)
 
 
+    @pytest.mark.parametrize(
+        "path, env",
+        [
+            "requirements.txt",
+            "Testing/Python/testing_directory",
+            "Testing/Python/testing_directory/plainfile.txt",
+            ".",            # special case: use an absolute path
+            "~",
+            "$CWD/subdir",
+            "$HOME/tmp",
+        ]
+    )
+    def test_path_parser(self, path, env):
+        home_dir = Path.home()
+        os.environ["HOME"] = str(home_dir)
+        os.environ["CWD"] = str(home_dir)
+        expanded = os.path.expandvars(path)
+        expanded = os.path.expanduser(expanded)
+        abs_path = Path(os.path.abspath(expanded))
+        assert abs_path == utils.path_parser(path)
 
-    def test_path_parser(self):
-        assert 1 == 1  
+
+    @pytest.mark.parametrize(
+        "prompt,user_input,default,expected",
+        [
+            ("Do you wish to continue?", "y", True, True),
+            ("Do you wish to continue?", "n", True, False),
+            ("Do you wish to continue?", "false", False, False),
+            ("Do you wish to continue?", "", True, True),   # default used
+            ("Do you wish to continue?", "", False, False) # default used
+        ],
+    )
+    def test_prompt_boolean(self, monkeypatch, prompt, user_input, default, expected):
+        monkeypatch.setattr("builtins.input", lambda _: user_input)
+        assert utils.prompt_boolean(prompt, default=default) is expected
     
-    def test_prompt_boolean(self):
-        assert 1 == 1  
 
-    def test_strtobool(self):
-        assert 1 == 1  
+    @pytest.mark.parametrize(
+        "strval, expected, included",
+        [
+            ("y", True, True),
+            ("1", True, True),
+            ("TRUE", True, True),
+            ("no", False, True),
+            ("off", False, True),
+            ("red", None, False)
+        ]
+    )
+    def test_strtobool(self, strval, expected, included):
+        if included:
+            assert utils.strtobool(strval) == expected
+        else:
+            with pytest.raises(ValueError):
+                utils.strtobool(strval)
