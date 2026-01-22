@@ -285,6 +285,7 @@ def run_selenium(browser, customerdomain):
                     (By.TAG_NAME, 'body')
                 )
             )
+
     else:
         raise ValueError('Expected the reports table to have a length of 10')
 

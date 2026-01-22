@@ -106,7 +106,7 @@ class TestReporter:
     def test_build_front_page_html(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
         """
         Tests Reporter._build_front_page_html() with test data for fragments,
-        tenant_info, report_uuid, and darkmode enabled.
+        tenant_info, report_uuid, with darkmode and redaction enabled.
         """
         tmp = tmp_path
         (tmp / "FrontPageReport").mkdir(parents=True)
@@ -154,6 +154,7 @@ class TestReporter:
             tenant_info,
             report_uuid,
             darkmode="true",
+            redaction="true"
         )
 
         assert Version.current in html
@@ -166,6 +167,7 @@ class TestReporter:
         assert "const testVar = 0;" in html
 
         assert "sgr_settings" in html and "data-darkmode=\"true\"" in html
+        assert "sgr_settings" in html and "data-redaction=\"true\"" in html
 
         assert "First" in html and "Second" in html
         assert report_uuid in html
@@ -342,7 +344,7 @@ class TestReporter:
         """
         Tests if Reporter._get_remediation_date() handles these cases:
             - returns the expected date for a given policy
-            - returns None for cases where the remediation date is 
+            - returns None for cases where the remediation date is
               not properly specified.
 
         This method simply pulls the remediation date from a policy if it exists.
@@ -470,6 +472,7 @@ class TestReporter:
             test_results,
             out_dir,
             darkmode="true",
+            redaction="true"
         )
 
         # Check JSON output
