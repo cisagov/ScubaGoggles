@@ -296,7 +296,8 @@ class Reporter:
 
         legend_html = ('<div class="indicator-legend" style="margin: 20px 0; '
                       'padding: 15px; background-color: #f8f9fa; '
-                      'border-radius: 5px; margin-left: 50px; margin-right: 50px">')
+                      'border-radius: 5px; margin-left: 50px; '
+                      'margin-right: 50px">')
         legend_html += '<h3 style="margin-top: 0;">Policy Indicators</h3>'
         legend_html += '<ul style="list-style: none; padding-left: 0; margin: 0; padding-bottom: 0;">'
 
@@ -1037,7 +1038,6 @@ class Reporter:
                     self._warn(warning)
         return details
 
-    # pylint: disable-next=too-many-branches
     def rego_json_to_ind_reports(self,
                                  test_results: list,
                                  out_path: str,
