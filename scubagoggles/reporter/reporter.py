@@ -299,7 +299,8 @@ class Reporter:
                       'border-radius: 5px; margin-left: 50px; '
                       'margin-right: 50px">')
         legend_html += '<h3 style="margin-top: 0;">Policy Indicators</h3>'
-        legend_html += '<ul style="list-style: none; padding-left: 0; margin: 0; padding-bottom: 0;">'
+        legend_html += ('<ul style="list-style: none; padding-left: 0; '
+                       'margin: 0; padding-bottom: 0;">')
 
         # Sort indicators for consistent display
         github_url = self._github_url
