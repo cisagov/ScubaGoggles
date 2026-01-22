@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 import os
-import scubagoggles.utils as utils
+from scubagoggles import utils
 from importlib.metadata import version, PackageNotFoundError
 
 class TestUtils:
@@ -14,7 +14,7 @@ class TestUtils:
             ({1:['a','b','c'],2:['d','e']}, [], {}),
             ({1:['a','b','c'],2:[],3:['a','b','c','d'],4:['a','e']}, [1,2], {'a':[1], 'b':[1], 'c':[1]}),
             ({1:['a','b','c'],2:[],3:['a','b','c','d'],4:['a','e']}, [1,2,3], {'a':[1,3], 'b':[1,3], 'c':[1,3], 'd':[3]}),
-            ({1:[],2:[],3:[],4:[]}, [1,3], {}) 
+            ({1:[],2:[],3:[],4:[]}, [1,3], {})
         ],
     )
     def test_create_subset_inverted_dict(self, dictionary, keys, expected):
@@ -37,11 +37,21 @@ class TestUtils:
     @pytest.mark.parametrize(
         "dict1, dict2, expected",
         [
-            ({'a':[1], 'b':[2]}, {'b':[3], 'c':[1]}, {'a':[1], 'b':[2,3], 'c':[1]}),
-            ({'a':[1], 'b':[2]}, {'b':[2], 'c':[1]}, {'a':[1], 'b':[2,2], 'c':[1]}),
-            ({'a':[1], 'b':[2], 'c':[3]},{'a':[2], 'b':[2], 'd':[1,2,3]},{'a':[1,2], 'b':[2,2], 'c':[3], 'd':[1,2,3]}),
-            ({'a':[], 'b':[1,2], 'c':[1]},{'b':[3], 'c':[]},{'a':[], 'b':[1,2,3], 'c':[1]}),
-            ({'a':[], 'b':[1,2], 'c':[1]},{'a':[], 'b':[3], 'c':[], 'd':[]},{'a':[], 'b':[1,2,3], 'c':[1], 'd':[]})
+            ({'a':[1], 'b':[2]}, 
+             {'b':[3], 'c':[1]}, 
+             {'a':[1], 'b':[2,3], 'c':[1]}),
+            ({'a':[1], 'b':[2]}, 
+             {'b':[2], 'c':[1]}, 
+             {'a':[1], 'b':[2,2], 'c':[1]}),
+            ({'a':[1], 'b':[2], 'c':[3]},
+             {'a':[2], 'b':[2], 'd':[1,2,3]},
+             {'a':[1,2], 'b':[2,2], 'c':[3], 'd':[1,2,3]}),
+            ({'a':[], 'b':[1,2], 'c':[1]},
+             {'b':[3], 'c':[]},
+             {'a':[], 'b':[1,2,3], 'c':[1]}),
+            ({'a':[], 'b':[1,2], 'c':[1]},
+             {'a':[], 'b':[3], 'c':[], 'd':[]},
+             {'a':[], 'b':[1,2,3], 'c':[1], 'd':[]})
         ]
     )
     def test_merge_dicts(self, dict1, dict2, expected):
@@ -89,7 +99,7 @@ class TestUtils:
 
 
     @pytest.mark.parametrize(
-        "path, env",
+        "path",
         [
             "requirements.txt",
             "Testing/Python/testing_directory",
@@ -100,7 +110,7 @@ class TestUtils:
             "$HOME/tmp",
         ]
     )
-    def test_path_parser(self, path, env):
+    def test_path_parser(self, path):
         home_dir = Path.home()
         os.environ["HOME"] = str(home_dir)
         os.environ["CWD"] = str(home_dir)
@@ -108,7 +118,6 @@ class TestUtils:
         expanded = os.path.expanduser(expanded)
         abs_path = Path(os.path.abspath(expanded))
         assert abs_path == utils.path_parser(path)
-
 
     @pytest.mark.parametrize(
         "prompt,user_input,default,expected",
@@ -120,10 +129,9 @@ class TestUtils:
             ("Do you wish to continue?", "", False, False) # default used
         ],
     )
-    def test_prompt_boolean(self, monkeypatch, prompt, user_input, default, expected):
+    def test_prompt_boolean(self, monkeypatch, prompt, user_input, default, expected):  # pylint: disable=too-many-positional-arguments
         monkeypatch.setattr("builtins.input", lambda _: user_input)
-        assert utils.prompt_boolean(prompt, default=default) is expected
-    
+        assert utils.prompt_boolean(prompt, default=default) == expected
 
     @pytest.mark.parametrize(
         "strval, expected, included",
