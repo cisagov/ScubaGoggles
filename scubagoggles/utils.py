@@ -112,7 +112,7 @@ def prompt_boolean(prompt: str, default: bool = True) -> bool:
     except EOFError as e:
         raise KeyboardInterrupt() from e
 
-    return (not answer and default) or (answer and strtobool(answer))
+    return (not answer and default) or (answer != '' and strtobool(answer))
 
 
 def strtobool(value: str) -> bool:
