@@ -72,6 +72,12 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         choices=('true', 'false'),
                         help='Enable dark mode')
 
+    parser.add_argument('--reportredaction',
+                        '-rr',
+                        metavar='<report-redaction>',
+                        choices=('true', 'false'),
+                        help='Enable report redaction')
+
     help_msg = ('Access token string to be used in lieu of a credentials file. '
                 'If provided, will take precendence over the credentials file. '
                 'Advanced option; using a credentials file is the recommended '
