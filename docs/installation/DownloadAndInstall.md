@@ -19,7 +19,7 @@ Each of the above steps is detailed in the following sections.
 
 ## Installing Python 3
 
-Running ScubaGoggles requires Python 3.9 or higher.  If Python is not installed
+Running ScubaGoggles requires Python 3.10 or higher.  If Python is not installed
 in your environment, please visit the [Python website](https://www.python.org/)
 for instructions on how to download and install Python.
 
