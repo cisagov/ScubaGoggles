@@ -9,6 +9,12 @@ from google.auth.exceptions import RefreshError
 class TestProvider:
     @pytest.fixture
     def mock_build(self, mocker):
+        """
+        Fixture that patches the googleapiclient.discovery build()
+        method so no Google API clients are created during tests.
+        
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        """
         mock_service = mocker.Mock()
         mock_directory = mocker.Mock()
         mock_orgunits = mocker.Mock()
@@ -34,6 +40,14 @@ class TestProvider:
         return mock_service, mock_directory
 
     def _provider(self, mocker, mock_build, **overrides) -> Provider:
+        """
+        Helper method that constructs a Provider instance with default parameters,
+        overrides can be specified if preferred.
+
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
+        :param **overrides: Overrides for the Provider parameters.
+        """
         defaults = {
             "customer_id": "test_customer",
             "credentials_file": "credentials.json",
@@ -45,9 +59,10 @@ class TestProvider:
 
     def test_exit(self, mocker, mock_build):
         """
-        Docstring for test_exit
+        Verifies Provider.__exit__ closes all service resources.
         
-        :param self: Description
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         """
         provider = self._provider(mocker, mock_build)
 
@@ -62,9 +77,11 @@ class TestProvider:
 
     def test_initialize_services(self, mocker, mock_build):
         """
-        Docstring for test_initialize_services
+        Verifies Provider initialization creates services for reports,
+        directory, and groups.
         
-        :param self: Description
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         """
         # _initialize_services() is called in __init__,
         # calling the provider instance is sufficient for testing
@@ -110,9 +127,13 @@ class TestProvider:
         expected_domains
     ):
         """
-        Docstring for test_list_domains
+        Verifies Provider.list_domains() returns the `domains` list 
+        from the Directory API.
         
-        :param self: Description
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
+        :param api_response: Parametrized object representing the API response.
+        :param expected_domains: Parametrized list representing the expected domains.
         """
         provider = self._provider(mocker, mock_build)
 
@@ -1453,53 +1474,33 @@ class TestProvider:
             customer="test_customer"
         )
 
-    @pytest.mark.parametrize(
-        "cases",
-        [
-            (
-                {
-                    "products": ["gmail"],
-                    "scenario": None,
-                }
-            ),
-            (
-                {
-                    "products": ["commoncontrols", "groups"],
-                    "scenario": None,
-                }
-            ),
-            (
-                {
-                    "products": ["gmail"],
-                    "scenario": "tenant_data",
-                }
-            ),
-            (
-                {
-                    "products": ["gmail"],
-                    "scenario": "logs",
-                }
-            ),
-            (
-                {
-                    "products": ["gmail"],
-
-                }
-            ),
-        ],
-    )
-    def test_call_gws_providers(self):
-        """
-        Docstring for test_call_gws_providers
-        
-        :param self: Description
-        """
-        pass
-
-    def test_check_scopes(self):
+    def test_check_scopes(self, mocker, mock_build):
         """
         Docstring for test_check_scopes
         
         :param self: Description
         """
-        pass
+        provider = self._provider(mocker, mock_build)
+
+        provider._credentials = mocker.Mock()
+        provider._credentials.scopes = ["scopeA", "scopeB"]
+
+        log_error = mocker.patch("scubagoggles.provider.log.error")
+
+        denied_exc = Exception("access_denied: Requested client not authorized.")
+        with pytest.raises(Exception) as excinfo:
+            provider._check_scopes(denied_exc)
+
+        assert excinfo.value is denied_exc
+        log_error.assert_called_once_with(
+            "Your credential may be missing one of the following scopes: %s",
+            ["scopeA", "scopeB"],
+        )
+
+        log_error.reset_mock()
+        other_exc = Exception("some other error")
+        with pytest.raises(Exception) as excinfo:
+            provider._check_scopes(other_exc)
+
+        assert excinfo.value is other_exc
+        log_error.assert_not_called()
