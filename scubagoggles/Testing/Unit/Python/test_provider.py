@@ -2,9 +2,9 @@
 test_provider tests the Provider class.
 """
 import pytest
+from google.auth.exceptions import RefreshError
 from scubagoggles.provider import Provider, SELECTORS
 from scubagoggles.scuba_constants import ApiReference
-from google.auth.exceptions import RefreshError
 
 class TestProvider:
     @pytest.fixture
@@ -69,9 +69,9 @@ class TestProvider:
         for key in provider._services:
             mock_resource = mocker.Mock()
             provider._services[key] = mock_resource
-        
+
         provider.__exit__(None, None, None)
-        
+
         for resource in provider._services.values():
             resource.close.assert_called_once()
 
@@ -577,7 +577,7 @@ class TestProvider:
             domain = expected["domain"]
             assert domain in result_map
             assert result_map[domain]["rdata"] == expected["rdata"]
-            
+
             result_log = result_map[domain]["log"]
             for expected_log in expected.get("log", []):
                 assert expected_log in result_log, \
@@ -749,7 +749,7 @@ class TestProvider:
                 "nxdomain": False,
                 "log_entries": []
             })
-        
+
         mock_query = mocker.patch.object(
             provider._dns_client,
             "query",
@@ -943,7 +943,7 @@ class TestProvider:
             resource_arg, item_arg = get_list_mock.call_args.args[:2]
             assert resource_arg is users_resource
             assert item_arg == "users"
-            # "test_customer" is the default customer specified in _provider() above 
+            # "test_customer" is the default customer specified in _provider() above
             assert get_list_mock.call_args.kwargs["customer"] == "test_customer"
             assert get_list_mock.call_args.kwargs["query"] == "isAdmin=True"
         else:
@@ -991,8 +991,9 @@ class TestProvider:
     def test_get_ous(self, mocker, mock_build, cases):
         """
         Verifies Provider.get_ous() gets OUs from the Directory API
-        and returns the raw OU list. These tests cover successful API response with multiple OUs, no OUs,
-        API exceptions, and correct successful/unsuccessful ApiReference calls.
+        and returns the raw OU list. These tests cover successful API response
+        with multiple OUs, no OUs, API exceptions, and correct
+        successful/unsuccessful ApiReference calls.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
@@ -1021,7 +1022,7 @@ class TestProvider:
         else:
             orgunits_resource.list.return_value.execute.return_value = cases["api_response"]
             result = provider.get_ous()
-        
+
         assert result == cases["expected"]
 
         if cases["expect_success_call"]:
@@ -1098,10 +1099,16 @@ class TestProvider:
             orgunits_resource.list.return_value.execute.side_effect = cases["raises"]
 
             if isinstance(cases["raises"], RefreshError):
-                with pytest.raises(RefreshError, match="access_denied: Requested client not authorized"):
+                with pytest.raises(
+                    RefreshError,
+                    match="access_denied: Requested client not authorized"
+                ):
                     provider.get_toplevel_ou()
             else:
-                with pytest.warns(RuntimeWarning, match="Exception thrown while getting top level OU"):
+                with pytest.warns(
+                    RuntimeWarning,
+                    match="Exception thrown while getting top level OU"
+                ):
                     with pytest.raises(Exception, match="API error"):
                         provider.get_toplevel_ou()
             
