@@ -243,6 +243,9 @@ def run_selenium(browser, customerdomain):
             # Check if customerdomain and tool version are present in individual report
             verify_tenant_table(browser, customerdomain, False)
 
+            # Verify indicators and legend are present
+            verify_indicators_and_legend(browser)
+
             policy_tables = browser.find_elements(By.CSS_SELECTOR, "table:not(.dns-logs table)")
             for table in policy_tables[1:]:
 
@@ -381,3 +384,85 @@ def verify_tenant_table(browser, customerdomain, parent):
             error_occurred = True
 
     assert not error_occurred
+
+
+def verify_indicators_and_legend(browser):
+    """
+    Verify that indicators are displayed correctly in the report and that
+    the legend is properly populated.
+
+    Args:
+        browser: A Selenium WebDriver instance
+    """
+    # Expected indicator names that might appear
+    expected_indicators = [
+        'Automated Check',
+        'Log-Based Check',
+        'Manual',
+        'Configurable'
+    ]
+
+    # Check if the legend exists
+    try:
+        legend = browser.find_element(By.CLASS_NAME, 'indicator-legend')
+        assert legend is not None, 'Indicator legend not found'
+
+        # Check if legend has the title "Policy Indicators:"
+        legend_title = legend.find_element(By.TAG_NAME, 'h3')
+        assert legend_title.text == 'Policy Indicators:', \
+            'Legend title should be "Policy Indicators:"'
+
+        # Get all indicator badges in the legend
+        legend_badges = legend.find_elements(By.CLASS_NAME, 'indicator-badge')
+        legend_links = legend.find_elements(By.CSS_SELECTOR,
+                                           'a.indicator-badge')
+
+        # Check that legend contains at least one indicator
+        assert len(legend_badges) + len(legend_links) > 0, \
+            'Legend should contain at least one indicator'
+
+        # Verify each indicator in legend has a description
+        legend_items = legend.find_elements(By.TAG_NAME, 'li')
+        for item in legend_items:
+            badge = (item.find_elements(By.CLASS_NAME, 'indicator-badge') +
+                    item.find_elements(By.CSS_SELECTOR, 'a.indicator-badge'))
+            description = item.find_elements(By.TAG_NAME, 'span')
+            assert len(badge) > 0, 'Each legend item should have a badge'
+            assert len(description) > 0, \
+                'Each legend item should have a description'
+
+    except Exception as e:
+        raise AssertionError(f'Legend verification failed: {e}') from e
+
+    # Check if indicators appear in requirement cells
+    try:
+        # Find all requirement cells in policy tables
+        policy_tables = browser.find_elements(
+            By.CSS_SELECTOR, "table:not(.dns-logs table)")
+        for table in policy_tables[1:]:  # Skip first table (metadata)
+            headers = (table.find_element(By.TAG_NAME, 'thead')
+                      .find_elements(By.TAG_NAME, 'th'))
+            # Check if this is a policy table (has Requirement column)
+            if len(headers) >= 2 and headers[1].text == 'Requirement':
+                tbody = table.find_element(By.TAG_NAME, 'tbody')
+                rows = tbody.find_elements(By.TAG_NAME, 'tr')
+                for row in rows:
+                    cells = row.find_elements(By.TAG_NAME, 'td')
+                    if len(cells) >= 2:
+                        requirement_cell = cells[1]  # Requirement column
+                        # Check if indicators are present in this cell
+                        indicators_in_cell = (
+                            requirement_cell.find_elements(
+                                By.CLASS_NAME, 'indicator-badge') +
+                            requirement_cell.find_elements(
+                                By.CSS_SELECTOR, 'a.indicator-badge'))
+                        # It's okay if some rows don't have indicators,
+                        # but if any do, verify they're valid
+                        for indicator in indicators_in_cell:
+                            indicator_text = indicator.text.strip()
+                            # Verify indicator text is one of the expected ones
+                            assert indicator_text in expected_indicators, \
+                                f'Unexpected indicator: {indicator_text}'
+    except Exception as e:
+        raise AssertionError(
+            f'Indicator verification in requirements failed: {e}') from e

@@ -295,12 +295,11 @@ class Reporter:
             return ''
 
         legend_html = ('<div class="indicator-legend" style="margin: 20px 0; '
-                      'padding: 15px; background-color: #f8f9fa; '
-                      'border-radius: 5px; margin-left: 50px; '
-                      'margin-right: 50px">')
-        legend_html += '<h3 style="margin-top: 0;">Policy Indicators</h3>'
-        legend_html += ('<ul style="list-style: none; padding-left: 0; '
-                       'margin: 0; padding-bottom: 0;">')
+                      'margin-left: 50px; font-size: 0.9em;">')
+        legend_html += ('<h3 style="margin: 0 0 10px 0; color: var(--header-color); '
+                       'font-weight: bold; font-size: 0.95em; text-align: left;">'
+                       'Policy Indicators:</h3>')
+        legend_html += '<ul style="list-style: none; padding-left: 0; margin: 0;">'
 
         # Sort indicators for consistent display
         github_url = self._github_url
@@ -316,8 +315,10 @@ class Reporter:
                 indicator_dict['link'] = '#key-terminology'
             badge = self._render_indicator_badge(indicator_dict, github_url)
             legend_html += (f'<li style="display: flex; align-items: center; '
-                          f'gap: 8px; margin-bottom: 10px;">{badge}'
-                          f'<span>{indicator_info["description"]}</span>'
+                          f'gap: 8px; margin-bottom: 8px; font-size: 0.85em;">'
+                          f'{badge}'
+                          f'<span style="color: var(--text-color);">'
+                          f'{indicator_info["description"]}</span>'
                           f'</li>')
 
         legend_html += '</ul></div>'
