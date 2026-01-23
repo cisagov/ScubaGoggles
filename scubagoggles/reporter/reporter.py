@@ -230,6 +230,7 @@ class Reporter:
             # Add link styling
             badge_style += ' text-decoration: none;'
             badge_html = (f'<a href="{link_url}" target="_blank" '
+                         f'class="indicator-badge" '
                          f'style="{badge_style}" '
                          f'title="{description}">'
                          f'{indicator_name}</a>')
