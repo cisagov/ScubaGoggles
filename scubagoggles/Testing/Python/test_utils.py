@@ -1,9 +1,9 @@
 """Unit tests for utility functions (utils.py) in the project."""
-import pytest
-from pathlib import Path
-import os
-from scubagoggles import utils
-from importlib.metadata import version, PackageNotFoundError
+import pytest                  # Third-party
+from pathlib import Path       # Standard library
+import os                      # Standard library
+from importlib.metadata import version, PackageNotFoundError  # Standard library
+from scubagoggles.utils import utils
 
 class TestUtils:
     """Test suite for utility functions.
