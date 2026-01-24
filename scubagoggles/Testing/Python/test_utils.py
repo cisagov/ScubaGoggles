@@ -3,7 +3,7 @@ import pytest                  # Third-party
 from pathlib import Path       # Standard library
 import os                      # Standard library
 from importlib.metadata import version, PackageNotFoundError  # Standard library
-from scubagoggles.utils import utils
+import scubagoggles.utils as utils
 
 class TestUtils:
     """Test suite for utility functions.
