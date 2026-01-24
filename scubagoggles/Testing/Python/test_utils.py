@@ -1,3 +1,4 @@
+"""Unit tests for utility functions (utils.py) in the project."""
 import pytest
 from pathlib import Path
 import os
@@ -5,6 +6,11 @@ from scubagoggles import utils
 from importlib.metadata import version, PackageNotFoundError
 
 class TestUtils:
+    """Test suite for utility functions.
+    This class contains tests for verifying
+      the behavior of various
+    utility functions in the project.
+    """
     @pytest.mark.parametrize(
         "dictionary, keys, expected",
         [
