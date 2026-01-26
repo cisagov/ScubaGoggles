@@ -3,7 +3,7 @@ import pytest                  # Third-party
 from pathlib import Path       # Standard library
 import os                      # Standard library
 from importlib.metadata import version, PackageNotFoundError  # Standard library
-import scubagoggles.utils as utils
+from scubagoggles import utils
 
 class TestUtils:
     """Test suite for utility functions.
@@ -11,6 +11,7 @@ class TestUtils:
       the behavior of various
     utility functions in the project.
     """
+
     @pytest.mark.parametrize(
         "dictionary, keys, expected",
         [
@@ -31,6 +32,7 @@ class TestUtils:
         ],
     )
     def test_create_subset_inverted_dict(self, dictionary, keys, expected):
+        """ Created inverted dict based on subset """
         assert utils.create_subset_inverted_dict(dictionary, keys) == expected
 
 
