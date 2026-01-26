@@ -32,7 +32,7 @@ class TestUtils:
         ],
     )
     def test_create_subset_inverted_dict(self, dictionary, keys, expected):
-        """ Created inverted dict based on subset """
+        """ Unit test for create_subset_inverted_dict """
         assert utils.create_subset_inverted_dict(dictionary, keys) == expected
 
 
@@ -46,6 +46,7 @@ class TestUtils:
         ],
     )
     def test_create_key_to_list(self,keys,expected):
+        """ Unit test for create_key_to_list """
         assert utils.create_key_to_list(keys) == expected
 
 
@@ -70,6 +71,7 @@ class TestUtils:
         ]
     )
     def test_merge_dicts(self, dict1, dict2, expected):
+        """ Unit test for merge_dicts """
         assert utils.merge_dicts(dict1, dict2) == expected
 
 
@@ -87,6 +89,7 @@ class TestUtils:
         ]
     )
     def test_rel_abs_path(self, base_filename, rel_segments):
+        """ Unit test for rel_abs_path """
         # build relative path
         rel_path = os.path.join(*rel_segments)
         cwd_path = Path.cwd()
@@ -105,6 +108,7 @@ class TestUtils:
         ]
     )
     def test_get_package_version(self, package, included):
+        """ Unit test for get_package_version """
         if included:
             v = version(package)
             assert v == utils.get_package_version(package)
@@ -126,6 +130,7 @@ class TestUtils:
         ]
     )
     def test_path_parser(self, path):
+        """ Unit test for path_parser """
         home_dir = Path.home()
         os.environ["HOME"] = str(home_dir)
         os.environ["CWD"] = str(home_dir)
@@ -145,6 +150,7 @@ class TestUtils:
         ],
     )
     def test_prompt_boolean(self, monkeypatch, prompt, user_input, default, expected):  # pylint: disable=too-many-positional-arguments
+        """ Unit test for prompt_boolean """
         monkeypatch.setattr("builtins.input", lambda _: user_input)
         assert utils.prompt_boolean(prompt, default=default) == expected
 
@@ -160,6 +166,7 @@ class TestUtils:
         ]
     )
     def test_strtobool(self, strval, expected, included):
+        """ Unit test for test_strtobool """
         if included:
             assert utils.strtobool(strval) == expected
         else:
