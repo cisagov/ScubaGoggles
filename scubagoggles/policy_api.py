@@ -144,6 +144,10 @@ class PolicyAPI:
         'classroom_teacher_permissions': {'settings': {
             'whoCanCreateClasses': isEnum}},
         'cloud_search_service_status': {'settings': {'serviceState': isState}},
+        'data_regions_data_processing_region': {'settings': {
+            'limitToStorageRegion': isBool}},
+        'data_regions_data_at_rest_region': {'settings': {
+            'region': isEnum}},
         'drive_and_docs_drive_for_desktop': {'settings': {
             'allowDriveForDesktop': isBool,
             'restrictToAuthorizedDevices': isBool}},
@@ -301,13 +305,14 @@ class PolicyAPI:
     # more defaults may be changed.  There is also no assurance that Google's
     # documentation reflects the current default values (i.e., the
     # documented defaults must be kept current with the implementation).
+    #
+    # NOTE: The following defaults are ONLY the ones listed by Google in
+    # their documentation.  If a default is needed for some other reason
+    # (e.g., due to optional license), please add it to the defaults listed
+    # in the update below this list.
 
     _defaults = {
-        'access_management_user_scoping': {
-            'accessManagementRegime': 'PREFERENCE_UNSPECIFIED'},
         'calendar_external_invitations': {'warnOnInvite': True},
-        'calendar_interoperability': {
-            'enableInteroperability': False},
         'calendar_primary_calendar_max_allowed_external_sharing': {
             'maxAllowedExternalSharing': 'EXTERNAL_FREE_BUSY_ONLY'},
         'calendar_secondary_calendar_max_allowed_external_sharing': {
@@ -339,7 +344,6 @@ class PolicyAPI:
         'gmail_links_and_external_images': {
             'applyFutureSettingsAutomatically': True,
             'enableAggressiveWarningsOnUntrustedLinks': False},
-        'gmail_mail_delegation': {'enableMailDelegation': False},
         'gmail_spoofing_and_authentication': {
             'applyFutureSettingsAutomatically': True},
         'groups_for_business_groups_sharing': {
@@ -355,12 +359,8 @@ class PolicyAPI:
             'enableAccountRecovery': False},
         'security_two_step_verification_device_trust': {
             'allowTrustingDevice': True},
-        'security_two_step_verification_enforcement': {
-            'enforcedFrom': '1970-01-01T00:00:00Z'},
         'security_two_step_verification_enforcement_factor': {
             'allowedSignInFactorSet': 'ALL'},
-        'security_two_step_verification_grace_period': {
-            'enrollmentGracePeriod': "0s"},
         'security_two_step_verification_enrollment': {
             'allowEnrollment': True},
         'security_user_account_recovery': {'enableAccountRecovery': False},
@@ -368,6 +368,23 @@ class PolicyAPI:
             'accessLevel': 'ALLOW_ALL',
             'allowAllInternalApps': False},
     }
+
+    # The following list of defaults are either ones that are needed and are
+    # NOT included in Google's default values list (and perhaps should be),
+    # or are needed due to optional functionality depending on the user's
+    # GWS licenses.
+
+    _defaults.update({
+        'access_management_user_scoping': {
+            'accessManagementRegime': 'PREFERENCE_UNSPECIFIED'},
+        'calendar_interoperability': {
+            'enableInteroperability': False},
+        'gmail_mail_delegation': {'enableMailDelegation': False},
+        'security_two_step_verification_enforcement': {
+            'enforcedFrom': '1970-01-01T00:00:00Z'},
+        'security_two_step_verification_grace_period': {
+            'enrollmentGracePeriod': "0s"},
+    })
 
     # This is the URL to the Policies API.
     _baseURL = 'https://cloudidentity.googleapis.com/v1/policies'

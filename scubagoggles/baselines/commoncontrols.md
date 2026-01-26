@@ -744,7 +744,7 @@ To disable Super Admin account self-recovery:
 #### GWS.COMMONCONTROLS.8.3v0.6 Instructions
 1.  Sign in to https://admin.google.com as an administrator.
 2.  Select **Security** -\> **Authentication**.
-3.  Select **Account Recovery**. 
+3.  Select **Account Recovery**.
 4.  Click **Recovery Information**.
 5.  Deselect the **Allow admins and users to add recovery email information to their account** checkbox.
 6.  Deselect the **Allow admins and users to add recovery phone information to their account** checkbox.
@@ -1202,7 +1202,7 @@ At the time of writing, data region policies cannot be applied to data types not
 #### GWS.COMMONCONTROLS.15.1v0.6
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols151v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential foreign adversaries to compromise the data.
 - _Last modified:_ January 2025
@@ -1217,7 +1217,6 @@ The data storage region SHALL be set to be the United States for all users in th
 Data SHALL be processed in the region selected for data at rest.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
 - _Last modified:_ January 2025
