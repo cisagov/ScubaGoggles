@@ -55,7 +55,7 @@ class TestRunRego:
         mock_result = MagicMock()
         mock_result.stdout = json.dumps(expected_output).encode()
 
-        def mock_subprocess_run(command, **kwargs):
+        def mock_subprocess_run(_command, **_kwargs):
             return mock_result
 
         monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
@@ -89,7 +89,7 @@ class TestRunRego:
         # Track the command passed to subprocess.run
         captured_command = []
 
-        def mock_subprocess_run(command, **kwargs):
+        def mock_subprocess_run(command, **_kwargs):
             captured_command.extend(command)
             mock_result = MagicMock()
             mock_result.stdout = b'[{"result": "ok"}]'
@@ -134,7 +134,7 @@ class TestRunRego:
         monkeypatch.setattr(run_rego, 'find_opa', mock_find_opa)
 
         # Mock subprocess.run
-        def mock_subprocess_run(command, **kwargs):
+        def mock_subprocess_run(_command, **_kwargs):
             mock_result = MagicMock()
             mock_result.stdout = b'[{"result": "ok"}]'
             return mock_result
@@ -168,7 +168,7 @@ class TestRunRego:
         monkeypatch.setattr(run_rego, 'OPA_EXE', mock_opa_exe)
 
         # Mock subprocess.run to raise CalledProcessError
-        def mock_subprocess_run(command, **kwargs):
+        def mock_subprocess_run(command, **_kwargs):
             error = subprocess.CalledProcessError(1, command)
             error.output = b'OPA error output'
             raise error
@@ -201,7 +201,7 @@ class TestRunRego:
         monkeypatch.setattr(run_rego, 'OPA_EXE', mock_opa_exe)
 
         # Mock subprocess.run to raise unexpected exception
-        def mock_subprocess_run(command, **kwargs):
+        def mock_subprocess_run(_command, **_kwargs):
             raise OSError('Unexpected OS error')
 
         monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
@@ -237,7 +237,7 @@ class TestRunRego:
         mock_result = MagicMock()
         mock_result.stdout = b'Version: 0.55.0'
 
-        def mock_subprocess_run(command, **kwargs):
+        def mock_subprocess_run(_command, **_kwargs):
             return mock_result
 
         monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
@@ -269,7 +269,7 @@ class TestRunRego:
         mock_result = MagicMock()
         mock_result.stdout = b'Version: 0.55.0'
 
-        def mock_subprocess_run(command, **kwargs):
+        def mock_subprocess_run(_command, **_kwargs):
             return mock_result
 
         monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
@@ -310,7 +310,7 @@ class TestRunRego:
         monkeypatch.setattr('os.access', lambda path, mode: True)
 
         # Mock subprocess.run to raise CalledProcessError for version check
-        def mock_subprocess_run(command, **kwargs):
+        def mock_subprocess_run(command, **_kwargs):
             error = subprocess.CalledProcessError(1, command)
             error.stderr = b'Version check error'
             error.output = b'Error output'
@@ -321,17 +321,23 @@ class TestRunRego:
         with pytest.raises(RuntimeError, match='Error occurred during OPA version check'):
             find_opa(tmp_path)
 
-    @pytest.mark.parametrize('os_type,machine,expected_filenames', [
-        ('Windows', 'AMD64', ['opa_windows_amd64.exe', 'opa_windows_amd64_static.exe',
-                              'opa.exe']),
-        ('Linux', 'x86_64', ['opa_linux_x86_64', 'opa_linux_x86_64_static',
-                             'opa_linux_amd64', 'opa_linux_amd64_static', 'opa']),
-        ('Darwin', 'arm64', ['opa_darwin_arm64', 'opa_darwin_arm64_static',
-                             'opa_darwin_amd64', 'opa_darwin_amd64_static', 'opa']),
+    @pytest.mark.parametrize('platform_config', [
+        {'os_type': 'Windows', 'machine': 'AMD64',
+         'expected': ['opa_windows_amd64.exe', 'opa_windows_amd64_static.exe', 'opa.exe']},
+        {'os_type': 'Linux', 'machine': 'x86_64',
+         'expected': ['opa_linux_x86_64', 'opa_linux_x86_64_static',
+                      'opa_linux_amd64', 'opa_linux_amd64_static', 'opa']},
+        {'os_type': 'Darwin', 'machine': 'arm64',
+         'expected': ['opa_darwin_arm64', 'opa_darwin_arm64_static',
+                      'opa_darwin_amd64', 'opa_darwin_amd64_static', 'opa']},
     ])
     def test_find_opa_platform_specific_filenames(self, monkeypatch, tmp_path,
-                                                   os_type, machine, expected_filenames):
+                                                   platform_config):
         """Tests that find_opa looks for platform-specific executable names."""
+
+        os_type = platform_config['os_type']
+        machine = platform_config['machine']
+        expected_filenames = platform_config['expected']
 
         # Mock platform
         monkeypatch.setattr('platform.system', lambda: os_type)
@@ -339,10 +345,9 @@ class TestRunRego:
 
         # Track which filenames were searched
         searched_files = []
-        original_exists = Path.exists
 
-        def mock_exists(self):
-            searched_files.append(self.name)
+        def mock_exists(path_self):
+            searched_files.append(path_self.name)
             return False
 
         monkeypatch.setattr(Path, 'exists', mock_exists)
@@ -418,15 +423,14 @@ class TestRunRego:
         (b'single', ['single']),
         (b'line1\n\nline3', ['line1', '', 'line3']),
     ])
-    def test_log_rego_output_line_splitting(self, caplog, stream_content, expected_lines):
+    def test_log_rego_output_line_splitting(self, stream_content, expected_lines):
         """Tests that log_rego_output correctly splits lines."""
 
         logged_lines = []
 
-        def capture_logger(msg, *args):
-            logged_lines.append(args[0] if args else msg)
+        def capture_logger(_msg, *args):
+            logged_lines.append(args[0] if args else _msg)
 
         log_rego_output(stream_content, capture_logger)
 
         assert logged_lines == expected_lines
-
