@@ -30,14 +30,15 @@ class TestRunRego:
         # Reset the global OPA_EXE before each test
         run_rego.OPA_EXE = None
 
-    # =========================================================================
-    # Tests for opa_eval
-    # =========================================================================
+    @pytest.fixture
+    def opa_test_files(self, tmp_path):
+        """Fixture providing mock input and rego files for opa_eval tests.
 
-    def test_opa_eval_success(self, monkeypatch, tmp_path):
-        """Tests that opa_eval successfully runs OPA and returns parsed JSON."""
-
-        # Create mock input file and rego files
+        Returns a dict with:
+            - input_file: Path to the mock input JSON file
+            - rego_path: Path to the directory containing mock rego files
+            - tmp_path: The temporary directory path
+        """
         input_file = tmp_path / "input.json"
         input_file.write_text('{"test": "data"}')
 
@@ -45,6 +46,23 @@ class TestRunRego:
         rego_path.mkdir()
         (rego_path / "Test.rego").write_text("package test")
         (rego_path / "Utils.rego").write_text("package utils")
+
+        return {
+            'input_file': input_file,
+            'rego_path': rego_path,
+            'tmp_path': tmp_path
+        }
+
+    # =========================================================================
+    # Tests for opa_eval
+    # =========================================================================
+
+    def test_opa_eval_success(self, monkeypatch, opa_test_files):
+        """Tests that opa_eval successfully runs OPA and returns parsed JSON."""
+
+        input_file = opa_test_files['input_file']
+        rego_path = opa_test_files['rego_path']
+        tmp_path = opa_test_files['tmp_path']
 
         # Mock the OPA executable path
         mock_opa_exe = tmp_path / "opa.exe"
@@ -70,17 +88,12 @@ class TestRunRego:
 
         assert result == expected_output
 
-    def test_opa_eval_with_debug(self, monkeypatch, tmp_path, caplog):
+    def test_opa_eval_with_debug(self, monkeypatch, opa_test_files, caplog):
         """Tests that opa_eval includes --explain=full flag when debug is True."""
 
-        # Create mock input file and rego files
-        input_file = tmp_path / "input.json"
-        input_file.write_text('{"test": "data"}')
-
-        rego_path = tmp_path / "rego"
-        rego_path.mkdir()
-        (rego_path / "Test.rego").write_text("package test")
-        (rego_path / "Utils.rego").write_text("package utils")
+        input_file = opa_test_files['input_file']
+        rego_path = opa_test_files['rego_path']
+        tmp_path = opa_test_files['tmp_path']
 
         # Mock the OPA executable path
         mock_opa_exe = tmp_path / "opa.exe"
@@ -108,17 +121,12 @@ class TestRunRego:
 
         assert '--explain=full' in captured_command
 
-    def test_opa_eval_calls_find_opa_when_not_cached(self, monkeypatch, tmp_path):
+    def test_opa_eval_calls_find_opa_when_not_cached(self, monkeypatch, opa_test_files):
         """Tests that opa_eval calls find_opa when OPA_EXE is None."""
 
-        # Create mock input file and rego files
-        input_file = tmp_path / "input.json"
-        input_file.write_text('{"test": "data"}')
-
-        rego_path = tmp_path / "rego"
-        rego_path.mkdir()
-        (rego_path / "Test.rego").write_text("package test")
-        (rego_path / "Utils.rego").write_text("package utils")
+        input_file = opa_test_files['input_file']
+        rego_path = opa_test_files['rego_path']
+        tmp_path = opa_test_files['tmp_path']
 
         # Ensure OPA_EXE is None
         monkeypatch.setattr(run_rego, 'OPA_EXE', None)
@@ -151,17 +159,12 @@ class TestRunRego:
 
         assert len(find_opa_called) == 1
 
-    def test_opa_eval_raises_on_subprocess_error(self, monkeypatch, tmp_path):
+    def test_opa_eval_raises_on_subprocess_error(self, monkeypatch, opa_test_files):
         """Tests that opa_eval raises RuntimeError when OPA subprocess fails."""
 
-        # Create mock input file and rego files
-        input_file = tmp_path / "input.json"
-        input_file.write_text('{"test": "data"}')
-
-        rego_path = tmp_path / "rego"
-        rego_path.mkdir()
-        (rego_path / "Test.rego").write_text("package test")
-        (rego_path / "Utils.rego").write_text("package utils")
+        input_file = opa_test_files['input_file']
+        rego_path = opa_test_files['rego_path']
+        tmp_path = opa_test_files['tmp_path']
 
         # Mock the OPA executable path
         mock_opa_exe = tmp_path / "opa.exe"
@@ -184,17 +187,12 @@ class TestRunRego:
                 debug=False
             )
 
-    def test_opa_eval_raises_on_unexpected_error(self, monkeypatch, tmp_path):
+    def test_opa_eval_raises_on_unexpected_error(self, monkeypatch, opa_test_files):
         """Tests that opa_eval raises RuntimeError on unexpected exceptions."""
 
-        # Create mock input file and rego files
-        input_file = tmp_path / "input.json"
-        input_file.write_text('{"test": "data"}')
-
-        rego_path = tmp_path / "rego"
-        rego_path.mkdir()
-        (rego_path / "Test.rego").write_text("package test")
-        (rego_path / "Utils.rego").write_text("package utils")
+        input_file = opa_test_files['input_file']
+        rego_path = opa_test_files['rego_path']
+        tmp_path = opa_test_files['tmp_path']
 
         # Mock the OPA executable path
         mock_opa_exe = tmp_path / "opa.exe"
