@@ -42,11 +42,18 @@ html[data-theme='dark'] {
     --border-color: #7b7b7b;
 }
 
+html { overflow-x: hidden; }
+
 body {
     background-color: var(--background-secondary);
     -webkit-print-color-adjust:exact !important;
     print-color-adjust:exact !important;
     color: var(--text-color)
+}
+
+.redact {
+  color: black;
+  background-color: black;
 }
 
 .alternating tr:nth-child(even) {
@@ -130,7 +137,7 @@ header a {
 }
 
 header h3:hover {
-    border-bottom: 5px solid var(--header-color);   
+    border-bottom: 5px solid var(--header-color);
 }
 
 td {
@@ -226,11 +233,15 @@ p {
 }
 
 #toggle-text {
-    color: #7b7b7b;
+    color: #000000;
     margin: 0.313em 3.125em;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0.875em;
     padding-bottom: 2px;
+}
+
+#toggle-text.dark {
+    color: #7b7b7b;
 }
 
 /* The switch - the box around the slider */
