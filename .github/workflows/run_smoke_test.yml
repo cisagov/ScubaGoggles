@@ -5,14 +5,14 @@ on:
   pull_request_review:
     types: [submitted]
   push:
-    # These paths are primarily for workflow testing purposes
-    paths:
-      - ".github/workflows/run_smoke_test.yml"
-      - ".github/actions/setup-dependencies-windows/action.yml"
-      - ".github/actions/setup-dependencies-macos/action.yml"
-    branches:
-      - "main"
-      - "*smoketest*"
+    # # These paths are primarily for workflow testing purposes
+    # paths:
+    #   - ".github/workflows/run_smoke_test.yml"
+    #   - ".github/actions/setup-dependencies-windows/action.yml"
+    #   - ".github/actions/setup-dependencies-macos/action.yml"
+    # branches:
+    #   - "main"
+    #   - "*smoketest*"
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -111,6 +111,10 @@ jobs:
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
+      - name: Install Pytest Coverage dependencies
+        run: |
+          pip install pytest pytest-cov
+
       - name: Run ScubaGoggles and check for correct output (windows | macOs)
         if: ${{ matrix.operating-system == 'windows-latest' ||  matrix.operating-system == 'macos-latest'}}
         run: |
@@ -125,6 +129,16 @@ jobs:
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
           FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
           echo "cachepath=$FOUNDIT" >> $GITHUB_OUTPUT
+
+      - name: Pytest Coverage Repository
+        run: |
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=src tests/ | tee pytest-coverage.txt
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
 
       - name: Cache the output directory
         id: baseline
