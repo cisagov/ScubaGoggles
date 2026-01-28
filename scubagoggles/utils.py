@@ -42,7 +42,7 @@ def merge_dicts(dict1: dict, dict2: dict) -> dict:
     Combines two dictionaries of lists that may or may not have the same keys
 
     :param dict1: the first dict of lists we want to merge
-    :param dict2: the second dict of lists we want to me
+    :param dict2: the second dict of lists we want to merge
     """
     for key, values in dict2.items():
         dict1.setdefault(key, []).extend(values)
@@ -112,7 +112,7 @@ def prompt_boolean(prompt: str, default: bool = True) -> bool:
     except EOFError as e:
         raise KeyboardInterrupt() from e
 
-    return (not answer and default) or (answer and strtobool(answer))
+    return (not answer and default) or (answer != '' and strtobool(answer))
 
 
 def strtobool(value: str) -> bool:
