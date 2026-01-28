@@ -6,7 +6,14 @@ from google.auth.exceptions import RefreshError
 from scubagoggles.provider import Provider, SELECTORS
 from scubagoggles.scuba_constants import ApiReference
 
+# Disable "protected-access" because we test some internal methods;
+# Disable "too-many-positional-arguments" because some tests have
+# 6 vs the expected 5 parameter limit, don't need to refactor this.
+# pylint: disable=protected-access,too-many-positional-arguments
+
 class TestProvider:
+    """Unit tests for the Provider class."""
+
     @pytest.fixture
     def mock_build(self, mocker):
         """
@@ -860,11 +867,11 @@ class TestProvider:
             assert "get_dkim_records" in provider._successful_calls
             assert "get_dmarc_records" in provider._successful_calls
         else:
-            assert result["domains"] == []
-            assert result["alias_domains"] == []
-            assert result["spf_records"] == []
-            assert result["dkim_records"] == []
-            assert result["dmarc_records"] == []
+            assert not result["domains"]
+            assert not result["alias_domains"]
+            assert not result["spf_records"]
+            assert not result["dkim_records"]
+            assert not result["dmarc_records"]
 
             spf_mock.assert_not_called()
             dkim_mock.assert_not_called()
@@ -1111,13 +1118,13 @@ class TestProvider:
                 ):
                     with pytest.raises(Exception, match="API error"):
                         provider.get_toplevel_ou()
-            
+
             # No return value for exception cases, set to the default expected value
             result = cases["expected"]
         else:
             orgunits_resource.list.return_value.execute.return_value = cases["api_response"]
             result = provider.get_toplevel_ou()
-        
+
         assert result == cases["expected"]
 
         if cases["expect_success_call"]:
@@ -1176,7 +1183,9 @@ class TestProvider:
             # get customers throws RefreshError
             {
                 "customer_execute": None,
-                "customer_side_effect": RefreshError("access_denied: Requested client not authorized"),
+                "customer_side_effect": RefreshError(
+                    "access_denied: Requested client not authorized"
+                ),
                 "domains": [ { "domainName": "example.com", "isPrimary": True }],
                 "expected": {
                     "ID": "",
@@ -1196,7 +1205,8 @@ class TestProvider:
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
-        :param cases: Parametrized test cases containing metadata for tenant info response/exceptions.
+        :param cases: Parametrized test cases containing metadata
+                      for tenant info response/exceptions.
         """
         provider = self._provider(mocker, mock_build)
 
@@ -1213,15 +1223,18 @@ class TestProvider:
             get_request.execute.side_effect = cases["customer_side_effect"]
         else:
             get_request.execute.return_value = cases["customer_execute"]
-        
+
         # We're not testing list_domains, mock with parametrized value
         mocker.patch.object(provider, "list_domains", return_value=cases["domains"])
 
         if cases["expect_warning"]:
-            with pytest.warns(RuntimeWarning, match="Exception thrown while retrieving customer list"):
+            with pytest.warns(
+                RuntimeWarning,
+                match="Exception thrown while retrieving customer list"
+            ):
                 with pytest.raises(UnboundLocalError):
                     provider.get_tenant_info()
-            
+
             assert ApiReference.LIST_CUSTOMERS.value in provider._unsuccessful_calls
         else:
             result = provider.get_tenant_info()
@@ -1230,7 +1243,7 @@ class TestProvider:
 
         customers_resource.get.assert_called_once_with(customerKey="test_customer")
         get_request.execute.assert_called_once()
-    
+
     @pytest.mark.parametrize(
         "cases",
         [
@@ -1328,7 +1341,10 @@ class TestProvider:
                         "events": [
                             {
                                 "parameters": [
-                                    { "name": "APPLICATION_NAME", "value": "Google Workspace Marketplace"},
+                                    {
+                                        "name": "APPLICATION_NAME",
+                                        "value": "Google Workspace Marketplace"
+                                    },
                                 ]
                             }
                         ]
@@ -1342,7 +1358,10 @@ class TestProvider:
                             "events": [
                                 {
                                     "parameters": [
-                                        { "name": "APPLICATION_NAME", "value": "Google Workspace Marketplace"},
+                                        {
+                                            "name": "APPLICATION_NAME",
+                                            "value": "Google Workspace Marketplace"
+                                        },
                                     ],
                                 },
                             ],
@@ -1386,7 +1405,10 @@ class TestProvider:
         get_list = mocker.patch.object(Provider, "_get_list", return_value=cases["reports"])
 
         if cases["expect_warning"]:
-            with pytest.warns(RuntimeWarning, match="An exception was thrown while getting the logs"):
+            with pytest.warns(
+                RuntimeWarning,
+                match="An exception was thrown while getting the logs"
+            ):
                 result = provider.get_gws_logs(products=cases["products"], event=cases["event"])
         else:
             result = provider.get_gws_logs(products=cases["products"], event=cases["event"])
@@ -1498,19 +1520,19 @@ class TestProvider:
             gs_get_request.execute.side_effect = cases["groups_side_effect"]
         else:
             gs_get_request.execute.side_effect = cases["groups_expected"]
-        
+
         gs_groups_resource.get.return_value = gs_get_request
 
         warning_expected = (cases["directory_side_effect"] is not None or
                             cases["groups_side_effect"] is not None)
-        
+
         if warning_expected:
             with pytest.warns(
                 RuntimeWarning,
                 match="Exception thrown while getting group settings; outputs will be incorrect"
             ):
                 result = provider.get_group_settings()
-            
+
             assert result == { "group_settings": [] }
             assert ApiReference.LIST_GROUPS.value not in provider._successful_calls
             assert ApiReference.GET_GROUP.value not in provider._successful_calls
