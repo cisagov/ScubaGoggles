@@ -135,7 +135,8 @@ jobs:
 
       - name: Pytest Coverage Repository
         run: |
-          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=src tests/ | tee pytest-coverage.txt
+          ls
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=src ./scubagoggles/Testing | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
