@@ -1,4 +1,7 @@
 name: Run Smoke Test
+permissions:
+  contents: write        # For checkout and comparing commits
+  pull-requests: write  # For creating/updating PR comments
 on:
   pull_request:
     types: [opened, reopened]
