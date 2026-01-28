@@ -493,7 +493,10 @@ class TestProvider:
             assert ApiReference.LIST_OUS.value not in provider._unsuccessful_calls
 
             # If successful, verify API was called with correct parameters
-            orgunits_resource.list.assert_called_once_with(customerId="test_customer")
+            orgunits_resource.list.assert_called_once_with(
+                customerId="test_customer",
+                type="allIncludingParent"
+            )
         else:
             assert ApiReference.LIST_OUS.value not in provider._successful_calls
             assert ApiReference.LIST_OUS.value in provider._unsuccessful_calls
