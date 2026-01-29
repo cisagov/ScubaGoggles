@@ -8,7 +8,6 @@ import json
 import logging
 import subprocess
 from pathlib import Path
-from unittest.mock import MagicMock
 
 import pytest
 
@@ -57,7 +56,7 @@ class TestRunRego:
     # Tests for opa_eval
     # =========================================================================
 
-    def test_opa_eval_success(self, monkeypatch, opa_test_files):
+    def test_opa_eval_success(self, mocker, opa_test_files):
         """Tests that opa_eval successfully runs OPA and returns parsed JSON."""
 
         input_file = opa_test_files['input_file']
@@ -65,18 +64,13 @@ class TestRunRego:
         tmp_path = opa_test_files['tmp_path']
 
         # Mock the OPA executable path
-        mock_opa_exe = tmp_path / "opa.exe"
-        monkeypatch.setattr(run_rego, 'OPA_EXE', mock_opa_exe)
+        mocker.patch.object(run_rego, 'OPA_EXE', tmp_path / "opa.exe")
 
         # Mock subprocess.run to return valid JSON output
         expected_output = [{"test_result": "pass"}]
-        mock_result = MagicMock()
+        mock_result = mocker.Mock()
         mock_result.stdout = json.dumps(expected_output).encode()
-
-        def mock_subprocess_run(_command, **_kwargs):
-            return mock_result
-
-        monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
+        mocker.patch.object(subprocess, 'run', return_value=mock_result)
 
         result = opa_eval(
             product_name='test',
@@ -88,7 +82,7 @@ class TestRunRego:
 
         assert result == expected_output
 
-    def test_opa_eval_with_debug(self, monkeypatch, opa_test_files, caplog):
+    def test_opa_eval_with_debug(self, mocker, opa_test_files, caplog):
         """Tests that opa_eval includes --explain=full flag when debug is True."""
 
         input_file = opa_test_files['input_file']
@@ -96,19 +90,12 @@ class TestRunRego:
         tmp_path = opa_test_files['tmp_path']
 
         # Mock the OPA executable path
-        mock_opa_exe = tmp_path / "opa.exe"
-        monkeypatch.setattr(run_rego, 'OPA_EXE', mock_opa_exe)
+        mocker.patch.object(run_rego, 'OPA_EXE', tmp_path / "opa.exe")
 
-        # Track the command passed to subprocess.run
-        captured_command = []
-
-        def mock_subprocess_run(command, **_kwargs):
-            captured_command.extend(command)
-            mock_result = MagicMock()
-            mock_result.stdout = b'[{"result": "ok"}]'
-            return mock_result
-
-        monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
+        # Mock subprocess.run and capture the command
+        mock_result = mocker.Mock()
+        mock_result.stdout = b'[{"result": "ok"}]'
+        mock_run = mocker.patch.object(subprocess, 'run', return_value=mock_result)
 
         with caplog.at_level(logging.DEBUG):
             opa_eval(
@@ -119,9 +106,11 @@ class TestRunRego:
                 debug=True
             )
 
+        # Verify --explain=full was in the command
+        captured_command = mock_run.call_args[0][0]
         assert '--explain=full' in captured_command
 
-    def test_opa_eval_calls_find_opa_when_not_cached(self, monkeypatch, opa_test_files):
+    def test_opa_eval_calls_find_opa_when_not_cached(self, mocker, opa_test_files):
         """Tests that opa_eval calls find_opa when OPA_EXE is None."""
 
         input_file = opa_test_files['input_file']
@@ -129,25 +118,17 @@ class TestRunRego:
         tmp_path = opa_test_files['tmp_path']
 
         # Ensure OPA_EXE is None
-        monkeypatch.setattr(run_rego, 'OPA_EXE', None)
+        mocker.patch.object(run_rego, 'OPA_EXE', None)
 
-        # Track if find_opa was called
-        find_opa_called = []
-        mock_opa_path = tmp_path / "opa.exe"
-
-        def mock_find_opa(opa_path):
-            find_opa_called.append(opa_path)
-            return mock_opa_path
-
-        monkeypatch.setattr(run_rego, 'find_opa', mock_find_opa)
+        # Mock find_opa to track calls
+        mock_find_opa = mocker.patch.object(
+            run_rego, 'find_opa', return_value=tmp_path / "opa.exe"
+        )
 
         # Mock subprocess.run
-        def mock_subprocess_run(_command, **_kwargs):
-            mock_result = MagicMock()
-            mock_result.stdout = b'[{"result": "ok"}]'
-            return mock_result
-
-        monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
+        mock_result = mocker.Mock()
+        mock_result.stdout = b'[{"result": "ok"}]'
+        mocker.patch.object(subprocess, 'run', return_value=mock_result)
 
         opa_eval(
             product_name='test',
@@ -157,9 +138,9 @@ class TestRunRego:
             debug=False
         )
 
-        assert len(find_opa_called) == 1
+        mock_find_opa.assert_called_once()
 
-    def test_opa_eval_raises_on_subprocess_error(self, monkeypatch, opa_test_files):
+    def test_opa_eval_raises_on_subprocess_error(self, mocker, opa_test_files):
         """Tests that opa_eval raises RuntimeError when OPA subprocess fails."""
 
         input_file = opa_test_files['input_file']
@@ -167,16 +148,12 @@ class TestRunRego:
         tmp_path = opa_test_files['tmp_path']
 
         # Mock the OPA executable path
-        mock_opa_exe = tmp_path / "opa.exe"
-        monkeypatch.setattr(run_rego, 'OPA_EXE', mock_opa_exe)
+        mocker.patch.object(run_rego, 'OPA_EXE', tmp_path / "opa.exe")
 
         # Mock subprocess.run to raise CalledProcessError
-        def mock_subprocess_run(command, **_kwargs):
-            error = subprocess.CalledProcessError(1, command)
-            error.output = b'OPA error output'
-            raise error
-
-        monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
+        error = subprocess.CalledProcessError(1, 'opa')
+        error.output = b'OPA error output'
+        mocker.patch.object(subprocess, 'run', side_effect=error)
 
         with pytest.raises(RuntimeError, match='OPA failure'):
             opa_eval(
@@ -187,7 +164,7 @@ class TestRunRego:
                 debug=False
             )
 
-    def test_opa_eval_raises_on_unexpected_error(self, monkeypatch, opa_test_files):
+    def test_opa_eval_raises_on_unexpected_error(self, mocker, opa_test_files):
         """Tests that opa_eval raises RuntimeError on unexpected exceptions."""
 
         input_file = opa_test_files['input_file']
@@ -195,14 +172,12 @@ class TestRunRego:
         tmp_path = opa_test_files['tmp_path']
 
         # Mock the OPA executable path
-        mock_opa_exe = tmp_path / "opa.exe"
-        monkeypatch.setattr(run_rego, 'OPA_EXE', mock_opa_exe)
+        mocker.patch.object(run_rego, 'OPA_EXE', tmp_path / "opa.exe")
 
         # Mock subprocess.run to raise unexpected exception
-        def mock_subprocess_run(_command, **_kwargs):
-            raise OSError('Unexpected OS error')
-
-        monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
+        mocker.patch.object(
+            subprocess, 'run', side_effect=OSError('Unexpected OS error')
+        )
 
         with pytest.raises(RuntimeError, match='Unexpected failure trying to run OPA'):
             opa_eval(
@@ -217,7 +192,7 @@ class TestRunRego:
     # Tests for find_opa
     # =========================================================================
 
-    def test_find_opa_in_provided_path(self, monkeypatch, tmp_path):
+    def test_find_opa_in_provided_path(self, mocker, tmp_path):
         """Tests that find_opa finds OPA executable in the provided path."""
 
         # Create a mock OPA executable
@@ -225,26 +200,22 @@ class TestRunRego:
         opa_exe.write_text("mock opa")
 
         # Mock platform to return windows
-        monkeypatch.setattr('platform.system', lambda: 'Windows')
-        monkeypatch.setattr('platform.machine', lambda: 'AMD64')
+        mocker.patch('platform.system', return_value='Windows')
+        mocker.patch('platform.machine', return_value='AMD64')
 
         # Mock os.access to return True for executable check
-        monkeypatch.setattr('os.access', lambda path, mode: True)
+        mocker.patch('os.access', return_value=True)
 
         # Mock subprocess.run for version check
-        mock_result = MagicMock()
+        mock_result = mocker.Mock()
         mock_result.stdout = b'Version: 0.55.0'
-
-        def mock_subprocess_run(_command, **_kwargs):
-            return mock_result
-
-        monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
+        mocker.patch.object(subprocess, 'run', return_value=mock_result)
 
         result = find_opa(tmp_path)
 
         assert result == opa_exe
 
-    def test_find_opa_in_path_env(self, monkeypatch, tmp_path):
+    def test_find_opa_in_path_env(self, mocker, tmp_path, monkeypatch):
         """Tests that find_opa searches PATH environment variable."""
 
         # Create a mock OPA executable in a temp directory
@@ -257,26 +228,22 @@ class TestRunRego:
         monkeypatch.setenv('PATH', str(opa_dir))
 
         # Mock platform to return windows
-        monkeypatch.setattr('platform.system', lambda: 'Windows')
-        monkeypatch.setattr('platform.machine', lambda: 'AMD64')
+        mocker.patch('platform.system', return_value='Windows')
+        mocker.patch('platform.machine', return_value='AMD64')
 
         # Mock os.access to return True for executable check
-        monkeypatch.setattr('os.access', lambda path, mode: True)
+        mocker.patch('os.access', return_value=True)
 
         # Mock subprocess.run for version check
-        mock_result = MagicMock()
+        mock_result = mocker.Mock()
         mock_result.stdout = b'Version: 0.55.0'
-
-        def mock_subprocess_run(_command, **_kwargs):
-            return mock_result
-
-        monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
+        mocker.patch.object(subprocess, 'run', return_value=mock_result)
 
         result = find_opa(None)
 
         assert result.name == 'opa.exe'
 
-    def test_find_opa_not_found_raises_error(self, monkeypatch, tmp_path):
+    def test_find_opa_not_found_raises_error(self, mocker, tmp_path, monkeypatch):
         """Tests that find_opa raises FileNotFoundError when OPA is not found."""
 
         # Create an empty directory
@@ -287,13 +254,13 @@ class TestRunRego:
         monkeypatch.setenv('PATH', str(empty_dir))
 
         # Mock platform to return windows
-        monkeypatch.setattr('platform.system', lambda: 'Windows')
-        monkeypatch.setattr('platform.machine', lambda: 'AMD64')
+        mocker.patch('platform.system', return_value='Windows')
+        mocker.patch('platform.machine', return_value='AMD64')
 
         with pytest.raises(FileNotFoundError, match='OPA executable not found in PATH'):
             find_opa(None)
 
-    def test_find_opa_version_check_failure(self, monkeypatch, tmp_path):
+    def test_find_opa_version_check_failure(self, mocker, tmp_path):
         """Tests that find_opa raises RuntimeError when version check fails."""
 
         # Create a mock OPA executable
@@ -301,20 +268,17 @@ class TestRunRego:
         opa_exe.write_text("mock opa")
 
         # Mock platform to return windows
-        monkeypatch.setattr('platform.system', lambda: 'Windows')
-        monkeypatch.setattr('platform.machine', lambda: 'AMD64')
+        mocker.patch('platform.system', return_value='Windows')
+        mocker.patch('platform.machine', return_value='AMD64')
 
         # Mock os.access to return True for executable check
-        monkeypatch.setattr('os.access', lambda path, mode: True)
+        mocker.patch('os.access', return_value=True)
 
         # Mock subprocess.run to raise CalledProcessError for version check
-        def mock_subprocess_run(command, **_kwargs):
-            error = subprocess.CalledProcessError(1, command)
-            error.stderr = b'Version check error'
-            error.output = b'Error output'
-            raise error
-
-        monkeypatch.setattr(subprocess, 'run', mock_subprocess_run)
+        error = subprocess.CalledProcessError(1, 'opa')
+        error.stderr = b'Version check error'
+        error.output = b'Error output'
+        mocker.patch.object(subprocess, 'run', side_effect=error)
 
         with pytest.raises(RuntimeError, match='Error occurred during OPA version check'):
             find_opa(tmp_path)
@@ -329,7 +293,7 @@ class TestRunRego:
          'expected': ['opa_darwin_arm64', 'opa_darwin_arm64_static',
                       'opa_darwin_amd64', 'opa_darwin_amd64_static', 'opa']},
     ])
-    def test_find_opa_platform_specific_filenames(self, monkeypatch, tmp_path,
+    def test_find_opa_platform_specific_filenames(self, mocker, tmp_path,
                                                    platform_config):
         """Tests that find_opa looks for platform-specific executable names."""
 
@@ -338,8 +302,8 @@ class TestRunRego:
         expected_filenames = platform_config['expected']
 
         # Mock platform
-        monkeypatch.setattr('platform.system', lambda: os_type)
-        monkeypatch.setattr('platform.machine', lambda: machine)
+        mocker.patch('platform.system', return_value=os_type)
+        mocker.patch('platform.machine', return_value=machine)
 
         # Track which filenames were searched
         searched_files = []
@@ -348,7 +312,7 @@ class TestRunRego:
             searched_files.append(path_self.name)
             return False
 
-        monkeypatch.setattr(Path, 'exists', mock_exists)
+        mocker.patch.object(Path, 'exists', mock_exists)
 
         # Expect FileNotFoundError since no file exists
         with pytest.raises(FileNotFoundError):
