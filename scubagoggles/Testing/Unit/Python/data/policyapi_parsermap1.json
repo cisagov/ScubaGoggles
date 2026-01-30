@@ -1,0 +1,17 @@
+{
+  "comment": "successful test of Policy API parser map",
+  "expected_settings": {
+    "gmail_spam_override_lists": {"parser": "GmailRulesParser",
+                                  "settings": {"spamOverride": "isListDict"}}
+  },
+  "policies": {
+    "topOU": {
+      "gmail_service_status": {
+        "serviceState": "ENABLED"
+      }
+    }
+  },
+  "results": {
+  "gmail_spam_override_lists": "GmailRulesParser"
+  }
+}

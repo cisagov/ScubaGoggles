@@ -1,0 +1,141 @@
+{
+  "comment": "successful test of _gmail_address_lists() in PolicyAPI",
+  "orgunits": {
+    "03ph8a2z2dvk5ts": {
+      "name": "topOU",
+      "path": "/"
+    }
+  },
+  "policies": {
+    "topOU": {
+      "gmail_email_address_lists": {
+        "emailAddressList": [
+          {
+            "id": "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll",
+            "name": "Scuba",
+            "addressList": {
+              "address": [
+                {
+                  "address": "cisaent.onmicrosoft.com",
+                  "requireAddressVerification": true
+                },
+                {
+                  "address": "scubagws.org",
+                  "requireAddressVerification": true
+                },
+                {
+                  "address": "spam@example.com",
+                  "requireAddressVerification": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te",
+            "name": "Blocked Senders",
+            "blockedAddressList": {
+              "address": [
+                {
+                  "address": "functionaltest@joe.com"
+                },
+                {
+                  "address": "support@3232363.ohtam8c.com"
+                }
+              ]
+            }
+          },
+          {
+            "id": "fb61c-02rvqlb30hfhzs9:00gjdgxs1t3h5sf",
+            "name": "Testing",
+            "blockedAddressList": {
+              "address": [
+                {
+                  "address": "info@test.org"
+                }
+              ]
+            }
+          },
+          {
+            "id": "059a0-02rvqlb30hfhzs9:00gjdgxs4d34og8",
+            "name": "Example",
+            "addressList": {
+              "address": [
+                {
+                  "address": "spam@example.com",
+                  "requireAddressVerification": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1",
+            "name": "MyTestList",
+            "addressList": {
+              "address": [
+                {
+                  "address": "test.com",
+                  "requireAddressVerification": true
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "gmail_rule_states": {
+        "ruleStates": [
+          {
+            "ruleId": "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll",
+            "enabled": true
+          },
+          {
+            "ruleId": "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te",
+            "enabled": true
+          },
+          {
+            "ruleId": "fb61c-02rvqlb30hfhzs9:00gjdgxs1t3h5sf",
+            "enabled": false
+          },
+          {
+            "ruleId": "059a0-02rvqlb30hfhzs9:00gjdgxs4d34og8",
+            "enabled": true
+          },
+          {
+            "ruleId": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1",
+            "enabled": false
+          }
+        ]
+      }
+    }
+  },
+  "results": {
+    "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll": {
+      "name": "Scuba",
+      "list": [
+        "cisaent.onmicrosoft.com",
+        "scubagws.org",
+        "spam@example.com"
+      ]
+    },
+    "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te": {
+      "name": "Blocked Senders",
+      "list": [
+        "functionaltest@joe.com",
+        "support@3232363.ohtam8c.com"
+      ]
+    },
+    "fb61c-02rvqlb30hfhzs9:00gjdgxs1t3h5sf": {
+      "name": "Testing",
+      "list": []
+    },
+    "059a0-02rvqlb30hfhzs9:00gjdgxs4d34og8": {
+      "name": "Example",
+      "list": [
+        "spam@example.com"
+      ]
+    },
+    "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1": {
+      "name": "MyTestList",
+      "list": []
+    }
+  }
+}
