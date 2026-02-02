@@ -1,0 +1,134 @@
+{
+  "comment": "apply Google Policy API default values to empty top OU",
+  "defaults": {
+    "calendar_external_invitations": {"warnOnInvite": true},
+    "chat_chat_history": {"allowUserModification": true,
+                          "historyOnByDefault": false},
+    "chat_external_chat_restriction": {
+      "allowExternalChat": false,
+      "externalChatRestriction": "NO_RESTRICTION"},
+    "drive_and_docs_drive_sdk": {"enableDriveSdkApiAccess": true},
+    "drive_and_docs_external_sharing": {
+      "accessCheckerSuggestions": "RECIPIENTS_OR_AUDIENCE_OR_PUBLIC",
+      "allowNonGoogleInvites": true,
+      "allowNonGoogleInvitesInAllowlistedDomains": false,
+      "allowPublishingFiles": true,
+      "allowReceivingExternalFiles": true,
+      "allowReceivingFilesOutsideAllowlistedDomains": true,
+      "allowedPartiesForDistributingContent": "ALL_ELIGIBLE_USERS",
+      "externalSharingMode": "ALLOWED",
+      "warnForExternalSharing": true,
+      "warnForSharingOutsideAllowlistedDomains": true},
+    "drive_and_docs_general_access_default": {
+      "defaultFileAccess": "LINK_SHARING_PRIVATE"},
+    "gmail_workspace_sync_for_outlook": {
+      "enableGoogleWorkspaceSyncForMicrosoftOutlook": true},
+    "gmail_email_spam_filter_ip_allowlist": {
+      "allowedIpAddresses": []},
+    "gmail_links_and_external_images": {
+      "applyFutureSettingsAutomatically": true,
+      "enableAggressiveWarningsOnUntrustedLinks": false},
+    "gmail_spoofing_and_authentication": {
+      "applyFutureSettingsAutomatically": true},
+    "groups_for_business_groups_sharing": {
+      "collaborationCapability": "DOMAIN_USERS_ONLY",
+      "createGroupsAccessLevel": "USERS_IN_DOMAIN",
+      "newGroupsAreHidden": false,
+      "ownersCanAllowExternalMembers": false,
+      "ownersCanAllowIncomingMailFromPublic": true,
+      "ownersCanHideGroups": false,
+      "viewTopicsDefaultAccessLevel": "DOMAIN_USERS"},
+    "security_less_secure_apps": {"allowLessSecureApps": false},
+    "security_super_admin_account_recovery": {
+      "enableAccountRecovery": false},
+    "security_user_account_recovery": {"enableAccountRecovery": false},
+    "workspace_marketplace_apps_access_options": {
+      "accessLevel": "ALLOW_ALL",
+      "allowAllInternalApps": false}
+    },
+  "service_status": [
+    "chat",
+    "drive_and_docs",
+    "gmail"
+  ],
+  "policies": {
+    "topOU": {}
+  },
+  "results": {
+    "topOU": {
+      "chat_service_status": {
+        "serviceState": "DISABLED"
+      },
+      "drive_and_docs_service_status": {
+        "serviceState": "DISABLED"
+      },
+      "gmail_service_status": {
+        "serviceState": "DISABLED"
+      },
+      "calendar_external_invitations": {
+        "warnOnInvite": true
+      },
+      "chat_chat_history": {
+        "allowUserModification": true,
+        "historyOnByDefault": false
+      },
+      "chat_external_chat_restriction": {
+        "allowExternalChat": false,
+        "externalChatRestriction": "NO_RESTRICTION"
+      },
+      "drive_and_docs_drive_sdk": {
+        "enableDriveSdkApiAccess": true
+      },
+      "drive_and_docs_external_sharing": {
+        "accessCheckerSuggestions": "RECIPIENTS_OR_AUDIENCE_OR_PUBLIC",
+        "allowNonGoogleInvites": true,
+        "allowNonGoogleInvitesInAllowlistedDomains": false,
+        "allowPublishingFiles": true,
+        "allowReceivingExternalFiles": true,
+        "allowReceivingFilesOutsideAllowlistedDomains": true,
+        "allowedPartiesForDistributingContent": "ALL_ELIGIBLE_USERS",
+        "externalSharingMode": "ALLOWED",
+        "warnForExternalSharing": true,
+        "warnForSharingOutsideAllowlistedDomains": true
+      },
+      "drive_and_docs_general_access_default": {
+        "defaultFileAccess": "LINK_SHARING_PRIVATE"
+      },
+      "gmail_workspace_sync_for_outlook": {
+        "enableGoogleWorkspaceSyncForMicrosoftOutlook": true
+      },
+      "gmail_email_spam_filter_ip_allowlist": {
+        "allowedIpAddresses": []
+      },
+      "gmail_links_and_external_images": {
+        "applyFutureSettingsAutomatically": true,
+        "enableAggressiveWarningsOnUntrustedLinks": false
+      },
+      "gmail_spoofing_and_authentication": {
+        "applyFutureSettingsAutomatically": true
+      },
+      "groups_for_business_groups_sharing": {
+        "collaborationCapability": "DOMAIN_USERS_ONLY",
+        "createGroupsAccessLevel": "USERS_IN_DOMAIN",
+        "newGroupsAreHidden": false,
+        "ownersCanAllowExternalMembers": false,
+        "ownersCanAllowIncomingMailFromPublic": true,
+        "ownersCanHideGroups": false,
+        "viewTopicsDefaultAccessLevel": "DOMAIN_USERS"
+      },
+      "security_less_secure_apps": {
+        "allowLessSecureApps": false
+      },
+      "security_super_admin_account_recovery": {
+        "enableAccountRecovery": false
+      },
+      "security_user_account_recovery": {
+        "enableAccountRecovery": false
+      },
+      "workspace_marketplace_apps_access_options": {
+        "accessLevel": "ALLOW_ALL",
+        "allowAllInternalApps": false
+      }
+    }
+  }
+}

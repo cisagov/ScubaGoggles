@@ -1,0 +1,99 @@
+{
+  "comment": "successful Policy API verification (includes non-verified values)",
+  "policies": {
+    "topOU": {
+      "classroom_service_status": {
+        "serviceState": "bad value"
+      },
+      "notebooklm_service_status": {
+        "serviceState": "untracked setting"
+      },
+      "drive_and_docs_external_sharing": {
+        "externalSharingMode": "not an enum",
+        "allowReceivingExternalFiles": 1,
+        "warnForSharingOutsideAllowlistedDomains": true,
+        "allowReceivingFilesOutsideAllowlistedDomains": true,
+        "allowNonGoogleInvitesInAllowlistedDomains": true,
+        "warnForExternalSharing": "true",
+        "allowNonGoogleInvites": false,
+        "allowPublishingFiles": true,
+        "accessCheckerSuggestions": "RECIPIENTS_ONLY",
+        "allowedPartiesForDistributingContent": "ALL_ELIGIBLE_USERS"
+      },
+      "security_two_step_verification_enforcement": {
+        "enforcedFrom": "20253-02-04T11:11:28.346Z"
+      },
+      "gmail_email_spam_filter_ip_allowlist": {
+        "allowedIpAddresses": [
+            "8.8.8.8/24",
+            100
+        ]
+      },
+      "security_password": {
+        "allowedStrength": 3,
+        "maximumLength": 100,
+        "enforceRequirementsAtLogin": true,
+        "allowReuse": false,
+        "expirationDuration": "20d"
+      }
+    }
+  },
+  "expected_settings": {
+    "calendar_service_status": {
+      "settings": {
+        "serviceState": "isState"
+      }
+    },
+    "classroom_service_status": {
+      "settings": {
+        "serviceState": "isState"
+      }
+    },
+    "drive_and_docs_external_sharing": {
+      "settings": {
+        "accessCheckerSuggestions": "isEnum",
+        "allowNonGoogleInvites": "isBool",
+        "allowNonGoogleInvitesInAllowlistedDomains": "isBool",
+        "allowPublishingFiles": "isBool",
+        "allowReceivingExternalFiles": "isBool",
+        "allowReceivingFilesOutsideAllowlistedDomains": "isBool",
+        "allowedPartiesForDistributingContent": "isEnum",
+        "externalSharingMode": "isEnum",
+        "warnForExternalSharing": "isBool",
+        "warnForSharingOutsideAllowlistedDomains": "isBool"
+      }
+    },
+    "security_password": {
+      "settings": {
+        "allowedStrength": "isEnum",
+        "allowReuse": "isBool",
+        "enforceRequirementsAtLogin": "isBool",
+        "expirationDuration": "isDuration",
+        "maximumLength": "isInt",
+        "minimumLength": "isInt"
+      }
+    },
+    "security_two_step_verification_enforcement": {
+      "settings": {
+        "enforcedFrom": "isTimestamp"
+      }
+    },
+    "gmail_email_spam_filter_ip_allowlist": {
+      "settings": {
+        "allowedIpAddresses": "isListStrings"
+      }
+    }
+  },
+  "results": [
+    "calendar_service_status.serviceState",
+    "classroom_service_status.serviceState",
+    "drive_and_docs_external_sharing.allowReceivingExternalFiles",
+    "drive_and_docs_external_sharing.externalSharingMode",
+    "drive_and_docs_external_sharing.warnForExternalSharing",
+    "gmail_email_spam_filter_ip_allowlist.allowedIpAddresses",
+    "security_two_step_verification_enforcement.enforcedFrom",
+    "security_password.allowedStrength",
+    "security_password.expirationDuration",
+    "security_password.minimumLength"
+  ]
+}

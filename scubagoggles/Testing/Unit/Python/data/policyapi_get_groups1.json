@@ -1,0 +1,24 @@
+{
+  "comment": "tests construction of group_id_map in PolicyAPI",
+  "response": {
+    "groups": [
+      {
+        "id": "00gjdgxs0jy4ar3",
+        "name": "Security Group"
+      },
+      {
+        "id": "02u6wntf4co42dm",
+        "name": "Secret Group"
+      },
+      {
+        "id": "03mzq4wv2ss2jml",
+        "name": "test-alias-domains-are-added-to-group-info"
+      }
+    ]
+  },
+  "results": {
+      "00gjdgxs0jy4ar3": "Security Group",
+      "02u6wntf4co42dm": "Secret Group",
+      "03mzq4wv2ss2jml": "test-alias-domains-are-added-to-group-info"
+  }
+}

@@ -237,10 +237,9 @@ To configure the settings for Sharing options:
 2.  Select **When users in your organization create items, the default access will be -\> Private to the owner.**
 
 #### GWS.DRIVEDOCS.1.9v0.6 Instructions
-1.  Select **Sharing settings -\> Sharing options**
-2.  Select **Highlight external files**
-3.  Check the **Highlight external Files** box to turn on the indicator.
-4.  Select **Save**.
+1.  Select **Sharing settings -\> Highlight External Files**.
+2.  Check the **Mark files shared or owned externally as "external" to indicate that content may be viewable outside your organization. Applies to Drive, Docs, Sheets, Slides, Drawings, and Vids.** box to turn on the indicator.
+3.  Select **Save**.
 
 #### GWS.DRIVEDOCS.1.10v0.6 Instructions
 1.  Select **Sharing settings -\> Sharing options**
