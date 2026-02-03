@@ -20,6 +20,7 @@
     --toggle-radius: 18px;
     --unvisited-link-color: #0000EE;
     --uuid-color: #424242;
+    font-family: Arial, Helvetica, sans-serif
 }
 
 html[data-theme='dark'] {
@@ -40,6 +41,7 @@ html[data-theme='dark'] {
     --text-color: #bdbdbd;
     --uuid-color: #999999;
     --border-color: #7b7b7b;
+    font-family: Arial, Helvetica, sans-serif
 }
 
 html { overflow-x: hidden; }
@@ -79,7 +81,6 @@ button.show-more {
 table {
     margin: auto;
     font-size: 12px;
-    font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 1000px;
 }
@@ -92,7 +93,6 @@ table {
 
 h3 {
     text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
     color: var(--header-color);
 }
 
@@ -100,7 +100,6 @@ h4 {
     text-align: center;
     justify-content: start;
     font-size: 10px;
-    font-family: Arial, Helvetica, sans-serif;
     color: var(--note-color);
     margin-left:20%;
     margin-right: 20%;
@@ -165,7 +164,6 @@ main {
 
 h1 {
     text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
     color: var(--header-color);
     margin-top: 10px;
     margin-bottom: 20px;
@@ -173,7 +171,6 @@ h1 {
 
 h2 {
     text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
     color: var(--header-color);
     font-size: 16px;
     margin-top: 50px;
@@ -189,24 +186,20 @@ img {
 }
 
 a.control_group:link {
-    font-family: Arial, Helvetica, sans-serif;
     color: var(--unvisited-link-color);
     text-decoration: underline;
 }
 
 a.control_group:visited {
-    font-family: Arial, Helvetica, sans-serif;
     color: var(--link-color);
 }
 
 a.control_group:hover {
-    font-family: Arial, Helvetica, sans-serif;
     color: var(--link-color);
     text-decoration: none;
 }
 
 a.control_group:active {
-    font-family: Arial, Helvetica, sans-serif;
     color: var(--link-color);
     text-decoration: none;
 }
@@ -217,7 +210,6 @@ hr {
 }
 
 p {
-    font-family: Arial, Helvetica, sans-serif;
     max-width: 50%;
     text-align: center;
     margin: auto;
@@ -235,7 +227,6 @@ p {
 #toggle-text {
     color: #000000;
     margin: 0.313em 3.125em;
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.875em;
     padding-bottom: 2px;
 }
