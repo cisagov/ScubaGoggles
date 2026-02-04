@@ -504,6 +504,10 @@ class Orchestrator:
         with report_file.open('w', encoding='utf-8') as results_file:
             json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
 
+        # Lighthouse Config
+        lighthouserc_json = './lighthouserc.json'
+        shutil.copy(lighthouserc_json, out_folder)
+
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
         scuba_results_file.unlink()
