@@ -173,7 +173,7 @@ jobs:
         run: |
           ls -al
           npm install -g @lhci/cli@0.15.x
-          lhci autorun --config=/home/runner/scubagoggles/lighthouserc.json --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
+          lhci autorun --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
