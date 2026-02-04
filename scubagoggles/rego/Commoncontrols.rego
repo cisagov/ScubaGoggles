@@ -163,7 +163,7 @@ if {
     enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
     enforceMethod != "PASSKEY_ONLY"
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true 
+    Is2SVEnforced(enforce2SV) == true
 }
 
 NonCompliantOUs1_1 contains {
@@ -302,7 +302,7 @@ if {
     enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
     enforceMethod == "ALL"
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true 
+    Is2SVEnforced(enforce2SV) == true
 }
 
 NonCompliantOUs1_3 contains {
@@ -399,7 +399,7 @@ if {
                                           OU)
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true 
+    Is2SVEnforced(enforce2SV) == true
 }
 
 NonCompliantOUs1_4 contains {
@@ -462,7 +462,7 @@ if {
     trustDevice := settings.security_two_step_verification_device_trust.allowTrustingDevice
     trustDevice
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true 
+    Is2SVEnforced(enforce2SV) == true
 }
 
 NonCompliantOUs1_5 contains {
@@ -1866,84 +1866,75 @@ tests contains {
 
 CommonControlsId15_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.15.1")
 
+NonComplianceMessage15_1(value) := sprintf("Region selected to store data at rest: %s",
+                                          [value])
+
+GetFriendlyValue15_1(Value) := "unspecified" if {
+    Value == "REGION_UNSPECIFIED"
+} else := "unrestricted (any region)" if {
+    Value == "ANY_REGION"
+} else := "United States only" if {
+    Value == "US"
+} else := "Europe only" if {
+    Value == "EUROPE"
+} else := Value
+
+NonCompliantOUs15_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage15_1(GetFriendlyValue15_1(region))
+}
+if {
+    some OU, settings in input.policies
+    region := settings.data_regions_data_at_rest_region.region
+    region != "US"
+}
+
 tests contains {
     "PolicyId": CommonControlsId15_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "Prerequisites": ["policy/data_regions_data_at_rest_region.region"],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs15_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
 }
+if {
+    Status := count(NonCompliantOUs15_1) == 0
+}
+
 #--
 
 #
 # Baseline GWS.COMMONCONTROLS.15.2
 #--
+
 CommonControlsId15_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.15.2")
+
+NonComplianceMessage15_2 :=
+    "Data processing not restricted to selected data at rest region"
 
 NonCompliantOUs15_2 contains {
     "Name": OU,
-    "Value": "Data processing in the region selected for data at rest is set to OFF"
-} if {
-    some OU in utils.OUsWithEvents
-    SettingName := "DataProcessingRequirementsProto limit_to_storage_location"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "true"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
-
-NonCompliantGroups15_2 contains {
-    "Name": Group,
-    "Value": "Data processing in the region selected for data at rest is set to OFF"
-} if {
-    some Group in utils.GroupsWithEvents
-    SettingName := "DataProcessingRequirementsProto limit_to_storage_location"
-    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
-    # Ignore groups without any events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "true"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-}
-
-tests contains {
-    "PolicyId": CommonControlsId15_2,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
+    "Value": NonComplianceMessage15_2
 }
 if {
-    DefaultSafe := false
-    SettingName := "DataProcessingRequirementsProto limit_to_storage_location"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
+    some OU, settings in input.policies
+    limit := settings.data_regions_data_processing_region.limitToStorageRegion
+    limit != true
 }
 
 tests contains {
     "PolicyId": CommonControlsId15_2,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs15_2, NonCompliantGroups15_2),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_2, "NonCompliantGroups": NonCompliantGroups15_2},
+    "Prerequisites": [
+        "policy/data_regions_data_processing_region.limitToStorageRegion"],
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs15_2, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_2},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    SettingName := "DataProcessingRequirementsProto limit_to_storage_location"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) > 0
-
-    Conditions := {
-        count(NonCompliantOUs15_2) == 0,
-        count(NonCompliantGroups15_2) == 0
-    }
-    Status := (false in Conditions) == false
+    Status := count(NonCompliantOUs15_2) == 0
 }
 #--
 
