@@ -88,9 +88,11 @@ class TestUserConfig:
         config = UserConfig(config_file=str(new_config_path))
         assert config.file_exists is False
 
-        # Set some values
-        config.output_dir = '/custom/output'
-        config.credentials_file = '/path/to/creds.json'
+        # Set some values using Path for cross-platform compatibility
+        custom_output = temp_dir / 'custom' / 'output'
+        creds_file = temp_dir / 'path' / 'to' / 'creds.json'
+        config.output_dir = str(custom_output)
+        config.credentials_file = str(creds_file)
 
         # Write the config
         config.write()
@@ -102,8 +104,8 @@ class TestUserConfig:
         # Verify the content can be read back
         new_config = UserConfig(config_file=str(new_config_path))
         assert new_config.file_exists is True
-        assert str(new_config.output_dir) == '/custom/output'
-        assert str(new_config.credentials_file) == '/path/to/creds.json'
+        assert new_config.output_dir == custom_output
+        assert new_config.credentials_file == creds_file
 
     def test_validate_raises_key_error(self, invalid_config_file, mocker):
         """Test that _validate raises KeyError for invalid configuration keys."""
