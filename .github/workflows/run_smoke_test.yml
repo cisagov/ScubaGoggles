@@ -163,8 +163,6 @@ jobs:
           path: |
             /home/runner/scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.baselinepath.outputs.cachepath }}
-        run: |
-          ls
 
       - name: Use Node.js 20.x
         uses: actions/setup-node@v3
