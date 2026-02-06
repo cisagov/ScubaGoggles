@@ -339,6 +339,7 @@ class Orchestrator:
         return (f'{pass_summary}{warning_summary}{failure_summary}'
                 f'{manual_summary}{omit_summary}{incorrect_summary}{error_summary}')
 
+    # pylint: disable=too-many-branches
     def _run_reporter(self):
         """
         Creates the individual reports and the front page
