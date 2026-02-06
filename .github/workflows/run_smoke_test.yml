@@ -157,6 +157,12 @@ jobs:
       contents: write
     if: ${{ always() }}
     steps:
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
       - name: Restore cached baseline folder
         uses: actions/cache/restore@v4
         with:
@@ -164,16 +170,14 @@ jobs:
             /home/runner/scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.baselinepath.outputs.cachepath }}
 
-      - name: Use Node.js 20.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
-
       - name: Run Lighthouse CI
         run: |
+          echo "ls ./runner"
           ls ./runner
+          echo "ls /home/runner/scubagoggles:"
+          ls /home/runner/scubagoggles
           npm install -g @lhci/cli@0.15.x
-          lhci autorun --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}" --assert.categories.accessibility=error
+          lhci autorun --config=/home/runner/scubagoggles/**/lighthouserc.json --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}" --assert.categories.accessibility=error
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
