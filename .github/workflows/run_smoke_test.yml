@@ -172,8 +172,8 @@ jobs:
 
       - name: Run Lighthouse CI
         run: |
-          echo "ls ./runner"
-          ls ./runner
+          echo "ls "
+          ls
           echo "ls /home/runner/scubagoggles:"
           ls /home/runner/scubagoggles
           npm install -g @lhci/cli@0.15.x
