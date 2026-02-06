@@ -504,7 +504,7 @@ class Orchestrator:
         with report_file.open('w', encoding='utf-8') as results_file:
             json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
 
-
+        # Check for Test Run
         if args.reportredaction == 'true':
             # Lighthouse Config
             lighthouserc_json = './lighthouserc.json'
