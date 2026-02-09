@@ -19,7 +19,7 @@ GeminiEnabled(orgunit) := utils.AppEnabled(input.policies, "gemini_app", orgunit
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceSetting1_1
+    "Value": NonComplianceMessage1_1
 } if {
     some OU in utils.OUsWithEvents
     GeminiEnabled(OU)
@@ -90,7 +90,7 @@ NonComplianceMessage2_1 := "Alpha Gemini features are enabled."
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": NonComplianceSetting2_1
+    "Value": NonComplianceMessage2_1
 } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting2_1, OU)
