@@ -1,0 +1,4 @@
+scubagoggles:
+  opa_dir: ~/.scubagoggles
+  output_dir: ./output
+  credentials: /path/to/credentials.json
