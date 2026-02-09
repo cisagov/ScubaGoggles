@@ -1,3 +1,6 @@
+"""
+test_purger.py tests the Purge class.
+"""
 import argparse
 import time
 from pathlib import Path
@@ -5,9 +8,11 @@ import pytest
 from scubagoggles.purge import purge_reports
 
 class TestPurge:
+    """Unit tests for the Purge class."""
 
     @pytest.fixture
     def mock_args(self, mocker):
+        """Fixture for mock arguments output_dir, keep, and expire."""
         args = argparse.Namespace()
         args.user_config = mocker.MagicMock()
         args.user_config.output_dir = Path("/mock/output")
