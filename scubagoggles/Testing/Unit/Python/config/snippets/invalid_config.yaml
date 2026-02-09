@@ -1,0 +1,4 @@
+scubagoggles:
+  opa_dir: ~/.scubagoggles
+  invalid_key: some_value
+  output_dir: ./output
