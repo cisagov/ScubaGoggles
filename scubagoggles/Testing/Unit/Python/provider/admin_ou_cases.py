@@ -5,6 +5,7 @@ Parametrized test case data for admin/OU Provider methods.
 from google.auth.exceptions import RefreshError
 
 GET_SUPER_ADMIN_CASES = [
+    # Multiple super admins returned
     {
         "user_list": [
             {
@@ -28,6 +29,33 @@ GET_SUPER_ADMIN_CASES = [
                     "orgUnitPath": "Sub-OU",
                 }
             ]
+        },
+        "expect_success_call": True,
+    },
+    # API raises generic exception
+    {
+        "user_list": None,
+        "get_list_raises": Exception("API error"),
+        "expected": {
+            "super_admins": []
+        },
+        "expect_success_call": False,
+    },
+    # API raises RefreshError
+    {
+        "user_list": None,
+        "get_list_raises": RefreshError("access_denied: Requested client not authorized"),
+        "expected": {
+            "super_admins": []
+        },
+        "expect_success_call": False,
+    },
+    # Empty user list returned
+    {
+        "user_list": [],
+        "get_list_raises": None,
+        "expected": {
+            "super_admins": []
         },
         "expect_success_call": True,
     },
