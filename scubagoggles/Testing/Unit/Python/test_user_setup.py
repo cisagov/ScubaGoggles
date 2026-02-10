@@ -18,51 +18,59 @@ from scubagoggles.user_setup import (
 
 
 class TestUserSetup:
-    """Test class for the user_setup.py module functions."""
+
+    """Test class for the user_setup.py module functions.
+    """
 
     @pytest.fixture
     def temp_dir(self, tmp_path):
-        """Fixture providing a temporary directory for test files."""
+
+        """Fixture providing a temporary directory for test files.
+        """
+
         return tmp_path
 
     @pytest.fixture
     def mock_user_config(self, mocker, tmp_path):
-        """Fixture providing a mock UserConfig object."""
+
+        """Fixture providing a mock UserConfig object.
+        """
+
         config = mocker.Mock()
-        config.output_dir = tmp_path / "output"
-        config.opa_dir = tmp_path / "opa"
         config.credentials_file = None
         config.file_exists = False
+        config.opa_dir = tmp_path / 'opa'
+        config.output_dir = tmp_path / 'output'
         config.write = mocker.Mock()
         return config
 
     @pytest.fixture
     def mock_arguments(self, mocker, mock_user_config):
-        """Fixture providing mock arguments namespace."""
+
+        """Fixture providing mock arguments namespace.
+        """
+
         args = mocker.Mock(spec=argparse.Namespace)
-        args.user_config = mock_user_config
-        args.outputpath = None
-        args.opapath = None
         args.credentials = None
         args.nocheck = False
         args.nodownload = False
+        args.opapath = None
+        args.outputpath = None
+        args.user_config = mock_user_config
         return args
 
     def test_user_setup(self, mock_arguments, mocker, capsys):
-        """Test the main user_setup function."""
+
+        """Test the main user_setup function.
+        """
+
         # Mock the sub-functions to isolate user_setup behavior
-        mock_user_dir = mocker.patch(
-            'scubagoggles.user_setup.user_directory',
-            return_value=True
-        )
-        mock_opa_dir = mocker.patch(
-            'scubagoggles.user_setup.opa_directory',
-            return_value=False
-        )
-        mock_creds = mocker.patch(
-            'scubagoggles.user_setup.credentials_file',
-            return_value=False
-        )
+        mock_user_dir = mocker.patch('scubagoggles.user_setup.user_directory',
+                                     return_value=True)
+        mock_opa_dir = mocker.patch('scubagoggles.user_setup.opa_directory',
+                                    return_value=False)
+        mock_creds = mocker.patch('scubagoggles.user_setup.credentials_file',
+                                  return_value=False)
 
         user_setup(mock_arguments)
 
@@ -76,10 +84,13 @@ class TestUserSetup:
 
         # Verify output was printed
         captured = capsys.readouterr()
-        assert "Configured default locations:" in captured.out
+        assert 'Configured default locations:' in captured.out
 
     def test_user_setup_no_modifications(self, mock_arguments, mocker):
-        """Test user_setup when no modifications are made."""
+
+        """Test user_setup when no modifications are made.
+        """
+
         mocker.patch('scubagoggles.user_setup.user_directory', return_value=False)
         mocker.patch('scubagoggles.user_setup.opa_directory', return_value=False)
         mocker.patch('scubagoggles.user_setup.credentials_file', return_value=False)
@@ -90,23 +101,28 @@ class TestUserSetup:
         mock_arguments.user_config.write.assert_not_called()
 
     def test_user_directory(self, mock_arguments, temp_dir):
-        """Test the user_directory function."""
+
+        """Test the user_directory function.
+        """
+
         # Test when outputpath is not specified
-        mock_arguments.outputpath = None
         result = user_directory(mock_arguments)
         assert result is False
 
         # Test when outputpath is specified and directory exists
-        output_path = temp_dir / "test_output"
+        output_path = temp_dir / 'test_output'
         output_path.mkdir()
         mock_arguments.outputpath = output_path
         result = user_directory(mock_arguments)
         assert result is True
-        assert mock_arguments.user_config.output_dir == output_path.resolve()
+        assert mock_arguments.user_config.output_dir.samefile(output_path)
 
     def test_user_directory_creates_dir(self, mock_arguments, temp_dir):
-        """Test that user_directory creates directory if it doesn't exist."""
-        new_output_path = temp_dir / "new_output"
+
+        """Test that user_directory creates directory if it doesn't exist.
+        """
+
+        new_output_path = temp_dir / 'new_output'
         mock_arguments.outputpath = new_output_path
         mock_arguments.nocheck = False
 
@@ -117,10 +133,13 @@ class TestUserSetup:
         assert new_output_path.exists()
 
     def test_user_directory_raises_not_a_directory(self, mock_arguments, temp_dir):
-        """Test that user_directory raises error when path is not a directory."""
+
+        """Test that user_directory raises error when path is not a directory.
+        """
+
         # Create a file instead of directory
-        file_path = temp_dir / "not_a_dir"
-        file_path.write_text("test")
+        file_path = temp_dir / 'not_a_dir'
+        file_path.write_text('test')
         mock_arguments.outputpath = file_path
         mock_arguments.nocheck = False
 
@@ -128,28 +147,32 @@ class TestUserSetup:
             user_directory(mock_arguments)
 
     def test_create_dir_download_opa(self, temp_dir, mocker):
-        """Test the create_dir_download_opa function."""
+
+        """Test the create_dir_download_opa function.
+        """
+
         # Mock download_opa and opa_filespec to avoid actual downloads
         mocker.patch('scubagoggles.user_setup.download_opa')
-        mocker.patch(
-            'scubagoggles.user_setup.opa_filespec',
-            return_value=temp_dir / "opa_executable"
-        )
+        mocker.patch('scubagoggles.user_setup.opa_filespec',
+                     return_value=temp_dir / 'opa_executable')
 
         # Test creating directory when it doesn't exist
-        opa_dir = temp_dir / "opa_dir"
+        opa_dir = temp_dir / 'opa_dir'
         assert not opa_dir.exists()
 
         create_dir_download_opa(opa_dir, create_dir=True, download=False)
         assert opa_dir.exists()
 
     def test_create_dir_download_opa_downloads(self, temp_dir, mocker):
-        """Test that create_dir_download_opa downloads OPA when needed."""
-        opa_dir = temp_dir / "opa_dir"
+
+        """Test that create_dir_download_opa downloads OPA when needed.
+        """
+
+        opa_dir = temp_dir / 'opa_dir'
         opa_dir.mkdir()
 
         # Mock opa_filespec to return a non-existent file
-        opa_exe = opa_dir / "opa_executable"
+        opa_exe = opa_dir / 'opa_executable'
         mocker.patch('scubagoggles.user_setup.opa_filespec', return_value=opa_exe)
         mock_download = mocker.patch('scubagoggles.user_setup.download_opa')
 
@@ -159,13 +182,16 @@ class TestUserSetup:
         mock_download.assert_called_once_with(opa_dir, verify=True)
 
     def test_create_dir_download_opa_skips_download_if_exists(self, temp_dir, mocker):
-        """Test that create_dir_download_opa skips download if OPA exists."""
-        opa_dir = temp_dir / "opa_dir"
+
+        """Test that create_dir_download_opa skips download if OPA exists.
+        """
+
+        opa_dir = temp_dir / 'opa_dir'
         opa_dir.mkdir()
 
         # Create a mock OPA executable file
-        opa_exe = opa_dir / "opa_executable"
-        opa_exe.write_text("mock opa")
+        opa_exe = opa_dir / 'opa_executable'
+        opa_exe.write_text('mock opa')
         mocker.patch('scubagoggles.user_setup.opa_filespec', return_value=opa_exe)
         mock_download = mocker.patch('scubagoggles.user_setup.download_opa')
 
@@ -175,67 +201,85 @@ class TestUserSetup:
         mock_download.assert_not_called()
 
     def test_create_dir_download_opa_raises_not_a_directory(self, temp_dir):
-        """Test that create_dir_download_opa raises error for non-directory."""
+
+        """Test that create_dir_download_opa raises error for non-directory.
+        """
+
         # Create a file instead of directory
-        file_path = temp_dir / "not_a_dir"
-        file_path.write_text("test")
+        file_path = temp_dir / 'not_a_dir'
+        file_path.write_text('test')
 
         with pytest.raises(NotADirectoryError):
             create_dir_download_opa(file_path, create_dir=True, download=False)
 
     def test_validate_opa_dir(self, temp_dir, mocker):
-        """Test the validate_opa_dir function."""
+
+        """Test the validate_opa_dir function.
+        """
+
         # Mock find_opa to return a valid path
-        opa_exe = temp_dir / "opa"
+        opa_exe = temp_dir / 'opa'
         mocker.patch('scubagoggles.user_setup.find_opa', return_value=opa_exe)
 
         result = validate_opa_dir(temp_dir)
         assert result is True
 
     def test_validate_opa_dir_not_found(self, temp_dir, mocker):
-        """Test validate_opa_dir when OPA is not found."""
-        mocker.patch(
-            'scubagoggles.user_setup.find_opa',
-            side_effect=FileNotFoundError("OPA not found")
-        )
+
+        """Test validate_opa_dir when OPA is not found.
+        """
+
+        mocker.patch('scubagoggles.user_setup.find_opa',
+                     side_effect=FileNotFoundError('OPA not found'))
 
         result = validate_opa_dir(temp_dir)
         assert result is False
 
     def test_validate_opa_dir_path_is_file(self, temp_dir):
-        """Test validate_opa_dir when path is a file, not directory."""
-        file_path = temp_dir / "not_a_dir"
-        file_path.write_text("test")
+
+        """Test validate_opa_dir when path is a file, not directory.
+        """
+
+        file_path = temp_dir / 'not_a_dir'
+        file_path.write_text('test')
 
         result = validate_opa_dir(file_path)
         assert result is False
 
     def test_validate_opa_dir_no_path(self, mocker):
-        """Test validate_opa_dir with no path (searches PATH)."""
+
+        """Test validate_opa_dir with no path (searches PATH).
+        """
+
         mocker.patch('scubagoggles.user_setup.find_opa', return_value=None)
 
         result = validate_opa_dir()
         assert result is False
 
     def test_credentials_file(self, mock_arguments, temp_dir):
-        """Test the credentials_file function."""
+
+        """Test the credentials_file function.
+        """
+
         # Test when credentials is not specified
-        mock_arguments.credentials = None
         result = credentials_file(mock_arguments)
         assert result is False
 
         # Test when credentials is specified and file exists
-        creds_path = temp_dir / "credentials.json"
+        creds_path = temp_dir / 'credentials.json'
         creds_path.write_text('{"test": "credentials"}')
         mock_arguments.credentials = creds_path
 
         result = credentials_file(mock_arguments)
         assert result is True
-        assert mock_arguments.user_config.credentials_file == creds_path.resolve()
+        assert mock_arguments.user_config.credentials_file.samefile(creds_path)
 
     def test_credentials_file_not_found(self, mock_arguments, temp_dir):
-        """Test credentials_file raises error when file doesn't exist."""
-        non_existent = temp_dir / "non_existent.json"
+
+        """Test credentials_file raises error when file doesn't exist.
+        """
+
+        non_existent = temp_dir / 'non_existent.json'
         mock_arguments.credentials = non_existent
         mock_arguments.nocheck = False
 
@@ -243,8 +287,11 @@ class TestUserSetup:
             credentials_file(mock_arguments)
 
     def test_credentials_file_nocheck(self, mock_arguments, temp_dir):
-        """Test credentials_file with nocheck=True skips file validation."""
-        non_existent = temp_dir / "non_existent.json"
+
+        """Test credentials_file with nocheck=True skips file validation.
+        """
+
+        non_existent = temp_dir / 'non_existent.json'
         mock_arguments.credentials = non_existent
         mock_arguments.nocheck = True
 
