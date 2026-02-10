@@ -28,6 +28,9 @@ from scubagoggles.Testing.Unit.Python.provider.log_cases import (
 from scubagoggles.Testing.Unit.Python.provider.group_cases import (
     GET_GROUP_SETTINGS_CASES,
 )
+from scubagoggles.Testing.Unit.Python.provider.get_list_cases import (
+    GET_LIST_CASES,
+)
 
 # Disable "protected-access" because we test some internal methods;
 # Disable "too-many-positional-arguments" because some tests have
@@ -748,6 +751,45 @@ class TestProvider:
             "groups",
             customer="test_customer"
         )
+    
+    @pytest.mark.parametrize(
+        "cases",
+        GET_LIST_CASES
+    )
+    def test_get_list(self, mocker, mock_build, cases):
+        """
+        Verifies Provider._get_list() handles single-page responses,
+        multi-page pagination, empty responses, and missing item keys.
+        
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
+        :param cases: Parametrized test cases containing page responses and expected results.
+        """
+        provider = self._provider(mocker, mock_build)
+
+        mock_resource = mocker.Mock()
+
+        mock_requests = []
+        for page_response in cases["pages"]:
+            mock_request = mocker.Mock()
+            mock_request.execute.return_value = page_response
+            mock_requests.append(mock_request)
+
+        # First request from _get_list()
+        mock_resource.list.return_value = mock_requests[0]
+
+        list_next_returns = mock_requests[1:] + [None]
+        mock_resource.list_next.side_effect = list_next_returns
+
+        result = provider._get_list(mock_resource, cases["item_key"], query="test=true")
+
+        assert result == cases["expected"]
+        mock_resource.list.assert_called_once_with(query="test=true")
+
+        for mock_request in mock_requests:
+            mock_request.execute.assert_called_once()
+
+        assert mock_resource.list_next.call_count == len(cases["pages"])
 
     def test_check_scopes(self, mocker, mock_build):
         """
