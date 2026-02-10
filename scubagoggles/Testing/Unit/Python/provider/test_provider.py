@@ -751,7 +751,7 @@ class TestProvider:
             "groups",
             customer="test_customer"
         )
-    
+
     @pytest.mark.parametrize(
         "cases",
         GET_LIST_CASES
