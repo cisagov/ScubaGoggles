@@ -12,6 +12,6 @@ jobs:
       with:
         base-branch: 'main'
         config-file: 'mlc_config.json'
-        use-quiet-mode: 'yes'
+        use-quiet-mode: 'no'
         use-verbose-mode: 'yes'
-        check-modified-files-only: 'yes'
+        check-modified-files-only: 'no'
