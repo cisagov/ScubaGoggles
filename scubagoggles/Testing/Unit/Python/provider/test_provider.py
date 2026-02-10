@@ -285,7 +285,7 @@ class TestProvider:
             result_log = result_map[domain]["log"]
             for expected_log in expected.get("log", []):
                 assert expected_log in result_log, \
-                f"Log entry {expected_log} not found for domain {domain}: {expected_log}"
+                f"Log entry {expected_log} not found for domain {domain}: {result_log}"
 
         assert mock_query.call_count >= len(domains)
 
@@ -429,7 +429,15 @@ class TestProvider:
         else:
             get_list_mock.return_value = cases["user_list"]
 
-        result = provider.get_super_admins()
+        if cases["expect_success_call"]:
+            result = provider.get_super_admins()
+        else:
+            with pytest.warns(
+                RuntimeWarning,
+                match="Exception thrown while getting super admins; outputs will be incorrect"
+            ):
+                result = provider.get_super_admins()
+
         assert result == cases["expected"]
 
         if cases["expect_success_call"]:
