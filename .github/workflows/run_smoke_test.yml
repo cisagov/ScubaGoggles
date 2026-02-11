@@ -70,7 +70,9 @@ jobs:
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.operating-system }}
     outputs:
-      baseline-path: ${{ steps.baselinepath.outputs.cachepath }}
+      linux-path: ${{ steps.linux-path.outputs.cachepath }}
+      mac-path: ${{ steps.mac-path.outputs.cachepath }}
+      windows-path: ${{ steps.windows-path.outputs.cachepath }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -89,7 +91,7 @@ jobs:
           name: "credentials.json"
           json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
-      - name: Setup Dependencies (Windows)
+      - name: Setup Dependencies (windows-latest)
         if: ${{ matrix.operating-system == 'windows-latest' }}
         uses: ./.github/actions/setup-dependencies-windows
         with:
@@ -113,27 +115,56 @@ jobs:
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
-      - name: Run ScubaGoggles and check for correct output (windows | macOs)
-        if: ${{ matrix.operating-system == 'windows-latest' ||  matrix.operating-system == 'macos-latest'}}
+      - name: Run ScubaGoggles and check for correct output (macOs)
+        if: ${{ matrix.operating-system == 'macos-latest'}}
+        id: mac-path
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+          FOUNDMAC=$(find /Users/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
+          echo $FOUNDMAC
+          echo "cachepath=$FOUNDMAC" >> $GITHUB_OUTPUT
+
+      - name: Cache the output directory (macOS)
+        if: ${{ matrix.operating-system == 'macos-latest'}}
+        uses: actions/cache@v4
+        with:
+          path: /Users/runner/scubagoggles
+          key: ${{ runner.os }}-baseline-${{ steps.mac-path.outputs.cachepath }}
+
+      - name: Run ScubaGoggles and check for correct output (windows)
+        if: ${{ matrix.operating-system == 'windows-latest' }}
+        id: windows-path
+        run: |
+          & ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
+          pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
+          $FOUNDWINDOWS = (Get-ChildItem -Path "C:\Users\runneradmin\scubagoggles" -Directory -Filter "GWSBaselineConformance_*" -Recurse -Force).FullName
+          $FOUNDWINDOWS
+          echo "cachepath=$FOUNDWINDOWS" >> $env:GITHUB_OUTPUT
+
+      - name: Cache the output directory (windows-latest)
+        if: ${{ matrix.operating-system == 'windows-latest' }}
+        uses: actions/cache@v4
+        with:
+          path: C:\Users\runneradmin\scubagoggles
+          key: ${{ runner.os }}-baseline-${{ steps.windows-path.outputs.cachepath }}
 
       - name: Run ScubaGoggles and check for correct output (ubuntu)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
-        id: baselinepath
+        id: linux-path
         run: |
           ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
-          FOUNDIT=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
-          echo "cachepath=$FOUNDIT" >> $GITHUB_OUTPUT
+          FOUNDLINUX=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
+          echo $FOUNDLINUX
+          echo "cachepath=$FOUNDLINUX" >> $GITHUB_OUTPUT
 
-      - name: Cache the output directory
-        id: baseline
+      - name: Cache the output directory (ubuntu-latest)
+        if: ${{ matrix.operating-system == 'ubuntu-latest' }}
         uses: actions/cache@v4
         with:
           path: /home/runner/scubagoggles
-          key: ${{ runner.os }}-baseline-${{ steps.baselinepath.outputs.cachepath }}
+          key: ${{ runner.os }}-baseline-${{ steps.linux-path.outputs.cachepath }}
 
   lhci:
     runs-on: ubuntu-latest
@@ -142,12 +173,12 @@ jobs:
       contents: write
     if: ${{ always() }}
     steps:
-      - name: Restore cached baseline folder
+      - name: Restore cached baseline folder (ubuntu-latest)
         uses: actions/cache/restore@v4
         with:
           path: |
             /home/runner/scubagoggles
-          key: ${{ runner.os }}-baseline-${{ steps.baselinepath.outputs.cachepath }}
+          key: ${{ runner.os }}-baseline-${{ needs.linux-path.outputs.cachepath }}
 
       - name: Use Node.js 20.x
         uses: actions/setup-node@v3
