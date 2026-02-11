@@ -65,7 +65,7 @@ Mail Delegation SHOULD be disabled.
 
 - _Rationale:_ Granting mail delegation can inadvertently lead to disclosure of sensitive information, impersonation of delegated accounts, or malicious alteration or deletion of emails. By controlling mail delegation, these risks can be significantly reduced, improving the security and integrity of email communications.
 - _Last modified:_ October 2023
-- _Note:_ Exceptions should be limited to individuals authorized by existing Agency policy, such as SES or Politically Appointed staff. Other considerations include ensuring that delegated accounts require Phishing-Resistant Multi-Factor Authentication (MFA), limiting delegated account permissions (ex. allowing view/reply but not delete), monitoring delegated accounts regularly, and disabling them if no longer required.
+- _Note:_ Exceptions should be limited to individuals authorized by existing Agency policy, such as Senior Executive Service (SES) or politically appointed staff. Other considerations include ensuring that delegated accounts require phishing-resistant multi-factor authentication (MFA), limiting delegated account permissions (e.g. allowing view/reply, prohibiting delete), monitoring delegated accounts regularly, and disabling them if no longer required.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
@@ -104,7 +104,7 @@ DKIM SHOULD be enabled for all domains.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
-- _Rationale:_ Enabling DKIM for all domains can help prevent email spoofing and phishing attacks. Without DKIM, adversaries could manipulate email headers to appear as if they're from a legitimate source, potentially leading to the disclosure of sensitive information. By enabling DKIM, the authenticity of emails can be verified, reducing this risk.
+- _Rationale:_ Enabling DKIM for all domains can help prevent email spoofing and phishing attacks. Without DKIM, threat actors could manipulate email headers to appear as if they are from a legitimate source, potentially leading to the disclosure of sensitive information. By enabling DKIM, the authenticity of emails can be verified, reducing this risk.
 - _Last modified:_ November 2023
 - _Note:_ This policy is not applicable to user alias domains. Emails sent from user alias domains will be signed by a Google-managed DKIM signing domain (gappssmtp.com) even if DKIM is disabled.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-8
@@ -153,7 +153,7 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
-- _Rationale:_ Adversaries could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, SPF is required for federal, executive branch, departments and agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
+- _Rationale:_ Threat actors could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, an SPF policy is required for Federal Civilian Executive Branch (FCEB) agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - _Last modified:_ February 2024
 - _Note:_ 
   - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softfail (indicated by `~`). Either hard or soft fail may be used to comply with this baseline policy.
@@ -199,12 +199,12 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 ### Policies
 
 #### GWS.GMAIL.4.1v0.6
-A DMARC policy SHALL be published at the full domain or the second-level domain for all Google Workspace domains, including user alias domains.
+A Domain-based Message Authentication, Reporting, and Conformance (DMARC) policy SHALL be published at the full domain or the second-level domain for all Google Workspace (GWS) domains, including user alias domains.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
-- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling adversaries to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every domain further reduces the risk posed by authentication failures.
+- _Rationale:_ Without proper authentication and a DMARC policy available for each domain, recipients may improperly handle SPF and DKIM failures, possibly enabling threat actors to send deceptive emails that appear to be from your domain. Publishing a DMARC policy for every domain further reduces the risk posed by authentication failures.
 - _Last modified:_ September 2025
 - _Note:_
   - A DMARC record published at the second-level domain applies to all subdomains by default. In other words, a DMARC record published for `example.com` will protect both `a.example.com` and `b.example.com`, but a separate record would need to be published for `c.example.gov`. In this example `a.example.com` is the full domain, or fully qualified domain name (FQDN), whereas `example.com` is the second-level domain.
@@ -219,7 +219,7 @@ The DMARC message rejection option SHALL be p=reject.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
-- _Rationale:_ Without stringent email authentication, adversaries could potentially send deceptive emails that appear to be from your domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for federal, executive branch, departments and agencies.
+- _Rationale:_ Without stringent email authentication, threat actors could potentially send deceptive emails that appear to be from the organization's domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for Federal Civilian Executive Branch (FCEB) agencies.
 - _Last modified:_ November 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -236,9 +236,9 @@ The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cy
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
-- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for federal, executive branch, departments and agencies, set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows CISA to monitor and address email authentication issues.
+- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for Federal Civilian Executive Branch (FCEB), set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows the CyberSecurity and Infrastructure Security Agency (CISA) to monitor and address email authentication issues.
 - _Last modified:_ November 2023
-- _Note:_ Only federal, executive branch, departments and agencies should include this email address in their DMARC record.
+- _Note:_ Only FCEB agencies should include this email address in their DMARC record.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4(5)
 - MITRE ATT&CK TTP Mapping
   - None
@@ -365,13 +365,13 @@ Google SHOULD be allowed to automatically apply future recommended settings for 
   - None
 
 #### GWS.GMAIL.5.5v0.6
-Emails flagged by the above attachment protection controls SHALL NOT be kept in inbox.
+Emails flagged by Google Workspace (GWS) Gmail policies 5.1-5.3 SHALL NOT be kept in inbox.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Keeping emails flagged by attachment protection controls in the inbox could potentially expose users to malicious content. Removing these emails from the inbox enhances the safety and integrity of user data and systems.
 - _Last modified:_ September 2023
-- _Note:_ Agencies and Organizations can choose whether to send email to spam or quarantine. Applies to Policies 5.1 - 5.3.
+- _Note:_ Agencies and organizations can choose whether to send these emails to spam or quarantine.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
@@ -385,11 +385,11 @@ Emails flagged by the above attachment protection controls SHALL NOT be kept in 
 
 
 #### GWS.GMAIL.5.6v0.6
-Any third-party or outside application selected for attachment protection SHOULD offer services comparable to those offered by Google Workspace.
+Any third-party or outside application selected for attachment protection SHOULD offer services comparable to those offered by Google Workspace (GWS).
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail56v06-instructions)
 
-- _Rationale:_ Using third-party or outside applications for attachment protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for attachment protection that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
@@ -449,7 +449,7 @@ Identify links behind shortened URLs SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Shortened URLs can potentially hide malicious links, posing a security risk. By enabling the identification of links behind shortened URLs, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Shortened URLs can hide malicious links, posing a security risk. This rick can be reduced by identifying links behind shortened URLs, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
@@ -464,7 +464,7 @@ Scan linked images SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Linked images in emails can potentially contain malicious content, posing a security risk. By enabling the scanning of linked images, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Linked images in emails can contain malicious content, posing a security risk. By enabling the scanning of linked images, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
@@ -479,7 +479,7 @@ Show warning prompt for any click on links to untrusted domains SHALL be enabled
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Clicking on links to unfamiliar domains can potentially expose users to malicious content, posing a security risk. By enabling a warning prompt for any click on such links, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Clicking on links to unfamiliar domains can expose users to malicious content, posing a security risk. This risk can be reduced by enabling a warning prompt for any click on such links, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4, SI-8, AT-2b
 - MITRE ATT&CK TTP Mapping
@@ -501,11 +501,11 @@ Google SHALL be allowed to automatically apply future recommended settings for l
   - None
 
 #### GWS.GMAIL.6.5v0.6
-Any third-party or outside application selected for links and external images protection SHOULD offer services comparable to those offered by Google Workspace.
+Any third-party or outside application selected for links and external images protection SHOULD offer services comparable to those offered by Google Workspace (GWS).
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail65v06-instructions)
 
-- _Rationale:_ Using third-party or outside applications for links and external images protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services enhances the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for links and external images protection that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services enhances the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
@@ -563,7 +563,7 @@ Protect against domain spoofing based on similar domain names SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Emails sent from domains that look similar to your domain can potentially deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Emails sent from domains that look similar to the user's domain can deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -577,7 +577,7 @@ Protect against spoofing of employee names SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Spoofing of employee identities (e.g., CEO and IT staff) can potentially deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Spoofing of employee identities (e.g., CEO and IT staff) can deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -591,7 +591,7 @@ Protect against inbound emails spoofing your domain SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Inbound emails appearing to come from your domain can potentially deceive users into interacting with malicious content, posing a security risk. By enabling protection against such spoofing, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Inbound emails appearing to come from the user's domain can deceive users into interacting with malicious content, posing a security risk. This risk can be reduced by enabling protection against such spoofing, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -605,7 +605,7 @@ Protect against any unauthenticated emails SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Unauthenticated emails can potentially contain malicious content, posing a security risk. By enabling protection against such emails, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Unauthenticated emails can contain malicious content, posing a security risk. This risk can be reduced by enabling protection against such emails, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -619,7 +619,7 @@ Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Inbound emails spoofing your domain can potentially deceive users into interacting with malicious content, posing a security risk. By enabling protection against such spoofing, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Inbound emails spoofing the user's domain can deceive users into interacting with malicious content, posing a security risk. This risk can be reduced by enabling protection against such spoofing, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -629,13 +629,13 @@ Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.6v0.6
-Emails flagged by the above spoofing and authentication controls SHALL NOT be kept in inbox.
+Emails flagged the Google Workshapce (GWS) policies 7.1 - 7.5 SHALL NOT be kept in inbox.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Keeping emails flagged by spoofing and authentication controls in the inbox could potentially expose users to malicious content. Moving emails out of the inbox can reduce this risk, enhancing the safety and integrity of the user's data and systems.
 - _Last modified:_ September 2023
-- _Note:_ Agencies and organizations can choose whether to send to spam or quarantine. This policy applies to Policy 7.1 - Policy 7.5
+- _Note:_ Agencies and organizations can choose whether to send the emails to spam or quarantine.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -659,11 +659,11 @@ Google SHALL be allowed to automatically apply future recommended settings for s
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.8v0.6
-Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace.
+Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace (GWS).
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail78v06-instructions)
 
-- _Rationale:_ Using third-party or outside applications for spoofing and authentication protection that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for spoofing and authentication protection that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -766,11 +766,11 @@ This section determines whether users have POP3 and IMAP access. Doing so allows
 ### Policies
 
 #### GWS.GMAIL.9.1v0.6
-POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
+Post Office Protocol (POP) and Internet Message Access Protocol (IMAP) access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Enabling POP and IMAP access could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. By disabling POP and IMAP access, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Enabling POP and IMAP access could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. This risk can be reduced by disabling POP and IMAP access, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ October 2025
 - _Note:_ IMAP access MAY be enabled on a per-OU or per-group basis when there is a specific need, e.g., to support users that require specialized software for accessibility purposes.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
@@ -811,7 +811,7 @@ Google Workspace Sync SHOULD be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Enabling Google Workspace Sync could potentially expose sensitive agency or organization data to unauthorized access or loss, posing a security risk. By disabling Google Workspace Sync, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Enabling Google Workspace Sync could potentially expose sensitive agency or organization data to unauthorized access or loss, posing a security risk. This risk can be reduced by disabling Google Workspace Sync, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ April 2025
 - _Note:_ Google Workspace Sync MAY be enabled on a per-user basis as needed.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
@@ -854,7 +854,7 @@ Automatic forwarding SHOULD be disabled, especially to external domains.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ By enabling automatic forwarding, especially to external domains, adversaries could gain persistent access to a victim's email, potentially exposing sensitive agency or organization emails to unauthorized access or loss. By disabling automatic forwarding, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ By enabling automatic forwarding, especially to external domains, threat actors could gain persistent access to a victim's email, potentially exposing sensitive agency or organization emails to unauthorized access or loss. This risk can be reduced by disabling automatic forwarding, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-4
 - MITRE ATT&CK TTP Mapping
@@ -886,11 +886,11 @@ This section determines whether outgoing mail is delivered only through the Goog
 ### Policies
 
 #### GWS.GMAIL.12.1v0.6
-Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers SHALL be disabled.
+Using a per-user outbound gateway that is a mail server other than the Google Workspace (GWS) mail servers SHALL be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Using a per-user outbound gateway that is a mail server other than the Google Workspace mail servers could potentially expose sensitive agency or organization emails to unauthorized access or loss, posing a security risk. By disabling this feature, this risk can be reduced, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using a per-user outbound gateway that is a mail server other than the GWS mail servers could potentially expose sensitive agency or organization emails to unauthorized access or loss, posing a security risk. This risk can be reduced by disabling this feature, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-4
 - MITRE ATT&CK TTP Mapping
@@ -974,7 +974,7 @@ An email allowlist SHOULD not be implemented.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Implementing an email allowlist could potentially expose users to security risks as allowlisted senders bypass important security mechanisms, including spam filtering and sender authentication checks. By not implementing an allowlist, this risk can be reduced, enhancing the safety and integrity of the user data and systems.
+- _Rationale:_ Implementing an email allowlist could potentially expose users to security risks as allowlisted senders bypass important security mechanisms, including spam filtering and sender authentication checks. This risk can be reduced by not implementing an allowlist, enhancing the safety and integrity of the user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-4
 - MITRE ATT&CK TTP Mapping
@@ -1028,11 +1028,11 @@ Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.
     - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
 
 #### GWS.GMAIL.15.2v0.6
-Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.
+Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace (GWS).
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail152v06-instructions)
 
-- _Rationale:_ Using third-party or outside applications for enhanced pre-delivery message scanning that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for enhanced pre-delivery message scanning that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
@@ -1070,12 +1070,12 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 ### Policies
 
 #### GWS.GMAIL.16.1v0.6
-Security sandbox SHOULD be enabled to provide additional protections for their email messages.
+Security sandbox SHOULD be enabled to provide additional protections for emails.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
-- _Rationale:_ Without a security sandbox, emails with malicious content could potentially interact directly with the users' systems, posing a risk. By enabling the security sandbox, additional protections are provided for email messages, reducing this risk and enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Without a security sandbox, emails with malicious content could potentially interact directly with the users' systems, posing a security risk. By enabling the security sandbox, additional protections are provided for email messages, reducing this risk and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
@@ -1083,11 +1083,11 @@ Security sandbox SHOULD be enabled to provide additional protections for their e
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
 #### GWS.GMAIL.16.2v0.6
-Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.
+Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace (GWS).
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail162v06-instructions)
 
-- _Rationale:_ Using third-party or outside applications for security sandbox that do not offer services comparable to those offered by Google Workspace could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ Using third-party or outside applications for security sandbox that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
@@ -1128,11 +1128,11 @@ This section allows for email messages sent through other Google Workspace appli
 ### Policies
 
 #### GWS.GMAIL.17.1v0.6
-Comprehensive mail storage SHOULD be enabled to allow tracking of information across applications.
+Comprehensive mail storage SHOULD be enabled to allow information traceability across applications.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail171v06-instructions)
 
-- _Rationale:_ Without comprehensive mail storage, tracking of information across applications could be compromised, posing a potential security risk. Enabling comprehensive mail storage can reduce this risk, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ The absence of comprehensive mail storage could compromise the ability for information tracability cross applications could be compromised, posing a security risk. Enabling comprehensive mail storage can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ November 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-12, SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -1170,7 +1170,7 @@ Domains SHALL NOT be added to lists that bypass spam filters.
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail181v06-instructions)
 
 
-- _Rationale:_ Legitimate emails may be incorrectly filtered by spam protections. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, however, provides for a large number of potentially unknown users to bypass spam protections.
+- _Rationale:_ Spam protections may incorrectly filter legitimate emails. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, could enable numerous unknown users to bypass spam protections.
 - _Last modified:_ April 2024
 - _Note:_ Allowed senders MAY be added.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
@@ -1185,7 +1185,7 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail182v06-instructions)
 
-- _Rationale:_ Legitimate emails may be incorrectly filtered by spam protections. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, however, provides for a large number of potentially unknown users to bypass spam protections.
+- _Rationale:_ Spam protections may incorrectly filter legitimate emails. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, hcould enable numerous unknown users to bypass spam protections.
 - _Last modified:_ April 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
