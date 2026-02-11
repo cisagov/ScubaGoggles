@@ -45,7 +45,7 @@ Who can join classes in your domain SHALL be restricted to users in your domain 
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Classes can contain private or otherwise sensitive information. Restricting access to your classes helps prevent data leakage resulting from unauthorized classroom access.
+- _Rationale:_ Classes can contain PII sensitive information. Restricting access to the organization's classes helps prevent data leakage resulting from unauthorized classroom access.
 - _Last modified:_ October 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
@@ -57,7 +57,7 @@ Which classes users in your domain can join SHALL be restricted to classes in yo
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Allowing users to join classes in arbitrary domains could allow for data to be exfiltrated to entities outside the control of the organization.
+- _Rationale:_ Allowing users to join classes from outside the organization's domains could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
 - _Last modified:_ October 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -99,7 +99,7 @@ Users SHALL NOT be able to authorize apps to access their Google Classroom data.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Allowing ordinary users to authorize apps to have access to classroom data opens a possibility for data loss. Allowing only admins to authorize apps reduces this risk.
+- _Rationale:_ Allowing ordinary users to authorize apps to have access to classroom data opens a possibility for data loss. Allowing only admins to authorize application access reduces this risk.
 - _Last modified:_ September 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(10)
 - MITRE ATT&CK TTP Mapping
@@ -136,7 +136,7 @@ Roster import with Clever SHOULD be turned off.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ If your organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into your organization's environment. If your organization does use Clever, then roster imports may be enabled.
+- _Rationale:_ If an organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into the organization's environment. If an organization does use Clever, then roster imports may be enabled.
 - _Last modified:_ September 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
