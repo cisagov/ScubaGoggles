@@ -113,8 +113,7 @@ NonCompliantGroups2_1 contains {
 tests contains {
     "PolicyId": GeminiId2_1,
     "Prerequisites": [
-        "reports/v1/activities/list",
-        "policy/gemini_app_service_status.serviceState"
+        "reports/v1/activities/list"
     ],
     "Criticality": "Shall",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
