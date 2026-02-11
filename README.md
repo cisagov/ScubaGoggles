@@ -1,3 +1,5 @@
+[![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/cisagov/ScubaGoggles)
+
 ![ScubaGoggles Logo](https://github.com/cisagov/ScubaGoggles/raw/main/docs/images/ScubaGoggles%20GitHub%20Graphic%20v2.jpg)
 
 
