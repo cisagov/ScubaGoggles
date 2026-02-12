@@ -199,7 +199,7 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 ### Policies
 
 #### GWS.GMAIL.4.1v0.6
-A DMARC policy SHALL be published at the full domain or the second-level domain for all Google Workspace (GWS) domains, including user alias domains.
+A DMARC policy SHALL be published at the full domain or the second-level domain for all Google Workspace domains, including user alias domains.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
