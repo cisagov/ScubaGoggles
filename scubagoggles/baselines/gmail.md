@@ -629,7 +629,7 @@ Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.6v0.6
-Emails flagged the Google Workshapce (GWS) policies 7.1 - 7.5 SHALL NOT be kept in inbox.
+Emails flagged by settings related to SCuBA policies GWS.GMAIL.7.1 through GWS.GMAIL.7.5 SHALL NOT be kept in inbox.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
