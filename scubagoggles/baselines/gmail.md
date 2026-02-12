@@ -1132,7 +1132,7 @@ Comprehensive mail storage SHOULD be enabled to allow information traceability a
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail171v06-instructions)
 
-- _Rationale:_ The absence of comprehensive mail storage could compromise the ability for information tracability cross applications could be compromised, posing a security risk. Enabling comprehensive mail storage can reduce this risk, enhancing the safety and integrity of user data and systems.
+- _Rationale:_ The absence of comprehensive mail storage could compromise the ability for information traceability across applications could be compromised, posing a security risk. Enabling comprehensive mail storage can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ November 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-12, SC-7(10)
 - MITRE ATT&CK TTP Mapping
