@@ -659,7 +659,7 @@ Google SHALL be allowed to automatically apply future recommended settings for s
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.8v0.6
-Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace (GWS).
+Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail78v06-instructions)
 
