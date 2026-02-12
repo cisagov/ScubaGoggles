@@ -637,7 +637,7 @@ Account conflict management SHOULD be configured to replace conflicting unmanage
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols71v06-instructions)
 
-- _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by Google Worksapce (GWS) admins. By resolving conflicting accounts, organizations can ensure all users have managed user accounts.
+- _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by GWS admins. By resolving conflicting accounts, organizations can ensure all users have managed user accounts.
 - _Last modified:_ April 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2
 - MITRE ATT&CK TTP Mapping
