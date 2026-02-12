@@ -766,7 +766,7 @@ This section determines whether users have POP3 and IMAP access. Doing so allows
 ### Policies
 
 #### GWS.GMAIL.9.1v0.6
-Post Office Protocol (POP) and Internet Message Access Protocol (IMAP) access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
+POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
