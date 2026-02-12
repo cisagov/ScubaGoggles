@@ -1185,7 +1185,7 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail182v06-instructions)
 
-- _Rationale:_ Spam protections may incorrectly filter legitimate emails. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, hcould enable numerous unknown users to bypass spam protections.
+- _Rationale:_ Spam protections may incorrectly filter legitimate emails. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, could enable numerous unknown users to bypass spam protections.
 - _Last modified:_ April 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
