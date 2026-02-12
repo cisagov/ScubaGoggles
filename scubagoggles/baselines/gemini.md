@@ -53,7 +53,7 @@ Gemini app user access SHALL be set to OFF for everyone without a license.
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Only Gemini data for users with the appropriate license will be
-protected by the Google Workspace (GWS) Terms of Service. Data for users without the
+protected by the Google Workspace Terms of Service. Data for users without the
 appropriate license can be used to improve Google's generative AI models. As such,
 allowing user access to Gemini under any license creates the risk of data leakage.
 - _Last modified:_ July 2025
