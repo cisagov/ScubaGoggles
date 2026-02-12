@@ -240,7 +240,7 @@ To enforce a device policy that requires company-owned devices, Google needs a l
 ### Policies
 
 #### GWS.COMMONCONTROLS.2.1v0.6
-Policies restricting access to Google Workspace (GWS) based on signals about enterprise devices SHOULD be implemented.
+Policies restricting access to Google Workspace based on signals about enterprise devices SHOULD be implemented.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
