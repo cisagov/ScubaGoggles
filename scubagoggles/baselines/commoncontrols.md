@@ -825,7 +825,7 @@ Agencies need to have a process in place to manage and control application acces
 ### Policies
 
 #### GWS.COMMONCONTROLS.10.1v0.6
-Agencies SHALL use GWS application access control policies to restrict access to all Google Workspace (GWS) services by third party apps.
+Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols101v06-instructions)
 
