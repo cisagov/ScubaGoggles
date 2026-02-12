@@ -577,7 +577,7 @@ A minimum of **two** and maximum of **eight** separate and distinct super admin 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)
 
-- _Rationale:_ The super admin role provides unfettered access to the Google Workspace (GWS). Properly managing the number of users with this level of access makes GWS compromise more challenging. Having too few accounts can increase the risk of losing admin access entirely (e.g., if a super admin forgets their password); Maintaining between two to four accounts balances concernsregarding accessibility and security.
+- _Rationale:_ The super admin role provides unfettered access to the Google Workspace (GWS). Properly managing the number of users with this level of access makes GWS compromise more challenging. Having too few accounts can increase the risk of losing admin access entirely (e.g., if a super admin forgets their password); Maintaining between two to four accounts balances concerns regarding accessibility and security.
 - _Last modified:_ July 2023
 - _Note:_ Admin count does not include "break-glass" super admin accounts.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(5)
