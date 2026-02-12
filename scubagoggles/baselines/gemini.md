@@ -100,7 +100,7 @@ Alpha Gemini features SHALL be disabled.
 - _Rationale:_ Allowing access to Gemini Alpha features may expose users to features that
 have not yet been fully vetted and may still need to undergo robust testing to ensure
 compliance with applicable security standards. Additionally, government customers are
-prohibited from using production data with pre-Gemini Alpha offerings, per the Google Workspace (GWS)
+prohibited from using production data with pre-Gemini Alpha offerings, per the Google Workspace
 Service Specific Terms.
 - _Last modified:_ July 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
