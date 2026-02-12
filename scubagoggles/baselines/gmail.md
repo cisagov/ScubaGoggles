@@ -1028,7 +1028,7 @@ Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.
     - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
 
 #### GWS.GMAIL.15.2v0.6
-Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace (GWS).
+Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail152v06-instructions)
 
