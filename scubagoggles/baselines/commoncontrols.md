@@ -77,7 +77,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 
         > Phishing-resistant methods:
 
-            - FIDO2 Security Key (directly in Google Workspace (GWS))
+            - FIDO2 Security Key (directly in Google Workspace)
 
             - Phone as Security Key
 
