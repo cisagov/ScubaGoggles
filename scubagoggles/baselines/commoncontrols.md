@@ -1152,7 +1152,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
 
 #### GWS.COMMONCONTROLS.14.2v0.6
-Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as directed by OMB Memorandum M-21-31, “Improving the Federal Government’s Investigative and Remediation Capabilities Related to Cybersecurity Incidents."
+Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as directed by OMB Memorandum M-21-31, "Improving the Federal Government’s Investigative and Remediation Capabilities Related to Cybersecurity Incidents."
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols142v06-instructions)
 
