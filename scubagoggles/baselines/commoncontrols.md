@@ -846,7 +846,7 @@ Agencies SHALL NOT allow users to grant consent for access to low-risk scopes.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
-- _Rationale:_ Allowing users to grant access to OAuth scopes not classified as high-risk could enable untrusted appsto gain access without non-administrative approval being allowlisted violating policy 10.1.
+- _Rationale:_ Allowing users to grant access to OAuth scopes not classified as high-risk could enable untrusted apps to gain access without non-administrative approval being allowlisted, violating policy 10.1.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
 - MITRE ATT&CK TTP Mapping
