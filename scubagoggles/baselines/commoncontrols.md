@@ -1330,7 +1330,7 @@ Require multiparty approval for sensitive admin actions SHOULD be enabled.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
-- _Rationale_: Changes to sensitive admin settings such as disabling 2-step verification (2SV) could introduce serious vulnerabilities in the Google Workspace (GWS) environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
+- _Rationale_: Changes to sensitive admin settings such as disabling 2-step verification (2SV) could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
 - MITRE ATT&CK TTP Mapping
