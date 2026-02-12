@@ -892,7 +892,7 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
 #### GWS.COMMONCONTROLS.10.5v0.6
-Access to Google Workspace (GWS) applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
+Access to GWS applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
