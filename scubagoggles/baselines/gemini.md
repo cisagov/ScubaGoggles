@@ -81,7 +81,7 @@ allowing user access to Gemini under any license creates the risk of data leakag
 
 
 ## 2. Alpha Gemini features
-Google Workspace (GWS) permits admins to restrict or enable access to Gemini Alpha features
+Google Workspace permits admins to restrict or enable access to Gemini Alpha features
 before they're made generally available.
 
 Note that Alpha features in Gemini are subject to the Pre-General Availability
