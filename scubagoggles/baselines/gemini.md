@@ -85,7 +85,7 @@ Google Workspace permits admins to restrict or enable access to Gemini Alpha fea
 before they're made generally available.
 
 Note that Alpha features in Gemini are subject to the Pre-General Availability
-Offering Terms (excluding Section 6.1(b)) of the GWS Service
+Offering Terms (excluding Section 6.1(b)) of the Google Workspace Service
 Specific Terms. Section 6.1(d) prohibits government customers from using live or
 production data in connection with Pre-Gemini Alpha Offerings.
 
