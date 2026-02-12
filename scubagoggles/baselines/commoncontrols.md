@@ -1268,7 +1268,7 @@ Service status for Google services that do not have an individual control SHOULD
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale_: Accessing additional google services without necessity can introduce potential vulnerabilities within the Google Workspace (GWS) environment. Disabling these services mitigates the risk restricting unnecessary access.
+- _Rationale_: Accessing additional google services without necessity can introduce potential vulnerabilities within the Google Workspace environment. Disabling these services mitigates the risk restricting unnecessary access.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
