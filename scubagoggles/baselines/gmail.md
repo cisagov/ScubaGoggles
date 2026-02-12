@@ -1083,7 +1083,7 @@ Security sandbox SHOULD be enabled to provide additional protections for emails.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
 #### GWS.GMAIL.16.2v0.6
-Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace (GWS).
+Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail162v06-instructions)
 
