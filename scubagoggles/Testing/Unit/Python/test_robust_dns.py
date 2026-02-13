@@ -23,7 +23,6 @@ class TestRobustDNSClient:
     @pytest.fixture
     def mock_requests_get(self, mocker):
         return mocker.patch('scubagoggles.robust_dns.requests.get')
-    
     """
     Test DOH Server Retrieval
     This method tests the 'doh_server' method, and simulates (using Mocks), three test cases where:
