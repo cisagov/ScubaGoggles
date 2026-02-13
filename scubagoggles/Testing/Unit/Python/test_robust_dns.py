@@ -14,17 +14,23 @@ class TestRobustDNSClient:
     """Mocks the GwsAuth class - the tests in this module do not call any
     Google API.
     """
-    # Convienient fixture
+    # Convienient Mock fixture for Resolver class
     @pytest.fixture
     def mock_resolver(self, mocker):
         return mocker.patch('scubagoggles.robust_dns.dns.resolver.Resolver')
 
+    # Convienient Mock fixture for requests.get
     @pytest.fixture
     def mock_requests_get(self, mocker):
         return mocker.patch('scubagoggles.robust_dns.requests.get')
     
     """
-    Test DOH Server Retrieval 
+    Test DOH Server Retrieval
+    This method tests the 'doh_server' method, and simulates (using Mocks), three test cases where:
+      The first DOH server is availible,
+      The first DOH server is not availible, but the second is
+      None of the DOH servers are availible
+    Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
     """
     @pytest.mark.parametrize("subtest, expected", 
     [
@@ -40,19 +46,27 @@ class TestRobustDNSClient:
             case 1:
                 mock_requests_get.return_value.json.return_value = {"status": "ok"} # aribtrary return value, doesn't matter
                 assert robust_dns_client.get_doh_server() == expected
-            # Only the second server is valid ([2606:4700:4700::1111])
+            # The first server is not valid but the second server is valid ([2606:4700:4700::1111])
             case 2:
                 good_return = Mock(spec=requests.Response)
                 good_return.json.return_value = {"status": "ok"}
-                mock_requests_get.side_effect = [requests.exceptions.Timeout, good_return] #first server fails, second server returns successfully
+                #simulate effects (exceptions/returns) for the next two function calls of requests.get()
+                mock_requests_get.side_effect = [requests.exceptions.Timeout, good_return] 
                 assert robust_dns_client.get_doh_server() == expected
             # none of the servers are availible
             case 3:
+                # Timeout side effect for all three calls to requests.get()
                 mock_requests_get.side_effect = requests.exceptions.Timeout
                 assert robust_dns_client.get_doh_server() is None
-    
+        # Move the Assert Statements inside the cases (match) since case #3 uses 'is None' instead of '==' comparison
+
     """
     Test DOH Query
+    This method tests the 'doh_query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
+    and logical behavior of the doh_query method.
+    Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
+    subtest : The specific unit test case covering a unique logical/branching scenario
+    max_tries : Used for looping behavior; Number of max_tries to run the DOH query passed into the doh_query method parameter 'max_tries'
     """
     @pytest.mark.parametrize("subtest, max_tries",
     [
@@ -188,7 +202,7 @@ class TestRobustDNSClient:
                 status_three_return.json.return_value = {"Status" : 3}
                 mock_requests_get.side_effect = [requests.exceptions.Timeout("time out"), status_three_return]  #return values for the next two iterations
 
-                # add log entries from Exception
+                # expected log entries from Exception side effect
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
@@ -197,7 +211,7 @@ class TestRobustDNSClient:
                 })
                 errors.append(f"time out")
 
-                # add log entries from Status 3 Code
+                # expected log entries from Status 3 Code
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
@@ -205,13 +219,14 @@ class TestRobustDNSClient:
                     "query_answers": []
                 })
 
+        # Expected return value of doh_query()
         return_value = {
                 "answers": answers,
                 "nxdomain": nxdomain,
                 "log_entries": log_entries,
                 "errors": errors
         }
-        #assert True == True
+        # Test Case Assertion
         assert robust_dns_client.doh_query(query, max_tries) == return_value
 
 
@@ -219,7 +234,11 @@ class TestRobustDNSClient:
 
     """
     Test Traditional Query
-    DELETE when done : MOCK of DNS Resolver MUST be implemented
+    This method tests the 'traditional_query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
+    and logical behavior of the traditional_query method.
+    Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
+    subtest : The specific unit test case covering a unique logical/branching scenario
+    max_tries : Used for looping behavior; Number of max_tries to run the DOH query passed into the traditional_query method parameter 'max_tries'
     """
     @pytest.mark.parametrize("subtest, max_tries",
     [
@@ -318,18 +337,28 @@ class TestRobustDNSClient:
                 })
                 # Then Break
         
-        # Expected Result
-        expected = {
+        # Expected return value of traditional_query()
+        return_value = {
             "answers": answers,
             "nxdomain": nxdomain,
             "log_entries": log_entries,
             "errors": errors
         }
-        assert robust_dns_client.traditional_query(query, max_tries) == expected
+        assert robust_dns_client.traditional_query(query, max_tries) == return_value
 
 
     """
     Test  Query
+    This method tests the 'query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
+    and logical behavior of the query method.
+    The query method invokes the traditional_query method and doh_query method.
+    There is little branching or logical behavior to capture, and the traditional_query and doh_query methods are mocked. 
+
+    Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
+    subtest : The specific unit test case covering a unique logical/branching scenario
+    max_tries : Used for looping behavior; Number of max_tries to attempt query / queries.
+    max_tries is propogated through the traditional_query and doh_query methods, 
+    but because those are mocked, this parameter is mostly irrelevant
     """
     @pytest.mark.parametrize("subtest, max_tries",
     [
@@ -342,6 +371,8 @@ class TestRobustDNSClient:
         query = "An example query."
         robust_dns_client = None
         traditional_query_mock = None
+        # expected return value for query()
+        expected = None
 
         match subtest:
         # TEST CASE 1 : Traditional Query Succeeded, No need for DOH Query
@@ -350,13 +381,17 @@ class TestRobustDNSClient:
                 mock_resolver.assert_called()
                 # Set up constructor as normal (regular instance)
                 traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
-                expected = {
-                    "answers": ["127.0.0.1", "192.68.1.1"],
+                # Expected Result of query() method and traditional_query() method
+                traditional_expected = {
+                    "answers": ["127.0.0.1", "192.68.1.1"],  # Answers don't matter here, just as long as its a non empty list
                     "nxdomain": False,
                     "log_entries": [],
                     "errors": []
                 }
-                traditional_query_mock.return_value = expected
+                # mock result of traditional_query()
+                traditional_query_mock.return_value = traditional_expected
+                # Expected Result of query() method
+                expected = traditional_expected
         # TEST CASE 2 : Traditional Query Failed, Retry with DOH Query
             case 2:
                 # Set up constructor as normal (regular instance)
@@ -366,8 +401,8 @@ class TestRobustDNSClient:
                 traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
                 # Mock Doh Query
                 doh_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.doh_query')
-                # mock result of traditional_query()
                 # for convenience, do not add log entries
+                # mock result of traditional_query()
                 traditional_expected = {
                     "answers": [], # answers is empty list, so logically, DOH query should be executed
                     "nxdomain": False,
@@ -377,8 +412,9 @@ class TestRobustDNSClient:
                 # mock result of doh_query()
                 # for convenience, same as traditional_query()
                 doh_expected = traditional_expected
-                # set the mock return values
+                # Mock return value of traditional_query()
                 traditional_query_mock.return_value = traditional_expected
+                # Mock return value of doh_query()
                 doh_query_mock.return_value = doh_expected
                 # Expected Result of query() method
                 expected = doh_expected
@@ -389,16 +425,18 @@ class TestRobustDNSClient:
                 robust_dns_client = RobustDNSClient(skip_doh = True)
                 # Traditional Query needs to be mocked
                 traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
-                # Traditional Query Fails
+                # Expected result of traditional_query()
                 traditional_expected = {
                     "answers": [], # answers is empty list. DOH Query is skipped because skip_doh was set to True
                     "nxdomain": False,
                     "log_entries": [],
                     "errors": []
                 }
+                # Mock return value of traditional_query()
                 traditional_query_mock.return_value = traditional_expected
+                # Expected Result of query() method
                 expected = traditional_expected
-
+        
         # Test Case Assertion
         assert robust_dns_client.query(query, max_tries) == expected            
 
