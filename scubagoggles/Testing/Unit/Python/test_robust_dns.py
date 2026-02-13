@@ -5,6 +5,7 @@ Tests for the PolicyAPI class.
 from pathlib import Path
 from unittest.mock import Mock
 import pytest
+import dns
 import requests
 from scubagoggles.robust_dns import RobustDNSClient
 
@@ -223,10 +224,10 @@ class TestRobustDNSClient:
     @pytest.mark.parametrize("subtest, max_tries",
     [
         (1, 2),
-        #(2, 2),
-        #(3, 2),
-        #(4, 2),
-        #(5, 3)
+        (2, 2),
+        (3, 2),
+        (4, 2),
+        (5, 3)
     ])
     # NOTE : No need to have a different constructor for the nameservers attributes with mock-testing (document this in code)
     def test_traditional_query(self, mock_resolver, subtest, max_tries):
@@ -257,36 +258,122 @@ class TestRobustDNSClient:
                     "query_result": f"Query returned 2 txt records",
                     "query_answers": answers
                 })
-                expected = {
-                    "answers": answers,
-                    "nxdomain": nxdomain,
-                    "log_entries": log_entries,
-                    "errors": errors
-                }
                 robust_dns_client.traditional_query(query, max_tries)
                 resolver_instance.resolve.assert_called()
         # TEST CASE 2 : dns.resolver.NoAnswer  (Loop count = 2)
-            #case 2:
+            case 2:
+                #simulate no answer
+                resolver_instance.resolve.side_effect = dns.resolver.NoAnswer
+                log_entries.append({
+                    "query_name": query,
+                    "query_method": "traditional",
+                    "query_result": "Query returned 0 txt records",
+                    "query_answers": []
+                })
         # TEST CASE 3 : dns.resolver.NXDOMAIN  (Loop count = 2)
-            #case 3:
+            case 3:
+                resolver_instance.resolve.side_effect = dns.resolver.NXDOMAIN
+                log_entries.append({
+                    "query_name": query,
+                    "query_method": "traditional",
+                    "query_result": "Query returned NXDOMAIN",
+                    "query_answers": []
+                })
+                nxdomain = True
         # TEST CASE 4 : General Exception   (Loop count = 2)
-            #case 4: 
+            case 4:
+                exception = dns.resolver.Timeout("Timeout")
+                resolver_instance.resolve.side_effect = exception
+                # The query failed, possibly a transient failure. Retry if we haven't reached
+                # max_tries.
+                for _ in range(max_tries):
+                    log_entries.append({
+                        "query_name": query,
+                        "query_method": "traditional",
+                        "query_result": f"Query resulted in exception Timeout",
+                        "query_answers": []
+                    })
+                    errors.append("Timeout")
         # TEST CASE 5 : General Exception   +   Result Succeeded (Loop count = 3)
-            #case 5:
+            case 5:
+                exception = dns.resolver.Timeout("Timeout")
+                resolver_instance.resolve.side_effect = [exception, dns.resolver.NoAnswer]
+                # The query failed, possibly a transient failure. Retry if we haven't reached
+                # max_tries.
+                # First Loop
+                log_entries.append({
+                    "query_name": query,
+                    "query_method": "traditional",
+                    "query_result": f"Query resulted in exception Timeout",
+                    "query_answers": []
+                })
+                errors.append("Timeout")
+
+                # Second loop
+                log_entries.append({
+                    "query_name": query,
+                    "query_method": "traditional",
+                    "query_result": "Query returned 0 txt records",
+                    "query_answers": []
+                })
+                # Then Break
         
-        #print(robust_dns_client.traditional_query(query, max_tries))
-        #print(expected)
+        # Expected Result
+        expected = {
+            "answers": answers,
+            "nxdomain": nxdomain,
+            "log_entries": log_entries,
+            "errors": errors
+        }
         assert robust_dns_client.traditional_query(query, max_tries) == expected
-        #assert True
 
 
     """
     Test  Query
-    DELETE when done : MOCK of DNS Resolver MUST be implemented
     """
-    def test_query(self):
+    @pytest.mark.parametrize("subtest, max_tries",
+    [
+        (1, 2),     # Note : max_tries for these test cases is mostly irrelevant here,
+        #(2, 2),     # since in-class methods traditional_query and doh_query are being mocked
+        #(3, 2),
+    ])
+    def test_query(self, mocker, mock_resolver, subtest, max_tries):
         assert True
-        # TEST CASE 1 : Traditional Query Succeeded, No need for DOH Query
-        # TEST CASE 2 : Traditional Query Failed, Retry with DOH Query
-        # TEST CASE 3 : Traditional Query Failed, Do not with DOH Query as skip_doh_query = True
+        query = "An example query."
+        robust_dns_client = None
+        traditional_query_mock = None
 
+        match subtest:
+        # TEST CASE 1 : Traditional Query Succeeded, No need for DOH Query
+            case 1:
+                robust_dns_client = RobustDNSClient()
+                mock_resolver.assert_called()
+                # Set up constructor as normal (regular instance)
+                traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
+                expected = {
+                    "answers": ["127.0.0.1", "192.68.1.1"],
+                    "nxdomain": False,
+                    "log_entries": [],
+                    "errors": []
+                }
+                traditional_query_mock.return_value = expected
+        # TEST CASE 2 : Traditional Query Failed, Retry with DOH Query
+            case 2:
+                robust_dns_client = RobustDNSClient()
+                # Set up constructor as normal (regular instance)
+                # Mock Traditional Query
+                # Mock DOH Query
+        # TEST CASE 3 : Traditional Query Failed, Do not with DOH Query as skip_doh_query = True
+            case 3:
+                robust_dns_client = RobustDNSClient(skip_doh = True)
+                # Set up constructor with skip_doh_query = True
+                # Traditional Query needs to be mocked
+                # Traditional Query Fails
+        
+        # Test Case Assertion
+        #print(robust_dns_client.query(query, max_tries))
+        #print("\n")
+        #print(expected)
+        #print("\n")
+        #assert True
+        assert robust_dns_client.query(query, max_tries) == expected            
