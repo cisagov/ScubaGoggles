@@ -334,8 +334,8 @@ class TestRobustDNSClient:
     @pytest.mark.parametrize("subtest, max_tries",
     [
         (1, 2),     # Note : max_tries for these test cases is mostly irrelevant here,
-        #(2, 2),     # since in-class methods traditional_query and doh_query are being mocked
-        #(3, 2),
+        (2, 2),     # since in-class methods traditional_query and doh_query are being mocked
+        (3, 2),
     ])
     def test_query(self, mocker, mock_resolver, subtest, max_tries):
         assert True
@@ -359,21 +359,46 @@ class TestRobustDNSClient:
                 traditional_query_mock.return_value = expected
         # TEST CASE 2 : Traditional Query Failed, Retry with DOH Query
             case 2:
-                robust_dns_client = RobustDNSClient()
                 # Set up constructor as normal (regular instance)
+                robust_dns_client = RobustDNSClient()
+                mock_resolver.assert_called()
                 # Mock Traditional Query
-                # Mock DOH Query
+                traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
+                # Mock Doh Query
+                doh_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.doh_query')
+                # mock result of traditional_query()
+                # for convenience, do not add log entries
+                traditional_expected = {
+                    "answers": [], # answers is empty list, so logically, DOH query should be executed
+                    "nxdomain": False,
+                    "log_entries": [],
+                    "errors": []
+                }
+                # mock result of doh_query()
+                # for convenience, same as traditional_query()
+                doh_expected = traditional_expected
+                # set the mock return values
+                traditional_query_mock.return_value = traditional_expected
+                doh_query_mock.return_value = doh_expected
+                # Expected Result of query() method
+                expected = doh_expected
+
         # TEST CASE 3 : Traditional Query Failed, Do not with DOH Query as skip_doh_query = True
             case 3:
-                robust_dns_client = RobustDNSClient(skip_doh = True)
                 # Set up constructor with skip_doh_query = True
+                robust_dns_client = RobustDNSClient(skip_doh = True)
                 # Traditional Query needs to be mocked
+                traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
                 # Traditional Query Fails
-        
+                traditional_expected = {
+                    "answers": [], # answers is empty list. DOH Query is skipped because skip_doh was set to True
+                    "nxdomain": False,
+                    "log_entries": [],
+                    "errors": []
+                }
+                traditional_query_mock.return_value = traditional_expected
+                expected = traditional_expected
+
         # Test Case Assertion
-        #print(robust_dns_client.query(query, max_tries))
-        #print("\n")
-        #print(expected)
-        #print("\n")
-        #assert True
         assert robust_dns_client.query(query, max_tries) == expected            
+
