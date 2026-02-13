@@ -33,7 +33,7 @@ class TestRobustDNSClient:
     subtest : The specific unit test case covering a unique logical/branching scenario
     expected : Expected value (for returned server);  "" indicates no servers are availible 
     """
-    @pytest.mark.parametrize("subtest, expected", 
+    @pytest.mark.parametrize("subtest, expected",
     [
         (1, "cloudflare-dns.com"),
         (2, "[2606:4700:4700::1111]"),
@@ -52,7 +52,7 @@ class TestRobustDNSClient:
                 good_return = Mock(spec=requests.Response)
                 good_return.json.return_value = {"status": "ok"}
                 #simulate effects (exceptions/returns) for the next two function calls of requests.get()
-                mock_requests_get.side_effect = [requests.exceptions.Timeout, good_return] 
+                mock_requests_get.side_effect = [requests.exceptions.Timeout, good_return]
                 assert robust_dns_client.get_doh_server() == expected
             # none of the servers are availible
             case 3:
@@ -107,7 +107,6 @@ class TestRobustDNSClient:
                     "query_result": "NA, DoH servers unreachable",
                     "query_answers": []
                 })
-            
             # Case where there is a valid server availible but Response is 0, 'Answer' IS NOT in the Json response
             case 2:
                 mock_requests_get.return_value.json.return_value = {"Status" : 0}
@@ -117,7 +116,6 @@ class TestRobustDNSClient:
                     "query_result": "Query returned 0 txt records",
                     "query_answers": []
                 })
-            
             # Case where there is a valid server availible but Response is 0, 'Answer' IS in the Json response
             case 3:
                 # Answers exists in json response (3 answers)
@@ -133,7 +131,6 @@ class TestRobustDNSClient:
                     "query_result": f"Query returned 3 txt records",
                     "query_answers": answers
                 })
-            
             # Case where there is a valid server availible but Response is 3
             case 4:
                 mock_requests_get.return_value.json.return_value = {"Status" : 3}
@@ -143,7 +140,6 @@ class TestRobustDNSClient:
                     "query_result": "Query returned NXDomain",
                     "query_answers": []
                 })
-            
             # Case where there is a valid server and the Status code is non-Zero and not 3
             case 5:
                 mock_requests_get.return_value.json.return_value = {"Status" : 1}  # non-zero Status code and Status code is not 1
@@ -156,7 +152,6 @@ class TestRobustDNSClient:
                         "query_answers": []
                     })
                     errors.append(f"Response code 1")
-
             # Case where there is a valid server, Status code is 1 the first iteration, and 3 the second iteration.
             case 6:
                 # Mock requests.Response() [Status 1]
@@ -183,7 +178,6 @@ class TestRobustDNSClient:
                     "query_result": "Query returned NXDomain",
                     "query_answers": []
                 })
-
             # Exception case (from requests.get)
             case 7:
                 mock_requests_get.side_effect = requests.exceptions.Timeout("time out")
@@ -196,7 +190,6 @@ class TestRobustDNSClient:
                         "query_answers": []
                     })
                     errors.append(f"time out")
-
             # Exception occurs on First Iteration, but Status Code 3 occurs on next iteration
             case 8:
                 status_three_return = Mock(spec=requests.Response)
@@ -219,7 +212,6 @@ class TestRobustDNSClient:
                     "query_result": "Query returned NXDomain",
                     "query_answers": []
                 })
-
         # Expected return value of doh_query()
         return_value = {
                 "answers": answers,
@@ -337,7 +329,6 @@ class TestRobustDNSClient:
                     "query_answers": []
                 })
                 # Then Break
-        
         # Expected return value of traditional_query()
         return_value = {
             "answers": answers,
