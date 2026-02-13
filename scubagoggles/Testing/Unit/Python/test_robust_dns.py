@@ -18,7 +18,6 @@ class TestRobustDNSClient:
     def mock_resolver(self, mocker):
         # pylint: disable=missing-function-docstring
         return mocker.patch('scubagoggles.robust_dns.dns.resolver.Resolver')
-
     """
     Mocks the requests.get method
     """
@@ -26,7 +25,6 @@ class TestRobustDNSClient:
     def mock_requests_get(self, mocker):
         # pylint: disable=missing-function-docstring
         return mocker.patch('scubagoggles.robust_dns.requests.get')
-    
     """
     Test DOH Server Retrieval
     This method tests the 'doh_server' method, and simulates (using Mocks), three test cases where:
