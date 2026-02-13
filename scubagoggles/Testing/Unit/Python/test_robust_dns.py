@@ -31,6 +31,8 @@ class TestRobustDNSClient:
       The first DOH server is not availible, but the second is
       None of the DOH servers are availible
     Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
+    subtest : The specific unit test case covering a unique logical/branching scenario
+    expected : Expected value (for returned server);  "" indicates no servers are availible 
     """
     @pytest.mark.parametrize("subtest, expected", 
     [
