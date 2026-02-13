@@ -11,18 +11,20 @@ from scubagoggles.robust_dns import RobustDNSClient
 
 class TestRobustDNSClient:
 
-    """Mocks the GwsAuth class - the tests in this module do not call any
-    Google API.
     """
-    # Convienient Mock fixture for Resolver class
+    Mocks the dns.resolver.Resolver Class
+    """
     @pytest.fixture
     def mock_resolver(self, mocker):
         return mocker.patch('scubagoggles.robust_dns.dns.resolver.Resolver')
 
-    # Convienient Mock fixture for requests.get
+    """
+    Mocks the requests.get method
+    """
     @pytest.fixture
     def mock_requests_get(self, mocker):
         return mocker.patch('scubagoggles.robust_dns.requests.get')
+    
     """
     Test DOH Server Retrieval
     This method tests the 'doh_server' method, and simulates (using Mocks), three test cases where:
@@ -31,7 +33,7 @@ class TestRobustDNSClient:
       None of the DOH servers are availible
     Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
     subtest : The specific unit test case covering a unique logical/branching scenario
-    expected : Expected value (for returned server);  "" indicates no servers are availible 
+    expected : Expected value (for returned server);  "" indicates no servers are availible
     """
     @pytest.mark.parametrize("subtest, expected",
     [
@@ -210,7 +212,7 @@ class TestRobustDNSClient:
                 status_three_return.json.return_value = {"Status" : 3}
                 #return values for the next two iterations
                 mock_requests_get.side_effect = [
-                    requests.exceptions.Timeout("time out"), 
+                    requests.exceptions.Timeout("time out"),
                     status_three_return
                 ]
 
@@ -258,7 +260,7 @@ class TestRobustDNSClient:
         (4, 2),
         (5, 3)
     ])
-    # NOTE : No need to have a different constructor for the 
+    # NOTE : No need to have a different constructor for the
     # nameservers attributes with mock-testing (document this in code)
     def test_traditional_query(self, mock_resolver, subtest, max_tries):
         robust_dns_client = RobustDNSClient()
@@ -385,7 +387,7 @@ class TestRobustDNSClient:
         trad_query_patch = 'scubagoggles.robust_dns.RobustDNSClient.traditional_query'
         # doh query patch name
         doh_query_patch = 'scubagoggles.robust_dns.RobustDNSClient.doh_query'
-        # expected return value for query()        
+        # expected return value for query()
         expected = None
 
         match subtest:
@@ -442,7 +444,7 @@ class TestRobustDNSClient:
                 traditional_query_mock = mocker.patch(trad_query_patch)
                 # Expected result of traditional_query()
                 traditional_expected = {
-                    # answers is empty list. DOH Query is skipped 
+                    # answers is empty list. DOH Query is skipped
                     # because skip_doh was set to True
                     "answers": [],
                     "nxdomain": False,
@@ -453,6 +455,5 @@ class TestRobustDNSClient:
                 traditional_query_mock.return_value = traditional_expected
                 # Expected Result of query() method
                 expected = traditional_expected
-        
         # Test Case Assertion
         assert robust_dns_client.query(query, max_tries) == expected
