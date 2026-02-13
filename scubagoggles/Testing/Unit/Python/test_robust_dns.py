@@ -16,6 +16,7 @@ class TestRobustDNSClient:
     """
     @pytest.fixture
     def mock_resolver(self, mocker):
+        # pylint: disable=missing-function-docstring
         return mocker.patch('scubagoggles.robust_dns.dns.resolver.Resolver')
 
     """
@@ -23,6 +24,7 @@ class TestRobustDNSClient:
     """
     @pytest.fixture
     def mock_requests_get(self, mocker):
+        # pylint: disable=missing-function-docstring
         return mocker.patch('scubagoggles.robust_dns.requests.get')
     
     """
@@ -421,7 +423,8 @@ class TestRobustDNSClient:
                 # for convenience, do not add log entries
                 # mock result of traditional_query()
                 traditional_expected = {
-                    "answers": [], # answers is empty list, so logically, DOH query should be executed
+                    # answers is empty list, so logically, DOH query should be executed
+                    "answers": [],
                     "nxdomain": False,
                     "log_entries": [],
                     "errors": []
