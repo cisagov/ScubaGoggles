@@ -45,13 +45,15 @@ class TestRobustDNSClient:
         match subtest:
             # The first server works as intended (cloudflare-dns.com)
             case 1:
-                mock_requests_get.return_value.json.return_value = {"status": "ok"} # aribtrary return value, doesn't matter
+                # aribtrary return value
+                mock_requests_get.return_value.json.return_value = {"status": "ok"} 
                 assert robust_dns_client.get_doh_server() == expected
             # The first server is not valid but the second server is valid ([2606:4700:4700::1111])
             case 2:
                 good_return = Mock(spec=requests.Response)
                 good_return.json.return_value = {"status": "ok"}
-                #simulate effects (exceptions/returns) for the next two function calls of requests.get()
+                # simulate effects (exceptions/returns) for the 
+                # next two function calls of requests.get()
                 mock_requests_get.side_effect = [requests.exceptions.Timeout, good_return]
                 assert robust_dns_client.get_doh_server() == expected
             # none of the servers are availible
@@ -59,7 +61,8 @@ class TestRobustDNSClient:
                 # Timeout side effect for all three calls to requests.get()
                 mock_requests_get.side_effect = requests.exceptions.Timeout
                 assert robust_dns_client.get_doh_server() is None
-        # Move the Assert Statements inside the cases (match) since case #3 uses 'is None' instead of '==' comparison
+        # Move the Assert Statements inside the cases (match) 
+        # since case #3 uses 'is None' instead of '==' comparison
 
     """
     Test DOH Query
@@ -107,7 +110,8 @@ class TestRobustDNSClient:
                     "query_result": "NA, DoH servers unreachable",
                     "query_answers": []
                 })
-            # Case where there is a valid server availible but Response is 0, 'Answer' IS NOT in the Json response
+            # Case where there is a valid server availible but 
+            # Response is 0, 'Answer' IS NOT in the Json response
             case 2:
                 mock_requests_get.return_value.json.return_value = {"Status" : 0}
                 log_entries.append({
@@ -116,7 +120,8 @@ class TestRobustDNSClient:
                     "query_result": "Query returned 0 txt records",
                     "query_answers": []
                 })
-            # Case where there is a valid server availible but Response is 0, 'Answer' IS in the Json response
+            # Case where there is a valid server availible 
+            # but Response is 0, 'Answer' IS in the Json response
             case 3:
                 # Answers exists in json response (3 answers)
                 json_answer_array = [{"data": "\"An answer with quotes, to be removed.\""}, 
@@ -131,7 +136,8 @@ class TestRobustDNSClient:
                     "query_result": f"Query returned 3 txt records",
                     "query_answers": answers
                 })
-            # Case where there is a valid server availible but Response is 3
+            # Case where there is a valid server 
+            # availible but Response is 3
             case 4:
                 mock_requests_get.return_value.json.return_value = {"Status" : 3}
                 log_entries.append({
@@ -140,9 +146,11 @@ class TestRobustDNSClient:
                     "query_result": "Query returned NXDomain",
                     "query_answers": []
                 })
-            # Case where there is a valid server and the Status code is non-Zero and not 3
+            # Case where there is a valid server and the 
+            # Status code is non-Zero and not 3
             case 5:
-                mock_requests_get.return_value.json.return_value = {"Status" : 1}  # non-zero Status code and Status code is not 1
+                # non-zero Status code and Status code is not 1
+                mock_requests_get.return_value.json.return_value = {"Status" : 1}  
                 # 2 tries
                 for _ in range(max_tries):
                     log_entries.append({
@@ -152,7 +160,9 @@ class TestRobustDNSClient:
                         "query_answers": []
                     })
                     errors.append(f"Response code 1")
-            # Case where there is a valid server, Status code is 1 the first iteration, and 3 the second iteration.
+            # Case where there is a valid server, 
+            # Status code is 1 the first iteration, 
+            # and 3 the second iteration.
             case 6:
                 # Mock requests.Response() [Status 1]
                 status_one_return = Mock(spec=requests.Response)
@@ -160,7 +170,8 @@ class TestRobustDNSClient:
                 # Mock requests.Response() [Status 3]
                 status_three_return = Mock(spec=requests.Response)
                 status_three_return.json.return_value = {"Status" : 3}
-                mock_requests_get.side_effect = [status_one_return, status_three_return]  #return values for the next two iterations
+                # return values for the next two iterations
+                mock_requests_get.side_effect = [status_one_return, status_three_return]  
 
                 # Expected return values for status code 1
                 log_entries.append({
