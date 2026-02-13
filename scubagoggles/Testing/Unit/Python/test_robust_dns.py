@@ -139,7 +139,7 @@ class TestRobustDNSClient:
                     "query_result": f"Query returned 3 txt records",
                     "query_answers": answers
                 })
-            # Case where there is a valid server 
+            # Case where there is a valid server
             # availible but Response is 3
             case 4:
                 mock_requests_get.return_value.json.return_value = {"Status" : 3}
@@ -149,11 +149,11 @@ class TestRobustDNSClient:
                     "query_result": "Query returned NXDomain",
                     "query_answers": []
                 })
-            # Case where there is a valid server and the 
+            # Case where there is a valid server and the
             # Status code is non-Zero and not 3
             case 5:
                 # non-zero Status code and Status code is not 1
-                mock_requests_get.return_value.json.return_value = {"Status" : 1}  
+                mock_requests_get.return_value.json.return_value = {"Status" : 1}
                 # 2 tries
                 for _ in range(max_tries):
                     log_entries.append({
@@ -163,8 +163,8 @@ class TestRobustDNSClient:
                         "query_answers": []
                     })
                     errors.append(f"Response code 1")
-            # Case where there is a valid server, 
-            # Status code is 1 the first iteration, 
+            # Case where there is a valid server,
+            # Status code is 1 the first iteration,
             # and 3 the second iteration.
             case 6:
                 # Mock requests.Response() [Status 1]
@@ -174,7 +174,7 @@ class TestRobustDNSClient:
                 status_three_return = Mock(spec=requests.Response)
                 status_three_return.json.return_value = {"Status" : 3}
                 # return values for the next two iterations
-                mock_requests_get.side_effect = [status_one_return, status_three_return]  
+                mock_requests_get.side_effect = [status_one_return, status_three_return]
 
                 # Expected return values for status code 1
                 log_entries.append({
@@ -183,7 +183,7 @@ class TestRobustDNSClient:
                     "query_result": f"Query returned response code 1",
                     "query_answers": []
                 })
-                errors.append(f"Response code 1")   
+                errors.append(f"Response code 1")
 
                 # Expected return values for status code 3
                 log_entries.append({
@@ -208,7 +208,8 @@ class TestRobustDNSClient:
             case 8:
                 status_three_return = Mock(spec=requests.Response)
                 status_three_return.json.return_value = {"Status" : 3}
-                mock_requests_get.side_effect = [requests.exceptions.Timeout("time out"), status_three_return]  #return values for the next two iterations
+                #return values for the next two iterations
+                mock_requests_get.side_effect = [requests.exceptions.Timeout("time out"), status_three_return]
 
                 # expected log entries from Exception side effect
                 log_entries.append({
@@ -235,7 +236,6 @@ class TestRobustDNSClient:
         }
         # Test Case Assertion
         assert robust_dns_client.doh_query(query, max_tries) == return_value
-
 
 
 
@@ -270,7 +270,7 @@ class TestRobustDNSClient:
         match subtest:
         # TEST CASE 1 : General Result Succeeded  (Loop count = 2)
             case 1:
-                # Mock item in Mock DNS resolver return value  
+                # Mock item in Mock DNS resolver return value
                 item_one = Mock()
                 item_one.to_text.return_value = "127.0.0.1"
                 item_two = Mock()
@@ -389,7 +389,8 @@ class TestRobustDNSClient:
                 traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
                 # Expected Result of query() method and traditional_query() method
                 traditional_expected = {
-                    "answers": ["127.0.0.1", "192.68.1.1"],  # Answers don't matter here, just as long as its a non empty list
+                    # Answers don't matter here, just as long as its a non empty list
+                    "answers": ["127.0.0.1", "192.68.1.1"],
                     "nxdomain": False,
                     "log_entries": [],
                     "errors": []
@@ -444,5 +445,4 @@ class TestRobustDNSClient:
                 expected = traditional_expected
         
         # Test Case Assertion
-        assert robust_dns_client.query(query, max_tries) == expected            
-
+        assert robust_dns_client.query(query, max_tries) == expected
