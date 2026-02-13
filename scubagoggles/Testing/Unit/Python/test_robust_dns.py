@@ -46,13 +46,13 @@ class TestRobustDNSClient:
             # The first server works as intended (cloudflare-dns.com)
             case 1:
                 # aribtrary return value
-                mock_requests_get.return_value.json.return_value = {"status": "ok"} 
+                mock_requests_get.return_value.json.return_value = {"status": "ok"}
                 assert robust_dns_client.get_doh_server() == expected
             # The first server is not valid but the second server is valid ([2606:4700:4700::1111])
             case 2:
                 good_return = Mock(spec=requests.Response)
                 good_return.json.return_value = {"status": "ok"}
-                # simulate effects (exceptions/returns) for the 
+                # simulate effects (exceptions/returns) for the
                 # next two function calls of requests.get()
                 mock_requests_get.side_effect = [requests.exceptions.Timeout, good_return]
                 assert robust_dns_client.get_doh_server() == expected
@@ -61,7 +61,7 @@ class TestRobustDNSClient:
                 # Timeout side effect for all three calls to requests.get()
                 mock_requests_get.side_effect = requests.exceptions.Timeout
                 assert robust_dns_client.get_doh_server() is None
-        # Move the Assert Statements inside the cases (match) 
+        # Move the Assert Statements inside the cases (match)
         # since case #3 uses 'is None' instead of '==' comparison
 
     """
@@ -110,7 +110,7 @@ class TestRobustDNSClient:
                     "query_result": "NA, DoH servers unreachable",
                     "query_answers": []
                 })
-            # Case where there is a valid server availible but 
+            # Case where there is a valid server availible but
             # Response is 0, 'Answer' IS NOT in the Json response
             case 2:
                 mock_requests_get.return_value.json.return_value = {"Status" : 0}
@@ -120,14 +120,17 @@ class TestRobustDNSClient:
                     "query_result": "Query returned 0 txt records",
                     "query_answers": []
                 })
-            # Case where there is a valid server availible 
+            # Case where there is a valid server availible
             # but Response is 0, 'Answer' IS in the Json response
             case 3:
                 # Answers exists in json response (3 answers)
-                json_answer_array = [{"data": "\"An answer with quotes, to be removed.\""}, 
-                 {"data": "A quote-free answer"}, 
+                json_answer_array = [{"data": "\"An answer with quotes, to be removed.\""},
+                 {"data": "A quote-free answer"},
                  {"data": ""}]
-                mock_requests_get.return_value.json.return_value = {"Status" : 0, "Answer": json_answer_array}
+                mock_requests_get.return_value.json.return_value = {
+                    "Status" : 0, 
+                    "Answer": json_answer_array
+                }
                 # expected answers (double-quotes removed)
                 answers = ["An answer with quotes, to be removed.", "A quote-free answer", ""]
                 log_entries.append({
