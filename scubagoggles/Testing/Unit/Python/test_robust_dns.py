@@ -10,7 +10,7 @@ import requests
 from scubagoggles.robust_dns import RobustDNSClient
 
 class TestRobustDNSClient:
-
+    """ Tests the RobustDNS class methods """
 
     @pytest.fixture
     def mock_resolver(self, mocker):
@@ -63,14 +63,6 @@ class TestRobustDNSClient:
         # Move the Assert Statements inside the cases (match)
         # since case #3 uses 'is None' instead of '==' comparison
 
-    """
-    Test DOH Query
-    This method tests the 'doh_query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
-    and logical behavior of the doh_query method.
-    Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
-    subtest : The specific unit test case covering a unique logical/branching scenario
-    max_tries : Used for looping behavior; Number of max_tries to run the DOH query passed into the doh_query method parameter 'max_tries'
-    """
     @pytest.mark.parametrize("subtest, max_tries",
     [
         (1, 2),
@@ -83,6 +75,14 @@ class TestRobustDNSClient:
         (8, 3)
     ])
     def test_doh_query(self, mocker, mock_resolver, mock_requests_get, subtest, max_tries):
+        """
+        Test DOH Query
+        This method tests the 'doh_query' method and provides extensive unit testing coverage of different branching cases, conditionals,
+        and logical behavior of the doh_query method.
+        Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
+        subtest : The specific unit test case covering a unique logical/branching scenario
+        max_tries : Used for looping behavior; Number of max_tries to run the DOH query passed into the doh_query method parameter 'max_tries'
+        """
         robust_dns_client = RobustDNSClient()
         mock_resolver.assert_called()
         doh_server_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.get_doh_server')
