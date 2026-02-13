@@ -209,7 +209,10 @@ class TestRobustDNSClient:
                 status_three_return = Mock(spec=requests.Response)
                 status_three_return.json.return_value = {"Status" : 3}
                 #return values for the next two iterations
-                mock_requests_get.side_effect = [requests.exceptions.Timeout("time out"), status_three_return]
+                mock_requests_get.side_effect = [
+                    requests.exceptions.Timeout("time out"), 
+                    status_three_return
+                ]
 
                 # expected log entries from Exception side effect
                 log_entries.append({
@@ -255,7 +258,8 @@ class TestRobustDNSClient:
         (4, 2),
         (5, 3)
     ])
-    # NOTE : No need to have a different constructor for the nameservers attributes with mock-testing (document this in code)
+    # NOTE : No need to have a different constructor for the 
+    # nameservers attributes with mock-testing (document this in code)
     def test_traditional_query(self, mock_resolver, subtest, max_tries):
         robust_dns_client = RobustDNSClient()
         #mock_resolver.assert_called()
@@ -377,7 +381,11 @@ class TestRobustDNSClient:
         query = "An example query."
         robust_dns_client = None
         traditional_query_mock = None
-        # expected return value for query()
+        # traditional query patch name
+        trad_query_patch = 'scubagoggles.robust_dns.RobustDNSClient.traditional_query'
+        # doh query patch name
+        doh_query_patch = 'scubagoggles.robust_dns.RobustDNSClient.doh_query'
+        # expected return value for query()        
         expected = None
 
         match subtest:
@@ -386,7 +394,7 @@ class TestRobustDNSClient:
                 robust_dns_client = RobustDNSClient()
                 mock_resolver.assert_called()
                 # Set up constructor as normal (regular instance)
-                traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
+                traditional_query_mock = mocker.patch(trad_query_patch)
                 # Expected Result of query() method and traditional_query() method
                 traditional_expected = {
                     # Answers don't matter here, just as long as its a non empty list
@@ -405,9 +413,9 @@ class TestRobustDNSClient:
                 robust_dns_client = RobustDNSClient()
                 mock_resolver.assert_called()
                 # Mock Traditional Query
-                traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
+                traditional_query_mock = mocker.patch(trad_query_patch)
                 # Mock Doh Query
-                doh_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.doh_query')
+                doh_query_mock = mocker.patch(doh_query_patch)
                 # for convenience, do not add log entries
                 # mock result of traditional_query()
                 traditional_expected = {
@@ -431,10 +439,12 @@ class TestRobustDNSClient:
                 # Set up constructor with skip_doh_query = True
                 robust_dns_client = RobustDNSClient(skip_doh = True)
                 # Traditional Query needs to be mocked
-                traditional_query_mock = mocker.patch('scubagoggles.robust_dns.RobustDNSClient.traditional_query')
+                traditional_query_mock = mocker.patch(trad_query_patch)
                 # Expected result of traditional_query()
                 traditional_expected = {
-                    "answers": [], # answers is empty list. DOH Query is skipped because skip_doh was set to True
+                    # answers is empty list. DOH Query is skipped 
+                    # because skip_doh was set to True
+                    "answers": [],
                     "nxdomain": False,
                     "log_entries": [],
                     "errors": []
