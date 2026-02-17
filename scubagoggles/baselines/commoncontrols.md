@@ -1156,7 +1156,7 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols142v06-instructions)
 
-- _Rationale:_ Audit logs should be retained for a sufficient duration to ensure availability when needed. Extending log retention provides gives an agency with the necessary visibility to investigate incidents that occurred in the past.
+- _Rationale:_ Audit logs should be retained for a sufficient duration to ensure availability when needed. Extending log retention provides an agency with the necessary visibility to investigate incidents that occurred in the past.
 - _Last modified:_ April 2025
 - _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies may use the tool that best fits their individual circumstances.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-11
