@@ -138,7 +138,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": f"Query returned 3 txt records",
+                    "query_result": "Query returned 3 txt records",
                     "query_answers": answers
                 })
             # Case where there is a valid server
@@ -161,10 +161,10 @@ class TestRobustDNSClient:
                     log_entries.append({
                         "query_name": query,
                         "query_method": "DoH",
-                        "query_result": f"Query returned response code 1",
+                        "query_result": "Query returned response code 1",
                         "query_answers": []
                     })
-                    errors.append(f"Response code 1")
+                    errors.append("Response code 1")
             # Case where there is a valid server,
             # Status code is 1 the first iteration,
             # and 3 the second iteration.
@@ -203,10 +203,10 @@ class TestRobustDNSClient:
                     log_entries.append({
                         "query_name": query,
                         "query_method": "DoH",
-                        "query_result": f"Query resulted in exception time out",
+                        "query_result": "Query resulted in exception time out",
                         "query_answers": []
                     })
-                    errors.append(f"time out")
+                    errors.append("time out")
             # Exception occurs on First Iteration, but Status Code 3 occurs on next iteration
             case 8:
                 max_tries = 3
@@ -222,10 +222,10 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": f"Query resulted in exception time out",
+                    "query_result": "Query resulted in exception time out",
                     "query_answers": []
                 })
-                errors.append(f"time out")
+                errors.append("time out")
 
                 # expected log entries from Status 3 Code
                 log_entries.append({
@@ -291,7 +291,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "traditional",
-                    "query_result": f"Query returned 2 txt records",
+                    "query_result": "Query returned 2 txt records",
                     "query_answers": answers
                 })
                 robust_dns_client.traditional_query(query, max_tries)
@@ -326,7 +326,7 @@ class TestRobustDNSClient:
                     log_entries.append({
                         "query_name": query,
                         "query_method": "traditional",
-                        "query_result": f"Query resulted in exception Timeout",
+                        "query_result": "Query resulted in exception Timeout",
                         "query_answers": []
                     })
                     errors.append("Timeout")
@@ -340,7 +340,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "traditional",
-                    "query_result": f"Query resulted in exception Timeout",
+                    "query_result": "Query resulted in exception Timeout",
                     "query_answers": []
                 })
                 errors.append("Timeout")
