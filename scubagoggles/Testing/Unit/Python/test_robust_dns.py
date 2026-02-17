@@ -30,7 +30,8 @@ class TestRobustDNSClient:
     def test_get_doh_server(self, mock_resolver, mock_requests_get, subtest, expected):
         """
         Test DOH Server Retrieval
-        This method tests the 'doh_server' method, and simulates (using Mocks), three test cases where:
+        This method tests the 'doh_server' method, and simulates 
+        (using Mocks), three test cases where:
         The first DOH server is availible,
         The first DOH server is not availible, but the second is
         None of the DOH servers are availible
@@ -259,11 +260,13 @@ class TestRobustDNSClient:
     def test_traditional_query(self, mock_resolver, subtest, max_tries):
         """
         Test Traditional Query
-        This method tests the 'traditional_query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
+        This method tests the 'traditional_query' method and provides extensive unit
+        testing coverage of different branching cases, conditionals, 
         and logical behavior of the traditional_query method.
-        Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
+        Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
         subtest : The specific unit test case covering a unique logical/branching scenario
-        max_tries : Used for looping behavior; Number of max_tries to run the DOH query passed into the traditional_query method parameter 'max_tries'
+        max_tries : Used for looping behavior; Number of max_tries to run the 
+        DOH query passed into the traditional_query method parameter 'max_tries'
         """
         robust_dns_client = RobustDNSClient()
         #mock_resolver.assert_called()
@@ -272,7 +275,6 @@ class TestRobustDNSClient:
         nxdomain = False
         errors = []
         log_entries = []
-        expected = None  # collect expected result here
         resolver_instance = mock_resolver.return_value
 
         match subtest:
@@ -371,15 +373,17 @@ class TestRobustDNSClient:
     def test_query(self, mocker, mock_resolver, subtest, max_tries):
         """
         Test  Query
-        This method tests the 'query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
+        This method tests the 'query' method and provides extensive unit
+          testing coverage of different branching cases, conditionals,
         and logical behavior of the query method.
         The query method invokes the traditional_query method and doh_query method.
-        There is little branching or logical behavior to capture, and the traditional_query and doh_query methods are mocked. 
+        There is little branching or logical behavior to capture, 
+        and the traditional_query and doh_query methods are mocked. 
 
-        Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
+        Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
         subtest : The specific unit test case covering a unique logical/branching scenario
         max_tries : Used for looping behavior; Number of max_tries to attempt query / queries.
-        max_tries is propogated through the traditional_query and doh_query methods, 
+        max_tries is propogated through the traditional_query and doh_query methods,
         but because those are mocked, this parameter is mostly irrelevant
         """
         query = "An example query."
