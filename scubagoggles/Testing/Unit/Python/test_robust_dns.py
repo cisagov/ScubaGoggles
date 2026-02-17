@@ -2,7 +2,6 @@
 Tests for the PolicyAPI class.
 
 """
-from pathlib import Path
 from unittest.mock import Mock
 import pytest
 import dns
@@ -246,14 +245,7 @@ class TestRobustDNSClient:
 
 
 
-    """
-    Test Traditional Query
-    This method tests the 'traditional_query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
-    and logical behavior of the traditional_query method.
-    Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
-    subtest : The specific unit test case covering a unique logical/branching scenario
-    max_tries : Used for looping behavior; Number of max_tries to run the DOH query passed into the traditional_query method parameter 'max_tries'
-    """
+
     @pytest.mark.parametrize("subtest, max_tries",
     [
         (1, 2),
@@ -265,6 +257,14 @@ class TestRobustDNSClient:
     # NOTE : No need to have a different constructor for the
     # nameservers attributes with mock-testing (document this in code)
     def test_traditional_query(self, mock_resolver, subtest, max_tries):
+        """
+        Test Traditional Query
+        This method tests the 'traditional_query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
+        and logical behavior of the traditional_query method.
+        Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
+        subtest : The specific unit test case covering a unique logical/branching scenario
+        max_tries : Used for looping behavior; Number of max_tries to run the DOH query passed into the traditional_query method parameter 'max_tries'
+        """
         robust_dns_client = RobustDNSClient()
         #mock_resolver.assert_called()
         query = "An example query."
@@ -361,19 +361,7 @@ class TestRobustDNSClient:
         assert robust_dns_client.traditional_query(query, max_tries) == return_value
 
 
-    """
-    Test  Query
-    This method tests the 'query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
-    and logical behavior of the query method.
-    The query method invokes the traditional_query method and doh_query method.
-    There is little branching or logical behavior to capture, and the traditional_query and doh_query methods are mocked. 
 
-    Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
-    subtest : The specific unit test case covering a unique logical/branching scenario
-    max_tries : Used for looping behavior; Number of max_tries to attempt query / queries.
-    max_tries is propogated through the traditional_query and doh_query methods, 
-    but because those are mocked, this parameter is mostly irrelevant
-    """
     @pytest.mark.parametrize("subtest, max_tries",
     [
         (1, 2),     # Note : max_tries for these test cases is mostly irrelevant here,
@@ -381,7 +369,19 @@ class TestRobustDNSClient:
         (3, 2),
     ])
     def test_query(self, mocker, mock_resolver, subtest, max_tries):
-        assert True
+        """
+        Test  Query
+        This method tests the 'query' method and provides extensive unit testing coverage of different branching cases, conditionals, 
+        and logical behavior of the query method.
+        The query method invokes the traditional_query method and doh_query method.
+        There is little branching or logical behavior to capture, and the traditional_query and doh_query methods are mocked. 
+
+        Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator) 
+        subtest : The specific unit test case covering a unique logical/branching scenario
+        max_tries : Used for looping behavior; Number of max_tries to attempt query / queries.
+        max_tries is propogated through the traditional_query and doh_query methods, 
+        but because those are mocked, this parameter is mostly irrelevant
+        """
         query = "An example query."
         robust_dns_client = None
         traditional_query_mock = None
