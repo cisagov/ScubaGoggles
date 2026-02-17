@@ -63,18 +63,18 @@ class TestRobustDNSClient:
         # Move the Assert Statements inside the cases (match)
         # since case #3 uses 'is None' instead of '==' comparison
 
-    @pytest.mark.parametrize("subtest, max_tries",
+    @pytest.mark.parametrize("subtest",
     [
-        (1, 2),
-        (2, 2),
-        (3, 2),
-        (4, 2),
-        (5, 2),
-        (6, 2),
-        (7, 3),
-        (8, 3)
+        (1),
+        (2),
+        (3),
+        (4),
+        (5),
+        (6),
+        (7),
+        (8)
     ])
-    def test_doh_query(self, mocker, mock_resolver, mock_requests_get, subtest, max_tries):
+    def test_doh_query(self, mocker, mock_resolver, mock_requests_get, subtest):
         """
         Test DOH Query
         This method tests the 'doh_query' method and provides extensive unit 
@@ -95,6 +95,7 @@ class TestRobustDNSClient:
         nxdomain = False
         errors = []
         log_entries = []
+        max_tries = 2
 
         # valid working server example (valid for all the cases except the first test case)
         doh_server_mock.return_value = "cloudflare-dns.com"
@@ -195,6 +196,7 @@ class TestRobustDNSClient:
                 })
             # Exception case (from requests.get)
             case 7:
+                max_tries = 3
                 mock_requests_get.side_effect = requests.exceptions.Timeout("time out")
                 # append log entries from Exception
                 for _ in range(max_tries):
@@ -207,6 +209,7 @@ class TestRobustDNSClient:
                     errors.append(f"time out")
             # Exception occurs on First Iteration, but Status Code 3 occurs on next iteration
             case 8:
+                max_tries = 3
                 status_three_return = Mock(spec=requests.Response)
                 status_three_return.json.return_value = {"Status" : 3}
                 #return values for the next two iterations
