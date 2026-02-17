@@ -175,7 +175,7 @@ External chat messaging SHALL be restricted to allowlisted domains only.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Allowing external chat messaging in Google Chat to unrestricted domains opens additional avenues for data exfiltration, increasing the risk of data leakage. By restricting external chat messaging to only allowlisted domains helps minimize the risk of sensitive information being shared outside the organization without explicit consent and approval.
+- _Rationale:_ Allowing external chat messaging in Google Chat to unrestricted domains opens additional avenues for data exfiltration, increasing the risk of data leakage. Restricting external chat messaging to only allowlisted domains helps minimize the risk of sensitive information being shared outside the organization without explicit consent and approval.
 - _Last modified:_ November 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
