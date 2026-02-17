@@ -45,7 +45,7 @@ Who can join classes in your domain SHALL be restricted to users in your domain 
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Classes can contain PII sensitive information. Restricting access to the organization's classes helps prevent data leakage resulting from unauthorized classroom access.
+- _Rationale:_ Classes can contain PII or sensitive information. Restricting access to the organization's classes helps prevent data leakage resulting from unauthorized classroom access.
 - _Last modified:_ October 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
