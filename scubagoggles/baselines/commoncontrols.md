@@ -316,7 +316,7 @@ Google Workspace handles post-SSO verification for profiles assigned org-wide as
 ### Policies
 
 #### GWS.COMMONCONTROLS.3.1v0.6
-Post-single sign-on (SSO) verification SHOULD be enabled for users signing in using the SSO profile for the organization.
+Single sign-on (SSO) verification SHOULD be enabled for users signing in using the SSO profile for the organization.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
@@ -1144,7 +1144,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 
         > Context Aware Access logs
 
-- _Rationale:_ This policy enhances security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids agency compliance with applicable law and binding policy and helps maintain the confidentiality, integrity, and availability of the agency's information systems.
+- _Rationale:_ This policy enhances security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids agency compliance with applicable law and binding policy, and helps maintain the confidentiality, integrity, and availability of the agency's information systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4(5)
 - MITRE ATT&CK TTP Mapping
@@ -1152,11 +1152,11 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
 
 #### GWS.COMMONCONTROLS.14.2v0.6
-Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as directed by OMB Memorandum M-21-31, "Improving the Federal Government’s Investigative and Remediation Capabilities Related to Cybersecurity Incidents."
+Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols142v06-instructions)
 
-- _Rationale:_ Audit logs should be retained for a sufficient duration to ensure availability when needed. Extending log retention provides an agency with the necessary visibility to investigate incidents that occurred in the past.
+- _Rationale:_ Audit logs should be retained for a sufficient duration to ensure availability when needed. Extending log retention provides an agency with the necessary visibility to investigate incidents that occurred in the past. Additionally, the Office of Management and Budget (OMB) Memorandum M-21-31, "Improving the Federal Government’s Investigative and Remediation Capabilities Related to Cybersecurity Incidents", requires audit logs be maintained for at least 6 months in active storage and an additional 18 months in cold storage.
 - _Last modified:_ April 2025
 - _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies may use the tool that best fits their individual circumstances.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-11
