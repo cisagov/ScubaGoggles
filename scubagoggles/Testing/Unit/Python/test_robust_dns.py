@@ -22,16 +22,14 @@ class TestRobustDNSClient:
         """ Mocks the requests.get method """
         return mocker.patch('scubagoggles.robust_dns.requests.get')
 
-    """
-    Test DOH Server Retrieval
+    """ Test DOH Server Retrieval
     This method tests the 'doh_server' method, and simulates (using Mocks), three test cases where:
       The first DOH server is availible,
       The first DOH server is not availible, but the second is
       None of the DOH servers are availible
     Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
     subtest : The specific unit test case covering a unique logical/branching scenario
-    expected : Expected value (for returned server);  "" indicates no servers are availible
-    """
+    expected : Expected value (for returned server);  "" indicates no servers are availible """
     @pytest.mark.parametrize("subtest, expected",
     [
         (1, "cloudflare-dns.com"),
