@@ -74,7 +74,7 @@ class TestRobustDNSClient:
         (7,3),
         (8,3)
     ])
-    def test_doh_query(self, mocker, mock_resolver, mock_requests_get, subtest, max_tries):
+    def test_doh_query(self, mocker, mock_resolver, mock_requests_get, subtest, max_tries): #pylint: disable
         """
         Test DOH Query
         This method tests the 'doh_query' method and provides extensive unit 
