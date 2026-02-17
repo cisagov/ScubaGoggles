@@ -365,7 +365,7 @@ Google SHOULD be allowed to automatically apply future recommended settings for 
   - None
 
 #### GWS.GMAIL.5.5v0.6
-Emails flagged by Google Workspace (GWS) Gmail policies 5.1-5.3 SHALL NOT be kept in inbox.
+Emails flagged by SCuBA policies GWS.GMAIL.5.1 through GWS.GMAIL.5.3 SHALL NOT be kept in inbox.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
