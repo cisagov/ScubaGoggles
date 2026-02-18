@@ -118,7 +118,7 @@ class Reporter:
             # Lowercase all the keys for case-insensitive comparisons
             key.lower(): value for key, value in omit_ou_d.items()
         }
-        
+  
         self.progress_bar = progress_bar
         self.rules_table = None
         self.annotated_failed_policies = {}

@@ -453,6 +453,7 @@ class Orchestrator:
                                 dns_logs,
                                 omissions,
                                 annotations,
+                                omit_ou,
                                 products_bar)
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
