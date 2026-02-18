@@ -313,6 +313,8 @@ class PolicyAPI:
 
     _defaults = {
         'calendar_external_invitations': {'warnOnInvite': True},
+        'calendar_interoperability': {
+            'enableInteroperability': False},
         'calendar_primary_calendar_max_allowed_external_sharing': {
             'maxAllowedExternalSharing': 'EXTERNAL_FREE_BUSY_ONLY'},
         'calendar_secondary_calendar_max_allowed_external_sharing': {
@@ -344,6 +346,7 @@ class PolicyAPI:
         'gmail_links_and_external_images': {
             'applyFutureSettingsAutomatically': True,
             'enableAggressiveWarningsOnUntrustedLinks': False},
+        'gmail_mail_delegation': {'enableMailDelegation': False},
         'gmail_spoofing_and_authentication': {
             'applyFutureSettingsAutomatically': True},
         'groups_for_business_groups_sharing': {
@@ -359,8 +362,12 @@ class PolicyAPI:
             'enableAccountRecovery': False},
         'security_two_step_verification_device_trust': {
             'allowTrustingDevice': True},
+        'security_two_step_verification_enforcement': {
+            'enforcedFrom': '1970-01-01T00:00:00Z'},
         'security_two_step_verification_enforcement_factor': {
             'allowedSignInFactorSet': 'ALL'},
+        'security_two_step_verification_grace_period': {
+            'enrollmentGracePeriod': "0s"},
         'security_two_step_verification_enrollment': {
             'allowEnrollment': True},
         'security_user_account_recovery': {'enableAccountRecovery': False},
