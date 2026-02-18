@@ -400,11 +400,7 @@ class Orchestrator:
         annotations = {}
         if 'annotatepolicy' in args and args.annotatepolicy is not None:
             annotations = args.annotatepolicy
-        
-        omit_ou = {}
-        if 'excludesite' in args and args.excludesite is not None:
-            omit_ou = args.excludesite
-            
+        omit_ou = getattr(args, "excludesite", None) or {}
         # Begin Creating the individual report files
         summary = {}
         results = {}
