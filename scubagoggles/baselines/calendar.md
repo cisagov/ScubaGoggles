@@ -44,7 +44,7 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
+- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -55,7 +55,7 @@ External sharing options for secondary calendars SHALL be configured to "Only fr
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to your organization.
+- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)(a)  
 - MITRE ATT&CK TTP Mapping
@@ -148,8 +148,7 @@ Calendar Interop SHOULD be disabled.
 
 - _Rationale:_ Enabling Calendar interop adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature unless required by the organization conforms to the principle of least functionality.
 - _Last modified:_ July 2023
-- Notes
-  - This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar
+- _Note:_ This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -160,7 +159,7 @@ Microsoft 365 (Graph API) SHALL be used in lieu of basic authentication to estab
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscalendar32v06-instructions)
 
-- _Rationale:_ Basic authentication is a deprecated and risk-prone authentication method. Using OAuth 2.0 helps reduce the risk of credential compromise.
+- _Rationale:_ Basic authentication is a deprecated and risk-prone authentication method. Using Microsoft 365 (Graph API) helps reduce the risk of credential compromise.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
