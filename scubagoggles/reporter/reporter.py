@@ -675,8 +675,6 @@ class Reporter:
             # Sanitize OriginalDetails if present
             if 'OriginalDetails' in result:
                 original_details = result['OriginalDetails']
-                original_details = original_details.replace(self._log_based_warning,
-                                                           self._log_based_warning_plaintext)
                 original_details = original_details.replace('<br>', '\n')
                 original_details = original_details.replace(dns_link, "")
                 original_details = self._convert_html_lists_to_plaintext(original_details)

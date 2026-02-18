@@ -68,6 +68,26 @@ test_SPF_Correct_V3 if {
     RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
+test_SPF_Correct_V4 if {
+    # Test softfail
+    PolicyId := GmailId3_1
+    Output := tests with input as {
+        "spf_records": [
+            {
+                "domain": "test.name",
+                "rdata": ["v=spf1 include:_spf.google.com ~all"]
+            }
+        ],
+        "domains": ["test.name"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+}
+
 test_SPF_Incorrect_V1 if {
     # Test SPF when there's multiple domains and only one is correct
     PolicyId := GmailId3_1
@@ -114,26 +134,6 @@ test_SPF_Incorrect_V2 if {
 #--
 
 test_SPF_Incorrect_V3 if {
-    # Test softfail
-    PolicyId := GmailId3_1
-    Output := tests with input as {
-        "spf_records": [
-            {
-                "domain": "test.name",
-                "rdata": ["v=spf1 include:_spf.google.com ~all"]
-            }
-        ],
-        "domains": ["test.name"]
-    }
-
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
-}
-
-test_SPF_Incorrect_V4 if {
     # Test no "all" mechanism
     PolicyId := GmailId3_1
     Output := tests with input as {
