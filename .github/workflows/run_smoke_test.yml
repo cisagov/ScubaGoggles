@@ -69,6 +69,14 @@ jobs:
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.operating-system }}
+    # Google's Policy API has a read request quota that limits the number of
+    # requests per minute.  This means we can't run too many jobs at the same
+    # time.  Limiting the runs by operating system should be good enough to
+    # avoid the limit.  GitHub allows 1 running and 1 pending job per
+    # concurrency group, so this setup will work as long as we stick to just
+    # 2 Python version runs per OS.
+    concurrency:
+      group: ${{ matrix.operating-system }}
     outputs:
       baseline-path: ${{ steps.baselinepath.outputs.cachepath }}
     steps:
