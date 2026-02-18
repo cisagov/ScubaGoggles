@@ -113,7 +113,7 @@ DKIM SHOULD be enabled for all domains.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
   - [T1434: Internal Spear Phishing](https://attack.mitre.org/techniques/T1434/)
-  - [T1672 : Email Spoofing](https://attack.mitre.org/techniques/T1672/)
+  - [T1672: Email Spoofing](https://attack.mitre.org/techniques/T1672/)
 
 ### Resources
 
@@ -167,8 +167,8 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
     - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
-  - [T1672 : Email Spoofing](https://attack.mitre.org/techniques/T1672/)
-  - [T1598 : Phishing for Information](https://attack.mitre.org/techniques/T1598/)
+  - [T1672: Email Spoofing](https://attack.mitre.org/techniques/T1672/)
+  - [T1598: Phishing for Information](https://attack.mitre.org/techniques/T1598/)
     - [T1598.003: Phishing for Information: Spearphishing Link](https://attack.mitre.org/techniques/T1598/003/)
 
 ### Resources
@@ -215,8 +215,8 @@ A DMARC policy SHALL be published at the full domain or the second-level domain 
   - User alias domains provide an alternative email address to send or receive email and therefore must have a DMARC policy in place.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
-  - [T1672 : Email Spoofing](https://attack.mitre.org/techniques/T1672/)
-  - [T1598 : Phishing for Information](https://attack.mitre.org/techniques/T1598/)
+  - [T1672: Email Spoofing](https://attack.mitre.org/techniques/T1672/)
+  - [T1598: Phishing for Information](https://attack.mitre.org/techniques/T1598/)
     - [T1598.003: Phishing for Information: Spearphishing Link](https://attack.mitre.org/techniques/T1598/003/)
 
 #### GWS.GMAIL.4.2v0.6
@@ -235,7 +235,7 @@ The DMARC message rejection option SHALL be p=reject.
     - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
   - [T1586:002: Compromise Accounts](https://attack.mitre.org/techniques/T1586/)
     - [T1586:002: Compromise Accounts: Email Accounts](https://attack.mitre.org/techniques/T1586/002/)
-  - [T1672 : Email Spoofing](https://attack.mitre.org/techniques/T1672/)
+  - [T1672: Email Spoofing](https://attack.mitre.org/techniques/T1672/)
 
 #### GWS.GMAIL.4.3v0.6
 The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.
