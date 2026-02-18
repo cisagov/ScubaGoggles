@@ -1,6 +1,6 @@
 # CISA Google Workspace Secure Configuration Baseline for Google Gemini
 
-Google Gemini is Google’s AI platform to assist with several tasks in Gmail, Drive, Docs, and Meet. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Gemini security.
+Google Gemini is Google’s Artificial Intelligence (AI) platform to assist with several tasks in Gmail, Drive, Docs, and Meet. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Gemini security.
 
 The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
@@ -26,17 +26,17 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 # Baseline Policies
 
 ## 1. Gemini App Access
-Data for users with a license that provides access to Gemini under the Google Workspace
+Data for users with a license that provides access to Gemini under the Google Workspace (GWS)
 or Workspace for Education terms cannot be used by Google for training generative
-AI models. However, Google Workspace supports enabling access to Gemini, regardless
+AI models. However, GWS supports enabling access to Gemini, regardless
 of license; only Gemini data for users with the appropriate license will be protected
-by the Google Workspace Terms of Service.
+by the GWS Terms of Service.
 
-Note that Gemini access to Google services outside of the Google Workspace core
+Gemini access to Google services outside of the GWS core
 services can be restricted in the admin center. These additional services
-are not covered by the Google Workspace agreement and as such, could represent
-some risk to user data. However, allowing Gemini access to those apps does not
-increase that risk as those apps cannot access data from Gemini. See
+are not covered by the GWS agreement and as such, could represent
+some risk to user data. However, allowing Gemini access to those applications does not
+increase that risk as those applications cannot access data from Gemini. See
 [Additional Google Services](https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/baselines/commoncontrols.md#16-additional-google-services)
 for more details on configuring these additional services.
 
@@ -47,7 +47,7 @@ Gemini app user access SHALL be set to OFF for everyone without a license.
 
 - _Rationale:_ Only Gemini data for users with the appropriate license will be
 protected by the Google Workspace Terms of Service. Data for users without the
-appropriate license can be used to improve Google's generative AI models; as such,
+appropriate license can be used to improve Google's generative AI models. As such,
 allowing user access to Gemini under any license creates the risk of data leakage.
 - _Last modified:_ July 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
@@ -80,17 +80,17 @@ before they're made generally available.
 Note that Alpha features in Gemini are subject to the Pre-General Availability
 Offering Terms (excluding Section 6.1(b)) of the Google Workspace Service
 Specific Terms. Section 6.1(d) prohibits government customers from using live or
-production data in connection with Pre-GA Offerings.
+production data in connection with Pre-Gemini Alpha Offerings.
 
 ### Policies
 
 #### GWS.GEMINI.2.1v0.6
 Alpha Gemini features SHALL be disabled.
 
-- _Rationale:_ Allowing access to alpha features may expose users to features that
+- _Rationale:_ Allowing access to Gemini Alpha features may expose users to features that
 have not yet been fully vetted and may still need to undergo robust testing to ensure
 compliance with applicable security standards. Additionally, government customers are
-prohibited from using production data with pre-GA offerings, per the Google Workspace
+prohibited from using production data with pre-general availability offerings, per the Google Workspace
 Service Specific Terms.
 - _Last modified:_ July 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)

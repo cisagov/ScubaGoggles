@@ -77,7 +77,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 
             - Google Passkeys
 
-- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
+- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing phishing-resistant methods reduces those risks. Additionally, the Office of Management and Budget (OMB) Memorandum M-22-09, “Moving the U.S. Government Toward Zero Trust Cybersecurity Principles” requires phishing-resistant MFA for agency staff, contractors, and partners, by the Office of Management and Budget Memo M-22-09.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2), IA-5c, IA-5g, IA-2(8)
 - MITRE ATT&CK TTP Mapping
@@ -111,7 +111,7 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
 #### GWS.COMMONCONTROLS.1.3v0.6
 SMS or Voice as the MFA method SHALL NOT be used.
 
-- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, phishing-resistant MFA is required for agency staff, contractors, and partners, by Office of Management and Budget Memo M-22-09.
+- _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, OMB M-22-09 requires phishing-resistant MFA for agency staff, contractors, and partners.
 - _Last modified:_ April 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7b, IA-5c
 - MITRE ATT&CK TTP Mapping
@@ -126,7 +126,7 @@ SMS or Voice as the MFA method SHALL NOT be used.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
 #### GWS.COMMONCONTROLS.1.4v0.6
-Google 2SV new user enrollment period SHALL be set to at least 1 day or at most 1 week.
+Google 2-Step Verification (2SV) new user enrollment period SHALL be set to at least 1 day or at most 1 week.
 
 - _Rationale:_ Enrollment must be enforced within a reasonable timeframe. One week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
 - _Last modified:_ April 2025
@@ -222,9 +222,9 @@ To enforce a device policy that requires company-owned devices, Google needs a l
 ### Policies
 
 #### GWS.COMMONCONTROLS.2.1v0.6
-Policies restricting access to GWS based on signals about enterprise devices SHOULD be implemented.
+Policies restricting access to Google Workspace based on signals about enterprise devices SHOULD be implemented.
 
-- _Rationale:_ Granular device access control afforded by context-aware access is in alignment with Federal zero trust strategy and principles. Context-aware access can help to increase the security of your GWS data by allowing you to restrict access to certain applications or services based on user/device attributes.
+- _Rationale:_ Granular device access control afforded by context-aware access is in alignment with federal zero trust strategy and principles. Context-aware access can help to increase the security of GWS data by allowing organizations to restrict access to certain applications or services based on user/device attributes.
 - _Last modified:_ July 2023
 - _Note:_ More granular controls may be used if the agency needs it.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-3
@@ -295,9 +295,9 @@ Google Workspace handles post-SSO verification for profiles assigned org-wide as
 ### Policies
 
 #### GWS.COMMONCONTROLS.3.1v0.6
-Post-SSO verification SHOULD be enabled for users signing in using the SSO profile for your organization.
+Single sign-on (SSO) verification SHOULD be enabled for users signing in using the SSO profile for the organization.
 
-- _Rationale:_ Without enabling post-SSO verification, any Google 2-Step Verification (2SV) configuration is ignored for third-party SSO users. Enabling post-SSO verification will apply 2SV verification policies.
+- _Rationale:_ Without enabling post-SSO verification, Google 2-Step Verification (2SV) configurations are not enforced for third-party SSO users. Enabling post-SSO verification ensures the application of 2SV verification policies.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
@@ -354,7 +354,7 @@ Note: If using a third-party IdP, and agency-set web session lengths for its use
 #### GWS.COMMONCONTROLS.4.1v0.6
 Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.
 
-- _Rationale:_ Allowing sessions to persist indefinitely allows users to bypass 2-Step Verification for future activity on that device. Limiting sessions to 12 hours may reduce the impact of session hijacking attacks and prevent users from inadvertently remaining logged in on unattended devices.
+- _Rationale:_ Allowing sessions to persist indefinitely allows users to bypass 2-Step Verification (2SV) for future activity on that device. Limiting sessions to 12 hours may reduce the impact of session hijacking attacks and prevent users from inadvertently remaining logged in on unattended devices.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-11
 - MITRE ATT&CK TTP Mapping
@@ -404,7 +404,7 @@ User password strength SHALL be enforced.
 #### GWS.COMMONCONTROLS.5.2v0.6
 User password length SHALL be at least 12 characters.
 
-- _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
+- _Rationale:_ The National Institute of Standards and Technology (NIST) published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5(1)
 - MITRE ATT&CK TTP Mapping
@@ -416,7 +416,7 @@ User password length SHALL be at least 12 characters.
 #### GWS.COMMONCONTROLS.5.3v0.6
 User password length SHOULD be at least 15 characters.
 
-- _Rationale:_ The National Institute of Standards and Technology (NIST) has published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
+- _Rationale:_ The National Institute of Standards and Technology (NIST) published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5(1)
 - MITRE ATT&CK TTP Mapping
@@ -440,7 +440,7 @@ Password policy SHALL be enforced at next sign-in.
 #### GWS.COMMONCONTROLS.5.5v0.6
 User passwords SHALL NOT be reused.
 
-- _Rationale:_ Password reuse represents a significant security risk. Preventing password reuse when possible limits the scope of a compromised password.
+- _Rationale:_ Password reuse represents a significant security risk. When possible, preventing password reuse limits the scope of a compromised password.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5(1)
 - MITRE ATT&CK TTP Mapping
@@ -517,8 +517,8 @@ Some examples of these privileged accounts include the following Pre-Built GWS A
 #### GWS.COMMONCONTROLS.6.1v0.6
 All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication(MFA), not an agency's authoritative on-premises or federated identity system.
 
-- _Rationale:_ Leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. This makes it more challenging for an adversary to pivot from a compromised on-premises environment to the cloud with privileged access.
-- _Last modified:_ January 2025
+- _Rationale:_ Cloud-only accounts leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. Enforcing this policy makes it more challenging for a threat actor to pivot from a compromised on-premises environment to the cloud with privileged access.
+- _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(5)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -531,7 +531,7 @@ All administrative accounts SHALL leverage Google Account authentication with ph
 #### GWS.COMMONCONTROLS.6.2v0.6
 A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.
 
-- _Rationale:_ The super admin role provides unfettered access to the workspace. Properly managing the number of users with this level of access makes workspace compromise more challenging. However, having too few accounts can be problematic as it increases the risk of losing admin access entirely (e.g., if a super admin forgets their password); having between 2 and 4 balances these two concerns.
+- _Rationale:_ The super admin role provides unfettered access to the Google Workspace. Properly managing the number of users with this level of access makes GWS compromise more challenging. Having too few accounts can increase the risk of losing admin access entirely (e.g., if a super admin forgets their password); Maintaining between two to four accounts balances concerns regarding accessibility and security.
 - _Last modified:_ July 2023
 - _Note:_ Admin count does not include "break-glass" super admin accounts.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(5)
@@ -589,7 +589,7 @@ By changing the email address, the user resolves the conflict by ensuring that t
 #### GWS.COMMONCONTROLS.7.1v0.6
 Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed ones.
 
-- _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by Workspace admins. By resolving conflicting accounts, organizations can ensure all users in their Workspace are using managed accounts.
+- _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by GWS admins. By resolving conflicting accounts, organizations can ensure all users have managed user accounts.
 - _Last modified:_ April 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2
 - MITRE ATT&CK TTP Mapping
@@ -631,7 +631,7 @@ This section addresses the GWS account self-recovery feature. When enabled, this
 #### GWS.COMMONCONTROLS.8.1v0.6
 Account self-recovery for super admins SHALL be disabled.
 
-- _Rationale:_ If enabled, an adversary could attempt to gain access to a super admin account through the account recovery method. Disabling this feature forces super admins to contact another super admin to recover their account, making it more difficult for a potential adversary to compromise their account.
+- _Rationale:_ If enabled, a threat actor could attempt to gain access to a super admin account through the account recovery method. Disabling this feature forces super admins to contact another super admin to recover their account, making it more difficult for a potential threat actor to compromise their account.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5d, IA-5g
 - MITRE ATT&CK TTP Mapping
@@ -651,9 +651,9 @@ Account self-recovery for users and non-super admins SHALL be disabled.
 #### GWS.COMMONCONTROLS.8.3v0.6
 Ability to add recovery information SHOULD be disabled.
 
-- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding PII to their organizational account, making it more difficult for a potential adversary to steal PII in the event of a compromise.
+- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding personally identifiable information (PII) to their organizational account, making it more difficult for a potential threat actor to steal PII in the event of a compromise.
 - _Last modified:_ August 2025
-- _Note:_ This setting is not applicable if you’re using single sign-on (SSO) with a third-party identity provider or Password Sync. GWS.COMMONCONTROLS.8.3 acts as a defense in depth policy when GWS.COMMONCONTROLS.8.1 and GWS.COMMONCONTROLS.8.2 are not enabled.
+- _Note:_ This setting is not applicable if using single sign-on (SSO) with a third-party identity provider or Password Sync. GWS.COMMONCONTROLS.8.3 acts as a defense in depth policy when GWS.COMMONCONTROLS.8.1 and GWS.COMMONCONTROLS.8.2 are not enabled.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -710,9 +710,9 @@ This control enforces more secure protection of highly privileged, senior execut
 ### Policies
 
 #### GWS.COMMONCONTROLS.9.1v0.6
-Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Program.
+Highly privileged accounts SHALL be enrolled in the Google Workspace (GWS) Advanced Protection Program.
 
-- _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
+- _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires users to use a security key, which is a hardware device or special software on mobile devices used to verify identity, to sign in to a Google Account. Unauthorized users will not be able to sign in without the user's security key, even if they have the user's username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2), IA-5c, IA-5d, IA-5g, SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
@@ -726,7 +726,7 @@ Highly privileged accounts SHALL be enrolled in the GWS Advanced Protection Prog
 #### GWS.COMMONCONTROLS.9.2v0.6
 All sensitive user accounts SHOULD be enrolled into the GWS Advanced Protection Program.
 
-- _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires you to use a security key, which is a hardware device or special software on your phone used to verify your identity, to sign in to your Google Account. Unauthorized users won't be able to sign in without your security key, even if they have your username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
+- _Rationale:_ Sophisticated phishing tactics can trick even the most savvy users into giving their sign-in credentials to attackers. Advanced Protection requires users to use a security key, which is a hardware device or special software on mobile devices used to verify identity, to sign in to a Google Account. Unauthorized users will not be able to sign in without the user's security key, even if they have the user's username and password. The Advanced Protection Program includes a curated group of high-security policies that are applied to enrolled accounts. Additional policies may be added to the Advanced Protection Program to ensure the protections are current.
 - _Last modified:_ July 2023
 - _Note:_ This control enforces more secure protection of sensitive user accounts from targeted attacks. Sensitive user accounts include political appointees, Senior Executive Service (SES) officials, or other senior officials whose account compromise would pose a level of risk prohibitive to agency mission fulfillment
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2), IA-5c, IA-5d, IA-5g, SI-3, SI-8
@@ -769,7 +769,7 @@ Agencies need to have a process in place to manage and control application acces
 #### GWS.COMMONCONTROLS.10.1v0.6
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
 
-- _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
+- _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to GWS.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
@@ -781,9 +781,9 @@ Agencies SHALL use GWS application access control policies to restrict access to
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
 #### GWS.COMMONCONTROLS.10.2v0.6
-Agencies SHALL NOT allow users to consent to access to low-risk scopes.
+Agencies SHALL NOT allow users to grant consent for access to low-risk scopes.
 
-- _Rationale:_ Allowing users to give access to OAuth scopes that aren't classified as high-risk could still allow for apps that are not trusted to be granted access by non-administrator personnel and without having to be allowlisted in accordance with policy 10.1.
+- _Rationale:_ Allowing users to grant access to OAuth scopes not classified as high-risk could enable untrusted apps to gain access without non-administrative approval being allowlisted, violating policy 10.1.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
 - MITRE ATT&CK TTP Mapping
@@ -797,7 +797,7 @@ Agencies SHALL NOT allow users to consent to access to low-risk scopes.
 #### GWS.COMMONCONTROLS.10.3v0.6
 Agencies SHALL NOT trust unconfigured internal apps.
 
-- _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
+- _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to GWS.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
@@ -823,9 +823,9 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
     - [T1059:009: Command and Scripting Interpreter: Cloud API](https://attack.mitre.org/techniques/T1059/009/)
 
 #### GWS.COMMONCONTROLS.10.5v0.6
-Access to Google Workspace applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
+Access to GWS applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
-- _Rationale:_ Antiquated authentication methods introduce additional risk into the workspace environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
+- _Rationale:_ Antiquated authentication methods introduce additional risk into the GWS environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
@@ -900,9 +900,9 @@ Some older versions of common software may break when this control is implemente
 ### Policies
 
 #### GWS.COMMONCONTROLS.11.1v0.6
-Only approved Google Workspace Marketplace applications SHALL be allowed for installation.
+Only approved Google Workspace (GWS) Marketplace applications SHALL be allowed for installation.
 
-- _Rationale:_ Marketplace apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to the workspace.
+- _Rationale:_ Marketplace apps may include malicious content. Restricting app access to only apps trusted by the organization reduces the risk of allowing malicious apps to connect to GWS.
 - _Last modified:_ October 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
@@ -944,7 +944,7 @@ This section prevents users from downloading a copy of the Google Takeout servic
 #### GWS.COMMONCONTROLS.12.1v0.6
 Google Takeout services SHALL be disabled.
 
-- _Rationale:_ Google Takeout is a service that allows you to download a copy of your data stored within 40+ Google products and services, including data from Gmail, Drive, Photos, and Calendar. While there may be a valid use case for individuals to back up their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
+- _Rationale:_ Google Takeout is a service that allows users to download a copy of their data stored within 40+ Google products and services, including data from Gmail, Drive, Photos, and Calendar. While there may be a valid use case for users to back up their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7, SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -1010,7 +1010,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 #### GWS.COMMONCONTROLS.13.1v0.6
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
-- _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the list of events linked above draws attention to them to minimize any impact to users and the agency.
+- _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the required system-defined events draws attention to these events while minimizing any impact to users and the organization.
 - _Last modified:_ January 2025
 - _Note:_ Any system-defined rules not listed are considered optional but should be reviewed and considered for activation by an administrator.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4(5)
@@ -1064,7 +1064,7 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
 
         > Context Aware Access logs
 
-- _Rationale:_ This policy enhances security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids agency compliance with applicable law and binding policy and helps maintain the confidentiality, integrity, and availability of the agency's information systems.
+- _Rationale:_ This policy enhances security by centralizing critical logs in the agency's Security Information and Event Management (SIEM) system, enabling timely detection and response to potential security incidents. It also aids agency compliance with applicable law and binding policy, and helps maintain the confidentiality, integrity, and availability of the agency's information systems.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4(5)
 - MITRE ATT&CK TTP Mapping
@@ -1072,11 +1072,11 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
 
 #### GWS.COMMONCONTROLS.14.2v0.6
-Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage, as directed by OMB M-21-31.
+Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage.
 
-- _Rationale:_ Audit logs may be unavailable when needed if they are not retained for a sufficient time. Increased log retention time gives an agency the necessary visibility to investigate incidents that occurred some time ago.
+- _Rationale:_ Audit logs should be retained for a sufficient duration to ensure availability when needed. Extending log retention provides an agency with the necessary visibility to investigate incidents that occurred in the past. Additionally, the Office of Management and Budget (OMB) Memorandum M-21-31, "Improving the Federal Government’s Investigative and Remediation Capabilities Related to Cybersecurity Incidents", requires audit logs be maintained for at least 6 months in active storage and an additional 18 months in cold storage.
 - _Last modified:_ April 2025
-- _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies are free to use the tool that best fits their individual circumstances.
+- _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies may use the tool that best fits their individual circumstances.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-11
 - MITRE ATT&CK TTP Mapping
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
@@ -1120,7 +1120,7 @@ At the time of writing, data region policies cannot be applied to data types not
 #### GWS.COMMONCONTROLS.15.1v0.6
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
-- _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential foreign adversaries to compromise the data.
+- _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential threat actors to compromise data.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -1132,7 +1132,7 @@ The data storage region SHALL be set to be the United States for all users in th
 #### GWS.COMMONCONTROLS.15.2v0.6
 Data SHALL be processed in the region selected for data at rest.
 
-- _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
+- _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it to unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -1180,7 +1180,7 @@ Google Workspace considers some of its services "core services," including Gmail
 #### GWS.COMMONCONTROLS.16.1v0.6
 Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.
 
-- _Rationale_: Allowing access to additional google services without a need may create unnecessary vulnerabilities within the Google Workspace environment. By turning these services off, it mitigates the risk by not allowing access.
+- _Rationale_: Accessing additional google services without necessity can introduce potential vulnerabilities within the Google Workspace environment. Disabling these services mitigates the risk restricting unnecessary access.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
@@ -1237,7 +1237,7 @@ This section covers whether multiple super admins need to approve changes to spe
 #### GWS.COMMONCONTROLS.17.1v0.6
 Require multiparty approval for sensitive admin actions SHOULD be enabled.
 
-- _Rationale_: Changes to sensitive admin settings such as disabling 2-step verification could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
+- _Rationale_: Changes to sensitive admin settings such as disabling 2-step verification (2SV) could introduce serious vulnerabilities in the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates the risk changing these settings pose.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
 - MITRE ATT&CK TTP Mapping
@@ -1310,7 +1310,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 [//]: # (Keep the version suffix out of the anchor.)
 <a name="commoncontrols184"></a>
 #### GWS.COMMONCONTROLS.18.4v0.6
-The action for the above DLP policies SHOULD be set to block external sharing.
+The action for DLP policies SHOULD be set to block external sharing.
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ January 2025

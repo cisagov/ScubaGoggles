@@ -79,7 +79,7 @@ This control determines which meetings users within the agency's organization ca
 ### Policies
 
 #### GWS.MEET.2.1v0.6
-Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace tenant or organization.
+Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace (GWS) tenant or organization.
 
 - _Rationale:_ Contact with unmanaged users can pose the risk of data leakage and other security threats. This policy reduces such contact by not allowing agency users to join meetings created by users' personal accounts.
 - _Last modified:_ September 2023
@@ -121,7 +121,7 @@ Note: When this feature is not enabled, any attendee that is a member of the hos
 #### GWS.MEET.3.1v0.6
 Host Management meeting features SHALL be enabled.
 
-- _Rationale:_ With host management disabled, any internal participant is able to take control of meetings, performing actions such as recording the meeting, disabling or enabling the chat, and ending the meeting. When enabled, these options are only available to meeting hosts.
+- _Rationale:_ With host management disabled, any internal participant can take control of meetings, performing actions such as recording the meeting, disabling or enabling the chat, and ending the meeting. When enabled, these options are only available to meeting hosts.
 - _Last modified:_ January 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping

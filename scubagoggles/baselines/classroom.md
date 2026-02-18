@@ -41,8 +41,8 @@ This section covers who has the ability to join classes and what classes the use
 #### GWS.CLASSROOM.1.1v0.6
 Who can join classes in your domain SHALL be set to Users in your domain only.
 
-- _Rationale:_ Classes can contain private or otherwise sensitive information. Restricting classes to users in your domain helps prevent data leakage resulting from unauthorized classroom access.
-- _Last modified:_ September 2023
+- _Rationale:_ Classes can contain PII or sensitive information. Restricting access to the organization's classes helps prevent data leakage resulting from unauthorized classroom access.
+- _Last modified:_ October 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -51,8 +51,8 @@ Who can join classes in your domain SHALL be set to Users in your domain only.
 #### GWS.CLASSROOM.1.2v0.6
 Which classes users in your domain can join SHALL be set to Classes in your domain only.
 
-- _Rationale:_ Allowing users to join a class from outside your domain could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
-- _Last modified:_ January 2025
+- _Rationale:_ Allowing users to join classes from outside the organization's domains could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
+- _Last modified:_ October 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -91,7 +91,7 @@ This section covers policies related to the Google Classroom API.
 #### GWS.CLASSROOM.2.1v0.6
 Users SHALL NOT be able to authorize apps to access their Google Classroom data.
 
-- _Rationale:_ Allowing ordinary users to authorize apps to have access to classroom data opens a possibility for data loss. Allowing only admins to authorize apps reduces this risk.
+- _Rationale:_ Allowing ordinary users to authorize apps to have access to classroom data opens a possibility for data loss. Allowing only admins to authorize application access reduces this risk.
 - _Last modified:_ September 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(10)
 - MITRE ATT&CK TTP Mapping
@@ -126,7 +126,7 @@ This section covers policies related to importing rosters from Clever.
 #### GWS.CLASSROOM.3.1v0.6
 Roster import with Clever SHOULD be turned off.
 
-- _Rationale:_ If your organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into your organization's environment. If your organization does use Clever, then roster imports may be enabled.
+- _Rationale:_ If an organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into the organization's environment. If an organization does use Clever, then roster imports may be enabled.
 - _Last modified:_ September 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping

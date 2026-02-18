@@ -40,12 +40,12 @@ This section covers whether users can share files outside of the organization, w
 #### GWS.DRIVEDOCS.1.1v0.6
 External sharing SHALL be restricted to allowlisted domains.
 
-- _Rationale:_ Documents may contain sensitive or private information. Disabling external sharing reduces the risk of inadvertent of data leakage.
+- _Rationale:_ Documents may contain PII or sensitive information. Disabling external sharing reduces the risk of inadvertent data leakage.
 - _Last modified:_ August 2025
 - _Note:_
   - This policy restricts information sharing
   - This policy prevents data leakage outside of the organization
-  - If specific users have a need for broader external sharing (e.g., for community outreach), external sharing MAY be enabled for specific OUs.
+  - If specific users have a need for broader external sharing (e.g., for community outreach), external sharing MAY be enabled for specific Organization Units (OUs).
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -54,7 +54,7 @@ External sharing SHALL be restricted to allowlisted domains.
 #### GWS.DRIVEDOCS.1.2v0.6
 Receiving files from outside of allowlisted domains SHOULD be disabled.
 
-- _Rationale:_ Users given access to external files may inadvertently input sensitive or private content. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to your users may reduce the risk of data loss or falling victim to external threats.
+- _Rationale:_ Users given access to external files may inadvertently input PII or sensitive information. Additionally, files created externally may contain malicious content. Disallowing external files from being shared to users may reduce the risk of data loss or falling victim to external threats.
 - _Last modified:_ August 2025
 - _Note:_ This policy is only applicable if external sharing is set to **ALLOWLISTED DOMAINS**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
@@ -76,7 +76,7 @@ Warnings SHALL be enabled when a user is attempting to share with someone not in
 #### GWS.DRIVEDOCS.1.4v0.6
 If sharing outside of the organization, then agencies SHOULD disable sharing of files with individuals who are not using a Google account.
 
-- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
+- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all users to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ August 2025
 - _Note:_ This policy is only applicable if external sharing is set to **ON**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
@@ -128,7 +128,7 @@ Private to owner SHALL be the default access level for newly created items.
 #### GWS.DRIVEDOCS.1.9v0.6
 Out-of-Domain file-level warnings SHALL be enabled.
 
-- _Rationale:_ By implementing Out-of-Domain file-level warnings, the feature can help users identify potentially risky files and avoid phishing scams when working with files shared from outside your organization.
+- _Rationale:_ Implementing Out-of-Domain file-level warnings, can help users identify potentially risky files and avoid phishing scams when working with files shared from external entities.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -136,9 +136,9 @@ Out-of-Domain file-level warnings SHALL be enabled.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.10v0.6
-If external sharing isn't allowed, then forms owned by users within your organization SHOULD NOT be able to accept responses from anyone with the link outside the organization.
+If external sharing is not allowed, then forms owned by users within the organization SHOULD NOT be able to accept responses from anyone with the link outside the organization.
 
-- _Rationale:_ If external sharing isn't allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight.
+- _Rationale:_ If external sharing is not allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight. Implementing this policy reduces these risks.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -146,9 +146,9 @@ If external sharing isn't allowed, then forms owned by users within your organiz
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.11v0.6
-If receiving external files isn’t allowed, then users in your organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of your organization.
+If receiving external files is not allowed, then users in the organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of the organization.
 
-- _Rationale:_ If receiving external files isn't allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight.
+- _Rationale:_ If receiving external files is not allowed, enabling this setting bypasses the external sharing restrictions in place. Users external to the organization can use forms to maliciously collect and share data without oversight. Implementing this policy reduces these risks.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -233,18 +233,18 @@ This section covers whether users can create new shared drives to share with oth
 ### Policies
 
 #### GWS.DRIVEDOCS.2.1v0.6
-Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.
+Agencies SHOULD NOT allow members with manager access to override shared Google Drive creation settings.
 
-- _Rationale:_ Allowing users who are not the drive owner to override settings violates the principle of least privilege. This policy reduces the risk of drive settings being modified by unauthorized individuals.
+- _Rationale:_ Allowing users who are not the Google Drive owner to override settings violates the principle of least privilege. This policy reduces the risk of Google Drive settings being modified by unauthorized individuals.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
 #### GWS.DRIVEDOCS.2.2v0.6
-Agencies SHALL allow users who are not shared drive members to be added to files.
+Agencies SHALL allow users who are not shared Google Drive members to be added to files.
 
-- _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as drive members, potentially exposing all drive files and increasing the risk of sensitive content exposure. By disallowing the sharing of these individual files, the risk of internal documents from being distributed outside the organization without explicit consent and approval is decreased.
+- _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as Google Drive members, potentially exposing all Google Drive files and increasing the risk of sensitive content exposure. Disallowing the sharing of these individual files reduces the risk of internal documents from being distributed outside the organization without explicit consent and approval.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
@@ -262,7 +262,7 @@ Agencies SHALL allow users who are not shared drive members to be added to files
 
 To configure the settings for Shared drive creation:
 
-##### Policy Group 2 common Instructions
+#### Policy Group 2 common Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Drive and Docs**.
 3.  Select **Sharing settings -\> Shared drive creation**.
@@ -283,9 +283,9 @@ This section covers whether a security update issued by Google will be applied t
 ### Policies
 
 #### GWS.DRIVEDOCS.3.1v0.6
-Agencies SHALL enable the security update for Drive files.
+Agencies SHALL enable the security update for Google Drive files.
 
-- _Rationale:_ By not enabling the update to the resource key security update a user could potentially gain unauthorized access to files. Enabling this security update decreases risk of unauthorized access and data spillage by controlling access to files in Google Drive.
+- _Rationale:_ Failure to enable the resource key security update may result in unauthorized access to files. Enabling this update reduces the risk of unauthorized access and potential data spillage by enhancing control for files in Google Drive.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
@@ -303,7 +303,7 @@ Agencies SHALL enable the security update for Drive files.
 
 To configure the settings for Security update for files:
 
-##### GWS.DRIVEDOCS.3.1v0.6 Instructions
+#### GWS.DRIVEDOCS.3.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Drive and Docs.**
 3.  Select **Sharing settings -\> Security update for files.**
@@ -318,9 +318,9 @@ This section covers whether users have access to Google Drive with the Drive SDK
 ### Policies
 
 #### GWS.DRIVEDOCS.4.1v0.6
-Agencies SHOULD disable Drive SDK access.
+Agencies SHOULD disable Google Drive SDK access.
 
-- _Rationale:_ The Drive SDK allows third-party applications to access Drive data, potentially leading to unintentional information sharing and data leakage. By disabling the Drive SDK you can decrease the risk of internal documents from being distributed outside the organization without explicit consent and approval.
+- _Rationale:_ The Google Drive SDK allows third-party applications to access Google Drive data, potentially leading to unintentional information sharing and data leakage. By disabling the Google Drive SDK agencies can decrease the risk of internal documents from being distributed externally without explicit consent and approval.
 - _Last modified:_ January 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
@@ -354,9 +354,9 @@ This section covers whether users can use add-ons in file editors within Google 
 ### Policies
 
 #### GWS.DRIVEDOCS.5.1v0.6
-Agencies SHALL disable Add-Ons.
+Agencies SHALL disable Google Drive Add-Ons.
 
-- _Rationale:_ Google Docs Add-Ons, depending on their permissions, can present a security risk, including potential exposure of sensitive content. By disabling unapproved add-ons and preventing their sharing, the risk of data leakage can be significantly reduced.
+- _Rationale:_ Google Docs Add-Ons based on their granted permissions, may pose security risks, such as the potential exposure of sensitive content. Disabling unapproved add-ons and restricting their sharing can reduce the risk of data leakage.
 - _Last modified:_ January 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
@@ -392,7 +392,7 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 #### GWS.DRIVEDOCS.6.1v0.6
 Google Drive for Desktop SHALL be enabled only for authorized devices.
 
-- _Rationale:_ Some users may attempt to use Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if done without malicious intent, this represents a security risk as the agency has no ability audit or protect such computers.
+- _Rationale:_ Some users may attempt to use Google Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if unintentional, this poses a security risk as the agency lacks the ability to audit or secure these computers. Implementing this policy helps reduce these risks. 
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
