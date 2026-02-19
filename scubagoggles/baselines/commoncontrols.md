@@ -1294,6 +1294,43 @@ User access to Early Access apps SHOULD be disabled.
     - [T1204:002: User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
     - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
+#### GWS.COMMONCONTROLS.16.3v0.6
+Looker Studio Sharing outside org SHOULD be set to OFF.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
+- _Rationale_: Rationale: Disabling sharing of Looker Studio assets outside the organization ensures that sensitive data, reports, and dashboards remain within the organization's control. This policy mitigates the risk of unauthorized access, data leakage, or exposure of proprietary information to external entities. By restricting sharing, the organization can maintain compliance with data governance standards, protect intellectual property, and safeguard customer or business-critical data. Additionally, this approach reduces the likelihood of accidental sharing or misuse of information, enhancing overall security and operational integrity.
+- _Last modified:_ Feburuary 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ TBD
+- MITRE ATT&CK TTP Mapping
+  - [T1567: Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567/)
+    - [T1567:002 Exfiltration Over Cloud Storage](https://attack.mitre.org/techniques/T1567/002)
+  - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
+    - [T1078:004 Cloud Accounts](https://attack.mitre.org/techniques/T1078/004)
+  - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
+    - [T1565:003 Stored Data Manipulation](https://attack.mitre.org/techniques/T1565/003)
+  - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
+    - [T1213:002 Cloud-Based Information Repositories](https://attack.mitre.org/techniques/T1213/002)
+
+#### GWS.COMMONCONTROLS.16.4v0.6
+Pinpoint access to drive SHOULD be set to OFF.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
+- _Rationale_: Disabling Pinpoint access to Google Drive ensures that sensitive files and data stored within the organization's Drive are not inadvertently accessed, analyzed, or shared through Pinpoint. This policy helps protect the confidentiality and integrity of organizational data by preventing unauthorized or unintended interactions between Pinpoint and Drive. By restricting this access, the organization can reduce the risk of data breaches, maintain compliance with data privacy regulations, and uphold strict data governance practices. This approach also minimizes potential misuse or exposure of sensitive information, enhancing overall security and operational control.
+- _Last modified:_ Febuary 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ TBD
+- MITRE ATT&CK TTP Mapping
+  - [T1567: Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567/)
+    - [T1567:002 Exfiltration Over Cloud Storage](https://attack.mitre.org/techniques/T1567/002)
+  - [T1078: Valid Accounts](https://attack.mitre.org/techniques/T1078/)
+    - [T1078:004 Cloud Accounts](https://attack.mitre.org/techniques/T1078/004)
+  - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
+    - [T1565:003 Stored Data Manipulation](https://attack.mitre.org/techniques/T1565/003)
+  - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
+    - [T1213:002 Cloud-Based Information Repositories](https://attack.mitre.org/techniques/T1213/002)
+  - [T1189: Drive-by Compromise](https://attack.mitre.org/techniques/T1189/)
+    
 ### Resources
 -	[GWS Admin Help \| Turn on or off additional Google services](https://support.google.com/a/answer/181865)
 -	[GWS Admin Help \| Turn Early Access apps on or off for users](https://support.google.com/a/answer/13515709)
@@ -1317,6 +1354,18 @@ User access to Early Access apps SHOULD be disabled.
 1. In the list of all services, scroll to and click on the **Early Access Apps** service.
 2. Click on **Service status**.
 3. Ensure **OFF for everyone** is checked.
+4. Click **Save**.
+
+#### GWS.COMMONCONTROLS.16.3v0.6 Instructions
+1. In the list of all services, scroll to and click on the **Looker Studio** service.
+2. Select **Sharing setting**.
+3. Ensure **OFF** is checked.
+4. Click **Save**.
+
+#### GWS.COMMONCONTROLS.16.4v0.6 Instructions
+1. In the list of all services, scroll to and click on the **Pinpoint** service.
+2. Click on **Data Access Settings**.
+3. Ensure **OFF - Users cannot copy files from Drive to Pinpoint** is checked.
 4. Click **Save**.
 
 ## 17. Multi-Party Approval
