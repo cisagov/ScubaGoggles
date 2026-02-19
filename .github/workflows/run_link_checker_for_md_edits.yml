@@ -1,7 +1,7 @@
 name: Run Link Checker for Markdown Edits
 on:
-    workflow_dispatch:
-    pull_request:
+  workflow_call:
+  workflow_dispatch:
 
 jobs:
   markdown-link-check:
@@ -12,6 +12,6 @@ jobs:
       with:
         base-branch: 'main'
         config-file: 'mlc_config.json'
-        use-quiet-mode: 'yes'
+        use-quiet-mode: 'no'
         use-verbose-mode: 'yes'
-        check-modified-files-only: 'yes'
+        check-modified-files-only: 'no'
