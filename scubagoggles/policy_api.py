@@ -585,6 +585,16 @@ class PolicyAPI:
             if response.status_code != self._too_many_requests:
                 break
 
+            if ('Quota exceeded' in response.text
+                and 'read requests per minute' in response.text):
+
+                log.warning('read requests to Policy API exceeded per '
+                            'minute quota - sleeping 1 minute')
+
+                sleep(60)
+
+                continue
+
             # Back off the requests exponentially (adding up to a 10% random
             # delay).
 
@@ -601,7 +611,8 @@ class PolicyAPI:
         response_json = response.json()
 
         if not response.ok:
-            raise RuntimeError(f'? {url} - {response_json["error"]["message"]} - code: {response.status_code}')
+            raise RuntimeError(f'? {url} - {response_json["error"]["message"]} '
+                               f'- code: {response.status_code}')
 
         log.debug('URL: %s', url)
         if params:
