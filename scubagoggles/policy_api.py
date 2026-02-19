@@ -601,7 +601,7 @@ class PolicyAPI:
         response_json = response.json()
 
         if not response.ok:
-            raise RuntimeError(f'? {url} - {response_json["error"]["message"]}')
+            raise RuntimeError(f'? {url} - {response_json["error"]["message"]} - code: {response.status_code}')
 
         log.debug('URL: %s', url)
         if params:
