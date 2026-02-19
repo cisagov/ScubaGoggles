@@ -27,7 +27,7 @@ on:
         description: "Choose python version(s), format must be an array of strings:"
         required: true
         type: string
-        default: "['3.10']"
+        default: "['3.10', '3.14']"
       opa-version:
         description: "Choose OPA version"
         required: true
@@ -53,7 +53,7 @@ jobs:
           # Default values for other events
           else
             operatingsystem_val="['windows-latest', 'macos-latest', 'ubuntu-latest']"
-            pythonversion_val="['3.10']"
+            pythonversion_val="['3.10', '3.14']"
             opaversion_val="latest"
           fi
           echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
@@ -69,14 +69,22 @@ jobs:
         # ctrl + f and search "python-3.<minor>.<patch>-<darwin-arm64/win32/linux>" for supported versions
         python-version: ${{ fromJSON(needs.configuration.outputs.python-version) }}
     runs-on: ${{ matrix.operating-system }}
+    # Google's Policy API has a read request quota that limits the number of
+    # requests per minute.  This means we can't run too many jobs at the same
+    # time.  Limiting the runs by operating system should be good enough to
+    # avoid the limit.  GitHub allows 1 running and 1 pending job per
+    # concurrency group, so this setup will work as long as we stick to just
+    # 2 Python version runs per OS.
+    concurrency:
+      group: ${{ matrix.operating-system }}
     outputs:
       baseline-path: ${{ steps.baselinepath.outputs.cachepath }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Python v${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
