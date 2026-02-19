@@ -1358,14 +1358,14 @@ Pinpoint access to drive SHOULD be set to OFF.
 
 #### GWS.COMMONCONTROLS.16.3v0.6 Instructions
 1. In the list of all services, scroll to and click on the **Looker Studio** service.
-2. Click on **Service status**.
-3. Ensure **OFF for everyone** is checked.
+2. Select **Sharing setting**.
+3. Ensure **OFF** is checked.
 4. Click **Save**.
 
 #### GWS.COMMONCONTROLS.16.4v0.6 Instructions
 1. In the list of all services, scroll to and click on the **Pinpoint** service.
-2. Click on **Service status**.
-3. Ensure **OFF for everyone** is checked.
+2. Click on **Data Access Settings**.
+3. Ensure **OFF - Users cannot copy files from Drive to Pinpoint** is checked.
 4. Click **Save**.
 
 ## 17. Multi-Party Approval
