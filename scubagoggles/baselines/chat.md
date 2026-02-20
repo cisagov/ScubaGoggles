@@ -180,6 +180,7 @@ External chat messaging SHALL be restricted to allowlisted domains only.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1213.005: Data from Information Repositories: Messaging Applications](https://attack.mitre.org/techniques/T1213/005/)
 
 ### Resources
 
