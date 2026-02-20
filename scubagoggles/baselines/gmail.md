@@ -2,7 +2,7 @@
 
 Gmail is the Google Workspace offering for sending and receiving email. Users can upload attachments to emails and send them to a given email address. Additional Gmail features include integrating with other Google applications, such as Meet and Chat. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Gmail security.
 
-The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
+The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal Civilian Executive Branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
@@ -40,7 +40,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 # Baseline Policies
 
@@ -205,7 +205,7 @@ The DMARC message rejection option SHALL be p=reject.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
     - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
-  - [T1586:002: Compromise Accounts](https://attack.mitre.org/techniques/T1586/)
+  - [T1586: Compromise Accounts](https://attack.mitre.org/techniques/T1586/)
     - [T1586:002: Compromise Accounts: Email Accounts](https://attack.mitre.org/techniques/T1586/002/)
 
 #### GWS.GMAIL.4.3v0.6
@@ -272,7 +272,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 ### Policies
 
 #### GWS.GMAIL.5.1v0.6
-Protect against encrypted attachments from untrusted senders SHALL be enabled.
+"Protect against encrypted attachments from untrusted senders" SHALL be enabled.
 
 - _Rationale:_ Attachments from untrusted senders, especially encrypted ones, may contain malicious content that poses a security risk. By enabling protection against encrypted attachments from untrusted senders, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -288,7 +288,7 @@ Protect against encrypted attachments from untrusted senders SHALL be enabled.
     - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.GMAIL.5.2v0.6
-Protect against attachments with scripts from untrusted senders SHALL be enabled.
+"Protect against attachments with scripts from untrusted senders" SHALL be enabled.
 
 - _Rationale:_ Attachments with scripts from untrusted senders may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -304,7 +304,7 @@ Protect against attachments with scripts from untrusted senders SHALL be enabled
     - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.GMAIL.5.3v0.6
-Protect against anomalous attachment types in emails SHALL be enabled.
+"Protect against anomalous attachment types in emails" SHALL be enabled.
 
 - _Rationale:_ Anomalous attachment types in emails may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of the user data and systems.
 - _Last modified:_ July 2023
@@ -405,7 +405,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 ### Policies
 
 #### GWS.GMAIL.6.1v0.6
-Identify links behind shortened URLs SHALL be enabled.
+"Identify links behind shortened URLs" SHALL be enabled.
 
 - _Rationale:_ Shortened URLs can hide malicious links, posing a security risk. This risk can be reduced by identifying links behind shortened URLs, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -418,7 +418,7 @@ Identify links behind shortened URLs SHALL be enabled.
     - [T1204:001: User Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
 
 #### GWS.GMAIL.6.2v0.6
-Scan linked images SHALL be enabled.
+"Scan linked images" SHALL be enabled.
 
 - _Rationale:_ Linked images in emails can contain malicious content, posing a security risk. By enabling the scanning of linked images, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -431,7 +431,7 @@ Scan linked images SHALL be enabled.
     - [T1204:002: User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
 
 #### GWS.GMAIL.6.3v0.6
-Show warning prompt for any click on links to untrusted domains SHALL be enabled.
+"Show warning prompt for any click on links to untrusted domains" SHALL be enabled.
 
 - _Rationale:_ Clicking on links to unfamiliar domains can expose users to malicious content, posing a security risk. This risk can be reduced by enabling a warning prompt for any click on such links, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -509,7 +509,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 ### Policies
 
 #### GWS.GMAIL.7.1v0.6
-Protect against domain spoofing based on similar domain names SHALL be enabled.
+"Protect against domain spoofing based on similar domain names" SHALL be enabled.
 
 - _Rationale:_ Emails sent from domains that look similar to the user's domain can deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -521,7 +521,7 @@ Protect against domain spoofing based on similar domain names SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.2v0.6
-Protect against spoofing of employee names SHALL be enabled.
+"Protect against spoofing of employee names" SHALL be enabled.
 
 - _Rationale:_ Spoofing of employee identities (e.g., CEO and IT staff) can deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -533,7 +533,7 @@ Protect against spoofing of employee names SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.3v0.6
-Protect against inbound emails spoofing your domain SHALL be enabled.
+"Protect against inbound emails spoofing your domain" SHALL be enabled.
 
 - _Rationale:_ Inbound emails appearing to come from the user's domain can deceive users into interacting with malicious content, posing a security risk. This risk can be reduced by enabling protection against such spoofing, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -545,7 +545,7 @@ Protect against inbound emails spoofing your domain SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.4v0.6
-Protect against any unauthenticated emails SHALL be enabled.
+"Protect against any unauthenticated emails" SHALL be enabled.
 
 - _Rationale:_ Unauthenticated emails can contain malicious content, posing a security risk. This risk can be reduced by enabling protection against such emails, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -557,7 +557,7 @@ Protect against any unauthenticated emails SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.5v0.6
-Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
+"Protect your Groups from inbound emails spoofing your domain" SHALL be enabled.
 
 - _Rationale:_ Inbound emails spoofing the user's domain can deceive users into interacting with malicious content, posing a security risk. This risk can be reduced by enabling protection against such spoofing, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -1098,7 +1098,7 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
   - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
 
 #### GWS.GMAIL.18.3v0.6
-Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.
+"Bypass spam filters" and "hide warnings for all messages from internal and external senders" SHALL NOT be enabled.
 
 - _Rationale:_ Bypassing spam filters and hiding warning for all messages from internal and external senders creates a security risk because all messages are allowed to bypass filters. Disabling this feature mitigates the risk.
 - _Last modified:_ April 2024

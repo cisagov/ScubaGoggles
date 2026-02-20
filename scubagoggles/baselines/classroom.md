@@ -4,7 +4,7 @@ Google Classroom is a service to streamline assignments, boost collaboration, an
 
 Google Classroom is designed and intended for implementation for Education Institutions. Google Classroom is available with the Google Workspace for Education Edition, and is included with all tiers of GWS for Education including Fundamentals, Standard, and Plus. CISA's Secure Configuration Baseline Classroom policies and guidance are written to the Plus edition.
 
-The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
+The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal Civilian Executive Branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
@@ -28,7 +28,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 # Baseline Policies
 
@@ -39,7 +39,7 @@ This section covers who has the ability to join classes and what classes the use
 ### Policies
 
 #### GWS.CLASSROOM.1.1v0.6
-Who can join classes in your domain SHALL be set to Users in your domain only.
+"Who can join classes in your domain" SHALL be set to "Users in your domain only."
 
 - _Rationale:_ Classes can contain PII or sensitive information. Restricting access to the organization's classes helps prevent data leakage resulting from unauthorized classroom access.
 - _Last modified:_ October 2025
@@ -49,7 +49,7 @@ Who can join classes in your domain SHALL be set to Users in your domain only.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.CLASSROOM.1.2v0.6
-Which classes users in your domain can join SHALL be set to Classes in your domain only.
+"Which classes users in your domain can join" SHALL be set to "Classes in your domain only."
 
 - _Rationale:_ Allowing users to join classes from outside the organization's domains could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
 - _Last modified:_ October 2025
@@ -124,7 +124,7 @@ This section covers policies related to importing rosters from Clever.
 ### Policies
 
 #### GWS.CLASSROOM.3.1v0.6
-Roster import with Clever SHOULD be turned off.
+"Roster Import" with Clever SHOULD be turned off.
 
 - _Rationale:_ If an organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into the organization's environment. If an organization does use Clever, then roster imports may be enabled.
 - _Last modified:_ September 2023

@@ -2,7 +2,7 @@
 
 Google Calendar is a calendar service in Google Workspace used for creating and editing events that enables collaboration amongst users. Calendar allows administrators to control and manage their sharing settings for both internal and external use. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Calendar security.
 
-The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
+The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal Civilian Executive Branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
@@ -25,7 +25,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 # Baseline Policies
 
@@ -38,7 +38,7 @@ This section determines what information is shared from calendars with external 
 #### GWS.CALENDAR.1.1v0.6
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."
 
-- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
+- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to "only free/busy information" helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -47,7 +47,7 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
 #### GWS.CALENDAR.1.2v0.6
 External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)."
 
-- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
+- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to "only free/busy information" helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)(a)  
 - MITRE ATT&CK TTP Mapping
@@ -134,7 +134,7 @@ Due to the added complexity and attack surface associated with configuring Calen
 #### GWS.CALENDAR.3.1v0.6
 Calendar Interop SHOULD be disabled.
 
-- _Rationale:_ Enabling Calendar interop adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature unless required by the organization conforms to the principle of least functionality.
+- _Rationale:_ Enabling Calendar interop adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature (unless required by the organization) conforms to the principle of least functionality.
 - _Last modified:_ July 2023
 - _Note:_ This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
@@ -195,7 +195,7 @@ This section covers whether or not the paid appointment booking feature is enabl
 ### Policies
 
 #### GWS.CALENDAR.4.1v0.6
-Appointment Schedule with Payments SHALL be disabled.
+"Appointment Schedule with Payments" SHALL be disabled.
 
 - _Rationale:_ Enabling paid appointments adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature conforms to the principle of least functionality.
 - _Last modified:_ July 2023
