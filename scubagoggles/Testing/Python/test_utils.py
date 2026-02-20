@@ -28,7 +28,11 @@ class TestUtils:
             ({1:['a','b','c'],2:[],3:['a','b','c','d'],4:['a','e']},
              [1,2,3], {'a':[1,3], 'b':[1,3], 'c':[1,3], 'd':[3]}),
             ({1:[],2:[],3:[],4:[]},
-             [1,3], {})
+             [1,3], {}),
+            ({1:['a','b','c'],2:['a', 'b']}, [1,3], 
+             {'a':[1], 'b':[1], 'c':[1]}),
+             ({1:['a', 'b', 'c']}, [2], 
+             {})
         ],
     )
     def test_create_subset_inverted_dict(self, dictionary, keys, expected):
@@ -67,7 +71,9 @@ class TestUtils:
              {'a':[], 'b':[1,2,3], 'c':[1]}),
             ({'a':[], 'b':[1,2], 'c':[1]},
              {'a':[], 'b':[3], 'c':[], 'd':[]},
-             {'a':[], 'b':[1,2,3], 'c':[1], 'd':[]})
+             {'a':[], 'b':[1,2,3], 'c':[1], 'd':[]}),
+             ({},{'a':[1], 'b':[2], 'c':[3]},
+              {'a':[1], 'b':[2], 'c':[3]})
         ]
     )
     def test_merge_dicts(self, dict1, dict2, expected):
@@ -88,6 +94,9 @@ class TestUtils:
             ["Testing", "Python", "testing_directory", "secondary_directory", "plain_file_2.txt"]),
         ]
     )
+    ###
+    # TODO Add test case where file path is within nested within directories
+    ###
     def test_rel_abs_path(self, base_filename, rel_segments):
         """ Unit test for rel_abs_path """
         # build relative path
@@ -131,6 +140,9 @@ class TestUtils:
     )
     def test_path_parser(self, path):
         """ Unit test for path_parser """
+        ###
+        # TODO This directly changes the os.environ, update this to use monkeypatch, so other tests running in succession don't get affected
+        ###
         home_dir = Path.home()
         os.environ["HOME"] = str(home_dir)
         os.environ["CWD"] = str(home_dir)
@@ -145,14 +157,21 @@ class TestUtils:
             ("Do you wish to continue?", "y", True, True),
             ("Do you wish to continue?", "n", True, False),
             ("Do you wish to continue?", "false", False, False),
+            ("Do you wish to continue?", "yes", False, True),
+            ("Do you wish to continue?", "false", True, False),
             ("Do you wish to continue?", "", True, True),   # default used
             ("Do you wish to continue?", "", False, False) # default used
+            ("Do you wish to continue?", "red", True, ValueError) # invalid input
         ],
     )
     def test_prompt_boolean(self, monkeypatch, prompt, user_input, default, expected):  # pylint: disable=too-many-positional-arguments
         """ Unit test for prompt_boolean """
         monkeypatch.setattr("builtins.input", lambda _: user_input)
-        assert utils.prompt_boolean(prompt, default=default) == expected
+        if user_input == "red":
+                with pytest.raises(ValueError):
+                    utils.prompt_boolean(prompt, default=default)
+        else:
+            assert utils.prompt_boolean(prompt, default=default) == expected
 
     @pytest.mark.parametrize(
         "strval, expected, included",
@@ -165,6 +184,10 @@ class TestUtils:
             ("red", None, False)
         ]
     )
+    ###
+    # TODO
+    # Missing certain cases hopefully you can copy these directly into your code
+    ###
     def test_strtobool(self, strval, expected, included):
         """ Unit test for test_strtobool """
         if included:
