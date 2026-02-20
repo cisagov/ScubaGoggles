@@ -286,7 +286,7 @@ Note that the implementation details of context-aware access use cases will vary
 -   Use nested access levels instead of selecting multiple access levels during assignment
 
 ## 3. Login Challenges
-Login challenges are additional security measures used to verify a user's identity, including post-SSO verification.
+Login challenges are additional security measures used to verify a user's identity, including Post single sign-on (SSO) verification.
 
 Post-SSO verification controls what additional checks are performed (e.g., Google 2SV) after a user succesfully authenticates through a third-party identity provider.
 SSO is managed through profiles, which can be assigned org-wide or to specific org units/groups.
@@ -295,7 +295,7 @@ Google Workspace handles post-SSO verification for profiles assigned org-wide as
 ### Policies
 
 #### GWS.COMMONCONTROLS.3.1v0.6
-Single sign-on (SSO) verification SHOULD be enabled for users signing in using the SSO profile for the organization.
+Post single sign-on (SSO) verification SHOULD be enabled for users signing in using the SSO profile for the organization.
 
 - _Rationale:_ Without enabling post-SSO verification, Google 2-Step Verification (2SV) configurations are not enforced for third-party SSO users. Enabling post-SSO verification ensures the application of 2SV verification policies.
 - _Last modified:_ January 2025
@@ -518,7 +518,7 @@ Some examples of these privileged accounts include the following Pre-Built GWS A
 All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication(MFA), not an agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Cloud-only accounts leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. Enforcing this policy makes it more challenging for a threat actor to pivot from a compromised on-premises environment to the cloud with privileged access.
-- _Last modified:_ November 2025
+- _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(5)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -641,7 +641,7 @@ Account self-recovery for super admins SHALL be disabled.
 #### GWS.COMMONCONTROLS.8.2v0.6
 Account self-recovery for users and non-super admins SHALL be disabled.
 
-- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential adversary to compromise an account.
+- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential threat actor to compromise an account.
 - _Last modified:_ February 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5d, IA-5g
 - MITRE ATT&CK TTP Mapping
@@ -652,7 +652,7 @@ Account self-recovery for users and non-super admins SHALL be disabled.
 Ability to add recovery information SHOULD be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding personally identifiable information (PII) to their organizational account, making it more difficult for a potential threat actor to steal PII in the event of a compromise.
-- _Last modified:_ August 2025
+- _Last modified:_ February 2025
 - _Note:_ This setting is not applicable if using single sign-on (SSO) with a third-party identity provider or Password Sync. GWS.COMMONCONTROLS.8.3 acts as a defense in depth policy when GWS.COMMONCONTROLS.8.1 and GWS.COMMONCONTROLS.8.2 are not enabled.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -762,14 +762,14 @@ To allow all users to enroll:
 
 ## 10. App Access to Google APIs
 
-Agencies need to have a process in place to manage and control application access to GWS data. This control enables the ability to restrict access to Google Workspace APIs from other applications and is aimed at mitigating the significant cybersecurity risk posed by the potential compromise of OAuth tokens. The baseline policy statements are written to allow implementers to balance operational need with risk posed by granting app access.
+Agencies need to have a process in place to manage and control application access to GWS data. This control enables the ability to restrict access to Google Workspace APIs from other applications and is aimed at mitigating the significant cybersecurity risk posed by the potential compromise of OAuth tokens. The baseline policy statements are written to allow implementers to balance operational need with risk posed by granting application access.
 
 ### Policies
 
 #### GWS.COMMONCONTROLS.10.1v0.6
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
 
-- _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to GWS.
+- _Rationale:_ Third-party applications may include malicious content. Restricting application access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to GWS.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
@@ -1178,7 +1178,7 @@ Google Workspace considers some of its services "core services," including Gmail
 ### Policies
 
 #### GWS.COMMONCONTROLS.16.1v0.6
-Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.
+"Service status for Google services that do not have an individual control" SHOULD be set to "OFF" for everyone.
 
 - _Rationale_: Accessing additional google services without necessity can introduce potential vulnerabilities within the Google Workspace environment. Disabling these services mitigates the risk restricting unnecessary access.
 - _Last modified:_ January 2025
@@ -1192,9 +1192,9 @@ Service status for Google services that do not have an individual control SHOULD
     - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.COMMONCONTROLS.16.2v0.6
-User access to Early Access apps SHOULD be disabled.
+User access to Early Access applications SHOULD be disabled.
 
-- _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
+- _Rationale_: Allowing early access to applications may expose users to applications that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
@@ -1310,7 +1310,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 [//]: # (Keep the version suffix out of the anchor.)
 <a name="commoncontrols184"></a>
 #### GWS.COMMONCONTROLS.18.4v0.6
-The action for DLP policies SHOULD be set to block external sharing.
+The action for DLP policies SHOULD be set to "block external sharing."
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ January 2025
