@@ -94,9 +94,6 @@ class TestUtils:
             ["Testing", "Python", "testing_directory", "secondary_directory", "plain_file_2.txt"]),
         ]
     )
-    ###
-    # TODO Add test case where file path is within nested within directories
-    ###
     def test_rel_abs_path(self, base_filename, rel_segments):
         """ Unit test for rel_abs_path """
         # build relative path
@@ -138,14 +135,11 @@ class TestUtils:
             "$HOME/tmp",
         ]
     )
-    def test_path_parser(self, path):
+    def test_path_parser(self, path, monkeypatch):
         """ Unit test for path_parser """
-        ###
-        # TODO This directly changes the os.environ, update this to use monkeypatch, so other tests running in succession don't get affected
-        ###
         home_dir = Path.home()
-        os.environ["HOME"] = str(home_dir)
-        os.environ["CWD"] = str(home_dir)
+        monkeypatch.setenv("HOME", str(home_dir))
+        monkeypatch.setenv("CWD", str(home_dir))
         expanded = os.path.expandvars(path)
         expanded = os.path.expanduser(expanded)
         abs_path = Path(os.path.abspath(expanded))
@@ -160,7 +154,7 @@ class TestUtils:
             ("Do you wish to continue?", "yes", False, True),
             ("Do you wish to continue?", "false", True, False),
             ("Do you wish to continue?", "", True, True),   # default used
-            ("Do you wish to continue?", "", False, False) # default used
+            ("Do you wish to continue?", "", False, False), # default used
             ("Do you wish to continue?", "red", True, ValueError) # invalid input
         ],
     )
@@ -184,10 +178,6 @@ class TestUtils:
             ("red", None, False)
         ]
     )
-    ###
-    # TODO
-    # Missing certain cases hopefully you can copy these directly into your code
-    ###
     def test_strtobool(self, strval, expected, included):
         """ Unit test for test_strtobool """
         if included:
