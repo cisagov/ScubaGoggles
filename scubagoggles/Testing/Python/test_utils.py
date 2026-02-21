@@ -29,9 +29,9 @@ class TestUtils:
              [1,2,3], {'a':[1,3], 'b':[1,3], 'c':[1,3], 'd':[3]}),
             ({1:[],2:[],3:[],4:[]},
              [1,3], {}),
-            ({1:['a','b','c'],2:['a', 'b']}, [1,3], 
+            ({1:['a','b','c'],2:['a', 'b']}, [1,3],
              {'a':[1], 'b':[1], 'c':[1]}),
-             ({1:['a', 'b', 'c']}, [2], 
+             ({1:['a', 'b', 'c']}, [2],
              {})
         ],
     )
@@ -162,8 +162,8 @@ class TestUtils:
         """ Unit test for prompt_boolean """
         monkeypatch.setattr("builtins.input", lambda _: user_input)
         if user_input == "red":
-                with pytest.raises(ValueError):
-                    utils.prompt_boolean(prompt, default=default)
+            with pytest.raises(ValueError):
+                utils.prompt_boolean(prompt, default=default)
         else:
             assert utils.prompt_boolean(prompt, default=default) == expected
 
