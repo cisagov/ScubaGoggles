@@ -1,0 +1,187 @@
+"""Unit tests for utility functions (utils.py) in the project."""
+from pathlib import Path       # Standard library
+from importlib.metadata import version, PackageNotFoundError  # Standard library
+import os                      # Standard library
+import pytest                  # Third-party
+from scubagoggles import utils
+
+class TestUtils:
+    """Test suite for utility functions.
+    This class contains tests for verifying
+      the behavior of various
+    utility functions in the project.
+    """
+
+    @pytest.mark.parametrize(
+        "dictionary, keys, expected",
+        [
+            ({1:['a','b','c'], 2:['a','d'], 3:['b','c','d']},
+             [1], {'a':[1], 'b':[1], 'c':[1]}),
+            ({1:['a','b'], 2:['a','c','d'], 3:['b','e'], 4:['a','e']},
+             [1,3,4], {'a':[1, 4], 'b':[1, 3], 'e':[3, 4]}),
+            ({1:['a','b'], 2:['a','c','d'], 3:['b','e'], 4:['a','e']},
+             [], {}),
+            ({1:['a','b','c'],2:['d','e']},
+             [], {}),
+            ({1:['a','b','c'],2:[],3:['a','b','c','d'],4:['a','e']},
+             [1,2], {'a':[1], 'b':[1], 'c':[1]}),
+            ({1:['a','b','c'],2:[],3:['a','b','c','d'],4:['a','e']},
+             [1,2,3], {'a':[1,3], 'b':[1,3], 'c':[1,3], 'd':[3]}),
+            ({1:[],2:[],3:[],4:[]},
+             [1,3], {}),
+            ({1:['a','b','c'],2:['a', 'b']}, [1,3],
+             {'a':[1], 'b':[1], 'c':[1]}),
+             ({1:['a', 'b', 'c']}, [2],
+             {})
+        ],
+    )
+    def test_create_subset_inverted_dict(self, dictionary, keys, expected):
+        """ Unit test for create_subset_inverted_dict """
+        assert utils.create_subset_inverted_dict(dictionary, keys) == expected
+
+
+    @pytest.mark.parametrize(
+        "keys, expected",
+        [
+            ([1,2,3],{1:[], 2:[], 3:[]}),
+            ([1,2],{1:[], 2:[]}),
+            ([1],{1:[]}),
+            ([],{})
+        ],
+    )
+    def test_create_key_to_list(self,keys,expected):
+        """ Unit test for create_key_to_list """
+        assert utils.create_key_to_list(keys) == expected
+
+
+    @pytest.mark.parametrize(
+        "dict1, dict2, expected",
+        [
+            ({'a':[1], 'b':[2]},
+             {'b':[3], 'c':[1]},
+             {'a':[1], 'b':[2,3], 'c':[1]}),
+            ({'a':[1], 'b':[2]},
+             {'b':[2], 'c':[1]},
+             {'a':[1], 'b':[2,2], 'c':[1]}),
+            ({'a':[1], 'b':[2], 'c':[3]},
+             {'a':[2], 'b':[2], 'd':[1,2,3]},
+             {'a':[1,2], 'b':[2,2], 'c':[3], 'd':[1,2,3]}),
+            ({'a':[], 'b':[1,2], 'c':[1]},
+             {'b':[3], 'c':[]},
+             {'a':[], 'b':[1,2,3], 'c':[1]}),
+            ({'a':[], 'b':[1,2], 'c':[1]},
+             {'a':[], 'b':[3], 'c':[], 'd':[]},
+             {'a':[], 'b':[1,2,3], 'c':[1], 'd':[]}),
+             ({},{'a':[1], 'b':[2], 'c':[3]},
+              {'a':[1], 'b':[2], 'c':[3]})
+        ]
+    )
+    def test_merge_dicts(self, dict1, dict2, expected):
+        """ Unit test for merge_dicts """
+        assert utils.merge_dicts(dict1, dict2) == expected
+
+
+    @pytest.mark.parametrize(
+        "base_filename, rel_segments",
+        [
+            ("plain_file.txt",
+            ["Testing", "Python", "testing_directory", "plain_file.txt"]),
+            ("non_existent_file.txt",
+            ["Testing", "Python", "testing_directory", "plain_file.txt"]),
+            ("requirements.txt",
+            ["requirements.txt"]),
+            ("plain_file_2.txt",
+            ["Testing", "Python", "testing_directory", "secondary_directory", "plain_file_2.txt"]),
+        ]
+    )
+    def test_rel_abs_path(self, base_filename, rel_segments):
+        """ Unit test for rel_abs_path """
+        # build relative path
+        rel_path = os.path.join(*rel_segments)
+        cwd_path = Path.cwd()
+        full_path = cwd_path / rel_path
+        # assert expected result
+        assert utils.rel_abs_path(base_filename, rel_path) == full_path
+
+
+    @pytest.mark.parametrize(
+        "package, included",
+        [
+            ("pyyaml", True),
+            ("requests", True),
+            ("tqdm", True),
+            ("polars", False)
+        ]
+    )
+    def test_get_package_version(self, package, included):
+        """ Unit test for get_package_version """
+        if included:
+            v = version(package)
+            assert v == utils.get_package_version(package)
+        else:
+            with pytest.raises(PackageNotFoundError):
+                utils.get_package_version(package)
+
+
+    @pytest.mark.parametrize(
+        "path",
+        [
+            "requirements.txt",
+            "Testing/Python/testing_directory",
+            "Testing/Python/testing_directory/plainfile.txt",
+            ".",            # special case: use an absolute path
+            "~",
+            "$CWD/subdir",
+            "$HOME/tmp",
+        ]
+    )
+    def test_path_parser(self, path, monkeypatch):
+        """ Unit test for path_parser """
+        home_dir = Path.home()
+        monkeypatch.setenv("HOME", str(home_dir))
+        monkeypatch.setenv("CWD", str(home_dir))
+        expanded = os.path.expandvars(path)
+        expanded = os.path.expanduser(expanded)
+        abs_path = Path(os.path.abspath(expanded))
+        assert abs_path == utils.path_parser(path)
+
+    @pytest.mark.parametrize(
+        "prompt,user_input,default,expected",
+        [
+            ("Do you wish to continue?", "y", True, True),
+            ("Do you wish to continue?", "n", True, False),
+            ("Do you wish to continue?", "false", False, False),
+            ("Do you wish to continue?", "yes", False, True),
+            ("Do you wish to continue?", "false", True, False),
+            ("Do you wish to continue?", "", True, True),   # default used
+            ("Do you wish to continue?", "", False, False), # default used
+            ("Do you wish to continue?", "red", True, ValueError) # invalid input
+        ],
+    )
+    def test_prompt_boolean(self, monkeypatch, prompt, user_input, default, expected):  # pylint: disable=too-many-positional-arguments
+        """ Unit test for prompt_boolean """
+        monkeypatch.setattr("builtins.input", lambda _: user_input)
+        if user_input == "red":
+            with pytest.raises(ValueError):
+                utils.prompt_boolean(prompt, default=default)
+        else:
+            assert utils.prompt_boolean(prompt, default=default) == expected
+
+    @pytest.mark.parametrize(
+        "strval, expected, included",
+        [
+            ("y", True, True),
+            ("1", True, True),
+            ("TRUE", True, True),
+            ("no", False, True),
+            ("off", False, True),
+            ("red", None, False)
+        ]
+    )
+    def test_strtobool(self, strval, expected, included):
+        """ Unit test for test_strtobool """
+        if included:
+            assert utils.strtobool(strval) == expected
+        else:
+            with pytest.raises(ValueError):
+                utils.strtobool(strval)
