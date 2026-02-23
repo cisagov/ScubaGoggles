@@ -88,9 +88,6 @@ class TestPurge:
 
         purge_reports(mock_args)
 
-        print('dirs')
-        print(mock_dirs)
-
         # should not be called; return
         mock_rmtree.assert_not_called()
 
