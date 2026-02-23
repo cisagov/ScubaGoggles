@@ -115,7 +115,7 @@ jobs:
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
-      - name: Run ScubaGoggles and check for correct output (macOs)
+      - name: Run ScubaGoggles and check for correct output (macos-latest)
         if: ${{ matrix.operating-system == 'macos-latest'}}
         id: mac-path
         run: |
@@ -125,14 +125,14 @@ jobs:
           echo $FOUNDMAC
           echo "cachepath=$FOUNDMAC" >> $GITHUB_OUTPUT
 
-      - name: Cache the output directory (macOS)
+      - name: Cache the output directory (macos-latest)
         if: ${{ matrix.operating-system == 'macos-latest'}}
         uses: actions/cache@v4
         with:
           path: /Users/runner/scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.mac-path.outputs.cachepath }}
 
-      - name: Run ScubaGoggles and check for correct output (windows)
+      - name: Run ScubaGoggles and check for correct output (windows-latest)
         if: ${{ matrix.operating-system == 'windows-latest' }}
         id: windows-path
         run: |
@@ -149,7 +149,7 @@ jobs:
           path: C:\Users\runneradmin\scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.windows-path.outputs.cachepath }}
 
-      - name: Run ScubaGoggles and check for correct output (ubuntu)
+      - name: Run ScubaGoggles and check for correct output (ubuntu-latest)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
         id: linux-path
         run: |
