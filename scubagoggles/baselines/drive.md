@@ -76,7 +76,7 @@ Warnings SHALL be enabled when a user is attempting to share with someone not in
 #### GWS.DRIVEDOCS.1.4v0.6
 If sharing outside of the organization, then agencies SHOULD disable sharing of files with individuals who are not using a Google account.
 
-- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all users to be signed in when viewing shared Doc/Drive materials.
+- _Rationale:_ Allowing users not signed in to a Google account to view shared files diminishes oversight and accountability and increases the chance of potential data breach. This policy reduces that risk by requiring all users to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ August 2025
 - _Note:_ This policy is only applicable if external sharing is set to **ON**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
@@ -87,7 +87,7 @@ If sharing outside of the organization, then agencies SHOULD disable sharing of 
 #### GWS.DRIVEDOCS.1.5v0.6
 Any OUs that do allow external sharing SHOULD disable making content available to anyone with the link.
 
-- _Rationale:_ Allowing users not signed-in to a Google account to view shared files diminishes oversight and accountability and increases the chance of a potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
+- _Rationale:_ Allowing users not signed in to a Google account to view shared files diminishes oversight and accountability and increases the chance of a potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Doc/Drive materials.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8
 - MITRE ATT&CK TTP Mapping
@@ -95,7 +95,7 @@ Any OUs that do allow external sharing SHOULD disable making content available t
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.6v0.6
-Agencies SHALL set access checking to recipients only.
+Agencies SHALL set access checking to "recipients only."
 
 - _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients.
 - _Last modified:_ June 2024
@@ -115,7 +115,7 @@ Users SHOULD NOT be allowed to upload or move content to shared drives owned by 
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.8v0.6
-Private to owner SHALL be the default access level for newly created items.
+"Private to owner" SHALL be the default access level for newly created items.
 
 - _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent overly broad accidental sharing of information.
 - _Last modified:_ August 2025
