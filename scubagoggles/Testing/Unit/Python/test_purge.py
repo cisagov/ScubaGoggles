@@ -1,5 +1,5 @@
 """
-test_purger.py tests the Purge class.
+test_purge.py tests the purge.py modules.
 """
 import argparse
 import time
@@ -48,6 +48,74 @@ class TestPurge:
         ]
         mock_rmtree.assert_has_calls(expected_calls)
 
+    def test_purge_reports_keep_none(self, mocker, mock_args):
+        """Verify no directories are deleted when keep count is None."""
+        mock_find = mocker.patch('scubagoggles.purge.find_report_directories')
+        mock_rmtree = mocker.patch('shutil.rmtree')
+
+        # Mock 5 directories (Oldest -> Newest)
+        mock_dirs = [
+            (Path("/mock/output/Report1"), 1000.0),
+            (Path("/mock/output/Report2"), 2000.0),
+            (Path("/mock/output/Report3"), 3000.0),
+            (Path("/mock/output/Report4"), 4000.0),
+            (Path("/mock/output/Report5"), 5000.0)
+        ]
+        mock_find.return_value = mock_dirs
+        mock_args.keep = None
+
+        purge_reports(mock_args)
+
+        # should not be called; return
+        mock_rmtree.assert_not_called()
+
+        # no deleted directories
+        assert mock_rmtree.call_count == 0
+
+    def test_purge_reports_keep_exceeds_dir_count(self, mocker, mock_args):
+        """Verify no directories are deleted when keep count exceeds directory count."""
+        mock_find = mocker.patch('scubagoggles.purge.find_report_directories')
+        mock_rmtree = mocker.patch('shutil.rmtree')
+
+        # Mock 2 directories (Oldest -> Newest)
+        mock_dirs = [
+            (Path("/mock/output/Report1"), 1000.0),
+            (Path("/mock/output/Report2"), 2000.0),
+            (Path("/mock/output/Report3"), 3000.0)
+        ]
+        mock_find.return_value = mock_dirs
+        mock_args.keep = 4
+
+        purge_reports(mock_args)
+
+        print('dirs')
+        print(mock_dirs)
+
+        # should not be called; return
+        mock_rmtree.assert_not_called()
+
+        # no deleted directories
+        assert mock_rmtree.call_count == 0
+
+    def test_purge_reports_invalid_type(self, mocker, mock_args):
+        """Verify raised error for invalid keep count input type"""
+        mock_find = mocker.patch('scubagoggles.purge.find_report_directories')
+
+        # Mock 5 directories (Oldest -> Newest)
+        mock_dirs = [
+            (Path("/mock/output/Report1"), 1000.0),
+            (Path("/mock/output/Report2"), 2000.0),
+            (Path("/mock/output/Report3"), 3000.0),
+            (Path("/mock/output/Report4"), 4000.0),
+            (Path("/mock/output/Report5"), 5000.0)
+        ]
+
+        mock_find.return_value = mock_dirs
+        mock_args.keep = 'None'
+
+        with pytest.raises(TypeError, match="not supported"):
+            purge_reports(mock_args)
+
     def test_purge_reports_expiration_logic(self, mocker, mock_args):
         """Verify directories are only deleted if they are older than expiration days."""
         mock_find = mocker.patch('scubagoggles.purge.find_report_directories')
@@ -70,9 +138,22 @@ class TestPurge:
         # recent is kept by 'keep'. expired1 and expired2 are candidates and > 3 days old.
         assert mock_rmtree.call_count == 2
 
-    def test_purge_reports_negative_keep(self, mock_args):
+    def test_purge_reports_negative_keep(self, mocker, mock_args):
         """Ensure negative values raise ValueError."""
+        mock_find = mocker.patch('scubagoggles.purge.find_report_directories')
+
+        # Mock 5 directories (Oldest -> Newest)
+        mock_dirs = [
+            (Path("/mock/output/Report1"), 1000.0),
+            (Path("/mock/output/Report2"), 2000.0),
+            (Path("/mock/output/Report3"), 3000.0),
+            (Path("/mock/output/Report4"), 4000.0),
+            (Path("/mock/output/Report5"), 5000.0)
+        ]
+        mock_find.return_value = mock_dirs
+
         mock_args.keep = -1
+
         with pytest.raises(ValueError, match="negative keep count"):
             purge_reports(mock_args)
 
@@ -91,9 +172,7 @@ class TestPurge:
         ]
         mock_find.return_value = mock_dirs
 
-
         mock_args.keep = 1
-        mock_args.dir_count = len(mock_dirs)
         mock_args.expire = -1
         with pytest.raises(ValueError, match="negative expire days"):
             purge_reports(mock_args)
