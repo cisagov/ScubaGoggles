@@ -151,7 +151,7 @@ This section covers the default permissions assigned to the viewing of conversat
 ### Policies
 
 #### GWS.GROUPS.3.1v0.6
-The default permission to view conversations SHOULD be set to "All Group Members".
+The default permission to view conversations SHOULD be set to "All Group Members."
 
 - _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace (GWS) organization. Restricting access to group members reduces the risk of data loss.
 - _Last modified:_ July 2023
@@ -190,7 +190,7 @@ This section covers whether or not the owner of a group can hide the group from 
 ### Policies
 
 #### GWS.GROUPS.4.1v0.6
-The Ability for Groups to be Hidden from the Directory SHALL be disabled.
+The ability for groups to be hidden from the directory SHALL be disabled.
 
 - _Rationale:_ Hidden groups are not visible, even to admins, in the list of groups found at groups.google.com, though they are still visible on the directory page on admin.google.com. As such, allowing for hidden groups increases the risk of groups being created without admin oversight.
 - _Last modified:_ July 2023
