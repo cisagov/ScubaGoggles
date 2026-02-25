@@ -73,7 +73,7 @@ allowing user access to Gemini under any license creates the risk of data leakag
 5.  Select **Save**.
 
 
-## 2. Alpha Gemini features
+## 2. Gemini Alpha features
 Google Workspace permits admins to restrict or enable access to Gemini Alpha features
 before they're made generally available.
 
@@ -85,7 +85,7 @@ production data in connection with Pre-Gemini Alpha Offerings.
 ### Policies
 
 #### GWS.GEMINI.2.1v0.6
-Alpha Gemini features SHALL be disabled.
+Gemini Alpha features SHALL be disabled.
 
 - _Rationale:_ Allowing access to Gemini Alpha features may expose users to features that
 have not yet been fully vetted and may still need to undergo robust testing to ensure
@@ -110,7 +110,7 @@ Service Specific Terms.
 
 #### GWS.GEMINI.2.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Generative AI** -\> **Gemini for Workspace**.
-3.  Select **Alpha Gemini features**.
+2.  Select **Generative AI** -\> **Gemini for Workspace.**
+3.  Select **Alpha features.**
 4.  Ensure **Turn off access to Alpha features in Gemini for Google Workspace** is selected.
 5.  Select **Save**.
