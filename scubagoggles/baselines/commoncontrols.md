@@ -1301,7 +1301,7 @@ Looker Studio Sharing outside org SHOULD be set to OFF.
 
 - _Rationale_: Rationale: Disabling sharing of Looker Studio assets outside the organization ensures that sensitive data, reports, and dashboards remain within the organization's control. This policy mitigates the risk of unauthorized access, data leakage, or exposure of proprietary information to external entities. By restricting sharing, the organization can maintain compliance with data governance standards, protect intellectual property, and safeguard customer or business-critical data. Additionally, this approach reduces the likelihood of accidental sharing or misuse of information, enhancing overall security and operational integrity.
 - _Last modified:_ Feburuary 2026
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ TBD
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1567: Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567/)
     - [T1567:002 Exfiltration Over Cloud Storage](https://attack.mitre.org/techniques/T1567/002)
@@ -1319,7 +1319,7 @@ Pinpoint access to drive SHOULD be set to OFF.
 
 - _Rationale_: Disabling Pinpoint access to Google Drive ensures that sensitive files and data stored within the organization's Drive are not inadvertently accessed, analyzed, or shared through Pinpoint. This policy helps protect the confidentiality and integrity of organizational data by preventing unauthorized or unintended interactions between Pinpoint and Drive. By restricting this access, the organization can reduce the risk of data breaches, maintain compliance with data privacy regulations, and uphold strict data governance practices. This approach also minimizes potential misuse or exposure of sensitive information, enhancing overall security and operational control.
 - _Last modified:_ Febuary 2026
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ TBD
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1567: Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567/)
     - [T1567:002 Exfiltration Over Cloud Storage](https://attack.mitre.org/techniques/T1567/002)
