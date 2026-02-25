@@ -515,7 +515,7 @@ Some examples of these privileged accounts include the following Pre-Built GWS A
 ### Policies
 
 #### GWS.COMMONCONTROLS.6.1v0.6
-All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication(MFA), not an agency's authoritative on-premises or federated identity system.
+All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication (MFA), not an agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Cloud-only accounts leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. Enforcing this policy makes it more challenging for a threat actor to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last modified:_ January 2025
@@ -767,9 +767,9 @@ Agencies need to have a process in place to manage and control application acces
 ### Policies
 
 #### GWS.COMMONCONTROLS.10.1v0.6
-Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
+Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party applications.
 
-- _Rationale:_ Third-party applications may include malicious content. Restricting application access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to GWS.
+- _Rationale:_ Third-party applications may include malicious content. Restricting application access to only applications trusted by the agency reduces the risk of allowing malicious applications to connect to GWS.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
@@ -1156,18 +1156,18 @@ Data SHALL be processed in the region selected for data at rest.
 #### GWS.COMMONCONTROLS.15.1v0.6 Instructions
 To configure Data Regions per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
+2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions.**
 3.	Click the **Region** card.
 4.	Click the **Data at rest** card.
-5.	Select the radio button option: "**United States**".
+5.	Select the radio button option: "**United States.**"
 6.	Click **Save**.
 
 #### GWS.COMMONCONTROLS.15.2v0.6 Instructions
 1. Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2. Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
+2. Navigate to **Data** -\> **Compliance** -\> **Data Regions.**
 3. Click the **Region** card.
 4. Click the **Data processing** card.
-5. Select the radio button option: "**Process data in the region selected for data at rest**".
+5. Select the radio button option: "**Process data in the region selected for data at rest.**"
 6. Click **Save**.
 
 
