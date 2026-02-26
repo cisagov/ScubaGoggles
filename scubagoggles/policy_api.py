@@ -581,6 +581,24 @@ class PolicyAPI:
             if response.status_code != self._too_many_requests:
                 break
 
+            if ('Quota exceeded' in response.text
+                and 'read requests per minute' in response.text):
+
+                # The read request quota may typically only be hit during
+                # testing.  The delay is longer here (than below) to try to
+                # avoid hitting the quota again.
+
+                delay = 30
+
+                log.warning('attempt %i - read requests to Policy API exceeded '
+                            'per minute quota: delay %i seconds',
+                            iter_count,
+                            delay)
+
+                sleep(delay)
+
+                continue
+
             # Back off the requests exponentially (adding up to a 10% random
             # delay).
 
