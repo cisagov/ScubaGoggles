@@ -161,7 +161,7 @@ The default permission to view conversations SHOULD be set to All Group Members.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace organization. Restricting access to group members reduces the risk of data loss.
+- _Rationale:_ Groups may contain private or sensitive information not appropriate for the entire Google Workspace (GWS) organization. Restricting access to group members reduces the risk of data loss.
 - _Last modified:_ July 2023
 - _Note:_ This setting can be changed by group owners and group managers.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6

@@ -57,7 +57,7 @@ Users SHALL NOT be allowed to change their history setting.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Altering the history settings in Google Chat can potentially allow users to obfuscate the sharing of sensitive information via Chat. This policy ensures that all chat histories are preserved, enhancing data security and promoting accountability among users.
+- _Rationale:_ Altering the history settings in Google Chat can potentially allow users to obfuscate the sharing of sensitive information via Chat. This policy ensures that all Google chat histories are preserved, enhancing data security and promoting accountability among users.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-9
 - MITRE ATT&CK TTP Mapping
@@ -134,7 +134,7 @@ This section covers whether chat history is retained by default for users within
 ### Policies
 
 #### GWS.CHAT.3.1v0.6
-Space history SHOULD be enabled for traceability of information.
+Space history SHOULD be enabled for information traceability.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -171,11 +171,11 @@ This section permits users to send Chat messages outside of their organization, 
 ### Policies
 
 #### GWS.CHAT.4.1v0.6
-External Chat messaging SHALL be restricted to allowlisted domains only.
+External chat messaging SHALL be restricted to allowlisted domains only.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Allowing external chat messaging in Google Chat to unrestricted domains opens additional avenues for data exfiltration, increasing the risk of data leakage. By restricting external chat messaging to allowlisted domains only, the risk of sensitive information being distributed outside the organization without explicit consent and approval is minimized.
+- _Rationale:_ Allowing external chat messaging in Google Chat to unrestricted domains opens additional avenues for data exfiltration, increasing the risk of data leakage. Restricting external chat messaging to only allowlisted domains helps minimize the risk of sensitive information being shared outside the organization without explicit consent and approval.
 - _Last modified:_ November 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3
 - MITRE ATT&CK TTP Mapping
@@ -225,7 +225,7 @@ Chat content reporting SHALL be enabled for all conversation types.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
-- _Rationale:_ Chat messages could potentially be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to workspace admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies help ensure that their users are able to report risky messages regardless of the conversation type.
+- _Rationale:_ Chat messages could be used as an avenue for phishing, malware distribution, or other security risks. Enabling this feature allows users to report any suspicious messages to Google Worksapce (GWS) admins, increasing threat awareness and facilitating threat mitigation. By selecting all conversation types, agencies help ensure that their users are able to report risky messages regardless of the conversation type.
 - _Last modified:_ February 2024
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IR-6
 - MITRE ATT&CK TTP Mapping
