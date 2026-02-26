@@ -2,7 +2,7 @@
 
 Gmail is the Google Workspace offering for sending and receiving email. Users can upload attachments to emails and send them to a given email address. Additional Gmail features include integrating with other Google applications, such as Meet and Chat. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Gmail security.
 
-The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal Civilian Executive Branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
+The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
@@ -137,7 +137,7 @@ The Sender Policy Framework (SPF) is a mechanism that allows administrators to s
 #### GWS.GMAIL.3.1v0.6
 An SPF policy SHALL be published for each domain that fails all non-approved senders.
 
-- _Rationale:_ Threat actors could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, an SPF policy is required for Federal Civilian Executive Branch (FCEB) agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
+- _Rationale:_ Threat actors could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, an SPF policy is required for Federal civilian executive branch (FCEB) agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - _Last modified:_ February 2024
 - _Note:_ 
   - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`).
@@ -197,7 +197,7 @@ A DMARC policy SHALL be published at the full domain or the second-level domain 
 #### GWS.GMAIL.4.2v0.6
 The DMARC message rejection option SHALL be p=reject.
 
-- _Rationale:_ Without stringent email authentication, threat actors could potentially send deceptive emails that appear to be from the organization's domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for Federal Civilian Executive Branch (FCEB) agencies.
+- _Rationale:_ Without stringent email authentication, threat actors could potentially send deceptive emails that appear to be from the organization's domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for Federal civilian executive branch (FCEB) agencies.
 - _Last modified:_ November 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -211,7 +211,7 @@ The DMARC message rejection option SHALL be p=reject.
 #### GWS.GMAIL.4.3v0.6
 The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.
 
-- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for Federal Civilian Executive Branch (FCEB), set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows the CyberSecurity and Infrastructure Security Agency (CISA) to monitor and address email authentication issues.
+- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for Federal civilian executive branch (FCEB), set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows the CyberSecurity and Infrastructure Security Agency (CISA) to monitor and address email authentication issues.
 - _Last modified:_ November 2023
 - _Note:_ Only FCEB agencies should include this email address in their DMARC record.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4(5)

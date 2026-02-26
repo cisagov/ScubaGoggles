@@ -4,7 +4,7 @@ Google Classroom is a service to streamline assignments, boost collaboration, an
 
 Google Classroom is designed and intended for implementation for Education Institutions. Google Classroom is available with the Google Workspace for Education Edition, and is included with all tiers of GWS for Education including Fundamentals, Standard, and Plus. CISA's Secure Configuration Baseline Classroom policies and guidance are written to the Plus edition.
 
-The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal Civilian Executive Branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
+The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
