@@ -444,7 +444,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
     - [T1204:001: User Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
 
 #### GWS.GMAIL.6.4v0.6
-Google SHALL be allowed to automatically apply future recommended settings for links and external images.
+Google SHOULD be allowed to automatically apply future recommended settings for links and external images.
 
 - _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
