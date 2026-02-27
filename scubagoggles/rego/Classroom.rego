@@ -44,7 +44,7 @@ tests contains {
         "policy/classroom_service_status.serviceState",
         "policy/classroom_class_membership.whoCanJoinClasses"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     # Empty list is for noncompliant groups as classroom settings can't be
     # modified at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
@@ -90,7 +90,7 @@ tests contains {
         "policy/classroom_service_status.serviceState",
         "policy/classroom_class_membership.whichClassesCanUsersJoin"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     # Empty list is for noncompliant groups as classroom settings can't be
     # modified at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_2, []),
@@ -139,7 +139,7 @@ tests contains {
         "policy/classroom_service_status.serviceState",
         "policy/classroom_api_data_access.enableApiAccess"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     # Empty list is for noncompliant groups as classroom settings can't be
     # modified at the group level
     "ReportDetails": utils.ReportDetails(NonCompliantOUs2_1, []),
@@ -232,7 +232,7 @@ tests contains {
         "policy/classroom_service_status.serviceState",
         "policy/classroom_student_unenrollment.whoCanUnenrollStudents"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,
@@ -279,7 +279,7 @@ tests contains {
         "policy/classroom_service_status.serviceState",
         "policy/classroom_teacher_permissions.whoCanCreateClasses"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
