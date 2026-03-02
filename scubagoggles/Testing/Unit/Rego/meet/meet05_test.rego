@@ -2,12 +2,12 @@ package meet
 import future.keywords
 
 #
-# GWS.MEET.6.1
+# GWS.MEET.5.1
 #--
 
 test_AutoRecording_Correct_V1 if {
     # Test not implemented
-    PolicyId := MeetId6_1
+    PolicyId := MeetId5_1
     Output := tests with input as {
         "meet_logs": {"items": [
 
@@ -26,12 +26,12 @@ test_AutoRecording_Correct_V1 if {
 #--
 
 #
-# GWS.MEET.6.2
+# GWS.MEET.5.2
 #--
 
 test_AutoTranscript_Correct_V1 if {
     # Test not implemented
-    PolicyId := MeetId6_2
+    PolicyId := MeetId5_2
     Output := tests with input as {
         "meet_logs": {"items": [
 
