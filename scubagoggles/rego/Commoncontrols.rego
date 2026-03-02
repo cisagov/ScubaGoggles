@@ -2010,6 +2010,40 @@ if {
 #--
 
 #
+# Baseline GWS.COMMONCONTROLS.16.3
+#--
+
+CommonControlsId16_3:= utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.16.3")
+
+tests contains {
+    "PolicyId": CommonControlsId16_3,
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
+# Baseline GWS.COMMONCONTROLS.16.4
+#--
+
+CommonControlsId16_4:= utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.16.4")
+
+tests contains {
+    "PolicyId": CommonControlsId16_4,
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+#--
+
+#
 # Baseline GWS.COMMONCONTROLS.17.1
 #--
 
