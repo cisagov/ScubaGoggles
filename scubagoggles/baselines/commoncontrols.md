@@ -286,7 +286,7 @@ Note that the implementation details of context-aware access use cases will vary
 -   Use nested access levels instead of selecting multiple access levels during assignment
 
 ## 3. Login Challenges
-Login challenges are additional security measures used to verify a user's identity, including Post single sign-on (SSO) verification.
+Login challenges are additional security measures used to verify a user's identity, including post single sign-on (SSO) verification.
 
 Post-SSO verification controls what additional checks are performed (e.g., Google 2SV) after a user succesfully authenticates through a third-party identity provider.
 SSO is managed through profiles, which can be assigned org-wide or to specific org units/groups.
