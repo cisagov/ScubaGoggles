@@ -1,4 +1,7 @@
 name: Run Smoke Test
+permissions:
+  contents: write        # For checkout and comparing commits
+  pull-requests: write  # For creating/updating PR comments
 on:
   pull_request:
     types: [opened, reopened]
@@ -7,14 +10,14 @@ on:
   pull_request_review:
     types: [submitted]
   push:
-    # These paths are primarily for workflow testing purposes
-    paths:
-      - ".github/workflows/run_smoke_test.yml"
-      - ".github/actions/setup-dependencies-windows/action.yml"
-      - ".github/actions/setup-dependencies-macos/action.yml"
-    branches:
-      - "main"
-      - "*smoketest*"
+  # # These paths are primarily for workflow testing purposes
+  #   paths:
+  #     - ".github/workflows/run_smoke_test.yml"
+  #     - ".github/actions/setup-dependencies-windows/action.yml"
+  #     - ".github/actions/setup-dependencies-macos/action.yml"
+  #   branches:
+  #     - "main"
+  #     - "*smoketest*"
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -115,6 +118,14 @@ jobs:
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
+      - name: Install Pytest Coverage dependencies
+        run: |
+          pip install pytest pytest-cov
+
+      - name: Install pip-audit
+        run: |
+          python -m pip install .
+
       - name: Run ScubaGoggles and check for correct output (macos-latest)
         if: ${{ matrix.operating-system == 'macos-latest'}}
         id: mac-path
@@ -165,6 +176,21 @@ jobs:
         with:
           path: /home/runner/scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.linux-path.outputs.cachepath }}
+
+      - name: Pytest Coverage Repository
+        run: |
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=src ./scubagoggles/Testing/Unit/Python | tee pytest-coverage.txt
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
+
+      - name: Vulnerability Scan
+        uses: pypa/gh-action-pip-audit@v1.1.0
+        with:
+          inputs: requirements.txt
 
   lhci:
     runs-on: ubuntu-latest
