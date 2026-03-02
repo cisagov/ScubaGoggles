@@ -101,6 +101,29 @@ test_DMARC_Incorrect_V2 if {
     RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
 }
 
+test_DMARC_Incorrect_V3 if {
+    # Test DMARC when there are multiple dmarc records
+    PolicyId := GmailId4_1
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "test.name",
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov",
+                    "v=DMARC1; p=reject"
+                ]
+            }
+        ],
+        "domains": ["test.name"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+}
+
 #
 # GWS.GMAIL.4.2
 #--
@@ -189,6 +212,29 @@ test_DMARCMessageReject_Incorrect_V2 if {
             {
                 "domain": "test.name",
                 "rdata": ["v=DMARC1; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+            }
+        ],
+        "domains": ["test.name"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+}
+
+test_DMARCMessageReject_Incorrect_V3 if {
+    # Test DMARC when there are multiple dmarc records
+    PolicyId := GmailId4_2
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "test.name",
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov",
+                    "v=DMARC1; p=reject"
+                ]
             }
         ],
         "domains": ["test.name"]
@@ -301,6 +347,30 @@ test_DMARCAggregateReports_Incorrect_V2 if {
     RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
 }
 
+test_DMARCAggregateReports_Incorrect_V3 if {
+    # Test DMARC when there are multiple dmarc records
+    PolicyId := GmailId4_3
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "test.name",
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov",
+                    "v=DMARC1; p=reject"
+                ]
+            }
+        ],
+        "domains": ["test.name"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+}
+
+
 #
 # GWS.GMAIL.4.4
 #--
@@ -389,6 +459,29 @@ test_DMARCAgencyPOC_Incorrect_V2 if {
             {
                 "domain": "test.name",
                 "rdata": ["v=DMARC1; p=reject; pct=100; mailto:reports@dmarc.cyber.dhs.gov"]
+            }
+        ],
+        "domains": ["test.name"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+}
+
+test_DMARCAgencyPOC_Incorrect_V3 if {
+    # Test DMARC when there are multiple dmarc records
+    PolicyId := GmailId4_4
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "test.name",
+                "rdata": [
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov",
+                    "v=DMARC1; p=reject"
+                ]
             }
         ],
         "domains": ["test.name"]

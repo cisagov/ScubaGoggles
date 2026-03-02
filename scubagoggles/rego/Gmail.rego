@@ -155,8 +155,8 @@ GmailId4_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.1")
 # Not applicable at OU or Group level
 DomainsWithDmarc contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
-    some Rdata in DmarcRecord.rdata
-    startswith(Rdata, "v=DMARC1;")
+    ValidAnswers := [Answer | some Answer in DmarcRecord.rdata; startswith(Answer, "v=DMARC1;")]
+    count(ValidAnswers) == 1
 }
 
 tests contains {
@@ -189,6 +189,7 @@ DomainsWithPreject contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
     contains(Rdata, "p=reject;")
+    DmarcRecord.domain in DomainsWithDmarc
 }
 
 tests contains {
@@ -217,6 +218,7 @@ DomainsWithDHSContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
     contains(Rdata, "mailto:reports@dmarc.cyber.dhs.gov")
+    DmarcRecord.domain in DomainsWithDmarc
 }
 
 tests contains {
@@ -245,6 +247,7 @@ DomainsWithAgencyContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
     count(split(Rdata, "@")) >= 3
+    DmarcRecord.domain in DomainsWithDmarc
 }
 
 tests contains {
