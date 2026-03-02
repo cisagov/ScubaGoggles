@@ -293,7 +293,7 @@ Agencies SHALL allow users who are not shared Google Drive members to be added t
 
 To configure the settings for Shared drive creation:
 
-##### Policy Group 2 common Instructions
+#### Policy Group 2 common Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Drive and Docs**.
 3.  Select **Sharing settings -\> Shared drive creation**.
@@ -336,7 +336,7 @@ Agencies SHALL enable the security update for Google Drive files.
 
 To configure the settings for Security update for files:
 
-##### GWS.DRIVEDOCS.3.1v0.6 Instructions
+#### GWS.DRIVEDOCS.3.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Drive and Docs.**
 3.  Select **Sharing settings -\> Security update for files.**
