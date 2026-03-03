@@ -85,9 +85,9 @@ class TestUtils:
         "base_filename, rel_segments",
         [
             ("plain_file.txt",
-            ["Testing", "Python", "testing_directory", "plain_file.txt"]),
+            ["scubagoggles", "Unit", "Python", "utils", "testing_directory", "plain_file.txt"]),
             ("non_existent_file.txt",
-            ["Testing", "Python", "testing_directory", "plain_file.txt"]),
+            ["scubagoggles", "Unit", "Python", "utils", "testing_directory", "plain_file.txt"]),
             ("requirements.txt",
             ["requirements.txt"]),
             ("plain_file_2.txt",
@@ -127,8 +127,8 @@ class TestUtils:
         "path",
         [
             "requirements.txt",
-            "Testing/Python/testing_directory",
-            "Testing/Python/testing_directory/plainfile.txt",
+            "scubagoggles/Unit/Python/utils/testing_directory",
+            "scubagoggles/Unit/Python/utils/testing_directory/plainfile.txt",
             ".",            # special case: use an absolute path
             "~",
             "$CWD/subdir",
