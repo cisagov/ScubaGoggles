@@ -161,6 +161,24 @@ DomainsWithDmarc contains DmarcRecord.domain if {
     count(ValidAnswers) == 1
 }
 
+DomainsWithMultipleDmarc contains DmarcRecord.domain if {
+    some DmarcRecord in input.dmarc_records
+    ValidAnswers := [Answer | some Answer in DmarcRecord.rdata; startswith(Answer, "v=DMARC1;")]
+    count(ValidAnswers) > 1
+}
+
+MultiDmarcWarning := " " if { count(DomainsWithMultipleDmarc) == 0 }
+MultiDmarcWarning := Warning if {
+    count(DomainsWithMultipleDmarc) > 0
+    Warning := concat("", [
+        " ",
+        format_int(count(DomainsWithMultipleDmarc), 10),
+        " domain(s) have multiple DMARC records: ",
+        concat(", ", DomainsWithMultipleDmarc),
+        ". "
+    ])
+}
+
 tests contains {
     "PolicyId": GmailId4_1,
     "Prerequisites": [
@@ -169,7 +187,10 @@ tests contains {
         "get_dmarc_records"
     ],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains),
+        MultiDmarcWarning,
+        DNSLink]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -198,7 +219,11 @@ tests contains {
     "PolicyId": GmailId4_2,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains),
+        MultiDmarcWarning,
+        DNSLink
+    ]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -227,7 +252,11 @@ tests contains {
     "PolicyId": GmailId4_3,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains),
+        MultiDmarcWarning,
+        DNSLink
+    ]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -256,7 +285,11 @@ tests contains {
     "PolicyId": GmailId4_4,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Should",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains),
+        MultiDmarcWarning,
+        DNSLink
+    ]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
