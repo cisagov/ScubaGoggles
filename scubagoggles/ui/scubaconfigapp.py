@@ -26,17 +26,17 @@ Compatible with: Streamlit 1.28+, ScubaGoggles 1.0+
 """
 
 # Import standard library modules for core functionality
-import streamlit as st  # Web application framework for creating the UI  # Web application framework for creating the UI
-import yaml  # YAML parser for reading/writing configuration files
-from typing import Dict, Any, List  # Type hints for better code documentation
 import os  # Operating system interface for file and environment operations
-from datetime import date  # Date handling for assessment timestamps
-from pathlib import Path  # Modern path handling for cross-platform compatibility
 import json  # JSON parsing for structured data handling
-import tempfile  # Temporary file creation for secure file operations
 import subprocess  # Process execution for launching external commands
 import sys  # System-specific parameters and functions for path manipulation
-from typing import Dict, List, Any, Optional  # Additional type hints for complex data structures
+import tempfile  # Temporary file creation for secure file operations
+from datetime import date  # Date handling for assessment timestamps
+from pathlib import Path  # Modern path handling for cross-platform compatibility
+from typing import Any, Dict, List, Optional  # Type hints for better code documentation
+
+import streamlit as st  # Web application framework for creating the UI
+import yaml  # YAML parser for reading/writing configuration files
 
 # Dynamic Path Resolution for ScubaGoggles Module Discovery
 # This section handles the complex task of locating and importing ScubaGoggles modules

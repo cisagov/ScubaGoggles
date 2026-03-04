@@ -2,13 +2,13 @@
 Configuration file generation utilities for ScubaGoggles UI
 """
 
-import yaml
 import json
-import tempfile
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, Optional
+
 import streamlit as st
+import yaml
 
 
 class ConfigGenerator:
@@ -120,7 +120,7 @@ class ConfigGenerator:
         return json.dumps(cleaned_config, indent=2, sort_keys=False)
     
     @staticmethod
-    def save_config_file(config_content: str, file_path: str, file_format: str = 'yaml') -> bool:
+    def save_config_file(config_content: str, file_path: str) -> bool:
         """Save configuration to file"""
         try:
             path = Path(file_path)

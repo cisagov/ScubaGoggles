@@ -22,29 +22,29 @@ class ConfigValidator:
         if not path.exists():
             return False, f"Credentials file does not exist: {file_path}"
         
-        if not path.suffix.lower() == '.json':
+        if path.suffix.lower() != '.json':
             return False, "Credentials file must be a JSON file"
         
         try:
-            with open(path, 'r') as f:
+            with open(path, 'r', encoding='utf-8') as f:
                 creds_data = json.load(f)
-            
-            # Check for required fields in service account JSON
-            required_fields = ['type', 'client_id', 'client_email', 'private_key']
-            missing_fields = [field for field in required_fields if field not in creds_data]
-            
-            if missing_fields:
-                return False, f"Credentials file missing required fields: {', '.join(missing_fields)}"
-            
-            if creds_data.get('type') != 'service_account':
-                return False, "Credentials file must be for a service account"
-            
-            return True, None
-            
-        except json.JSONDecodeError as e:
-            return False, f"Invalid JSON in credentials file: {e}"
-        except Exception as e:
-            return False, f"Error reading credentials file: {e}"
+
+        except json.JSONDecodeError as exc:
+            return False, f"Invalid JSON in credentials file: {exc}"
+        except OSError as exc:
+            return False, f"Error reading credentials file: {exc}"
+
+        # Check for required fields in service account JSON
+        required_fields = ['type', 'client_id', 'client_email', 'private_key']
+        missing_fields = [field for field in required_fields if field not in creds_data]
+
+        if missing_fields:
+            return False, f"Credentials file missing required fields: {', '.join(missing_fields)}"
+
+        if creds_data.get('type') != 'service_account':
+            return False, "Credentials file must be for a service account"
+
+        return True, None
     
     @staticmethod
     def validate_access_token(token: str) -> Tuple[bool, Optional[str]]:
@@ -194,10 +194,11 @@ class UIValidator:
         """Display validation results in Streamlit UI"""
         if is_valid:
             st.success("Configuration is valid!")
-        else:
-            st.error("Configuration has errors:")
-            for error in errors:
-                st.error(f"  • {error}")
+            return
+
+        st.error("Configuration has errors:")
+        for error in errors:
+            st.error(f"  • {error}")
     
     @staticmethod
     def show_field_validation(field_name: str, value: Any, validator_func, *args) -> bool:
