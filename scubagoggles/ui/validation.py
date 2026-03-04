@@ -1,13 +1,11 @@
 """
-Configuration validation utilities for ScubaGoggles UI
+Configuration validation utilities for ScubaGoggles UI.
 """
 
 import json
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-
-import streamlit as st
 
 
 class ConfigValidator:
@@ -226,100 +224,3 @@ class ConfigValidator:
         return len(errors) == 0, errors
 
 
-class UIValidator:
-    """UI-specific validation and feedback"""
-
-    @staticmethod
-    def show_validation_results(is_valid: bool, errors: List[str]):
-        """Display validation results in Streamlit UI"""
-        if is_valid:
-            st.success("Configuration is valid!")
-            return
-
-        st.error("Configuration has errors:")
-        for error in errors:
-            st.error(f"  • {error}")
-
-    @staticmethod
-    def show_field_validation(
-        field_name: str,
-        value: Any,
-        validator_func,
-        *args,
-    ) -> bool:
-        """Show real-time validation for individual fields"""
-        if value:  # Only validate if value is provided
-            is_valid, error = validator_func(value, *args)
-            if not is_valid:
-                st.error(f"❌ {field_name}: {error}")
-                return False
-
-            st.success(f"✅ {field_name}: Valid")
-            return True
-
-        return True
-
-    @staticmethod
-    def create_validation_summary(
-        config_dict: Dict[str, Any],
-        available_baselines: List[str],
-    ) -> None:
-        """Create a validation summary section"""
-        st.subheader("Configuration Validation")
-
-        is_valid, errors = ConfigValidator.validate_complete_config(
-            config_dict,
-            available_baselines,
-        )
-
-        if is_valid:
-            st.success("All validations passed! Configuration is ready to use.")
-        else:
-            st.error("Configuration validation failed:")
-            for idx, error in enumerate(errors, 1):
-                st.error(f"{idx}. {error}")
-
-        # Validation details in expander
-        with st.expander("Validation Details"):
-            auth_status = (
-                "Valid"
-                if (
-                    config_dict.get("credentials")
-                    or config_dict.get("accesstoken")
-                )
-                else "❌ Missing"
-            )
-
-            baselines_status = (
-                f"{len(config_dict.get('baselines', []))} selected"
-                if config_dict.get("baselines")
-                else "❌ None selected"
-            )
-
-            output_status = (
-                "Valid" if config_dict.get("outputpath") else "❌ Not specified"
-            )
-
-            advanced_options_count = len(
-                [
-                    key
-                    for key in ["breakglassaccounts", "tenant", "opapath"]
-                    if config_dict.get(key)
-                ],
-            )
-
-            advanced_options_status = (
-                f"{advanced_options_count} configured"
-                if advanced_options_count
-                else "ℹ️ None configured"
-            )
-
-            validation_details = {
-                "Authentication": auth_status,
-                "Baselines": baselines_status,
-                "Output Path": output_status,
-                "Advanced Options": advanced_options_status,
-            }
-
-            for check, status in validation_details.items():
-                st.write(f"**{check}:** {status}")

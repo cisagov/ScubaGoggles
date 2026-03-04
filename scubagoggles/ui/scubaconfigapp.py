@@ -1,79 +1,47 @@
 """
-ScubaGoggles Configuration Interface - Professional Streamlit Application
+ScubaGoggles Configuration Interface
 
-This module provides a comprehensive web-based configuration interface for ScubaGoggles,
-a Google Workspace security assessment tool. The interface allows users to:
-
-1. Configure organization information and assessment parameters
-2. Select which Google Workspace products to assess
-3. Manage policy omissions and annotations
-4. Set up break glass users and advanced settings
-5. Export configurations to YAML files
-6. Launch ScubaGoggles assessments directly from the interface
-
-The application is designed to match the styling and functionality of ScubaGear's
-ScubaConfigApp but adapted for Google Workspace environments.
-
-Key Components:
-- Streamlit-based tabbed interface
-- Dynamic policy parsing from baseline markdown files
-- YAML configuration export/import
-- Integration with ScubaGoggles orchestrator
-- Professional styling matching CISA branding
-
-Author: CISA Team
-Compatible with: Streamlit 1.28+, ScubaGoggles 1.0+
+Streamlit-based configuration editor for ScubaGoggles Google Workspace
+security assessments.  Provides tabbed UI for organization info, baseline
+selection, policy omissions/annotations, break-glass accounts, and
+YAML config export/import.
 """
 
-# Import standard library modules for core functionality
-import base64  # Encoding/decoding for dialog messages
-import subprocess  # Process execution for launching external commands
-import sys  # System-specific parameters and functions for path manipulation
-import tempfile  # Temporary file creation for secure file operations
-from datetime import date, datetime  # Date handling for assessments and annotations
-from pathlib import Path  # Modern path handling for cross-platform compatibility
-from typing import Any, Dict  # Type hints for better code documentation
+import base64
+import subprocess
+import sys
+from datetime import date, datetime
+from pathlib import Path
+from typing import Any, Dict
 
-import re  # Regex utilities for YAML formatting
-import streamlit as st  # Web application framework for creating the UI
-import yaml  # YAML parser for reading/writing configuration files
+import re
+import streamlit as st
+import yaml
 
-# Dynamic Path Resolution for ScubaGoggles Module Discovery
-# This section handles the complex task of locating and importing ScubaGoggles modules
-# regardless of how the application is launched (standalone, development, or packaged)
-current_dir = Path(__file__).parent.parent.parent  # Navigate up 3 levels to reach project root
-# Ensure the ScubaGoggles package is discoverable by adding to Python path
-# This prevents ImportError when running the UI independently
+current_dir = Path(__file__).parent.parent.parent
 if str(current_dir) not in sys.path:
-    sys.path.insert(0, str(current_dir))  # Insert at beginning for priority
+    sys.path.insert(0, str(current_dir))
 
-# ScubaGoggles Module Import Strategy with Graceful Degradation
-# This section implements a robust import mechanism that allows the UI to function
-# even when ScubaGoggles modules are not available (e.g., during development or testing)
-
-scubagoggles_available = True  # Flag to track if full ScubaGoggles functionality is available
+scubagoggles_available = True
 
 try:
-    # Attempt to import core ScubaGoggles modules for full functionality
-    from scubagoggles.config import UserConfig  # Configuration management and validation
-    from scubagoggles.version import Version  # Version information and compatibility checks
-except ImportError as e:
-    # Graceful degradation: Create mock classes when ScubaGoggles is not available
-    # This allows the UI to function for configuration creation even without the backend
+    from scubagoggles.config import UserConfig
+    from scubagoggles.version import Version
+except ImportError:
     scubagoggles_available = False
 
     class MockUserConfig:
-        """Mock user configuration class with default values for UI operation"""
+        """Fallback when ScubaGoggles backend is not installed."""
         def __init__(self):
-            self.output_dir = "./"  # Default output directory
-            self.credentials_file = None  # No credentials file specified
+            self.output_dir = "./"
+            self.credentials_file = None
 
     class MockVersion:
-        """Mock version class providing basic version information"""
+        """Fallback when ScubaGoggles backend is not installed."""
         number = "1.0.0"
         @classmethod
         def initialize(cls):
-            """No-op initialization for mock version."""
+            pass
 
     UserConfig = MockUserConfig
     Version = MockVersion
@@ -81,72 +49,34 @@ except ImportError as e:
 
 
 class ScubaConfigApp:
-    """ScubaGoggles Configuration Interface - Main Application Class
-
-    This class encapsulates the entire ScubaGoggles configuration interface,
-    providing a professional Streamlit-based web application for managing
-    Google Workspace security assessment configurations.
-
-    The application features:
-    - Tabbed interface for different configuration sections
-    - Dynamic policy management from baseline files
-    - YAML configuration export/import capabilities
-    - Integration with ScubaGoggles orchestrator for assessments
-    - Professional styling matching CISA design standards
-    """
+    """Streamlit-based configuration editor for ScubaGoggles."""
 
     def __init__(self):
-        """Initialize the ScubaGoggles Configuration Application
-
-        Sets up the core application components including:
-        - User configuration object for storing settings
-        - Version information for display and compatibility
-        - Parsed baseline policies from markdown files
-        - Streamlit session state for persistent user data
-
-        The session state maintains all user configurations across
-        page interactions and form submissions.
-        """
-        # Initialize core application objects
         self.user_config = UserConfig()
         Version.initialize()
-        self.available_policies = self.parse_baseline_policies()  # Pre-parsed policy data
+        self.available_policies = self.parse_baseline_policies()
 
-        # Initialize Streamlit Session State for Persistent Configuration Data
-        # This ensures user input persists across page interactions and reruns
         if 'config_data' not in st.session_state:
             st.session_state.config_data = {
-                # Organization and Assessment Information
-                'organization': '',  # Primary organization name
-                'orgname': '',  # Detailed organization name
-                'orgunitname': '',  # Organizational unit or department
-                'subjectemail': '',  # Assessment contact email
-                'customerid': '',  # Google Workspace customer ID
-                'description': '',  # Assessment description and context
-
-                # Technical Configuration
-                'environment': 'google_workspace',  # Fixed environment type
-                'baselines': [],  # Selected product baselines for assessment
-                'credentials': '',  # Path to service account credentials
-                'outputpath': './',  # Directory for assessment results
-
-                # Assessment Behavior Settings
-                'darkmode': False,  # Dark mode preference for reports
-                'quiet': False,  # Suppress verbose output during assessment
-
-                # Policy Management Configuration
-                'omitpolicy': {},  # Policies to exclude from assessment
-                'annotatepolicy': {},  # Custom annotations for specific policies
-                'breakglassaccounts': [],  # Emergency access user accounts
-
-                # User Interface Settings
-                'ui_dark_mode': False  # Dark mode for the configuration interface
+                'orgname': '',
+                'orgunitname': '',
+                'subjectemail': '',
+                'customerid': '',
+                'description': '',
+                'baselines': [],
+                'credentials': '',
+                'outputpath': './',
+                'darkmode': False,
+                'quiet': False,
+                'omitpolicy': {},
+                'annotatepolicy': {},
+                'breakglassaccounts': [],
+                'ui_dark_mode': False,
             }
 
         if 'ui_show_help' not in st.session_state:
             st.session_state.ui_show_help = False
 
-        # Sync widget keys from config_data so widgets can use key= without value=
         _defaults = {
             'orgname': '', 'orgunitname': '', 'description': '',
             'customerid_advanced': ('customerid', ''),
@@ -263,19 +193,16 @@ class ScubaConfigApp:
     def _generate_css(self, dark_mode):
         """Generate CSS based on dark mode setting"""
 
-        # Define color schemes
         if dark_mode:
             bg_color = "#0e1117"
             secondary_bg = "#262730"
             text_color = "#fafafa"
-            _header_gradient = "linear-gradient(135deg, #1f2937 0%, #374151 100%)"
             section_bg = "#262730"
             border_color = "#4b5563"
         else:
             bg_color = "#f6fbfe"
             secondary_bg = "#ffffff"
             text_color = "#262730"
-            _header_gradient = "linear-gradient(135deg, #3d5b96 0%, #4a90e2 100%)"
             section_bg = "white"
             border_color = "#e8f4fd"
 
@@ -781,24 +708,14 @@ class ScubaConfigApp:
     def open_configuration_from_disk(self):
         """Open a native file dialog and load the selected YAML config."""
         try:
-            dialog_script = (
-                "import tkinter as tk; from tkinter import filedialog; "
-                "root = tk.Tk(); root.withdraw(); "
-                "root.attributes('-topmost', True); root.update(); "
+            file_path = self._run_tk_dialog(
+                "from tkinter import filedialog; "
                 "print(filedialog.askopenfilename("
                 "defaultextension='.yaml', "
                 "filetypes=[('YAML files','*.yaml'),('YAML files','*.yml'),('All files','*.*')], "
                 "title='Open ScubaGoggles Configuration')); "
                 "root.destroy()"
             )
-            result = subprocess.run(
-                [sys.executable, "-c", dialog_script],
-                capture_output=True,
-                text=True,
-                timeout=120,
-                check=False,
-            )
-            file_path = result.stdout.strip()
 
             if not file_path:
                 st.info("Open cancelled.")
@@ -832,32 +749,40 @@ class ScubaConfigApp:
             st.error(f"Failed to open configuration: {e}")
 
     @staticmethod
-    def _run_native_messagebox(script: str) -> str:
-        """Run a tkinter dialog in a subprocess and return stdout."""
+    def _run_tk_dialog(script: str, timeout: int = 120) -> str:
+        """Run a tkinter dialog in a subprocess and return stdout.
+
+        The script is prefixed with the standard tkinter root-window
+        boilerplate (hidden, topmost) so callers only need to supply
+        the dialog-specific logic.
+        """
+        preamble = (
+            "import tkinter as tk; "
+            "root = tk.Tk(); root.withdraw(); "
+            "root.attributes('-topmost', True); root.update(); "
+        )
         result = subprocess.run(
-            [sys.executable, "-c", script],
+            [sys.executable, "-c", preamble + script],
             capture_output=True,
             text=True,
-            timeout=60,
+            timeout=timeout,
             check=False,
         )
         return result.stdout.strip()
 
     def _confirm_and_reset(self):
         """Show a native Yes/No confirmation before resetting."""
-        script = (
-            "import tkinter as tk; from tkinter import messagebox; "
-            "root = tk.Tk(); root.withdraw(); "
-            "root.attributes('-topmost', True); root.update(); "
-            "answer = messagebox.askyesno("
-            "'Confirm Reset', "
-            "'Are you sure you want to reset all fields to their defaults?\\n\\n"
-            "All unsaved changes will be lost.'); "
-            "print('yes' if answer else 'no'); "
-            "root.destroy()"
-        )
         try:
-            answer = self._run_native_messagebox(script)
+            answer = self._run_tk_dialog(
+                "from tkinter import messagebox; "
+                "answer = messagebox.askyesno("
+                "'Confirm Reset', "
+                "'Are you sure you want to reset all fields to their defaults?\\n\\n"
+                "All unsaved changes will be lost.'); "
+                "print('yes' if answer else 'no'); "
+                "root.destroy()",
+                timeout=60,
+            )
             if answer == "yes":
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]
@@ -891,17 +816,15 @@ class ScubaConfigApp:
         bullet_list = "\n".join(f"  - {e}" for e in errors)
         message = f"The following validation errors occurred:\n{bullet_list}"
         encoded = base64.b64encode(message.encode("utf-8")).decode("ascii")
-        script = (
-            "import tkinter as tk; from tkinter import messagebox; "
-            "import base64; "
-            f"msg = base64.b64decode('{encoded}').decode('utf-8'); "
-            "root = tk.Tk(); root.withdraw(); "
-            "root.attributes('-topmost', True); root.update(); "
-            "messagebox.showwarning('Validation Errors', msg); "
-            "root.destroy()"
-        )
         try:
-            self._run_native_messagebox(script)
+            self._run_tk_dialog(
+                "from tkinter import messagebox; "
+                "import base64; "
+                f"msg = base64.b64decode('{encoded}').decode('utf-8'); "
+                "messagebox.showwarning('Validation Errors', msg); "
+                "root.destroy()",
+                timeout=60,
+            )
         except Exception:
             for err in errors:
                 st.error(f"❌ {err}")
@@ -1332,27 +1255,9 @@ class ScubaConfigApp:
                                                 f"**Configure Omission for {policy_id}**",
                                             )
 
-                                        # Get existing values if editing or already omitted
                                         existing_rationale = ""
                                         existing_expiration = None
-                                        if is_editing and policy_id in omit_policies:
-                                            existing_data = omit_policies[policy_id]
-                                            existing_rationale = existing_data.get(
-                                                "rationale",
-                                                "",
-                                            )
-                                            if "expiration" in existing_data:
-                                                try:
-                                                    existing_expiration = (
-                                                        datetime.strptime(
-                                                            existing_data["expiration"],
-                                                            "%Y-%m-%d",
-                                                        ).date()
-                                                    )
-                                                except (ValueError, TypeError):
-                                                    existing_expiration = None
-                                        elif policy_id in omit_policies:
-                                            # If policy is omitted but not in editing mode, load values
+                                        if policy_id in omit_policies:
                                             existing_data = omit_policies[policy_id]
                                             existing_rationale = existing_data.get(
                                                 "rationale",
@@ -1594,23 +1499,10 @@ class ScubaConfigApp:
                                         else:
                                             st.markdown(f"**Configure Annotation for {policy_id}**")
 
-                                        # Get existing values if editing
                                         existing_comment = ""
                                         existing_incorrect = False
                                         existing_remediation = None
-                                        if is_editing and policy_id in annotate_policies:
-                                            existing_data = annotate_policies[policy_id]
-                                            existing_comment = existing_data.get('comment', '')
-                                            existing_incorrect = existing_data.get('incorrectresult', False)
-                                            if 'remediationdate' in existing_data:
-                                                try:
-                                                    existing_remediation = datetime.strptime(
-                                                        existing_data['remediationdate'],
-                                                        '%Y-%m-%d',
-                                                    ).date()
-                                                except (ValueError, TypeError):
-                                                    existing_remediation = None
-                                        elif policy_id in annotate_policies:  # If policy is annotated but not in editing mode, load values
+                                        if policy_id in annotate_policies:
                                             existing_data = annotate_policies[policy_id]
                                             existing_comment = existing_data.get('comment', '')
                                             existing_incorrect = existing_data.get('incorrectresult', False)
@@ -1916,73 +1808,6 @@ class ScubaConfigApp:
             )
             st.session_state.config_data['darkmode'] = dark_mode
 
-    def render_authentication_tab(self):
-        """Render authentication configuration"""
-        st.markdown('<div class="section-container">', unsafe_allow_html=True)
-        st.markdown(
-            '<h2 class="section-title">Authentication Configuration</h2>',
-            unsafe_allow_html=True,
-        )
-
-        st.markdown("### 🔐 Service Account Credentials")
-
-        # File upload
-        uploaded_file = st.file_uploader(
-            "Upload Service Account JSON File",
-            type=['json'],
-            help="Upload your Google service account credentials file"
-        )
-
-        # File path input
-        creds_path = st.text_input(
-            "Or specify file path",
-            value=st.session_state.config_data.get('credentials', ''),
-            placeholder="/path/to/service-account.json",
-            help="Path to your existing credentials file"
-        )
-
-        if uploaded_file:
-            # Save uploaded file
-            with tempfile.NamedTemporaryFile(
-                mode='w',
-                suffix='.json',
-                delete=False,
-            ) as tmp_file:
-                tmp_file.write(uploaded_file.read().decode())
-                st.session_state.config_data['credentials'] = tmp_file.name
-                st.success(f"✅ Uploaded credentials: {uploaded_file.name}")
-        elif creds_path:
-            st.session_state.config_data['credentials'] = creds_path
-            if Path(creds_path).exists():
-                st.success(f"✅ Using credentials: {creds_path}")
-            else:
-                st.error(f"❌ File not found: {creds_path}")
-
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    def render_output_tab(self):
-        """Render output configuration"""
-        st.markdown('<div class="section-container">', unsafe_allow_html=True)
-        st.markdown('<h2 class="section-title">Output Configuration</h2>', unsafe_allow_html=True)
-
-        # Output path
-        output_path = st.text_input(
-            "📁 Output Directory",
-            value=st.session_state.config_data.get('outputpath', './'),
-            placeholder="./reports",
-            help="Directory where assessment reports will be saved"
-        )
-        st.session_state.config_data['outputpath'] = output_path
-
-        # Dark mode
-        dark_mode = st.checkbox(
-            "🌙 Enable dark mode for reports",
-            value=st.session_state.config_data.get('darkmode', False)
-        )
-        st.session_state.config_data['darkmode'] = dark_mode
-
-        st.markdown('</div>', unsafe_allow_html=True)
-
     def render_preview_tab(self):
         """Render configuration preview"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
@@ -2024,10 +1849,8 @@ class ScubaConfigApp:
                     self._show_validation_errors(errors)
                 else:
                     try:
-                        dialog_script = (
-                            "import tkinter as tk; from tkinter import filedialog; "
-                            "root = tk.Tk(); root.withdraw(); "
-                            "root.attributes('-topmost', True); root.update(); "
+                        file_path = self._run_tk_dialog(
+                            "from tkinter import filedialog; "
                             "print(filedialog.asksaveasfilename("
                             "defaultextension='.yaml', "
                             "filetypes=[('YAML files','*.yaml'),"
@@ -2037,14 +1860,6 @@ class ScubaConfigApp:
                             "title='Save ScubaGoggles Configuration')); "
                             "root.destroy()"
                         )
-                        result = subprocess.run(
-                            [sys.executable, "-c", dialog_script],
-                            capture_output=True,
-                            text=True,
-                            timeout=120,
-                            check=False,
-                        )
-                        file_path = result.stdout.strip()
 
                         if file_path:
                             Path(file_path).parent.mkdir(parents=True, exist_ok=True)
@@ -2101,39 +1916,6 @@ class ScubaConfigApp:
             config['breakglassaccounts'] = data['breakglassaccounts']
 
         return config
-
-    def validate_config(self) -> bool:
-        """Validate the current configuration"""
-        data = st.session_state.config_data
-        errors = []
-
-        # Check organization fields
-        if not data.get('orgname'):
-            errors.append("Organization Name is required")
-        if not data.get('baselines'):
-            errors.append("At least one baseline must be selected")
-
-        # Check authentication specific fields
-        auth_method = data.get('auth_method', 'Service Account')
-        if auth_method == "Service Account":
-            if not data.get('customerid'):
-                errors.append("Customer ID is required for Service Account authentication")
-            if not data.get('subjectemail'):
-                errors.append("Subject Email is required for Service Account authentication")
-            if not data.get('credentials'):
-                errors.append("Credentials file is required for Service Account authentication")
-
-        if errors:
-            for error in errors:
-                st.error(f"❌ {error}")
-            return False
-        return True
-
-    def test_configuration(self):
-        """Test the configuration"""
-        st.info("🧪 Testing configuration...")
-        # Add configuration testing logic here
-        st.success("✅ Configuration test passed!")
 
     def run(self):
         """Main application entry point"""

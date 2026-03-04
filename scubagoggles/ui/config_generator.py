@@ -4,10 +4,8 @@ Configuration file generation utilities for ScubaGoggles UI.
 
 import json
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
-import streamlit as st
 import yaml
 
 
@@ -125,21 +123,6 @@ class ConfigGenerator:
         return json.dumps(cleaned_config, indent=2, sort_keys=False)
 
     @staticmethod
-    def save_config_file(config_content: str, file_path: str) -> bool:
-        """Save configuration to file."""
-        try:
-            path = Path(file_path)
-            path.parent.mkdir(parents=True, exist_ok=True)
-
-            with open(path, "w", encoding="utf-8") as file_obj:
-                file_obj.write(config_content)
-
-            return True
-        except OSError as exc:
-            st.error(f"Error saving configuration file: {exc}")
-            return False
-
-    @staticmethod
     def create_sample_configs() -> Dict[str, str]:
         """Create sample configuration files for different use cases."""
         samples: Dict[str, str] = {}
@@ -177,118 +160,3 @@ class ConfigGenerator:
         return samples
 
 
-class ConfigLoader:
-    """Handles loading of existing configuration files."""
-
-    @staticmethod
-    def load_config_file(file_path: str) -> Optional[Dict[str, Any]]:
-        """Load configuration from YAML or JSON file."""
-        try:
-            path = Path(file_path)
-            if not path.exists():
-                return None
-
-            with open(path, "r", encoding="utf-8") as file_obj:
-                content = file_obj.read()
-
-            # Try YAML first, then JSON
-            try:
-                return yaml.safe_load(content)
-            except yaml.YAMLError:
-                try:
-                    return json.loads(content)
-                except json.JSONDecodeError:
-                    st.error("File is neither valid YAML nor JSON")
-                    return None
-
-        except OSError as exc:
-            st.error(f"Error loading configuration file: {exc}")
-            return None
-
-    @staticmethod
-    def merge_configs(
-        base_config: Dict[str, Any],
-        override_config: Dict[str, Any],
-    ) -> Dict[str, Any]:
-        """Merge two configuration dictionaries, with override taking precedence."""
-        merged: Dict[str, Any] = base_config.copy()
-
-        for key, value in override_config.items():
-            if isinstance(value, dict) and key in merged and isinstance(
-                merged[key],
-                dict,
-            ):
-                merged[key] = ConfigLoader.merge_configs(merged[key], value)
-            else:
-                merged[key] = value
-
-        return merged
-
-
-def render_config_generator_section(config_dict: Dict[str, Any]) -> str:
-    """Render the configuration generator UI section."""
-    st.subheader("📄 Configuration File Generation")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        include_comments = st.checkbox("Include helpful comments", value=True)
-        file_format = st.selectbox("File format", ["YAML", "JSON"])
-
-    with col2:
-        filename = st.text_input(
-            "Filename",
-            value=f"scubagoggles_config.{file_format.lower()}",
-        )
-
-    # Generate configuration
-    if file_format == "YAML":
-        config_content = ConfigGenerator.generate_yaml_config(
-            config_dict,
-            include_comments,
-        )
-        language = "yaml"
-    else:
-        config_content = ConfigGenerator.generate_json_config(config_dict)
-        language = "json"
-
-    # Display generated configuration
-    st.code(config_content, language=language)
-
-    # Download button
-    st.download_button(
-        label=f"💾 Download {file_format} Configuration",
-        data=config_content,
-        file_name=filename,
-        mime=f"text/{language}",
-    )
-
-    return config_content
-
-
-def render_sample_configs_section() -> None:
-    """Render sample configurations section."""
-    with st.expander("📋 Sample Configurations"):
-        st.subheader("Sample Configuration Files")
-
-        samples = ConfigGenerator.create_sample_configs()
-
-        sample_type = st.selectbox(
-            "Choose sample configuration",
-            ["basic_gws", "advanced", "access_token"],
-            format_func=lambda key: {
-                "basic_gws": "Basic Google Workspace",
-                "advanced": "Advanced with Break Glass Accounts",
-                "access_token": "Using Access Token",
-            }[key],
-        )
-
-        if sample_type in samples:
-            st.code(samples[sample_type], language="yaml")
-
-            st.download_button(
-                label=f"💾 Download {sample_type.replace('_', ' ').title()} Sample",
-                data=samples[sample_type],
-                file_name=f"sample_{sample_type}.yaml",
-                mime="text/yaml",
-            )
