@@ -128,59 +128,61 @@ def main() -> None:
     else:
         popen_kwargs["start_new_session"] = True
 
-    server_process = subprocess.Popen(cmd, **popen_kwargs)
+    with subprocess.Popen(cmd, **popen_kwargs) as server_process:
+        # Guarantee cleanup even on unexpected exit (e.g. sys.exit elsewhere)
+        atexit.register(_kill_server, server_process)
 
-    # Guarantee cleanup even on unexpected exit (e.g. sys.exit elsewhere)
-    atexit.register(_kill_server, server_process)
+        def _shutdown() -> None:
+            """Tear down server and close all windows."""
+            print("\nScubaGoggles UI stopped by user")
+            _kill_server(server_process)
+            for win in webview.windows:
+                try:
+                    win.destroy()
+                except Exception:
+                    pass
+            os._exit(0)
 
-    def _shutdown() -> None:
-        """Tear down server and close all windows."""
-        print("\nScubaGoggles UI stopped by user")
-        _kill_server(server_process)
-        for win in webview.windows:
-            try:
-                win.destroy()
-            except Exception:
-                pass
-        os._exit(0)
+        if sys.platform == "win32":
+            # On Windows the native GUI loop blocks Python signal handling.
+            # Use a Console Control Handler which Windows invokes on its own
+            # thread — it works even while pywebview's message loop is running.
+            ctrl_c_event = 0
+            ctrl_break_event = 1
+            ctrl_close_event = 2
 
-    if sys.platform == "win32":
-        # On Windows the native GUI loop blocks Python signal handling.
-        # Use a Console Control Handler which Windows invokes on its own
-        # thread — it works even while pywebview's message loop is running.
-        ctrl_c_event = 0
-        ctrl_break_event = 1
-        ctrl_close_event = 2
+            @ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_uint)
+            def _console_handler(event: int) -> bool:
+                if event in (ctrl_c_event, ctrl_break_event, ctrl_close_event):
+                    _shutdown()
+                    return True
+                return False
 
-        @ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_uint)
-        def _console_handler(event: int) -> bool:
-            if event in (ctrl_c_event, ctrl_break_event, ctrl_close_event):
-                _shutdown()
-                return True
-            return False
+            ctypes.windll.kernel32.SetConsoleCtrlHandler(_console_handler, True)
+        else:
+            signal.signal(signal.SIGINT, lambda *_: _shutdown())
 
-        ctypes.windll.kernel32.SetConsoleCtrlHandler(_console_handler, True)
-    else:
-        signal.signal(signal.SIGINT, lambda *_: _shutdown())
+        try:
+            print(
+                "Starting ScubaGoggles Configuration UI "
+                f"({theme_base} theme) ...",
+            )
 
-    try:
-        print(f"Starting ScubaGoggles Configuration UI ({theme_base} theme) ...")
-
-        webview.create_window(
-            "ScubaGoggles Configuration",
-            url,
-            width=1280,
-            height=900,
-            min_size=(900, 600),
-        )
-        webview.start()
-    except KeyboardInterrupt:
-        print("\nScubaGoggles UI stopped by user")
-    except Exception as e:
-        print(f"Error starting UI: {e}")
-        sys.exit(1)
-    finally:
-        _kill_server(server_process)
+            webview.create_window(
+                "ScubaGoggles Configuration",
+                url,
+                width=1280,
+                height=900,
+                min_size=(900, 600),
+            )
+            webview.start()
+        except KeyboardInterrupt:
+            print("\nScubaGoggles UI stopped by user")
+        except Exception as exc:
+            print(f"Error starting UI: {exc}")
+            sys.exit(1)
+        finally:
+            _kill_server(server_process)
 
 
 if __name__ == "__main__":

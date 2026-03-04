@@ -1317,40 +1317,58 @@ class ScubaConfigApp:
                                 
                                 # Expandable form for omitting this policy
                                 if st.session_state.get(f"expand_omit_{policy_id}", False):
-                                    is_editing = st.session_state.get(f"editing_omit_{policy_id}", False)
+                                    is_editing = st.session_state.get(
+                                        f"editing_omit_{policy_id}",
+                                        False,
+                                    )
                                     with st.container():
                                         st.markdown("---")
                                         if is_editing:
-                                            st.markdown(f"**Edit Omission for {policy_id}**")
+                                            st.markdown(
+                                                f"**Edit Omission for {policy_id}**",
+                                            )
                                         else:
-                                            st.markdown(f"**Configure Omission for {policy_id}**")
-                                        
-                                        # Get existing values if editing
+                                            st.markdown(
+                                                f"**Configure Omission for {policy_id}**",
+                                            )
+
+                                        # Get existing values if editing or already omitted
                                         existing_rationale = ""
                                         existing_expiration = None
                                         if is_editing and policy_id in omit_policies:
                                             existing_data = omit_policies[policy_id]
-                                            existing_rationale = existing_data.get('rationale', '')
-                                            if 'expiration' in existing_data:
+                                            existing_rationale = existing_data.get(
+                                                "rationale",
+                                                "",
+                                            )
+                                            if "expiration" in existing_data:
                                                 try:
-                                                    existing_expiration = datetime.strptime(
-                                                        existing_data['expiration'],
-                                                        '%Y-%m-%d',
-                                                    ).date()
+                                                    existing_expiration = (
+                                                        datetime.strptime(
+                                                            existing_data["expiration"],
+                                                            "%Y-%m-%d",
+                                                        ).date()
+                                                    )
                                                 except (ValueError, TypeError):
                                                     existing_expiration = None
-                elif policy_id in omit_policies:  # If policy is omitted but not in editing mode, load values
+                                        elif policy_id in omit_policies:
+                                            # If policy is omitted but not in editing mode, load values
                                             existing_data = omit_policies[policy_id]
-                                            existing_rationale = existing_data.get('rationale', '')
-                                            if 'expiration' in existing_data:
+                                            existing_rationale = existing_data.get(
+                                                "rationale",
+                                                "",
+                                            )
+                                            if "expiration" in existing_data:
                                                 try:
-                                                    existing_expiration = datetime.strptime(
-                                                        existing_data['expiration'],
-                                                        '%Y-%m-%d',
-                                                    ).date()
+                                                    existing_expiration = (
+                                                        datetime.strptime(
+                                                            existing_data["expiration"],
+                                                            "%Y-%m-%d",
+                                                        ).date()
+                                                    )
                                                 except (ValueError, TypeError):
                                                     existing_expiration = None
-                                        
+
                                         rationale = st.text_input(
                                             "Rationale (Required)",
                                             value=existing_rationale,
