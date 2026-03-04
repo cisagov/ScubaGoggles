@@ -51,7 +51,7 @@ if str(current_dir) not in sys.path:
 # This section implements a robust import mechanism that allows the UI to function
 # even when ScubaGoggles modules are not available (e.g., during development or testing)
 
-SCUBAGOGGLES_AVAILABLE = True  # Flag to track if full ScubaGoggles functionality is available
+scubagoggles_available = True  # Flag to track if full ScubaGoggles functionality is available
 
 try:
     # Attempt to import core ScubaGoggles modules for full functionality
@@ -60,23 +60,21 @@ try:
 except ImportError as e:
     # Graceful degradation: Create mock classes when ScubaGoggles is not available
     # This allows the UI to function for configuration creation even without the backend
-    SCUBAGOGGLES_AVAILABLE = False
-    
+    scubagoggles_available = False
+
     class MockUserConfig:
         """Mock user configuration class with default values for UI operation"""
         def __init__(self):
             self.output_dir = "./"  # Default output directory
             self.credentials_file = None  # No credentials file specified
-    
+
     class MockVersion:
         """Mock version class providing basic version information"""
         number = "1.0.0"
         @classmethod
         def initialize(cls):
-            pass
-    
-    # Replace imported classes with mock versions for UI-only operation
-    Orchestrator = MockOrchestrator
+            """No-op initialization for mock version."""
+
     UserConfig = MockUserConfig
     Version = MockVersion
     OPA_VERSION = "0.70.0"
@@ -84,11 +82,11 @@ except ImportError as e:
 
 class ScubaConfigApp:
     """ScubaGoggles Configuration Interface - Main Application Class
-    
+
     This class encapsulates the entire ScubaGoggles configuration interface,
     providing a professional Streamlit-based web application for managing
     Google Workspace security assessment configurations.
-    
+
     The application features:
     - Tabbed interface for different configuration sections
     - Dynamic policy management from baseline files
@@ -96,16 +94,16 @@ class ScubaConfigApp:
     - Integration with ScubaGoggles orchestrator for assessments
     - Professional styling matching CISA design standards
     """
-    
+
     def __init__(self):
         """Initialize the ScubaGoggles Configuration Application
-        
+
         Sets up the core application components including:
         - User configuration object for storing settings
         - Version information for display and compatibility
         - Parsed baseline policies from markdown files
         - Streamlit session state for persistent user data
-        
+
         The session state maintains all user configurations across
         page interactions and form submissions.
         """
@@ -113,7 +111,7 @@ class ScubaConfigApp:
         self.user_config = UserConfig()
         Version.initialize()
         self.available_policies = self.parse_baseline_policies()  # Pre-parsed policy data
-        
+
         # Initialize Streamlit Session State for Persistent Configuration Data
         # This ensures user input persists across page interactions and reruns
         if 'config_data' not in st.session_state:
@@ -125,26 +123,26 @@ class ScubaConfigApp:
                 'subjectemail': '',  # Assessment contact email
                 'customerid': '',  # Google Workspace customer ID
                 'description': '',  # Assessment description and context
-                
+
                 # Technical Configuration
                 'environment': 'google_workspace',  # Fixed environment type
                 'baselines': [],  # Selected product baselines for assessment
                 'credentials': '',  # Path to service account credentials
                 'outputpath': './',  # Directory for assessment results
-                
+
                 # Assessment Behavior Settings
                 'darkmode': False,  # Dark mode preference for reports
                 'quiet': False,  # Suppress verbose output during assessment
-                
+
                 # Policy Management Configuration
                 'omitpolicy': {},  # Policies to exclude from assessment
                 'annotatepolicy': {},  # Custom annotations for specific policies
                 'breakglassaccounts': [],  # Emergency access user accounts
-                
+
                 # User Interface Settings
                 'ui_dark_mode': False  # Dark mode for the configuration interface
             }
-            
+
         if 'ui_show_help' not in st.session_state:
             st.session_state.ui_show_help = False
 
@@ -161,18 +159,22 @@ class ScubaConfigApp:
         for widget_key, source in _defaults.items():
             if widget_key not in st.session_state:
                 if isinstance(source, tuple):
-                    st.session_state[widget_key] = st.session_state.config_data.get(source[0], source[1])
+                    st.session_state[widget_key] = (
+                        st.session_state.config_data.get(source[0], source[1])
+                    )
                 else:
-                    st.session_state[widget_key] = st.session_state.config_data.get(widget_key, source)
+                    st.session_state[widget_key] = (
+                        st.session_state.config_data.get(widget_key, source)
+                    )
 
     def parse_baseline_policies(self) -> Dict[str, Dict[str, str]]:
         """Parse policies from baseline markdown files"""
         policies = {}
         baseline_dir = Path('scubagoggles/baselines')
-        
+
         if not baseline_dir.exists():
             return policies
-        
+
         for md_file in baseline_dir.glob('*.md'):
             if md_file.name == 'README.md':
                 continue
@@ -187,46 +189,46 @@ class ScubaConfigApp:
             except Exception:
                 # Skip files that can't be parsed
                 continue
-        
+
         return policies
-    
-    def extract_policies_from_markdown(self, content: str, baseline_name: str) -> Dict[str, str]:
+
+    def extract_policies_from_markdown(self, content: str, _baseline_name: str) -> Dict[str, str]:
         """Extract policy IDs and titles from markdown content"""
         policies = {}
         lines = content.split('\n')
-        
+
         in_policies_section = False
         current_policy_id = None
-        
+
         for line in lines:
             line = line.strip()
-            
+
             # Check if we're entering the policies section
             if line == '### Policies':
                 in_policies_section = True
                 continue
-            
+
             # Check if we're leaving the policies section
             if in_policies_section and line.startswith('### ') and line != '### Policies':
                 in_policies_section = False
                 continue
-            
+
             # Extract policy IDs
             if in_policies_section and line.startswith('#### GWS.'):
                 # Extract policy ID (remove #### and any trailing text)
                 policy_id = line.replace('#### ', '').split()[0]
                 current_policy_id = policy_id
-                
+
                 # Get the next line which should contain the policy description
                 continue
-            
+
             # Get policy description (first line after policy ID)
             if in_policies_section and current_policy_id and not line.startswith('#') and line:
                 # Clean up the description
                 description = line.rstrip('.')
                 policies[current_policy_id] = description
                 current_policy_id = None
-        
+
         return policies
 
     def setup_page_config(self):
@@ -237,64 +239,64 @@ class ScubaConfigApp:
             layout="wide",
             initial_sidebar_state="collapsed"
         )
-        
+
         # Set custom theme with green primary color for checkboxes
         st.markdown("""
         <script>
         const theme = {
             primaryColor: "#28a745",
-            backgroundColor: "#f6fbfe", 
+            backgroundColor: "#f6fbfe",
             secondaryBackgroundColor: "#ffffff",
             textColor: "#262730"
         };
         window.streamlitTheme = theme;
         </script>
         """, unsafe_allow_html=True)
-        
+
         # Custom CSS to match ScubaGear's professional look with dark mode support
         dark_mode = st.session_state.config_data.get('ui_dark_mode', False)
-        
+
         # Always regenerate CSS to ensure it matches current state
         css_content = self._generate_css(dark_mode)
         st.markdown(css_content, unsafe_allow_html=True)
-    
+
     def _generate_css(self, dark_mode):
         """Generate CSS based on dark mode setting"""
-        
+
         # Define color schemes
         if dark_mode:
             bg_color = "#0e1117"
             secondary_bg = "#262730"
             text_color = "#fafafa"
-            header_gradient = "linear-gradient(135deg, #1f2937 0%, #374151 100%)"
+            _header_gradient = "linear-gradient(135deg, #1f2937 0%, #374151 100%)"
             section_bg = "#262730"
             border_color = "#4b5563"
         else:
             bg_color = "#f6fbfe"
             secondary_bg = "#ffffff"
             text_color = "#262730"
-            header_gradient = "linear-gradient(135deg, #3d5b96 0%, #4a90e2 100%)"
+            _header_gradient = "linear-gradient(135deg, #3d5b96 0%, #4a90e2 100%)"
             section_bg = "white"
             border_color = "#e8f4fd"
-        
+
         return f"""
         <style>
         /* Import Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap');
-        
+
         /* Set Streamlit theme variables for green checkboxes */
         :root {{
             --primary-color: #28a745;
             --primary-color-dark: #1e7e34;
         }}
-        
+
         /* Main app styling */
         .stApp {{
             background-color: {bg_color};
             font-family: 'Segoe UI', sans-serif;
             color: {text_color};
         }}
-        
+
         /* Header toolbar bar */
         .header-bar {{
             background: {secondary_bg};
@@ -306,18 +308,18 @@ class ScubaConfigApp:
             border-radius: 8px 8px 0 0;
             margin-bottom: 0.25rem;
         }}
-        
+
         .header-logo {{
             font-size: 2rem;
             line-height: 1;
             flex-shrink: 0;
         }}
-        
+
         .header-text {{
             flex: 1;
             min-width: 0;
         }}
-        
+
         .header-title {{
             font-size: 1.2rem;
             font-weight: 700;
@@ -325,7 +327,7 @@ class ScubaConfigApp:
             color: {text_color};
             white-space: nowrap;
         }}
-        
+
         .header-subtitle {{
             font-size: 0.78rem;
             color: {'#9ca3af' if dark_mode else '#6b7280'};
@@ -334,7 +336,7 @@ class ScubaConfigApp:
             overflow: hidden;
             text-overflow: ellipsis;
         }}
-        
+
         /* Tab styling */
         .stTabs [data-baseweb="tab-list"] {{
             gap: 0;
@@ -342,7 +344,7 @@ class ScubaConfigApp:
             border-radius: 8px 8px 0 0;
             padding: 0.5rem;
         }}
-        
+
         .stTabs [data-baseweb="tab"] {{
             background-color: transparent;
             border: none;
@@ -350,13 +352,13 @@ class ScubaConfigApp:
             font-weight: 500;
             color: {text_color};
         }}
-        
+
         .stTabs [aria-selected="true"] {{
             background-color: {section_bg};
             border-radius: 6px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }}
-        
+
         /* Section styling */
         .section-container {{
             background: transparent;
@@ -365,7 +367,7 @@ class ScubaConfigApp:
             box-shadow: none;
             margin-bottom: 0;
         }}
-        
+
         .section-title {{
             font-size: 1.4rem;
             font-weight: 600;
@@ -374,7 +376,7 @@ class ScubaConfigApp:
             border-bottom: 2px solid {border_color};
             padding-bottom: 0.5rem;
         }}
-        
+
         /* Dark mode specific overrides */
         {'' if not dark_mode else '''
         /* Text colors for dark mode */
@@ -383,7 +385,7 @@ class ScubaConfigApp:
         .stText, p, div, span, label {
             color: #fafafa !important;
         }
-        
+
         /* Form elements */
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea,
@@ -393,25 +395,25 @@ class ScubaConfigApp:
             color: #fafafa !important;
             border-color: #6b7280 !important;
         }
-        
+
         /* Buttons */
         .stButton > button {
             background-color: #374151 !important;
             color: #fafafa !important;
             border-color: #6b7280 !important;
         }
-        
+
         /* Labels and help text */
-        .stTextInput label, .stTextArea label, .stSelectbox label, 
+        .stTextInput label, .stTextArea label, .stSelectbox label,
         .stNumberInput label, .stCheckbox label {
             color: #fafafa !important;
         }
-        
+
         /* Tab labels */
         .stTabs [data-baseweb="tab"] {
             color: #fafafa !important;
         }
-        
+
         /* General text elements */
         [data-testid="stMarkdownContainer"] p,
         [data-testid="stMarkdownContainer"] div,
@@ -419,7 +421,7 @@ class ScubaConfigApp:
         [data-testid="stText"] {
             color: #fafafa !important;
         }
-        
+
         /* Alert boxes and notifications */
         .stAlert, [data-testid="stNotification"],
         [data-testid="stAlert"], .stWarning, .stError, .stSuccess, .stInfo {
@@ -427,7 +429,7 @@ class ScubaConfigApp:
             color: #fafafa !important;
             border-color: #6b7280 !important;
         }
-        
+
         /* Warning/Error/Success box content */
         .stAlert > div, .stAlert p, .stAlert span,
         [data-testid="stNotification"] > div,
@@ -435,43 +437,43 @@ class ScubaConfigApp:
         [data-testid="stNotification"] span {
             color: #fafafa !important;
         }
-        
+
         /* Expander components */
         .streamlit-expander {
             background-color: #374151 !important;
             border-color: #6b7280 !important;
         }
-        
+
         .streamlit-expander .streamlit-expander-header {
             background-color: #374151 !important;
             color: #fafafa !important;
         }
-        
+
         .streamlit-expander .streamlit-expander-content {
             background-color: #262730 !important;
         }
-        
-        
+
+
         /* Container backgrounds */
         .stContainer, [data-testid="stVerticalBlock"] > div,
         [data-testid="stHorizontalBlock"] > div {
             background-color: transparent !important;
         }
-        
+
         /* Metric components */
         .metric-container, [data-testid="stMetric"] {
             background-color: #374151 !important;
             color: #fafafa !important;
         }
-        
+
         /* Dataframe/table styling */
         .stDataFrame, [data-testid="stDataFrame"] {
             background-color: #374151 !important;
             color: #fafafa !important;
         }
-        
+
         '''}
-        
+
         /* Form styling */
         .stTextInput > div > div > input {{
             border: 1px solid #d0d5e0;
@@ -479,17 +481,17 @@ class ScubaConfigApp:
             padding: 0.75rem;
             font-size: 0.95rem;
         }}
-        
+
         .stTextInput > div > div > input:focus {{
             border-color: #4a90e2;
             box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
         }}
-        
+
         .stSelectbox > div > div > div {{
             border: 1px solid #d0d5e0;
             border-radius: 6px;
         }}
-        
+
         /* Product selection grid */
         .product-grid {{
             display: grid;
@@ -497,7 +499,7 @@ class ScubaConfigApp:
             gap: 1rem;
             margin-top: 1rem;
         }}
-        
+
         .product-card {{
             background: #f8f9fa;
             border: 2px solid #e9ecef;
@@ -505,34 +507,34 @@ class ScubaConfigApp:
             padding: 1.25rem;
             transition: all 0.2s ease;
         }}
-        
+
         .product-card:hover {{
             border-color: #4a90e2;
             box-shadow: 0 4px 12px rgba(74, 144, 226, 0.1);
         }}
-        
+
         .product-card.selected {{
             border-color: #4a90e2;
             background: #f0f8ff;
         }}
-        
+
         .product-icon {{
             font-size: 2rem;
             margin-bottom: 0.5rem;
         }}
-        
+
         .product-title {{
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 0.5rem;
         }}
-        
+
         .product-description {{
             font-size: 0.9rem;
             color: #6c757d;
             line-height: 1.4;
         }}
-        
+
         /* Button styling */
         .stButton > button {{
             border-radius: 6px;
@@ -541,11 +543,11 @@ class ScubaConfigApp:
             transition: all 0.2s ease;
             font-size: 0.85rem;
         }}
-        
+
         .stCheckbox {{
             margin-top: 0 !important;
         }}
-        
+
         /* Status indicators */
         .status-indicator {{
             display: inline-flex;
@@ -556,22 +558,22 @@ class ScubaConfigApp:
             font-size: 0.9rem;
             font-weight: 500;
         }}
-        
+
         .status-success {{
             background: #d4edda;
             color: #155724;
         }}
-        
+
         .status-warning {{
             background: #fff3cd;
             color: #856404;
         }}
-        
+
         .status-error {{
             background: #f8d7da;
             color: #721c24;
         }}
-        
+
         /* Help modal styling */
         .help-modal {{
             position: fixed;
@@ -585,7 +587,7 @@ class ScubaConfigApp:
             justify-content: center;
             align-items: center;
         }}
-        
+
         .help-content {{
             background: {section_bg};
             border-radius: 12px;
@@ -596,7 +598,7 @@ class ScubaConfigApp:
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             color: {text_color};
         }}
-        
+
         .help-close {{
             float: right;
             font-size: 1.5rem;
@@ -604,18 +606,18 @@ class ScubaConfigApp:
             color: {text_color};
             margin: -1rem -1rem 1rem 1rem;
         }}
-        
+
         .help-section {{
             margin-bottom: 1.5rem;
         }}
-        
+
         .help-title {{
             color: #4a90e2;
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
         }}
-        
+
         /* Context help styling */
         .context-help {{
             background: {('rgba(74, 144, 226, 0.1)' if not dark_mode else 'rgba(74, 144, 226, 0.2)')};
@@ -624,18 +626,18 @@ class ScubaConfigApp:
             margin: 1rem 0;
             border-radius: 4px;
         }}
-        
+
         .help-icon {{
             color: #4a90e2;
             font-size: 1.2rem;
             cursor: pointer;
             margin-left: 0.5rem;
         }}
-        
+
         .help-icon:hover {{
             color: #3d5b96;
         }}
-        
+
         /* Hide Streamlit default elements */
         #MainMenu {{display: none !important;}}
         footer {{display: none !important;}}
@@ -674,11 +676,11 @@ class ScubaConfigApp:
             # Parse the uploaded YAML file
             yaml_content = uploaded_file.read().decode('utf-8')
             config = yaml.safe_load(yaml_content)
-            
+
             if not config:
                 st.error("Invalid or empty YAML file")
                 return
-            
+
             # Import basic organization fields
             if 'orgname' in config:
                 st.session_state.config_data['orgname'] = config['orgname']
@@ -689,7 +691,7 @@ class ScubaConfigApp:
             if 'Description' in config:
                 st.session_state.config_data['description'] = config['Description']
                 st.session_state['description'] = config['Description']  # Update widget key
-            
+
             # Import authentication fields
             if 'customerid' in config:
                 st.session_state.config_data['customerid'] = config['customerid']
@@ -697,7 +699,7 @@ class ScubaConfigApp:
                 st.session_state.config_data['subjectemail'] = config['subjectemail']
             if 'credentials' in config:
                 st.session_state.config_data['credentials'] = config['credentials']
-            
+
             # Import baselines and update checkbox states
             if 'baselines' in config:
                 # Handle both list and string formats
@@ -706,23 +708,23 @@ class ScubaConfigApp:
                     baselines = [baselines]
                 elif not isinstance(baselines, list):
                     baselines = []
-                
+
                 # Filter out any baselines that don't exist in our baseline info
                 baseline_info = self.get_baseline_info()
                 valid_baselines = [b for b in baselines if b in baseline_info]
                 invalid_baselines = [b for b in baselines if b not in baseline_info]
-                
+
                 st.session_state.config_data['baselines'] = valid_baselines
-                
+
                 # Update individual checkbox states for UI consistency
                 available_baselines = list(baseline_info.keys())
                 for baseline in available_baselines:
                     st.session_state[f"baseline_{baseline}"] = baseline in valid_baselines
-                
+
                 # Warn about invalid baselines
                 if invalid_baselines:
                     st.warning(f"⚠️ **Skipped unknown baselines:** {', '.join(invalid_baselines)}")
-            
+
             # Import output settings
             if 'outputpath' in config:
                 st.session_state.config_data['outputpath'] = config['outputpath']
@@ -735,14 +737,14 @@ class ScubaConfigApp:
                     st.session_state.config_data['darkmode'] = bool(darkmode)
             if 'quiet' in config:
                 st.session_state.config_data['quiet'] = bool(config['quiet'])
-            
+
             # Import advanced configuration sections
             if 'omitpolicy' in config and isinstance(config['omitpolicy'], dict):
                 st.session_state.config_data['omitpolicy'] = config['omitpolicy']
-            
+
             if 'AnnotatePolicy' in config and isinstance(config['AnnotatePolicy'], dict):
                 st.session_state.config_data['annotatepolicy'] = config['AnnotatePolicy']
-            
+
             if 'breakglassaccounts' in config:
                 breakglass = config['breakglassaccounts']
                 if isinstance(breakglass, list):
@@ -751,7 +753,7 @@ class ScubaConfigApp:
                     st.session_state.config_data['breakglassaccounts'] = [breakglass]
                 else:
                     st.session_state.config_data['breakglassaccounts'] = []
-            
+
             # Success message with summary
             imported_items = []
             if st.session_state.config_data.get('orgname'):
@@ -764,13 +766,13 @@ class ScubaConfigApp:
                 imported_items.append(f"Annotated Policies: {len(st.session_state.config_data['annotatepolicy'])}")
             if st.session_state.config_data.get('breakglassaccounts'):
                 imported_items.append(f"Break Glass Accounts: {len(st.session_state.config_data['breakglassaccounts'])}")
-            
-            st.success(f"✅ Configuration imported successfully!")
+
+            st.success("✅ Configuration imported successfully!")
             if imported_items:
                 st.info("📋 **Imported:** " + " • ".join(imported_items))
-            
+
             st.rerun()
-            
+
         except yaml.YAMLError as e:
             st.error(f"❌ YAML parsing error: {str(e)}")
         except Exception as e:
@@ -819,6 +821,7 @@ class ScubaConfigApp:
                 def __init__(self, data: bytes):
                     self._data = data
                 def read(self):
+                    """Return the stored bytes."""
                     return self._data
 
             self.import_configuration(_Wrapper(yaml_content.encode("utf-8")))
@@ -932,24 +935,24 @@ class ScubaConfigApp:
         """Render help modal overlay"""
         if st.session_state.ui_show_help:
             self._show_help_dialog()
-    
+
     @st.dialog("🤿 ScubaGoggles Help & Documentation")
     def _show_help_dialog(self):
         """Show help content in a proper modal dialog"""
-        
+
         # Help content
         st.markdown("### This professional interface helps you create configuration files for ScubaGoggles security assessments.")
-        
+
         st.markdown("## 🚀 Quick Start Guide")
         st.markdown("""
         1. **Main Tab:** Select products and baselines to assess
-        2. **Omit Policies:** Exclude specific policies from assessment  
+        2. **Omit Policies:** Exclude specific policies from assessment
         3. **Annotate Policies:** Add custom notes and documentation
         4. **Break Glass:** Configure emergency access accounts
         5. **Advanced:** Set output paths and advanced options
         6. **Preview:** Review your configuration before saving
         """)
-        
+
         st.markdown("## 📋 Tab Documentation")
         st.markdown("""
         - **Main:** Product selection with baseline coverage
@@ -958,7 +961,7 @@ class ScubaConfigApp:
         - **Break Glass:** Emergency accounts that bypass normal security controls
         - **Advanced:** Output directory configuration and technical settings
         """)
-        
+
         st.markdown("## 💡 Tips & Best Practices")
         st.markdown("""
         - Use the import feature to load existing configurations
@@ -968,14 +971,14 @@ class ScubaConfigApp:
         - All fields are validated before configuration generation
         - Preview tab shows the exact YAML that will be generated
         """)
-        
+
         st.markdown("## 🔗 Resources")
         st.markdown("""
         - [ScubaGoggles Documentation](https://github.com/cisagov/ScubaGoggles)
         - [SCuBA Project](https://cisa.gov/scuba)
         - [User Guide](https://github.com/cisagov/ScubaGoggles/blob/main/docs)
         """)
-        
+
         # Close button
         if st.button("✅ Got it!", key="close_help_dialog", type="primary"):
             st.session_state.ui_show_help = False
@@ -1053,13 +1056,13 @@ class ScubaConfigApp:
             <strong>Organization Information:</strong><br>
             • <strong>Organization Name:</strong> Official name of your organization (required)<br>
             • <strong>Organization Unit:</strong> Specific department or division being assessed<br><br>
-            
+
             <strong>Product Selection:</strong><br>
             • Choose which Google Workspace products to assess<br>
             • Green checkboxes indicate selected products<br>
             • Each product has specific security baselines<br>
             • You can select multiple products for coverage<br><br>
-            
+
             <strong>Best Practices:</strong><br>
             • Start with core products (commoncontrols, gmail, calendar)<br>
             • Add additional products based on your organization's usage<br>
@@ -1108,7 +1111,7 @@ class ScubaConfigApp:
 
         # Product Selection Section
         st.markdown('<h3 style="margin-top: 2rem;">Select at least one product:*</h3>', unsafe_allow_html=True)
-        
+
         baseline_info = self.get_baseline_info()
         available_baselines = list(baseline_info.keys())
         current_selection = st.session_state.config_data.get('baselines', [])
@@ -1128,7 +1131,7 @@ class ScubaConfigApp:
                 for baseline in available_baselines:
                     st.session_state[f"baseline_{baseline}"] = True
                 st.rerun()
-        
+
         with col2:
             if st.button("❌ Clear All", key="clear_all_main"):
                 st.session_state.config_data['baselines'] = []
@@ -1143,19 +1146,19 @@ class ScubaConfigApp:
             info = baseline_info[baseline]
             baseline_policies = self.available_policies.get(baseline.upper(), {}) if self.available_policies else {}
             policy_count = len(baseline_policies)
-            
+
             with cols[i % 2]:
                 # Create a checkbox with custom styling including policy count
                 selected = st.checkbox(
                     f"{info['icon']} **{info['title']}** ({policy_count} policies)",
                     key=f"baseline_{baseline}"
                 )
-                
+
                 if selected and baseline not in current_selection:
                     current_selection.append(baseline)
                 elif not selected and baseline in current_selection:
                     current_selection.remove(baseline)
-                
+
                 st.caption(info['description'])
                 st.markdown("---")
 
@@ -1191,51 +1194,49 @@ class ScubaConfigApp:
         """Render omit policies configuration tab"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
         st.markdown('<h2 class="section-title">Omit Policies</h2>', unsafe_allow_html=True)
-        
+
         # Context help for omit policies
         with st.expander("ℹ️ Help: Policy Omission Guidelines", expanded=False):
             st.markdown("""
             <div class="context-help">
             <strong>What is Policy Omission?</strong><br>
             Excluding specific security policies from ScubaGoggles evaluation when they don't apply to your organization or are handled by external controls.<br><br>
-            
+
             <strong>Valid Reasons to Omit:</strong><br>
             • Policy implemented by third-party service that ScubaGoggles cannot audit<br>
             • Policy not applicable to your organization's operational model<br>
             • Compensating controls provide equivalent security<br>
             • Accepting documented risk for specific controls<br><br>
-            
+
             <strong>Status Indicators:</strong><br>
             • 🟢 Green dot: Policy configured for omission<br>
             • 🟠 Orange dot: Policy being edited<br>
             • No dot: Policy not omitted<br><br>
-            
+
             <strong>Important:</strong> All omissions should be documented and approved by your security team.
             </div>
             """, unsafe_allow_html=True)
-        
+
         st.markdown("""
         **Use this section to exclude specific policies from ScubaGoggles evaluation.**
-        
+
         ⚠️ **Important:** Any omitted policies should be carefully considered and documented as part of your organization's cybersecurity risk management program.
-        
+
         Common reasons for omitting policies:
         - Policy is implemented by a third-party service that ScubaGoggles cannot audit
         - Policy is not applicable to your organization
         - Accepting risk for specific controls with proper documentation
         """)
-        
+
         # Get current omit policies
         omit_policies = st.session_state.config_data.get('omitpolicy', {})
-        
+
         # Add new omitted policy
         st.subheader("➕ Add Policy to Omit")
-        
+
         # Show available policies by selected baselines only
         selected_baselines = st.session_state.config_data.get('baselines', [])
-        selected_policy = None
-        selected_description = None
-        
+
         if selected_baselines and self.available_policies:
             st.markdown("**Available Policies from Selected Products:**")
 
@@ -1259,7 +1260,7 @@ class ScubaConfigApp:
                             for policy_id, description in baseline_policies.items():
                                 # Check if this policy is already omitted
                                 is_omitted = policy_id in omit_policies
-                                
+
                                 # Policy header with expand/collapse
                                 col1, col2 = st.columns([4, 1])
                                 with col1:
@@ -1270,7 +1271,7 @@ class ScubaConfigApp:
                                     else:
                                         st.markdown(f"**{policy_id}**")
                                     st.caption(description)
-                                
+
                                 with col2:
                                     if is_omitted:
                                         col_edit, col_remove = st.columns(2)
@@ -1281,7 +1282,6 @@ class ScubaConfigApp:
                                                 st.session_state[f"rationale_{policy_id}"] = existing_data.get('rationale', '')
                                                 # Convert date string to date object for session state
                                                 if 'expiration' in existing_data:
-                                                    from datetime import datetime
                                                     try:
                                                         date_obj = datetime.strptime(existing_data['expiration'], '%Y-%m-%d').date()
                                                         st.session_state[f"expiration_{policy_id}"] = date_obj
@@ -1304,7 +1304,7 @@ class ScubaConfigApp:
                                         expand_key = f"expand_omit_{policy_id}"
                                         if expand_key not in st.session_state:
                                             st.session_state[expand_key] = False
-                                        
+
                                         if st.button("➕ Omit", key=f"toggle_omit_{policy_id}"):
                                             # Clear any existing session state for fresh start
                                             if f"rationale_{policy_id}" in st.session_state:
@@ -1314,7 +1314,7 @@ class ScubaConfigApp:
                                             st.session_state[expand_key] = not st.session_state[expand_key]
                                             st.session_state[f"editing_omit_{policy_id}"] = False  # New configuration
                                             st.rerun()
-                                
+
                                 # Expandable form for omitting this policy
                                 if st.session_state.get(f"expand_omit_{policy_id}", False):
                                     is_editing = st.session_state.get(
@@ -1375,7 +1375,7 @@ class ScubaConfigApp:
                                             placeholder="Reason for omitting this policy",
                                             key=f"rationale_{policy_id}"
                                         )
-                                        
+
                                         # Clear any string values in session state for date input
                                         date_key = f"expiration_{policy_id}"
                                         if date_key in st.session_state and isinstance(
@@ -1389,14 +1389,14 @@ class ScubaConfigApp:
                                                 ).date()
                                             except (ValueError, TypeError):
                                                 del st.session_state[date_key]
-                                        
+
                                         expiration = st.date_input(
                                             "Expiration Date (Optional)",
                                             value=existing_expiration if existing_expiration else date.today(),
                                             help="Date after which the policy should no longer be omitted",
                                             key=f"expiration_{policy_id}"
                                         )
-                                        
+
                                         col_save, col_cancel = st.columns(2)
                                         with col_save:
                                             button_text = "💾 Update Omission" if is_editing else "✅ Save Omission"
@@ -1405,7 +1405,7 @@ class ScubaConfigApp:
                                                     omit_config = {'rationale': rationale}
                                                     if expiration:
                                                         omit_config['expiration'] = expiration.strftime('%Y-%m-%d')
-                                                    
+
                                                     omit_policies[policy_id] = omit_config
                                                     st.session_state.config_data['omitpolicy'] = omit_policies
                                                     st.session_state[f"expand_omit_{policy_id}"] = False
@@ -1415,7 +1415,7 @@ class ScubaConfigApp:
                                                     st.rerun()
                                                 else:
                                                     st.error("❌ Rationale is required")
-                                        
+
                                         with col_cancel:
                                             if st.button("❌ Cancel", key=f"cancel_omit_{policy_id}"):
                                                 st.session_state[f"expand_omit_{policy_id}"] = False
@@ -1423,18 +1423,18 @@ class ScubaConfigApp:
                                                 st.rerun()
                         else:
                             st.info(f"No policies found for {baseline_name} product")
-                
+
                 st.divider()
             else:
                 st.info("ℹ️ No policies available for selected products")
         else:
             st.warning("⚠️ Please select products in the Main tab first to see available policies")
-        
+
         # Summary of current omitted policies
         if omit_policies:
             st.markdown("---")
             st.subheader("📋 Summary of Omitted Policies")
-            
+
             for policy_id, policy_data in omit_policies.items():
                 st.markdown(f"🚫 **{policy_id}**: {policy_data.get('rationale', 'No rationale provided')}")
                 if 'expiration' in policy_data:
@@ -1449,49 +1449,49 @@ class ScubaConfigApp:
         """Render annotate policies configuration tab"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
         st.markdown('<h2 class="section-title">Annotate Policies</h2>', unsafe_allow_html=True)
-        
+
         # Context help for annotate policies
         with st.expander("ℹ️ Help: Policy Annotation Guidelines", expanded=False):
             st.markdown("""
             <div class="context-help">
             <strong>What are Policy Annotations?</strong><br>
             Adding contextual information and documentation to specific policy results for audit trails and remediation planning.<br><br>
-            
+
             <strong>Annotation Types:</strong><br>
             • <strong>Action Plan:</strong> Document remediation steps for failing controls<br>
             • <strong>Incorrect Result:</strong> Mark false positives (use with caution)<br>
             • <strong>Context:</strong> Provide additional background information<br>
             • <strong>Remediation Date:</strong> Set target dates for addressing issues<br><br>
-            
+
             <strong>Best Practices:</strong><br>
             • Always document reasons for marking results as incorrect<br>
             • Include specific remediation steps and responsible parties<br>
             • Set realistic remediation dates<br>
             • Review annotations regularly during security assessments<br><br>
-            
+
             <strong>Warning:</strong> Use "Incorrect Result" sparingly to avoid security blind spots.
             </div>
             """, unsafe_allow_html=True)
-        
+
         st.markdown("""
         **Use this section to add annotations to specific policy results.**
-        
+
         Annotations allow you to:
         - Document action plans for failing controls
-        - Mark incorrect results 
+        - Mark incorrect results
         - Provide additional context for results
         - Set remediation dates for failing controls
-        
+
         ⚠️ **Caution:** Exercise care when marking results as incorrect to avoid introducing blind spots.
         """)
-        
+
         # Get current annotated policies
         annotate_policies = st.session_state.config_data.get('annotatepolicy', {})
-        
+
         # Check for tab switch signal
         if st.session_state.get('switch_to_annotate_tab', False):
             st.session_state.switch_to_annotate_tab = False
-        
+
         # Check for pre-selected policy from omit tab
         preselected_policy = st.session_state.get('selected_policy_for_annotation')
         if preselected_policy:
@@ -1501,13 +1501,13 @@ class ScubaConfigApp:
             if st.button("✅ Acknowledged"):
                 del st.session_state.selected_policy_for_annotation
                 st.rerun()
-        
+
         # Show available policies by selected baselines only
         selected_baselines = st.session_state.config_data.get('baselines', [])
 
         if selected_baselines and self.available_policies:
             st.markdown("**Available Policies from Selected Products:**")
-            
+
             # Map UI baseline names to policy parser names (lowercase to uppercase)
             selected_baseline_policies: Dict[str, Dict[str, str]] = {}
             for baseline in selected_baselines:
@@ -1516,17 +1516,17 @@ class ScubaConfigApp:
                     selected_baseline_policies[baseline.title()] = self.available_policies[
                         baseline_upper
                     ]
-            
+
             if selected_baseline_policies:
                 baseline_tabs = st.tabs(list(selected_baseline_policies.keys()))
-                
+
                 for i, (baseline_name, baseline_policies) in enumerate(selected_baseline_policies.items()):
                     with baseline_tabs[i]:
                         if baseline_policies:
                             for policy_id, description in baseline_policies.items():
                                 # Check if this policy is already annotated
                                 is_annotated = policy_id in annotate_policies
-                                
+
                                 # Policy header with expand/collapse
                                 col1, col2 = st.columns([4, 1])
                                 with col1:
@@ -1537,7 +1537,7 @@ class ScubaConfigApp:
                                     else:
                                         st.markdown(f"**{policy_id}**")
                                     st.caption(description)
-                                
+
                                 with col2:
                                     if is_annotated:
                                         col_edit, col_remove = st.columns(2)
@@ -1549,7 +1549,6 @@ class ScubaConfigApp:
                                                 st.session_state[f"incorrect_{policy_id}"] = existing_data.get('incorrectresult', False)
                                                 # Convert date string to date object for session state
                                                 if 'remediationdate' in existing_data:
-                                                    from datetime import datetime
                                                     try:
                                                         date_obj = datetime.strptime(existing_data['remediationdate'], '%Y-%m-%d').date()
                                                         st.session_state[f"remediation_{policy_id}"] = date_obj
@@ -1572,7 +1571,7 @@ class ScubaConfigApp:
                                         expand_key = f"expand_annotate_{policy_id}"
                                         if expand_key not in st.session_state:
                                             st.session_state[expand_key] = False
-                                        
+
                                         if st.button("📝 Annotate", key=f"toggle_annotate_{policy_id}"):
                                             # Clear any existing session state for fresh start
                                             if f"comment_{policy_id}" in st.session_state:
@@ -1584,7 +1583,7 @@ class ScubaConfigApp:
                                             st.session_state[expand_key] = not st.session_state[expand_key]
                                             st.session_state[f"editing_annotate_{policy_id}"] = False  # New configuration
                                             st.rerun()
-                                
+
                                 # Expandable form for annotating this policy
                                 if st.session_state.get(f"expand_annotate_{policy_id}", False):
                                     is_editing = st.session_state.get(f"editing_annotate_{policy_id}", False)
@@ -1594,7 +1593,7 @@ class ScubaConfigApp:
                                             st.markdown(f"**Edit Annotation for {policy_id}**")
                                         else:
                                             st.markdown(f"**Configure Annotation for {policy_id}**")
-                                        
+
                                         # Get existing values if editing
                                         existing_comment = ""
                                         existing_incorrect = False
@@ -1623,7 +1622,7 @@ class ScubaConfigApp:
                                                     ).date()
                                                 except (ValueError, TypeError):
                                                     existing_remediation = None
-                                        
+
                                         comment = st.text_area(
                                             "Comment/Annotation",
                                             value=existing_comment,
@@ -1632,7 +1631,7 @@ class ScubaConfigApp:
                                             key=f"comment_{policy_id}",
                                             height=100
                                         )
-                                        
+
                                         col1, col2 = st.columns(2)
                                         with col1:
                                             incorrect_result = st.checkbox(
@@ -1641,7 +1640,7 @@ class ScubaConfigApp:
                                                 help="Check if the result for this policy is incorrect",
                                                 key=f"incorrect_{policy_id}"
                                             )
-                                        
+
                                         with col2:
                                             # Clear any string values in session state for date input
                                             remediation_key = f"remediation_{policy_id}"
@@ -1658,14 +1657,14 @@ class ScubaConfigApp:
                                                     )
                                                 except (ValueError, TypeError):
                                                     del st.session_state[remediation_key]
-                                            
+
                                             remediation_date = st.date_input(
                                                 "Remediation Date (Optional)",
                                                 value=existing_remediation if existing_remediation else date.today(),
                                                 help="Date when a failing control is expected to be implemented",
                                                 key=f"remediation_{policy_id}"
                                             )
-                                        
+
                                         col_save, col_cancel = st.columns(2)
                                         with col_save:
                                             button_text = "💾 Update Annotation" if is_editing else "✅ Save Annotation"
@@ -1677,7 +1676,7 @@ class ScubaConfigApp:
                                                     annotation_config['incorrectresult'] = True
                                                 if remediation_date:
                                                     annotation_config['remediationdate'] = remediation_date.strftime('%Y-%m-%d')
-                                                
+
                                                 if annotation_config:  # Only save if there's something to annotate
                                                     annotate_policies[policy_id] = annotation_config
                                                     st.session_state.config_data['annotatepolicy'] = annotate_policies
@@ -1688,7 +1687,7 @@ class ScubaConfigApp:
                                                     st.rerun()
                                                 else:
                                                     st.error("❌ At least one annotation field is required")
-                                        
+
                                         with col_cancel:
                                             if st.button("❌ Cancel", key=f"cancel_annotate_{policy_id}"):
                                                 st.session_state[f"expand_annotate_{policy_id}"] = False
@@ -1696,18 +1695,18 @@ class ScubaConfigApp:
                                                 st.rerun()
                         else:
                             st.info(f"No policies found for {baseline_name} product")
-                
+
                 st.divider()
             else:
                 st.info("ℹ️ No policies available for selected products")
         else:
             st.warning("⚠️ Please select products in the Main tab first to see available policies")
-        
+
         # Summary of current annotated policies
         if annotate_policies:
             st.markdown("---")
             st.subheader("📋 Summary of Annotated Policies")
-            
+
             for policy_id, policy_data in annotate_policies.items():
                 st.markdown(f"📝 **{policy_id}**")
                 if 'comment' in policy_data:
@@ -1726,23 +1725,23 @@ class ScubaConfigApp:
         """Render break glass accounts configuration tab"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
         st.markdown('<h2 class="section-title">Break Glass Accounts</h2>', unsafe_allow_html=True)
-        
+
         st.markdown("""
         **Configure super admin accounts that should be considered "break glass accounts".**
-        
-        Break glass accounts are emergency access accounts used only in critical situations and should be excluded 
+
+        Break glass accounts are emergency access accounts used only in critical situations and should be excluded
         from the overall super admin count in ScubaGoggles assessments.
-        
+
         ⚠️ **Important:** These accounts should:
         - Be used only for emergency access
         - Have strong authentication controls
         - Be regularly audited
         - Have minimal day-to-day access
         """)
-        
+
         # Current break glass accounts
         break_glass_accounts = st.session_state.config_data.get('breakglassaccounts', [])
-        
+
         # Add new break glass account
         st.subheader("➕ Add Break Glass Account")
 
@@ -1768,7 +1767,7 @@ class ScubaConfigApp:
                 help="Email address of break glass account",
                 key="new_break_glass"
             )
-        
+
         with col2:
             st.button("➕ Add Account", type="primary", on_click=_add_break_glass_account)
 
@@ -1781,7 +1780,7 @@ class ScubaConfigApp:
                 st.error("❌ Account already exists in list")
             else:
                 st.error("❌ Email address is required")
-        
+
         # Display current break glass accounts
         if break_glass_accounts:
             st.subheader("📋 Current Break Glass Accounts")
@@ -1805,10 +1804,10 @@ class ScubaConfigApp:
         """Render advanced configuration tab"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
         st.markdown('<h2 class="section-title">Advanced Configuration</h2>', unsafe_allow_html=True)
-        
+
         # Authentication Settings
         st.subheader("🔐 Authentication Settings")
-        
+
         auth_method = st.selectbox(
             "Authentication Method",
             ["Service Account", "OAuth 2.0", "Application Default Credentials"],
@@ -1817,10 +1816,10 @@ class ScubaConfigApp:
             key="auth_method"
         )
         st.session_state.config_data['auth_method'] = auth_method
-        
+
         if auth_method == "Service Account":
             st.info("📋 Service account authentication requires a JSON credentials file and subject email.")
-            
+
             # Service Account specific fields
             col1, col2 = st.columns([1, 2])
             with col1:
@@ -1836,7 +1835,7 @@ class ScubaConfigApp:
                 st.session_state.config_data['customerid'] = customerid
                 if customerid:
                     st.caption("Required for service account authentication")
-            
+
             col1, col2 = st.columns([1, 2])
             with col1:
                 st.markdown("**Subject Email***")
@@ -1851,7 +1850,7 @@ class ScubaConfigApp:
                 st.session_state.config_data['subjectemail'] = subjectemail
                 if subjectemail:
                     st.caption("Must be a super admin user")
-            
+
             # File path input for credentials
             creds_path = st.text_input(
                 "📁 Service Account JSON File Path",
@@ -1861,7 +1860,6 @@ class ScubaConfigApp:
             )
             st.session_state.config_data['credentials'] = creds_path
             if creds_path:
-                from pathlib import Path
                 if Path(creds_path).exists():
                     st.success(f"✅ Using credentials: {creds_path}")
                 else:
@@ -1870,12 +1868,12 @@ class ScubaConfigApp:
             st.info("🌐 OAuth 2.0 will open a browser window for interactive authentication.")
         else:
             st.info("🔧 Application Default Credentials will use your environment's default authentication.")
-        
+
         st.divider()
-        
+
         # Output Settings
         st.subheader("📁 Output Settings")
-        
+
         col1, col2 = st.columns(2)
         with col1:
             output_format = st.selectbox(
@@ -1886,7 +1884,7 @@ class ScubaConfigApp:
                 key="output_format"
             )
             st.session_state.config_data['output_format'] = output_format
-        
+
         with col2:
             output_path = st.text_input(
                 "Output Directory",
@@ -1895,12 +1893,12 @@ class ScubaConfigApp:
                 key="output_path_advanced"
             )
             st.session_state.config_data['outputpath'] = output_path
-        
+
         st.divider()
-        
+
         # Execution Settings
         st.subheader("⚙️ Execution Settings")
-        
+
         col1, col2 = st.columns(2)
         with col1:
             quiet = st.checkbox(
@@ -1909,7 +1907,7 @@ class ScubaConfigApp:
                 key="quiet_mode"
             )
             st.session_state.config_data['quiet'] = quiet
-        
+
         with col2:
             dark_mode = st.checkbox(
                 "Dark Mode Reports",
@@ -1921,17 +1919,20 @@ class ScubaConfigApp:
     def render_authentication_tab(self):
         """Render authentication configuration"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
-        st.markdown('<h2 class="section-title">Authentication Configuration</h2>', unsafe_allow_html=True)
-        
+        st.markdown(
+            '<h2 class="section-title">Authentication Configuration</h2>',
+            unsafe_allow_html=True,
+        )
+
         st.markdown("### 🔐 Service Account Credentials")
-        
+
         # File upload
         uploaded_file = st.file_uploader(
             "Upload Service Account JSON File",
             type=['json'],
             help="Upload your Google service account credentials file"
         )
-        
+
         # File path input
         creds_path = st.text_input(
             "Or specify file path",
@@ -1939,7 +1940,7 @@ class ScubaConfigApp:
             placeholder="/path/to/service-account.json",
             help="Path to your existing credentials file"
         )
-        
+
         if uploaded_file:
             # Save uploaded file
             with tempfile.NamedTemporaryFile(
@@ -1963,7 +1964,7 @@ class ScubaConfigApp:
         """Render output configuration"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
         st.markdown('<h2 class="section-title">Output Configuration</h2>', unsafe_allow_html=True)
-        
+
         # Output path
         output_path = st.text_input(
             "📁 Output Directory",
@@ -1972,7 +1973,7 @@ class ScubaConfigApp:
             help="Directory where assessment reports will be saved"
         )
         st.session_state.config_data['outputpath'] = output_path
-        
+
         # Dark mode
         dark_mode = st.checkbox(
             "🌙 Enable dark mode for reports",
@@ -1986,14 +1987,14 @@ class ScubaConfigApp:
         """Render configuration preview"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
         st.markdown('<h2 class="section-title">Configuration Preview</h2>', unsafe_allow_html=True)
-        
+
         # Generate clean config
         clean_config = self.generate_clean_config()
-        
+
         if clean_config:
             # Show YAML preview with flow style for arrays to match ScubaGoggles conventions
             yaml_config = yaml.dump(clean_config, default_flow_style=False, sort_keys=False)
-            
+
             # Convert baselines array to flow style to match sample files
             yaml_config = re.sub(
                 r'baselines:\n(?:- (.+)\n)+',
@@ -2004,10 +2005,14 @@ class ScubaConfigApp:
             # Convert breakglassaccounts array to flow style if present
             yaml_config = re.sub(
                 r'breakglassaccounts:\n(?:- (.+)\n)+',
-                lambda m: 'breakglassaccounts: [' + ', '.join(re.findall(r'- (.+)', m.group(0))) + ']\n',
+                lambda m: (
+                    'breakglassaccounts: ['
+                    + ', '.join(re.findall(r'- (.+)', m.group(0)))
+                    + ']\n'
+                ),
                 yaml_config,
             )
-            
+
             st.code(yaml_config, language='yaml')
 
             st.markdown("---")
@@ -2025,7 +2030,9 @@ class ScubaConfigApp:
                             "root.attributes('-topmost', True); root.update(); "
                             "print(filedialog.asksaveasfilename("
                             "defaultextension='.yaml', "
-                            "filetypes=[('YAML files','*.yaml'),('YAML files','*.yml'),('All files','*.*')], "
+                            "filetypes=[('YAML files','*.yaml'),"
+                            "('YAML files','*.yml'),"
+                            "('All files','*.*')], "
                             "initialfile='scubagoggles_config.yaml', "
                             "title='Save ScubaGoggles Configuration')); "
                             "root.destroy()"
@@ -2058,7 +2065,7 @@ class ScubaConfigApp:
         """Generate clean configuration dictionary"""
         config = {}
         data = st.session_state.config_data
-        
+
         # Required fields
         if data.get('customerid'):
             config['customerid'] = data['customerid']
@@ -2070,13 +2077,13 @@ class ScubaConfigApp:
             config['baselines'] = data['baselines']
         if data.get('credentials'):
             config['credentials'] = data['credentials']
-        
+
         # Optional organization fields
         if data.get('orgunitname'):
             config['orgunitname'] = data['orgunitname']
         if data.get('description'):
             config['Description'] = data['description']
-        
+
         # Output settings
         if data.get('outputpath') and data['outputpath'] != './':
             config['outputpath'] = data['outputpath']
@@ -2084,7 +2091,7 @@ class ScubaConfigApp:
             config['darkmode'] = 'true'
         if data.get('quiet'):
             config['quiet'] = data['quiet']
-        
+
         # Advanced configuration sections
         if data.get('omitpolicy'):
             config['omitpolicy'] = data['omitpolicy']
@@ -2092,20 +2099,20 @@ class ScubaConfigApp:
             config['AnnotatePolicy'] = data['annotatepolicy']
         if data.get('breakglassaccounts'):
             config['breakglassaccounts'] = data['breakglassaccounts']
-        
+
         return config
 
     def validate_config(self) -> bool:
         """Validate the current configuration"""
         data = st.session_state.config_data
         errors = []
-        
+
         # Check organization fields
         if not data.get('orgname'):
             errors.append("Organization Name is required")
         if not data.get('baselines'):
             errors.append("At least one baseline must be selected")
-        
+
         # Check authentication specific fields
         auth_method = data.get('auth_method', 'Service Account')
         if auth_method == "Service Account":
@@ -2115,7 +2122,7 @@ class ScubaConfigApp:
                 errors.append("Subject Email is required for Service Account authentication")
             if not data.get('credentials'):
                 errors.append("Credentials file is required for Service Account authentication")
-        
+
         if errors:
             for error in errors:
                 st.error(f"❌ {error}")
@@ -2131,47 +2138,51 @@ class ScubaConfigApp:
     def run(self):
         """Main application entry point"""
         self.setup_page_config()
-        
+
         self.render_header()
-        
+
         # Create tabs similar to ScubaGear
         tabs = st.tabs([
-            "🏢 Main", 
+            "🏢 Main",
             "🚫 Omit Policies",
-            "📝 Annotate Policies", 
+            "📝 Annotate Policies",
             "🚨 Break Glass",
             "⚙️ Advanced",
             "👁️ Preview"
         ])
-        
+
         with tabs[0]:
             self.render_main_tab()
-        
+
         with tabs[1]:
             self.render_omit_policies_tab()
-        
+
         with tabs[2]:
             self.render_annotate_policies_tab()
-        
+
         with tabs[3]:
             self.render_break_glass_tab()
-        
+
         with tabs[4]:
             self.render_advanced_tab()
-        
+
         with tabs[5]:
             self.render_preview_tab()
-        
+
         # Status bar
         st.markdown("---")
         col1, col2, col3 = st.columns([2, 1, 1])
-        
+
         with col1:
-            st.markdown('<span class="status-indicator status-success">✅ ScubaGoggles</span>', unsafe_allow_html=True)
-           
+            st.markdown(
+                '<span class="status-indicator status-success">'
+                '✅ ScubaGoggles</span>',
+                unsafe_allow_html=True,
+            )
+
         with col2:
             st.markdown(f"**Version:** {Version.number}")
-        
+
         with col3:
             st.markdown("**[GitHub Repository](https://github.com/cisagov/ScubaGoggles)**")
 
