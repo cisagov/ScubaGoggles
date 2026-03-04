@@ -33,7 +33,7 @@ import sys  # System-specific parameters and functions for path manipulation
 import tempfile  # Temporary file creation for secure file operations
 from datetime import date  # Date handling for assessment timestamps
 from pathlib import Path  # Modern path handling for cross-platform compatibility
-from typing import Any, Dict, List, Optional  # Type hints for better code documentation
+from typing import Any, Dict, List  # Type hints for better code documentation
 
 import streamlit as st  # Web application framework for creating the UI
 import yaml  # YAML parser for reading/writing configuration files
@@ -55,10 +55,8 @@ SCUBAGOGGLES_AVAILABLE = True  # Flag to track if full ScubaGoggles functionalit
 
 try:
     # Attempt to import core ScubaGoggles modules for full functionality
-    from scubagoggles.orchestrator import Orchestrator  # Main assessment orchestration engine
     from scubagoggles.config import UserConfig  # Configuration management and validation
     from scubagoggles.version import Version  # Version information and compatibility checks
-    from scubagoggles.scuba_constants import OPA_VERSION  # Open Policy Agent version constants
 except ImportError as e:
     # Graceful degradation: Create mock classes when ScubaGoggles is not available
     # This allows the UI to function for configuration creation even without the backend

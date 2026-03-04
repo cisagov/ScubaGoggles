@@ -11,41 +11,49 @@ import streamlit as st
 
 class ConfigValidator:
     """Handles validation of ScubaGoggles configuration parameters"""
-    
+
     @staticmethod
     def validate_credentials_file(file_path: str) -> Tuple[bool, Optional[str]]:
         """Validate Google service account credentials file"""
+        error: Optional[str] = None
+
         if not file_path:
-            return False, "Credentials file path is required"
-        
-        path = Path(file_path)
-        if not path.exists():
-            return False, f"Credentials file does not exist: {file_path}"
-        
-        if path.suffix.lower() != '.json':
-            return False, "Credentials file must be a JSON file"
-        
+            error = "Credentials file path is required"
+
+        path = Path(file_path) if not error else None
+        if path and not path.exists():
+            error = f"Credentials file does not exist: {file_path}"
+
+        if path and path.suffix.lower() != ".json":
+            error = "Credentials file must be a JSON file"
+
         try:
-            with open(path, 'r', encoding='utf-8') as f:
-                creds_data = json.load(f)
-
+            if not error and path is not None:
+                with open(path, "r", encoding="utf-8") as f:
+                    creds_data = json.load(f)
+            else:
+                creds_data = None
         except json.JSONDecodeError as exc:
-            return False, f"Invalid JSON in credentials file: {exc}"
+            error = f"Invalid JSON in credentials file: {exc}"
+            creds_data = None
         except OSError as exc:
-            return False, f"Error reading credentials file: {exc}"
+            error = f"Error reading credentials file: {exc}"
+            creds_data = None
 
-        # Check for required fields in service account JSON
-        required_fields = ['type', 'client_id', 'client_email', 'private_key']
-        missing_fields = [field for field in required_fields if field not in creds_data]
+        if not error and creds_data is not None:
+            required_fields = ["type", "client_id", "client_email", "private_key"]
+            missing_fields = [field for field in required_fields if field not in creds_data]
 
-        if missing_fields:
-            return False, f"Credentials file missing required fields: {', '.join(missing_fields)}"
+            if missing_fields:
+                error = (
+                    "Credentials file missing required fields: "
+                    f"{', '.join(missing_fields)}"
+                )
+            elif creds_data.get("type") != "service_account":
+                error = "Credentials file must be for a service account"
 
-        if creds_data.get('type') != 'service_account':
-            return False, "Credentials file must be for a service account"
+        return error is None, error
 
-        return True, None
-    
     @staticmethod
     def validate_access_token(token: str) -> Tuple[bool, Optional[str]]:
         """Validate access token format"""
@@ -110,7 +118,10 @@ class ConfigValidator:
             return True, None  # Optional field
         
         # UUID pattern (basic validation)
-        uuid_pattern = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', re.IGNORECASE)
+        uuid_pattern = re.compile(
+            r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+            re.IGNORECASE,
+        )
         
         invalid_uuids = []
         for account in accounts:
@@ -129,7 +140,10 @@ class ConfigValidator:
             return True, None  # Optional field
         
         # Basic domain validation
-        domain_pattern = re.compile(r'^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$')
+        domain_pattern = re.compile(
+            r'^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?'
+            r'(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$'
+        )
         
         if not domain_pattern.match(domain):
             return False, "Invalid domain format"
