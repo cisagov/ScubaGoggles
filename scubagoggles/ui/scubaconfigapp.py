@@ -1070,7 +1070,7 @@ class ScubaConfigApp:
         # Organization Name
         col1, col2 = st.columns([1, 2])
         with col1:
-            st.markdown("**[ℹ️] Organization Name***")
+            st.markdown("**ℹ️ Organization Name***")
         with col2:
             orgname = st.text_input(
                 "Organization Name",
@@ -1084,11 +1084,11 @@ class ScubaConfigApp:
         # Organization Unit Name
         col1, col2 = st.columns([1, 2])
         with col1:
-            st.markdown("**[ℹ️] Organization Unit Name**")
+            st.markdown("**ℹ️ Organization Unit Name**")
         with col2:
             orgunitname = st.text_input(
                 "Organization Unit Name",
-                placeholder="Subdepartment of Example",
+                placeholder="Cybersecurity and Infrastructure Security Agency",
                 help="Name of your organizational unit (optional)",
                 key="orgunitname",
                 label_visibility="collapsed"
