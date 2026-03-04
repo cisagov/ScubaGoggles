@@ -831,13 +831,13 @@ class ScubaConfigApp:
     @staticmethod
     def _run_native_messagebox(script: str) -> str:
         """Run a tkinter dialog in a subprocess and return stdout."""
-            result = subprocess.run(
-                [sys.executable, "-c", script],
-                capture_output=True,
-                text=True,
-                timeout=60,
-                check=False,
-            )
+        result = subprocess.run(
+            [sys.executable, "-c", script],
+            capture_output=True,
+            text=True,
+            timeout=60,
+            check=False,
+        )
         return result.stdout.strip()
 
     def _confirm_and_reset(self):

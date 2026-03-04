@@ -165,7 +165,7 @@ class ScubaRunner:
                 pass
 
             time.sleep(0.5)
-    
+
     def get_output(self) -> List[str]:
         """Get all captured output"""
         output_lines = []
@@ -176,7 +176,7 @@ class ScubaRunner:
         except queue.Empty:
             pass
         return output_lines
-    
+
     def get_errors(self) -> List[str]:
         """Get all captured errors"""
         error_lines = []
