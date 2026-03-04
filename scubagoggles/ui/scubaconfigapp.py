@@ -26,15 +26,15 @@ Compatible with: Streamlit 1.28+, ScubaGoggles 1.0+
 """
 
 # Import standard library modules for core functionality
-import os  # Operating system interface for file and environment operations
-import json  # JSON parsing for structured data handling
+import base64  # Encoding/decoding for dialog messages
 import subprocess  # Process execution for launching external commands
 import sys  # System-specific parameters and functions for path manipulation
 import tempfile  # Temporary file creation for secure file operations
-from datetime import date  # Date handling for assessment timestamps
+from datetime import date, datetime  # Date handling for assessments and annotations
 from pathlib import Path  # Modern path handling for cross-platform compatibility
-from typing import Any, Dict, List  # Type hints for better code documentation
+from typing import Any, Dict  # Type hints for better code documentation
 
+import re  # Regex utilities for YAML formatting
 import streamlit as st  # Web application framework for creating the UI
 import yaml  # YAML parser for reading/writing configuration files
 
@@ -61,13 +61,6 @@ except ImportError as e:
     # Graceful degradation: Create mock classes when ScubaGoggles is not available
     # This allows the UI to function for configuration creation even without the backend
     SCUBAGOGGLES_AVAILABLE = False
-    
-    class MockOrchestrator:
-        """Mock orchestrator class providing basic product information for UI functionality"""
-        @staticmethod
-        def gws_products():
-            """Return static list of Google Workspace products for UI configuration"""
-            return {'gws_baselines': ['gmail', 'drive', 'calendar', 'meet', 'groups', 'chat', 'sites', 'classroom']}
     
     class MockUserConfig:
         """Mock user configuration class with default values for UI operation"""
@@ -183,13 +176,17 @@ class ScubaConfigApp:
         for md_file in baseline_dir.glob('*.md'):
             if md_file.name == 'README.md':
                 continue
-                
+
             try:
                 content = md_file.read_text(encoding='utf-8')
                 baseline_name = md_file.stem.upper()
-                policies[baseline_name] = self.extract_policies_from_markdown(content, baseline_name)
-            except Exception as e:
-                continue  # Skip files that can't be parsed
+                policies[baseline_name] = self.extract_policies_from_markdown(
+                    content,
+                    baseline_name,
+                )
+            except Exception:
+                # Skip files that can't be parsed
+                continue
         
         return policies
     
@@ -794,7 +791,10 @@ class ScubaConfigApp:
             )
             result = subprocess.run(
                 [sys.executable, "-c", dialog_script],
-                capture_output=True, text=True, timeout=120,
+                capture_output=True,
+                text=True,
+                timeout=120,
+                check=False,
             )
             file_path = result.stdout.strip()
 
@@ -831,10 +831,13 @@ class ScubaConfigApp:
     @staticmethod
     def _run_native_messagebox(script: str) -> str:
         """Run a tkinter dialog in a subprocess and return stdout."""
-        result = subprocess.run(
-            [sys.executable, "-c", script],
-            capture_output=True, text=True, timeout=60,
-        )
+            result = subprocess.run(
+                [sys.executable, "-c", script],
+                capture_output=True,
+                text=True,
+                timeout=60,
+                check=False,
+            )
         return result.stdout.strip()
 
     def _confirm_and_reset(self):
@@ -882,10 +885,9 @@ class ScubaConfigApp:
 
     def _show_validation_errors(self, errors: list):
         """Show validation errors in a native warning dialog."""
-        import base64 as _b64
         bullet_list = "\n".join(f"  - {e}" for e in errors)
         message = f"The following validation errors occurred:\n{bullet_list}"
-        encoded = _b64.b64encode(message.encode("utf-8")).decode("ascii")
+        encoded = base64.b64encode(message.encode("utf-8")).decode("ascii")
         script = (
             "import tkinter as tk; from tkinter import messagebox; "
             "import base64; "
@@ -898,8 +900,8 @@ class ScubaConfigApp:
         try:
             self._run_native_messagebox(script)
         except Exception:
-            for e in errors:
-                st.error(f"❌ {e}")
+            for err in errors:
+                st.error(f"❌ {err}")
 
     def render_header(self):
         """Render a header toolbar matching SCuBAGear style"""
@@ -913,7 +915,7 @@ class ScubaConfigApp:
         </div>
         """, unsafe_allow_html=True)
 
-        btn_open, btn_reset, btn_help, spacer = st.columns([1, 1, 1, 4])
+        btn_open, btn_reset, btn_help, _spacer = st.columns([1, 1, 1, 4])
         with btn_open:
             if st.button("📂 Open", use_container_width=True, help="Open an existing configuration file"):
                 self.open_configuration_from_disk()
@@ -1118,7 +1120,7 @@ class ScubaConfigApp:
                 st.session_state[bkey] = baseline in current_selection
 
         # Select All / None buttons
-        col1, col2, col3 = st.columns([1, 1, 4])
+        col1, col2, _col3 = st.columns([1, 1, 4])
         with col1:
             if st.button("✅ Select All", key="select_all_main"):
                 st.session_state.config_data['baselines'] = available_baselines.copy()
@@ -1143,8 +1145,6 @@ class ScubaConfigApp:
             policy_count = len(baseline_policies)
             
             with cols[i % 2]:
-                is_selected = baseline in current_selection
-                
                 # Create a checkbox with custom styling including policy count
                 selected = st.checkbox(
                     f"{info['icon']} **{info['title']}** ({policy_count} policies)",
@@ -1163,80 +1163,29 @@ class ScubaConfigApp:
 
         # Products supporting exclusions note
         if current_selection:
-            total_policies = sum(len(self.available_policies.get(b.upper(), {})) for b in current_selection)
+            total_policies = sum(
+                len(self.available_policies.get(b.upper(), {})) for b in current_selection
+            )
             # Filter out baselines that don't exist in baseline_info to prevent KeyError
             valid_baselines = [b for b in current_selection if b in baseline_info]
             invalid_baselines = [b for b in current_selection if b not in baseline_info]
-            
+
             if valid_baselines:
-                st.info("📝 **Products selected:** " + ", ".join([baseline_info[b]['title'] for b in valid_baselines]))
-            
+                titles = [baseline_info[b]['title'] for b in valid_baselines]
+                st.info("📝 **Products selected:** " + ", ".join(titles))
+
             if invalid_baselines:
-                st.warning(f"⚠️ **Unknown baselines imported:** {', '.join(invalid_baselines)}")
-            
-            st.success(f"✅ Selected {len(current_selection)} products with {total_policies} policies total")
+                st.warning(
+                    "⚠️ **Unknown baselines imported:** "
+                    + ", ".join(invalid_baselines),
+                )
+
+            st.success(
+                f"✅ Selected {len(current_selection)} products with "
+                f"{total_policies} policies total",
+            )
 
         st.markdown('</div>', unsafe_allow_html=True)
-
-    def parse_baseline_policies(self) -> Dict[str, Dict[str, str]]:
-        """Parse policies from baseline markdown files"""
-        policies = {}
-        baseline_dir = Path('scubagoggles/baselines')
-        
-        if not baseline_dir.exists():
-            return policies
-        
-        for md_file in baseline_dir.glob('*.md'):
-            if md_file.name == 'README.md':
-                continue
-                
-            try:
-                content = md_file.read_text(encoding='utf-8')
-                baseline_name = md_file.stem.upper()
-                policies[baseline_name] = self.extract_policies_from_markdown(content, baseline_name)
-            except Exception as e:
-                continue  # Skip files that can't be parsed
-        
-        return policies
-    
-    def extract_policies_from_markdown(self, content: str, baseline_name: str) -> Dict[str, str]:
-        """Extract policy IDs and titles from markdown content"""
-        policies = {}
-        lines = content.split('\n')
-        
-        in_policies_section = False
-        current_policy_id = None
-        
-        for line in lines:
-            line = line.strip()
-            
-            # Check if we're entering the policies section
-            if line == '### Policies':
-                in_policies_section = True
-                continue
-            
-            # Check if we're leaving the policies section
-            if in_policies_section and line.startswith('### ') and line != '### Policies':
-                in_policies_section = False
-                continue
-            
-            # Extract policy IDs
-            if in_policies_section and line.startswith('#### GWS.'):
-                # Extract policy ID (remove #### and any trailing text)
-                policy_id = line.replace('#### ', '').split()[0]
-                current_policy_id = policy_id
-                
-                # Get the next line which should contain the policy description
-                continue
-            
-            # Get policy description (first line after policy ID)
-            if in_policies_section and current_policy_id and not line.startswith('#') and line:
-                # Clean up the description
-                description = line.rstrip('.')
-                policies[current_policy_id] = description
-                current_policy_id = None
-        
-        return policies
 
     def render_omit_policies_tab(self):
         """Render omit policies configuration tab"""
@@ -1289,21 +1238,22 @@ class ScubaConfigApp:
         
         if selected_baselines and self.available_policies:
             st.markdown("**Available Policies from Selected Products:**")
-            
+
             # Map UI baseline names to policy parser names (lowercase to uppercase)
-            selected_baseline_policies = {}
+            selected_baseline_policies: Dict[str, Dict[str, str]] = {}
             for baseline in selected_baselines:
                 baseline_upper = baseline.upper()
                 if baseline_upper in self.available_policies:
-                    selected_baseline_policies[baseline.title()] = self.available_policies[baseline_upper]
-            
+                    selected_baseline_policies[baseline.title()] = self.available_policies[
+                        baseline_upper
+                    ]
+
             if selected_baseline_policies:
                 baseline_tabs = st.tabs(list(selected_baseline_policies.keys()))
-                
-                selected_policy = None
-                selected_description = None
-                
-                for i, (baseline_name, baseline_policies) in enumerate(selected_baseline_policies.items()):
+
+                for i, (baseline_name, baseline_policies) in enumerate(
+                    selected_baseline_policies.items(),
+                ):
                     with baseline_tabs[i]:
                         if baseline_policies:
                             for policy_id, description in baseline_policies.items():
@@ -1325,7 +1275,7 @@ class ScubaConfigApp:
                                     if is_omitted:
                                         col_edit, col_remove = st.columns(2)
                                         with col_edit:
-                                            if st.button(f"✏️ Edit", key=f"edit_omit_{policy_id}"):
+                                            if st.button("✏️ Edit", key=f"edit_omit_{policy_id}"):
                                                 # Load existing values for editing
                                                 existing_data = omit_policies[policy_id]
                                                 st.session_state[f"rationale_{policy_id}"] = existing_data.get('rationale', '')
@@ -1345,7 +1295,7 @@ class ScubaConfigApp:
                                                 st.session_state[f"editing_omit_{policy_id}"] = True
                                                 st.rerun()
                                         with col_remove:
-                                            if st.button(f"🗑️ Remove", key=f"remove_omit_{policy_id}"):
+                                            if st.button("🗑️ Remove", key=f"remove_omit_{policy_id}"):
                                                 del omit_policies[policy_id]
                                                 st.session_state.config_data['omitpolicy'] = omit_policies
                                                 st.success(f"✅ Removed omitted policy: {policy_id}")
@@ -1355,7 +1305,7 @@ class ScubaConfigApp:
                                         if expand_key not in st.session_state:
                                             st.session_state[expand_key] = False
                                         
-                                        if st.button(f"➕ Omit", key=f"toggle_omit_{policy_id}"):
+                                        if st.button("➕ Omit", key=f"toggle_omit_{policy_id}"):
                                             # Clear any existing session state for fresh start
                                             if f"rationale_{policy_id}" in st.session_state:
                                                 del st.session_state[f"rationale_{policy_id}"]
@@ -1382,18 +1332,22 @@ class ScubaConfigApp:
                                             existing_data = omit_policies[policy_id]
                                             existing_rationale = existing_data.get('rationale', '')
                                             if 'expiration' in existing_data:
-                                                from datetime import datetime
                                                 try:
-                                                    existing_expiration = datetime.strptime(existing_data['expiration'], '%Y-%m-%d').date()
+                                                    existing_expiration = datetime.strptime(
+                                                        existing_data['expiration'],
+                                                        '%Y-%m-%d',
+                                                    ).date()
                                                 except (ValueError, TypeError):
                                                     existing_expiration = None
-                                        elif policy_id in omit_policies:  # If policy is omitted but not in editing mode, load values
+                elif policy_id in omit_policies:  # If policy is omitted but not in editing mode, load values
                                             existing_data = omit_policies[policy_id]
                                             existing_rationale = existing_data.get('rationale', '')
                                             if 'expiration' in existing_data:
-                                                from datetime import datetime
                                                 try:
-                                                    existing_expiration = datetime.strptime(existing_data['expiration'], '%Y-%m-%d').date()
+                                                    existing_expiration = datetime.strptime(
+                                                        existing_data['expiration'],
+                                                        '%Y-%m-%d',
+                                                    ).date()
                                                 except (ValueError, TypeError):
                                                     existing_expiration = None
                                         
@@ -1406,10 +1360,15 @@ class ScubaConfigApp:
                                         
                                         # Clear any string values in session state for date input
                                         date_key = f"expiration_{policy_id}"
-                                        if date_key in st.session_state and isinstance(st.session_state[date_key], str):
+                                        if date_key in st.session_state and isinstance(
+                                            st.session_state[date_key],
+                                            str,
+                                        ):
                                             try:
-                                                from datetime import datetime
-                                                st.session_state[date_key] = datetime.strptime(st.session_state[date_key], '%Y-%m-%d').date()
+                                                st.session_state[date_key] = datetime.strptime(
+                                                    st.session_state[date_key],
+                                                    '%Y-%m-%d',
+                                                ).date()
                                             except (ValueError, TypeError):
                                                 del st.session_state[date_key]
                                         
@@ -1440,7 +1399,7 @@ class ScubaConfigApp:
                                                     st.error("❌ Rationale is required")
                                         
                                         with col_cancel:
-                                            if st.button(f"❌ Cancel", key=f"cancel_omit_{policy_id}"):
+                                            if st.button("❌ Cancel", key=f"cancel_omit_{policy_id}"):
                                                 st.session_state[f"expand_omit_{policy_id}"] = False
                                                 st.session_state[f"editing_omit_{policy_id}"] = False
                                                 st.rerun()
@@ -1511,9 +1470,6 @@ class ScubaConfigApp:
         # Get current annotated policies
         annotate_policies = st.session_state.config_data.get('annotatepolicy', {})
         
-        # Get current annotated policies
-        annotate_policies = st.session_state.config_data.get('annotatepolicy', {})
-        
         # Check for tab switch signal
         if st.session_state.get('switch_to_annotate_tab', False):
             st.session_state.switch_to_annotate_tab = False
@@ -1530,18 +1486,18 @@ class ScubaConfigApp:
         
         # Show available policies by selected baselines only
         selected_baselines = st.session_state.config_data.get('baselines', [])
-        selected_policy = None
-        selected_description = None
-        
+
         if selected_baselines and self.available_policies:
             st.markdown("**Available Policies from Selected Products:**")
             
             # Map UI baseline names to policy parser names (lowercase to uppercase)
-            selected_baseline_policies = {}
+            selected_baseline_policies: Dict[str, Dict[str, str]] = {}
             for baseline in selected_baselines:
                 baseline_upper = baseline.upper()
                 if baseline_upper in self.available_policies:
-                    selected_baseline_policies[baseline.title()] = self.available_policies[baseline_upper]
+                    selected_baseline_policies[baseline.title()] = self.available_policies[
+                        baseline_upper
+                    ]
             
             if selected_baseline_policies:
                 baseline_tabs = st.tabs(list(selected_baseline_policies.keys()))
@@ -1568,7 +1524,7 @@ class ScubaConfigApp:
                                     if is_annotated:
                                         col_edit, col_remove = st.columns(2)
                                         with col_edit:
-                                            if st.button(f"✏️ Edit", key=f"edit_annotate_{policy_id}"):
+                                            if st.button("✏️ Edit", key=f"edit_annotate_{policy_id}"):
                                                 # Load existing values for editing
                                                 existing_data = annotate_policies[policy_id]
                                                 st.session_state[f"comment_{policy_id}"] = existing_data.get('comment', '')
@@ -1589,7 +1545,7 @@ class ScubaConfigApp:
                                                 st.session_state[f"editing_annotate_{policy_id}"] = True
                                                 st.rerun()
                                         with col_remove:
-                                            if st.button(f"🗑️ Remove", key=f"remove_annotate_{policy_id}"):
+                                            if st.button("🗑️ Remove", key=f"remove_annotate_{policy_id}"):
                                                 del annotate_policies[policy_id]
                                                 st.session_state.config_data['annotatepolicy'] = annotate_policies
                                                 st.success(f"✅ Removed annotation for policy: {policy_id}")
@@ -1599,7 +1555,7 @@ class ScubaConfigApp:
                                         if expand_key not in st.session_state:
                                             st.session_state[expand_key] = False
                                         
-                                        if st.button(f"📝 Annotate", key=f"toggle_annotate_{policy_id}"):
+                                        if st.button("📝 Annotate", key=f"toggle_annotate_{policy_id}"):
                                             # Clear any existing session state for fresh start
                                             if f"comment_{policy_id}" in st.session_state:
                                                 del st.session_state[f"comment_{policy_id}"]
@@ -1630,9 +1586,11 @@ class ScubaConfigApp:
                                             existing_comment = existing_data.get('comment', '')
                                             existing_incorrect = existing_data.get('incorrectresult', False)
                                             if 'remediationdate' in existing_data:
-                                                from datetime import datetime
                                                 try:
-                                                    existing_remediation = datetime.strptime(existing_data['remediationdate'], '%Y-%m-%d').date()
+                                                    existing_remediation = datetime.strptime(
+                                                        existing_data['remediationdate'],
+                                                        '%Y-%m-%d',
+                                                    ).date()
                                                 except (ValueError, TypeError):
                                                     existing_remediation = None
                                         elif policy_id in annotate_policies:  # If policy is annotated but not in editing mode, load values
@@ -1640,9 +1598,11 @@ class ScubaConfigApp:
                                             existing_comment = existing_data.get('comment', '')
                                             existing_incorrect = existing_data.get('incorrectresult', False)
                                             if 'remediationdate' in existing_data:
-                                                from datetime import datetime
                                                 try:
-                                                    existing_remediation = datetime.strptime(existing_data['remediationdate'], '%Y-%m-%d').date()
+                                                    existing_remediation = datetime.strptime(
+                                                        existing_data['remediationdate'],
+                                                        '%Y-%m-%d',
+                                                    ).date()
                                                 except (ValueError, TypeError):
                                                     existing_remediation = None
                                         
@@ -1667,10 +1627,17 @@ class ScubaConfigApp:
                                         with col2:
                                             # Clear any string values in session state for date input
                                             remediation_key = f"remediation_{policy_id}"
-                                            if remediation_key in st.session_state and isinstance(st.session_state[remediation_key], str):
+                                            if remediation_key in st.session_state and isinstance(
+                                                st.session_state[remediation_key],
+                                                str,
+                                            ):
                                                 try:
-                                                    from datetime import datetime
-                                                    st.session_state[remediation_key] = datetime.strptime(st.session_state[remediation_key], '%Y-%m-%d').date()
+                                                    st.session_state[remediation_key] = (
+                                                        datetime.strptime(
+                                                            st.session_state[remediation_key],
+                                                            '%Y-%m-%d',
+                                                        ).date()
+                                                    )
                                                 except (ValueError, TypeError):
                                                     del st.session_state[remediation_key]
                                             
@@ -1705,7 +1672,7 @@ class ScubaConfigApp:
                                                     st.error("❌ At least one annotation field is required")
                                         
                                         with col_cancel:
-                                            if st.button(f"❌ Cancel", key=f"cancel_annotate_{policy_id}"):
+                                            if st.button("❌ Cancel", key=f"cancel_annotate_{policy_id}"):
                                                 st.session_state[f"expand_annotate_{policy_id}"] = False
                                                 st.session_state[f"editing_annotate_{policy_id}"] = False
                                                 st.rerun()
@@ -1768,16 +1735,16 @@ class ScubaConfigApp:
             if email and email not in accounts:
                 accounts.append(email)
                 st.session_state.config_data['breakglassaccounts'] = accounts
-                st.session_state._bg_add_status = ("success", email)
+                st.session_state.bg_add_status = ("success", email)
             elif email in accounts:
-                st.session_state._bg_add_status = ("duplicate", email)
+                st.session_state.bg_add_status = ("duplicate", email)
             else:
-                st.session_state._bg_add_status = ("empty", "")
+                st.session_state.bg_add_status = ("empty", "")
             st.session_state.new_break_glass = ""
 
         col1, col2 = st.columns([3, 1])
         with col1:
-            new_break_glass = st.text_input(
+            st.text_input(
                 "Break Glass Account Email",
                 placeholder="emergency-admin@example.org",
                 help="Email address of break glass account",
@@ -1787,7 +1754,7 @@ class ScubaConfigApp:
         with col2:
             st.button("➕ Add Account", type="primary", on_click=_add_break_glass_account)
 
-        status = st.session_state.pop("_bg_add_status", None)
+        status = st.session_state.pop("bg_add_status", None)
         if status:
             kind, email = status
             if kind == "success":
@@ -1957,8 +1924,11 @@ class ScubaConfigApp:
         
         if uploaded_file:
             # Save uploaded file
-            import tempfile
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp_file:
+            with tempfile.NamedTemporaryFile(
+                mode='w',
+                suffix='.json',
+                delete=False,
+            ) as tmp_file:
                 tmp_file.write(uploaded_file.read().decode())
                 st.session_state.config_data['credentials'] = tmp_file.name
                 st.success(f"✅ Uploaded credentials: {uploaded_file.name}")
@@ -2007,18 +1977,17 @@ class ScubaConfigApp:
             yaml_config = yaml.dump(clean_config, default_flow_style=False, sort_keys=False)
             
             # Convert baselines array to flow style to match sample files
-            import re
             yaml_config = re.sub(
                 r'baselines:\n(?:- (.+)\n)+',
                 lambda m: 'baselines: [' + ', '.join(re.findall(r'- (.+)', m.group(0))) + ']\n',
-                yaml_config
+                yaml_config,
             )
-            
+
             # Convert breakglassaccounts array to flow style if present
             yaml_config = re.sub(
                 r'breakglassaccounts:\n(?:- (.+)\n)+',
                 lambda m: 'breakglassaccounts: [' + ', '.join(re.findall(r'- (.+)', m.group(0))) + ']\n',
-                yaml_config
+                yaml_config,
             )
             
             st.code(yaml_config, language='yaml')
@@ -2045,7 +2014,10 @@ class ScubaConfigApp:
                         )
                         result = subprocess.run(
                             [sys.executable, "-c", dialog_script],
-                            capture_output=True, text=True, timeout=120,
+                            capture_output=True,
+                            text=True,
+                            timeout=120,
+                            check=False,
                         )
                         file_path = result.stdout.strip()
 
