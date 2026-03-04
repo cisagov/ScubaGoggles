@@ -1088,7 +1088,7 @@ class ScubaConfigApp:
         with col2:
             orgunitname = st.text_input(
                 "Organization Unit Name",
-                placeholder="Cybersecurity and Infrastructure Security Agency",
+                placeholder="Cybersecurity and Infrastructure Security Agency (optional)",
                 help="Name of your organizational unit (optional)",
                 key="orgunitname",
                 label_visibility="collapsed"
