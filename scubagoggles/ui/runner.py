@@ -252,5 +252,3 @@ class ReportManager:
         except OSError as exc:
             st.error(f"Error reading report summary: {exc}")
             return None
-
-

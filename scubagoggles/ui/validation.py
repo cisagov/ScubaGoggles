@@ -222,5 +222,3 @@ class ConfigValidator:
                 errors.append(f"Tenant domain validation: {error}")
 
         return len(errors) == 0, errors
-
-

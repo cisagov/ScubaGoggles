@@ -158,5 +158,3 @@ class ConfigGenerator:
         samples["access_token"] = ConfigGenerator.generate_yaml_config(token_config)
 
         return samples
-
-

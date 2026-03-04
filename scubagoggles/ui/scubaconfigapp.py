@@ -7,6 +7,8 @@ selection, policy omissions/annotations, break-glass accounts, and
 YAML config export/import.
 """
 
+# pylint: disable=line-too-long
+
 import base64
 import subprocess
 import sys
