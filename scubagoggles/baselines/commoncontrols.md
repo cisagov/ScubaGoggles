@@ -6,7 +6,7 @@ The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation and addresses the following:
 - [Phishing-Resistant Multifactor Authentication](#1-phishing-resistant-multifactor-authentication)
@@ -43,7 +43,7 @@ This Common Controls baseline document:
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 # Baseline Policies
 
@@ -51,7 +51,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 Multifactor authentication (MFA), particularly phishing-resistant MFA, is a critical security control against attacks such as password spraying, password theft, and phishing. Adopting phishing-resistant MFA may take time, especially on mobile devices. Organizations must upgrade to a phishing-resistant MFA method as soon as possible to be compliant with OMB M-22-09 and this policy to address the critical security threat posed by modern phishing attacks.
 
-This control recognizes federation as a viable option for phishing-resistant MFA and includes architectural considerations around on-premises and cloud-native identity federation in established Federal Civilian Executive Branch (FCEB) environments. Federation for GWS can be implemented via a cloud-native identity provider (IdP). Google's documentation acknowledges that on-premises Active Directory implementations may be predominant in environments that adopt GWS and provides guidance on the use of Google Cloud Directory Sync (GCDS) to synchronize Google Account data with an established Microsoft Active Directory or LDAP server.
+This control recognizes federation as a viable option for phishing-resistant MFA and includes architectural considerations around on-premises and cloud-native identity federation in established Federal civilian executive branch (FCEB) environments. Federation for GWS can be implemented via a cloud-native identity provider (IdP). Google's documentation acknowledges that on-premises Active Directory implementations may be predominant in environments that adopt GWS and provides guidance on the use of Google Cloud Directory Sync (GCDS) to synchronize Google Account data with an established Microsoft Active Directory or LDAP server.
 
 The following graphic illustrates the spectrum of MFA options and their relative strength, with phishing resistant MFA (per OMB Memo 22-09) being the mandated method.
 Please note there is a distinction between Google 2 Step Verification (2SV) and MFA as a general term. While FIDO Security Key and Phone as a Security Key are acceptable forms of Phishing-Resistant MFA which rely on Google 2SV as the underlying mechanism, the other forms listed in the "strongest" column do not use Google
@@ -286,7 +286,7 @@ Note that the implementation details of context-aware access use cases will vary
 -   Use nested access levels instead of selecting multiple access levels during assignment
 
 ## 3. Login Challenges
-Login challenges are additional security measures used to verify a user's identity, including post-SSO verification.
+Login challenges are additional security measures used to verify a user's identity, including post single sign-on (SSO) verification.
 
 Post-SSO verification controls what additional checks are performed (e.g., Google 2SV) after a user succesfully authenticates through a third-party identity provider.
 SSO is managed through profiles, which can be assigned org-wide or to specific org units/groups.
@@ -295,7 +295,7 @@ Google Workspace handles post-SSO verification for profiles assigned org-wide as
 ### Policies
 
 #### GWS.COMMONCONTROLS.3.1v0.6
-Single sign-on (SSO) verification SHOULD be enabled for users signing in using the SSO profile for the organization.
+Post single sign-on (SSO) verification SHOULD be enabled for users signing in using the SSO profile for the organization.
 
 - _Rationale:_ Without enabling post-SSO verification, Google 2-Step Verification (2SV) configurations are not enforced for third-party SSO users. Enabling post-SSO verification ensures the application of 2SV verification policies.
 - _Last modified:_ January 2025
@@ -515,10 +515,10 @@ Some examples of these privileged accounts include the following Pre-Built GWS A
 ### Policies
 
 #### GWS.COMMONCONTROLS.6.1v0.6
-All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication(MFA), not an agency's authoritative on-premises or federated identity system.
+All administrative accounts SHALL leverage Google Account authentication with phishing-resistant multifactor authentication (MFA), not an agency's authoritative on-premises or federated identity system.
 
 - _Rationale:_ Cloud-only accounts leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. Enforcing this policy makes it more challenging for a threat actor to pivot from a compromised on-premises environment to the cloud with privileged access.
-- _Last modified:_ November 2025
+- _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(5)
 - MITRE ATT&CK TTP Mapping
   - [T1110: Brute Force](https://attack.mitre.org/techniques/T1110/)
@@ -641,7 +641,7 @@ Account self-recovery for super admins SHALL be disabled.
 #### GWS.COMMONCONTROLS.8.2v0.6
 Account self-recovery for users and non-super admins SHALL be disabled.
 
-- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential adversary to compromise an account.
+- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential threat actor to compromise an account.
 - _Last modified:_ February 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5d, IA-5g
 - MITRE ATT&CK TTP Mapping
@@ -652,7 +652,7 @@ Account self-recovery for users and non-super admins SHALL be disabled.
 Ability to add recovery information SHOULD be disabled.
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature prevents a user from adding personally identifiable information (PII) to their organizational account, making it more difficult for a potential threat actor to steal PII in the event of a compromise.
-- _Last modified:_ August 2025
+- _Last modified:_ February 2025
 - _Note:_ This setting is not applicable if using single sign-on (SSO) with a third-party identity provider or Password Sync. GWS.COMMONCONTROLS.8.3 acts as a defense in depth policy when GWS.COMMONCONTROLS.8.1 and GWS.COMMONCONTROLS.8.2 are not enabled.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -762,14 +762,14 @@ To allow all users to enroll:
 
 ## 10. App Access to Google APIs
 
-Agencies need to have a process in place to manage and control application access to GWS data. This control enables the ability to restrict access to Google Workspace APIs from other applications and is aimed at mitigating the significant cybersecurity risk posed by the potential compromise of OAuth tokens. The baseline policy statements are written to allow implementers to balance operational need with risk posed by granting app access.
+Agencies need to have a process in place to manage and control application access to GWS data. This control enables the ability to restrict access to Google Workspace APIs from other applications and is aimed at mitigating the significant cybersecurity risk posed by the potential compromise of OAuth tokens. The baseline policy statements are written to allow implementers to balance operational need with risk posed by granting application access.
 
 ### Policies
 
 #### GWS.COMMONCONTROLS.10.1v0.6
-Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
+Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party applications.
 
-- _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to GWS.
+- _Rationale:_ Third-party applications may include malicious content. Restricting application access to only applications trusted by the agency reduces the risk of allowing malicious applications to connect to GWS.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
@@ -1156,18 +1156,18 @@ Data SHALL be processed in the region selected for data at rest.
 #### GWS.COMMONCONTROLS.15.1v0.6 Instructions
 To configure Data Regions per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
+2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions.**
 3.	Click the **Region** card.
 4.	Click the **Data at rest** card.
-5.	Select the radio button option: "**United States**".
+5.	Select the radio button option: "**United States.**"
 6.	Click **Save**.
 
 #### GWS.COMMONCONTROLS.15.2v0.6 Instructions
 1. Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2. Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
+2. Navigate to **Data** -\> **Compliance** -\> **Data Regions.**
 3. Click the **Region** card.
 4. Click the **Data processing** card.
-5. Select the radio button option: "**Process data in the region selected for data at rest**".
+5. Select the radio button option: "**Process data in the region selected for data at rest.**"
 6. Click **Save**.
 
 
@@ -1178,7 +1178,7 @@ Google Workspace considers some of its services "core services," including Gmail
 ### Policies
 
 #### GWS.COMMONCONTROLS.16.1v0.6
-Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.
+"Service status for Google services that do not have an individual control" SHOULD be set to "OFF" for everyone.
 
 - _Rationale_: Accessing additional google services without necessity can introduce potential vulnerabilities within the Google Workspace environment. Disabling these services mitigates the risk restricting unnecessary access.
 - _Last modified:_ January 2025
@@ -1192,9 +1192,9 @@ Service status for Google services that do not have an individual control SHOULD
     - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.COMMONCONTROLS.16.2v0.6
-User access to Early Access apps SHOULD be disabled.
+User access to Early Access applications SHOULD be disabled.
 
-- _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
+- _Rationale_: Allowing early access to applications may expose users to applications that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
@@ -1310,7 +1310,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 [//]: # (Keep the version suffix out of the anchor.)
 <a name="commoncontrols184"></a>
 #### GWS.COMMONCONTROLS.18.4v0.6
-The action for DLP policies SHOULD be set to block external sharing.
+The action for DLP policies SHOULD be set to "block external sharing."
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
 - _Last modified:_ January 2025

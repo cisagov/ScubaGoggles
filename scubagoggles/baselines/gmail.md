@@ -6,7 +6,7 @@ The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation available at the [Gmail Google Workspace Admin Help Center](https://support.google.com/a/topic/9202?hl=en&ref_topic=9197) and addresses the following:.
 
@@ -40,7 +40,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 # Baseline Policies
 
@@ -137,7 +137,7 @@ The Sender Policy Framework (SPF) is a mechanism that allows administrators to s
 #### GWS.GMAIL.3.1v0.6
 An SPF policy SHALL be published for each domain that fails all non-approved senders.
 
-- _Rationale:_ Threat actors could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, an SPF policy is required for Federal Civilian Executive Branch (FCEB) agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
+- _Rationale:_ Threat actors could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, an SPF policy is required for Federal civilian executive branch (FCEB) agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - _Last modified:_ February 2024
 - _Note:_ 
   - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softail (indicated by `~`). Fail, as used in this baseline policy, refers to hardfail (i.e., `-`).
@@ -197,7 +197,7 @@ A DMARC policy SHALL be published at the full domain or the second-level domain 
 #### GWS.GMAIL.4.2v0.6
 The DMARC message rejection option SHALL be p=reject.
 
-- _Rationale:_ Without stringent email authentication, threat actors could potentially send deceptive emails that appear to be from the organization's domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for Federal Civilian Executive Branch (FCEB) agencies.
+- _Rationale:_ Without stringent email authentication, threat actors could potentially send deceptive emails that appear to be from the organization's domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for Federal civilian executive branch (FCEB) agencies.
 - _Last modified:_ November 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -205,13 +205,13 @@ The DMARC message rejection option SHALL be p=reject.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
     - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
-  - [T1586:002: Compromise Accounts](https://attack.mitre.org/techniques/T1586/)
+  - [T1586: Compromise Accounts](https://attack.mitre.org/techniques/T1586/)
     - [T1586:002: Compromise Accounts: Email Accounts](https://attack.mitre.org/techniques/T1586/002/)
 
 #### GWS.GMAIL.4.3v0.6
 The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.
 
-- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for Federal Civilian Executive Branch (FCEB), set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows the CyberSecurity and Infrastructure Security Agency (CISA) to monitor and address email authentication issues.
+- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for Federal civilian executive branch (FCEB), set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows the CyberSecurity and Infrastructure Security Agency (CISA) to monitor and address email authentication issues.
 - _Last modified:_ November 2023
 - _Note:_ Only FCEB agencies should include this email address in their DMARC record.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4(5)
@@ -272,7 +272,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 ### Policies
 
 #### GWS.GMAIL.5.1v0.6
-Protect against encrypted attachments from untrusted senders SHALL be enabled.
+"Protect against encrypted attachments from untrusted senders" SHALL be enabled.
 
 - _Rationale:_ Attachments from untrusted senders, especially encrypted ones, may contain malicious content that poses a security risk. By enabling protection against encrypted attachments from untrusted senders, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -288,7 +288,7 @@ Protect against encrypted attachments from untrusted senders SHALL be enabled.
     - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.GMAIL.5.2v0.6
-Protect against attachments with scripts from untrusted senders SHALL be enabled.
+"Protect against attachments with scripts from untrusted senders" SHALL be enabled.
 
 - _Rationale:_ Attachments with scripts from untrusted senders may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -304,7 +304,7 @@ Protect against attachments with scripts from untrusted senders SHALL be enabled
     - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.GMAIL.5.3v0.6
-Protect against anomalous attachment types in emails SHALL be enabled.
+"Protect against anomalous attachment types in emails" SHALL be enabled.
 
 - _Rationale:_ Anomalous attachment types in emails may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of the user data and systems.
 - _Last modified:_ July 2023
@@ -405,7 +405,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 ### Policies
 
 #### GWS.GMAIL.6.1v0.6
-Identify links behind shortened URLs SHALL be enabled.
+"Identify links behind shortened URLs" SHALL be enabled.
 
 - _Rationale:_ Shortened URLs can hide malicious links, posing a security risk. This risk can be reduced by identifying links behind shortened URLs, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -418,7 +418,7 @@ Identify links behind shortened URLs SHALL be enabled.
     - [T1204:001: User Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
 
 #### GWS.GMAIL.6.2v0.6
-Scan linked images SHALL be enabled.
+"Scan linked images" SHALL be enabled.
 
 - _Rationale:_ Linked images in emails can contain malicious content, posing a security risk. By enabling the scanning of linked images, this risk can be reduced, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -431,7 +431,7 @@ Scan linked images SHALL be enabled.
     - [T1204:002: User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
 
 #### GWS.GMAIL.6.3v0.6
-Show warning prompt for any click on links to untrusted domains SHALL be enabled.
+"Show warning prompt for any click on links to untrusted domains" SHALL be enabled.
 
 - _Rationale:_ Clicking on links to unfamiliar domains can expose users to malicious content, posing a security risk. This risk can be reduced by enabling a warning prompt for any click on such links, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -444,7 +444,7 @@ Show warning prompt for any click on links to untrusted domains SHALL be enabled
     - [T1204:001: User Execution: Malicious Link](https://attack.mitre.org/techniques/T1204/001/)
 
 #### GWS.GMAIL.6.4v0.6
-Google SHALL be allowed to automatically apply future recommended settings for links and external images.
+Google SHOULD be allowed to automatically apply future recommended settings for links and external images.
 
 - _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -509,7 +509,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 ### Policies
 
 #### GWS.GMAIL.7.1v0.6
-Protect against domain spoofing based on similar domain names SHALL be enabled.
+"Protect against domain spoofing based on similar domain names" SHALL be enabled.
 
 - _Rationale:_ Emails sent from domains that look similar to the user's domain can deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -521,7 +521,7 @@ Protect against domain spoofing based on similar domain names SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.2v0.6
-Protect against spoofing of employee names SHALL be enabled.
+"Protect against spoofing of employee names" SHALL be enabled.
 
 - _Rationale:_ Spoofing of employee identities (e.g., CEO and IT staff) can deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -533,7 +533,7 @@ Protect against spoofing of employee names SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.3v0.6
-Protect against inbound emails spoofing your domain SHALL be enabled.
+"Protect against inbound emails spoofing your domain" SHALL be enabled.
 
 - _Rationale:_ Inbound emails appearing to come from the user's domain can deceive users into interacting with malicious content, posing a security risk. This risk can be reduced by enabling protection against such spoofing, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -545,7 +545,7 @@ Protect against inbound emails spoofing your domain SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.4v0.6
-Protect against any unauthenticated emails SHALL be enabled.
+"Protect against any unauthenticated emails" SHALL be enabled.
 
 - _Rationale:_ Unauthenticated emails can contain malicious content, posing a security risk. This risk can be reduced by enabling protection against such emails, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -557,7 +557,7 @@ Protect against any unauthenticated emails SHALL be enabled.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.5v0.6
-Protect your Groups from inbound emails spoofing your domain SHALL be enabled.
+"Protect your Groups from inbound emails spoofing your domain" SHALL be enabled.
 
 - _Rationale:_ Inbound emails spoofing the user's domain can deceive users into interacting with malicious content, posing a security risk. This risk can be reduced by enabling protection against such spoofing, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ July 2023
@@ -1098,7 +1098,7 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
   - [T1534: Internal Spearphishing](https://attack.mitre.org/techniques/T1534/)
 
 #### GWS.GMAIL.18.3v0.6
-Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.
+"Bypass spam filters" and "hide warnings for all messages from internal and external senders" SHALL NOT be enabled.
 
 - _Rationale:_ Bypassing spam filters and hiding warning for all messages from internal and external senders creates a security risk because all messages are allowed to bypass filters. Disabling this feature mitigates the risk.
 - _Last modified:_ April 2024

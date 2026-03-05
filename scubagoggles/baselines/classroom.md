@@ -8,7 +8,7 @@ The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Classroom](https://support.google.com/edu/classroom/?hl=en#topic=10298088) and addresses the following:
 
@@ -28,7 +28,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 # Baseline Policies
 
@@ -39,7 +39,7 @@ This section covers who has the ability to join classes and what classes the use
 ### Policies
 
 #### GWS.CLASSROOM.1.1v0.6
-Who can join classes in your domain SHALL be set to Users in your domain only.
+"Who can join classes in your domain" SHALL be set to "Users in your domain only."
 
 - _Rationale:_ Classes can contain PII or sensitive information. Restricting access to the organization's classes helps prevent data leakage resulting from unauthorized classroom access.
 - _Last modified:_ October 2025
@@ -49,7 +49,7 @@ Who can join classes in your domain SHALL be set to Users in your domain only.
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.CLASSROOM.1.2v0.6
-Which classes users in your domain can join SHALL be set to Classes in your domain only.
+"Which classes users in your domain can join" SHALL be set to "Classes in your domain only."
 
 - _Rationale:_ Allowing users to join classes from outside the organization's domains could allow for data to be exfiltrated to entities outside the control of the organization creating a significant security risk.
 - _Last modified:_ October 2025
@@ -124,7 +124,7 @@ This section covers policies related to importing rosters from Clever.
 ### Policies
 
 #### GWS.CLASSROOM.3.1v0.6
-Roster import with Clever SHOULD be turned off.
+"Roster Import" with Clever SHOULD be turned off.
 
 - _Rationale:_ If an organization does not use Clever, allowing roster imports could create a way for unauthorized data to be inputted into the organization's environment. If an organization does use Clever, then roster imports may be enabled.
 - _Last modified:_ September 2023

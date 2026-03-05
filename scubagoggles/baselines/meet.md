@@ -6,7 +6,7 @@ The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation available at [Google Meet settings reference for admins](https://support.google.com/a/answer/7304109?product_name=UnuFlow&hl=en&visit_id=637812507975083818-2789839413&rd=1&src=supportwidget0&hl=en#:~:text=From%20the%20Admin%20console%20Home%20page%2C%20go%20to,to%20everyone%2C%20leave%20the%20top%20organizational%20unit%20selected) and addresses the following:
 
@@ -28,7 +28,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 # Baseline Policies
 
@@ -39,9 +39,9 @@ This control limits safe meeting access to users with a Google Account or Dialin
 ### Policies
 
 #### GWS.MEET.1.1v0.6
-Meeting access SHOULD be restricted to users signed in with a Google Account or Dialing in using a phone.
+Meeting access SHOULD be restricted to users signed in with a Google Account or dialing in using a phone.
 
-- _Rationale:_ Allowing users not signed-in to join meetings diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring all users to sign-in.
+- _Rationale:_ Allowing users not signed in to join meetings diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring all users to sign in.
 - _Last modified:_ June 2023
 - _Note:_ There is a related configuration option shown to the meeting organizer within Google Meet itself, called "Meeting access type." The setting in the admin center restricts at the org-level the types of users able to join meetings. The setting shown to the meeting organizer allows the organizer to specify who, of those permitted to join meetings by the org-wide setting, must ask to join their meeting. This baseline only provides guidance on the org-wide setting; the per-meeting setting MAY be set as each agency sees fit.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2, IA-8
@@ -159,7 +159,7 @@ This control provides a warning label for any participating a meeting who is not
 ### Policies
 
 #### GWS.MEET.4.1v0.6
-Warn for external participants SHALL be enabled.
+"Warn for external participants" SHALL be enabled.
 
 - _Rationale:_ Users may inadvertently include external users or not be aware that external users are present. When enabled, external or unidentified participants in a meeting are given a label. This increases situational awareness amongst meeting participants and can help prevent inadvertent data leakage.
 - _Last modified:_ September 2023
