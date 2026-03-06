@@ -116,6 +116,8 @@ GmailId3_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.3.1")
 # Not applicable at OU or Group level
 DomainsWithSpf contains SpfRecord.domain if {
     some SpfRecord in input.spf_records
+    # Ensure that there's only 1 SPF record
+    count([Answer | some Answer in SpfRecord.rdata; startswith(Answer, "v=spf1")]) == 1
     some Rdata in SpfRecord.rdata
     startswith(Rdata, "v=spf1 ")
     # Ensure that the policy either ends with "-all", "~all", or directs to a different SPF policy
@@ -155,8 +157,26 @@ GmailId4_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.1")
 # Not applicable at OU or Group level
 DomainsWithDmarc contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
-    some Rdata in DmarcRecord.rdata
-    startswith(Rdata, "v=DMARC1;")
+    ValidAnswers := [Answer | some Answer in DmarcRecord.rdata; startswith(Answer, "v=DMARC1;")]
+    count(ValidAnswers) == 1
+}
+
+DomainsWithMultipleDmarc contains DmarcRecord.domain if {
+    some DmarcRecord in input.dmarc_records
+    ValidAnswers := [Answer | some Answer in DmarcRecord.rdata; startswith(Answer, "v=DMARC1;")]
+    count(ValidAnswers) > 1
+}
+
+MultiDmarcWarning := " " if { count(DomainsWithMultipleDmarc) == 0 }
+MultiDmarcWarning := Warning if {
+    count(DomainsWithMultipleDmarc) > 0
+    Warning := concat("", [
+        " ",
+        format_int(count(DomainsWithMultipleDmarc), 10),
+        " domain(s) have multiple DMARC records: ",
+        concat(", ", DomainsWithMultipleDmarc),
+        ". "
+    ])
 }
 
 tests contains {
@@ -167,7 +187,10 @@ tests contains {
         "get_dmarc_records"
     ],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains),
+        MultiDmarcWarning,
+        DNSLink]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -189,13 +212,18 @@ DomainsWithPreject contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
     contains(Rdata, "p=reject;")
+    DmarcRecord.domain in DomainsWithDmarc
 }
 
 tests contains {
     "PolicyId": GmailId4_2,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains),
+        MultiDmarcWarning,
+        DNSLink
+    ]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -217,13 +245,18 @@ DomainsWithDHSContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
     contains(Rdata, "mailto:reports@dmarc.cyber.dhs.gov")
+    DmarcRecord.domain in DomainsWithDmarc
 }
 
 tests contains {
     "PolicyId": GmailId4_3,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains),
+        MultiDmarcWarning,
+        DNSLink
+    ]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -245,13 +278,18 @@ DomainsWithAgencyContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
     count(split(Rdata, "@")) >= 3
+    DmarcRecord.domain in DomainsWithDmarc
 }
 
 tests contains {
     "PolicyId": GmailId4_4,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Should",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains),
+        MultiDmarcWarning,
+        DNSLink
+    ]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
