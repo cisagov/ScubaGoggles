@@ -1,0 +1,16 @@
+{
+  "comment": "successful test of Policy API parser map - no custom parsers",
+  "expected_settings": {
+        "chat_chat_history": {"allowUserModification": true,
+                              "historyOnByDefault": false}
+  },
+  "policies": {
+    "topOU": {
+      "gmail_service_status": {
+        "serviceState": "ENABLED"
+      }
+    }
+  },
+  "results": {
+  }
+}
