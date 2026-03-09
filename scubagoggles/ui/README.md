@@ -11,7 +11,6 @@ The ScubaGoggles Configuration UI provides a comprehensive web interface for cre
 - **Policy Omission**: Exclude specific policies with documented rationale and expiration dates
 - **Policy Annotation**: Add comments, mark incorrect results, and set remediation dates
 - **Break Glass Account Configuration**: Define emergency access accounts for special handling
-- **Advanced Settings**: Configure authentication, output paths, and execution options
 - **Configuration Preview & Export**: View and download YAML configuration files
 - **Dark Mode Support**: Toggle between light and dark themes for the interface
 
@@ -79,8 +78,7 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 2. **🚫 Omit Policies** - Exclude specific policies with documented rationale
 3. **📝 Annotate Policies** - Add comments, mark incorrect results, and set remediation dates
 4. **🚨 Break Glass** - Configure emergency access accounts
-5. **⚙️ Advanced** - Set authentication, output paths, and execution options
-6. **👁️ Preview** - Review and download the generated YAML configuration
+5. **👁️ Preview** - Review and download the generated YAML configuration
 
 ### Sidebar Features
 
@@ -103,12 +101,11 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 4. **Omit Policies** (Optional): Exclude specific policies with documented rationale
 5. **Annotate Policies** (Optional): Add comments and documentation to policy results
 6. **Break Glass Accounts** (Optional): Configure emergency access accounts
-7. **Advanced Settings**: Configure authentication credentials, output paths, and execution options
-8. **Preview & Export**: Review the generated configuration and download the YAML file
+7. **Preview & Export**: Review the generated configuration and download the YAML file
 
 ### Typical Use Cases
 
-- **Creating a New Configuration**: Start with Main tab → Select products → Configure Advanced settings → Preview & Export
+- **Creating a New Configuration**: Start with Main tab → Select products → Preview & Export
 - **Managing Policy Exceptions**: Select products → Go to Omit Policies tab → Configure exclusions with rationale
 - **Documentation & Remediation**: Select products → Go to Annotate Policies tab → Add comments and set remediation dates
 - **Importing Existing Configuration**: Use sidebar Import feature → Review/modify settings → Export updated configuration

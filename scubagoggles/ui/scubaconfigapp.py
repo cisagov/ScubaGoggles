@@ -875,8 +875,7 @@ class ScubaConfigApp:
         2. **Omit Policies:** Exclude specific policies from assessment
         3. **Annotate Policies:** Add custom notes and documentation
         4. **Break Glass:** Configure emergency access accounts
-        5. **Advanced:** Set output paths and advanced options
-        6. **Preview:** Review your configuration before saving
+        5. **Preview:** Review your configuration before saving
         """)
 
         st.markdown("## 📋 Tab Documentation")
@@ -885,7 +884,6 @@ class ScubaConfigApp:
         - **Omit Policies:** Use green dots to indicate configured policies, orange during editing
         - **Annotate Policies:** Add rationale and documentation for policy decisions
         - **Break Glass:** Emergency accounts that bypass normal security controls
-        - **Advanced:** Output directory configuration and technical settings
         """)
 
         st.markdown("## 💡 Tips & Best Practices")
@@ -1699,7 +1697,7 @@ class ScubaConfigApp:
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # NOTE: Advanced tab functionality is hidden/disabled
+    # TODO: Re-enable Advanced tab when auth integration is ready
     # def render_advanced_tab(self):
     #     """Render advanced configuration tab"""
     #     st.markdown('<div class="section-container">', unsafe_allow_html=True)
