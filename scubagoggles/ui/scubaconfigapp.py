@@ -802,14 +802,15 @@ class ScubaConfigApp:
         if not data.get('baselines'):
             errors.append("At least 1 product must be selected for the configuration to be valid.")
 
-        auth_method = data.get('auth_method', 'Service Account')
-        if auth_method == "Service Account":
-            if not data.get('customerid'):
-                errors.append("Customer ID is required for Service Account authentication.")
-            if not data.get('subjectemail'):
-                errors.append("Subject Email is required for Service Account authentication.")
-            if not data.get('credentials'):
-                errors.append("Credentials file path is required for Service Account authentication.")
+        # NOTE: Advanced tab authentication validation disabled - fields are optional
+        # auth_method = data.get('auth_method', 'Service Account')
+        # if auth_method == "Service Account":
+        #     if not data.get('customerid'):
+        #         errors.append("Customer ID is required for Service Account authentication.")
+        #     if not data.get('subjectemail'):
+        #         errors.append("Subject Email is required for Service Account authentication.")
+        #     if not data.get('credentials'):
+        #         errors.append("Credentials file path is required for Service Account authentication.")
 
         return errors
 
@@ -1002,7 +1003,7 @@ class ScubaConfigApp:
         with col2:
             orgname = st.text_input(
                 "Organization Name",
-                placeholder="Department of Homeland Secuity",
+                placeholder="Department of Homeland Security",
                 help="Name of your organization",
                 key="orgname",
                 label_visibility="collapsed"
@@ -1297,9 +1298,11 @@ class ScubaConfigApp:
                                             except (ValueError, TypeError):
                                                 del st.session_state[date_key]
 
+                                        expiration_value = existing_expiration if existing_expiration and existing_expiration >= date.today() else None
                                         expiration = st.date_input(
                                             "Expiration Date (Optional)",
-                                            value=existing_expiration if existing_expiration else date.today(),
+                                            value=expiration_value,
+                                            min_value=date.today(),
                                             help="Date after which the policy should no longer be omitted",
                                             key=f"expiration_{policy_id}"
                                         )
@@ -1552,9 +1555,11 @@ class ScubaConfigApp:
                                                 except (ValueError, TypeError):
                                                     del st.session_state[remediation_key]
 
+                                            remediation_value = existing_remediation if existing_remediation and existing_remediation >= date.today() else None
                                             remediation_date = st.date_input(
                                                 "Remediation Date (Optional)",
-                                                value=existing_remediation if existing_remediation else date.today(),
+                                                value=remediation_value,
+                                                min_value=date.today(),
                                                 help="Date when a failing control is expected to be implemented",
                                                 key=f"remediation_{policy_id}"
                                             )
@@ -1694,121 +1699,122 @@ class ScubaConfigApp:
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    def render_advanced_tab(self):
-        """Render advanced configuration tab"""
-        st.markdown('<div class="section-container">', unsafe_allow_html=True)
-        st.markdown('<h2 class="section-title">Advanced Configuration</h2>', unsafe_allow_html=True)
-
-        # Authentication Settings
-        st.subheader("🔐 Authentication Settings")
-
-        auth_method = st.selectbox(
-            "Authentication Method",
-            ["Service Account", "OAuth 2.0", "Application Default Credentials"],
-            index=0,
-            help="Choose the authentication method for Google Workspace API access",
-            key="auth_method"
-        )
-        st.session_state.config_data['auth_method'] = auth_method
-
-        if auth_method == "Service Account":
-            st.info("📋 Service account authentication requires a JSON credentials file and subject email.")
-
-            # Service Account specific fields
-            col1, col2 = st.columns([1, 2])
-            with col1:
-                st.markdown("**Customer ID***")
-            with col2:
-                customerid = st.text_input(
-                    "Customer ID",
-                    placeholder="Your Google Workspace Customer ID",
-                    help="The unique ID assigned to your GWS tenant. Required for service account authentication.",
-                    key="customerid_advanced",
-                    label_visibility="collapsed"
-                )
-                st.session_state.config_data['customerid'] = customerid
-                if customerid:
-                    st.caption("Required for service account authentication")
-
-            col1, col2 = st.columns([1, 2])
-            with col1:
-                st.markdown("**Subject Email***")
-            with col2:
-                subjectemail = st.text_input(
-                    "Subject Email",
-                    placeholder="admin@example.com",
-                    help="Email address of the user the service account should act on behalf of (must be super admin)",
-                    key="subjectemail_advanced",
-                    label_visibility="collapsed"
-                )
-                st.session_state.config_data['subjectemail'] = subjectemail
-                if subjectemail:
-                    st.caption("Must be a super admin user")
-
-            # File path input for credentials
-            creds_path = st.text_input(
-                "📁 Service Account JSON File Path",
-                placeholder="/path/to/service-account.json",
-                help="Path to your service account credentials file",
-                key="credentials_advanced"
-            )
-            st.session_state.config_data['credentials'] = creds_path
-            if creds_path:
-                if Path(creds_path).exists():
-                    st.success(f"✅ Using credentials: {creds_path}")
-                else:
-                    st.error(f"❌ File not found: {creds_path}")
-        elif auth_method == "OAuth 2.0":
-            st.info("🌐 OAuth 2.0 will open a browser window for interactive authentication.")
-        else:
-            st.info("🔧 Application Default Credentials will use your environment's default authentication.")
-
-        st.divider()
-
-        # Output Settings
-        st.subheader("📁 Output Settings")
-
-        col1, col2 = st.columns(2)
-        with col1:
-            output_format = st.selectbox(
-                "Output Format",
-                ["HTML", "JSON", "Both"],
-                index=0,
-                help="Choose the format for assessment reports",
-                key="output_format"
-            )
-            st.session_state.config_data['output_format'] = output_format
-
-        with col2:
-            output_path = st.text_input(
-                "Output Directory",
-                placeholder="./reports/",
-                help="Directory where reports will be saved",
-                key="output_path_advanced"
-            )
-            st.session_state.config_data['outputpath'] = output_path
-
-        st.divider()
-
-        # Execution Settings
-        st.subheader("⚙️ Execution Settings")
-
-        col1, col2 = st.columns(2)
-        with col1:
-            quiet = st.checkbox(
-                "Quiet Mode",
-                help="Suppress non-essential output during execution",
-                key="quiet_mode"
-            )
-            st.session_state.config_data['quiet'] = quiet
-
-        with col2:
-            dark_mode = st.checkbox(
-                "Dark Mode Reports",
-                help="Generate reports with dark theme",
-                key="dark_mode_advanced"
-            )
-            st.session_state.config_data['darkmode'] = dark_mode
+    # NOTE: Advanced tab functionality is hidden/disabled
+    # def render_advanced_tab(self):
+    #     """Render advanced configuration tab"""
+    #     st.markdown('<div class="section-container">', unsafe_allow_html=True)
+    #     st.markdown('<h2 class="section-title">Advanced Configuration</h2>', unsafe_allow_html=True)
+    #
+    #     # Authentication Settings
+    #     st.subheader("🔐 Authentication Settings")
+    #
+    #     auth_method = st.selectbox(
+    #         "Authentication Method",
+    #         ["Service Account", "OAuth 2.0", "Application Default Credentials"],
+    #         index=0,
+    #         help="Choose the authentication method for Google Workspace API access",
+    #         key="auth_method"
+    #     )
+    #     st.session_state.config_data['auth_method'] = auth_method
+    #
+    #     if auth_method == "Service Account":
+    #         st.info("📋 Service account authentication requires a JSON credentials file and subject email.")
+    #
+    #         # Service Account specific fields
+    #         col1, col2 = st.columns([1, 2])
+    #         with col1:
+    #             st.markdown("**Customer ID***")
+    #         with col2:
+    #             customerid = st.text_input(
+    #                 "Customer ID",
+    #                 placeholder="Your Google Workspace Customer ID",
+    #                 help="The unique ID assigned to your GWS tenant. Required for service account authentication.",
+    #                 key="customerid_advanced",
+    #                 label_visibility="collapsed"
+    #             )
+    #             st.session_state.config_data['customerid'] = customerid
+    #             if customerid:
+    #                 st.caption("Required for service account authentication")
+    #
+    #         col1, col2 = st.columns([1, 2])
+    #         with col1:
+    #             st.markdown("**Subject Email***")
+    #         with col2:
+    #             subjectemail = st.text_input(
+    #                 "Subject Email",
+    #                 placeholder="admin@example.com",
+    #                 help="Email address of the user the service account should act on behalf of (must be super admin)",
+    #                 key="subjectemail_advanced",
+    #                 label_visibility="collapsed"
+    #             )
+    #             st.session_state.config_data['subjectemail'] = subjectemail
+    #             if subjectemail:
+    #                 st.caption("Must be a super admin user")
+    #
+    #         # File path input for credentials
+    #         creds_path = st.text_input(
+    #             "📁 Service Account JSON File Path",
+    #             placeholder="/path/to/service-account.json",
+    #             help="Path to your service account credentials file",
+    #             key="credentials_advanced"
+    #         )
+    #         st.session_state.config_data['credentials'] = creds_path
+    #         if creds_path:
+    #             if Path(creds_path).exists():
+    #                 st.success(f"✅ Using credentials: {creds_path}")
+    #             else:
+    #                 st.error(f"❌ File not found: {creds_path}")
+    #     elif auth_method == "OAuth 2.0":
+    #         st.info("🌐 OAuth 2.0 will open a browser window for interactive authentication.")
+    #     else:
+    #         st.info("🔧 Application Default Credentials will use your environment's default authentication.")
+    #
+    #     st.divider()
+    #
+    #     # Output Settings
+    #     st.subheader("📁 Output Settings")
+    #
+    #     col1, col2 = st.columns(2)
+    #     with col1:
+    #         output_format = st.selectbox(
+    #             "Output Format",
+    #             ["HTML", "JSON", "Both"],
+    #             index=0,
+    #             help="Choose the format for assessment reports",
+    #             key="output_format"
+    #         )
+    #         st.session_state.config_data['output_format'] = output_format
+    #
+    #     with col2:
+    #         output_path = st.text_input(
+    #             "Output Directory",
+    #             placeholder="./reports/",
+    #             help="Directory where reports will be saved",
+    #             key="output_path_advanced"
+    #         )
+    #         st.session_state.config_data['outputpath'] = output_path
+    #
+    #     st.divider()
+    #
+    #     # Execution Settings
+    #     st.subheader("⚙️ Execution Settings")
+    #
+    #     col1, col2 = st.columns(2)
+    #     with col1:
+    #         quiet = st.checkbox(
+    #             "Quiet Mode",
+    #             help="Suppress non-essential output during execution",
+    #             key="quiet_mode"
+    #         )
+    #         st.session_state.config_data['quiet'] = quiet
+    #
+    #     with col2:
+    #         dark_mode = st.checkbox(
+    #             "Dark Mode Reports",
+    #             help="Generate reports with dark theme",
+    #             key="dark_mode_advanced"
+    #         )
+    #         st.session_state.config_data['darkmode'] = dark_mode
 
     def render_preview_tab(self):
         """Render configuration preview"""
@@ -1926,12 +1932,13 @@ class ScubaConfigApp:
         self.render_header()
 
         # Create tabs similar to ScubaGear
+        # NOTE: Advanced tab is hidden/disabled
         tabs = st.tabs([
             "🏢 Main",
             "🚫 Omit Policies",
             "📝 Annotate Policies",
             "🚨 Break Glass",
-            "⚙️ Advanced",
+            # "⚙️ Advanced",  # Hidden - functionality commented out
             "👁️ Preview"
         ])
 
@@ -1947,10 +1954,11 @@ class ScubaConfigApp:
         with tabs[3]:
             self.render_break_glass_tab()
 
-        with tabs[4]:
-            self.render_advanced_tab()
+        # NOTE: Advanced tab hidden
+        # with tabs[4]:
+        #     self.render_advanced_tab()
 
-        with tabs[5]:
+        with tabs[4]:
             self.render_preview_tab()
 
         # Status bar
