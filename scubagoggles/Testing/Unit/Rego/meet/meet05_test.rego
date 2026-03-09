@@ -47,5 +47,4 @@ test_AutoTranscript_Correct_V1 if {
     RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == "Currently not able to be tested automatically; please manually check."
 }
-
 #--
