@@ -255,10 +255,10 @@ class RobustDNSClient:
                 log_entries.append({
                     "query_name": qname,
                     "query_method": "DoH",
-                    "query_result": f"Query returned response code {response['Status']}",
+                    "query_result": f"Query returned response code {rcode}",
                     "query_answers": []
                 })
-                errors.append(f"Response code {response['Status']}")
+                errors.append(f"Response code {rcode}")
 
             # Catch Generic Exception when attempting DoH query
             except Exception as exception:
