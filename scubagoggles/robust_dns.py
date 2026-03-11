@@ -6,18 +6,22 @@ import requests
 
 class RobustDNSClient:
     '''Class used to run robust DNS queries.'''
-    def __init__(self, dns_resolvers: list = None, skip_doh: bool = False):
+    def __init__(self, dns_resolvers: list = None, doh_servers: list = None, skip_doh: bool = False):
         """
         Initialize the DNS client.
 
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
+        :param doh_servers: (optional) list of DoH servers that should be used 
+            for DoH queries.
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.
         """
         self.resolver = dns.resolver.Resolver()
         if dns_resolvers:
             self.resolver.nameservers = dns_resolvers
+        
+        self.preferred_doh_list = doh_servers
 
         self.skip_doh = skip_doh
 
@@ -139,14 +143,23 @@ class RobustDNSClient:
         If none are successful, returns None.
         """
         doh_servers = ["cloudflare-dns.com", "[2606:4700:4700::1111]", "1.1.1.1"]
+
+        if self.preferred_doh_list is not None:
+            doh_servers = self.preferred_doh_list
+        
         preferred_server = None
         for server in doh_servers:
             try:
-                # Attempt to resolve a.root-servers.net over DoH. The domain chosen is somewhat
-                # arbitrary, as we don't care what the answer is, only if the query succeeds/fails.
-                # a.root-servers.net, the address of one of the DNS root servers, was chosen as a
-                # benign, highly-available domain.
-                uri = f"https://{server}/dns-query?name=a.root-servers.net"
+                # User-preferred 
+                uri = server
+
+                # Attempt to resolve a.root-servers.net over DoH if no preferred list is specified. 
+                # The domain chosen is somewhat arbitrary, as we don't care what the answer is, 
+                # only if the query succeeds/fails. a.root-servers.net, the address of one of the 
+                # DNS root servers, was chosen as a benign, highly-available domain.
+                if self.preferred_doh_list is None:
+                    uri = f"https://{server}/dns-query?name=a.root-servers.net"
+
                 headers = {"accept":"application/dns-json"}
                 requests.get(uri, headers=headers, timeout=2).json()
                 # No error was thrown, return this server
@@ -190,32 +203,43 @@ class RobustDNSClient:
         try_number = 0
         while try_number < max_tries:
             try_number += 1
-            uri = f"https://{self.doh_server}/dns-query?name={qname}&type=txt"
-            headers = {"accept":"application/dns-json"}
+            
+            # perferred server is already in URI format
+            uri = self.doh_server
+
+            # Defeault DoH server is not a URI
+            if self.preferred_doh_list is None:
+                uri = f"https://{self.doh_server}/dns-query?name={qname}&type=txt"
+            
+            #headers = {"accept":"application/dns-json"}
             try:
-                response = requests.get(uri, headers=headers, timeout=5).json()
-                if response['Status'] == 0:
+                
+                #response = requests.get(uri, headers=headers, timeout=5).json()
+                # True DoH
+                query = dns.message.make_query(qname, dns.rdatatype.TXT)
+                response = dns.query.https(query, uri, timeout=5)
+                rcode = response.rcode()
+
+                if rcode == dns.rcode.NOERROR:
                     # 0 indicates there was no error
-                    if 'Answer' in response:
-                        nanswers = len(response['Answer'])
-                        for answer in response['Answer']:
-                            answers.append(answer['data'].replace('"', ''))
-                        log_entries.append({
-                            "query_name": qname,
-                            "query_method": "DoH",
-                            "query_result": f"Query returned {nanswers} txt records",
-                            "query_answers": answers
-                        })
-                    else:
-                        # Edge case where the domain exists but there are no txt records
-                        log_entries.append({
-                            "query_name": qname,
-                            "query_method": "DoH",
-                            "query_result": "Query returned 0 txt records",
-                            "query_answers": []
-                        })
+
+                    # need to iterate across all answer sets
+                    # to get the number of answers
+                    nanswers = 0
+                    for answer_set in response.answer:
+                            nanswers += len(answer_set)
+                            for rdata in answer_set:
+                                answers.append(rdata.to_text().replace('"', ''))
+                    # Add all the answers to the log_queries list                               
+                    log_entries.append({
+                        "query_name": qname,
+                        "query_method": "DoH",
+                        "query_result": f"Query returned {nanswers} txt records",
+                        "query_answers": answers
+                    })
                     break
-                if response['Status'] == 3:
+
+                if rcode == dns.rcode.NXDOMAIN:
                     # 3 indicates NXDomain. The DNS query succeeded, but the domain did not
                     # exist.
                     log_entries.append({
@@ -225,6 +249,7 @@ class RobustDNSClient:
                         "query_answers": []
                     })
                     break
+
                 # The remainder of the response codes indicate that the query did not succeed.
                 # Retry if we haven't reached max_tries.
                 log_entries.append({
@@ -234,6 +259,8 @@ class RobustDNSClient:
                     "query_answers": []
                 })
                 errors.append(f"Response code {response['Status']}")
+
+            # Catch Generic Exception when attempting DoH query
             except Exception as exception:
                 # The DoH query failed, likely due to a network issue. Retry if we haven't
                 # reached max_trues.

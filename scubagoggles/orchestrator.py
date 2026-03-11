@@ -150,6 +150,7 @@ class Orchestrator:
                       access_token=args.accesstoken,
                       svc_account_email=args.subjectemail,
                       dns_resolvers=args.preferreddnsresolvers,
+                      doh_servers=args.preferreddohservers,
                       skip_doh=args.skipdoh) as provider:
             provider_dict = provider.call_gws_providers(products, args.quiet)
             provider_dict['successful_calls'] = list(provider.successful_calls)
