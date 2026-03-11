@@ -119,35 +119,35 @@ class ConfigValidator:
 
         return True, None
 
+    EMAIL_PATTERN = re.compile(
+        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    )
+
     @staticmethod
     def validate_break_glass_accounts(
         accounts: List[str],
     ) -> Tuple[bool, Optional[str]]:
-        """Validate break glass account UUIDs"""
+        """Validate break glass account email addresses"""
         if not accounts:
             return True, None  # Optional field
 
-        # UUID pattern (basic validation)
-        uuid_pattern = re.compile(
-            (
-                r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-"
-                r"[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-            ),
-            re.IGNORECASE,
-        )
-
-        invalid_uuids: List[str] = []
+        invalid_emails: List[str] = []
         for account in accounts:
-            if not uuid_pattern.match(account.strip()):
-                invalid_uuids.append(account)
+            if not ConfigValidator.EMAIL_PATTERN.match(account.strip()):
+                invalid_emails.append(account)
 
-        if invalid_uuids:
+        if invalid_emails:
             return False, (
-                "Invalid UUID format for break glass accounts: "
-                f"{', '.join(invalid_uuids)}"
+                "Invalid email format for break glass accounts: "
+                f"{', '.join(invalid_emails)}"
             )
 
         return True, None
+
+    @staticmethod
+    def validate_email(email: str) -> bool:
+        """Return True if email has a valid format."""
+        return bool(ConfigValidator.EMAIL_PATTERN.match(email.strip()))
 
     @staticmethod
     def validate_tenant_domain(domain: str) -> Tuple[bool, Optional[str]]:

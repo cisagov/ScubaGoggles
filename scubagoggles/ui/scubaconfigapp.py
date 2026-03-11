@@ -18,6 +18,8 @@ from typing import Any, Dict
 
 import re
 import streamlit as st
+
+from scubagoggles.ui.validation import ConfigValidator
 import yaml
 
 current_dir = Path(__file__).parent.parent.parent
@@ -62,14 +64,8 @@ class ScubaConfigApp:
             st.session_state.config_data = {
                 'orgname': '',
                 'orgunitname': '',
-                'subjectemail': '',
-                'customerid': '',
                 'description': '',
                 'baselines': [],
-                'credentials': '',
-                'outputpath': './',
-                'darkmode': False,
-                'quiet': False,
                 'omitpolicy': {},
                 'annotatepolicy': {},
                 'breakglassaccounts': [],
@@ -79,25 +75,12 @@ class ScubaConfigApp:
         if 'ui_show_help' not in st.session_state:
             st.session_state.ui_show_help = False
 
-        _defaults = {
-            'orgname': '', 'orgunitname': '', 'description': '',
-            'customerid_advanced': ('customerid', ''),
-            'subjectemail_advanced': ('subjectemail', ''),
-            'credentials_advanced': ('credentials', ''),
-            'output_path_advanced': ('outputpath', './'),
-            'quiet_mode': ('quiet', False),
-            'dark_mode_advanced': ('darkmode', False),
-        }
-        for widget_key, source in _defaults.items():
+        _defaults = {'orgname': '', 'orgunitname': '', 'description': ''}
+        for widget_key, fallback in _defaults.items():
             if widget_key not in st.session_state:
-                if isinstance(source, tuple):
-                    st.session_state[widget_key] = (
-                        st.session_state.config_data.get(source[0], source[1])
-                    )
-                else:
-                    st.session_state[widget_key] = (
-                        st.session_state.config_data.get(widget_key, source)
-                    )
+                st.session_state[widget_key] = (
+                    st.session_state.config_data.get(widget_key, fallback)
+                )
 
     def parse_baseline_policies(self) -> Dict[str, Dict[str, str]]:
         """Parse policies from baseline markdown files"""
@@ -621,14 +604,6 @@ class ScubaConfigApp:
                 st.session_state.config_data['description'] = config['Description']
                 st.session_state['description'] = config['Description']  # Update widget key
 
-            # Import authentication fields
-            if 'customerid' in config:
-                st.session_state.config_data['customerid'] = config['customerid']
-            if 'subjectemail' in config:
-                st.session_state.config_data['subjectemail'] = config['subjectemail']
-            if 'credentials' in config:
-                st.session_state.config_data['credentials'] = config['credentials']
-
             # Import baselines and update checkbox states
             if 'baselines' in config:
                 # Handle both list and string formats
@@ -653,19 +628,6 @@ class ScubaConfigApp:
                 # Warn about invalid baselines
                 if invalid_baselines:
                     st.warning(f"⚠️ **Skipped unknown baselines:** {', '.join(invalid_baselines)}")
-
-            # Import output settings
-            if 'outputpath' in config:
-                st.session_state.config_data['outputpath'] = config['outputpath']
-            if 'darkmode' in config:
-                # Handle both string and boolean values
-                darkmode = config['darkmode']
-                if isinstance(darkmode, str):
-                    st.session_state.config_data['darkmode'] = darkmode.lower() == 'true'
-                else:
-                    st.session_state.config_data['darkmode'] = bool(darkmode)
-            if 'quiet' in config:
-                st.session_state.config_data['quiet'] = bool(config['quiet'])
 
             # Import advanced configuration sections
             if 'omitpolicy' in config and isinstance(config['omitpolicy'], dict):
@@ -801,16 +763,6 @@ class ScubaConfigApp:
             errors.append("Organization Name is required.")
         if not data.get('baselines'):
             errors.append("At least 1 product must be selected for the configuration to be valid.")
-
-        # NOTE: Advanced tab authentication validation disabled - fields are optional
-        # auth_method = data.get('auth_method', 'Service Account')
-        # if auth_method == "Service Account":
-        #     if not data.get('customerid'):
-        #         errors.append("Customer ID is required for Service Account authentication.")
-        #     if not data.get('subjectemail'):
-        #         errors.append("Subject Email is required for Service Account authentication.")
-        #     if not data.get('credentials'):
-        #         errors.append("Credentials file path is required for Service Account authentication.")
 
         return errors
 
@@ -1646,14 +1598,16 @@ class ScubaConfigApp:
             """Callback: runs before the next render so we can clear the widget."""
             email = st.session_state.get("new_break_glass", "").strip()
             accounts = st.session_state.config_data.get('breakglassaccounts', [])
-            if email and email not in accounts:
-                accounts.append(email)
-                st.session_state.config_data['breakglassaccounts'] = accounts
-                st.session_state.bg_add_status = ("success", email)
+            if not email:
+                st.session_state.bg_add_status = ("empty", "")
+            elif not ConfigValidator.validate_email(email):
+                st.session_state.bg_add_status = ("invalid", email)
             elif email in accounts:
                 st.session_state.bg_add_status = ("duplicate", email)
             else:
-                st.session_state.bg_add_status = ("empty", "")
+                accounts.append(email)
+                st.session_state.config_data['breakglassaccounts'] = accounts
+                st.session_state.bg_add_status = ("success", email)
             st.session_state.new_break_glass = ""
 
         col1, col2 = st.columns([3, 1])
@@ -1670,9 +1624,11 @@ class ScubaConfigApp:
 
         status = st.session_state.pop("bg_add_status", None)
         if status:
-            kind, email = status
+            kind, value = status
             if kind == "success":
-                st.success(f"✅ Added break glass account: {email}")
+                st.success(f"✅ Added break glass account: {value}")
+            elif kind == "invalid":
+                st.error(f"❌ Invalid email format: {value}")
             elif kind == "duplicate":
                 st.error("❌ Account already exists in list")
             else:
@@ -1887,31 +1843,16 @@ class ScubaConfigApp:
         config = {}
         data = st.session_state.config_data
 
-        # Required fields
-        if data.get('customerid'):
-            config['customerid'] = data['customerid']
-        if data.get('subjectemail'):
-            config['subjectemail'] = data['subjectemail']
         if data.get('orgname'):
             config['orgname'] = data['orgname']
         if data.get('baselines'):
             config['baselines'] = data['baselines']
-        if data.get('credentials'):
-            config['credentials'] = data['credentials']
 
         # Optional organization fields
         if data.get('orgunitname'):
             config['orgunitname'] = data['orgunitname']
         if data.get('description'):
             config['Description'] = data['description']
-
-        # Output settings
-        if data.get('outputpath') and data['outputpath'] != './':
-            config['outputpath'] = data['outputpath']
-        if data.get('darkmode'):
-            config['darkmode'] = 'true'
-        if data.get('quiet'):
-            config['quiet'] = data['quiet']
 
         # Advanced configuration sections
         if data.get('omitpolicy'):
