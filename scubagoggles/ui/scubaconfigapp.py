@@ -764,6 +764,12 @@ class ScubaConfigApp:
         if not data.get('baselines'):
             errors.append("At least 1 product must be selected for the configuration to be valid.")
 
+        break_glass = data.get('breakglassaccounts', [])
+        if break_glass:
+            is_valid, error = ConfigValidator.validate_break_glass_accounts(break_glass)
+            if not is_valid:
+                errors.append(error)
+
         return errors
 
     def _show_validation_errors(self, errors: list):

@@ -33,13 +33,9 @@ def _find_free_port() -> int:
 
 
 def _resolve_app_file() -> Path | None:
-    """Return the path to the best available Streamlit app file."""
-    ui_dir = Path(__file__).parent
-    for name in ("scubaconfigapp.py", "config_generator.py"):
-        candidate = ui_dir / name
-        if candidate.exists():
-            return candidate
-    return None
+    """Return the path to the Streamlit app file."""
+    candidate = Path(__file__).parent / "scubaconfigapp.py"
+    return candidate if candidate.exists() else None
 
 
 def _detect_theme() -> str:
