@@ -152,4 +152,24 @@ test_SPF_Incorrect_V3 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
 }
+
+test_SPF_Incorrect_V4 if {
+    # Fail if multiple records
+    PolicyId := GmailId3_1
+    Output := tests with input as {
+        "spf_records": [
+            {
+                "domain": "test.name",
+                "rdata": ["v=spf1 include:_spf.google.com -all", "v=spf1 include:_spf.google.com -all"]
+            }
+        ],
+        "domains": ["test.name"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+}
 #--
