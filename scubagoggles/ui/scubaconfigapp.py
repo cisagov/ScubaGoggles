@@ -75,6 +75,8 @@ class ScubaConfigApp:
                 'omitpolicy': {},
                 'annotatepolicy': {},
                 'breakglassaccounts': [],
+                'preferreddnsresolvers': [],
+                'skipdoh': False,
                 'ui_dark_mode': False,
             }
 
@@ -696,6 +698,19 @@ class ScubaConfigApp:
             else:
                 st.session_state.config_data['breakglassaccounts'] = []
 
+        if 'preferreddnsresolvers' in config:
+            resolvers = config['preferreddnsresolvers']
+            if isinstance(resolvers, list):
+                st.session_state.config_data['preferreddnsresolvers'] = resolvers
+            elif resolvers:
+                st.session_state.config_data['preferreddnsresolvers'] = [str(resolvers)]
+            else:
+                st.session_state.config_data['preferreddnsresolvers'] = []
+
+        if 'skipdoh' in config:
+            st.session_state.config_data['skipdoh'] = bool(config['skipdoh'])
+            st.session_state['skipdoh_checkbox'] = bool(config['skipdoh'])
+
     @staticmethod
     def _show_import_summary():
         """Display a success toast summarising what was imported."""
@@ -705,6 +720,7 @@ class ScubaConfigApp:
             'omitpolicy': lambda v: f"Omitted Policies: {len(v)}",
             'annotatepolicy': lambda v: f"Annotated Policies: {len(v)}",
             'breakglassaccounts': lambda v: f"Break Glass Accounts: {len(v)}",
+            'preferreddnsresolvers': lambda v: f"DNS Resolvers: {len(v)} configured",
         }
         imported_items = [
             fmt(val)
@@ -1503,7 +1519,104 @@ class ScubaConfigApp:
                 f"{total_policies} policies total",
             )
 
+        self._render_dns_config()
+
         st.markdown('</div>', unsafe_allow_html=True)
+
+    def _render_dns_config(self):
+        """Render the DNS configuration section inside the Main tab."""
+        st.markdown('<h3 style="margin-top: 2rem;">DNS Configuration</h3>', unsafe_allow_html=True)
+
+        with st.expander("ℹ️ Help: DNS Configuration", expanded=False):
+            st.markdown("""
+            <div class="context-help">
+            <strong>DNS Configuration:</strong><br>
+            • These settings control how ScubaGoggles resolves DNS records (SPF, DKIM, DMARC) required by Gmail security policies<br>
+            • <strong>Preferred DNS Resolvers:</strong> Custom DNS resolver IP addresses to use instead of system defaults<br>
+            • <strong>Skip DoH:</strong> Disable DNS over HTTPS fallback when traditional DNS requests fail<br><br>
+
+            <strong>Common DNS Resolvers:</strong><br>
+            • Google: 8.8.8.8, 8.8.4.4<br>
+            • Cloudflare: 1.1.1.1, 1.0.0.1<br>
+            • If not specified, the system default DNS resolver will be used
+            </div>
+            """, unsafe_allow_html=True)
+
+        dns_resolvers = st.session_state.config_data.get('preferreddnsresolvers', [])
+
+        st.markdown("**Preferred DNS Resolvers**")
+        st.caption(
+            "Specify custom DNS resolver IP addresses for SPF, DKIM, and DMARC lookups. "
+            "If not provided, the system default will be used."
+        )
+
+        def _add_dns_resolver():
+            """Callback: validate and add a DNS resolver IP, then clear the input."""
+            ip = st.session_state.get("new_dns_resolver", "").strip()
+            resolvers = st.session_state.config_data.get('preferreddnsresolvers', [])
+            if not ip:
+                st.session_state.dns_add_status = ("empty", "")
+            elif not re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
+                st.session_state.dns_add_status = ("invalid", ip)
+            elif ip in resolvers:
+                st.session_state.dns_add_status = ("duplicate", ip)
+            else:
+                resolvers.append(ip)
+                st.session_state.config_data['preferreddnsresolvers'] = resolvers
+                st.session_state.dns_add_status = ("success", ip)
+            st.session_state.new_dns_resolver = ""
+
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.text_input(
+                "DNS Resolver IP Address",
+                placeholder="8.8.8.8",
+                help="IP address of a DNS resolver (e.g., 8.8.8.8)",
+                key="new_dns_resolver",
+                label_visibility="collapsed"
+            )
+        with col2:
+            st.button("➕ Add Resolver", type="primary",
+                       on_click=_add_dns_resolver, key="add_dns_btn")
+
+        self._show_dns_add_status()
+
+        if dns_resolvers:
+            for i, resolver in enumerate(dns_resolvers):
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    st.markdown(f"🌐 **{resolver}**")
+                with col2:
+                    if st.button("🗑️ Remove", key=f"remove_dns_{i}"):
+                        dns_resolvers.remove(resolver)
+                        st.session_state.config_data['preferreddnsresolvers'] = dns_resolvers
+                        st.rerun()
+
+        st.divider()
+
+        skipdoh = st.checkbox(
+            "Skip DNS over HTTPS (DoH) Fallback",
+            value=st.session_state.config_data.get('skipdoh', False),
+            help="If enabled, ScubaGoggles will not fall back to DNS over HTTPS "
+                 "when traditional DNS requests fail for SPF, DKIM, and DMARC lookups",
+            key="skipdoh_checkbox"
+        )
+        st.session_state.config_data['skipdoh'] = skipdoh
+
+    @staticmethod
+    def _show_dns_add_status():
+        """Display feedback from the most recent DNS resolver add attempt."""
+        status = st.session_state.pop("dns_add_status", None)
+        if not status:
+            return
+        kind, ip = status
+        _messages = {
+            "success": (st.success, f"✅ Added DNS resolver: {ip}"),
+            "invalid": (st.error, f"❌ Invalid IP address format: {ip}"),
+            "duplicate": (st.error, "❌ Resolver already exists in list"),
+        }
+        fn, msg = _messages.get(kind, (st.error, "❌ IP address is required"))
+        fn(msg)
 
     def render_omit_policies_tab(self):
         """Render omit policies configuration tab"""
@@ -1826,7 +1939,7 @@ class ScubaConfigApp:
             # Show YAML preview with flow style for arrays to match ScubaGoggles conventions
             yaml_config = yaml.dump(clean_config, default_flow_style=False, sort_keys=False)
 
-            for key in ('baselines', 'breakglassaccounts'):
+            for key in ('baselines', 'breakglassaccounts', 'preferreddnsresolvers'):
                 yaml_config = self._yaml_array_to_flow(yaml_config, key)
 
             st.code(yaml_config, language='yaml')
@@ -1885,6 +1998,7 @@ class ScubaConfigApp:
             ('omitpolicy', 'omitpolicy'),
             ('annotatepolicy', 'AnnotatePolicy'),
             ('breakglassaccounts', 'breakglassaccounts'),
+            ('preferreddnsresolvers', 'preferreddnsresolvers'),
         )
         for src, dest in _direct:
             if data.get(src):
@@ -1895,6 +2009,8 @@ class ScubaConfigApp:
             config['outputpath'] = data['outputpath']
         if data.get('darkmode'):
             config['darkmode'] = True
+        if data.get('skipdoh'):
+            config['skipdoh'] = True
 
         return config
 
