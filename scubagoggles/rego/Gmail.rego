@@ -469,23 +469,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.5.6
-#--
-# No implementation steps provided for this policy
-
-GmailId5_6 := utils.PolicyIdWithSuffix("GWS.GMAIL.5.6")
-
-tests contains {
-    "PolicyId": GmailId5_6,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please check manually.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
 
 ###############
 # GWS.GMAIL.6 #
@@ -639,22 +622,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.6.5
-#--
-
-GmailId6_5 := utils.PolicyIdWithSuffix("GWS.GMAIL.6.5")
-
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": GmailId6_5,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
 
 ###############
 # GWS.GMAIL.7 #
@@ -935,23 +902,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.7.8
-#--
-
-GmailId7_8 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.8")
-
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": GmailId7_8,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
 
 ###############
 # GWS.GMAIL.8 #
@@ -1320,23 +1270,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.15.2
-#--
-
-GmailId15_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.15.2")
-
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": GmailId15_2,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
 
 ################
 # GWS.GMAIL.16 #
@@ -1397,23 +1330,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.16.2
-#--
-
-GmailId16_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.16.2")
-
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": GmailId16_2,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
 
 ################
 # GWS.GMAIL.17 #
