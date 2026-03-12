@@ -249,7 +249,7 @@ Automatic transcripts for Google Meet SHALL be disabled.
 
 ### Implementation
 
-#### GWS.MEET.6.1v0.6 Instructions
+#### GWS.MEET.5.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Meet video settings**.
@@ -257,7 +257,7 @@ Automatic transcripts for Google Meet SHALL be disabled.
 5.  Ensure **Meetings are recorded by default** is unselected.
 6.  Click **Save**.
 
-#### GWS.MEET.6.2v0.6 Instructions
+#### GWS.MEET.5.2v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Meet video settings**.
