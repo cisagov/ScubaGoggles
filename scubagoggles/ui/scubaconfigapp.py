@@ -1872,39 +1872,29 @@ class ScubaConfigApp:
         config = {}
         data = st.session_state.config_data
 
-        # Required fields
-        if data.get('customerid'):
-            config['customerid'] = data['customerid']
-        if data.get('subjectemail'):
-            config['subjectemail'] = data['subjectemail']
-        if data.get('orgname'):
-            config['orgname'] = data['orgname']
-        if data.get('baselines'):
-            config['baselines'] = data['baselines']
-        if data.get('credentials'):
-            config['credentials'] = data['credentials']
+        # data-key → config-key for simple pass-through fields
+        _direct = (
+            ('customerid', 'customerid'),
+            ('subjectemail', 'subjectemail'),
+            ('orgname', 'orgname'),
+            ('baselines', 'baselines'),
+            ('credentials', 'credentials'),
+            ('orgunitname', 'orgunitname'),
+            ('description', 'Description'),
+            ('quiet', 'quiet'),
+            ('omitpolicy', 'omitpolicy'),
+            ('annotatepolicy', 'AnnotatePolicy'),
+            ('breakglassaccounts', 'breakglassaccounts'),
+        )
+        for src, dest in _direct:
+            if data.get(src):
+                config[dest] = data[src]
 
-        # Optional organization fields
-        if data.get('orgunitname'):
-            config['orgunitname'] = data['orgunitname']
-        if data.get('description'):
-            config['Description'] = data['description']
-
-        # Output settings
+        # Output settings with special handling
         if data.get('outputpath') and data['outputpath'] != './':
             config['outputpath'] = data['outputpath']
         if data.get('darkmode'):
             config['darkmode'] = True
-        if data.get('quiet'):
-            config['quiet'] = data['quiet']
-
-        # Advanced configuration sections
-        if data.get('omitpolicy'):
-            config['omitpolicy'] = data['omitpolicy']
-        if data.get('annotatepolicy'):
-            config['AnnotatePolicy'] = data['annotatepolicy']
-        if data.get('breakglassaccounts'):
-            config['breakglassaccounts'] = data['breakglassaccounts']
 
         return config
 
