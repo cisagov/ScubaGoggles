@@ -6,7 +6,8 @@ import requests
 
 class RobustDNSClient:
     '''Class used to run robust DNS queries.'''
-    def __init__(self, dns_resolvers: list = None, doh_servers: list = None, skip_doh: bool = False):
+    def __init__(self, dns_resolvers: list = None, doh_servers: list = None, 
+                skip_doh: bool = False):
         """
         Initialize the DNS client.
 
@@ -20,7 +21,7 @@ class RobustDNSClient:
         self.resolver = dns.resolver.Resolver()
         if dns_resolvers:
             self.resolver.nameservers = dns_resolvers
-        
+
         self.preferred_doh_list = doh_servers
 
         self.skip_doh = skip_doh
@@ -146,16 +147,16 @@ class RobustDNSClient:
 
         if self.preferred_doh_list is not None:
             doh_servers = self.preferred_doh_list
-        
+
         preferred_server = None
         for server in doh_servers:
             try:
-                # User-preferred 
+                # User-preferred
                 uri = server
 
-                # Attempt to resolve a.root-servers.net over DoH if no preferred list is specified. 
-                # The domain chosen is somewhat arbitrary, as we don't care what the answer is, 
-                # only if the query succeeds/fails. a.root-servers.net, the address of one of the 
+                # Attempt to resolve a.root-servers.net over DoH if no preferred list is specified.
+                # The domain chosen is somewhat arbitrary, as we don't care what the answer is,
+                # only if the query succeeds/fails. a.root-servers.net, the address of one of the
                 # DNS root servers, was chosen as a benign, highly-available domain.
                 if self.preferred_doh_list is None:
                     uri = f"https://{server}/dns-query?name=a.root-servers.net"
@@ -203,14 +204,14 @@ class RobustDNSClient:
         try_number = 0
         while try_number < max_tries:
             try_number += 1
-            
+
             # perferred server is already in URI format
             uri = self.doh_server
 
             # Defeault DoH server is not a URI
             if self.preferred_doh_list is None:
                 uri = f"https://{self.doh_server}/dns-query?name={qname}&type=txt"
-            
+
             #headers = {"accept":"application/dns-json"}
             try:
                 
@@ -227,10 +228,10 @@ class RobustDNSClient:
                     # to get the number of answers
                     nanswers = 0
                     for answer_set in response.answer:
-                            nanswers += len(answer_set)
-                            for rdata in answer_set:
-                                answers.append(rdata.to_text().replace('"', ''))
-                    # Add all the answers to the log_queries list                               
+                        nanswers += len(answer_set)
+                        for rdata in answer_set:
+                            answers.append(rdata.to_text().replace('"', ''))
+                    # Add all the answers to the log_queries list
                     log_entries.append({
                         "query_name": qname,
                         "query_method": "DoH",
