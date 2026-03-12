@@ -27,8 +27,6 @@ current_dir = Path(__file__).parent.parent.parent
 if str(current_dir) not in sys.path:
     sys.path.insert(0, str(current_dir))
 
-from scubagoggles.scuba_constants import OPA_VERSION
-
 scubagoggles_available = True
 
 try:
