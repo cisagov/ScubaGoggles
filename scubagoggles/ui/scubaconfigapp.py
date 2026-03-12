@@ -7,7 +7,7 @@ selection, policy omissions/annotations, break-glass accounts, and
 YAML config export/import.
 """
 
-# pylint: disable=line-too-long
+# pylint: disable=line-too-long,too-many-lines
 
 import base64
 import subprocess
@@ -34,18 +34,18 @@ try:
 except ImportError:
     scubagoggles_available = False
 
-    class MockUserConfig:
+    class MockUserConfig:  # pylint: disable=too-few-public-methods
         """Fallback when ScubaGoggles backend is not installed."""
         def __init__(self):
             self.output_dir = "./"
             self.credentials_file = None
 
-    class MockVersion:
+    class MockVersion:  # pylint: disable=too-few-public-methods
         """Fallback when ScubaGoggles backend is not installed."""
         number = "1.0.0"
         @classmethod
         def initialize(cls):
-            pass
+            """No-op; satisfies the Version.initialize() interface."""
 
     UserConfig = MockUserConfig
     Version = MockVersion
@@ -602,9 +602,8 @@ class ScubaConfigApp:
         """
 
     def import_configuration(self, uploaded_file):
-        """Import configuration from uploaded YAML file"""
+        """Import configuration from uploaded YAML file."""
         try:
-            # Parse the uploaded YAML file
             yaml_content = uploaded_file.read().decode('utf-8')
             config = yaml.safe_load(yaml_content)
 
@@ -612,99 +611,110 @@ class ScubaConfigApp:
                 st.error("Invalid or empty YAML file")
                 return
 
-            # Import basic organization fields
-            if 'orgname' in config:
-                st.session_state.config_data['orgname'] = config['orgname']
-                st.session_state['orgname'] = config['orgname']  # Update widget key
-            if 'orgunitname' in config:
-                st.session_state.config_data['orgunitname'] = config['orgunitname']
-                st.session_state['orgunitname'] = config['orgunitname']  # Update widget key
-            if 'Description' in config:
-                st.session_state.config_data['description'] = config['Description']
-                st.session_state['description'] = config['Description']  # Update widget key
-
-            # Import authentication fields
-            if 'customerid' in config:
-                st.session_state.config_data['customerid'] = config['customerid']
-            if 'subjectemail' in config:
-                st.session_state.config_data['subjectemail'] = config['subjectemail']
-            if 'credentials' in config:
-                st.session_state.config_data['credentials'] = config['credentials']
-
-            # Import baselines and update checkbox states
-            if 'baselines' in config:
-                # Handle both list and string formats
-                baselines = config['baselines']
-                if isinstance(baselines, str):
-                    baselines = [baselines]
-                elif not isinstance(baselines, list):
-                    baselines = []
-
-                # Filter out any baselines that don't exist in our baseline info
-                baseline_info = self.get_baseline_info()
-                valid_baselines = [b for b in baselines if b in baseline_info]
-                invalid_baselines = [b for b in baselines if b not in baseline_info]
-
-                st.session_state.config_data['baselines'] = valid_baselines
-
-                self._sync_baseline_checkboxes(valid_baselines)
-
-                # Warn about invalid baselines
-                if invalid_baselines:
-                    st.warning(f"⚠️ **Skipped unknown baselines:** {', '.join(invalid_baselines)}")
-
-            # Import output settings
-            if 'outputpath' in config:
-                st.session_state.config_data['outputpath'] = config['outputpath']
-            if 'darkmode' in config:
-                # Handle both string and boolean values
-                darkmode = config['darkmode']
-                if isinstance(darkmode, str):
-                    st.session_state.config_data['darkmode'] = darkmode.lower() == 'true'
-                else:
-                    st.session_state.config_data['darkmode'] = bool(darkmode)
-            if 'quiet' in config:
-                st.session_state.config_data['quiet'] = bool(config['quiet'])
-
-            # Import advanced configuration sections
-            if 'omitpolicy' in config and isinstance(config['omitpolicy'], dict):
-                st.session_state.config_data['omitpolicy'] = config['omitpolicy']
-
-            if 'AnnotatePolicy' in config and isinstance(config['AnnotatePolicy'], dict):
-                st.session_state.config_data['annotatepolicy'] = config['AnnotatePolicy']
-
-            if 'breakglassaccounts' in config:
-                breakglass = config['breakglassaccounts']
-                if isinstance(breakglass, list):
-                    st.session_state.config_data['breakglassaccounts'] = breakglass
-                elif breakglass:  # Handle single string value
-                    st.session_state.config_data['breakglassaccounts'] = [breakglass]
-                else:
-                    st.session_state.config_data['breakglassaccounts'] = []
-
-            # Success message with summary
-            imported_items = []
-            if st.session_state.config_data.get('orgname'):
-                imported_items.append(f"Organization: {st.session_state.config_data['orgname']}")
-            if st.session_state.config_data.get('baselines'):
-                imported_items.append(f"Baselines: {len(st.session_state.config_data['baselines'])} selected")
-            if st.session_state.config_data.get('omitpolicy'):
-                imported_items.append(f"Omitted Policies: {len(st.session_state.config_data['omitpolicy'])}")
-            if st.session_state.config_data.get('annotatepolicy'):
-                imported_items.append(f"Annotated Policies: {len(st.session_state.config_data['annotatepolicy'])}")
-            if st.session_state.config_data.get('breakglassaccounts'):
-                imported_items.append(f"Break Glass Accounts: {len(st.session_state.config_data['breakglassaccounts'])}")
-
-            st.success("✅ Configuration imported successfully!")
-            if imported_items:
-                st.info("📋 **Imported:** " + " • ".join(imported_items))
-
+            self._import_org_fields(config)
+            self._import_auth_fields(config)
+            self._import_baselines(config)
+            self._import_output_settings(config)
+            self._import_advanced_sections(config)
+            self._show_import_summary()
             st.rerun()
 
         except yaml.YAMLError as e:
             st.error(f"❌ YAML parsing error: {str(e)}")
         except Exception as e:
             st.error(f"❌ Import error: {str(e)}")
+
+    @staticmethod
+    def _import_org_fields(config: dict):
+        """Import organization-level fields from *config* into session state."""
+        for yaml_key, state_key in (
+            ('orgname', 'orgname'),
+            ('orgunitname', 'orgunitname'),
+            ('Description', 'description'),
+        ):
+            if yaml_key in config:
+                st.session_state.config_data[state_key] = config[yaml_key]
+                st.session_state[state_key] = config[yaml_key]
+
+    @staticmethod
+    def _import_auth_fields(config: dict):
+        """Import authentication fields from *config* into session state."""
+        for key in ('customerid', 'subjectemail', 'credentials'):
+            if key in config:
+                st.session_state.config_data[key] = config[key]
+
+    def _import_baselines(self, config: dict):
+        """Import baselines from *config*, validating against known baselines."""
+        if 'baselines' not in config:
+            return
+
+        baselines = config['baselines']
+        if isinstance(baselines, str):
+            baselines = [baselines]
+        elif not isinstance(baselines, list):
+            baselines = []
+
+        baseline_info = self.get_baseline_info()
+        valid = [b for b in baselines if b in baseline_info]
+        invalid = [b for b in baselines if b not in baseline_info]
+
+        st.session_state.config_data['baselines'] = valid
+        self._sync_baseline_checkboxes(valid)
+
+        if invalid:
+            st.warning(f"⚠️ **Skipped unknown baselines:** {', '.join(invalid)}")
+
+    @staticmethod
+    def _import_output_settings(config: dict):
+        """Import output-related settings from *config*."""
+        if 'outputpath' in config:
+            st.session_state.config_data['outputpath'] = config['outputpath']
+        if 'darkmode' in config:
+            darkmode = config['darkmode']
+            if isinstance(darkmode, str):
+                st.session_state.config_data['darkmode'] = darkmode.lower() == 'true'
+            else:
+                st.session_state.config_data['darkmode'] = bool(darkmode)
+        if 'quiet' in config:
+            st.session_state.config_data['quiet'] = bool(config['quiet'])
+
+    @staticmethod
+    def _import_advanced_sections(config: dict):
+        """Import omit-policy, annotate-policy, and break-glass accounts."""
+        if 'omitpolicy' in config and isinstance(config['omitpolicy'], dict):
+            st.session_state.config_data['omitpolicy'] = config['omitpolicy']
+
+        if 'AnnotatePolicy' in config and isinstance(config['AnnotatePolicy'], dict):
+            st.session_state.config_data['annotatepolicy'] = config['AnnotatePolicy']
+
+        if 'breakglassaccounts' in config:
+            breakglass = config['breakglassaccounts']
+            if isinstance(breakglass, list):
+                st.session_state.config_data['breakglassaccounts'] = breakglass
+            elif breakglass:
+                st.session_state.config_data['breakglassaccounts'] = [breakglass]
+            else:
+                st.session_state.config_data['breakglassaccounts'] = []
+
+    @staticmethod
+    def _show_import_summary():
+        """Display a success toast summarising what was imported."""
+        summary_keys = {
+            'orgname': lambda v: f"Organization: {v}",
+            'baselines': lambda v: f"Baselines: {len(v)} selected",
+            'omitpolicy': lambda v: f"Omitted Policies: {len(v)}",
+            'annotatepolicy': lambda v: f"Annotated Policies: {len(v)}",
+            'breakglassaccounts': lambda v: f"Break Glass Accounts: {len(v)}",
+        }
+        imported_items = [
+            fmt(val)
+            for key, fmt in summary_keys.items()
+            if (val := st.session_state.config_data.get(key))
+        ]
+
+        st.success("✅ Configuration imported successfully!")
+        if imported_items:
+            st.info("📋 **Imported:** " + " • ".join(imported_items))
 
     def open_configuration_from_disk(self):
         """Open a native file dialog and load the selected YAML config."""
@@ -734,7 +744,7 @@ class ScubaConfigApp:
                 st.error("Invalid or empty YAML file.")
                 return
 
-            class _Wrapper:
+            class _Wrapper:  # pylint: disable=too-few-public-methods
                 """Mimic an uploaded file so import_configuration can be reused."""
                 def __init__(self, data: bytes):
                     self._data = data
@@ -966,83 +976,114 @@ class ScubaConfigApp:
         selected_baseline_policies = self._get_selected_baseline_policies()
         selected_baselines = st.session_state.config_data.get('baselines', [])
 
-        if selected_baselines and self.available_policies:
-            st.markdown("**Available Policies from Selected Products:**")
-
-            if selected_baseline_policies:
-                baseline_tabs = st.tabs(list(selected_baseline_policies.keys()))
-
-                for i, (baseline_name, baseline_policies) in enumerate(
-                    selected_baseline_policies.items(),
-                ):
-                    with baseline_tabs[i]:
-                        if baseline_policies:
-                            for policy_id, policy_desc in baseline_policies.items():
-                                is_configured = policy_id in policies
-                                expand_key = f"expand_{prefix}_{policy_id}"
-                                editing_key = f"editing_{prefix}_{policy_id}"
-
-                                col1, col2 = st.columns([4, 1])
-                                with col1:
-                                    if is_configured:
-                                        st.markdown(f"🟢 **{policy_id}** ({configured_label})")
-                                    elif st.session_state.get(expand_key, False):
-                                        st.markdown(f"🟠 **{policy_id}** (Configuring...)")
-                                    else:
-                                        st.markdown(f"**{policy_id}**")
-                                    st.caption(policy_desc)
-
-                                with col2:
-                                    if is_configured:
-                                        col_edit, col_remove = st.columns(2)
-                                        with col_edit:
-                                            if st.button("✏️ Edit", key=f"edit_{prefix}_{policy_id}"):
-                                                existing = policies[policy_id]
-                                                for sk, cfg_key in field_map.items():
-                                                    full_key = f"{sk}_{policy_id}"
-                                                    if sk in date_fields:
-                                                        self._load_existing_date(existing, cfg_key, full_key)
-                                                    elif isinstance(existing.get(cfg_key, ''), bool):
-                                                        st.session_state[full_key] = existing.get(cfg_key, False)
-                                                    else:
-                                                        st.session_state[full_key] = existing.get(cfg_key, '')
-                                                st.session_state[expand_key] = True
-                                                st.session_state[editing_key] = True
-                                                st.rerun()
-                                        with col_remove:
-                                            if st.button("🗑️ Remove", key=f"remove_{prefix}_{policy_id}"):
-                                                del policies[policy_id]
-                                                st.session_state.config_data[config_key] = policies
-                                                st.success(f"✅ Removed {prefix}ed policy: {policy_id}")
-                                                st.rerun()
-                                    else:
-                                        if expand_key not in st.session_state:
-                                            st.session_state[expand_key] = False
-                                        if st.button(add_button_label, key=f"toggle_{prefix}_{policy_id}"):
-                                            for sk in field_map:
-                                                st.session_state.pop(f"{sk}_{policy_id}", None)
-                                            st.session_state[expand_key] = not st.session_state[expand_key]
-                                            st.session_state[editing_key] = False
-                                            st.rerun()
-
-                                if st.session_state.get(expand_key, False):
-                                    is_editing = st.session_state.get(editing_key, False)
-                                    with st.container():
-                                        st.markdown("---")
-                                        action = "Edit" if is_editing else "Configure"
-                                        st.markdown(f"**{action} {config_noun} for {policy_id}**")
-                                        render_form(policy_id, policies, is_editing)
-                        else:
-                            st.info(f"No policies found for {baseline_name} product")
-
-                st.divider()
-            else:
-                st.info("ℹ️ No policies available for selected products")
-        else:
+        if not (selected_baselines and self.available_policies):
             st.warning("⚠️ Please select products in the Main tab first to see available policies")
+        elif not selected_baseline_policies:
+            st.info("ℹ️ No policies available for selected products")
+        else:
+            st.markdown("**Available Policies from Selected Products:**")
+            baseline_tabs = st.tabs(list(selected_baseline_policies.keys()))
+            for i, (baseline_name, baseline_policies) in enumerate(
+                selected_baseline_policies.items(),
+            ):
+                with baseline_tabs[i]:
+                    self._render_baseline_policy_list(
+                        baseline_name, baseline_policies, policies,
+                        config_key=config_key, prefix=prefix,
+                        configured_label=configured_label,
+                        add_button_label=add_button_label,
+                        config_noun=config_noun,
+                        field_map=field_map, date_fields=date_fields,
+                        render_form=render_form,
+                    )
+            st.divider()
 
         render_summary(policies)
         st.markdown('</div>', unsafe_allow_html=True)
+
+    def _render_baseline_policy_list(
+        self, baseline_name, baseline_policies, policies, *,
+        config_key, prefix, configured_label, add_button_label,
+        config_noun, field_map, date_fields, render_form,
+    ):
+        """Render the policy rows for a single baseline inside its tab."""
+        if not baseline_policies:
+            st.info(f"No policies found for {baseline_name} product")
+            return
+        for policy_id, policy_desc in baseline_policies.items():
+            self._render_policy_row(
+                policy_id, policy_desc, policies,
+                config_key=config_key, prefix=prefix,
+                configured_label=configured_label,
+                add_button_label=add_button_label,
+                config_noun=config_noun,
+                field_map=field_map, date_fields=date_fields,
+                render_form=render_form,
+            )
+
+    def _render_policy_row(
+        self, policy_id, policy_desc, policies, *,
+        config_key, prefix, configured_label, add_button_label,
+        config_noun, field_map, date_fields, render_form,
+    ):
+        """Render a single policy's status label, action buttons, and inline form."""
+        is_configured = policy_id in policies
+        expand_key = f"expand_{prefix}_{policy_id}"
+        editing_key = f"editing_{prefix}_{policy_id}"
+
+        col1, col2 = st.columns([4, 1])
+        with col1:
+            if is_configured:
+                st.markdown(f"🟢 **{policy_id}** ({configured_label})")
+            elif st.session_state.get(expand_key, False):
+                st.markdown(f"🟠 **{policy_id}** (Configuring...)")
+            else:
+                st.markdown(f"**{policy_id}**")
+            st.caption(policy_desc)
+
+        with col2:
+            if is_configured:
+                col_edit, col_remove = st.columns(2)
+                with col_edit:
+                    if st.button("✏️ Edit", key=f"edit_{prefix}_{policy_id}"):
+                        self._populate_edit_fields(policies[policy_id], field_map, date_fields, policy_id)
+                        st.session_state[expand_key] = True
+                        st.session_state[editing_key] = True
+                        st.rerun()
+                with col_remove:
+                    if st.button("🗑️ Remove", key=f"remove_{prefix}_{policy_id}"):
+                        del policies[policy_id]
+                        st.session_state.config_data[config_key] = policies
+                        st.success(f"✅ Removed {prefix}ed policy: {policy_id}")
+                        st.rerun()
+            else:
+                if expand_key not in st.session_state:
+                    st.session_state[expand_key] = False
+                if st.button(add_button_label, key=f"toggle_{prefix}_{policy_id}"):
+                    for sk in field_map:
+                        st.session_state.pop(f"{sk}_{policy_id}", None)
+                    st.session_state[expand_key] = not st.session_state[expand_key]
+                    st.session_state[editing_key] = False
+                    st.rerun()
+
+        if st.session_state.get(expand_key, False):
+            is_editing = st.session_state.get(editing_key, False)
+            with st.container():
+                st.markdown("---")
+                action = "Edit" if is_editing else "Configure"
+                st.markdown(f"**{action} {config_noun} for {policy_id}**")
+                render_form(policy_id, policies, is_editing)
+
+    def _populate_edit_fields(self, existing, field_map, date_fields, policy_id):
+        """Load existing policy values into session state for editing."""
+        for sk, cfg_key in field_map.items():
+            full_key = f"{sk}_{policy_id}"
+            if sk in date_fields:
+                self._load_existing_date(existing, cfg_key, full_key)
+            elif isinstance(existing.get(cfg_key, ''), bool):
+                st.session_state[full_key] = existing.get(cfg_key, False)
+            else:
+                st.session_state[full_key] = existing.get(cfg_key, '')
 
     # --- Omit-specific form and summary ---
 
@@ -1656,7 +1697,7 @@ class ScubaConfigApp:
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # TODO: Re-enable Advanced tab when auth integration is ready
+    # NOTE(deferred): Re-enable Advanced tab when auth integration is ready
     # def render_advanced_tab(self):
     #     """Render advanced configuration tab"""
     #     st.markdown('<div class="section-container">', unsafe_allow_html=True)
@@ -1852,7 +1893,8 @@ class ScubaConfigApp:
         # Output settings
         if data.get('outputpath') and data['outputpath'] != './':
             config['outputpath'] = data['outputpath']
-        config['darkmode'] = 'true' if data.get('darkmode') else 'false'
+        if data.get('darkmode'):
+            config['darkmode'] = True
         if data.get('quiet'):
             config['quiet'] = data['quiet']
 
