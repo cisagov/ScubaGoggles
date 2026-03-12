@@ -20,11 +20,14 @@ import re
 import streamlit as st
 import yaml
 
+from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 from scubagoggles.ui.validation import ConfigValidator
 
 current_dir = Path(__file__).parent.parent.parent
 if str(current_dir) not in sys.path:
     sys.path.insert(0, str(current_dir))
+
+from scubagoggles.scuba_constants import OPA_VERSION
 
 scubagoggles_available = True
 
@@ -49,7 +52,6 @@ except ImportError:
 
     UserConfig = MockUserConfig
     Version = MockVersion
-    OPA_VERSION = "0.70.0"
 
 
 class ScubaConfigApp:
@@ -85,12 +87,6 @@ class ScubaConfigApp:
 
         _defaults = {
             'orgname': '', 'orgunitname': '', 'description': '',
-            'customerid_advanced': ('customerid', ''),
-            'subjectemail_advanced': ('subjectemail', ''),
-            'credentials_advanced': ('credentials', ''),
-            'output_path_advanced': ('outputpath', './'),
-            'quiet_mode': ('quiet', False),
-            'dark_mode_advanced': ('darkmode', False),
         }
         for widget_key, source in _defaults.items():
             if widget_key not in st.session_state:
@@ -103,67 +99,38 @@ class ScubaConfigApp:
                         st.session_state.config_data.get(widget_key, source)
                     )
 
-    def parse_baseline_policies(self) -> Dict[str, Dict[str, str]]:
-        """Parse policies from baseline markdown files"""
-        policies = {}
+    @staticmethod
+    def parse_baseline_policies() -> Dict[str, Dict[str, str]]:
+        """Parse policies from baseline markdown files using MarkdownParser.
+
+        Returns a dict keyed by uppercase product name, where each value is
+        a dict mapping policy ID to its description text.
+        """
+
         baseline_dir = Path('scubagoggles/baselines')
-
         if not baseline_dir.exists():
-            return policies
+            return {}
 
-        for md_file in baseline_dir.glob('*.md'):
-            if md_file.name == 'README.md':
-                continue
+        products = [
+            f.stem for f in baseline_dir.glob('*.md')
+            if f.name != 'README.md'
+        ]
+        if not products:
+            return {}
 
-            try:
-                content = md_file.read_text(encoding='utf-8')
-                baseline_name = md_file.stem.upper()
-                policies[baseline_name] = self.extract_policies_from_markdown(
-                    content,
-                    baseline_name,
-                )
-            except Exception:
-                # Skip files that can't be parsed
-                continue
+        try:
+            parser = MarkdownParser(baseline_dir)
+            parsed = parser.parse_baselines(products)
+        except (MarkdownParserError, OSError):
+            return {}
 
-        return policies
-
-    def extract_policies_from_markdown(self, content: str, _baseline_name: str) -> Dict[str, str]:
-        """Extract policy IDs and titles from markdown content"""
-        policies = {}
-        lines = content.split('\n')
-
-        in_policies_section = False
-        current_policy_id = None
-
-        for line in lines:
-            line = line.strip()
-
-            # Check if we're entering the policies section
-            if line == '### Policies':
-                in_policies_section = True
-                continue
-
-            # Check if we're leaving the policies section
-            if in_policies_section and line.startswith('### ') and line != '### Policies':
-                in_policies_section = False
-                continue
-
-            # Extract policy IDs
-            if in_policies_section and line.startswith('#### GWS.'):
-                # Extract policy ID (remove #### and any trailing text)
-                policy_id = line.replace('#### ', '').split()[0]
-                current_policy_id = policy_id
-
-                # Get the next line which should contain the policy description
-                continue
-
-            # Get policy description (first line after policy ID)
-            if in_policies_section and current_policy_id and not line.startswith('#') and line:
-                # Clean up the description
-                description = line.rstrip('.')
-                policies[current_policy_id] = description
-                current_policy_id = None
+        policies: Dict[str, Dict[str, str]] = {}
+        for product, groups in parsed.items():
+            flat: Dict[str, str] = {}
+            for group in groups:
+                for control in group['Controls']:
+                    flat[control['Id']] = control['Value']
+            policies[product.upper()] = flat
 
         return policies
 
@@ -617,7 +584,7 @@ class ScubaConfigApp:
             self._import_auth_fields(config)
             self._import_baselines(config)
             self._import_output_settings(config)
-            self._import_advanced_sections(config)
+            self._import_policy_and_account_sections(config)
             self._show_import_summary()
             st.rerun()
 
@@ -681,8 +648,8 @@ class ScubaConfigApp:
             st.session_state.config_data['quiet'] = bool(config['quiet'])
 
     @staticmethod
-    def _import_advanced_sections(config: dict):
-        """Import omit-policy, annotate-policy, and break-glass accounts."""
+    def _import_policy_and_account_sections(config: dict):
+        """Import omit-policy, annotate-policy, break-glass accounts, and DNS settings."""
         if 'omitpolicy' in config and isinstance(config['omitpolicy'], dict):
             st.session_state.config_data['omitpolicy'] = config['omitpolicy']
 
@@ -1810,123 +1777,6 @@ class ScubaConfigApp:
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # NOTE(deferred): Re-enable Advanced tab when auth integration is ready
-    # def render_advanced_tab(self):
-    #     """Render advanced configuration tab"""
-    #     st.markdown('<div class="section-container">', unsafe_allow_html=True)
-    #     st.markdown('<h2 class="section-title">Advanced Configuration</h2>', unsafe_allow_html=True)
-    #
-    #     # Authentication Settings
-    #     st.subheader("🔐 Authentication Settings")
-    #
-    #     auth_method = st.selectbox(
-    #         "Authentication Method",
-    #         ["Service Account", "OAuth 2.0", "Application Default Credentials"],
-    #         index=0,
-    #         help="Choose the authentication method for Google Workspace API access",
-    #         key="auth_method"
-    #     )
-    #     st.session_state.config_data['auth_method'] = auth_method
-    #
-    #     if auth_method == "Service Account":
-    #         st.info("📋 Service account authentication requires a JSON credentials file and subject email.")
-    #
-    #         # Service Account specific fields
-    #         col1, col2 = st.columns([1, 2])
-    #         with col1:
-    #             st.markdown("**Customer ID***")
-    #         with col2:
-    #             customerid = st.text_input(
-    #                 "Customer ID",
-    #                 placeholder="Your Google Workspace Customer ID",
-    #                 help="The unique ID assigned to your GWS tenant. Required for service account authentication.",
-    #                 key="customerid_advanced",
-    #                 label_visibility="collapsed"
-    #             )
-    #             st.session_state.config_data['customerid'] = customerid
-    #             if customerid:
-    #                 st.caption("Required for service account authentication")
-    #
-    #         col1, col2 = st.columns([1, 2])
-    #         with col1:
-    #             st.markdown("**Subject Email***")
-    #         with col2:
-    #             subjectemail = st.text_input(
-    #                 "Subject Email",
-    #                 placeholder="admin@example.com",
-    #                 help="Email address of the user the service account should act on behalf of (must be super admin)",
-    #                 key="subjectemail_advanced",
-    #                 label_visibility="collapsed"
-    #             )
-    #             st.session_state.config_data['subjectemail'] = subjectemail
-    #             if subjectemail:
-    #                 st.caption("Must be a super admin user")
-    #
-    #         # File path input for credentials
-    #         creds_path = st.text_input(
-    #             "📁 Service Account JSON File Path",
-    #             placeholder="/path/to/service-account.json",
-    #             help="Path to your service account credentials file",
-    #             key="credentials_advanced"
-    #         )
-    #         st.session_state.config_data['credentials'] = creds_path
-    #         if creds_path:
-    #             if Path(creds_path).exists():
-    #                 st.success(f"✅ Using credentials: {creds_path}")
-    #             else:
-    #                 st.error(f"❌ File not found: {creds_path}")
-    #     elif auth_method == "OAuth 2.0":
-    #         st.info("🌐 OAuth 2.0 will open a browser window for interactive authentication.")
-    #     else:
-    #         st.info("🔧 Application Default Credentials will use your environment's default authentication.")
-    #
-    #     st.divider()
-    #
-    #     # Output Settings
-    #     st.subheader("📁 Output Settings")
-    #
-    #     col1, col2 = st.columns(2)
-    #     with col1:
-    #         output_format = st.selectbox(
-    #             "Output Format",
-    #             ["HTML", "JSON", "Both"],
-    #             index=0,
-    #             help="Choose the format for assessment reports",
-    #             key="output_format"
-    #         )
-    #         st.session_state.config_data['output_format'] = output_format
-    #
-    #     with col2:
-    #         output_path = st.text_input(
-    #             "Output Directory",
-    #             placeholder="./reports/",
-    #             help="Directory where reports will be saved",
-    #             key="output_path_advanced"
-    #         )
-    #         st.session_state.config_data['outputpath'] = output_path
-    #
-    #     st.divider()
-    #
-    #     # Execution Settings
-    #     st.subheader("⚙️ Execution Settings")
-    #
-    #     col1, col2 = st.columns(2)
-    #     with col1:
-    #         quiet = st.checkbox(
-    #             "Quiet Mode",
-    #             help="Suppress non-essential output during execution",
-    #             key="quiet_mode"
-    #         )
-    #         st.session_state.config_data['quiet'] = quiet
-    #
-    #     with col2:
-    #         dark_mode = st.checkbox(
-    #             "Dark Mode Reports",
-    #             help="Generate reports with dark theme",
-    #             key="dark_mode_advanced"
-    #         )
-    #         st.session_state.config_data['darkmode'] = dark_mode
-
     def render_preview_tab(self):
         """Render configuration preview"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
@@ -2027,14 +1877,11 @@ class ScubaConfigApp:
                 "default configuration values may be inaccurate."
             )
 
-        # Create tabs similar to ScubaGear
-        # NOTE: Advanced tab is hidden/disabled
         tabs = st.tabs([
             "🏢 Main",
             "🚫 Omit Policies",
             "📝 Annotate Policies",
             "🚨 Break Glass",
-            # "⚙️ Advanced",  # Hidden - functionality commented out
             "👁️ Preview"
         ])
 
@@ -2049,10 +1896,6 @@ class ScubaConfigApp:
 
         with tabs[3]:
             self.render_break_glass_tab()
-
-        # NOTE: Advanced tab hidden
-        # with tabs[4]:
-        #     self.render_advanced_tab()
 
         with tabs[4]:
             self.render_preview_tab()

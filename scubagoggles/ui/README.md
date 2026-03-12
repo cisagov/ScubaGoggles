@@ -40,7 +40,7 @@ The application consolidates all configuration capabilities into a single, profe
 ### Prerequisites
 
 1. **ScubaGoggles** must be installed and available
-2. **Python 3.8+** is required
+2. **Python 3.10+** is required
 3. **Streamlit** and UI dependencies
 
 ### Install Dependencies
@@ -143,11 +143,6 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
    - Check file permissions for uploaded files
    - Ensure YAML files are properly formatted
    - Verify configuration file schema matches ScubaGoggles requirements
-
-6. **No Policies Available**
-   - Ensure baseline markdown files exist in `scubagoggles/baselines/`
-   - Select at least one product in the Main tab
-   - Verify baseline files contain policy definitions
 
 ### Getting Help
 
