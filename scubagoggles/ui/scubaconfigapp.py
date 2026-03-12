@@ -1276,9 +1276,9 @@ class ScubaConfigApp:
 
         st.markdown("## 🔗 Resources")
         st.markdown("""
-        - [ScubaGoggles Documentation](https://github.com/cisagov/ScubaGoggles)
+        - [ScubaGoggles GitHub](https://github.com/cisagov/ScubaGoggles)
         - [SCuBA Project](https://cisa.gov/scuba)
-        - [User Guide](https://github.com/cisagov/ScubaGoggles/blob/main/docs)
+        - [Documentation](https://github.com/cisagov/ScubaGoggles/blob/main/docs)
         """)
 
         # Close button
