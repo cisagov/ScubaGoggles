@@ -1,0 +1,406 @@
+{
+  "comment": "tests get_policies() in PolicyAPI, MaxMap reduction, gmail_rules",
+  "orgunits": {
+    "03ph8a2z2dvk5ts": {
+      "name": "topOU",
+      "path": "/"
+    }
+  },
+  "response": {
+    "policies": [
+      {
+        "name": "policies/ahp3f257c2szng5iedezjp4byykqc",
+        "customer": "customers/C03ymv5su",
+        "policyQuery": {
+          "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+          "sortOrder": 201.00124
+        },
+        "setting": {
+          "type": "settings/gmail.service_status",
+          "value": {
+            "serviceState": "ENABLED"
+          }
+        },
+        "type": "ADMIN"
+      },
+      {
+        "name": "policies/ahp3f257c2c7p5gpcxezjp4byykui",
+        "customer": "customers/C03ymv5su",
+        "policyQuery": {
+          "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+          "sortOrder": 201.00048
+        },
+        "setting": {
+          "type": "settings/gmail.spam_override_lists",
+          "value": {
+            "spamOverride": [
+              {
+                "description": "Scuba",
+                "enableAggressiveFiltering": true,
+                "addToQuarantine": true,
+                "quarantineId": 0,
+                "bypassInternalSenders": false,
+                "bypassSelectedSenders": true,
+                "bypassSenderAllowlist": [
+                  "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll"
+                ],
+                "hideWarningBannerFromSelectedSenders": false,
+                "hideWarningBannerForAll": false,
+                "ruleId": "6776f-02rvqlb32nzzmh1:00gjdgxs17dp8vu"
+              }
+            ]
+          }
+        },
+        "type": "ADMIN"
+      },
+      {
+        "name": "policies/ahp3f257c2c7p5gpcxezjp4byykuk",
+        "customer": "customers/C03ymv5su",
+        "policyQuery": {
+          "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+          "sortOrder": 201.00048
+        },
+        "setting": {
+          "type": "settings/gmail.blocked_sender_lists",
+          "value": {
+            "blockedSenders": [
+              {
+                "description": "Scuba Blocked senders",
+                "senderBlocklist": [
+                  "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te"
+                ],
+                "bypassApprovedSender": false,
+                "bypassApprovedSenderAllowlist": [
+                  "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll"
+                ],
+                "ruleId": "6609f-02rvqlb32nzzmh1:00gjdgxs3rdcrjn"
+              }
+            ]
+          }
+        },
+        "type": "ADMIN"
+      },
+      {
+        "name": "policies/ahp3f257c2c7p5gpcxezjp4byykuu",
+        "customer": "customers/C03ymv5su",
+        "policyQuery": {
+          "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+          "sortOrder": 201.00048
+        },
+        "setting": {
+          "type": "settings/gmail.rule_states",
+          "value": {
+            "ruleStates": [
+              {
+                "ruleId": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te",
+                "enabled": false
+              },
+              {
+                "ruleId": "fb580-02rvqlb32nzzmh1:00gjdgxs3dy6vkm",
+                "enabled": true
+              },
+              {
+                "ruleId": "4906c-02rvqlb32nzzmh1:00gjdgxs1t3h5sf",
+                "enabled": true
+              },
+              {
+                "ruleId": "705ca-02rvqlb32nzzmh1:00gjdgxs4d34og8",
+                "enabled": true
+              },
+              {
+                "ruleId": "6776f-02rvqlb32nzzmh1:00gjdgxs17dp8vu",
+                "enabled": false
+              },
+              {
+                "ruleId": "6609f-02rvqlb32nzzmh1:00gjdgxs3rdcrjn",
+                "enabled": true
+              }
+            ]
+          }
+        },
+        "type": "ADMIN"
+      },
+      {
+        "name": "policies/ahp3f257c3u4jshwapezjp4byykug",
+        "customer": "customers/C03ymv5su",
+        "policyQuery": {
+          "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+          "sortOrder": 201.0005
+        },
+        "setting": {
+          "type": "settings/gmail.email_address_lists",
+          "value": {
+            "emailAddressList": [
+              {
+                "id": "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll",
+                "name": "Scuba",
+                "addressList": {
+                  "address": [
+                    {
+                      "address": "cisaent.onmicrosoft.com",
+                      "requireAddressVerification": true
+                    },
+                    {
+                      "address": "scubagws.org",
+                      "requireAddressVerification": true
+                    },
+                    {
+                      "address": "spam@example.com",
+                      "requireAddressVerification": true
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te",
+                "name": "Blocked Senders",
+                "blockedAddressList": {
+                  "address": [
+                    {
+                      "address": "functionaltest@joe.com"
+                    },
+                    {
+                      "address": "support@3232363.ohtam8c.com"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "fb61c-02rvqlb30hfhzs9:00gjdgxs1t3h5sf",
+                "name": "Testing",
+                "blockedAddressList": {
+                  "address": [
+                    {
+                      "address": "info@test.org"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "059a0-02rvqlb30hfhzs9:00gjdgxs4d34og8",
+                "name": "Example",
+                "addressList": {
+                  "address": [
+                    {
+                      "address": "spam@example.com",
+                      "requireAddressVerification": true
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1",
+                "name": "RoyTestList",
+                "addressList": {
+                  "address": [
+                    {
+                      "address": "test.com",
+                      "requireAddressVerification": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "type": "ADMIN"
+      },
+      {
+        "name": "policies/ahp3f257c3u4jshwapezjp4byykuu",
+        "customer": "customers/C03ymv5su",
+        "policyQuery": {
+          "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
+          "sortOrder": 201.0005
+        },
+        "setting": {
+          "type": "settings/gmail.rule_states",
+          "value": {
+            "ruleStates": [
+              {
+                "ruleId": "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll",
+                "enabled": true
+              },
+              {
+                "ruleId": "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te",
+                "enabled": true
+              },
+              {
+                "ruleId": "fb61c-02rvqlb30hfhzs9:00gjdgxs1t3h5sf",
+                "enabled": true
+              },
+              {
+                "ruleId": "059a0-02rvqlb30hfhzs9:00gjdgxs4d34og8",
+                "enabled": true
+              },
+              {
+                "ruleId": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1",
+                "enabled": true
+              }
+            ]
+          }
+        },
+        "type": "ADMIN"
+      }
+    ]
+  },
+  "defaults": {},
+  "results": {
+    "topOU": {
+      "gmail_email_address_lists": {
+        "emailAddressList": [
+          {
+            "id": "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll",
+            "name": "Scuba",
+            "addressList": {
+              "address": [
+                {
+                  "address": "cisaent.onmicrosoft.com",
+                  "requireAddressVerification": true
+                },
+                {
+                  "address": "scubagws.org",
+                  "requireAddressVerification": true
+                },
+                {
+                  "address": "spam@example.com",
+                  "requireAddressVerification": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te",
+            "name": "Blocked Senders",
+            "blockedAddressList": {
+              "address": [
+                {
+                  "address": "functionaltest@joe.com"
+                },
+                {
+                  "address": "support@3232363.ohtam8c.com"
+                }
+              ]
+            }
+          },
+          {
+            "id": "fb61c-02rvqlb30hfhzs9:00gjdgxs1t3h5sf",
+            "name": "Testing",
+            "blockedAddressList": {
+              "address": [
+                {
+                  "address": "info@test.org"
+                }
+              ]
+            }
+          },
+          {
+            "id": "059a0-02rvqlb30hfhzs9:00gjdgxs4d34og8",
+            "name": "Example",
+            "addressList": {
+              "address": [
+                {
+                  "address": "spam@example.com",
+                  "requireAddressVerification": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1",
+            "name": "RoyTestList",
+            "addressList": {
+              "address": [
+                {
+                  "address": "test.com",
+                  "requireAddressVerification": true
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "gmail_rule_states": {
+        "ruleStates": [
+          {
+            "ruleId": "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll",
+            "enabled": true
+          },
+          {
+            "ruleId": "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te",
+            "enabled": true
+          },
+          {
+            "ruleId": "fb61c-02rvqlb30hfhzs9:00gjdgxs1t3h5sf",
+            "enabled": true
+          },
+          {
+            "ruleId": "059a0-02rvqlb30hfhzs9:00gjdgxs4d34og8",
+            "enabled": true
+          },
+          {
+            "ruleId": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1",
+            "enabled": true
+          },
+          {
+            "ruleId": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te",
+            "enabled": false
+          },
+          {
+            "ruleId": "fb580-02rvqlb32nzzmh1:00gjdgxs3dy6vkm",
+            "enabled": true
+          },
+          {
+            "ruleId": "4906c-02rvqlb32nzzmh1:00gjdgxs1t3h5sf",
+            "enabled": true
+          },
+          {
+            "ruleId": "705ca-02rvqlb32nzzmh1:00gjdgxs4d34og8",
+            "enabled": true
+          },
+          {
+            "ruleId": "6776f-02rvqlb32nzzmh1:00gjdgxs17dp8vu",
+            "enabled": false
+          },
+          {
+            "ruleId": "6609f-02rvqlb32nzzmh1:00gjdgxs3rdcrjn",
+            "enabled": true
+          }
+        ]
+      },
+      "gmail_spam_override_lists": {
+        "spamOverride": []
+      },
+      "gmail_blocked_sender_lists": {
+        "blockedSenders": [
+          {
+            "description": "Scuba Blocked senders",
+            "senderBlocklist": [
+              {
+                "name": "Blocked Senders",
+                "list": [
+                  "functionaltest@joe.com",
+                  "support@3232363.ohtam8c.com"
+                ]
+              }
+            ],
+            "bypassApprovedSender": false,
+            "bypassApprovedSenderAllowlist": [
+              {
+                "name": "Scuba",
+                "list": [
+                  "cisaent.onmicrosoft.com",
+                  "scubagws.org",
+                  "spam@example.com"
+                ]
+              }
+            ],
+            "ruleId": "6609f-02rvqlb32nzzmh1:00gjdgxs3rdcrjn"
+          }
+        ]
+      },
+      "gmail_service_status": {
+        "serviceState": "ENABLED"
+      }
+    }
+  }
+}
