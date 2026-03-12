@@ -18,9 +18,9 @@ from typing import Any, Dict
 
 import re
 import streamlit as st
+import yaml
 
 from scubagoggles.ui.validation import ConfigValidator
-import yaml
 
 current_dir = Path(__file__).parent.parent.parent
 if str(current_dir) not in sys.path:
@@ -64,8 +64,14 @@ class ScubaConfigApp:
             st.session_state.config_data = {
                 'orgname': '',
                 'orgunitname': '',
+                'subjectemail': '',
+                'customerid': '',
                 'description': '',
                 'baselines': [],
+                'credentials': '',
+                'outputpath': './',
+                'darkmode': False,
+                'quiet': False,
                 'omitpolicy': {},
                 'annotatepolicy': {},
                 'breakglassaccounts': [],
@@ -75,12 +81,25 @@ class ScubaConfigApp:
         if 'ui_show_help' not in st.session_state:
             st.session_state.ui_show_help = False
 
-        _defaults = {'orgname': '', 'orgunitname': '', 'description': ''}
-        for widget_key, fallback in _defaults.items():
+        _defaults = {
+            'orgname': '', 'orgunitname': '', 'description': '',
+            'customerid_advanced': ('customerid', ''),
+            'subjectemail_advanced': ('subjectemail', ''),
+            'credentials_advanced': ('credentials', ''),
+            'output_path_advanced': ('outputpath', './'),
+            'quiet_mode': ('quiet', False),
+            'dark_mode_advanced': ('darkmode', False),
+        }
+        for widget_key, source in _defaults.items():
             if widget_key not in st.session_state:
-                st.session_state[widget_key] = (
-                    st.session_state.config_data.get(widget_key, fallback)
-                )
+                if isinstance(source, tuple):
+                    st.session_state[widget_key] = (
+                        st.session_state.config_data.get(source[0], source[1])
+                    )
+                else:
+                    st.session_state[widget_key] = (
+                        st.session_state.config_data.get(widget_key, source)
+                    )
 
     def parse_baseline_policies(self) -> Dict[str, Dict[str, str]]:
         """Parse policies from baseline markdown files"""
@@ -604,6 +623,14 @@ class ScubaConfigApp:
                 st.session_state.config_data['description'] = config['Description']
                 st.session_state['description'] = config['Description']  # Update widget key
 
+            # Import authentication fields
+            if 'customerid' in config:
+                st.session_state.config_data['customerid'] = config['customerid']
+            if 'subjectemail' in config:
+                st.session_state.config_data['subjectemail'] = config['subjectemail']
+            if 'credentials' in config:
+                st.session_state.config_data['credentials'] = config['credentials']
+
             # Import baselines and update checkbox states
             if 'baselines' in config:
                 # Handle both list and string formats
@@ -620,14 +647,24 @@ class ScubaConfigApp:
 
                 st.session_state.config_data['baselines'] = valid_baselines
 
-                # Update individual checkbox states for UI consistency
-                available_baselines = list(baseline_info.keys())
-                for baseline in available_baselines:
-                    st.session_state[f"baseline_{baseline}"] = baseline in valid_baselines
+                self._sync_baseline_checkboxes(valid_baselines)
 
                 # Warn about invalid baselines
                 if invalid_baselines:
                     st.warning(f"⚠️ **Skipped unknown baselines:** {', '.join(invalid_baselines)}")
+
+            # Import output settings
+            if 'outputpath' in config:
+                st.session_state.config_data['outputpath'] = config['outputpath']
+            if 'darkmode' in config:
+                # Handle both string and boolean values
+                darkmode = config['darkmode']
+                if isinstance(darkmode, str):
+                    st.session_state.config_data['darkmode'] = darkmode.lower() == 'true'
+                else:
+                    st.session_state.config_data['darkmode'] = bool(darkmode)
+            if 'quiet' in config:
+                st.session_state.config_data['quiet'] = bool(config['quiet'])
 
             # Import advanced configuration sections
             if 'omitpolicy' in config and isinstance(config['omitpolicy'], dict):
@@ -764,11 +801,27 @@ class ScubaConfigApp:
         if not data.get('baselines'):
             errors.append("At least 1 product must be selected for the configuration to be valid.")
 
+        creds_path = data.get('credentials', '')
+        if creds_path:
+            valid, err = ConfigValidator.validate_credentials_file(creds_path)
+            if not valid:
+                errors.append(err)
+
+        output_path = data.get('outputpath', '')
+        if output_path and output_path != './':
+            valid, err = ConfigValidator.validate_output_path(output_path)
+            if not valid:
+                errors.append(err)
+
         break_glass = data.get('breakglassaccounts', [])
         if break_glass:
-            is_valid, error = ConfigValidator.validate_break_glass_accounts(break_glass)
-            if not is_valid:
-                errors.append(error)
+            valid, err = ConfigValidator.validate_break_glass_accounts(break_glass)
+            if not valid:
+                errors.append(err)
+
+        subject_email = data.get('subjectemail', '')
+        if subject_email and not ConfigValidator.validate_email(subject_email):
+            errors.append("Subject email has an invalid format.")
 
         return errors
 
@@ -789,6 +842,349 @@ class ScubaConfigApp:
         except Exception:
             for err in errors:
                 st.error(f"❌ {err}")
+
+    # ------------------------------------------------------------------
+    # Shared helpers to reduce duplication across tabs
+    # ------------------------------------------------------------------
+
+    def _get_selected_baseline_policies(self) -> Dict[str, Dict[str, str]]:
+        """Map selected baselines to their available policies."""
+        selected_baselines = st.session_state.config_data.get('baselines', [])
+        result: Dict[str, Dict[str, str]] = {}
+        if selected_baselines and self.available_policies:
+            for baseline in selected_baselines:
+                upper = baseline.upper()
+                if upper in self.available_policies:
+                    result[baseline.title()] = self.available_policies[upper]
+        return result
+
+    @staticmethod
+    def _normalize_session_date(key: str):
+        """Coerce a session-state date value from string to date object."""
+        if key in st.session_state and isinstance(st.session_state[key], str):
+            try:
+                st.session_state[key] = datetime.strptime(
+                    st.session_state[key], '%Y-%m-%d',
+                ).date()
+            except (ValueError, TypeError):
+                del st.session_state[key]
+
+    @staticmethod
+    def _load_existing_date(existing_data: dict, config_key: str, session_key: str):
+        """Load a date string from config into session state as a date object."""
+        if config_key in existing_data:
+            try:
+                st.session_state[session_key] = datetime.strptime(
+                    existing_data[config_key], '%Y-%m-%d',
+                ).date()
+            except (ValueError, TypeError):
+                st.session_state.pop(session_key, None)
+        else:
+            st.session_state.pop(session_key, None)
+
+    @staticmethod
+    def _parse_config_date(existing_data: dict, config_key: str):
+        """Parse a YYYY-MM-DD string from config, returning None on failure."""
+        raw = existing_data.get(config_key)
+        if raw:
+            try:
+                return datetime.strptime(raw, '%Y-%m-%d').date()
+            except (ValueError, TypeError):
+                pass
+        return None
+
+    def _sync_baseline_checkboxes(self, selected: list):
+        """Synchronise per-baseline checkbox session keys with *selected*."""
+        for baseline in self.get_baseline_info():
+            st.session_state[f"baseline_{baseline}"] = baseline in selected
+
+    @staticmethod
+    def _yaml_array_to_flow(yaml_str: str, key: str) -> str:
+        """Convert a YAML block-style list to flow-style for *key*."""
+        return re.sub(
+            rf'{re.escape(key)}:\n(?:- (.+)\n)+',
+            lambda m: (
+                f'{key}: ['
+                + ', '.join(re.findall(r'- (.+)', m.group(0)))
+                + ']\n'
+            ),
+            yaml_str,
+        )
+
+    # ------------------------------------------------------------------
+    # Generic policy-configuration tab (omit / annotate)
+    # ------------------------------------------------------------------
+
+    def _render_policy_config_tab(
+        self,
+        *,
+        config_key: str,
+        prefix: str,
+        title: str,
+        help_content: str,
+        description: str,
+        configured_label: str,
+        add_button_label: str,
+        config_noun: str,
+        field_map: Dict[str, str],
+        date_fields: set,
+        render_form,
+        render_summary,
+        pre_render=None,
+    ):
+        """Render a policy-configuration tab (shared by omit and annotate).
+
+        Parameters
+        ----------
+        config_key : session-state key holding the policies dict
+        prefix : short string used in widget keys ('omit' / 'annotate')
+        title : tab heading text
+        help_content : HTML for the help expander
+        description : markdown intro paragraph
+        configured_label : status label shown for configured policies
+        add_button_label : text on the "add" button (e.g. '➕ Omit')
+        config_noun : noun for form headers (e.g. 'Omission' / 'Annotation')
+        field_map : maps session-key suffix -> config dict key
+        date_fields : set of session-key suffixes that are date fields
+        render_form : callable(policy_id, policies, is_editing) that renders the form
+        render_summary : callable(policies) that renders the summary section
+        pre_render : optional callable() run before the policy list
+        """
+        st.markdown('<div class="section-container">', unsafe_allow_html=True)
+        st.markdown(f'<h2 class="section-title">{title}</h2>', unsafe_allow_html=True)
+
+        with st.expander(f"ℹ️ Help: {title} Guidelines", expanded=False):
+            st.markdown(help_content, unsafe_allow_html=True)
+
+        st.markdown(description)
+
+        policies = st.session_state.config_data.get(config_key, {})
+
+        if pre_render:
+            pre_render()
+
+        selected_baseline_policies = self._get_selected_baseline_policies()
+        selected_baselines = st.session_state.config_data.get('baselines', [])
+
+        if selected_baselines and self.available_policies:
+            st.markdown("**Available Policies from Selected Products:**")
+
+            if selected_baseline_policies:
+                baseline_tabs = st.tabs(list(selected_baseline_policies.keys()))
+
+                for i, (baseline_name, baseline_policies) in enumerate(
+                    selected_baseline_policies.items(),
+                ):
+                    with baseline_tabs[i]:
+                        if baseline_policies:
+                            for policy_id, policy_desc in baseline_policies.items():
+                                is_configured = policy_id in policies
+                                expand_key = f"expand_{prefix}_{policy_id}"
+                                editing_key = f"editing_{prefix}_{policy_id}"
+
+                                col1, col2 = st.columns([4, 1])
+                                with col1:
+                                    if is_configured:
+                                        st.markdown(f"🟢 **{policy_id}** ({configured_label})")
+                                    elif st.session_state.get(expand_key, False):
+                                        st.markdown(f"🟠 **{policy_id}** (Configuring...)")
+                                    else:
+                                        st.markdown(f"**{policy_id}**")
+                                    st.caption(policy_desc)
+
+                                with col2:
+                                    if is_configured:
+                                        col_edit, col_remove = st.columns(2)
+                                        with col_edit:
+                                            if st.button("✏️ Edit", key=f"edit_{prefix}_{policy_id}"):
+                                                existing = policies[policy_id]
+                                                for sk, cfg_key in field_map.items():
+                                                    full_key = f"{sk}_{policy_id}"
+                                                    if sk in date_fields:
+                                                        self._load_existing_date(existing, cfg_key, full_key)
+                                                    elif isinstance(existing.get(cfg_key, ''), bool):
+                                                        st.session_state[full_key] = existing.get(cfg_key, False)
+                                                    else:
+                                                        st.session_state[full_key] = existing.get(cfg_key, '')
+                                                st.session_state[expand_key] = True
+                                                st.session_state[editing_key] = True
+                                                st.rerun()
+                                        with col_remove:
+                                            if st.button("🗑️ Remove", key=f"remove_{prefix}_{policy_id}"):
+                                                del policies[policy_id]
+                                                st.session_state.config_data[config_key] = policies
+                                                st.success(f"✅ Removed {prefix}ed policy: {policy_id}")
+                                                st.rerun()
+                                    else:
+                                        if expand_key not in st.session_state:
+                                            st.session_state[expand_key] = False
+                                        if st.button(add_button_label, key=f"toggle_{prefix}_{policy_id}"):
+                                            for sk in field_map:
+                                                st.session_state.pop(f"{sk}_{policy_id}", None)
+                                            st.session_state[expand_key] = not st.session_state[expand_key]
+                                            st.session_state[editing_key] = False
+                                            st.rerun()
+
+                                if st.session_state.get(expand_key, False):
+                                    is_editing = st.session_state.get(editing_key, False)
+                                    with st.container():
+                                        st.markdown("---")
+                                        action = "Edit" if is_editing else "Configure"
+                                        st.markdown(f"**{action} {config_noun} for {policy_id}**")
+                                        render_form(policy_id, policies, is_editing)
+                        else:
+                            st.info(f"No policies found for {baseline_name} product")
+
+                st.divider()
+            else:
+                st.info("ℹ️ No policies available for selected products")
+        else:
+            st.warning("⚠️ Please select products in the Main tab first to see available policies")
+
+        render_summary(policies)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # --- Omit-specific form and summary ---
+
+    def _render_omit_form(self, policy_id: str, policies: dict, is_editing: bool):
+        """Render the omit-policy inline form."""
+        existing = policies.get(policy_id, {})
+        existing_rationale = existing.get('rationale', '')
+        existing_expiration = self._parse_config_date(existing, 'expiration')
+
+        rationale = st.text_input(
+            "Rationale (Required)",
+            value=existing_rationale,
+            placeholder="Reason for omitting this policy",
+            key=f"rationale_{policy_id}",
+        )
+
+        self._normalize_session_date(f"expiration_{policy_id}")
+        exp_value = existing_expiration if existing_expiration and existing_expiration >= date.today() else None
+        expiration = st.date_input(
+            "Expiration Date (Optional)",
+            value=exp_value,
+            min_value=date.today(),
+            help="Date after which the policy should no longer be omitted",
+            key=f"expiration_{policy_id}",
+        )
+
+        col_save, col_cancel = st.columns(2)
+        with col_save:
+            label = "💾 Update Omission" if is_editing else "✅ Save Omission"
+            if st.button(label, key=f"save_omit_{policy_id}", type="primary"):
+                if rationale:
+                    cfg: Dict[str, Any] = {'rationale': rationale}
+                    if expiration:
+                        cfg['expiration'] = expiration.strftime('%Y-%m-%d')
+                    policies[policy_id] = cfg
+                    st.session_state.config_data['omitpolicy'] = policies
+                    st.session_state[f"expand_omit_{policy_id}"] = False
+                    st.session_state[f"editing_omit_{policy_id}"] = False
+                    st.success(f"✅ {'Updated' if is_editing else 'Added'} omitted policy: {policy_id}")
+                    st.rerun()
+                else:
+                    st.error("❌ Rationale is required")
+        with col_cancel:
+            if st.button("❌ Cancel", key=f"cancel_omit_{policy_id}"):
+                st.session_state[f"expand_omit_{policy_id}"] = False
+                st.session_state[f"editing_omit_{policy_id}"] = False
+                st.rerun()
+
+    @staticmethod
+    def _render_omit_summary(policies: dict):
+        """Render the omit-policy summary block."""
+        if policies:
+            st.markdown("---")
+            st.subheader("📋 Summary of Omitted Policies")
+            for pid, data in policies.items():
+                st.markdown(f"🚫 **{pid}**: {data.get('rationale', 'No rationale provided')}")
+                if 'expiration' in data:
+                    st.caption(f"Expires: {data['expiration']}")
+        else:
+            st.markdown("---")
+            st.info("ℹ️ No policies are currently omitted")
+
+    # --- Annotate-specific form and summary ---
+
+    def _render_annotate_form(self, policy_id: str, policies: dict, is_editing: bool):
+        """Render the annotate-policy inline form."""
+        existing = policies.get(policy_id, {})
+        existing_comment = existing.get('comment', '')
+        existing_incorrect = existing.get('incorrectresult', False)
+        existing_remediation = self._parse_config_date(existing, 'remediationdate')
+
+        comment = st.text_area(
+            "Comment/Annotation",
+            value=existing_comment,
+            placeholder="Implementation in progress...",
+            help="Comment to add to the report for this policy",
+            key=f"comment_{policy_id}",
+            height=100,
+        )
+
+        col1, col2 = st.columns(2)
+        with col1:
+            incorrect_result = st.checkbox(
+                "Mark as Incorrect Result",
+                value=existing_incorrect,
+                help="Check if the result for this policy is incorrect",
+                key=f"incorrect_{policy_id}",
+            )
+        with col2:
+            self._normalize_session_date(f"remediation_{policy_id}")
+            rem_value = existing_remediation if existing_remediation and existing_remediation >= date.today() else None
+            remediation_date = st.date_input(
+                "Remediation Date (Optional)",
+                value=rem_value,
+                min_value=date.today(),
+                help="Date when a failing control is expected to be implemented",
+                key=f"remediation_{policy_id}",
+            )
+
+        col_save, col_cancel = st.columns(2)
+        with col_save:
+            label = "💾 Update Annotation" if is_editing else "✅ Save Annotation"
+            if st.button(label, key=f"save_annotate_{policy_id}", type="primary"):
+                cfg: Dict[str, Any] = {}
+                if comment:
+                    cfg['comment'] = comment
+                if incorrect_result:
+                    cfg['incorrectresult'] = True
+                if remediation_date:
+                    cfg['remediationdate'] = remediation_date.strftime('%Y-%m-%d')
+                if cfg:
+                    policies[policy_id] = cfg
+                    st.session_state.config_data['annotatepolicy'] = policies
+                    st.session_state[f"expand_annotate_{policy_id}"] = False
+                    st.session_state[f"editing_annotate_{policy_id}"] = False
+                    st.success(f"✅ {'Updated' if is_editing else 'Added'} annotation for policy: {policy_id}")
+                    st.rerun()
+                else:
+                    st.error("❌ At least one annotation field is required")
+        with col_cancel:
+            if st.button("❌ Cancel", key=f"cancel_annotate_{policy_id}"):
+                st.session_state[f"expand_annotate_{policy_id}"] = False
+                st.session_state[f"editing_annotate_{policy_id}"] = False
+                st.rerun()
+
+    @staticmethod
+    def _render_annotate_summary(policies: dict):
+        """Render the annotate-policy summary block."""
+        if policies:
+            st.markdown("---")
+            st.subheader("📋 Summary of Annotated Policies")
+            for pid, data in policies.items():
+                st.markdown(f"📝 **{pid}**")
+                if 'comment' in data:
+                    st.caption(f"Comment: {data['comment']}")
+                if data.get('incorrectresult', False):
+                    st.caption("🔴 Marked as Incorrect Result")
+                if 'remediationdate' in data:
+                    st.caption(f"Remediation Date: {data['remediationdate']}")
+        else:
+            st.markdown("---")
+            st.info("ℹ️ No policies are currently annotated")
 
     def render_header(self):
         """Render a header toolbar matching SCuBAGear style"""
@@ -1009,17 +1405,13 @@ class ScubaConfigApp:
         with col1:
             if st.button("✅ Select All", key="select_all_main"):
                 st.session_state.config_data['baselines'] = available_baselines.copy()
-                # Update individual checkbox states
-                for baseline in available_baselines:
-                    st.session_state[f"baseline_{baseline}"] = True
+                self._sync_baseline_checkboxes(available_baselines)
                 st.rerun()
 
         with col2:
             if st.button("❌ Clear All", key="clear_all_main"):
                 st.session_state.config_data['baselines'] = []
-                # Update individual checkbox states
-                for baseline in available_baselines:
-                    st.session_state[f"baseline_{baseline}"] = False
+                self._sync_baseline_checkboxes([])
                 st.rerun()
 
         # Create product grid with icons and policy counts
@@ -1074,12 +1466,11 @@ class ScubaConfigApp:
 
     def render_omit_policies_tab(self):
         """Render omit policies configuration tab"""
-        st.markdown('<div class="section-container">', unsafe_allow_html=True)
-        st.markdown('<h2 class="section-title">Omit Policies</h2>', unsafe_allow_html=True)
-
-        # Context help for omit policies
-        with st.expander("ℹ️ Help: Policy Omission Guidelines", expanded=False):
-            st.markdown("""
+        self._render_policy_config_tab(
+            config_key='omitpolicy',
+            prefix='omit',
+            title='Omit Policies',
+            help_content="""
             <div class="context-help">
             <strong>What is Policy Omission?</strong><br>
             Excluding specific security policies from ScubaGoggles evaluation when they don't apply to your organization or are handled by external controls.<br><br>
@@ -1097,9 +1488,8 @@ class ScubaConfigApp:
 
             <strong>Important:</strong> All omissions should be documented and approved by your security team.
             </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("""
+            """,
+            description="""
         **Use this section to exclude specific policies from ScubaGoggles evaluation.**
 
         ⚠️ **Important:** Any omitted policies should be carefully considered and documented as part of your organization's cybersecurity risk management program.
@@ -1108,217 +1498,37 @@ class ScubaConfigApp:
         - Policy is implemented by a third-party service that ScubaGoggles cannot audit
         - Policy is not applicable to your organization
         - Accepting risk for specific controls with proper documentation
-        """)
+        """,
+            configured_label='Omitted',
+            add_button_label='➕ Omit',
+            config_noun='Omission',
+            field_map={'rationale': 'rationale', 'expiration': 'expiration'},
+            date_fields={'expiration'},
+            render_form=self._render_omit_form,
+            render_summary=self._render_omit_summary,
+        )
 
-        # Get current omit policies
-        omit_policies = st.session_state.config_data.get('omitpolicy', {})
+    @staticmethod
+    def _annotate_pre_render():
+        """Handle tab-switch signal and pre-selected policy for annotate tab."""
+        if st.session_state.get('switch_to_annotate_tab', False):
+            st.session_state.switch_to_annotate_tab = False
 
-        # Add new omitted policy
-        st.subheader("➕ Add Policy to Omit")
-
-        # Show available policies by selected baselines only
-        selected_baselines = st.session_state.config_data.get('baselines', [])
-
-        if selected_baselines and self.available_policies:
-            st.markdown("**Available Policies from Selected Products:**")
-
-            # Map UI baseline names to policy parser names (lowercase to uppercase)
-            selected_baseline_policies: Dict[str, Dict[str, str]] = {}
-            for baseline in selected_baselines:
-                baseline_upper = baseline.upper()
-                if baseline_upper in self.available_policies:
-                    selected_baseline_policies[baseline.title()] = self.available_policies[
-                        baseline_upper
-                    ]
-
-            if selected_baseline_policies:
-                baseline_tabs = st.tabs(list(selected_baseline_policies.keys()))
-
-                for i, (baseline_name, baseline_policies) in enumerate(
-                    selected_baseline_policies.items(),
-                ):
-                    with baseline_tabs[i]:
-                        if baseline_policies:
-                            for policy_id, description in baseline_policies.items():
-                                # Check if this policy is already omitted
-                                is_omitted = policy_id in omit_policies
-
-                                # Policy header with expand/collapse
-                                col1, col2 = st.columns([4, 1])
-                                with col1:
-                                    if is_omitted:
-                                        st.markdown(f"🟢 **{policy_id}** (Omitted)")
-                                    elif st.session_state.get(f"expand_omit_{policy_id}", False):
-                                        st.markdown(f"🟠 **{policy_id}** (Configuring...)")
-                                    else:
-                                        st.markdown(f"**{policy_id}**")
-                                    st.caption(description)
-
-                                with col2:
-                                    if is_omitted:
-                                        col_edit, col_remove = st.columns(2)
-                                        with col_edit:
-                                            if st.button("✏️ Edit", key=f"edit_omit_{policy_id}"):
-                                                # Load existing values for editing
-                                                existing_data = omit_policies[policy_id]
-                                                st.session_state[f"rationale_{policy_id}"] = existing_data.get('rationale', '')
-                                                # Convert date string to date object for session state
-                                                if 'expiration' in existing_data:
-                                                    try:
-                                                        date_obj = datetime.strptime(existing_data['expiration'], '%Y-%m-%d').date()
-                                                        st.session_state[f"expiration_{policy_id}"] = date_obj
-                                                    except (ValueError, TypeError):
-                                                        if f"expiration_{policy_id}" in st.session_state:
-                                                            del st.session_state[f"expiration_{policy_id}"]
-                                                else:
-                                                    if f"expiration_{policy_id}" in st.session_state:
-                                                        del st.session_state[f"expiration_{policy_id}"]
-                                                st.session_state[f"expand_omit_{policy_id}"] = True
-                                                st.session_state[f"editing_omit_{policy_id}"] = True
-                                                st.rerun()
-                                        with col_remove:
-                                            if st.button("🗑️ Remove", key=f"remove_omit_{policy_id}"):
-                                                del omit_policies[policy_id]
-                                                st.session_state.config_data['omitpolicy'] = omit_policies
-                                                st.success(f"✅ Removed omitted policy: {policy_id}")
-                                                st.rerun()
-                                    else:
-                                        expand_key = f"expand_omit_{policy_id}"
-                                        if expand_key not in st.session_state:
-                                            st.session_state[expand_key] = False
-
-                                        if st.button("➕ Omit", key=f"toggle_omit_{policy_id}"):
-                                            # Clear any existing session state for fresh start
-                                            if f"rationale_{policy_id}" in st.session_state:
-                                                del st.session_state[f"rationale_{policy_id}"]
-                                            if f"expiration_{policy_id}" in st.session_state:
-                                                del st.session_state[f"expiration_{policy_id}"]
-                                            st.session_state[expand_key] = not st.session_state[expand_key]
-                                            st.session_state[f"editing_omit_{policy_id}"] = False  # New configuration
-                                            st.rerun()
-
-                                # Expandable form for omitting this policy
-                                if st.session_state.get(f"expand_omit_{policy_id}", False):
-                                    is_editing = st.session_state.get(
-                                        f"editing_omit_{policy_id}",
-                                        False,
-                                    )
-                                    with st.container():
-                                        st.markdown("---")
-                                        if is_editing:
-                                            st.markdown(
-                                                f"**Edit Omission for {policy_id}**",
-                                            )
-                                        else:
-                                            st.markdown(
-                                                f"**Configure Omission for {policy_id}**",
-                                            )
-
-                                        existing_rationale = ""
-                                        existing_expiration = None
-                                        if policy_id in omit_policies:
-                                            existing_data = omit_policies[policy_id]
-                                            existing_rationale = existing_data.get(
-                                                "rationale",
-                                                "",
-                                            )
-                                            if "expiration" in existing_data:
-                                                try:
-                                                    existing_expiration = (
-                                                        datetime.strptime(
-                                                            existing_data["expiration"],
-                                                            "%Y-%m-%d",
-                                                        ).date()
-                                                    )
-                                                except (ValueError, TypeError):
-                                                    existing_expiration = None
-
-                                        rationale = st.text_input(
-                                            "Rationale (Required)",
-                                            value=existing_rationale,
-                                            placeholder="Reason for omitting this policy",
-                                            key=f"rationale_{policy_id}"
-                                        )
-
-                                        # Clear any string values in session state for date input
-                                        date_key = f"expiration_{policy_id}"
-                                        if date_key in st.session_state and isinstance(
-                                            st.session_state[date_key],
-                                            str,
-                                        ):
-                                            try:
-                                                st.session_state[date_key] = datetime.strptime(
-                                                    st.session_state[date_key],
-                                                    '%Y-%m-%d',
-                                                ).date()
-                                            except (ValueError, TypeError):
-                                                del st.session_state[date_key]
-
-                                        expiration_value = existing_expiration if existing_expiration and existing_expiration >= date.today() else None
-                                        expiration = st.date_input(
-                                            "Expiration Date (Optional)",
-                                            value=expiration_value,
-                                            min_value=date.today(),
-                                            help="Date after which the policy should no longer be omitted",
-                                            key=f"expiration_{policy_id}"
-                                        )
-
-                                        col_save, col_cancel = st.columns(2)
-                                        with col_save:
-                                            button_text = "💾 Update Omission" if is_editing else "✅ Save Omission"
-                                            if st.button(button_text, key=f"save_omit_{policy_id}", type="primary"):
-                                                if rationale:
-                                                    omit_config = {'rationale': rationale}
-                                                    if expiration:
-                                                        omit_config['expiration'] = expiration.strftime('%Y-%m-%d')
-
-                                                    omit_policies[policy_id] = omit_config
-                                                    st.session_state.config_data['omitpolicy'] = omit_policies
-                                                    st.session_state[f"expand_omit_{policy_id}"] = False
-                                                    st.session_state[f"editing_omit_{policy_id}"] = False
-                                                    action_text = "Updated" if is_editing else "Added"
-                                                    st.success(f"✅ {action_text} omitted policy: {policy_id}")
-                                                    st.rerun()
-                                                else:
-                                                    st.error("❌ Rationale is required")
-
-                                        with col_cancel:
-                                            if st.button("❌ Cancel", key=f"cancel_omit_{policy_id}"):
-                                                st.session_state[f"expand_omit_{policy_id}"] = False
-                                                st.session_state[f"editing_omit_{policy_id}"] = False
-                                                st.rerun()
-                        else:
-                            st.info(f"No policies found for {baseline_name} product")
-
-                st.divider()
-            else:
-                st.info("ℹ️ No policies available for selected products")
-        else:
-            st.warning("⚠️ Please select products in the Main tab first to see available policies")
-
-        # Summary of current omitted policies
-        if omit_policies:
-            st.markdown("---")
-            st.subheader("📋 Summary of Omitted Policies")
-
-            for policy_id, policy_data in omit_policies.items():
-                st.markdown(f"🚫 **{policy_id}**: {policy_data.get('rationale', 'No rationale provided')}")
-                if 'expiration' in policy_data:
-                    st.caption(f"Expires: {policy_data['expiration']}")
-        else:
-            st.markdown("---")
-            st.info("ℹ️ No policies are currently omitted")
-
-        st.markdown('</div>', unsafe_allow_html=True)
+        preselected_policy = st.session_state.get('selected_policy_for_annotation')
+        if preselected_policy:
+            st.success(f"📝 Ready to annotate: **{preselected_policy[0]}**")
+            st.info(f"Description: {preselected_policy[1]}")
+            if st.button("✅ Acknowledged"):
+                del st.session_state.selected_policy_for_annotation
+                st.rerun()
 
     def render_annotate_policies_tab(self):
         """Render annotate policies configuration tab"""
-        st.markdown('<div class="section-container">', unsafe_allow_html=True)
-        st.markdown('<h2 class="section-title">Annotate Policies</h2>', unsafe_allow_html=True)
-
-        # Context help for annotate policies
-        with st.expander("ℹ️ Help: Policy Annotation Guidelines", expanded=False):
-            st.markdown("""
+        self._render_policy_config_tab(
+            config_key='annotatepolicy',
+            prefix='annotate',
+            title='Annotate Policies',
+            help_content="""
             <div class="context-help">
             <strong>What are Policy Annotations?</strong><br>
             Adding contextual information and documentation to specific policy results for audit trails and remediation planning.<br><br>
@@ -1337,9 +1547,8 @@ class ScubaConfigApp:
 
             <strong>Warning:</strong> Use "Incorrect Result" sparingly to avoid security blind spots.
             </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("""
+            """,
+            description="""
         **Use this section to add annotations to specific policy results.**
 
         Annotations allow you to:
@@ -1349,232 +1558,20 @@ class ScubaConfigApp:
         - Set remediation dates for failing controls
 
         ⚠️ **Caution:** Exercise care when marking results as incorrect to avoid introducing blind spots.
-        """)
-
-        # Get current annotated policies
-        annotate_policies = st.session_state.config_data.get('annotatepolicy', {})
-
-        # Check for tab switch signal
-        if st.session_state.get('switch_to_annotate_tab', False):
-            st.session_state.switch_to_annotate_tab = False
-
-        # Check for pre-selected policy from omit tab
-        preselected_policy = st.session_state.get('selected_policy_for_annotation')
-        if preselected_policy:
-            st.success(f"📝 Ready to annotate: **{preselected_policy[0]}**")
-            st.info(f"Description: {preselected_policy[1]}")
-            # Clear the selection after showing
-            if st.button("✅ Acknowledged"):
-                del st.session_state.selected_policy_for_annotation
-                st.rerun()
-
-        # Show available policies by selected baselines only
-        selected_baselines = st.session_state.config_data.get('baselines', [])
-
-        if selected_baselines and self.available_policies:
-            st.markdown("**Available Policies from Selected Products:**")
-
-            # Map UI baseline names to policy parser names (lowercase to uppercase)
-            selected_baseline_policies: Dict[str, Dict[str, str]] = {}
-            for baseline in selected_baselines:
-                baseline_upper = baseline.upper()
-                if baseline_upper in self.available_policies:
-                    selected_baseline_policies[baseline.title()] = self.available_policies[
-                        baseline_upper
-                    ]
-
-            if selected_baseline_policies:
-                baseline_tabs = st.tabs(list(selected_baseline_policies.keys()))
-
-                for i, (baseline_name, baseline_policies) in enumerate(selected_baseline_policies.items()):
-                    with baseline_tabs[i]:
-                        if baseline_policies:
-                            for policy_id, description in baseline_policies.items():
-                                # Check if this policy is already annotated
-                                is_annotated = policy_id in annotate_policies
-
-                                # Policy header with expand/collapse
-                                col1, col2 = st.columns([4, 1])
-                                with col1:
-                                    if is_annotated:
-                                        st.markdown(f"🟢 **{policy_id}** (Annotated)")
-                                    elif st.session_state.get(f"expand_annotate_{policy_id}", False):
-                                        st.markdown(f"🟠 **{policy_id}** (Configuring...)")
-                                    else:
-                                        st.markdown(f"**{policy_id}**")
-                                    st.caption(description)
-
-                                with col2:
-                                    if is_annotated:
-                                        col_edit, col_remove = st.columns(2)
-                                        with col_edit:
-                                            if st.button("✏️ Edit", key=f"edit_annotate_{policy_id}"):
-                                                # Load existing values for editing
-                                                existing_data = annotate_policies[policy_id]
-                                                st.session_state[f"comment_{policy_id}"] = existing_data.get('comment', '')
-                                                st.session_state[f"incorrect_{policy_id}"] = existing_data.get('incorrectresult', False)
-                                                # Convert date string to date object for session state
-                                                if 'remediationdate' in existing_data:
-                                                    try:
-                                                        date_obj = datetime.strptime(existing_data['remediationdate'], '%Y-%m-%d').date()
-                                                        st.session_state[f"remediation_{policy_id}"] = date_obj
-                                                    except (ValueError, TypeError):
-                                                        if f"remediation_{policy_id}" in st.session_state:
-                                                            del st.session_state[f"remediation_{policy_id}"]
-                                                else:
-                                                    if f"remediation_{policy_id}" in st.session_state:
-                                                        del st.session_state[f"remediation_{policy_id}"]
-                                                st.session_state[f"expand_annotate_{policy_id}"] = True
-                                                st.session_state[f"editing_annotate_{policy_id}"] = True
-                                                st.rerun()
-                                        with col_remove:
-                                            if st.button("🗑️ Remove", key=f"remove_annotate_{policy_id}"):
-                                                del annotate_policies[policy_id]
-                                                st.session_state.config_data['annotatepolicy'] = annotate_policies
-                                                st.success(f"✅ Removed annotation for policy: {policy_id}")
-                                                st.rerun()
-                                    else:
-                                        expand_key = f"expand_annotate_{policy_id}"
-                                        if expand_key not in st.session_state:
-                                            st.session_state[expand_key] = False
-
-                                        if st.button("📝 Annotate", key=f"toggle_annotate_{policy_id}"):
-                                            # Clear any existing session state for fresh start
-                                            if f"comment_{policy_id}" in st.session_state:
-                                                del st.session_state[f"comment_{policy_id}"]
-                                            if f"incorrect_{policy_id}" in st.session_state:
-                                                del st.session_state[f"incorrect_{policy_id}"]
-                                            if f"remediation_{policy_id}" in st.session_state:
-                                                del st.session_state[f"remediation_{policy_id}"]
-                                            st.session_state[expand_key] = not st.session_state[expand_key]
-                                            st.session_state[f"editing_annotate_{policy_id}"] = False  # New configuration
-                                            st.rerun()
-
-                                # Expandable form for annotating this policy
-                                if st.session_state.get(f"expand_annotate_{policy_id}", False):
-                                    is_editing = st.session_state.get(f"editing_annotate_{policy_id}", False)
-                                    with st.container():
-                                        st.markdown("---")
-                                        if is_editing:
-                                            st.markdown(f"**Edit Annotation for {policy_id}**")
-                                        else:
-                                            st.markdown(f"**Configure Annotation for {policy_id}**")
-
-                                        existing_comment = ""
-                                        existing_incorrect = False
-                                        existing_remediation = None
-                                        if policy_id in annotate_policies:
-                                            existing_data = annotate_policies[policy_id]
-                                            existing_comment = existing_data.get('comment', '')
-                                            existing_incorrect = existing_data.get('incorrectresult', False)
-                                            if 'remediationdate' in existing_data:
-                                                try:
-                                                    existing_remediation = datetime.strptime(
-                                                        existing_data['remediationdate'],
-                                                        '%Y-%m-%d',
-                                                    ).date()
-                                                except (ValueError, TypeError):
-                                                    existing_remediation = None
-
-                                        comment = st.text_area(
-                                            "Comment/Annotation",
-                                            value=existing_comment,
-                                            placeholder="Implementation in progress...",
-                                            help="Comment to add to the report for this policy",
-                                            key=f"comment_{policy_id}",
-                                            height=100
-                                        )
-
-                                        col1, col2 = st.columns(2)
-                                        with col1:
-                                            incorrect_result = st.checkbox(
-                                                "Mark as Incorrect Result",
-                                                value=existing_incorrect,
-                                                help="Check if the result for this policy is incorrect",
-                                                key=f"incorrect_{policy_id}"
-                                            )
-
-                                        with col2:
-                                            # Clear any string values in session state for date input
-                                            remediation_key = f"remediation_{policy_id}"
-                                            if remediation_key in st.session_state and isinstance(
-                                                st.session_state[remediation_key],
-                                                str,
-                                            ):
-                                                try:
-                                                    st.session_state[remediation_key] = (
-                                                        datetime.strptime(
-                                                            st.session_state[remediation_key],
-                                                            '%Y-%m-%d',
-                                                        ).date()
-                                                    )
-                                                except (ValueError, TypeError):
-                                                    del st.session_state[remediation_key]
-
-                                            remediation_value = existing_remediation if existing_remediation and existing_remediation >= date.today() else None
-                                            remediation_date = st.date_input(
-                                                "Remediation Date (Optional)",
-                                                value=remediation_value,
-                                                min_value=date.today(),
-                                                help="Date when a failing control is expected to be implemented",
-                                                key=f"remediation_{policy_id}"
-                                            )
-
-                                        col_save, col_cancel = st.columns(2)
-                                        with col_save:
-                                            button_text = "💾 Update Annotation" if is_editing else "✅ Save Annotation"
-                                            if st.button(button_text, key=f"save_annotate_{policy_id}", type="primary"):
-                                                annotation_config = {}
-                                                if comment:
-                                                    annotation_config['comment'] = comment
-                                                if incorrect_result:
-                                                    annotation_config['incorrectresult'] = True
-                                                if remediation_date:
-                                                    annotation_config['remediationdate'] = remediation_date.strftime('%Y-%m-%d')
-
-                                                if annotation_config:  # Only save if there's something to annotate
-                                                    annotate_policies[policy_id] = annotation_config
-                                                    st.session_state.config_data['annotatepolicy'] = annotate_policies
-                                                    st.session_state[f"expand_annotate_{policy_id}"] = False
-                                                    st.session_state[f"editing_annotate_{policy_id}"] = False
-                                                    action_text = "Updated" if is_editing else "Added"
-                                                    st.success(f"✅ {action_text} annotation for policy: {policy_id}")
-                                                    st.rerun()
-                                                else:
-                                                    st.error("❌ At least one annotation field is required")
-
-                                        with col_cancel:
-                                            if st.button("❌ Cancel", key=f"cancel_annotate_{policy_id}"):
-                                                st.session_state[f"expand_annotate_{policy_id}"] = False
-                                                st.session_state[f"editing_annotate_{policy_id}"] = False
-                                                st.rerun()
-                        else:
-                            st.info(f"No policies found for {baseline_name} product")
-
-                st.divider()
-            else:
-                st.info("ℹ️ No policies available for selected products")
-        else:
-            st.warning("⚠️ Please select products in the Main tab first to see available policies")
-
-        # Summary of current annotated policies
-        if annotate_policies:
-            st.markdown("---")
-            st.subheader("📋 Summary of Annotated Policies")
-
-            for policy_id, policy_data in annotate_policies.items():
-                st.markdown(f"📝 **{policy_id}**")
-                if 'comment' in policy_data:
-                    st.caption(f"Comment: {policy_data['comment']}")
-                if policy_data.get('incorrectresult', False):
-                    st.caption("🔴 Marked as Incorrect Result")
-                if 'remediationdate' in policy_data:
-                    st.caption(f"Remediation Date: {policy_data['remediationdate']}")
-        else:
-            st.markdown("---")
-            st.info("ℹ️ No policies are currently annotated")
-
-        st.markdown('</div>', unsafe_allow_html=True)
+        """,
+            configured_label='Annotated',
+            add_button_label='📝 Annotate',
+            config_noun='Annotation',
+            field_map={
+                'comment': 'comment',
+                'incorrect': 'incorrectresult',
+                'remediation': 'remediationdate',
+            },
+            date_fields={'remediation'},
+            render_form=self._render_annotate_form,
+            render_summary=self._render_annotate_summary,
+            pre_render=self._annotate_pre_render,
+        )
 
     def render_break_glass_tab(self):
         """Render break glass accounts configuration tab"""
@@ -1630,11 +1627,11 @@ class ScubaConfigApp:
 
         status = st.session_state.pop("bg_add_status", None)
         if status:
-            kind, value = status
+            kind, email = status
             if kind == "success":
-                st.success(f"✅ Added break glass account: {value}")
+                st.success(f"✅ Added break glass account: {email}")
             elif kind == "invalid":
-                st.error(f"❌ Invalid email format: {value}")
+                st.error(f"❌ Invalid email format: {email}")
             elif kind == "duplicate":
                 st.error("❌ Account already exists in list")
             else:
@@ -1788,23 +1785,8 @@ class ScubaConfigApp:
             # Show YAML preview with flow style for arrays to match ScubaGoggles conventions
             yaml_config = yaml.dump(clean_config, default_flow_style=False, sort_keys=False)
 
-            # Convert baselines array to flow style to match sample files
-            yaml_config = re.sub(
-                r'baselines:\n(?:- (.+)\n)+',
-                lambda m: 'baselines: [' + ', '.join(re.findall(r'- (.+)', m.group(0))) + ']\n',
-                yaml_config,
-            )
-
-            # Convert breakglassaccounts array to flow style if present
-            yaml_config = re.sub(
-                r'breakglassaccounts:\n(?:- (.+)\n)+',
-                lambda m: (
-                    'breakglassaccounts: ['
-                    + ', '.join(re.findall(r'- (.+)', m.group(0)))
-                    + ']\n'
-                ),
-                yaml_config,
-            )
+            for key in ('baselines', 'breakglassaccounts'):
+                yaml_config = self._yaml_array_to_flow(yaml_config, key)
 
             st.code(yaml_config, language='yaml')
 
@@ -1849,16 +1831,30 @@ class ScubaConfigApp:
         config = {}
         data = st.session_state.config_data
 
+        # Required fields
+        if data.get('customerid'):
+            config['customerid'] = data['customerid']
+        if data.get('subjectemail'):
+            config['subjectemail'] = data['subjectemail']
         if data.get('orgname'):
             config['orgname'] = data['orgname']
         if data.get('baselines'):
             config['baselines'] = data['baselines']
+        if data.get('credentials'):
+            config['credentials'] = data['credentials']
 
         # Optional organization fields
         if data.get('orgunitname'):
             config['orgunitname'] = data['orgunitname']
         if data.get('description'):
             config['Description'] = data['description']
+
+        # Output settings
+        if data.get('outputpath') and data['outputpath'] != './':
+            config['outputpath'] = data['outputpath']
+        config['darkmode'] = 'true' if data.get('darkmode') else 'false'
+        if data.get('quiet'):
+            config['quiet'] = data['quiet']
 
         # Advanced configuration sections
         if data.get('omitpolicy'):
@@ -1875,6 +1871,13 @@ class ScubaConfigApp:
         self.setup_page_config()
 
         self.render_header()
+
+        if not scubagoggles_available:
+            st.warning(
+                "ScubaGoggles backend is not installed. "
+                "Running with limited functionality — version info and "
+                "default configuration values may be inaccurate."
+            )
 
         # Create tabs similar to ScubaGear
         # NOTE: Advanced tab is hidden/disabled
@@ -1911,11 +1914,18 @@ class ScubaConfigApp:
         col1, col2, col3 = st.columns([2, 1, 1])
 
         with col1:
-            st.markdown(
-                '<span class="status-indicator status-success">'
-                '✅ ScubaGoggles</span>',
-                unsafe_allow_html=True,
-            )
+            if scubagoggles_available:
+                st.markdown(
+                    '<span class="status-indicator status-success">'
+                    '✅ ScubaGoggles</span>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.markdown(
+                    '<span class="status-indicator status-warning">'
+                    '⚠️ ScubaGoggles (backend not installed)</span>',
+                    unsafe_allow_html=True,
+                )
 
         with col2:
             st.markdown(f"**Version:** {Version.number}")

@@ -33,8 +33,6 @@ The application consolidates all configuration capabilities into a single, profe
 - `scubaconfigapp.py` - Complete professional configuration application with all features
 - `launch.py` - Launcher script for starting the UI
 - `validation.py` - Configuration validation utilities
-- `config_generator.py` - YAML/JSON configuration generation utilities
-- `runner.py` - ScubaGoggles execution and results management
 - `__init__.py` - Package initialization
 
 ## Installation
@@ -110,29 +108,12 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 - **Documentation & Remediation**: Select products → Go to Annotate Policies tab → Add comments and set remediation dates
 - **Importing Existing Configuration**: Use sidebar Import feature → Review/modify settings → Export updated configuration
 
-## Comparison with ScubaGear ScubaConfigApp
-
-| Feature | ScubaGear ScubaConfigApp | ScubaGoggles UI |
-|---------|-------------------------|-----------------|
-| **Platform** | Windows (WPF/XAML) | Cross-platform (Web) |
-| **Technology** | PowerShell + XAML | Python + Streamlit |
-| **Authentication** | M365 OAuth | Google Service Accounts |
-| **Baselines** | M365 Products | Google Workspace |
-| **Validation** | Real-time | Real-time |
-| **Configuration Export** | YAML/JSON | YAML/JSON |
-| **Direct Execution** | Yes | No |
-| **Results Viewing** | Integrated | Integrated |
-| **Theming** | Light | Streamlit themes |
-
-
 ## Development
 
 ### Adding New Features
 
 1. **UI Components**: Add to respective tab rendering methods
 2. **Validation**: Extend `validation.py` with new validators
-3. **Configuration**: Update `config_generator.py` for new options
-4. **Execution**: Modify `runner.py` for new execution features
 
 
 ## Troubleshooting
