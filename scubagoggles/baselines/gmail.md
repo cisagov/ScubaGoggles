@@ -155,7 +155,7 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
 
 - _Rationale:_ Threat actors could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, an SPF policy is required for Federal Civilian Executive Branch (FCEB) agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - _Last modified:_ February 2024
-- _Note:_ 
+- _Note:_
   - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softfail (indicated by `~`). Either hard or soft fail may be used to comply with this baseline policy.
   - This policy is not applicable to user alias domains. Gmail uses the primary domain as the `envelope-from` domain and the alias domain as the `header-from` domain, SPF only verifies the `envelope-from` domain.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-2d
@@ -1167,7 +1167,7 @@ This section covers the settings relating to bypassing spam filters.
 #### GWS.GMAIL.18.1v0.6
 Domains SHALL NOT be added to lists that bypass spam filters.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail181v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 
 - _Rationale:_ Spam protections may incorrectly filter legitimate emails. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, could enable numerous unknown users to bypass spam protections.
@@ -1183,7 +1183,7 @@ Domains SHALL NOT be added to lists that bypass spam filters.
 #### GWS.GMAIL.18.2v0.6
 Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail182v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Spam protections may incorrectly filter legitimate emails. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, could enable numerous unknown users to bypass spam protections.
 - _Last modified:_ April 2024
@@ -1197,7 +1197,7 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 #### GWS.GMAIL.18.3v0.6
 Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail183v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 
 - _Rationale:_ Bypassing spam filters and hiding warning for all messages from internal and external senders creates a security risk because all messages are allowed to bypass filters. Disabling this feature mitigates the risk.

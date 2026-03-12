@@ -14,7 +14,64 @@ import pytest
 import google.auth.transport.requests as requests
 import scubagoggles.auth as auth
 
+from scubagoggles.parsers.gmail_rules_parser import GmailRulesParser
 from scubagoggles.policy_api import PolicyAPI
+
+
+class CommonMethods:
+
+    """Common methods related to PolicyAPI class testing used in this module
+    and other testing modules.
+    """
+
+    def __init__(self, data_dir: Path):
+
+        """CommonMethod class initialization - the data directory containing
+        data needed by tests is given.
+        """
+
+        self._data_dir = data_dir
+
+    def next_test_data(self, test_prefix: str):
+
+        """Given a prefix of file names, this method yields the file name
+        (considered the test name) and the test data as a dictionary which is
+        read from the file in the data directory.  The file name format is:
+        <prefix><test-number>, with <test-number> as an integer (1, 2, ...
+        - any combination of digits following the prefix works, but you should
+        follow the convention of starting with 1 and increasing sequentially
+        for each subsequent test).
+
+        :yield: (test_name, test_data)
+        :rtype: tuple
+        """
+
+        for input_file in self._data_dir.glob(f'{test_prefix}*.json'):
+            test_name = input_file.stem
+            if not re.match(fr'{test_prefix}\d+$', test_name):
+                continue
+
+            test_data = json.loads(input_file.read_text())
+            yield test_name, test_data
+
+    @staticmethod
+    def patch_policy_api(monkeypatch, test_data: dict = None):
+
+        """Sets up the PolicyAPI class so it can be used with test methods.
+        The given test data must include a dictionary with optional keys
+        "orgunits" and "groups" that may contain a set of orgunit and group
+        names, respectively.  These take the place of the PolicyAPI class
+        calling Google for those names.
+        """
+
+        def mock_get_ou(_):
+            return test_data.get('orgunits') if test_data else None
+
+        def mock_get_groups(_):
+            return test_data.get('groups') if test_data else None
+
+        monkeypatch.setattr(PolicyAPI, '_get_ou', mock_get_ou)
+        monkeypatch.setattr(PolicyAPI, '_get_groups', mock_get_groups)
 
 
 class MockGwsAuth:
@@ -54,6 +111,8 @@ auth.GwsAuth = MockGwsAuth
 
 requests.AuthorizedSession = MockSession
 
+# pylint: disable=too-many-public-methods
+
 
 class TestPolicyApi:
 
@@ -63,7 +122,7 @@ class TestPolicyApi:
     # The test module needs to access "internal" methods.
     # pylint: disable=protected-access
 
-    _data_dir = Path(__file__).parent / 'data'
+    _common = CommonMethods(Path(__file__).parent / 'data')
 
     def test_close(self, monkeypatch):
 
@@ -72,7 +131,7 @@ class TestPolicyApi:
         to be cleaned up.
         """
 
-        self._patch_policy_api(monkeypatch)
+        self._common.patch_policy_api(monkeypatch)
 
         with PolicyAPI(auth.GwsAuth(), 'topOU') as policy_api:
             session = policy_api._session
@@ -124,6 +183,21 @@ class TestPolicyApi:
         """
 
         assert PolicyAPI.isInt(value) is expected
+
+    @pytest.mark.parametrize(('value', 'expected'),
+                             (# Valid values
+                              ([{'a': 1, 'b': 2}, {1: 'a', '2': 'b'}], True),
+                              # Invalid values
+                              ([1, 2, 3], False),
+                              (2, False),
+                              ('test', False)))
+    def test_islistdict(self, value, expected):
+
+        """Tests for the isListDict() lambda used in the PolicyAPI expected
+        settings.
+        """
+
+        assert PolicyAPI.isListDict(value) is expected
 
     @pytest.mark.parametrize(('value', 'expected'),
                              (# Valid values
@@ -223,7 +297,7 @@ class TestPolicyApi:
             settings_found = False
 
             for name, value in section_data.items():
-                assert name in ('settings', 'reducer')
+                assert name in ('key', 'parser', 'settings', 'reducer')
 
                 match name:
                     case 'settings':
@@ -238,13 +312,18 @@ class TestPolicyApi:
                                                  PolicyAPI.isDuration,
                                                  PolicyAPI.isEnum,
                                                  PolicyAPI.isInt,
+                                                 PolicyAPI.isListDict,
                                                  PolicyAPI.isListStrings,
                                                  PolicyAPI.isState,
                                                  PolicyAPI.isString,
                                                  PolicyAPI.isTimestamp)
 
+                    case 'parser':
+                        assert value in (GmailRulesParser,)
+
                     case 'reducer':
-                        assert value in (PolicyAPI._merge_reducer,)
+                        assert value in (PolicyAPI._max_map_reducer,
+                                         PolicyAPI._merge_reducer,)
 
             assert settings_found, f'section: {section_name}'
 
@@ -269,6 +348,45 @@ class TestPolicyApi:
                 validator = section_settings[setting_name]
                 assert validator(setting_default)
 
+    def test_parser_map(self, monkeypatch, subtests):
+
+        """Tests the initialization of the PolicyAPI parser map.
+        """
+
+        module = globals()
+        next_test_data = self._common.next_test_data
+        patch_policy_api = self._common.patch_policy_api
+
+        for test_name, test_data in next_test_data('policyapi_parsermap'):
+            with subtests.test(msg = f'subtest: {test_name}'):
+                patch_policy_api(monkeypatch)
+                expected_settings = test_data['expected_settings']
+                monkeypatch.setattr(PolicyAPI,
+                                    '_expectedPolicySettings',
+                                    expected_settings)
+                policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
+
+                # For custom parsers, the name of the parser class is stored
+                # in the test input and is converted here from the string
+                # value to the parser class.
+
+                for config in expected_settings.values():
+
+                    parser = config.get('parser')
+
+                    if parser in module and isinstance(module[parser], type):
+                        config['parser'] = module[parser]
+
+                policies = test_data['policies']
+
+                if ('expect_exception' in test_data
+                    and test_data['expect_exception']):
+                    with pytest.raises(RuntimeError):
+                        policy_api._initialize_parser_map(policies)
+                else:
+                    policy_api._initialize_parser_map(policies)
+                    self._compare_parser_map(policy_api, test_data)
+
     def test_get_groups(self, monkeypatch, subtests):
 
         """Tests the Policy API method for getting GWS groups and storing
@@ -277,7 +395,9 @@ class TestPolicyApi:
 
         monkeypatch.setattr(PolicyAPI, '_get_ou', lambda x: None)
 
-        for test_name, test_data in self._next_test_data('policyapi_get_groups'):
+        next_test_data = self._common.next_test_data
+
+        for test_name, test_data in next_test_data('policyapi_get_groups'):
             with subtests.test(msg = f'subtest: {test_name}'):
                 self._patch_get(monkeypatch, test_data)
                 policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
@@ -290,9 +410,28 @@ class TestPolicyApi:
         returned by Google to the format used by ScubaGoggles for Rego.
         """
 
-        for test_name, test_data in self._next_test_data('policyapi_get_policies'):
+        # Individual tests are made by running ScubaGoggles with appropriate
+        # settings that tests the desired functionality.  Use the environment
+        # variable SCUBAGOGGLES_DUMP_FILE to set up a file where the raw
+        # response from the Google Policy API will be written (JSON).  Use
+        # an existing test data file as a template for a new file.  It's
+        # ideal if you can trim the response down to the relevant policies
+        # (otherwise, all policies are going to be in the test and it'll
+        # make it more difficult to debug when there are problems).  Put the
+        # "dumped" response in the "response" section of the test data file.
+        # You may have to edit the "orgunits", "groups", "defaults", and
+        # "service_status" sections as needed (sometimes the easiest is to
+        # try to make these small or empty).  Run pytest with --trace and
+        # stop at the "assert" line.  Dump the result into JSON format.
+        # Confirm that the result is correct for the given input and then
+        # use it in the "results" section of the test data.
+
+        next_test_data = self._common.next_test_data
+        patch_policy_api = self._common.patch_policy_api
+
+        for test_name, test_data in next_test_data('policyapi_get_policies'):
             with subtests.test(msg = f'subtest: {test_name}'):
-                self._patch_policy_api(monkeypatch, test_data)
+                patch_policy_api(monkeypatch, test_data)
                 self._patch_get(monkeypatch, test_data)
                 self._patch_service_status(monkeypatch, test_data)
                 test_defaults = test_data['defaults']
@@ -309,7 +448,9 @@ class TestPolicyApi:
 
         monkeypatch.setattr(PolicyAPI, '_get_groups', lambda x: None)
 
-        for test_name, test_data in self._next_test_data('policyapi_get_ou'):
+        next_test_data = self._common.next_test_data
+
+        for test_name, test_data in next_test_data('policyapi_get_ou'):
             with subtests.test(msg = f'subtest: {test_name}'):
                 self._patch_get(monkeypatch, test_data)
                 policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
@@ -325,9 +466,12 @@ class TestPolicyApi:
         settings.
         """
 
-        for test_name, test_data in self._next_test_data('policyapi_verify'):
+        next_test_data = self._common.next_test_data
+        patch_policy_api = self._common.patch_policy_api
+
+        for test_name, test_data in next_test_data('policyapi_verify'):
             with subtests.test(msg = f'subtest: {test_name}'):
-                self._patch_policy_api(monkeypatch, test_data)
+                patch_policy_api(monkeypatch, test_data)
                 expected_settings = test_data['expected_settings']
                 self._add_validators(expected_settings)
                 monkeypatch.setattr(PolicyAPI,
@@ -344,7 +488,7 @@ class TestPolicyApi:
         """
 
         top_ou = 'topOU'
-        self._patch_policy_api(monkeypatch, {'orgunits': {top_ou}})
+        self._common.patch_policy_api(monkeypatch, {'orgunits': {top_ou}})
         expected_message = f'No policy settings found for orgunit: {top_ou}'
 
         policy_api = PolicyAPI(auth.GwsAuth(), top_ou)
@@ -365,9 +509,12 @@ class TestPolicyApi:
         be included in the test input data.
         """
 
-        for test_name, test_data in self._next_test_data('policyapi_reducer'):
+        next_test_data = self._common.next_test_data
+        patch_policy_api = self._common.patch_policy_api
+
+        for test_name, test_data in next_test_data('policyapi_reducer'):
             with subtests.test(msg = f'subtest: {test_name}'):
-                self._patch_policy_api(monkeypatch, test_data)
+                patch_policy_api(monkeypatch, test_data)
 
                 policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
                 policy_api._reduce(test_data['policies'])
@@ -383,9 +530,12 @@ class TestPolicyApi:
         been applied.
         """
 
-        for test_name, test_data in self._next_test_data('policyapi_defaults'):
+        next_test_data = self._common.next_test_data
+        patch_policy_api = self._common.patch_policy_api
+
+        for test_name, test_data in next_test_data('policyapi_defaults'):
             with subtests.test(msg = f'subtest: {test_name}'):
-                self._patch_policy_api(monkeypatch, test_data)
+                patch_policy_api(monkeypatch, test_data)
                 test_defaults = test_data['defaults']
                 monkeypatch.setattr(PolicyAPI, '_defaults', test_defaults)
                 self._patch_service_status(monkeypatch, test_data)
@@ -394,17 +544,6 @@ class TestPolicyApi:
                 policy_api._apply_defaults(test_data['policies'])
 
                 self._compare_defaults(test_data)
-
-    @classmethod
-    def _next_test_data(cls, test_prefix):
-
-        for input_file in cls._data_dir.glob(f'{test_prefix}*.json'):
-            test_name = input_file.stem
-            if not re.match(fr'{test_prefix}\d*$', test_name):
-                continue
-
-            test_data = json.loads(input_file.read_text())
-            yield test_name, test_data
 
     @staticmethod
     def _compare_defaults(test_data: dict):
@@ -416,6 +555,29 @@ class TestPolicyApi:
         policies = test_data['policies']
         results = test_data['results']
         assert policies == results
+
+    @staticmethod
+    def _compare_parser_map(policy_api: PolicyAPI, test_data: dict):
+
+        """Compares the PolicyAPI's parser map with the expected result
+        from the test data.
+        """
+
+        # Any custom parsers used in testing must be imported into this module.
+        # Each instance in the parser map must be an instance of the parser
+        # class named in the expected result section of the test data.
+
+        module = globals()
+
+        expected_results = test_data['results']
+
+        for section, parser_instance in policy_api._parser_map.items():
+
+            assert section in expected_results
+
+            parser_class = module[expected_results[section]]
+
+            assert isinstance(parser_instance, parser_class)
 
     @staticmethod
     def _compare_reduction(policy_api: PolicyAPI, test_data: dict):
@@ -465,6 +627,12 @@ class TestPolicyApi:
     @staticmethod
     def _patch_get(monkeypatch, test_data: dict):
 
+        """Patches the PolicyAPI::_get() method, which gets the Policy API
+        data from Google.  The given test data is used to simulate the
+        response from the Policy API "get" request.  Depending on the given
+        test data, it simulates either a single-page or multi-page responses.
+        """
+
         def multi_get(_, _unused_url, params):
 
             # This simulates multi-page responses.  The test data must contain
@@ -495,25 +663,6 @@ class TestPolicyApi:
         mock_get = multi_get if 'responses' in test_data else single_get
 
         monkeypatch.setattr(PolicyAPI, '_get', mock_get)
-
-    @staticmethod
-    def _patch_policy_api(monkeypatch, test_data: dict = None):
-
-        """Sets up the PolicyAPI class so it can be used with test methods.
-        The given test data must include a dictionary with optional keys
-        "orgunits" and "groups" that may contain a set of orgunit and group
-        names, respectively.  These take the place of the PolicyAPI class
-        calling Google for those names.
-        """
-
-        def mock_get_ou(_):
-            return test_data.get('orgunits') if test_data else None
-
-        def mock_get_groups(_):
-            return test_data.get('groups') if test_data else None
-
-        monkeypatch.setattr(PolicyAPI, '_get_ou', mock_get_ou)
-        monkeypatch.setattr(PolicyAPI, '_get_groups', mock_get_groups)
 
     @staticmethod
     def _patch_service_status(monkeypatch, test_data: dict):
