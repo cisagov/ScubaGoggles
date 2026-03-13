@@ -284,3 +284,55 @@ Automatic transcripts for Google Meet SHALL be disabled.
 4.  Click **Automatic transcription**.
 5.  Ensure **Meetings are transcribed by default** is unselected.
 6.  Click **Save**.
+
+## 7. Gemini Settings
+
+This section covers Gemini settings that are found in the Google Meet settings.
+
+### Policies
+
+#### GWS.MEET.7.1v0.6
+Allow hosts to change who notes are shared to SHOULD be de-selected.
+
+- _Rationale:_ Allowing hosts of meetings to change the sharing setting could inadvertently allow ai notes to be shared with unauthorized individuals.
+- _Last modified:_ March 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
+- MITRE ATT&CK TTP Mapping
+  - TBD
+
+#### GWS.MEET.7.2v0.6
+Default sharing setting for Google AI notes SHALL be set to The hosts and co-hosts.
+
+- _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
+- _Last modified:_ January 2024
+- _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
+- MITRE ATT&CK TTP Mapping
+  - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)
+  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
+  - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
+
+
+### Resources
+- [Choose automatic meeting artifact settings for your organization](https://support.google.com/a/answer/15496523?p=automaticmeetingrecords)
+
+### Prerequisites
+-   None
+
+### Implementation
+
+#### GWS.MEET.7.1v0.6 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
+3.  Click **Gemini Settings**.
+4.  Click **Google AI notes sharing**.
+5.  Ensure **Allow hosts to change who notes are shared** is unselected.
+6.  Click **Save**.
+
+#### GWS.MEET.7.2v0.6 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
+3.  Click **Gemini Settings**.
+4.  Click **Automatic transcription**.
+5.  Ensure **Default sharing setting for Google AI notes** is set to hosts and co-hosts.
+6.  Click **Save**.
