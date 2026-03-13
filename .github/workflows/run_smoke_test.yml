@@ -7,14 +7,14 @@ on:
   pull_request_review:
     types: [submitted]
   push:
-    # These paths are primarily for workflow testing purposes
-    paths:
-      - ".github/workflows/run_smoke_test.yml"
-      - ".github/actions/setup-dependencies-windows/action.yml"
-      - ".github/actions/setup-dependencies-macos/action.yml"
-    branches:
-      - "main"
-      - "*smoketest*"
+    # # These paths are primarily for workflow testing purposes
+    # paths:
+    #   - ".github/workflows/run_smoke_test.yml"
+    #   - ".github/actions/setup-dependencies-windows/action.yml"
+    #   - ".github/actions/setup-dependencies-macos/action.yml"
+    # branches:
+    #   - "main"
+    #   - "*smoketest*"
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -115,6 +115,10 @@ jobs:
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
+      - name: Install Pytest Coverage dependencies
+        run: |
+          pip install . && pip install --upgrade pytest-cov coverage pytest-mock
+
       - name: Run ScubaGoggles and check for correct output (macos-latest)
         if: ${{ matrix.operating-system == 'macos-latest'}}
         id: mac-path
@@ -159,11 +163,28 @@ jobs:
           echo $FOUNDLINUX
           echo "cachepath=$FOUNDLINUX" >> $GITHUB_OUTPUT
 
+      - name: Pytest Coverage Repository
+        run: |
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=scubagoggles ./scubagoggles/Testing/Unit/Python | tee pytest-coverage.txt
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
+          hide-comment: true
+
+      - name: Vulnerability Scan
+        uses: pypa/gh-action-pip-audit@v1.1.0
+        with:
+          inputs: requirements.txt
+
       - name: Cache the output directory (ubuntu-latest)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
         uses: actions/cache@v4
         with:
           path: /home/runner/scubagoggles
+
           key: ${{ runner.os }}-baseline-${{ steps.linux-path.outputs.cachepath }}
 
   lhci:
@@ -180,15 +201,16 @@ jobs:
             /home/runner/scubagoggles
           key: ${{ runner.os }}-baseline-${{ needs.linux-path.outputs.cachepath }}
 
-      - name: Use Node.js 20.x
+      - name: Use Node.js 24.x
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
+          node-version: 24.x
 
       - name: Run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.15.x
-          lhci autorun --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
+          CONFIG_PATH=$(find /home/runner/scubagoggles -name "lighthouserc.json" | head -n 1)
+          lhci autorun --config="$CONFIG_PATH" --collect.staticDistDir=/home/runner/scubagoggles --outputDir=./ --collect.maxAutodiscoverUrls=12 --upload.target=temporary-public-storage --upload.githubAppToken="${{ secrets.LHCI_GITHUB_APP_TOKEN }}"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
