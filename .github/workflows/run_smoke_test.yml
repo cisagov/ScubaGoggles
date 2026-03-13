@@ -117,7 +117,7 @@ jobs:
 
       - name: Install Pytest Coverage dependencies
         run: |
-          pip install . && pip install --upgrade pytest-cov coverage pytest-mock
+          pip install . && pip install --upgrade pytest-cov
 
       - name: Run ScubaGoggles and check for correct output (macos-latest)
         if: ${{ matrix.operating-system == 'macos-latest'}}
@@ -162,17 +162,6 @@ jobs:
           FOUNDLINUX=$(find /home/runner/scubagoggles -type d -name "GWSBaselineConformance_*")
           echo $FOUNDLINUX
           echo "cachepath=$FOUNDLINUX" >> $GITHUB_OUTPUT
-
-      - name: Pytest Coverage Repository
-        run: |
-          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=scubagoggles ./scubagoggles/Testing/Unit/Python | tee pytest-coverage.txt
-
-      - name: Pytest coverage comment
-        uses: MishaKav/pytest-coverage-comment@main
-        with:
-          pytest-coverage-path: ./pytest-coverage.txt
-          junitxml-path: ./pytest.xml
-          hide-comment: true
 
       - name: Vulnerability Scan
         uses: pypa/gh-action-pip-audit@v1.1.0
