@@ -140,7 +140,7 @@ jobs:
         if: ${{ matrix.operating-system == 'windows-latest' }}
         id: windows-path
         run: |
-          & ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
+          ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
           pytest ./scubagoggles/Testing/Functional/SmokeTests/ -vvv --subjectemail="${{ secrets.GWS_SUBJECT_EMAIL }}" --customerdomain="${{ secrets.GWS_DOMAIN }}"
           $FOUNDWINDOWS = (Get-ChildItem -Path "C:\Users\runneradmin\scubagoggles" -Directory -Filter "GWSBaselineConformance_*" -Recurse -Force).FullName
           $FOUNDWINDOWS
