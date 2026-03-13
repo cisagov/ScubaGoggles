@@ -1,0 +1,17 @@
+{
+  "comment": "test of Policy API parser map - missing custom parser",
+  "expected_settings": {
+    "gmail_spam_override_lists": {"parser": "_bad_parser_name",
+                                  "settings": {"spamOverride": "isListDict"}}
+  },
+  "expect_exception": true,
+  "policies": {
+    "topOU": {
+      "gmail_service_status": {
+        "serviceState": "ENABLED"
+      }
+    }
+  },
+  "results": {
+  }
+}

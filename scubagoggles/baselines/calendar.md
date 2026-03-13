@@ -57,7 +57,7 @@ External sharing options for secondary calendars SHALL be configured to "Only fr
 
 - _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
 - _Last modified:_ July 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)(a)  
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
@@ -209,7 +209,7 @@ This section covers whether or not the paid appointment booking feature is enabl
 ### Policies
 
 #### GWS.CALENDAR.4.1v0.6
-Appointment Schedule with Payments SHALL be disabled.
+Appointment Schedule with Payments SHOULD be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
