@@ -115,10 +115,6 @@ jobs:
           opa-version: ${{ needs.configuration.outputs.opa-version }}
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Pytest Coverage dependencies
-        run: |
-          pip install . && pip install --upgrade pytest-cov
-
       - name: Run ScubaGoggles and check for correct output (macos-latest)
         if: ${{ matrix.operating-system == 'macos-latest'}}
         id: mac-path
