@@ -6,7 +6,7 @@ import requests
 
 class RobustDNSClient:
     '''Class used to run robust DNS queries.'''
-    def __init__(self, dns_resolvers: list = None, doh_servers: list = None, 
+    def __init__(self, dns_resolvers: list = None, doh_servers: list = None,
                 skip_doh: bool = False):
         """
         Initialize the DNS client.
@@ -214,7 +214,7 @@ class RobustDNSClient:
 
             #headers = {"accept":"application/dns-json"}
             try:
-                
+
                 #response = requests.get(uri, headers=headers, timeout=5).json()
                 # True DoH
                 query = dns.message.make_query(qname, dns.rdatatype.TXT)
