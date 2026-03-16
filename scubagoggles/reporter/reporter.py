@@ -875,7 +875,7 @@ class Reporter:
                         "Query Name": qname,
                         "Query Method": query['query_method'],
                         "Summary": query['query_result'],
-                        "Answers": '\n'.join(answers)
+                        "Answers": '<br>'.join(answers)
                     })
             log_table = self.create_html_table(logs)
             log_table = log_table.replace("<table>", "<table class='alternating dns-table'>")
