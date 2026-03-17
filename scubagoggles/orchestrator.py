@@ -182,7 +182,7 @@ class Orchestrator:
         top_level_ou = provider_dict['tenant_info']['topLevelOU']
         if not top_level_ou.startswith('/'):
             top_level_ou = '/' + top_level_ou
-        ou_paths = set([ou['orgUnitPath'] for ou in all_ous])
+        ou_paths = {ou['orgUnitPath'] for ou in all_ous}
         for setting in settings:
             invalid = set()
             for exception in vars(args)[setting]:
@@ -211,7 +211,7 @@ class Orchestrator:
         settings = ['imapexceptions']
 
         all_groups = provider_dict['group_settings']
-        group_emails = set([group['email'] for group in all_groups])
+        group_emails = {group['email'] for group in all_groups}
         for setting in settings:
             invalid = set()
             for exception in vars(args)[setting]:

@@ -12,8 +12,6 @@ import yaml
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.utils import path_parser
 
-log = logging.getLogger(__name__)
-
 def log_level(level):
     """Normalizes a given log level string.
 

@@ -6,7 +6,6 @@ rego, and report creation stages for the automated SCuBA conformance assessment
 """
 
 import argparse
-import logging
 import sys
 
 from pathlib import Path
