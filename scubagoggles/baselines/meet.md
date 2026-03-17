@@ -14,8 +14,8 @@ This baseline is based on Google documentation available at [Google Meet setting
 -   [Internal Access to External Meetings](#2-internal-access-to-external-meetings)
 -   [Host Management Meeting Features](#3-host-management-meeting-features)
 -   [External Participants](#4-external-participants)
--   [Incoming Calls](#5-incoming-calls)
--   [Video Meeting Settings](#6-video-meeting-settings)
+-   [Video Meeting Settings](#5-video-meeting-settings)
+-   [Gemini Settings](#6-gemini-settings)
 
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
