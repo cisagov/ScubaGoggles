@@ -54,6 +54,7 @@ class ScubaArgumentParser:
 
     def __init__(self, parser):
         self.parser = parser
+        self.log = logging.root
 
     def parse_args(self) -> argparse.Namespace:
         """
@@ -70,7 +71,6 @@ class ScubaArgumentParser:
 
         logging.basicConfig(format='(%(levelname)s): %(message)s')
         level = log_level(args.log)
-        self.log = logging.root
         self.log.setLevel(level)
 
         if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
