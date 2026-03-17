@@ -504,6 +504,7 @@ class Provider:
             for domain in self.list_domains():
                 if domain['isPrimary']:
                     primary_domain = domain['domainName']
+                    break
             return {
                 'ID' : tenant_id,
                 'domain': primary_domain,

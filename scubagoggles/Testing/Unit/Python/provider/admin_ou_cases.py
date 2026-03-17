@@ -110,9 +110,21 @@ GET_TOPLEVEL_OU_CASES = [
         "raises": None,
         "expect_success_call": True,
     },
-    # Root OU missing
+    # Root OU missing and "organizationUnits" is empty
     {
         "api_response": { "organizationUnits": [] },
+        "expected": "",
+        "raises": None,
+        "expect_success_call": True,
+    },
+    # "organizationUnits" key is present but root OU, "/", is missing
+    {
+        "api_response": {
+            "organizationUnits": [
+                { "orgUnitPath": "/Sub-OU1", "name": "Sub OU 1" },
+                { "orgUnitPath": "/Sub-OU2", "name": "Sub OU 2" },
+            ]
+        },
         "expected": "",
         "raises": None,
         "expect_success_call": True,
