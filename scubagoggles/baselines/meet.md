@@ -281,7 +281,7 @@ Allow hosts to change who notes are shared to SHOULD be unselected.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1567: Exfiltration Over Web Service: Exfiltration to Cloud torage](https://attack.mitre.org/techniques/T1567/002/)
+  - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud torage](https://attack.mitre.org/techniques/T1567/002/)
 
 #### GWS.MEET.6.2v0.6
 Default sharing setting for Google AI notes SHALL be set to The hosts and co-hosts.
@@ -293,7 +293,7 @@ Default sharing setting for Google AI notes SHALL be set to The hosts and co-hos
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1567: Exfiltration Over Web Service: Exfiltration to Cloud torage](https://attack.mitre.org/techniques/T1567/002/)
+  - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud torage](https://attack.mitre.org/techniques/T1567/002/)
 
 
 ### Resources
