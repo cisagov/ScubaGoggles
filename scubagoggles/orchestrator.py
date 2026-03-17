@@ -143,7 +143,6 @@ class Orchestrator:
 
         args = self._args
         products = args.baselines
-        break_glass_accounts = args.breakglassaccounts
 
         with Provider(args.customerid,
                       args.credentials,
@@ -158,13 +157,73 @@ class Orchestrator:
 
         provider_dict['baseline_suffix'] = self._md_parser.default_version
         provider_dict['baseline_versions'] = self._md_parser.policy_version_map
-        provider_dict['break_glass_accounts'] = break_glass_accounts
+        provider_dict['break_glass_accounts'] = args.breakglassaccounts
+        provider_dict['imap_exceptions'] = args.imapexceptions
         provider_dict['report_uuid'] = args.report_uuid
+
+        self._validate_ou_exceptions(provider_dict)
+        self._validate_group_exceptions(provider_dict)
 
         out_jsonfile = args.outputpath / args.outputproviderfilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(provider_dict, out_stream, indent=4)
+
+
+    def _validate_ou_exceptions(self, provider_dict: dict):
+        '''Validate any configuration items that require the user to provide an org unit.'''
+
+        args = self._args
+        # List of settings where the user has to input an OU. Currently there's only one, but more
+        # are planned.
+        settings = ['imapexceptions']
+
+        all_ous = provider_dict['organizational_units']['organizationUnits']
+        top_level_ou = provider_dict['tenant_info']['topLevelOU']
+        if not top_level_ou.startswith('/'):
+            top_level_ou = '/' + top_level_ou
+        ou_paths = set([ou['orgUnitPath'] for ou in all_ous])
+        for setting in settings:
+            invalid = set()
+            for exception in vars(args)[setting]:
+                if 'ou' not in exception or exception['ou'] == '':
+                    continue
+                ou = exception['ou']
+                if not ou.startswith('/'):
+                    ou = '/' + ou
+                if ou not in ou_paths:
+                    invalid.add(ou)
+                if ou == top_level_ou and ('group' not in exception or exception['group'] == ''):
+                    log.warning('%s - cannot configure exception for the entire top-level OU, %s',
+                                setting, top_level_ou)
+
+            if len(invalid) > 0:
+                log.warning('%s - no OUs found matching "%s".',
+                            setting, ', '.join(invalid))
+
+
+    def _validate_group_exceptions(self, provider_dict: dict):
+        '''Validate any configuration items that require the user to provide a group.'''
+
+        args = self._args
+        # List of settings where the user has to input an OU. Currently there's only one, but more
+        # are planned.
+        settings = ['imapexceptions']
+
+        all_groups = provider_dict['group_settings']
+        group_emails = set([group['email'] for group in all_groups])
+        for setting in settings:
+            invalid = set()
+            for exception in vars(args)[setting]:
+                if 'group' not in exception or exception['group'] == '':
+                    continue
+                group = exception['group']
+                if group not in group_emails:
+                    invalid.add(group)
+            if len(invalid) > 0:
+                log.warning('%s - no groups found matching "%s".',
+                            setting, ', '.join(invalid))
+
 
     def _rego_eval(self):
         """

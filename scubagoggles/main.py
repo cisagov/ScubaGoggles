@@ -406,35 +406,6 @@ def get_version_args(parser: argparse.ArgumentParser):
                        help=f'{pfx} Upgrade code to new version number')
 
 
-def log_level(level):
-    """Normalizes a given log level string.
-
-    A complete upper-cased log level string is returned if the given string
-    uniquely identifies one of the log levels.  The returned log level string
-    may be passed to the logger routines.
-
-    :param str level: abbreviation that uniquely identifies
-        a log level (e.g., 'd', 'info', 'crit').
-
-    :return: upper-cased log level string.
-    """
-
-    log_levels = ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')
-
-    return_level = level.upper()
-
-    if return_level not in log_levels:
-
-        match_level = [x for x in log_levels if x.startswith(return_level)]
-
-        if not match_level:
-            raise RuntimeError(f'{level} - unrecognized log level')
-
-        return_level = match_level[0]
-
-    return return_level
-
-
 def dive():
     """Takes in the arguments needed to run scubagoggles
     """
@@ -511,11 +482,6 @@ def dive():
 
     scuba_parser = ScubaArgumentParser(parser)
     args = scuba_parser.parse_args_with_config()
-
-    logging.basicConfig(format='(%(levelname)s): %(message)s')
-    level = log_level(args.log)
-    log = logging.root
-    log.setLevel(level)
 
     # When trapping exceptions to suppress tracebacks (which users don't need
     # to see for obvious failures not related to the code), make sure the

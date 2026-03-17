@@ -3,6 +3,9 @@ package gmail
 import future.keywords
 import data.utils
 import data.utils.GetFriendlyEnabledValue
+import data.utils.ExceptionConfigured
+import data.utils.ExceptionJustification
+import data.utils.FormatJustification
 
 GmailEnabled(orgunit) := utils.AppEnabled(input.policies, "gmail", orgunit)
 
@@ -1055,6 +1058,39 @@ GetFriendlyValue9_1(ImapEnabled, PopEnabled) := Description if {
     Description := "POP access is enabled"
 } else := "Both IMAP and POP access are disabled"
 
+ImapEnabled contains OU if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    section := "gmail_imap_access"
+    setting := "enableImapAccess"
+    imapSet := utils.ApiSettingExists(section, setting, OU)
+    imapSet == true
+    imapEnable := utils.GetApiSettingValue(section, setting, OU)
+    imapEnable == true
+}
+
+PopEnabled contains OU if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    section := "gmail_pop_access"
+    setting := "enablePopAccess"
+    popSet := utils.ApiSettingExists(section, setting, OU)
+    popSet == true
+    popEnable := utils.GetApiSettingValue(section, setting, OU)
+    popEnable == true
+}
+
+ImapExceptions contains OU if {
+    some OU in ImapEnabled
+    ExceptionConfigured(OU, "imap_exceptions")
+}
+
+ImapExceptionsFormatted contains Message if {
+    some OU in ImapExceptions
+    Justification := ExceptionJustification(OU, "imap_exceptions")
+    Message := sprintf("<li>%s. %s</li>", [OU, FormatJustification(Justification)])
+}
+
 NonCompliantOUs9_1 contains {
     "Name": OU,
     "Value": GetFriendlyValue9_1(imapEnable, popEnable)
@@ -1062,16 +1098,20 @@ NonCompliantOUs9_1 contains {
 if {
     some OU, settings in input.policies
     GmailEnabled(OU)
-    imapSection := "gmail_imap_access"
-    imapSetting := "enableImapAccess"
-    popSection := "gmail_pop_access"
-    popSetting := "enablePopAccess"
-    imapSet := utils.ApiSettingExists(imapSection, imapSetting, OU)
-    popSet := utils.ApiSettingExists(popSection, popSetting, OU)
-    true in {imapSet, popSet}
-    imapEnable := utils.GetApiSettingValue(imapSection, imapSetting, OU)
-    popEnable := utils.GetApiSettingValue(popSection, popSetting, OU)
+    imapEnable := OU in (ImapEnabled - ImapExceptions)
+    popEnable := OU in PopEnabled
     true in {imapEnable, popEnable}
+}
+
+ImapExceptionMessage := "" if {
+    count(ImapExceptions) == 0
+} else := Message if {
+    Message := concat("", [
+        "<br>Note: IMAP is enabled in the following locations but ScubaGoggles was configured to ",
+        "allow exceptions for them:<ul>",
+        concat("", ImapExceptionsFormatted),
+        "</ul>"
+    ])
 }
 
 tests contains {
@@ -1080,7 +1120,7 @@ tests contains {
         "policy/gmail_service_status.serviceState"
     ],
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, []),
+    "ReportDetails": concat("", [utils.ReportDetails(NonCompliantOUs9_1, []), ImapExceptionMessage]),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1},
     "RequirementMet": Status,
     "NoSuchEvent": false

@@ -3,7 +3,7 @@ Class for parsing the config file and command-line arguments.
 """
 
 import argparse
-import warnings
+import logging
 
 from pathlib import Path
 
@@ -12,6 +12,35 @@ import yaml
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.utils import path_parser
 
+log = logging.getLogger(__name__)
+
+def log_level(level):
+    """Normalizes a given log level string.
+
+    A complete upper-cased log level string is returned if the given string
+    uniquely identifies one of the log levels.  The returned log level string
+    may be passed to the logger routines.
+
+    :param str level: abbreviation that uniquely identifies
+        a log level (e.g., 'd', 'info', 'crit').
+
+    :return: upper-cased log level string.
+    """
+
+    log_levels = ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')
+
+    return_level = level.upper()
+
+    if return_level not in log_levels:
+
+        match_level = [x for x in log_levels if x.startswith(return_level)]
+
+        if not match_level:
+            raise RuntimeError(f'{level} - unrecognized log level')
+
+        return_level = match_level[0]
+
+    return return_level
 
 class ScubaArgumentParser:
     """
@@ -41,8 +70,16 @@ class ScubaArgumentParser:
         """
         args = self.parse_args()
 
+        logging.basicConfig(format='(%(levelname)s): %(message)s')
+        level = log_level(args.log)
+        log = logging.root
+        log.setLevel(level)
+
         if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
             args.breakglassaccounts = []
+
+        if 'imapexceptions' not in args or args.imapexceptions is None:
+            args.imapexceptions = []
 
         if not 'config' in args or not args.config:
             return args
@@ -131,6 +168,9 @@ class ScubaArgumentParser:
         if 'annotatepolicy' in args:
             ScubaArgumentParser.validate_annotations(args)
 
+        if 'imapexceptions' in args:
+            ScubaArgumentParser.validate_imap_exceptions(args)
+
         # We want OrgName to be in PascalCase for consistency with ScubaGear.
         # But as all other options for ScubaGoggles are all lowercase, make
         # ScubaGoggles accept either orgname or OrgName to make things more
@@ -165,11 +205,9 @@ class ScubaArgumentParser:
         # Warn for any unexpected IDs
         for control_id in args.omitpolicy:
             if control_id.lower() not in control_ids:
-                warnings.warn('Config file indicates omitting '
-                              f'{control_id}, but {control_id} is not one '
-                              'of the controls encompassed by the baselines '
-                              'indicated by the baselines parameter. Control '
-                              'will not be omitted.')
+                log.warning('Config file indicates omitting %s but %s is not one of the controls '
+                             'encompassed by the baselines indicated by the baselines parameter. '
+                             'Control will not be omitted.', control_id, control_id)
 
     @staticmethod
     def validate_annotations(args : argparse.Namespace) -> None:
@@ -193,7 +231,23 @@ class ScubaArgumentParser:
         # Warn for any unexpected IDs
         for control_id in args.annotatepolicy:
             if control_id.lower() not in control_ids:
-                warnings.warn('Config file adds annotations for '
-                              f'{control_id}, but {control_id} is not one '
-                              'of the controls encompassed by the baselines '
-                              'indicated by the baselines parameter.')
+                log.warning('Config file adds annotations for %s, but %s is not one of the '
+                            'controls encompassed by the baselines indicated by the baselines '
+                            'parameter.', control_id, control_id)
+
+
+    @staticmethod
+    def validate_imap_exceptions(args : argparse.Namespace) -> None:
+        """
+        Validate and standardize structure of the IMAP exceptions.
+        """
+
+        for i, exception in enumerate(args.imapexceptions):
+            args.imapexceptions[i] = {
+                'ou': exception.get('ou', ''),
+                'group': exception.get('group', ''),
+                'justification': exception.get('justification', '')
+            }
+            if args.imapexceptions[i]['ou'] == '' and args.imapexceptions[i]['group'] == '':
+                log.warning(('Invalid entry in config file "imapexceptions": each entry must '
+                            'specify at least an OU or a group.'))
