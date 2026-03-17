@@ -464,7 +464,63 @@ GET_DNSINFO_CASES = [
                 "log": []
             }
         ],
-        "expected_calls": True
+        "expected_calls": True,
+        "expected_base_domains": ["example.com"],
+        "expected_alias_domains": ["alias.com"]
+    },
+    # Case where no verified base domains exist but verified alias domains exist
+    {
+        "base_domains": [
+            {"domainName": "unverified.com", "verified": False},
+        ],
+        "alias_domains": [
+            {"domainAliasName": "alias.com", "verified": True}
+        ],
+        "spf_output": [],
+        "dkim_output": [],
+        "dmarc_output": [
+            {
+                "domain": "alias.com",
+                "rdata": ["v=DMARC1; p=none"],
+                "log": []
+            }
+        ],
+        "expected_calls": True,
+        "expected_base_domains": [],
+        "expected_alias_domains": ["alias.com"],
+    },
+    # Case where verified base domains exist but no verified alias domains exist
+    {
+        "base_domains": [
+            {"domainName": "example.com", "verified": True},
+        ],
+        "alias_domains": [
+            {"domainAliasName": "unverified.com", "verified": False},
+        ],
+        "spf_output": [
+            {
+                "domain": "example.com",
+                "rdata": ["v=spf1 include:_spf.google.com ~all"],
+                "log": []
+            }
+        ],
+        "dkim_output": [
+            {
+                "domain": "example.com",
+                "rdata": ["v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."],
+                "log": []
+            },
+        ],
+        "dmarc_output": [
+            {
+                "domain": "example.com",
+                "rdata": ["v=DMARC1; p=none"],
+                "log": []
+            }
+        ],
+        "expected_calls": True,
+        "expected_base_domains": ["example.com"],
+        "expected_alias_domains": [],
     },
     # Case where no verified domains exist
     {
@@ -473,6 +529,8 @@ GET_DNSINFO_CASES = [
         "spf_output": [],
         "dkim_output": [],
         "dmarc_output": [],
-        "expected_calls": False
+        "expected_calls": False,
+        "expected_base_domains": [],
+        "expected_alias_domains": []
     },
 ]

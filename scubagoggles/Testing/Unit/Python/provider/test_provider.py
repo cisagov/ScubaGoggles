@@ -50,11 +50,9 @@ class TestProvider:
         """
         mock_service = mocker.Mock()
         mock_directory = mocker.Mock()
-        mock_orgunits = mocker.Mock()
+        mock_orgunits = mocker.MagicMock()
         mock_groups = mocker.Mock()
 
-        mock_orgunits.__enter__ = lambda s: s
-        mock_orgunits.__exit__ = lambda s, exc_type, exc_val, exc_tb: None
         mock_orgunits.list.return_value.execute.return_value = {
             "organizationUnits": [{
                 "orgUnitPath": "/",
@@ -72,7 +70,7 @@ class TestProvider:
         mocker.patch("scubagoggles.provider.build", side_effect=mock_side_effect)
         return mock_service, mock_directory
 
-    def _provider(self, _mocker, _mock_build, **overrides) -> Provider:
+    def _provider(self, **overrides) -> Provider:
         """
         Helper method that constructs a Provider instance with default parameters,
         overrides can be specified if preferred.
@@ -90,14 +88,14 @@ class TestProvider:
         params = {**defaults, **overrides}
         return Provider(**params)
 
-    def test_exit(self, mocker, mock_build):
+    @pytest.mark.usefixtures("mock_build")
+    def test_exit(self, mocker):
         """
         Verifies Provider.__exit__ closes all service resources.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         for key in provider._services:
             mock_resource = mocker.Mock()
@@ -108,17 +106,16 @@ class TestProvider:
         for resource in provider._services.values():
             resource.close.assert_called_once()
 
-    def test_initialize_services(self, mocker, mock_build):
+    def test_initialize_services(self, mock_build):
         """
         Verifies Provider initialization creates services for reports,
         directory, and groups.
         
-        :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         """
         # _initialize_services() is called in __init__,
         # calling the provider instance is sufficient for testing
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         assert set(provider._services.keys()) == {"reports", "directory", "groups"}
 
@@ -131,10 +128,10 @@ class TestProvider:
         ("api_response", "expected_domains"),
         LIST_DOMAINS_CASES
     )
+    @pytest.mark.usefixtures("mock_build")
     def test_list_domains(
         self,
         mocker,
-        mock_build,
         api_response,
         expected_domains
     ):
@@ -143,11 +140,10 @@ class TestProvider:
         from the Directory API.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param api_response: Parametrized object representing the API response.
         :param expected_domains: Parametrized list representing the expected domains.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         directory = mocker.Mock()
         provider._services["directory"] = directory
@@ -166,10 +162,10 @@ class TestProvider:
         ("api_response", "expected_aliases"),
         LIST_ALIAS_DOMAINS_CASES
     )
+    @pytest.mark.usefixtures("mock_build")
     def test_list_alias_domains(
         self,
         mocker,
-        mock_build,
         api_response,
         expected_aliases
     ):
@@ -182,7 +178,7 @@ class TestProvider:
         :param api_response: Parametrized object representing the API response.
         :param expected_aliases: Parametrized list representing the expected domain aliases.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         directory = mocker.Mock()
         provider._services["directory"] = directory
@@ -201,10 +197,10 @@ class TestProvider:
         ("domains", "query_response", "expected_spf_records"),
         GET_SPF_RECORDS_CASES
     )
+    @pytest.mark.usefixtures("mock_build")
     def test_get_spf_records(
         self,
         mocker,
-        mock_build,
         domains,
         query_response,
         expected_spf_records
@@ -215,12 +211,11 @@ class TestProvider:
         `rdata`, and `log` keys.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param domains: Parametrized set of domains to query for SPF records.
         :param query_response: Parametrized mapping of domain to query response.
         :param expected_spf_records: Parametrized list representing the SPF results.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         def query_side_effect(domain):
             return query_response[domain]
@@ -238,10 +233,10 @@ class TestProvider:
         ("domains", "query_responses", "expected_dkim_records"),
         GET_DKIM_RECORDS_CASES
     )
+    @pytest.mark.usefixtures("mock_build")
     def test_get_dkim_records(
         self,
         mocker,
-        mock_build,
         domains,
         query_responses,
         expected_dkim_records
@@ -251,12 +246,11 @@ class TestProvider:
         using the configured selectors and returns expected output.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param domains: Parametrized set of domains to query for DKIM records.
         :param query_responses: Parametrized mapping of domain to query response.
         :param expected_dkim_records: Parametrized list representing the DKIM results.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         def query_side_effect(qname):
             return query_responses.get(qname, {
@@ -296,10 +290,10 @@ class TestProvider:
         ("domains", "query_responses", "expected_dmarc_records"),
         GET_DMARC_RECORDS_CASES
     )
+    @pytest.mark.usefixtures("mock_build")
     def test_get_dmarc_records(
         self,
         mocker,
-        mock_build,
         domains,
         query_responses,
         expected_dmarc_records
@@ -309,13 +303,12 @@ class TestProvider:
         at "_dmarc.<domain>" and returns expected results.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param domains: Parametrized set of domains/subdomains to query for DMARC records.
         :param query_responses: Parametrized mapping of query name, e.g. "_dmarc.example.com", 
         to the DNS client response object that contains `answers`, `nxdomain`, and `log_entries`. 
         :param expected_dmarc_records: Parametrized list representing the DMARC results.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         def query_side_effect(qname):
             return query_responses.get(qname, {
@@ -341,7 +334,8 @@ class TestProvider:
         "cases",
         GET_DNSINFO_CASES
     )
-    def test_get_dnsinfo(self, mocker, mock_build, cases):
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_dnsinfo(self, mocker, cases):
         """
         Verify if get_dnsinfo() collects verified base and alias domains,
         calls the respective methods (get_spf_records, get_dkim_records, etc.),
@@ -351,10 +345,9 @@ class TestProvider:
         dkim_records, and dmarc_records.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param cases: Parametrized test cases containing domain and DNS record information.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         base_domains = cases["base_domains"]
         alias_domains = cases["alias_domains"]
@@ -376,8 +369,8 @@ class TestProvider:
         result = provider.get_dnsinfo()
 
         if expected_calls:
-            assert result["domains"] == ["example.com"]
-            assert result["alias_domains"] == ["alias.com"]
+            assert result["domains"] == cases.get("expected_base_domains", ["example.com"])
+            assert result["alias_domains"] == cases.get("expected_alias_domains", ["alias.com"])
             assert result["spf_records"] == spf_output
             assert result["dkim_records"] == dkim_output
             assert result["dmarc_records"] == dmarc_output
@@ -401,10 +394,10 @@ class TestProvider:
         "cases",
         GET_SUPER_ADMIN_CASES
     )
+    @pytest.mark.usefixtures("mock_build")
     def test_get_super_admins(
         self,
         mocker,
-        mock_build,
         cases
     ):
         """
@@ -412,10 +405,9 @@ class TestProvider:
         from the Directory API.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param cases: Parametrized test cases containing user list and expected results.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         users_resource = mocker.Mock(name="users_resource")
         users_ctx_manager = mocker.MagicMock(name="users_ctx_manager")
@@ -462,7 +454,8 @@ class TestProvider:
         "cases",
         GET_OU_CASES
     )
-    def test_get_ous(self, mocker, mock_build, cases):
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_ous(self, mocker, cases):
         """
         Verifies Provider.get_ous() gets OUs from the Directory API
         and returns the raw OU list. These tests cover successful API response
@@ -473,7 +466,7 @@ class TestProvider:
         :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param cases: Parametrized test cases containing metadata for OU response/exceptions.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         # Clear calls since get_toplevel_ou is called during provider initialization.
         # get_toplevel_ou calls the same ApiReference.LIST_OUS, so it'll be listed
@@ -516,7 +509,8 @@ class TestProvider:
             "cases",
             GET_TOPLEVEL_OU_CASES
     )
-    def test_get_toplevel_ou(self, mocker, mock_build, cases):
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_toplevel_ou(self, mocker, cases):
         """
         Verifies if Provider.get_toplevel_ou() gets the tenant's 
         root OU. These test cases the presence of a root OU, absence of a root OU,
@@ -524,10 +518,9 @@ class TestProvider:
         if access to the requested API is denied.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param cases: Parametrized test cases containing metadata for OU response/exceptions.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         provider._successful_calls.clear()
         provider._unsuccessful_calls.clear()
@@ -581,7 +574,8 @@ class TestProvider:
         "cases",
         GET_TENANT_INFO_CASES
     )
-    def test_get_tenant_info(self, mocker, mock_build, cases):
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_tenant_info(self, mocker, cases):
         """
         Verifies if Provider.get_tenant_info() gets the tenant/customer
         metadata. These test cases cover successful calls to customers.get().execute(), 
@@ -589,11 +583,10 @@ class TestProvider:
         and correct successful/unsuccessful ApiReference calls.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param cases: Parametrized test cases containing metadata
                       for tenant info response/exceptions.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         provider._successful_calls.clear()
         provider._unsuccessful_calls.clear()
@@ -633,7 +626,8 @@ class TestProvider:
         "cases",
         GET_GWS_LOGS_CASES
     )
-    def test_get_gws_logs(self, mocker, mock_build, cases):
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_gws_logs(self, mocker, cases):
         """
         Verifies if Provider.get_gws_logs() retrieves Admin logs and
         filters them by the requested product/event type. These test 
@@ -641,10 +635,9 @@ class TestProvider:
         results, filtering on different events, and exception handling.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param cases: Parametrized test cases containing metadata for GWS logs response/exceptions.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         activities_resource = mocker.Mock(name="activities_resource")
         activities_ctx_manager = mocker.MagicMock(name="activities_ctx_manager")
@@ -677,7 +670,8 @@ class TestProvider:
         "cases",
         GET_GROUP_SETTINGS_CASES
     )
-    def test_get_group_settings(self, mocker, mock_build, cases):
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_group_settings(self, mocker, cases):
         """
         Verifies Provider.get_group_settings() lists groups from the Directory
         API and then gets group settings from the Groups Settings API. 
@@ -686,10 +680,9 @@ class TestProvider:
         exceptions, and correct successful/unsuccessful ApiReference calls.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param cases: Parametrized test cases containing metadata for OU response/exceptions.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         directory_service = provider._services["directory"]
         groups_service = provider._services["groups"]
@@ -756,16 +749,16 @@ class TestProvider:
         "cases",
         GET_LIST_CASES
     )
-    def test_get_list(self, mocker, mock_build, cases):
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_list(self, mocker, cases):
         """
         Verifies Provider._get_list() handles single-page responses,
         multi-page pagination, empty responses, and missing item keys.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param cases: Parametrized test cases containing page responses and expected results.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         mock_resource = mocker.Mock()
 
@@ -791,15 +784,15 @@ class TestProvider:
 
         assert mock_resource.list_next.call_count == len(cases["pages"])
 
-    def test_check_scopes(self, mocker, mock_build):
+    @pytest.mark.usefixtures("mock_build")
+    def test_check_scopes(self, mocker):
         """
         Verifies if Provider._check_scopes() handles auth-related
         exceptions.
         
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
-        :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         """
-        provider = self._provider(mocker, mock_build)
+        provider = self._provider()
 
         provider._credentials = mocker.Mock()
         provider._credentials.scopes = ["scopeA", "scopeB"]
