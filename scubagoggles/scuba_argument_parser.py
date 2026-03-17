@@ -70,7 +70,7 @@ class ScubaArgumentParser:
 
         logging.basicConfig(format='(%(levelname)s): %(message)s')
         level = log_level(args.log)
-        log = logging.root
+        self.log = logging.root
         log.setLevel(level)
 
         if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
@@ -161,13 +161,13 @@ class ScubaArgumentParser:
                     setattr(args, option_name, path_parser(option_value))
 
         if 'omitpolicy' in args:
-            ScubaArgumentParser.validate_omissions(args)
+            self.validate_omissions(args)
 
         if 'annotatepolicy' in args:
-            ScubaArgumentParser.validate_annotations(args)
+            self.validate_annotations(args)
 
         if 'imapexceptions' in args:
-            ScubaArgumentParser.validate_imap_exceptions(args)
+            self.validate_imap_exceptions(args)
 
         # We want OrgName to be in PascalCase for consistency with ScubaGear.
         # But as all other options for ScubaGoggles are all lowercase, make
@@ -181,8 +181,7 @@ class ScubaArgumentParser:
             vars(args)['OrgUnitName'] = args.orgunitname
             del vars(args)['orgunitname']
 
-    @staticmethod
-    def validate_omissions(args : argparse.Namespace) -> None:
+    def validate_omissions(self, args: argparse.Namespace) -> None:
         """
         Warn for any control IDs configured for omission that aren't in the
         set of IDs covered by the baselines specificied in --baselines.
@@ -203,12 +202,11 @@ class ScubaArgumentParser:
         # Warn for any unexpected IDs
         for control_id in args.omitpolicy:
             if control_id.lower() not in control_ids:
-                log.warning('Config file indicates omitting %s but %s is not one of the controls '
-                             'encompassed by the baselines indicated by the baselines parameter. '
-                             'Control will not be omitted.', control_id, control_id)
+                self.log.warning('Config file indicates omitting %s but %s is not one of the '
+                                 'controls encompassed by the baselines indicated by the baselines '
+                                 'parameter. Control will not be omitted.', control_id, control_id)
 
-    @staticmethod
-    def validate_annotations(args : argparse.Namespace) -> None:
+    def validate_annotations(self, args: argparse.Namespace) -> None:
         """
         Warn for any control IDs configured for annotation that aren't in the
         set of IDs covered by the baselines specificied in --baselines.
@@ -229,13 +227,12 @@ class ScubaArgumentParser:
         # Warn for any unexpected IDs
         for control_id in args.annotatepolicy:
             if control_id.lower() not in control_ids:
-                log.warning('Config file adds annotations for %s, but %s is not one of the '
-                            'controls encompassed by the baselines indicated by the baselines '
-                            'parameter.', control_id, control_id)
+                self.log.warning('Config file adds annotations for %s, but %s is not one of the '
+                                 'controls encompassed by the baselines indicated by the baselines '
+                                 'parameter.', control_id, control_id)
 
 
-    @staticmethod
-    def validate_imap_exceptions(args : argparse.Namespace) -> None:
+    def validate_imap_exceptions(self, args: argparse.Namespace) -> None:
         """
         Validate and standardize structure of the IMAP exceptions.
         """
@@ -247,5 +244,5 @@ class ScubaArgumentParser:
                 'justification': exception.get('justification', '')
             }
             if args.imapexceptions[i]['ou'] == '' and args.imapexceptions[i]['group'] == '':
-                log.warning(('Invalid entry in config file "imapexceptions": each entry must '
-                            'specify at least an OU or a group.'))
+                self.log.warning(('Invalid entry in config file "imapexceptions": each entry must '
+                                  'specify at least an OU or a group.'))
