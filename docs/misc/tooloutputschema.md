@@ -13,10 +13,10 @@ This document is intended to be an authoritative source of the object schema JSO
 | MetaData.TenantId | String | A unique identifier assigned to each M365 tenant/GWS customer. | On the report summary page under "Tenant ID" (ScubaGear only). | 32c412d2-b044-3425-8ed1-ab220b70d3d1 |
 | MetaData.DisplayName | String | The display name of the M365 tenant/GWS customer. | On both the report summary page and the individual report for each baseline under "Tenant Display Name" (ScubaGear only). | Example Tenant Name |
 | MetaData.DomainName | String | The primary domain of the customer (ScubaGoggles) or the initial and immutable .onmicrosoft.com domain of an Entra ID tenant (ScubaGear). | On the report summary page under "Customer Domain" (ScubaGoggles) or "Tenant Domain Name" (ScubaGear). | example.com |
-| MetaData.ProductSuite | String | Name of the SCuBA baseline product suite that is being assessed with the current SCuBA tool. | N/A| Microsoft 365 |
-| MetaData.ProductsAssessed | Array | List of products scanned by the SCuBA tool. | On the report summary page, the values in the "Baseline Conformance Reports" column. | ["Azure Active Directory", "Microsoft 365 Defender"] |
-| MetaData.ProductAbbreviationMapping | Object | A mapping of the list of products assessed during a run of the SCuBA tool to the abbreviations used in the policy identifiers and policy groups in the SCuBA secure configuration baseline documents. | N/A| {"Azure Active Directory":  "AAD", "Microsoft 365 Defender": "Defender"} |
-| MetaData.Tool | String | Name of the current SCuBA tool conducting the assessment. | On the footer of the report summary page, e.g., "Report generated with CISA's ScubaGear tool v1.7.1." | ScubaGear |
+| MetaData.ProductSuite | String | Name of the SCuBA baseline product suite that is being assessed with the current SCuBA tool. | N/A| Google Workspace |
+| MetaData.ProductsAssessed | Array | List of products scanned by the SCuBA tool. | On the report summary page, the values in the "Baseline Conformance Reports" column. | ["Common Controls", "Gmail"] |
+| MetaData.ProductAbbreviationMapping | Object | A mapping of the list of products assessed during a run of the SCuBA tool to the abbreviations used in the policy identifiers and policy groups in the SCuBA secure configuration baseline documents. | N/A| {"Common Controls", "Gmail"} |
+| MetaData.Tool | String | Name of the current SCuBA tool conducting the assessment. | On the footer of the report summary page, e.g., "Report generated with CISA's ScubaGoggles tool v0.6.0." | ScubaGoggles |
 | MetaData.ToolVersion | String | Version of the current SCuBA tool conducting the assessment. | On the footer of the report summary page, e.g., "Report generated with CISA's ScubaGear tool v1.7.1." | 1.7.1 |
 | MetaData.TimestampZulu | String | ISO 8601 compliant timestamp at zero offset from Coordinated Universal Time (UTC). | N/A, though a timestamp formatted in the local datetime of the user that ran the tool is shown on both the report summary page and the individual report for each baseline under "Report Date." | 2024-03-20T18:42:05.043Z |
 | MetaData.ReportUUID | String | UUIDv4 128-bit label used to uniquely identify a SCuBA tool assessment result. | In the bottom right of the footer of the report summary page, eg., "Report UUID: 516d34ab-8d53-4862-979a-a3ff11b4abb6" | 516d34ab-8d53-4862-979a-a3ff11b4abb6 |
@@ -163,10 +163,6 @@ This document is intended to be an authoritative source of the object schema JSO
 | Result | String | The decision made by the ScubaGear assessment whether the tenant ScubaGear was run against meets required configuration stated by the policy. | Warning | Possible values include:<ul><li><code>Pass</code></li><li><code>Fail</code></li><li><code>Warning</code></li><li><code>N/A</code> (typically indicates a manual check needed)</li><li><code>Omitted</code></li><li><code>Incorrect Result</code></li><li><code>Error - Test results missing</code></li><li><code>Error</code></li><li><code>No events found</code> (this is a ScubaGoggles only item and should eventually disappear someday)</li></ul> |
 | Criticality | String | Based RFC 2119. SHALL means the policy is required, SHOULD means the policy is recommend,  3rd Party means that the policy may be implemented via a 3rd Party service (e.g., malware protections are required don't have to be done via Defender). | Should | Possible values include:<ul><li><code>Shall</code></li><li><code>Should</code></li><li><code>Shall/3rd Party</code></li><li><code>Should/3rd Party</code></li><li><code>Shall/Not-implemented</code></li><li><code>Should/Not-implemented</code></li></ul> |
 | Details | String | The exact information of either how the tenant ScubaGear is run against either does or does not meet the SCuBA Secure Configuration Baseline Policy Requirement | 1 meeting policy(ies) found that does not restrict installation of Microsoft Apps by default: Global | Any annotations will be included in HTML formatted string |
-| OmittedEvaluationResult | String | For controls, that were omitted, what the result would have been if it hadn't been omitted. For controls that were not omitted, this value will be set to "N/A". | Fail | Will continue to be output by ScubaGear for backwards compatibility, but we are deprecating this field and it will be removed in the next major release |
-| OmittedEvaluationDetails | String | For controls, that were omitted, what the details string would have been if it hadn't been omitted. For controls that were not omitted, this value will be set to "N/A". | 1 meeting policy(ies) found that does not restrict installation of Microsoft Apps by default: Global | Will continue to be output by ScubaGear for backwards compatibility, but we are deprecating this field and it will be removed in the next major release |
-| IncorrectResult | String | For controls that the user marked as incorrect, what the result would have been if it hadn't been marked incorrect. For controls that were not marked incorrect, this value will be set to "N/A". | Fail | Will continue to be output by ScubaGear for backwards compatibility, but we are deprecating this field and it will be removed in the next major release |
-| IncorrectResultDetails | String | For controls that the user marked as incorrect, what the details string would have been if it hadn't been marked incorrect. For controls that were not marked incorrect, this value will be set to "N/A". | 1 meeting policy(ies) found that does not restrict installation of Microsoft Apps by default: Global | Will continue to be output by ScubaGear for backwards compatibility, but we are deprecating this field and it will be removed in the next major release |
 | OriginalResult | String | The raw result before being annotated or omitted. | Warning | N/A|
 | OriginalDetails | String | The raw result details before being annotated or omitted. | 1 meeting policy(ies) found that does not restrict installation of Microsoft Apps by default: Global | N/A|
 | Comments | Array | Will have annotation and/or omission comments for a control | N/A| N/A|
@@ -193,6 +189,8 @@ This document is intended to be an authoritative source of the object schema JSO
 | query_method | String | The method used for resolving the DNS query: either "traditional" or "DoH." | traditional |
 | query_result | String | String description of the result of the DNS query. | Query returned 1 txt records |
 | query_name | String | The domain name. | example.onmicrosoft.com |
+| query_answers | String | When the query returned txt recods | "v=DMARC1; p=reject; rua=mailto:reports@dmarc.cyber.dhs.gov; pct=100; ruf=mailto:reports@dmarc.cyber.dhs.gov"|
+
 
 </details>
 
@@ -201,19 +199,8 @@ This document is intended to be an authoritative source of the object schema JSO
 
 | Field Name | Type | Description | Example |
 | --- | --- | --- | --- |
-| AlertName | String | The name of the rule associated with the alert. | New user added |
+| Alert Name | String | The name of the rule associated with the alert. | New user added |
 | Description | String | A brief description of the rule. | A new user has been added to the domain. |
 | Status | String | The status of the rule. Either "Unknown", "Enabled", or "Disabled". | Enabled |
-
-</details>
-
-<details>
-<summary>License Object</summary>
-
-| Field Name | Type | Description | Example |
-| --- | --- | --- | --- |
-| SkuPartNumber | String | Listed as "License SKU Identifier" on the "Tenant Licensing Information" table of the AAD report. | M365_G5_GCC |
-| ConsumedUnits | Int | Listed as "Licenses in Use" on the "Tenant Licensing Information" table of the AAD report. | 25 |
-| PrepaidUnits.Enabled | Int | Listed as "Total Licenses" on the "Tenant Licensing Information" table of the AAD report. | 30 |
 
 </details>
