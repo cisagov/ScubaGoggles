@@ -71,7 +71,7 @@ class ScubaArgumentParser:
         logging.basicConfig(format='(%(levelname)s): %(message)s')
         level = log_level(args.log)
         self.log = logging.root
-        log.setLevel(level)
+        self.log.setLevel(level)
 
         if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
             args.breakglassaccounts = []
@@ -136,8 +136,7 @@ class ScubaArgumentParser:
         cli_args, _ = aux_parser.parse_known_args()
         return cli_args
 
-    @staticmethod
-    def validate_config(args : argparse.Namespace) -> None:
+    def validate_config(self, args: argparse.Namespace) -> None:
         """
         Check for an logical errors in the advanced ScubaGoggles configuration
         options.
