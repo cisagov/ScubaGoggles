@@ -32,10 +32,8 @@ from scubagoggles.Testing.Unit.Python.provider.get_list_cases import (
     GET_LIST_CASES,
 )
 
-# Disable "protected-access" because we test some internal methods;
-# Disable "too-many-positional-arguments" because some tests have
-# 6 vs the expected 5 parameter limit, don't need to refactor this.
-# pylint: disable=protected-access,too-many-positional-arguments
+# Disable "protected-access" because we test some internal methods
+# pylint: disable=protected-access
 
 class TestProvider:
     """Unit tests for the Provider class."""
