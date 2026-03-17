@@ -3,9 +3,6 @@ package gmail
 import future.keywords
 import data.utils
 import data.utils.GetFriendlyEnabledValue
-import data.utils.ExceptionConfigured
-import data.utils.ExceptionJustification
-import data.utils.FormatJustification
 
 GmailEnabled(orgunit) := utils.AppEnabled(input.policies, "gmail", orgunit)
 
@@ -1082,13 +1079,13 @@ PopEnabled contains OU if {
 
 ImapExceptions contains OU if {
     some OU in ImapEnabled
-    ExceptionConfigured(OU, "imap_exceptions")
+    utils.ExceptionConfigured(OU, "imap_exceptions")
 }
 
 ImapExceptionsFormatted contains Message if {
     some OU in ImapExceptions
-    Justification := ExceptionJustification(OU, "imap_exceptions")
-    Message := sprintf("<li>%s. %s</li>", [OU, FormatJustification(Justification)])
+    Justification := utils.ExceptionJustification(OU, "imap_exceptions")
+    Message := sprintf("<li>%s. %s</li>", [OU, utils.FormatJustification(Justification)])
 }
 
 NonCompliantOUs9_1 contains {
