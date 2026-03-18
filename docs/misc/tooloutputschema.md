@@ -110,7 +110,7 @@ This document is intended to be an authoritative source of the object schema JSO
 | Details | String | The exact information of either how the tenant ScubaGear is run against either does or does not meet the SCuBA Secure Configuration Baseline Policy Requirement | 1 meeting policy(ies) found that does not restrict installation of Microsoft Apps by default: Global | Any annotations will be included in HTML formatted string |
 | OriginalResult | String | The raw result before being annotated or omitted. | Warning | N/A|
 | OriginalDetails | String | The raw result details before being annotated or omitted. | 1 meeting policy(ies) found that does not restrict installation of Microsoft Apps by default: Global | N/A|
-| Comments | Array | Will have annotation and/or omission comments for a control | N/A| N/A|
+| Comments | Array | Will have annotation and/or omission comments for a control | "We are working on remediating this policy", "Policy is failing for x reason", etc | N/A|
 | ResolutionDate | String or null | Will be either remediation date or omission expiration date; if configured both omission date and a remediation date, the omission date takes precedence; if configured neither, this will be null | 2024-08-01 | N/A|
 
 </details>
