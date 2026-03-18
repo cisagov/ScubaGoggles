@@ -13,7 +13,8 @@ from scubagoggles.main import (
     get_opa_args,
     get_setup_args,
     get_purge_args,
-    get_version_args
+    get_version_args,
+    log_level
 )
 
 # These tests intentionally inspect argparse internals.
@@ -362,7 +363,7 @@ class TestMain:
         ]
 
         for abbreviation, expected in cases:
-            actual = main.log_level(abbreviation)
+            actual = log_level(abbreviation)
             assert actual == expected, (
                 f"log_level({abbreviation!r}) -> {actual!r}, expected {expected!r}"
             )
@@ -371,7 +372,7 @@ class TestMain:
         """ Tests that log_level raises an error on invalid input """
 
         with pytest.raises(RuntimeError, match=r" - unrecognized log level$"):
-            main.log_level("1234")
+            log_level("1234")
 
     @pytest.fixture
     def main_module(self):
