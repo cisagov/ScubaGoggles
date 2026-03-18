@@ -2,23 +2,33 @@
 test_main.py tests the main function.
 """
 import argparse
-import pytest
 from pathlib import Path
 from types import SimpleNamespace
 import sys
 import logging
-import scubagoggles.main as main
+import pytest
+from scubagoggles import main
 from scubagoggles.main import (
     get_gws_args,
     get_opa_args,
     get_setup_args,
     get_purge_args,
     get_version_args
-    # dive is tested via patched import of main
 )
 
+# These tests intentionally inspect argparse internals.
+# pylint: disable=protected-access
+
+# Dummy classes are used for testing. Don't need to add unused code for pylint.
+# pylint: disable=too-few-public-methods
+# pylint: disable=unnecessary-pass
+
 class TestMain:
+    """ Test class for the main function."""
+
     def test_get_gws_args_adds_expected_arguments(self, monkeypatch):
+        """ Test that get_gws_args adds expected arguments """
+
         # Patch dependencies used inside get_gws_args
         def path_parser_sentinel(value):
             return value
@@ -45,15 +55,20 @@ class TestMain:
         created = {"orchestrator_args": None, "start_called": 0}
 
         class DummyOrchestrator:
+            """ Dummy Orchestrator """
+
             @staticmethod
             def gws_products():
-                # unsorted input to verify sorting occurs in get_gws_args
+                """ Unsorted input to verify sorting occurs in get_gws_args """
+
                 return {"gws_baselines": ["zbaseline", "abaseline"]}
 
             def __init__(self, args):
                 created["orchestrator_args"] = args
 
             def start_automation(self):
+                """ Dummy start automation """
+
                 created["start_called"] += 1
 
         monkeypatch.setattr(main, "Orchestrator", DummyOrchestrator)
@@ -66,8 +81,6 @@ class TestMain:
                 opa_dir="OPADIR",
             )
             parser = argparse.ArgumentParser()
-
-            # Act
             get_gws_args(parser, user_config)
 
             # Assert: dispatch is set and calls Orchestrator(args).start_automation()
@@ -129,6 +142,8 @@ class TestMain:
             assert "--skipexport" in cached_opts
 
     def test_get_opa_args_adds_expected_arguments(self, monkeypatch):
+        """ Test get_opa_args adds expected arguments """
+
         # Arrange: patch globals so we can assert the exact objects used
         def getopa_sentinel():
             raise AssertionError("Should not be called in this test")
@@ -196,6 +211,8 @@ class TestMain:
         assert version in group._group_actions
 
     def test_get_setup_args_adds_expected_arguments(self, monkeypatch):
+        """ Test get_setup_args adds expected arguments """
+
         # Arrange: patch globals referenced by get_setup_args so we can assert identity
         def user_setup_sentinel():
             raise AssertionError("Should not be called in this test")
@@ -254,6 +271,8 @@ class TestMain:
         assert outputpath.help == "Scubagoggles output directory"
 
     def test_get_purge_args_adds_expected_arguments(self, monkeypatch):
+        """ Test get_purge_args adds expected arguments """
+
         # Arrange
         def purge_reports_sentinel():
             raise AssertionError("Should not be called in this test")
@@ -289,9 +308,13 @@ class TestMain:
         assert keep_action.help == "Number of recent reports to keep (default: 1)"
 
     def test_get_version_args_adds_expected_arguments(self, monkeypatch):
+        """ Test get_version_args adds expected arguments """
+
         dispatch_sentinel = object()
 
         class DummyVersion:
+            """ Dummy version """
+
             command_dispatch = dispatch_sentinel
 
         monkeypatch.setattr(main, "Version", DummyVersion)
@@ -324,6 +347,8 @@ class TestMain:
         assert upgrade_action in group._group_actions
 
     def test_log_level_normalizes_abbreviations(self):
+        """ Tests that log levels normalize into correct values """
+
         cases = [
             ("d", "DEBUG"),
             ("dEbUG", "DEBUG"),
@@ -343,27 +368,38 @@ class TestMain:
             )
 
     def test_log_level_raises_error_on_invalid_input(self):
+        """ Tests that log_level raises an error on invalid input """
+
         with pytest.raises(RuntimeError, match=r" - unrecognized log level$"):
             main.log_level("1234")
 
     @pytest.fixture
     def main_module(self):
-        # Reuse the globally-imported module
+        """ Reuse the globally-imported module """
+
         return main
 
     @pytest.fixture
     def patched_main(self, monkeypatch, main_module):
+        """ Patch main function """
+
         class DummyUserConfig:
+            """ Dummy class for testing"""
+
             pass
 
         monkeypatch.setattr(main_module, "UserConfig", DummyUserConfig)
         monkeypatch.setattr(main_module, "log_level", lambda _lvl: logging.WARNING)
 
         class DummyScubaArgumentParser:
+            """ Dummy class for testing """
+
             def __init__(self, parser):
                 self._parser = parser
 
             def parse_args_with_config(self):
+                """ Dummy function for testing """
+
                 return self._parser.parse_args()
 
         monkeypatch.setattr(main_module, "ScubaArgumentParser", DummyScubaArgumentParser)
@@ -372,6 +408,8 @@ class TestMain:
 
     @pytest.mark.parametrize("subcommand", ["getopa", "gws", "purge", "setup", "version"])
     def test_dive_dispatches_to_each_subcommand(self, monkeypatch, patched_main, subcommand):
+        """ Test dive dispatches to each subcommand """
+
         main_module = patched_main
 
         dispatch_calls = {name: [] for name in ["getopa", "gws", "purge", "setup", "version"]}
@@ -411,4 +449,3 @@ class TestMain:
         for name in dispatch_calls:
             if name != subcommand:
                 assert len(dispatch_calls[name]) == 0
-
