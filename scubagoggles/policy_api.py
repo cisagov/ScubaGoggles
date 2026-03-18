@@ -588,20 +588,41 @@ class PolicyAPI:
         # The parameters will only be used if Google returns the policies in
         # multiple pages.  The following loop will iterate multiple times only
         # if there's more than one page.
+
         params = None
 
         while True:
 
+            start_time = time.time()
+
             policies_result = self._get(self._baseURL, params)
+
+            elapsed_time = time.time() - start_time
+
+            log.debug('Elapsed time: %.2f seconds', elapsed_time)
 
             # So far, only one page of actual content is being returned
             # (with 2 blank pages, which is another issue).  Merge each page's
             # policies in with the result list.
+
             if 'policies' in policies_result:
                 policies += policies_result['policies']
 
             if 'nextPageToken' not in policies_result:
                 break
+
+            # If the last request took less than a second, Google will almost
+            # certainly reject the next request unless the it's made at least
+            # a second later than the prior one.  This slight delay will
+            # reduce the chance of a wasted request that'll get rejected.
+
+            if elapsed_time < 1:
+
+                delay = 1 - elapsed_time
+
+                log.debug('  delay %.2f seconds', delay)
+
+                sleep(delay)
 
             params = {'pageToken': policies_result['nextPageToken']}
 
@@ -620,8 +641,6 @@ class PolicyAPI:
 
         response = None
 
-        start_time = time.time()
-
         # Google will return the "too many requests" error if the requests come
         # in without any delay between them, or because the read request quota
         # is exceeded. The total iterations is limited to 8 because the delay is
@@ -630,6 +649,8 @@ class PolicyAPI:
         # it sometimes takes seconds to get a response, and for those cases a
         # subsequent request is made after a sufficient delay due to the time it
         # took for the previous response.
+
+        quota_delay = 30
 
         for iter_count in range(1, 9):
 
@@ -644,14 +665,14 @@ class PolicyAPI:
                 # testing.  The delay is longer here (than below) to try to
                 # avoid hitting the quota again.
 
-                delay = 30
-
                 log.warning('attempt %i - read requests to Policy API exceeded '
                             'per minute quota: delay %i seconds',
                             iter_count,
-                            delay)
+                            quota_delay)
 
-                sleep(delay)
+                sleep(quota_delay)
+
+                quota_delay += 15
 
                 continue
 
@@ -666,8 +687,6 @@ class PolicyAPI:
 
             sleep(delay)
 
-        end_time = time.time() - start_time
-
         response_json = response.json()
 
         if not response.ok:
@@ -677,7 +696,6 @@ class PolicyAPI:
         if params:
             log.debug('  params: %s', params)
         log.debug('Result length: %d', len(response.text))
-        log.debug('Elapsed time: %.2f seconds', end_time)
 
         return response_json
 
