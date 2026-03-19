@@ -191,22 +191,23 @@ class Orchestrator:
                 ou = exception['ou']
                 if not ou.startswith('/'):
                     ou = '/' + ou
-                if ou not in ou_paths:
+                if ou == top_level_ou:
+                    if 'group' not in exception or exception['group'] == '':
+                        log.warning('%s - cannot create exception for the entire top-level OU, "%s"',
+                                    setting, provider_dict['tenant_info']['topLevelOU'])
+                elif ou not in ou_paths:
                     invalid.add(ou)
-                if ou == top_level_ou and ('group' not in exception or exception['group'] == ''):
-                    log.warning('%s - cannot configure exception for the entire top-level OU, %s',
-                                setting, top_level_ou)
 
             if len(invalid) > 0:
-                log.warning('%s - no OUs found matching "%s".',
-                            setting, ', '.join(invalid))
+                log.warning('%s - no OUs found matching %s.',
+                            setting, ', '.join([f'"{ou}"' for ou in invalid]))
 
 
     def _validate_group_exceptions(self, provider_dict: dict):
         '''Validate any configuration items that require the user to provide a group.'''
 
         args = self._args
-        # List of settings where the user has to input an OU. Currently there's only one, but more
+        # List of settings where the user has to input a group. Currently there's only one, but more
         # are planned.
         settings = ['imapexceptions']
 
@@ -221,8 +222,8 @@ class Orchestrator:
                 if group not in group_emails:
                     invalid.add(group)
             if len(invalid) > 0:
-                log.warning('%s - no groups found matching "%s".',
-                            setting, ', '.join(invalid))
+                log.warning('%s - no groups found matching %s.',
+                            setting, ', '.join([f'"{group}"' for group in invalid]))
 
 
     def _rego_eval(self):
