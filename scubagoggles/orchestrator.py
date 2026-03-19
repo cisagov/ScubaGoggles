@@ -193,7 +193,7 @@ class Orchestrator:
                     ou = '/' + ou
                 if ou == top_level_ou:
                     if 'group' not in exception or exception['group'] == '':
-                        log.warning('%s - cannot create exception for the entire top-level OU, "%s"',
+                        log.warning('%s - cannot create exception for entire top-level OU, "%s"',
                                     setting, provider_dict['tenant_info']['topLevelOU'])
                 elif ou not in ou_paths:
                     invalid.add(ou)
