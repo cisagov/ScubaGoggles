@@ -1133,80 +1133,34 @@ CommonControlsId10_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.1")
 
 # NOTE: App access cannot be controlled at the group/OU level
 
-# Step 1: Get the set of services that have either an API access allow or API access block event
-APIAccessEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "EventName": Event.name,
-    "OrgUnit": OrgUnit,
-    "ServiceName": ServiceName
+NonComplianceMessage10_1(value) := sprintf("%s services are unrestricted",
+                                          [value])
+
+NonCompliantOUs10_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage10_1(count(unrestrictedScopesGroup))
 }
 if {
-    some Item in input.commoncontrols_logs.items
-    some Event in Item.events
-    # Filter for events where event name is either ALLOW_SERVICE_FOR_OAUTH2_ACCESS or DISALLOW...
-    true in {
-        Event.name == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS",
-        Event.name == "DISALLOW_SERVICE_FOR_OAUTH2_ACCESS"
-    }
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-    ServiceName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "OAUTH2_SERVICE_NAME"][0]
-}
+    some OU, settings in input.policies
+    some service in settings.api_controls_google_services.services
+    service.isEnabled = true
+    unrestrictedScopesGroup := service.scopesGroup
 
-# Step 2: Identify services whose most recent event is an allow event
-HighRiskBlocked contains Service if {
-    # Iterate through all services
-    some Service in {Event.ServiceName | some Event in APIAccessEvents}
-    # Only look at services that end with _HIGH_RISK. It's confusing
-    # how these events appear in the logs. If a user selects "Restricted"
-    # and doesn't check "allow not high risk" a pair of events will appear:
-    # 1 with the service name (e.g., DRIVE) with ALLOW_SERVICE_FOR_OAUTH2_ACCESS
-    # and a second with the DRIVE_HIGH_RISK set to DISALLOW_SERVICE_FOR_OAUTH2_ACCESS.
-    # If user user instead selects "Restricted" but doesn't check "allow not high risk",
-    # again, a pair of events will appear:
-    # 1 with the service name (e.g., DRIVE) with DISALLOW_SERVICE_FOR_OAUTH2_ACCESS
-    # and a second with the DRIVE_HIGH_RISK set to ALLOW_SERVICE_FOR_OAUTH2_ACCESS.
-    # Really confusing. But, in short, to identify services that are set to "resticted but
-    # allow not high risk", we just need to look for events ending with _HIGH_RISK.
-    endswith(Service, "_HIGH_RISK")
-    # Filter for just that service
-    FilteredEvents := {Event | some Event in APIAccessEvents; Event.ServiceName == Service}
-    # Get the most recent change
-    Event := utils.GetLastEvent(FilteredEvents)
-    # If the most recent change is ALLOW, this service is unrestricted
-    Event.EventName == "DISALLOW_SERVICE_FOR_OAUTH2_ACCESS"
+    count(unrestrictedScopesGroup) > 0
 }
-
-# Step 3: Identify services whose most recent event is an allow event and where
-# the high-risk context isn't blocked
-UnrestrictedServices10_1 contains Service if {
-    # Iterate through all services
-    some Service in {Event.ServiceName | some Event in APIAccessEvents}
-    # Ignore services that end risk _HIGH_RISK. Those are handled later
-    not endswith(Service, "_HIGH_RISK")
-    # Filter for just that service
-    FilteredEvents := {Event | some Event in APIAccessEvents; Event.ServiceName == Service}
-    # Get the most recent change
-    Event := utils.GetLastEvent(FilteredEvents)
-    # If the most recent change is ALLOW... and the _HIGH_RISK
-    # version of the service is not blocked, then the app is unrestricted
-    Event.EventName == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS"
-    not concat("", [Service, "_HIGH_RISK"]) in HighRiskBlocked
-}
-
-# This policy does not have API support currently and the rego logic does not correctly catch the corresponding event.
-# Hence updating to be manually checked
 
 tests contains {
     "PolicyId": CommonControlsId10_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "Prerequisites": ["policy/api_controls_google_services.services"],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
 }
-#--
+if {
+    Status := count(NonCompliantOUs10_1) == 0
+}
 
 #
 # Baseline GWS.COMMONCONTROLS.10.2
@@ -1214,62 +1168,29 @@ tests contains {
 
 CommonControlsId10_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.2")
 
-# Identify services whose most recent event is an allow event
-UnrestrictedServices10_2 contains Service if {
-    # Iterate through all services
-    some Service in {Event.ServiceName | some Event in APIAccessEvents}
-    # Ignore services that end risk _HIGH_RISK. Those are handled later
-    not endswith(Service, "_HIGH_RISK")
-    # Filter for just that service
-    FilteredEvents := {Event | some Event in APIAccessEvents; Event.ServiceName == Service}
-    # Get the most recent change
-    Event := utils.GetLastEvent(FilteredEvents)
-    # If the most recent change is ALLOW..., even if the _HIGH_RISK
-    # version of the service is blocked, then the app is unrestricted
-    # for the purposes of 11.3, so we don't need to check the high
-    # risk part for this one.
-    Event.EventName == "ALLOW_SERVICE_FOR_OAUTH2_ACCESS"
-}
+NonComplianceMessage10_2 := "Internal apps are trusted"
 
-ReportDetails10_2(true) := "Requirement met."
-
-ReportDetails10_2(false) := concat("", [
-    "The following services allow access: ",
-    concat(", ", UnrestrictedServices10_2), "."
-])
-
-tests contains {
-    "PolicyId": CommonControlsId10_2,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": concat("", [
-        "No API Access Allowed/Blocked events in the current logs. ",
-        "While we are unable to determine the state from the logs, ",
-        "the default setting is non-compliant; manual check recommended."
-    ]),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
+NonCompliantOUs10_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage10_2
 }
 if {
-    DefaultSafe := false
-    Events := APIAccessEvents
-    count(Events) == 0
+    some OU, settings in input.policies
+    settings.api_controls_internal_apps.trustInternalApps = true
 }
 
 tests contains {
     "PolicyId": CommonControlsId10_2,
     "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
-    "ReportDetails": ReportDetails10_2(Status),
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_2, []),
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := APIAccessEvents
-    count(Events) > 0
-    Status := count(UnrestrictedServices10_2) == 0
+    Status := count(NonCompliantOUs10_2) == 0
 }
+
 #--
 
 #
@@ -1280,51 +1201,15 @@ CommonControlsId10_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.3")
 
 # NOTE: this setting cannot be set at the group level.
 
-DomainOwnedAppAccessEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "EventName": Event.name,
-    "OrgUnit": OrgUnit
-}
-if {
-    some Item in input.commoncontrols_logs.items
-    some Event in Item.events
-    # Filter for events where event name is either TRUST_DOMAIN_OWNED_OAUTH2_APPS or UNTRUST...
-    true in {
-        Event.name == "UNTRUST_DOMAIN_OWNED_OAUTH2_APPS",
-        Event.name == "TRUST_DOMAIN_OWNED_OAUTH2_APPS"
-    }
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-}
+NonComplianceMessage10_3 := "Internal apps are trusted"
 
 NonCompliantOUs10_3 contains {
     "Name": OU,
-    "Value": "Trust internal apps is ON"
+    "Value": NonComplianceMessage10_3
 }
 if {
-    some OU in utils.OUsWithEvents
-    Events := {Event | some Event in DomainOwnedAppAccessEvents; Event.OrgUnit == OU}
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.EventName != "UNTRUST_DOMAIN_OWNED_OAUTH2_APPS"
-}
-
-tests contains {
-    "PolicyId": CommonControlsId10_3,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    Events := {Event | some Event in DomainOwnedAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
-    count(Events) == 0
+    some OU, settings in input.policies
+    settings.api_controls_internal_apps.trustInternalApps = true
 }
 
 tests contains {
@@ -1332,15 +1217,13 @@ tests contains {
     "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_3, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := {Event | some Event in DomainOwnedAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
-    count(Events) > 0
     Status := count(NonCompliantOUs10_3) == 0
 }
+
 #--
 
 #
@@ -1350,59 +1233,17 @@ if {
 CommonControlsId10_4 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.4")
 
 # NOTE: this setting cannot be set at the group level.
-
-UnconfiguredAppAccessEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "EventName": Event.name,
-    "OrgUnit": OrgUnit
-}
-if {
-    some Item in input.commoncontrols_logs.items
-    some Event in Item.events
-    # Filter for events where event name is either BLOCK_ALL... or UNBLOCK... or SIGN_IN...
-    true in {
-        Event.name == "BLOCK_ALL_THIRD_PARTY_API_ACCESS",
-        Event.name == "UNBLOCK_ALL_THIRD_PARTY_API_ACCESS",
-        Event.name == "SIGN_IN_ONLY_THIRD_PARTY_API_ACCESS"
-    }
-    OrgUnit := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "ORG_UNIT_NAME"][0]
-}
-
-GetFriendlyValue10_4(Value) := "Allow users to access any third-party apps" if {
-    Value == "UNBLOCK_ALL_THIRD_PARTY_API_ACCESS"
-} else := "Allow users to access third-party apps that only request basic info needed for Sign in with Google." if {
-    Value == "SIGN_IN_ONLY_THIRD_PARTY_API_ACCESS"
-} else := concat(" ", [Value, "seconds"])
+NonComplianceMessage10_4 := "Internal apps are trusted"
 
 NonCompliantOUs10_4 contains {
     "Name": OU,
-    "Value": concat("", ["Unconfigured third-party app access is set to ", GetFriendlyValue10_4(LastEvent.EventName)])
+    "Value": NonComplianceMessage10_4
 }
 if {
-    some OU in utils.OUsWithEvents
-    Events := {Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == OU}
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.EventName != "BLOCK_ALL_THIRD_PARTY_API_ACCESS"
-}
+    some OU, settings in input.policies
+    accessLevel := settings.api_controls_unconfigured_third_party_apps.accessLevel
+    accessLevel != "UNSPECIFIED_UBER_BLOCK"
 
-tests contains {
-    "PolicyId": CommonControlsId10_4,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    Events := {Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
-    count(Events) == 0
 }
 
 tests contains {
@@ -1410,13 +1251,10 @@ tests contains {
     "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_4, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Events := {Event | some Event in UnconfiguredAppAccessEvents; Event.OrgUnit == utils.TopLevelOU}
-    count(Events) > 0
     Status := count(NonCompliantOUs10_4) == 0
 }
 #--
@@ -1427,6 +1265,7 @@ if {
 
 CommonControlsId10_5 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.5")
 
+# NOTE: this setting cannot be set at the group level.
 NonComplianceMessage10_5 := "Users are allowed to manage access to less secure apps."
 
 NonCompliantOUs10_5 contains {
@@ -1435,22 +1274,22 @@ NonCompliantOUs10_5 contains {
 }
 if {
     some OU, settings in input.policies
-    lessSecure := settings.security_less_secure_apps.allowLessSecureApps
-    lessSecure != false
+    lessSecureAppsSetting := settings.asecurity_less_secure_apps.allowLessSecureApps
+    lessSecureAppsSetting != false
 }
 
 tests contains {
     "PolicyId": CommonControlsId10_5,
-    "Prerequisites": ["policy/security_less_secure_apps.allowLessSecureApps"],
+    "Prerequisites": ["reports/v1/activities/list"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_5, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_5},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
     Status := count(NonCompliantOUs10_5) == 0
 }
+
 #--
 
 #########################
