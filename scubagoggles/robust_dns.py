@@ -2,6 +2,7 @@
 as well as DNS over HTTPS (DoH)'''
 
 import dns
+from dns import resolver
 import requests
 
 class RobustDNSClient:
@@ -18,7 +19,7 @@ class RobustDNSClient:
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.
         """
-        self.resolver = dns.resolver.Resolver()
+        self.resolver = resolver.Resolver()
         if dns_resolvers:
             self.resolver.nameservers = dns_resolvers
 
@@ -95,7 +96,7 @@ class RobustDNSClient:
                     "query_answers": answers
                 })
                 break
-            except dns.resolver.NoAnswer:
+            except resolver.NoAnswer:
                 # The answer section was empty. This usually means that while
                 # the domain exists, but there are no records of the requested
                 # type. No need to retry the traditional query, this was not a
@@ -110,7 +111,7 @@ class RobustDNSClient:
                     "query_answers": []
                 })
                 break
-            except dns.resolver.NXDOMAIN:
+            except resolver.NXDOMAIN:
                 # The server returned NXDomain, no need to retry the traditional query or retry
                 # with DoH, this was not a transient failure.
                 log_entries.append({
