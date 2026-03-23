@@ -156,8 +156,7 @@ Conversation retention SHALL be set to minimum of 18 months.
 
 ### Resources
 
--   [Turn access to Google Workspace with Gemini Alpha on or off](https://support.google.com/a/answer/14170809)
--   [Google Workspace Service Specific Terms](https://workspace.google.com/terms/service-terms/index.html)
+-   None
 
 ### Prerequisites
 
@@ -165,9 +164,16 @@ Conversation retention SHALL be set to minimum of 18 months.
 
 ### Implementation
 
-#### GWS.GEMINI.2.1v0.6 Instructions
+#### GWS.GEMINI.3.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Generative AI** -\> **Gemini for Workspace**.
-3.  Select **Alpha Gemini features** -\>  **Alpha features**.
-4.  Ensure **Turn off access to Alpha features in Gemini for Google Workspace** is selected.
+2.  Select **Generative AI** -\> **Gemini Ap**.
+3.  Select **Gemini Conversation History**
+4.  Ensure **Gemini conversation history** is selected.
+5.  Select **Save**.
+
+#### GWS.GEMINI.3.2v0.6 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Generative AI** -\> **Gemini Ap**.
+3.  Select **Gemini Conversation History**
+4.  Ensure **Conversation retention** is set to at least 18 months.
 5.  Select **Save**.
