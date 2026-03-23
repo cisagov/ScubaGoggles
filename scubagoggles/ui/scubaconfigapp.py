@@ -682,8 +682,8 @@ class ScubaConfigApp:
         summary_keys = {
             'orgname': lambda v: f"Organization: {v}",
             'baselines': lambda v: f"Baselines: {len(v)} selected",
-            'omitpolicy': lambda v: f"Omitted Policies: {len(v)}",
             'annotatepolicy': lambda v: f"Annotated Policies: {len(v)}",
+            'omitpolicy': lambda v: f"Omitted Policies: {len(v)}",
             'breakglassaccounts': lambda v: f"Break Glass Accounts: {len(v)}",
             'preferreddnsresolvers': lambda v: f"DNS Resolvers: {len(v)} configured",
         }
@@ -1248,8 +1248,8 @@ class ScubaConfigApp:
         st.markdown("## 🚀 Quick Start Guide")
         st.markdown("""
         1. **Main Tab:** Select products and baselines to assess
-        2. **Omit Policies:** Exclude specific policies from assessment
-        3. **Annotate Policies:** Add custom notes and documentation
+        2. **Annotate Policies:** Add custom notes and documentation
+        3. **Omit Policies:** Exclude specific policies from assessment
         4. **Break Glass:** Configure emergency access accounts
         5. **Preview:** Review your configuration before saving
         """)
@@ -1257,8 +1257,8 @@ class ScubaConfigApp:
         st.markdown("## 📋 Tab Documentation")
         st.markdown("""
         - **Main:** Product selection with baseline coverage
-        - **Omit Policies:** Use green dots to indicate configured policies, orange during editing
         - **Annotate Policies:** Add rationale and documentation for policy decisions
+        - **Omit Policies:** Use green dots to indicate configured policies, orange during editing
         - **Break Glass:** Emergency accounts that bypass normal security controls
         """)
 
@@ -1843,8 +1843,8 @@ class ScubaConfigApp:
             ('orgunitname', 'orgunitname'),
             ('description', 'Description'),
             ('quiet', 'quiet'),
-            ('omitpolicy', 'omitpolicy'),
             ('annotatepolicy', 'AnnotatePolicy'),
+            ('omitpolicy', 'omitpolicy'),
             ('breakglassaccounts', 'breakglassaccounts'),
             ('preferreddnsresolvers', 'preferreddnsresolvers'),
         )
@@ -1877,8 +1877,8 @@ class ScubaConfigApp:
 
         tabs = st.tabs([
             "🏢 Main",
-            "🚫 Omit Policies",
             "📝 Annotate Policies",
+            "🚫 Omit Policies",
             "🚨 Break Glass",
             "👁️ Preview"
         ])
@@ -1887,10 +1887,10 @@ class ScubaConfigApp:
             self.render_main_tab()
 
         with tabs[1]:
-            self.render_omit_policies_tab()
+            self.render_annotate_policies_tab()
 
         with tabs[2]:
-            self.render_annotate_policies_tab()
+            self.render_omit_policies_tab()
 
         with tabs[3]:
             self.render_break_glass_tab()
