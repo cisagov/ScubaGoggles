@@ -1149,17 +1149,19 @@ if {
     count(unrestrictedScopesGroup) > 0
 }
 
+# This policy does not have API support currently
+# Only services that are restricted are shown in api_controls_google_services
+# We are unable to determine whether there exists services that are unrestricted
+# Hence updating to be manually checked
+
 tests contains {
     "PolicyId": CommonControlsId10_1,
-    "Prerequisites": ["policy/api_controls_google_services.services"],
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_1, []),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Status := count(NonCompliantOUs10_1) == 0
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
 }
 
 #
@@ -1168,27 +1170,34 @@ if {
 
 CommonControlsId10_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.2")
 
-NonComplianceMessage10_2 := "Internal apps are trusted"
+# NOTE: This setting is only applicable to Drive, Gmail, Classroom and Chat
 
-NonCompliantOUs10_2 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage10_2
-}
-if {
+HighRiskScopes := ["DRIVE_HIGH_RISK", "GMAIL_HIGH_RISK", "CLASSROOM_HIGH_RISK", "CHAT_HIGH_RISK"]
+
+UnrestrictedServices10_2 contains UnrestrictedService if {
     some OU, settings in input.policies
-    settings.api_controls_internal_apps.trustInternalApps = true
+    some service in settings.api_controls_google_services.services
+    service.scopesGroup in HighRiskScopes
+    UnrestrictedService := service.scopesGroup
 }
+
+ReportDetails10_2(true) := "Requirement met."
+
+ReportDetails10_2(false) := concat("", [
+    "The following services allow access: ",
+    concat(", ", UnrestrictedServices10_2), "."
+])
 
 tests contains {
     "PolicyId": CommonControlsId10_2,
-    "Prerequisites": ["reports/v1/activities/list"],
+    "Prerequisites": ["policy/api_controls_google_services.services"],
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs10_2, []),
+    "ReportDetails": ReportDetails10_2(Status),
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Status := count(NonCompliantOUs10_2) == 0
+    Status := count(UnrestrictedServices10_2) == 0
 }
 
 #--
@@ -1201,7 +1210,7 @@ CommonControlsId10_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.3")
 
 # NOTE: this setting cannot be set at the group level.
 
-NonComplianceMessage10_3 := "Internal apps are trusted"
+NonComplianceMessage10_3 := "Trust internal apps is ON"
 
 NonCompliantOUs10_3 contains {
     "Name": OU,
@@ -1214,9 +1223,10 @@ if {
 
 tests contains {
     "PolicyId": CommonControlsId10_3,
-    "Prerequisites": ["reports/v1/activities/list"],
+    "Prerequisites": ["policy/api_controls_internal_apps.trustInternalApps"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_3, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_3},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -1233,24 +1243,30 @@ if {
 CommonControlsId10_4 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.4")
 
 # NOTE: this setting cannot be set at the group level.
-NonComplianceMessage10_4 := "Internal apps are trusted"
+
+# NOTE: Google documentation lists the setting options as ACCESS_LEVEL_UNSPECIFIED, BLOCK_ALL and ALLOW_SIGN_IN_ONLY
+# But actual setting options are UNSPECIFIED_UBER_BLOCK, BLOCK_ALL_SCOPES and ALLOW_SIGN_IN_SCOPES_ONLY
+GetFriendlyValue10_4(Value) := "Allow users to access any third-party apps" if {
+    Value == "UNSPECIFIED_UBER_BLOCK"
+} else := "Allow users to access third-party apps that only request basic info needed for Sign in with Google." if {
+    Value == "ALLOW_SIGN_IN_SCOPES_ONLY"
+}
 
 NonCompliantOUs10_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage10_4
+    "Value": concat("", ["Unconfigured third-party app access is set to ", GetFriendlyValue10_4(accessLevel)])
 }
 if {
     some OU, settings in input.policies
     accessLevel := settings.api_controls_unconfigured_third_party_apps.accessLevel
-    accessLevel != "UNSPECIFIED_UBER_BLOCK"
-
 }
 
 tests contains {
     "PolicyId": CommonControlsId10_4,
-    "Prerequisites": ["reports/v1/activities/list"],
+    "Prerequisites": ["policy/api_controls_unconfigured_third_party_apps.accessLevel"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_4, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_4},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
@@ -1274,13 +1290,13 @@ NonCompliantOUs10_5 contains {
 }
 if {
     some OU, settings in input.policies
-    lessSecureAppsSetting := settings.asecurity_less_secure_apps.allowLessSecureApps
+    lessSecureAppsSetting := settings.security_less_secure_apps.allowLessSecureApps
     lessSecureAppsSetting != false
 }
 
 tests contains {
     "PolicyId": CommonControlsId10_5,
-    "Prerequisites": ["reports/v1/activities/list"],
+    "Prerequisites": ["policy/security_less_secure_apps.allowLessSecureApps"],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_5, []),
     "RequirementMet": Status,
