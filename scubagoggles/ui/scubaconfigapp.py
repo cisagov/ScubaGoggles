@@ -1795,7 +1795,7 @@ class ScubaConfigApp:
             st.markdown("---")
             st.subheader("Save Configuration")
 
-            if st.button("💾 Save Configuration", type="primary", use_container_width=True):
+            if st.button("💾 Save Configuration"):
                 errors = self._validate_before_save()
                 if errors:
                     self._show_validation_errors(errors)
