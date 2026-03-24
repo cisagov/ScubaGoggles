@@ -272,11 +272,11 @@ This section covers Google Gemini features within the Google Meet app.
 ### Policies
 
 #### GWS.MEET.6.1v0.6
-Allow hosts to change who notes are shared to SHOULD be unselected.
+Admins SHOULD NOT be allowed to override the default sharing level for meeting notes set by the organization.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet61v06-instructions)
 
-- _Rationale:_ Allowing hosts to change note sharing could create a risk of unauthorized data sharing.
+- _Rationale:_ Meeting notes may contain sensitive information that should not be shared outside of the organization. Preventing hosts from overriding the default sharing level reduces the risk of inadvertent sharing of meeting notes.
 - _Last modified:_ March 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
@@ -284,12 +284,12 @@ Allow hosts to change who notes are shared to SHOULD be unselected.
   - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud torage](https://attack.mitre.org/techniques/T1567/002/)
 
 #### GWS.MEET.6.2v0.6
-Default sharing setting for Google AI notes SHALL be set to The hosts and co-hosts.
+Default sharing setting for Google AI notes SHALL be restricted to guests in your organization.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet62v06-instructions)
 
-- _Rationale:_ This prevents unintentional unauthorized access to meeting AI notes.
-- _Last modified:_ January 2024
+- _Rationale:_ Meeting notes may contain sensitive information that should not be shared outside of the organization. Setting a secure default sharing level reduces the risk of inadvertent sharing of meeting notes.
+- _Last modified:_ March 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -312,7 +312,7 @@ Default sharing setting for Google AI notes SHALL be set to The hosts and co-hos
 5.  Ensure **Allow hosts to change who notes are shared to** is unselected.
 6.  Click **Save**.
 
-#### GWS.MEET.5.2v0.6 Instructions
+#### GWS.MEET.6.2v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Gemini Settings**.
