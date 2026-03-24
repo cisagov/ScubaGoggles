@@ -290,7 +290,7 @@ Default sharing setting for Google AI notes SHALL be set to The hosts and co-hos
 
 - _Rationale:_ This prevents unintentional unauthorized access to meeting AI notes.
 - _Last modified:_ January 2024
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping: SC-7(10)
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud torage](https://attack.mitre.org/techniques/T1567/002/)
