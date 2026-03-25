@@ -23,41 +23,46 @@ import yaml
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 from scubagoggles.ui.validation import ConfigValidator
 
-current_dir = Path(__file__).parent.parent.parent
-if str(current_dir) not in sys.path:
-    sys.path.insert(0, str(current_dir))
-
-scubagoggles_available = True
-
-try:
-    from scubagoggles.config import UserConfig
-    from scubagoggles.version import Version
-except ImportError:
-    scubagoggles_available = False
-
-    class MockUserConfig:  # pylint: disable=too-few-public-methods
-        """Fallback when ScubaGoggles backend is not installed."""
-        def __init__(self):
-            self.output_dir = "./"
-            self.credentials_file = None
-
-    class MockVersion:  # pylint: disable=too-few-public-methods
-        """Fallback when ScubaGoggles backend is not installed."""
-        number = "1.0.0"
-        @classmethod
-        def initialize(cls):
-            """No-op; satisfies the Version.initialize() interface."""
-
-    UserConfig = MockUserConfig
-    Version = MockVersion
-
-
 class ScubaConfigApp:
     """Streamlit-based configuration editor for ScubaGoggles."""
 
+    @staticmethod
+    def _load_scubagoggles_backend():
+        """Load backend classes when available, otherwise return safe fallbacks."""
+        current_dir = Path(__file__).parent.parent.parent
+        if str(current_dir) not in sys.path:
+            sys.path.insert(0, str(current_dir))
+
+        try:
+            from scubagoggles.config import UserConfig  # pylint: disable=import-outside-toplevel
+            from scubagoggles.version import Version  # pylint: disable=import-outside-toplevel
+            return True, UserConfig, Version
+        except ImportError:
+            class MockUserConfig:  # pylint: disable=too-few-public-methods
+                """Fallback when ScubaGoggles backend is not installed."""
+                def __init__(self):
+                    self.output_dir = "./"
+                    self.credentials_file = None
+
+            class MockVersion:  # pylint: disable=too-few-public-methods
+                """Fallback when ScubaGoggles backend is not installed."""
+                number = "1.0.0"
+
+                @classmethod
+                def initialize(cls):
+                    """No-op; satisfies the Version.initialize() interface."""
+
+            return False, MockUserConfig, MockVersion
+
     def __init__(self):
-        self.user_config = UserConfig()
-        Version.initialize()
+        (
+            self.scubagoggles_available,
+            user_config_class,
+            version_class,
+        ) = self._load_scubagoggles_backend()
+        self.version_class = version_class
+        self.user_config = user_config_class()
+        self.version_class.initialize()
         self.available_policies = self.parse_baseline_policies()
 
         if 'config_data' not in st.session_state:
@@ -1868,7 +1873,7 @@ class ScubaConfigApp:
 
         self.render_header()
 
-        if not scubagoggles_available:
+        if not self.scubagoggles_available:
             st.warning(
                 "ScubaGoggles backend is not installed. "
                 "Running with limited functionality — version info and "
@@ -1903,7 +1908,7 @@ class ScubaConfigApp:
         col1, col2, col3 = st.columns([2, 1, 1])
 
         with col1:
-            if scubagoggles_available:
+            if self.scubagoggles_available:
                 st.markdown(
                     '<span class="status-indicator status-success">'
                     '✅ ScubaGoggles</span>',
@@ -1917,7 +1922,7 @@ class ScubaConfigApp:
                 )
 
         with col2:
-            st.markdown(f"**Version:** {Version.number}")
+            st.markdown(f"**Version:** {self.version_class.number}")
 
         with col3:
             st.markdown("**[GitHub Repository](https://github.com/cisagov/ScubaGoggles)**")
