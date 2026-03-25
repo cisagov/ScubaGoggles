@@ -612,7 +612,8 @@ test_ThirdPartyApps_Incorrect_2 if {
 
     failedOU := [{"Name": "topOU",
                   "Value": concat("", ["Unconfigured third-party app access is set to:",
-                  " Allow users to access third-party apps that only request basic info needed for Sign in with Google."])}]
+                  " Allow users to access third-party apps that only",
+                  " request basic info needed for Sign in with Google."])}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
