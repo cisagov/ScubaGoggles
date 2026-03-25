@@ -1178,7 +1178,7 @@ UnrestrictedServices10_2 contains UnrestrictedService if {
     some OU, settings in input.policies
     some service in settings.api_controls_google_services.services
     service.scopesGroup in HighRiskScopes
-    UnrestrictedService := service.scopesGroup
+    UnrestrictedService := split(service.scopesGroup, "_")[0]
 }
 
 ReportDetails10_2(true) := "Requirement met."
