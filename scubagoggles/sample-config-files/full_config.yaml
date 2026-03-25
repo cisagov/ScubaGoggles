@@ -94,6 +94,11 @@ outputreportfilename: BaselineReports
 #     - 8.8.8.8
 #     - 8.8.4.4
 
+# Use this field to control what DNS over HTTPS (DoH) servers are used (if specified) execute DoH queries.
+# preferreddohservers:
+#     - 8.8.8.8
+#     - cloudflare-dns.com
+
 # Use this field to assign true, to not fallback to DoH should the traditional DNS requests fail when retrieving any DNS records required by the specific SCuBA policies listed above.
 # skipdoh: true
 

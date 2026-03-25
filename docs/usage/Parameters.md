@@ -21,6 +21,7 @@ usage: scubagoggles gws [-h]
                         [--outputregofilename <name>]
                         [--outputreportfilename]
                         [--preferreddnsresolvers <dns-resolvers> [<dns-resolvers> ...]]
+                        [--preferreddohservers <doh-servers> [<doh-servers> ...]]
                         [--quiet]
                         [--silencebodwarnings]
                         [--skipdoh]
@@ -84,6 +85,11 @@ options:
                         IP addresses of DNS resolvers that should be used to retrieve any DNS records required by
                         specific SCuBA policies. Optional; if not provided, the system default will be used. Example:
                         --preferreddnsresolvers 8.8.8.8 8.8.4.4
+  --preferreddohservers <doh-servers>
+                        IP addresses of DoH servers that should be used to retrieve any TXT records (i.e. required 
+                        by specific SCuBA policy). Optional; If not provided, the DoH query will use a default 
+                        list of DoH servers: "cloudflare-dns.com", "[2606:4700:4700::1111]", "1.1.1.1". Example:
+                        --preferreddohservers 8.8.8.8 cloudfare-dns.com
   --quiet               This switch suppresses automatically launching a web browser to open the html report output and
                         the loading bar output.
   --silencebodwarnings  This switch suppresses warning relating to requirements specific to BOD compliance (e.g.,
