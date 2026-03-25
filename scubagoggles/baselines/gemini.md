@@ -166,14 +166,14 @@ Conversation retention SHALL be set to minimum of 18 months.
 
 #### GWS.GEMINI.3.1v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Generative AI** -\> **Gemini Ap**.
+2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **Gemini Conversation History**
 4.  Ensure **Gemini conversation history** is selected.
 5.  Select **Save**.
 
 #### GWS.GEMINI.3.2v0.6 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Generative AI** -\> **Gemini Ap**.
+2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **Gemini Conversation History**
 4.  Ensure **Conversation retention** is set to at least 18 months.
 5.  Select **Save**.
