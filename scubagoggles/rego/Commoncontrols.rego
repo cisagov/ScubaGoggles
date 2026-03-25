@@ -1133,7 +1133,7 @@ CommonControlsId10_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.1")
 
 # NOTE: App access cannot be controlled at the group/OU level
 
-NonComplianceMessage10_1(value) := sprintf("%s services are unrestricted",
+NonComplianceMessage10_1(value) := sprintf("%s services are unrestricted.",
                                           [value])
 
 NonCompliantOUs10_1 contains {
@@ -1210,7 +1210,7 @@ CommonControlsId10_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.3")
 
 # NOTE: this setting cannot be set at the group level.
 
-NonComplianceMessage10_3 := "Trust internal apps is ON"
+NonComplianceMessage10_3 := "Trust internal apps is ON."
 
 NonCompliantOUs10_3 contains {
     "Name": OU,
@@ -1248,13 +1248,13 @@ CommonControlsId10_4 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.4")
 # But actual setting options are UNSPECIFIED_UBER_BLOCK, BLOCK_ALL_SCOPES and ALLOW_SIGN_IN_SCOPES_ONLY
 GetFriendlyValue10_4(Value) := "Allow users to access any third-party apps" if {
     Value == "UNSPECIFIED_UBER_BLOCK"
-} else := "Allow users to access third-party apps that only request basic info needed for Sign in with Google." if {
+} else := "Allow users to access third-party apps that only request basic info needed for Sign in with Google" if {
     Value == "ALLOW_SIGN_IN_SCOPES_ONLY"
 }
 
 NonCompliantOUs10_4 contains {
     "Name": OU,
-    "Value": concat("", ["Unconfigured third-party app access is set to ", GetFriendlyValue10_4(accessLevel)])
+    "Value": concat("", ["Unconfigured third-party app access is set to: ", GetFriendlyValue10_4(accessLevel), "."]),
 }
 if {
     some OU, settings in input.policies

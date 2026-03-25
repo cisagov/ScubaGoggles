@@ -226,7 +226,7 @@ test_HighRiskServices_Incorrect_1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "The following services allow access: DRIVE_HIGH_RISK."
+    RuleOutput[0].ReportDetails == "The following services allow access: DRIVE."
 }
 
 test_HighRiskServices_Incorrect_2 if {
@@ -320,7 +320,7 @@ test_HighRiskServices_Incorrect_2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "The following services allow access: GMAIL_HIGH_RISK."
+    RuleOutput[0].ReportDetails == "The following services allow access: GMAIL."
 }
 
 test_HighRiskServices_Incorrect_3 if {
@@ -414,7 +414,7 @@ test_HighRiskServices_Incorrect_3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "The following services allow access: CLASSROOM_HIGH_RISK."
+    RuleOutput[0].ReportDetails == "The following services allow access: CLASSROOM."
 }
 
 test_HighRiskServices_Incorrect_4 if {
@@ -508,7 +508,7 @@ test_HighRiskServices_Incorrect_4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "The following services allow access: CHAT_HIGH_RISK."
+    RuleOutput[0].ReportDetails == "The following services allow access: CHAT."
 }
 
 #
@@ -589,7 +589,7 @@ test_ThirdPartyApps_Incorrect_1 if {
     }
 
     failedOU := [{"Name": "topOU",
-                  "Value": "Unconfigured third-party app access is set to Allow users to access any third-party apps"}]
+                  "Value": "Unconfigured third-party app access is set to: Allow users to access any third-party apps."}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -610,7 +610,7 @@ test_ThirdPartyApps_Incorrect_2 if {
     }
 
     failedOU := [{"Name": "topOU",
-                  "Value": "Unconfigured third-party app access is set to Allow users to access third-party apps that only request basic info needed for Sign in with Google."}]
+                  "Value": "Unconfigured third-party app access is set to: Allow users to access third-party apps that only request basic info needed for Sign in with Google."}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
