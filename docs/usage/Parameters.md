@@ -481,6 +481,25 @@ scubagoggles gws --darkmode
 # Enable identification information redaction styles for the report output
 scubagoggles gws --reportredaction
 ```
+## Preferred DoH Servers
+
+**--preferreddohservers**  IP addresses of DoH servers that should be used to retrieve any TXT records required by specific SCuBA policies. See [PreferredDnsResolvers](#preferreddnsresolvers) for the list of applicable policies.
+
+Optional; If not provided, the DoH query will use a default list of DoH servers:"cloudflare-dns.com", "[2606:4700:4700::1111]", "1.1.1.1".
+
+| Parameter   | Value                                               |
+|-------------|-----------------------------------------------------|
+| Optional    | Yes                                                 |
+| Datatype    | List of strings                                     |
+| Default     | cloudflare-dns.com, [2606:4700:4700::1111], 1.1.1.1 |
+| Config File | Yes                                                 |
+
+Here is an example using `--preferreddohservers`:
+
+```powershell
+scubagoggles gws --preferreddohservers 8.8.8.8 cloudfare-dns.com
+```
+
 ## Run cache mode 
 
 **--runcached ** switch when added will run the tool in "RunCached mode". When combined with --skipexport allows the user to skip authentication and provider export.
