@@ -297,7 +297,7 @@ Default sharing setting for Google AI notes SHALL be restricted to guests in you
 
 
 ### Resources
-- None
+- [https://support.google.com/meet/answer/14754931](https://support.google.com/meet/answer/14754931)
 
 ### Prerequisites
 -   None
