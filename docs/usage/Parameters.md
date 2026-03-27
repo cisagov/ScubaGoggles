@@ -4,8 +4,6 @@ The scubagoggles gws cmdlet has several command-line parameters, which are descr
 
 > **Note**: Some parameters can also be specified in a [configuration file](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md). If specified in both, command-line parameters have precedence over the config file.
 
-> **Note**: Parameters use the Pascal case convention, and their names are consistent with those in the configuration file. 
-
 Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS,
 all commands will be under the `gws` "subcommand".
 
