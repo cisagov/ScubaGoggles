@@ -10,6 +10,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -134,13 +135,11 @@ def update_opa_docs(latest_version: str) -> None:
     print(f"Updated OPA version references in {docs_path}")
 
 
-def run_rego_unit_tests() -> str:
-    """Run the OPA Rego unit tests and return the output.
+def run_rego_unit_tests() -> None:
+    """Run the OPA Rego unit tests, exiting non-zero on failure.
 
     Uses `opa test` directly (requires OPA on PATH, e.g. via
     open-policy-agent/setup-opa).
-
-    :return: combined stdout/stderr from the test run
     """
     rego_dir = REPO_ROOT / "scubagoggles" / "rego"
     test_dir = REPO_ROOT / "scubagoggles" / "Testing" / "Unit" / "Rego"
@@ -152,14 +151,15 @@ def run_rego_unit_tests() -> str:
     print(f"Running: opa test -v ({len(rego_files)} rego + {len(test_files)} test files)")
 
     result = subprocess.run(cmd, capture_output=True, text=True, check=False)
-    output = result.stdout + result.stderr
+    print(result.stdout)
+    if result.stderr:
+        print(result.stderr)
 
     if result.returncode != 0:
-        print(f"Warning: OPA unit tests exited with code {result.returncode}")
-    else:
-        print("OPA unit tests passed.")
+        print(f"OPA unit tests failed (exit code {result.returncode})")
+        sys.exit(result.returncode)
 
-    return output
+    print("OPA unit tests passed.")
 
 
 def set_github_output(name: str, value: str) -> None:
@@ -222,8 +222,7 @@ def main():
         update_opa_docs(args.latest)
 
     elif args.command == "test":
-        output = run_rego_unit_tests()
-        print(output)
+        run_rego_unit_tests()
 
 
 if __name__ == "__main__":

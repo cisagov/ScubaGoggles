@@ -80,12 +80,7 @@ jobs:
             --latest "$LATEST_VERSION"
 
       - name: Run OPA Rego unit tests
-        id: unit-tests
-        run: |
-          python utils/workflow/update_opa.py test 2>&1 | tee opa_test_output.txt
-          echo "test_output<<EOFMARKER" >> "$GITHUB_OUTPUT"
-          tail -c 40000 opa_test_output.txt >> "$GITHUB_OUTPUT"
-          echo "EOFMARKER" >> "$GITHUB_OUTPUT"
+        run: python utils/workflow/update_opa.py test
 
       - name: Create branch, commit, and open PR
         run: |
@@ -111,23 +106,13 @@ jobs:
           Keep ScubaGoggles aligned with the latest OPA release.
           See [OPA releases](https://github.com/open-policy-agent/opa/releases).
 
-          Closes #918
-
           ## Testing
 
           - **OPA version tested:** v${{ env.LATEST_VERSION }}
-          - **Rego unit tests:** Ran as part of this workflow
+          - **Rego unit tests:** Passed (ran as part of this workflow)
           - **Smoke test:** A smoke test has been triggered against branch
             `${{ env.BRANCH_NAME }}`. Check the
             [latest smoke test run](https://github.com/${{ github.repository }}/actions/workflows/run_smoke_test.yml).
-
-          <details>
-          <summary>Rego unit test output (last 40 KB, may be truncated)</summary>
-
-          ```
-          ${{ steps.unit-tests.outputs.test_output }}
-          ```
-          </details>
 
           ## Pre-approval checklist
 
