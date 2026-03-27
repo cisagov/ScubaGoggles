@@ -457,7 +457,7 @@ scubagoggles gws --debug
 |-------------|----------|
 | Optional    | Yes      |
 | Datatype    | Boolean  |
-| Default     | n/a      |
+| Default     | The system default theme      |
 | Config File | Yes      |
 
 ```powershell
