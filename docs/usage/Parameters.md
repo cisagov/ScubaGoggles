@@ -496,7 +496,7 @@ scubagoggles gws --runcached
 ```
 ## Skip Export
 
-**--runcached ** will skip the provider export. To be used in conjunction with --runcached.
+**--skipexport** will skip the provider export. To be used in conjunction with --runcached.
 
 | Parameter   | Value  |
 |-------------|--------|
