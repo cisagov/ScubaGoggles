@@ -2,7 +2,6 @@
 Class for parsing the config file and command-line arguments.
 """
 
-import yaml
 import argparse
 import logging
 
@@ -10,6 +9,8 @@ from pathlib import Path
 
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.utils import path_parser
+
+import yaml
 
 log = logging.getLogger(__name__)
 
