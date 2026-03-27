@@ -443,7 +443,7 @@ scubagoggles gws --numberofuuidcharacterstotruncate 18
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes   |
 
 ```powershell
 # print debugging information for OPA
