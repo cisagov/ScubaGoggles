@@ -5,10 +5,7 @@
 name: Update OPA Version Dependency
 
 on:
-  # TODO: Remove this push trigger before merging to main.
-  push:
-    branches:
-      - "918-create-opa-workflow"
+
   schedule:
     # Run Monday through Friday at 2:11 AM UTC (10:11 PM EDT)
     - cron: "11 2 * * 1-5"
