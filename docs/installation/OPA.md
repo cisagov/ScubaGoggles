@@ -53,7 +53,7 @@ options:
 
 ```bash
 # example
-scubagoggles getopa -v v0.60.0
+scubagoggles getopa -v v1.15.0
 ```
 
 If you have run the [ScubaGoggles setup utility](DownloadAndInstall.md#ScubaGoggles-Setup-Utility),
@@ -63,7 +63,7 @@ you may have specified the location of the OPA executable. `getopa` will save th
 
 1. If the above options can not execute for any reason or you would prefer to
    download OPA manually, go to the [Open Policy Agent website](https://www.openpolicyagent.org/docs/latest/#running-opa)
-2. Check the website for a compatible OPA version (Currently v0.45.0 and above)
+2. Check the website for a compatible OPA version (Currently v1.15.0 and above)
    for ScubaGoggles and select the corresponding version on top left of the
    website.
 3. Navigate to the menu on left side of the screen:
