@@ -177,6 +177,7 @@ def set_github_output(name: str, value: str) -> None:
 
 
 def main():
+    """Parse arguments and dispatch to the appropriate subcommand."""
     parser = argparse.ArgumentParser(
         description="OPA version dependency management helpers"
     )
