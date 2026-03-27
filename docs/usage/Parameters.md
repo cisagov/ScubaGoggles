@@ -382,7 +382,7 @@ scubagoggles gws --quiet
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes    |
 
 ```powershell
 # Silence warning related to BOD submission requirements
