@@ -136,12 +136,12 @@ scubagoggles gws --outjasonfilename <output-JSON-file>
 
 **--config** identifies the local file path to a YAML formatted configuration file. Configuration file parameters can be used in place of command-line parameters. Additional parameters and variables not available on the command line can also be included in the file that will be provided to the tool for use in specific tests.
 
-| Parameter   | Value                                    |
-|-------------|------------------------------------------|
-| Optional    | Yes                                      |
-| Datatype    | String                                   |
-| Default     | Directory where ScubaGoggles is executed |
-| Config File | No                                       |
+| Parameter   | Value     |
+|-------------|-----------|
+| Optional    | Yes       |
+| Datatype    | String    |
+| Default     | n/a       |
+| Config File | No        |
 
 Here is an example using `--config`:
 
