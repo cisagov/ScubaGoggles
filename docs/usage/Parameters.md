@@ -503,7 +503,7 @@ scubagoggles gws --runcached
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes    |
 
 ```powershell
 # run the tool in "RunCached mode" and skip the provider export
