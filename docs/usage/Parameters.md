@@ -69,7 +69,7 @@ scubagoggles gws --accesstoken <access-token>
 |-------------|---------------------------------------------------|
 | Optional    | Yes                                               |
 | Datatype    | List of Strings                                   |
-| Default     | ["assuredcontrols", "calendar", "chat", "classroom", "commoncontrols", "drive", "gemini", "gmail", "groups", "meet", "sites""] |
+| Default     | ["assuredcontrols", "calendar", "chat", "classroom", "commoncontrols", "drive", "gemini", "gmail", "groups", "meet", "sites"] |
 | Config File | Yes                                               |
 
 The list of acceptable values are:
