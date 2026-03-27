@@ -488,7 +488,7 @@ scubagoggles gws --reportredaction
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes    |
 
 ```powershell
 # run the tool in "RunCached mode"
