@@ -198,7 +198,7 @@ scubagoggles gws --customerid <customer-id>
 |-------------|----------------------------------|
 | Optional    | Yes                              |
 | Datatype    | String                           |
-| Default     | `C:\Users\johndoe\.scubagoggles\`|
+| Default     | path indicated through the setup utility |
 | Config File | Yes                              |
 
 Here is an example using ` --opapath`:
