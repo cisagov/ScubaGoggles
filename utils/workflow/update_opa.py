@@ -143,7 +143,7 @@ def _parse_test_summary(output: str) -> str:
     :param output: raw stdout from ``opa test -v``
     :return: formatted summary string
     """
-    result_re = re.compile(r"^data\.(\w+)\.\w+:\s+(PASS|FAIL)", re.MULTILINE)
+    result_re = re.compile(r"data\.(\w+)\.[^:]+:\s+(PASS|FAIL)")
     counts: dict[str, dict[str, int]] = {}
 
     for match in result_re.finditer(output):
