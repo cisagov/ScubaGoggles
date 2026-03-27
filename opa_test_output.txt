@@ -1,0 +1,858 @@
+Running: opa test -v (12 rego + 72 test files)
+OPA unit tests passed.
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api04_test.rego:42:
+data.calendar.test_CalendarAPI_Payments_Incorrect_1: PASS (3.721689ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api04_test.rego:35:
+data.calendar.test_CalendarAPI_Payments_Correct_1: PASS (4.19314ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols17_test.rego:39:
+data.commoncontrols.test_MPA_Incorrect_V1: PASS (44.033632ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols17_test.rego:7:
+data.commoncontrols.test_MPA_Correct_V1: PASS (52.842795ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols17_test.rego:75:
+data.commoncontrols.test_MPA_Incorrect_V2: PASS (79.612138ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:89:
+data.gmail.test_Encrypted_Correct_1: PASS (47.33313ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:96:
+data.gmail.test_Encrypted_Incorrect_1: PASS (33.909229ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:105:
+data.gmail.test_Encrypted_Incorrect_2: PASS (32.991388ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:114:
+data.gmail.test_Scripts_Correct_1: PASS (15.428904ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:121:
+data.gmail.test_Scripts_Incorrect_1: PASS (14.252143ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:130:
+data.gmail.test_Scripts_Incorrect_2: PASS (15.040351ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:139:
+data.gmail.test_AnomalousAttach_Correct_1: PASS (15.037154ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:146:
+data.gmail.test_AnomalousAttach_Incorrect_1: PASS (18.775209ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:155:
+data.gmail.test_AnomalousAttach_Incorrect_2: PASS (30.157443ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:171:
+data.gmail.test_FutureSettings_Incorrect_1: PASS (30.335626ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:189:
+data.gmail.test_AttachConsequence_Correct_1: PASS (33.928493ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:164:
+data.gmail.test_FutureSettings_Correct_1: PASS (62.837378ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:196:
+data.gmail.test_AttachConsequence_Incorrect_1: PASS (29.192905ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:180:
+data.gmail.test_FutureSettings_Incorrect_2: PASS (65.289668ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api05_test.rego:206:
+data.gmail.test_AttachConsequence_Incorrect_2: PASS (21.842311ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols09_test.rego:7:
+data.commoncontrols.test_HighlyPriv_Correct_V1: PASS (25.366264ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols09_test.rego:30:
+data.commoncontrols.test_Sensitive_Correct_V1: PASS (22.80279ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail02_test.rego:7:
+data.gmail.test_DKIM_Correct_V1: PASS (11.862164ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail02_test.rego:27:
+data.gmail.test_DKIM_Correct_V2: PASS (11.980975ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail02_test.rego:51:
+data.gmail.test_DKIM_Incorrect_V1: PASS (11.817684ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail02_test.rego:75:
+data.gmail.test_DKIM_Incorrect_V2: PASS (15.041553ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api03_test.rego:36:
+data.calendar.test_CalendarAPI_Interoperability_Correct_1: PASS (3.278714ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api03_test.rego:56:
+data.calendar.test_OAuth_Correct_V1: PASS (2.289191ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api03_test.rego:43:
+data.calendar.test_CalendarAPI_Interoperability_Incorrect_1: PASS (3.47ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet_api01_test.rego:34:
+data.meet.test_MeetAPI_UserAccessType_Correct_1: PASS (3.611854ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet_api01_test.rego:41:
+data.meet.test_MeetAPI_UserAccessType_Incorrect_1: PASS (3.807198ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols06_test.rego:59:
+data.commoncontrols.test_Count_Correct_V2: PASS (16.480406ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols06_test.rego:30:
+data.commoncontrols.test_Count_Correct_V1: PASS (16.980691ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols06_test.rego:7:
+data.commoncontrols.test_Separate_Correct_V1: PASS (18.364036ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols06_test.rego:92:
+data.commoncontrols.test_Count_Correct_V3: PASS (18.028672ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols06_test.rego:146:
+data.commoncontrols.test_Count_Incorrect_V1: PASS (23.792192ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols06_test.rego:204:
+data.commoncontrols.test_Count_Incorrect_V2: PASS (23.654575ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api08_test.rego:39:
+data.gmail.test_EmailUploads_Incorrect_1: PASS (23.033108ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api08_test.rego:32:
+data.gmail.test_EmailUploads_Correct_1: PASS (36.754281ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api10_test.rego:29:
+data.commoncontrols.test_LessSecureApps_Correct_1: PASS (46.146641ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api10_test.rego:36:
+data.commoncontrols.test_LessSecureApps_Incorrect_1: PASS (65.783983ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api04_test.rego:68:
+data.chat.test_ChatAPI_External_Messages_Correct_1: PASS (5.815617ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api04_test.rego:75:
+data.chat.test_ChatAPI_External_Messages_Incorrect_1: PASS (6.212469ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api04_test.rego:84:
+data.chat.test_ChatAPI_External_Messages_Incorrect_2: PASS (7.128722ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api03_test.rego:57:
+data.chat.test_ChatAPI_Space_History_Correct_1: PASS (5.274709ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api03_test.rego:64:
+data.chat.test_ChatAPI_Space_History_Incorrect_1: PASS (5.495711ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api03_test.rego:73:
+data.chat.test_ChatAPI_Space_History_Incorrect_2: PASS (6.811762ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api03_test.rego:97:
+data.chat.test_ChatAPI_Space_History_Incorrect_3: PASS (5.879706ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols13_test.rego:12:
+data.commoncontrols.test_Alerts_V1: PASS (201.680356ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols13_test.rego:33:
+data.commoncontrols.test_Alerts_V2: PASS (186.474193ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols13_test.rego:63:
+data.commoncontrols.test_Alerts_V3: PASS (170.642751ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols13_test.rego:95:
+data.commoncontrols.test_Alerts_V4: PASS (173.934579ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols13_test.rego:154:
+data.commoncontrols.test_Alerts_V6: PASS (22.654867ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols13_test.rego:175:
+data.commoncontrols.test_Alerts_V7: PASS (22.910814ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols13_test.rego:122:
+data.commoncontrols.test_Alerts_V5: PASS (109.446588ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols13_test.rego:199:
+data.commoncontrols.test_Alerts_V8: PASS (142.800118ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api09_test.rego:50:
+data.gmail.test_ImapPopEnable_Incorrect_1: PASS (33.859452ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api09_test.rego:43:
+data.gmail.test_ImapPopEnable_Correct_1: PASS (20.517668ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:12:
+data.commoncontrols.test_SSO_Correct_V1: PASS (24.020243ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:37:
+data.commoncontrols.test_SSO_Correct_V2: PASS (27.46212ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:120:
+data.commoncontrols.test_SSO_Incorrect_V1: PASS (32.286903ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:73:
+data.commoncontrols.test_SSO_Correct_V3: PASS (51.735216ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:185:
+data.commoncontrols.test_SSO_Incorrect_V3: PASS (42.607478ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:200:
+data.commoncontrols.test_SSO_Incorrect_V4: PASS (65.157093ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:147:
+data.commoncontrols.test_SSO_Incorrect_V2: PASS (100.02101ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:270:
+data.commoncontrols.test_SSO_Profiles_Correct_V1: PASS (78.391419ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:225:
+data.commoncontrols.test_SSO_Incorrect_V5: PASS (101.13297ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:295:
+data.commoncontrols.test_SSO_Profiles_Correct_V2: PASS (78.753636ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:377:
+data.commoncontrols.test_SSO_Profiles_Incorrect_V1: PASS (50.896445ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:331:
+data.commoncontrols.test_SSO_Profiles_Correct_V3: PASS (120.885801ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:404:
+data.commoncontrols.test_SSO_Profiles_Incorrect_V2: PASS (86.078764ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:442:
+data.commoncontrols.test_SSO_Profiles_Incorrect_V3: PASS (93.363944ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:457:
+data.commoncontrols.test_SSO_Profiles_Incorrect_V4: PASS (83.233546ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols03_test.rego:482:
+data.commoncontrols.test_SSO_Profiles_Incorrect_V5: PASS (57.323968ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api02_test.rego:48:
+data.classroom.test_ClassroomAPI_DataAccess_Correct_1: PASS (2.936838ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api02_test.rego:55:
+data.classroom.test_ClassroomAPI_DataAccess_Incorrect_1: PASS (4.666568ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet_api03_test.rego:31:
+data.meet.test_MeetAPI_HostMgt_Correct_1: PASS (3.320301ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet_api03_test.rego:38:
+data.meet.test_MeetAPI_HostMgt_Incorrect_1: PASS (3.92083ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/sites/sites_api01_test.rego:46:
+data.sites.test_SitesAPI_Correct_1: PASS (1.522265ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/sites/sites_api01_test.rego:53:
+data.sites.test_SitesAPI_Incorrect_1: PASS (2.233509ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/sites/sites_api01_test.rego:64:
+data.sites.test_SitesAPI_Incorrect_2: PASS (1.895408ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet_api04_test.rego:31:
+data.meet.test_MeetAPI_ExtWarn_Correct_1: PASS (3.296287ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet_api04_test.rego:38:
+data.meet.test_MeetAPI_ExtWarn_Incorrect_1: PASS (4.066821ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api04_test.rego:35:
+data.groups.test_GroupsAPI_HiddenGroups_Correct_1: PASS (2.683085ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api04_test.rego:42:
+data.groups.test_GroupsAPI_HiddenGroups_Incorrect_1: PASS (3.330686ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive05_test.rego:104:
+data.drive.test_Sharing_Incorrect_V1: PASS (7.443728ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive05_test.rego:12:
+data.drive.test_Sharing_Correct_V1: PASS (9.651215ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive05_test.rego:70:
+data.drive.test_Sharing_Correct_V3: PASS (11.368395ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive05_test.rego:36:
+data.drive.test_Sharing_Correct_V2: PASS (11.733704ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive05_test.rego:128:
+data.drive.test_Sharing_Incorrect_V2: PASS (9.653382ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive05_test.rego:226:
+data.drive.test_Sharing_Incorrect_V5: PASS (7.609637ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive05_test.rego:154:
+data.drive.test_Sharing_Incorrect_V3: PASS (12.183783ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive05_test.rego:190:
+data.drive.test_Sharing_Incorrect_V4: PASS (12.227424ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api01_test.rego:44:
+data.calendar.test_CalendarAPI_PrimaryShare_Correct_1: PASS (3.131459ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api01_test.rego:51:
+data.calendar.test_CalendarAPI_PrimaryShare_Incorrect_1: PASS (3.821525ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api01_test.rego:61:
+data.calendar.test_CalendarAPI_SecondaryShare_Correct_1: PASS (3.305043ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api01_test.rego:68:
+data.calendar.test_CalendarAPI_SecondaryShare_Incorrect_1: PASS (3.65283ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api02_test.rego:35:
+data.calendar.test_CalendarAPI_WarnExternal_Correct_1: PASS (2.977132ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/calendar/calendar_api02_test.rego:42:
+data.calendar.test_CalendarAPI_WarnExternal_Incorrect_1: PASS (3.24966ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:12:
+data.commoncontrols.test_AccessControl_Correct_V1#01: PASS (18.317202ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:35:
+data.commoncontrols.test_Consent_Correct_V1: PASS (21.325233ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:63:
+data.commoncontrols.test_Consent_Correct_V2: PASS (20.56538ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:101:
+data.commoncontrols.test_Consent_Incorrect_V1: PASS (18.946126ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:129:
+data.commoncontrols.test_Consent_Incorrect_V2: PASS (21.678579ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:205:
+data.commoncontrols.test_Consent_Incorrect_V4: PASS (17.515649ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:167:
+data.commoncontrols.test_Consent_Incorrect_V3: PASS (20.695064ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:232:
+data.commoncontrols.test_Internal_Correct_V1: PASS (20.013675ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:287:
+data.commoncontrols.test_Internal_Incorrect_V1: PASS (20.964026ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:346:
+data.commoncontrols.test_Internal_Incorrect_V3: PASS (18.164557ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:312:
+data.commoncontrols.test_Internal_Incorrect_V2: PASS (21.214836ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:255:
+data.commoncontrols.test_Internal_Correct_V2: PASS (26.783848ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:365:
+data.commoncontrols.test_Unconfigured_Correct_V1: PASS (21.158566ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:388:
+data.commoncontrols.test_Unconfigured_Correct_V2: PASS (22.170435ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:420:
+data.commoncontrols.test_Unconfigured_Incorrect_V1: PASS (20.840792ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:447:
+data.commoncontrols.test_Unconfigured_Incorrect_V2: PASS (20.718231ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols10_test.rego:475:
+data.commoncontrols.test_Unconfigured_Incorrect_V3: PASS (22.783461ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api04_test.rego:51:
+data.classroom.test_ClassroomAPI_Unenrollment_Correct_1#01: PASS (3.450173ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api04_test.rego:58:
+data.classroom.test_ClassroomAPI_Unenrollment_Incorrect_1#01: PASS (5.287984ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api06_test.rego:73:
+data.drive.test_DriveDesktop_Incorrect_1: PASS (33.190608ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api06_test.rego:82:
+data.drive.test_DriveDesktop_Incorrect_2: PASS (39.665802ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api06_test.rego:66:
+data.drive.test_DriveDesktop_Correct_1: PASS (51.261284ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api02_test.rego:43:
+data.chat.test_ChatAPI_External_Sharing_Correct_1: PASS (13.447585ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api02_test.rego:50:
+data.chat.test_ChatAPI_External_Sharing_Incorrect_1: PASS (11.797052ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api01_test.rego:45:
+data.groups.test_GroupsAPI_Collaboration_Correct_1: PASS (8.071106ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api01_test.rego:52:
+data.groups.test_GroupsAPI_Collaboration_Incorrect_1: PASS (8.226455ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api01_test.rego:101:
+data.groups.test_GroupsAPI_ExternalAccess_Correct_1: PASS (8.109848ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api01_test.rego:108:
+data.groups.test_GroupsAPI_ExternalAccess_Incorrect_1: PASS (8.213281ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api01_test.rego:157:
+data.groups.test_GroupsAPI_ExternalEmail_Correct_1: PASS (8.031282ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api01_test.rego:164:
+data.groups.test_GroupsAPI_ExternalEmail_Incorrect_1: PASS (6.903332ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api12_test.rego:85:
+data.commoncontrols.test_Takeout_Correct_1: PASS (102.029483ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api12_test.rego:92:
+data.commoncontrols.test_Takeout_Incorrect_1: PASS (100.898537ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api12_test.rego:112:
+data.commoncontrols.test_Takeout_Incorrect_2: PASS (124.517535ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols02_test.rego:8:
+data.commoncontrols.test_CAA_Correct_V1: PASS (65.283847ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols02_test.rego:69:
+data.commoncontrols.test_CAA_Incorrect_V1: PASS (47.774267ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols02_test.rego:34:
+data.commoncontrols.test_CAA_Correct_V2: PASS (95.810519ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols02_test.rego:132:
+data.commoncontrols.test_CAA_Incorrect_V3: PASS (76.752531ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols02_test.rego:96:
+data.commoncontrols.test_CAA_Incorrect_V2: PASS (115.037794ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api04_test.rego:49:
+data.drive.test_SecurityUpdate_Correct_1: PASS (17.16289ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api04_test.rego:65:
+data.drive.test_SecurityUpdate_Incorrect_2: PASS (25.636683ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api04_test.rego:56:
+data.drive.test_SecurityUpdate_Incorrect_1: PASS (31.199802ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api12_test.rego:34:
+data.gmail.test_OutGateways_Correct_1: PASS (28.667729ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api12_test.rego:41:
+data.gmail.test_OutGateways_Incorrect_1: PASS (13.5407ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api01_test.rego:50:
+data.gmail.test_MailDelegation_Correct_1: PASS (46.787049ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api01_test.rego:57:
+data.gmail.test_MailDelegation_Incorrect_1: PASS (67.009455ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api01_test.rego:66:
+data.gmail.test_MailDelegation_Incorrect_2: PASS (48.293379ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail15_test.rego:9:
+data.gmail.test_Other_Correct_V1#01: PASS (20.896944ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:478:
+data.gmail.test_DMARCAgencyPOC_Incorrect_V3: PASS (25.93972ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:8:
+data.gmail.test_DMARC_Correct_V1: PASS (13.106332ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:58:
+data.gmail.test_DMARC_Incorrect_V1: PASS (13.743274ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:85:
+data.gmail.test_DMARC_Incorrect_V2: PASS (12.682942ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:30:
+data.gmail.test_DMARC_Correct_V2: PASS (27.16858ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:133:
+data.gmail.test_DMARCMessageReject_Correct_V1: PASS (13.692033ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:155:
+data.gmail.test_DMARCMessageReject_Correct_V2: PASS (13.6126ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:105:
+data.gmail.test_DMARC_Incorrect_V3: PASS (27.824662ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:209:
+data.gmail.test_DMARCMessageReject_Incorrect_V2: PASS (12.894686ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:229:
+data.gmail.test_DMARCMessageReject_Incorrect_V3: PASS (13.472793ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:183:
+data.gmail.test_DMARCMessageReject_Incorrect_V1: PASS (25.854344ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:279:
+data.gmail.test_DMARCAggregateReports_Correct_V2: PASS (13.452866ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:307:
+data.gmail.test_DMARCAggregateReports_Incorrect_V1: PASS (13.212457ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:257:
+data.gmail.test_DMARCAggregateReports_Correct_V1: PASS (24.889497ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:353:
+data.gmail.test_DMARCAggregateReports_Incorrect_V3: PASS (13.092603ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:333:
+data.gmail.test_DMARCAggregateReports_Incorrect_V2: PASS (21.615752ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:382:
+data.gmail.test_DMARCAgencyPOC_Correct_V1: PASS (15.705602ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:432:
+data.gmail.test_DMARCAgencyPOC_Incorrect_V1: PASS (13.482441ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:458:
+data.gmail.test_DMARCAgencyPOC_Incorrect_V2: PASS (12.795291ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail04_test.rego:404:
+data.gmail.test_DMARCAgencyPOC_Correct_V2: PASS (25.492063ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api18_test.rego:184:
+data.gmail.test_SpamFilterDomains_Correct_1: PASS (18.696516ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api18_test.rego:203:
+data.gmail.test_SpamFilterDomains_Incorrect_2: PASS (19.321856ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api18_test.rego:191:
+data.gmail.test_SpamFilterDomains_Incorrect_1: PASS (25.703154ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api18_test.rego:220:
+data.gmail.test_SpamFilterWarnings_Incorrect_1: PASS (16.29112ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api18_test.rego:213:
+data.gmail.test_SpamFilterWarnings_Correct_1: PASS (18.382107ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api18_test.rego:243:
+data.gmail.test_SpamFilterBypass_Correct_1: PASS (12.806633ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api18_test.rego:259:
+data.gmail.test_SpamFilterBypass_Incorrect_2: PASS (16.078504ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api18_test.rego:250:
+data.gmail.test_SpamFilterBypass_Incorrect_1: PASS (24.521224ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api18_test.rego:233:
+data.gmail.test_SpamFilterWarnings_Incorrect_2: PASS (31.988268ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api11_test.rego:32:
+data.gmail.test_Autoforward_Correct_1: PASS (12.64971ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api11_test.rego:39:
+data.gmail.test_Autoforward_Incorrect_1: PASS (21.189769ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api03_test.rego:51:
+data.classroom.test_ClassroomAPI_RosterImport_Correct_1: PASS (3.111923ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api03_test.rego:58:
+data.classroom.test_ClassroomAPI_DataAccess_Incorrect_1#01: PASS (11.930862ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api03_test.rego:67:
+data.drive.test_SecurityUpdate_Correct_1#01: PASS (8.664882ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api03_test.rego:74:
+data.drive.test_SecurityUpdate_Incorrect_1#01: PASS (10.883732ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api03_test.rego:86:
+data.drive.test_SecurityUpdate_Incorrect_2#01: PASS (10.531426ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api16_test.rego:74:
+data.commoncontrols.test_EarlyAccess_Correct_1: PASS (22.602199ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api16_test.rego:49:
+data.commoncontrols.test_EntServices_Correct_1: PASS (38.756842ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api16_test.rego:65:
+data.commoncontrols.test_EntServices_Incorrect_2: PASS (26.958889ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api16_test.rego:56:
+data.commoncontrols.test_EntServices_Incorrect_1: PASS (38.587241ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api16_test.rego:81:
+data.commoncontrols.test_EarlyAccess_Incorrect_1: PASS (23.731091ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api16_test.rego:90:
+data.commoncontrols.test_EarlyAccess_Incorrect_2: PASS (57.010154ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet05_test.rego:38:
+data.meet.test_Incoming_Correct_V2: PASS (7.298177ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet05_test.rego:7:
+data.meet.test_Incoming_Correct_V1: PASS (13.176211ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet05_test.rego:123:
+data.meet.test_Incoming_Incorrect_V1: PASS (7.604888ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet05_test.rego:69:
+data.meet.test_Incoming_Correct_V3: PASS (12.493239ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet05_test.rego:254:
+data.meet.test_Incoming_Incorrect_V4: PASS (5.618139ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet05_test.rego:206:
+data.meet.test_Incoming_Incorrect_V3: PASS (10.692296ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet05_test.rego:158:
+data.meet.test_Incoming_Incorrect_V2: PASS (22.086458ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api03_test.rego:47:
+data.groups.test_GroupsAPI_ViewTopics_Correct_1: PASS (7.744288ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api03_test.rego:54:
+data.groups.test_GroupsAPI_ViewTopics_Incorrect_1: PASS (9.132231ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api08_test.rego:64:
+data.commoncontrols.test_SAAcctRecovery_Correct_1: PASS (22.67301ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api08_test.rego:80:
+data.commoncontrols.test_SAAcctRecovery_Incorrect_2: PASS (27.606127ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api08_test.rego:71:
+data.commoncontrols.test_SAAcctRecovery_Incorrect_1: PASS (50.704351ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api08_test.rego:89:
+data.commoncontrols.test_UserAcctRecovery_Correct_1: PASS (81.655965ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api08_test.rego:96:
+data.commoncontrols.test_UserAcctRecovery_Incorrect_1: PASS (105.368399ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api08_test.rego:114:
+data.commoncontrols.test_NotImplemented_0803_1: PASS (94.162165ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api08_test.rego:105:
+data.commoncontrols.test_UserAcctRecovery_Incorrect_2: PASS (115.298468ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail03_test.rego:27:
+data.gmail.test_SPF_Correct_V2: PASS (32.425799ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail03_test.rego:7:
+data.gmail.test_SPF_Correct_V1: PASS (59.578692ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail03_test.rego:91:
+data.gmail.test_SPF_Incorrect_V1: PASS (22.442491ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail03_test.rego:71:
+data.gmail.test_SPF_Correct_V4: PASS (49.765457ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail03_test.rego:115:
+data.gmail.test_SPF_Incorrect_V2: PASS (30.373609ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail03_test.rego:51:
+data.gmail.test_SPF_Correct_V3: PASS (57.595696ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail03_test.rego:156:
+data.gmail.test_SPF_Incorrect_V4: PASS (29.486588ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail03_test.rego:136:
+data.gmail.test_SPF_Incorrect_V3: PASS (48.15015ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:7:
+data.chat.test_Enable_Correct_V1: PASS (62.242576ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:261:
+data.chat.test_Enable_Incorrect_V1: PASS (43.430796ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:65:
+data.chat.test_Enable_Correct_V2: PASS (83.628996ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:324:
+data.chat.test_Enable_Incorrect_V2: PASS (35.448472ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:490:
+data.chat.test_Enable_Incorrect_V4: PASS (14.357462ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:546:
+data.chat.test_Categories_Correct_V1: PASS (8.864603ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:387:
+data.chat.test_Enable_Incorrect_V3: PASS (33.838378ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:582:
+data.chat.test_Categories_Correct_V2: PASS (12.474012ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:163:
+data.chat.test_Enable_Correct_V3: PASS (88.430142ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:636:
+data.chat.test_Categories_Correct_V3: PASS (11.030455ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:682:
+data.chat.test_Categories_Incorrect_V1: PASS (9.160324ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:778:
+data.chat.test_Categories_Incorrect_V3: PASS (4.204789ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat05_test.rego:721:
+data.chat.test_Categories_Incorrect_V2: PASS (13.001465ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet_api02_test.rego:34:
+data.meet.test_MeetAPI_MeetAccess_Correct_1: PASS (3.743238ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet_api02_test.rego:41:
+data.meet.test_MeetAPI_MeetAccess_Incorrect_1: PASS (3.882498ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api02_test.rego:112:
+data.drive.test_NonMemberExternalAccess_1: PASS (9.123024ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api02_test.rego:105:
+data.drive.test_NonMemberExternalAccess_Correct_1: PASS (11.832178ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api02_test.rego:87:
+data.drive.test_ManagerOverride_Incorrect_1: PASS (8.492531ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api02_test.rego:80:
+data.drive.test_ManagerOverride_Correct_1: PASS (10.622025ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api02_test.rego:96:
+data.drive.test_ManagerOverride_Incorrect_2: PASS (10.272635ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api02_test.rego:121:
+data.drive.test_NonMemberExternalAccess_2: PASS (13.597324ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api11_test.rego:43:
+data.commoncontrols.test_MarketplaceApps_Correct_1: PASS (26.411052ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api11_test.rego:50:
+data.commoncontrols.test_MarketplaceApps_Incorrect_1: PASS (27.41587ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api15_test.rego:61:
+data.commoncontrols.test_DataAtRestRegion_Correct_1: PASS (21.604088ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api15_test.rego:79:
+data.commoncontrols.test_DataAtRestRegion_Incorrect_2: PASS (27.059006ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api15_test.rego:88:
+data.commoncontrols.test_DataProcessRegion_Correct_1: PASS (38.113065ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api15_test.rego:68:
+data.commoncontrols.test_DataAtRestRegion_Incorrect_1: PASS (60.60718ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api15_test.rego:95:
+data.commoncontrols.test_DataProcessRegion_Incorrect_1: PASS (47.214575ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api15_test.rego:104:
+data.commoncontrols.test_DataProcessRegion_Incorrect_2: PASS (49.3329ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:157:
+data.commoncontrols.test_2SV_Correct_1: PASS (38.058995ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:164:
+data.commoncontrols.test_2SV_Incorrect_1: PASS (61.603881ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:177:
+data.commoncontrols.test_2SV_Incorrect_2: PASS (66.707187ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:201:
+data.commoncontrols.test_Alt2SV_Incorrect_1: PASS (63.960227ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:194:
+data.commoncontrols.test_Alt2SV_Correct_1: PASS (97.244567ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:225:
+data.commoncontrols.test_NoTelephony2SV_Correct_1: PASS (103.028675ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:212:
+data.commoncontrols.test_Alt2SV_Incorrect_2: PASS (125.938752ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:232:
+data.commoncontrols.test_NoTelephony2SV_Incorrect_1: PASS (128.264661ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:245:
+data.commoncontrols.test_NoTelephony2SV_Incorrect_2: PASS (119.682439ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:260:
+data.commoncontrols.test_2SVUserEnrollment_Correct_1: PASS (72.526054ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:267:
+data.commoncontrols.test_2SVUserEnrollment_Incorrect_1: PASS (83.907361ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:301:
+data.commoncontrols.test_2SVDeviceTrust_Incorrect_1: PASS (60.125519ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:294:
+data.commoncontrols.test_2SVDeviceTrust_Correct_1: PASS (63.523525ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:278:
+data.commoncontrols.test_2SVUserEnrollment_Incorrect_2: PASS (79.917132ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api01_test.rego:312:
+data.commoncontrols.test_2SVDeviceTrust_Incorrect_2: PASS (61.800187ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api14_test.rego:33:
+data.gmail.test_Allowlist_Correct_1: PASS (13.587726ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api14_test.rego:41:
+data.gmail.test_Allowlist_Incorrect_1: PASS (12.877226ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols02_test.rego:131:
+data.assuredcontrols.test_Assuredcontrols2_1_Incorrect_V3: PASS (14.198013ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols02_test.rego:91:
+data.assuredcontrols.test_Assuredcontrols2_1_Incorrect_V1: PASS (23.287746ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols02_test.rego:144:
+data.assuredcontrols.test_Assuredcontrols2_1_Incorrect_V4: PASS (2.532885ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols02_test.rego:110:
+data.assuredcontrols.test_Assuredcontrols2_1_Incorrect_V2: PASS (24.312693ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols02_test.rego:85:
+data.assuredcontrols.test_Assuredcontrols2_1_Correct_V1: PASS (43.268451ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api01_test.rego:57:
+data.classroom.test_ClassroomAPI_JoinClassroom_Correct_1: PASS (3.710087ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api01_test.rego:64:
+data.classroom.test_ClassroomAPI_JoinClassroom_Incorrect_1: PASS (5.244253ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api01_test.rego:73:
+data.classroom.test_ClassroomAPI_JoinClasses_Correct_1: PASS (3.828868ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api01_test.rego:80:
+data.classroom.test_ClassroomAPI_JoinClasses_Incorrect_1: PASS (5.654006ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini01_test.rego:7:
+data.gemini.test_1_1_Correct_V1: PASS (5.794648ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini01_test.rego:42:
+data.gemini.test_1_1_Correct_V2: PASS (5.815932ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini01_test.rego:141:
+data.gemini.test_1_1_Incorrect_V1: PASS (6.46133ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini01_test.rego:78:
+data.gemini.test_1_1_Correct_V3: PASS (10.850588ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini01_test.rego:180:
+data.gemini.test_1_1_Incorrect_V2: PASS (10.416933ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols07_test.rego:7:
+data.commoncontrols.test_Conflicting_Correct_V1: PASS (20.070165ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api04_test.rego:57:
+data.commoncontrols.test_CCAPI_ReAuth_NonComply_1: PASS (25.348527ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api04_test.rego:50:
+data.commoncontrols.test_CCAPI_ReAuth_Comply_1: PASS (28.828471ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail17_test.rego:7:
+data.gmail.test_ComprehensiveMailStorage_Correct_V1: PASS (11.181126ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:76:
+data.gmail.test_ShortLinks_Correct_1: PASS (13.432678ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:83:
+data.gmail.test_ShortLinks_Incorrect_1: PASS (14.924405ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:101:
+data.gmail.test_ScanImages_Correct_1: PASS (12.526741ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:92:
+data.gmail.test_ShortLinks_Incorrect_2: PASS (15.77615ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:108:
+data.gmail.test_ScanImages_Incorrect_1: PASS (14.108466ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:117:
+data.gmail.test_ScanImages_Incorrect_2: PASS (17.825826ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:126:
+data.gmail.test_WarnEnabled_Correct_1: PASS (12.247915ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:142:
+data.gmail.test_WarnEnabled_Incorrect_2: PASS (16.104762ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:151:
+data.gmail.test_ApplyFuture_Correct_1: PASS (12.664598ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:133:
+data.gmail.test_WarnEnabled_Incorrect_1: PASS (22.59865ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:158:
+data.gmail.test_ApplyFuture_Incorrect_1: PASS (13.765708ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api06_test.rego:167:
+data.gmail.test_ApplyFuture_Incorrect_2: PASS (15.643794ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols01_test.rego:60:
+data.assuredcontrols.test_Assuredcontrols_1_1_Incorrect_V2: PASS (2.455701ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols01_test.rego:79:
+data.assuredcontrols.test_AssuredControls1_2_Correct_1: PASS (2.363169ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols01_test.rego:11:
+data.assuredcontrols.test_Assuredcontrols_1_1_Correct_V1: PASS (6.616097ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols01_test.rego:96:
+data.assuredcontrols.test_AssuredControls1_2_Correct_2: PASS (2.355125ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols01_test.rego:35:
+data.assuredcontrols.test_Assuredcontrols_1_1_Incorrect_V1: PASS (7.026862ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols01_test.rego:113:
+data.assuredcontrols.test_AssuredControls1_2_Incorrect_1: PASS (2.633543ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/assuredcontrols/assuredcontrols01_test.rego:131:
+data.assuredcontrols.test_AssuredControls1_2_Incorrect_2: PASS (2.677094ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:7:
+data.gmail.test_SecuritySandbox_Correct_V1: PASS (13.640375ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:35:
+data.gmail.test_SecuritySandbox_Correct_V2: PASS (16.176706ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:149:
+data.gmail.test_SecuritySandbox_Incorrect_V1: PASS (13.272492ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:73:
+data.gmail.test_SecuritySandbox_Correct_V3: PASS (16.89322ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:111:
+data.gmail.test_SecuritySandbox_Correct_V4: PASS (17.912197ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:181:
+data.gmail.test_SecuritySandbox_Incorrect_V2: PASS (14.719601ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:249:
+data.gmail.test_SecuritySandbox_Incorrect_V4: PASS (14.453278ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:321:
+data.gmail.test_Other_Correct_V1: PASS (10.396936ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:210:
+data.gmail.test_SecuritySandbox_Incorrect_V3: PASS (17.199781ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail16_test.rego:278:
+data.gmail.test_SecuritySandbox_Incorrect_V5: PASS (16.623298ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api02_test.rego:47:
+data.groups.test_GroupsAPI_Creator_Correct_1: PASS (5.374604ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/groups/groups_api02_test.rego:54:
+data.groups.test_GroupsAPI_Creator_Incorrect_1: PASS (8.754779ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:299:
+data.drive.test_DefaultAccess_Correct_1: PASS (35.607373ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:316:
+data.drive.test_DefaultAccess_Incorrect_2: PASS (22.760173ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:306:
+data.drive.test_DefaultAccess_Incorrect_1: PASS (61.738409ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:289:
+data.drive.test_MoveContent_Incorrect_2: PASS (14.886359ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:126:
+data.drive.test_ExtSharing_Correct_1: PASS (21.651469ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:153:
+data.drive.test_ReceiveExt_Correct_1: PASS (30.407382ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:144:
+data.drive.test_ExtSharing_Incorrect_2: PASS (47.802422ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:160:
+data.drive.test_ReceiveExt_Incorrect_1: PASS (44.500299ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:171:
+data.drive.test_UserExtSharing_Correct_1: PASS (29.433504ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:133:
+data.drive.test_ExtSharing_Incorrect_1: PASS (71.885969ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:189:
+data.drive.test_NonGoogle_Correct_1: PASS (29.015757ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:178:
+data.drive.test_UserExtSharing_Incorrect_1: PASS (60.050329ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:207:
+data.drive.test_NonGoogle_Incorrect_2: PASS (46.347588ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:216:
+data.drive.test_AllowPublish_Correct_1: PASS (29.748821ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:196:
+data.drive.test_NonGoogle_Incorrect_1: PASS (61.826756ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:243:
+data.drive.test_AccessCheck_Correct_1: PASS (19.784748ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:234:
+data.drive.test_AllowPublish_Incorrect_2: PASS (46.673335ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:223:
+data.drive.test_AllowPublish_Incorrect_1: PASS (75.571593ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:270:
+data.drive.test_MoveContent_Correct_1: PASS (28.057834ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:260:
+data.drive.test_AccessCheck_Incorrect_2: PASS (56.077726ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:250:
+data.drive.test_AccessCheck_Incorrect_1: PASS (73.164792ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/drive/drive_api01_test.rego:277:
+data.drive.test_MoveContent_Incorrect_1: PASS (63.80386ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini02_test.rego:7:
+data.gemini.test_2_1_Correct_V1: PASS (5.877102ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini02_test.rego:42:
+data.gemini.test_2_1_Correct_V2: PASS (26.310497ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini02_test.rego:105:
+data.gemini.test_2_1_Incorrect_V1: PASS (24.775803ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini02_test.rego:197:
+data.gemini.test_2_1_Incorrect_V3: PASS (12.61994ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gemini/gemini02_test.rego:144:
+data.gemini.test_2_1_Incorrect_V2: PASS (21.713633ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail13_test.rego:82:
+data.gmail.test_ExternalReplyWarning_Correct_V3: PASS (56.859208ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail13_test.rego:7:
+data.gmail.test_ExternalReplyWarning_Correct_V1: PASS (14.844315ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail13_test.rego:38:
+data.gmail.test_ExternalReplyWarning_Correct_V2: PASS (16.346693ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail13_test.rego:234:
+data.gmail.test_ExternalReplyWarning_Incorrect_V3: PASS (19.543404ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail13_test.rego:170:
+data.gmail.test_ExternalReplyWarning_Incorrect_V1: PASS (13.506886ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail13_test.rego:202:
+data.gmail.test_ExternalReplyWarning_Incorrect_V2: PASS (14.218263ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail13_test.rego:126:
+data.gmail.test_ExternalReplyWarning_Correct_V4: PASS (36.287759ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail13_test.rego:311:
+data.gmail.test_ExternalReplyWarning_Incorrect_V5: PASS (16.498523ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail13_test.rego:279:
+data.gmail.test_ExternalReplyWarning_Incorrect_V4: PASS (14.195548ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api05_test.rego:51:
+data.classroom.test_ClassroomAPI_Unenrollment_Correct_1: PASS (2.919115ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/classroom/classroom_api05_test.rego:58:
+data.classroom.test_ClassroomAPI_Unenrollment_Incorrect_1: PASS (5.237478ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api01_test.rego:43:
+data.chat.test_ChatAPI_History_Correct_1: PASS (5.22632ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api01_test.rego:50:
+data.chat.test_ChatAPI_History_Incorrect_1: PASS (5.853785ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api01_test.rego:59:
+data.chat.test_ChatAPI_Change_History_Correct_1: PASS (5.025757ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/chat/chat_api01_test.rego:66:
+data.chat.test_ChatAPI_Change_History_Incorrect_1: PASS (5.607669ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api10_test.rego:34:
+data.gmail.test_SyncEnable_Correct_1: PASS (11.95053ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api10_test.rego:41:
+data.gmail.test_SyncEnable_Incorrect_1: PASS (12.807291ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet06_test.rego:8:
+data.meet.test_AutoRecording_Correct_V1: PASS (2.874291ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/meet/meet06_test.rego:32:
+data.meet.test_AutoTranscript_Correct_V1: PASS (2.850196ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols14_test.rego:30:
+data.commoncontrols.test_AccessControl_Correct_V1: PASS (19.175527ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols14_test.rego:7:
+data.commoncontrols.test_SEIM_Correct_V1: PASS (35.17066ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:89:
+data.commoncontrols.test_CCAPI_PwdLength_NonComply_1: PASS (25.257823ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:66:
+data.commoncontrols.test_CCAPI_PwdStrength_Comply_1: PASS (22.817921ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:82:
+data.commoncontrols.test_CCAPI_PwdLength_Comply_1: PASS (21.908249ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:73:
+data.commoncontrols.test_CCAPI_PwdStrength_NonComply_1: PASS (24.24129ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:98:
+data.commoncontrols.test_CCAPI_PwdSuggestLength_Comply_1: PASS (21.800477ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:114:
+data.commoncontrols.test_CCAPI_PwdNextLogin_Comply_1: PASS (21.885064ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:105:
+data.commoncontrols.test_CCAPI_PwdSuggestLength_NonComply_1: PASS (24.760587ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:121:
+data.commoncontrols.test_CCAPI_PwdNextLogin_NonComply_1: PASS (24.0104ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:130:
+data.commoncontrols.test_CCAPI_PwdReuse_Comply_1: PASS (21.772915ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:146:
+data.commoncontrols.test_CCAPI_PwdResetFrequency_Comply_1: PASS (22.086118ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:137:
+data.commoncontrols.test_CCAPI_PwdReuse_NonComply_1: PASS (24.190235ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/commoncontrols/commoncontrols_api05_test.rego:153:
+data.commoncontrols.test_CCAPI_PwdResetFrequency_NonComply_1: PASS (24.55153ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api15_test.rego:50:
+data.gmail.test_PreScanning_Correct_1: PASS (12.31679ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api15_test.rego:57:
+data.gmail.test_PreScanning_Incorrect_1: PASS (12.640099ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api15_test.rego:66:
+data.gmail.test_PreScanning_Incorrect_2: PASS (13.995357ms)
+
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:127:
+data.gmail.test_EmployeeNameSpoofing_Correct_1: PASS (22.852725ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:134:
+data.gmail.test_EmployeeNameSpoofing_Incorrect_1: PASS (19.854351ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:143:
+data.gmail.test_EmployeeNameSpoofing_Incorrect_2: PASS (57.525741ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:152:
+data.gmail.test_DomainSpoofing_Correct_1: PASS (20.000626ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:159:
+data.gmail.test_DomainSpoofing_Incorrect_1: PASS (25.146366ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:168:
+data.gmail.test_DomainSpoofing_Incorrect_2: PASS (22.413412ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:177:
+data.gmail.test_UnauthenticatedEmailSpoofing_Correct_1: PASS (18.407783ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:184:
+data.gmail.test_UnauthenticatedEmailSpoofing_Incorrect_1: PASS (17.9729ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:202:
+data.gmail.test_GroupsSpoofing_Correct_1: PASS (14.021674ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:193:
+data.gmail.test_UnauthenticatedEmailSpoofing_Incorrect_2: PASS (18.125183ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:209:
+data.gmail.test_GroupsSpoofing_Incorrect_1: PASS (15.354757ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:227:
+data.gmail.test_SpoofConsequence_Correct_1: PASS (12.094577ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:218:
+data.gmail.test_GroupsSpoofing_Incorrect_2: PASS (16.379944ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:234:
+data.gmail.test_SpoofConsequence_Incorrect_1: PASS (19.473905ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:255:
+data.gmail.test_FutureSettings_Correct_1#01: PASS (12.019284ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:245:
+data.gmail.test_SpoofConsequence_Incorrect_2: PASS (16.579416ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:262:
+data.gmail.test_FutureSettings_Incorrect_1#01: PASS (17.510752ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:271:
+data.gmail.test_FutureSettings_Incorrect_2#01: PASS (16.918643ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:102:
+data.gmail.test_DomainNameSpoofing_Correct_1: PASS (14.631057ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:109:
+data.gmail.test_DomainNameSpoofing_Incorrect_1: PASS (13.852359ms)
+/home/runner/work/ScubaGoggles/ScubaGoggles/scubagoggles/Testing/Unit/Rego/gmail/gmail_api07_test.rego:118:
+data.gmail.test_DomainNameSpoofing_Incorrect_2: PASS (12.277397ms)
+--------------------------------------------------------------------------------
+PASS: 391/391
+
