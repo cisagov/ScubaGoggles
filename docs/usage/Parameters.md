@@ -217,7 +217,7 @@ scubagoggles gws  --opapath C:\Users\johndoe\Downloads
 |-------------|----------------------------------|
 | Optional    | Yes                              |
 | Datatype    | String                           |
-| Default     | `C:\Users\johndoe\.scubagoggles\`|
+| Default     | The "rego" folder within the ScubaGoggles installation folder |
 | Config File | Yes                              |
 
 Here is an example using `--regopath`:
