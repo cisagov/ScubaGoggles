@@ -16,7 +16,7 @@ on:
 
 permissions: read-all
 
-jobs:
+jobs: 
   check-opa-update:
     name: Check for OPA Update
     runs-on: ubuntu-latest
