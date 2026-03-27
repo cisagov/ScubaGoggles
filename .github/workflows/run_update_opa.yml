@@ -1,0 +1,149 @@
+# Purpose: Automatically check for new OPA releases and update ScubaGoggles'
+# pinned OPA version dependency. Creates a PR with the version bump and
+# triggers regression testing.
+
+name: Update OPA Version Dependency
+
+on:
+  schedule:
+    # Run Monday through Friday at 2:11 AM UTC (10:11 PM EDT)
+    - cron: "11 2 * * 1-5"
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  check-opa-update:
+    name: Check for OPA Update
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      update_required: ${{ steps.check.outputs.update_required }}
+      current_version: ${{ steps.check.outputs.current_version }}
+      latest_version: ${{ steps.check.outputs.latest_version }}
+      branch_name: ${{ steps.check.outputs.branch_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Check if OPA update is required
+        id: check
+        run: python utils/workflow/update_opa.py check
+
+  update-opa:
+    name: Update OPA and Create PR
+    needs: check-opa-update
+    if: needs.check-opa-update.outputs.update_required == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CURRENT_VERSION: ${{ needs.check-opa-update.outputs.current_version }}
+      LATEST_VERSION: ${{ needs.check-opa-update.outputs.latest_version }}
+      BRANCH_NAME: ${{ needs.check-opa-update.outputs.branch_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Setup OPA
+        uses: open-policy-agent/setup-opa@v2
+        with:
+          version: v${{ env.LATEST_VERSION }}
+
+      - name: Update OPA version in scuba_constants.py
+        run: |
+          python utils/workflow/update_opa.py update \
+            --current "$CURRENT_VERSION" \
+            --latest "$LATEST_VERSION"
+
+      - name: Update OPA version in documentation
+        run: |
+          python utils/workflow/update_opa.py update-docs \
+            --latest "$LATEST_VERSION"
+
+      - name: Run OPA Rego unit tests
+        id: unit-tests
+        run: |
+          python utils/workflow/update_opa.py test 2>&1 | tee opa_test_output.txt
+          echo "test_output<<EOFMARKER" >> "$GITHUB_OUTPUT"
+          cat opa_test_output.txt >> "$GITHUB_OUTPUT"
+          echo "EOFMARKER" >> "$GITHUB_OUTPUT"
+
+      - name: Create branch, commit, and open PR
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git checkout -b "$BRANCH_NAME"
+          git add -A
+          git commit -m "Bump OPA version from v${CURRENT_VERSION} to v${LATEST_VERSION}"
+          git push origin "$BRANCH_NAME"
+
+          PR_BODY=$(cat <<'EOF'
+          ## Description
+
+          This pull request was automatically created by a GitHub Action to bump
+          ScubaGoggles' Open Policy Agent (OPA) version dependency.
+
+          - Updates `OPA_VERSION` in `scubagoggles/scuba_constants.py` from
+            `v${{ env.CURRENT_VERSION }}` to `v${{ env.LATEST_VERSION }}`
+          - Updates OPA version references in documentation
+
+          ### Motivation and context
+
+          Keep ScubaGoggles aligned with the latest OPA release.
+          See [OPA releases](https://github.com/open-policy-agent/opa/releases).
+
+          Closes #918
+
+          ## Testing
+
+          - **OPA version tested:** v${{ env.LATEST_VERSION }}
+          - **Rego unit tests:** Ran as part of this workflow
+          - **Smoke test:** A smoke test has been triggered against branch
+            `${{ env.BRANCH_NAME }}`. Check the
+            [latest smoke test run](https://github.com/${{ github.repository }}/actions/workflows/run_smoke_test.yml).
+
+          <details>
+          <summary>Rego unit test output</summary>
+
+          ```
+          ${{ steps.unit-tests.outputs.test_output }}
+          ```
+          </details>
+
+          ## Pre-approval checklist
+
+          - [x] This PR has an informative and human-readable title.
+          - [x] Changes are limited to a single goal.
+          - [x] All relevant repo and/or project documentation has been updated to reflect the changes in this PR.
+          - [x] Tests have been added and/or modified to cover the changes in this PR.
+          - [x] All new and existing tests pass.
+          EOF
+          )
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH_NAME" \
+            --title "Bump OPA version from v${CURRENT_VERSION} to v${LATEST_VERSION}" \
+            --body "$PR_BODY" \
+            --label "version bump"
+
+      - name: Trigger smoke test workflow
+        run: |
+          gh workflow run run_smoke_test.yml \
+            --ref "$BRANCH_NAME" \
+            -f "opa-version=$LATEST_VERSION"
