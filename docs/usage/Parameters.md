@@ -365,7 +365,7 @@ scubagoggles gws --preferreddnsresolvers 8.8.8.8 8.8.4.4
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes    |
 
 Here is an example using `--quiet`:
 
