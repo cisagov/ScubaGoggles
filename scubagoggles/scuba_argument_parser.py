@@ -208,7 +208,7 @@ class ScubaArgumentParser:
     def validate_annotations(self, args: argparse.Namespace) -> None:
         """
         Warn for any control IDs configured for annotation that aren't in the
-        set of IDs covered by the baselines specificied in --baselines.
+        set of IDs covered by the baselines specified in --baselines.
         """
 
         md_products = set(args.baselines)

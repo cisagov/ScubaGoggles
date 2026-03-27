@@ -128,7 +128,7 @@ ExceptionConfigured(OrgUnit, Type) := true if {
     some Exception in input[Type]
     # Exception is configured if groups match AND (ou paths match OR if the ou is blank)
     # Blank is accepted because if the user configures an exception for a group, they don't have to
-    # input the OU. The arg parser ensure that the user specifies at the least an OU or a group so
+    # input the OU. The arg parser ensures that the user specifies at the least an OU or a group so
     # this logic won't give anyone a free pass.
     true in [
         AddLeadingSlash(Exception.ou) == OrgUnitPath,

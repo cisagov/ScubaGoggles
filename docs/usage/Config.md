@@ -89,7 +89,12 @@ The following SCuBA polices depend on the capability to make DNS requests:
 - GWS.GMAIL.4.1v0.6
 - GWS.GMAIL.4.2v0.6
 - GWS.GMAIL.4.3v0.6
-- GWS.GMAIL.4.4v0.6
+- GWS.GMAIL.2.1
+- GWS.GMAIL.3.1
+- GWS.GMAIL.4.1
+- GWS.GMAIL.4.2
+- GWS.GMAIL.4.3
+- GWS.GMAIL.4.4
 
 In some cases, it can be helpful to control where those DNS requests are
 sent to (see [ScubaGoggles lists failures for the SPF, DKIM, and DMARC policies (GWS.GMAIL.2 through GWS.GMAIL.4) even though you have published the applicable DNS records](/docs/troubleshooting/Troubleshooting.md#scubagoggles-lists-failures-for-the-spf-dkim-and-dmarc-policies-gwsgmail2-through-gwsgmail4-even-though-you-have-published-the-applicable-dns-records)). ScubaGoggles provides two options for
@@ -127,14 +132,14 @@ scubagoggles gws --skipdoh
 ```
 
 ### IMAP Exceptions
-Per GWS.GMAIL.9.1v0.6, IMAP MAY be enabled on a per-OU or per-group basis when there is a specific need.
+Per GWS.GMAIL.9.1, IMAP MAY be enabled on a per-OU or per-group basis when there is a specific need.
 The `imapexceptions` top-level key allows the user to specify OUs and groups where IMAP is allowed.
-Each enty in the `imapexceptions` list accepts the following fields:
+Each entry in the `imapexceptions` list accepts the following fields:
 -  `ou`: Org unit where IMAP should be allowed. Cannot be the workspace's top-level OU. The OU must
     be input as a path relative to the top-level OU. Examples:
         - `My OU`
         - `My OU/My sub OU`.
--  `group`: Group where IMAP should be allowed. Enter as the group email rather than the desplay
+-  `group`: Group where IMAP should be allowed. Enter as the group email rather than the display
     name, e.g., `examplegroup@example.com`.
 - `justification`: A brief explanation of why the exception is allowed.
 
