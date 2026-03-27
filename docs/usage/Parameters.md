@@ -481,7 +481,7 @@ scubagoggles gws --reportredaction
 ```
 ## Run cache mode 
 
-**--runcached ** switch when added will run the tool in "RunCached mode". When combined with --skipexport allows the user to skip authentication and provider export.
+**--runcached** switch when added will run the tool in "RunCached mode". When combined with --skipexport allows the user to skip authentication and provider export.
 
 | Parameter   | Value  |
 |-------------|--------|
