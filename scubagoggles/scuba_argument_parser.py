@@ -241,6 +241,9 @@ class ScubaArgumentParser:
         Validate and standardize structure of the IMAP exceptions.
         """
 
+        if args.imapexceptions is None:
+            args.imapexceptions = []
+
         for i, exception in enumerate(args.imapexceptions):
             args.imapexceptions[i] = {
                 'ou': exception.get('ou', ''),
