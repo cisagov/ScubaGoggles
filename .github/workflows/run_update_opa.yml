@@ -84,7 +84,7 @@ jobs:
         run: |
           python utils/workflow/update_opa.py test 2>&1 | tee opa_test_output.txt
           echo "test_output<<EOFMARKER" >> "$GITHUB_OUTPUT"
-          cat opa_test_output.txt >> "$GITHUB_OUTPUT"
+          tail -c 40000 opa_test_output.txt >> "$GITHUB_OUTPUT"
           echo "EOFMARKER" >> "$GITHUB_OUTPUT"
 
       - name: Create branch, commit, and open PR
@@ -122,7 +122,7 @@ jobs:
             [latest smoke test run](https://github.com/${{ github.repository }}/actions/workflows/run_smoke_test.yml).
 
           <details>
-          <summary>Rego unit test output</summary>
+          <summary>Rego unit test output (last 40 KB, may be truncated)</summary>
 
           ```
           ${{ steps.unit-tests.outputs.test_output }}
