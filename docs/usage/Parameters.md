@@ -104,7 +104,7 @@ scubagoggles gws --baselines chat, meet
 |-------------|--------------------------------------------|
 | Optional    | Yes                                        |
 | Datatype    | String                                     |
-| Default     | `GWSBaselineConformance` with a timestamp |
+| Default     | Path indicated through the setup utility. If not configured during the setup, default to the directory where ScubaGoggles is executed. |
 | Config File | Yes                                        |
 
 Here is an example using `--outputpath`:
