@@ -135,11 +135,55 @@ def update_opa_docs(latest_version: str) -> None:
     print(f"Updated OPA version references in {docs_path}")
 
 
-def run_rego_unit_tests() -> None:
+def _parse_test_summary(output: str) -> str:
+    """Parse OPA verbose test output into a per-baseline summary.
+
+    Expects lines like ``data.<package>.<test_name>: PASS (1.234ms)``.
+
+    :param output: raw stdout from ``opa test -v``
+    :return: formatted summary string
+    """
+    result_re = re.compile(r"^data\.(\w+)\.\w+:\s+(PASS|FAIL)", re.MULTILINE)
+    counts: dict[str, dict[str, int]] = {}
+
+    for match in result_re.finditer(output):
+        package = match.group(1).capitalize()
+        status = match.group(2)
+        if package not in counts:
+            counts[package] = {"PASS": 0, "FAIL": 0}
+        counts[package][status] += 1
+
+    if not counts:
+        return "No test results parsed."
+
+    lines = []
+    total_pass = 0
+    total_fail = 0
+    for package in sorted(counts):
+        passed = counts[package]["PASS"]
+        failed = counts[package]["FAIL"]
+        total = passed + failed
+        total_pass += passed
+        total_fail += failed
+        status = "PASS" if failed == 0 else "FAIL"
+        lines.append(
+            f"======== Testing {package} ======== {status}: {passed}/{total}"
+        )
+
+    overall = f"Total: {total_pass}/{total_pass + total_fail} passed"
+    if total_fail:
+        overall += f", {total_fail} failed"
+    lines.append(overall)
+    return "\n".join(lines)
+
+
+def run_rego_unit_tests() -> str:
     """Run the OPA Rego unit tests, exiting non-zero on failure.
 
     Uses `opa test` directly (requires OPA on PATH, e.g. via
     open-policy-agent/setup-opa).
+
+    :return: formatted test summary string
     """
     rego_dir = REPO_ROOT / "scubagoggles" / "rego"
     test_dir = REPO_ROOT / "scubagoggles" / "Testing" / "Unit" / "Rego"
@@ -151,19 +195,23 @@ def run_rego_unit_tests() -> None:
     print(f"Running: opa test -v ({len(rego_files)} rego + {len(test_files)} test files)")
 
     result = subprocess.run(cmd, capture_output=True, text=True, check=False)
-    print(result.stdout)
-    if result.stderr:
-        print(result.stderr)
 
     if result.returncode != 0:
+        print(result.stdout)
+        if result.stderr:
+            print(result.stderr)
         print(f"OPA unit tests failed (exit code {result.returncode})")
         sys.exit(result.returncode)
 
-    print("OPA unit tests passed.")
+    summary = _parse_test_summary(result.stdout)
+    print(summary)
+    return summary
 
 
 def set_github_output(name: str, value: str) -> None:
     """Append a key=value pair to $GITHUB_OUTPUT for use in subsequent steps.
+
+    Handles multiline values using the heredoc delimiter syntax.
 
     :param name: output variable name
     :param value: output variable value
@@ -171,7 +219,10 @@ def set_github_output(name: str, value: str) -> None:
     github_output = os.environ.get("GITHUB_OUTPUT")
     if github_output:
         with open(github_output, "a", encoding="utf-8") as f:
-            f.write(f"{name}={value}\n")
+            if "\n" in value:
+                f.write(f"{name}<<EOFMARKER\n{value}\nEOFMARKER\n")
+            else:
+                f.write(f"{name}={value}\n")
     else:
         print(f"  (local) {name}={value}")
 
@@ -222,7 +273,8 @@ def main():
         update_opa_docs(args.latest)
 
     elif args.command == "test":
-        run_rego_unit_tests()
+        summary = run_rego_unit_tests()
+        set_github_output("test_summary", summary)
 
 
 if __name__ == "__main__":

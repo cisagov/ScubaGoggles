@@ -80,6 +80,7 @@ jobs:
             --latest "$LATEST_VERSION"
 
       - name: Run OPA Rego unit tests
+        id: unit-tests
         run: python utils/workflow/update_opa.py test
 
       - name: Create branch, commit, and open PR
@@ -91,14 +92,15 @@ jobs:
           git commit -m "Bump OPA version from v${CURRENT_VERSION} to v${LATEST_VERSION}"
           git push origin "$BRANCH_NAME"
 
-          PR_BODY=$(cat <<'EOF'
-          ## Description
+          TEST_SUMMARY="${{ steps.unit-tests.outputs.test_summary }}"
+
+          PR_BODY="## Description
 
           This pull request was automatically created by a GitHub Action to bump
           ScubaGoggles' Open Policy Agent (OPA) version dependency.
 
-          - Updates `OPA_VERSION` in `scubagoggles/scuba_constants.py` from
-            `v${{ env.CURRENT_VERSION }}` to `v${{ env.LATEST_VERSION }}`
+          - Updates \`OPA_VERSION\` in \`scubagoggles/scuba_constants.py\` from
+            \`v${CURRENT_VERSION}\` to \`v${LATEST_VERSION}\`
           - Updates OPA version references in documentation
 
           ### Motivation and context
@@ -108,11 +110,15 @@ jobs:
 
           ## Testing
 
-          - **OPA version tested:** v${{ env.LATEST_VERSION }}
-          - **Rego unit tests:** Passed (ran as part of this workflow)
-          - **Smoke test:** A smoke test has been triggered against branch
-            `${{ env.BRANCH_NAME }}`. Check the
-            [latest smoke test run](https://github.com/${{ github.repository }}/actions/workflows/run_smoke_test.yml).
+          Rego Unit Test results for OPA v${LATEST_VERSION}:
+
+          \`\`\`
+          ${TEST_SUMMARY}
+          \`\`\`
+
+          - A smoke test is also being run against this branch. Check the
+            [latest smoke test](https://github.com/${{ github.repository }}/actions/workflows/run_smoke_test.yml)
+            targeting branch: \`${BRANCH_NAME}\`.
 
           ## Pre-approval checklist
 
@@ -120,9 +126,7 @@ jobs:
           - [x] Changes are limited to a single goal.
           - [x] All relevant repo and/or project documentation has been updated to reflect the changes in this PR.
           - [x] Tests have been added and/or modified to cover the changes in this PR.
-          - [x] All new and existing tests pass.
-          EOF
-          )
+          - [x] All new and existing tests pass."
 
           gh pr create \
             --base main \
