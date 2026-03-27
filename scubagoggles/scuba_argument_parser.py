@@ -7,10 +7,11 @@ import logging
 
 from pathlib import Path
 
+import yaml
+
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.utils import path_parser
 
-import yaml
 
 log = logging.getLogger(__name__)
 
