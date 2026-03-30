@@ -220,10 +220,13 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         metavar='<dns-resolvers>',
                         help=help_msg)
 
-    help_msg = ('IP addresses of DoH servers that should be used to retrieve any'
-                'TXT records (i.e. required by specific SCuBA policy). Optional;'
-                'If not provided, the DoH query will use a default list of DoH servers:\n'
-                '[\"cloudflare-dns.com\", \"[2606:4700:4700::1111]\", \"1.1.1.1\"]')
+    help_msg = ('IP addresses or domain names of DoH servers that should be used for DoH Queries ' +
+                'to retrieve any TXT records (i.e. required  by specific SCuBA policy).' +
+                'DoH queries will only be made if the traditional DNS queries fail' +
+                'Optional; If not provided, the DoH query will use a default ' +
+                'list of DoH servers: "cloudflare-dns.com", "2606:4700:4700::1111", "1.1.1.1". Example:' +
+                '--preferreddohservers 8.8.8.8 cloudfare-dns.com')
+
     parser.add_argument('--preferreddohservers',
                         default=None,
                         nargs='+',
