@@ -20,6 +20,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 import requests
+import packaging.version as packageVersion
 
 from scubagoggles.provider import Provider
 from scubagoggles.reporter.md_parser import MarkdownParser
@@ -158,16 +159,19 @@ class Orchestrator:
                 f"An unexpected error occurred in retrieving latest SCuBA Goggles"
                 f"version: {err}"
             )
-            print(error_message)
+            log.error(error_message)
             return
+
+        local_machine_version = packageVersion.Version(local_machine_version)
+        latest_version_on_pypi = packageVersion.Version(latest_version_on_pypi)
 
         if local_machine_version < latest_version_on_pypi:
             local_goggles_install_is_behind = (
                 f"A new version of SCuBA Goggles is available (v{latest_version_on_pypi}),"
                 f" you're running {local_machine_version}.\nConsider updating via: "
-                f"pip install scubagoggles."
+                f"pip install scubagoggles --upgrade."
             )
-            print(local_goggles_install_is_behind)
+            log.warning(local_goggles_install_is_behind)
 
     def _run_gws_providers(self):
         """
