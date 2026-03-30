@@ -223,7 +223,7 @@ tests contains {
         "policy/calendar_service_status.serviceState",
         "policy/calendar_appointment_schedules.enablePayments"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
     "RequirementMet": Status,

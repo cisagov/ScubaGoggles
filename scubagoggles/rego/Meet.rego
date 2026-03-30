@@ -224,7 +224,15 @@ tests contains {
 }
 #--
 
-MeetId6_1 := utils.PolicyIdWithSuffix("GWS.MEET.1.1")
+##############
+# GWS.MEET.6 #
+##############
+
+#
+# Baseline GWS.MEET.6.1
+#--
+
+MeetId6_1 := utils.PolicyIdWithSuffix("GWS.MEET.6.1")
 
 tests contains {
     "PolicyId": MeetId6_1,
@@ -235,8 +243,13 @@ tests contains {
     "RequirementMet": false,
     "NoSuchEvent": true
 }
+#--
 
-MeetId6_2 := utils.PolicyIdWithSuffix("GWS.MEET.1.2")
+#
+# Baseline GWS.MEET.6.2
+#--
+
+MeetId6_2 := utils.PolicyIdWithSuffix("GWS.MEET.6.2")
 
 tests contains {
     "PolicyId": MeetId6_2,
@@ -247,3 +260,4 @@ tests contains {
     "RequirementMet": false,
     "NoSuchEvent": true
 }
+#--

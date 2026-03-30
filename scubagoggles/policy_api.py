@@ -11,6 +11,7 @@ import time
 
 from collections import defaultdict
 from collections.abc import Iterable
+from itertools import chain
 from pathlib import Path
 from random import random
 from time import sleep
@@ -21,11 +22,16 @@ from time import sleep
 import google.auth.transport.requests as requests
 
 from scubagoggles.auth import GwsAuth
+from scubagoggles.parsers.gmail_rules_parser import GmailRulesParser
 
 log = logging.getLogger(__name__)
 
 # Not all lambdas are bad, you know (see below)...
 # pylint: disable=unnecessary-lambda-assignment
+# For this check, pylint includes comments and blank lines, making the
+# check kind of arbitrary. It's not expected that this module will grow
+# significantly.
+# pylint: disable=too-many-lines
 
 
 class PolicyAPI:
@@ -52,6 +58,9 @@ class PolicyAPI:
 
     isInt = lambda x: isinstance(x, int)
 
+    isListDict = lambda x: (isinstance(x, list)
+                            and all(isinstance(e, dict) for e in x))
+
     isListStrings = lambda x: (isinstance(x, list)
                                and all(isinstance(e, str) for e in x))
 
@@ -74,6 +83,8 @@ class PolicyAPI:
     # in the expected policy settings below.
 
     _merge_reducer = '_merge'
+
+    _max_map_reducer = '_max_map'
 
     # This is the list of policy settings returned by Google that are relevant
     # to the secure baselines.  Settings that are not relevant are ignored
@@ -183,6 +194,12 @@ class PolicyAPI:
         'enterprise_service_restrictions_service_status': {'settings': {
             'serviceState': isState}},
         'gmail_auto_forwarding': {'settings': {'enableAutoForwarding': isBool}},
+        'gmail_blocked_sender_lists': {'parser': GmailRulesParser,
+            'settings': {'blockedSenders': isListDict}},
+        'gmail_email_address_lists': {'key': 'id',
+                                      'reducer': _max_map_reducer,
+                                      'settings': {'emailAddressList':
+                                                   isListDict}},
         'gmail_email_attachment_safety': {'settings': {
             'anomalousAttachmentProtectionConsequence': isEnum,
             'applyFutureRecommendedSettingsAutomatically': isBool,
@@ -203,7 +220,12 @@ class PolicyAPI:
             'enableShortenerScanning': isBool}},
         'gmail_mail_delegation': {'settings': {'enableMailDelegation': isBool}},
         'gmail_pop_access': {'settings': {'enablePopAccess': isBool}},
+        'gmail_rule_states': {'reducer': _max_map_reducer,
+                              'settings': {'ruleStates': isListDict}},
         'gmail_service_status': {'settings': {'serviceState': isState}},
+        'gmail_spam_override_lists': {'parser': GmailRulesParser,
+                                      'reducer': _max_map_reducer,
+                                      'settings': {'spamOverride': isListDict}},
         'gmail_spoofing_and_authentication': {'settings': {
             'applyFutureSettingsAutomatically': isBool,
             'detectDomainNameSpoofing': isBool,
@@ -409,6 +431,8 @@ class PolicyAPI:
 
         self._group_id_map = self._get_groups()
 
+        self._parser_map = None
+
         # This is a dictionary that is used in reducing the policies returned
         # by Google.
         self._reduction_map = None
@@ -432,6 +456,14 @@ class PolicyAPI:
         """
 
         self._session.close()
+
+    @property
+    def top_orgunit(self):
+
+        """Returns the top orgunit name, as a string.
+        """
+
+        return self._top_orgunit
 
     def get_policies(self) -> dict:
 
@@ -466,6 +498,8 @@ class PolicyAPI:
             result[orgunit_name][section] = self._settings(policy)
 
         self._apply_defaults(result)
+
+        self._custom_parse_policies(result)
 
         return result
 
@@ -532,7 +566,7 @@ class PolicyAPI:
 
             for group_data in response.get('groups', ()):
                 group_id = group_data['id']
-                group_id_map[group_id] = group_data['name']
+                group_id_map[group_id] = group_data['email']
 
             if 'nextPageToken' not in response:
                 break
@@ -589,18 +623,37 @@ class PolicyAPI:
         start_time = time.time()
 
         # Google will return the "too many requests" error if the requests come
-        # in without any delay between them. The total iterations is limited to
-        # 8 because the delay is exponential and after several iterations the
-        # delay becomes impractical if the error continues to be returned.
-        # In practice, with the API calls it sometimes takes seconds to get a
-        # response, and for those cases a subsequent request is made after a
-        # sufficient delay due to the time it took for the previous response.
+        # in without any delay between them, or because the read request quota
+        # is exceeded. The total iterations is limited to 8 because the delay is
+        # exponential and after several iterations the delay becomes impractical
+        # if the error continues to be returned. In practice, with the API calls
+        # it sometimes takes seconds to get a response, and for those cases a
+        # subsequent request is made after a sufficient delay due to the time it
+        # took for the previous response.
 
         for iter_count in range(1, 9):
 
             response = self._session.get(url, params = params)
             if response.status_code != self._too_many_requests:
                 break
+
+            if ('Quota exceeded' in response.text
+                and 'read requests per minute' in response.text):
+
+                # The read request quota may typically only be hit during
+                # testing.  The delay is longer here (than below) to try to
+                # avoid hitting the quota again.
+
+                delay = 30
+
+                log.warning('attempt %i - read requests to Policy API exceeded '
+                            'per minute quota: delay %i seconds',
+                            iter_count,
+                            delay)
+
+                sleep(delay)
+
+                continue
 
             # Back off the requests exponentially (adding up to a 10% random
             # delay).
@@ -628,7 +681,7 @@ class PolicyAPI:
 
         return response_json
 
-    def _reduce(self, policies: Iterable):
+    def _reduce(self, policies: list):
 
         """Reduces the policies returned by Google to those that apply for
         each orgunit and group.
@@ -650,7 +703,7 @@ class PolicyAPI:
 
         # Sorting the policies by largest sort order first is KEY to getting
         # the correct policies.  This accomplishes the "max" reduction
-        # referred to by Google, and it also necessary for the "merge"
+        # referred to by Google, and it's also necessary for the "merge"
         # reduction.
         policies.sort(key = self._sort_order, reverse = True)
 
@@ -701,7 +754,7 @@ class PolicyAPI:
                 # expected format, the value is kept as received as the
                 # group name.
                 group_name = self._group_id_map.get(group_id, group_id)
-                orgunit_name += f' (group "{group_name}")'
+                orgunit_name += f' (group {group_name})'
 
             # The setting has two layers in the policies dictionary.  Depending
             # on the setting, there may be one or multiple values - so the
@@ -740,6 +793,75 @@ class PolicyAPI:
                 reduce_method = getattr(self, reduce_name)
                 reduce_method(key, policy)
 
+    def _custom_parse_policies(self, policies: dict):
+
+        """Calls the custom parsers for any sections that require special
+        processing to convert Google's data to a format that's easier to work
+        with in the Rego policies.  A parser is a class that defines the "call"
+        method that's invoked to handle the additional parsing.
+
+        Upon initialization, the parser's constructor is given this PolicyAPI
+        instance and the policies.
+
+        During custom policy parsing, the parser is called for a policy
+        section and provided the orgunit and section names.  The parser may
+        alter the data in the policy section as needed.
+
+        :param dict policies: dictionary of policies, keyed by orgunit name.
+        """
+
+        if not self._parser_map and not self._initialize_parser_map(policies):
+            return
+
+        for orgunit in chain((self._top_orgunit,),
+                             (k for k in policies if k != self._top_orgunit)):
+
+            org_policies = policies[orgunit]
+
+            for section, parser in self._parser_map.items():
+                if section in org_policies:
+                    parser(orgunit, section)
+
+    def _initialize_parser_map(self, policies):
+
+        """This method creates a mapping of section names to parser instances.
+        This mapping is stored in the instance's "_parser_map" attribute.  Each
+        parser is provided this PolicyAPI instance and the given policies as
+        it's instantiated.
+
+        :return: True if any parsers were found, False otherwise.
+        :rtype: bool
+        """
+
+        parse_sections = {k: v['parser']
+                          for k, v in self._expectedPolicySettings.items()
+                          if 'parser' in v}
+
+        self._parser_map = {}
+
+        parser_instance_map = {}
+
+        for section, parser_class in parse_sections.items():
+
+            if not isinstance(parser_class, type):
+                raise RuntimeError(f'? {parser_class} - invalid parser for '
+                                   f'{section} - not a class '
+                                   f'({type(parser_class)})')
+
+            # Each parser is instantiated once, and multiple sections using
+            # the same parser share the same instance.
+
+            name = parser_class.__name__
+
+            if name not in parser_instance_map:
+                parser_instance_map[name] = parser_class(self, policies)
+
+            parser = parser_instance_map[name]
+
+            self._parser_map[section] = parser
+
+        return len(self._parser_map) > 0
+
     @staticmethod
     def _settings(policy: dict) -> dict:
 
@@ -761,6 +883,75 @@ class PolicyAPI:
         """
 
         return policy['policyQuery']['sortOrder']
+
+    def _max_map(self, key: tuple, policy: dict):
+
+        """Peforms a "MaxMap" reduction of the given policy with the current
+        policy (having the greatest sort order).
+
+        Settings that are subject to the MaxMap reduction are ones that have
+        a list of dictionaries with a common "primary key" field in each
+        dictionary.  If a dictionary is found in a lower priority policy that
+        is not present in the current (higher priority) policy, it will be
+        added to the current policy.
+
+        :param key: tuple containing the orgunit name and section name, used
+            for locating the corresponding policy in the reduction map.
+        :param policy: "raw" policy having a sort order below the policy
+            stored in the reduction map.
+        """
+
+        # Determine the key used in the policy setting.  Either it's explicitly
+        # specified in the "expected settings" data structure, or it will
+        # default to "ruleId" (which seems to be the most common key name
+        # in Google's settings).
+
+        _, section = key
+
+        expected_setting = self._expectedPolicySettings[section]
+
+        primary_key_name = expected_setting.get('key', 'ruleId')
+
+        # It's assumed that the policy has only one setting, which is a
+        # list of dictionaries.
+
+        setting_name = next(iter(expected_setting['settings']))
+
+        # Get the policy from the reduction map.  The policies have already
+        # been sorted by largest sort order first, so this one is the
+        # in-effect policy for the given key.
+
+        current_policy = self._reduction_map[key]
+
+        current_settings = self._settings(current_policy)
+
+        # Collect the primary key values into a set for the current policy.
+        # This will be used to find out whether any values for the given
+        # policy need to be added to the current one.
+
+        key_map = {e[primary_key_name]: e
+                   for e in current_settings[setting_name]}
+
+        # Add entries in the given settings to the current settings if they
+        # don't exist in the current settings.
+
+        given_settings = self._settings(policy)
+
+        for entry in given_settings[setting_name]:
+            primary_key = entry[primary_key_name]
+            if primary_key in key_map:
+
+                # Update any fields in the existing entry that are missing
+                # but present in the given entry.
+
+                current_entry = key_map[primary_key]
+                for field_name, field_value in entry.items():
+                    if field_name not in current_entry:
+                        current_entry[field_name] = field_value
+
+            else:
+                current_settings[setting_name].append(entry)
+                key_map[primary_key] = entry
 
     def _merge(self, key: tuple, policy: dict):
 
