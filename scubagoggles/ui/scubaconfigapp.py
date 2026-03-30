@@ -583,6 +583,10 @@ class ScubaConfigApp:
                 st.error("Invalid or empty YAML file")
                 return
 
+            # ScubaGoggles expects lowercase parameter names; normalize keys so
+            # imports remain compatible with historical mixed-case files.
+            config = self._normalize_config_keys(config)
+
             self._import_org_fields(config)
             self._import_auth_fields(config)
             self._import_baselines(config)
@@ -597,12 +601,20 @@ class ScubaConfigApp:
             st.error(f"❌ Import error: {str(e)}")
 
     @staticmethod
+    def _normalize_config_keys(config: dict) -> dict:
+        """Return a copy of *config* with top-level keys normalized to lowercase."""
+        normalized = {}
+        for key, value in config.items():
+            normalized[str(key).lower()] = value
+        return normalized
+
+    @staticmethod
     def _import_org_fields(config: dict):
         """Import organization-level fields from *config* into session state."""
         for yaml_key, state_key in (
             ('orgname', 'orgname'),
             ('orgunitname', 'orgunitname'),
-            ('Description', 'description'),
+            ('description', 'description'),
         ):
             if yaml_key in config:
                 st.session_state.config_data[state_key] = config[yaml_key]
@@ -656,8 +668,8 @@ class ScubaConfigApp:
         if 'omitpolicy' in config and isinstance(config['omitpolicy'], dict):
             st.session_state.config_data['omitpolicy'] = config['omitpolicy']
 
-        if 'AnnotatePolicy' in config and isinstance(config['AnnotatePolicy'], dict):
-            st.session_state.config_data['annotatepolicy'] = config['AnnotatePolicy']
+        if 'annotatepolicy' in config and isinstance(config['annotatepolicy'], dict):
+            st.session_state.config_data['annotatepolicy'] = config['annotatepolicy']
 
         if 'breakglassaccounts' in config:
             breakglass = config['breakglassaccounts']
@@ -1846,9 +1858,9 @@ class ScubaConfigApp:
             ('baselines', 'baselines'),
             ('credentials', 'credentials'),
             ('orgunitname', 'orgunitname'),
-            ('description', 'Description'),
+            ('description', 'description'),
             ('quiet', 'quiet'),
-            ('annotatepolicy', 'AnnotatePolicy'),
+            ('annotatepolicy', 'annotatepolicy'),
             ('omitpolicy', 'omitpolicy'),
             ('breakglassaccounts', 'breakglassaccounts'),
             ('preferreddnsresolvers', 'preferreddnsresolvers'),
