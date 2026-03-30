@@ -203,6 +203,7 @@ class TestGwsAuth:
         mocker.patch('scubagoggles.auth.Request')
 
         auth = GwsAuth(credentials_file)
+        assert token_file.exists()
 
         # Simulate the token becoming stale after initialization
         mock_fresh_credentials.token_state = TokenState.STALE
@@ -225,6 +226,7 @@ class TestGwsAuth:
         )
 
         auth = GwsAuth(credentials_file)
+        assert token_file.exists()
 
         result = auth.credentials
 
