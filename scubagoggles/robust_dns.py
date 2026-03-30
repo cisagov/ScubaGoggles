@@ -213,7 +213,6 @@ class RobustDNSClient:
             if self.preferred_doh_list is None:
                 uri = f"https://{self.doh_server}/dns-query?name={qname}&type=txt"
 
-            #headers = {"accept":"application/dns-json"}
             try:
 
                 #response = requests.get(uri, headers=headers, timeout=5).json()
