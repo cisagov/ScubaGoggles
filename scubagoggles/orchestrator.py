@@ -145,26 +145,26 @@ class Orchestrator:
         Compares the installed version of ScubaGoggles on the local machine
         to the latest version avaialable on PyPI. 
         """
-    
+        
         local_machine_version = Version.number
-    
+        
         # Error handling for retrieving latest Goggles version on PyPI
-        try: 
+        try:
             goggles_url_response = requests.get(SCUBAGOGGLES_PACKAGE_URL, timeout=10)
             goggles_url_response.raise_for_status()
             latest_version_on_pypi = goggles_url_response.json()["info"]["version"]
-        except Exception as err: 
+        except Exception as err:
             error_message = (
                 f"An unexpected error occurred in retrieving latest SCuBA Goggles"
                 f"version: {err}"
             )
             print(error_message)
             return
-        
+
         if local_machine_version < latest_version_on_pypi:
             local_goggles_install_is_behind = (
                 f"A new version of SCuBA Goggles is available (v{latest_version_on_pypi}),"
-                f" you're running {local_machine_version}.\nConsider updating via: " 
+                f" you're running {local_machine_version}.\nConsider updating via: "
                 f"pip install scubagoggles."
             )
             print(local_goggles_install_is_behind)
@@ -645,7 +645,7 @@ class Orchestrator:
         args.baselines = list(args.baselines)
         args.baselines.sort()
         
-        # checks if the local version is behind the latest version available and 
+        # checks if the local version is behind the latest version available and
         # notifies the user if so
         self.notify_user_if_new_release_is_available()
 
