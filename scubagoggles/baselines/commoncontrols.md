@@ -1083,7 +1083,6 @@ GWS includes system-defined alerting rules that provide situational awareness in
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the required system-defined events draws attention to these events while minimizing any impact to users and the organization.
 - _Last modified:_ January 2025

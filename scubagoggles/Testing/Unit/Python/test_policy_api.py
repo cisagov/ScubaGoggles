@@ -14,7 +14,9 @@ import pytest
 import google.auth.transport.requests as requests
 import scubagoggles.auth as auth
 
+from scubagoggles.parsers.dlp_rules_parser import DlpRulesParser
 from scubagoggles.parsers.gmail_rules_parser import GmailRulesParser
+from scubagoggles.parsers.system_rules_parser import SystemRulesParser
 from scubagoggles.policy_api import PolicyAPI
 
 
@@ -309,6 +311,7 @@ class TestPolicyApi:
                         for setting_name, validator in value.items():
                             assert isinstance(setting_name, str)
                             assert validator in (PolicyAPI.isBool,
+                                                 PolicyAPI.isDict,
                                                  PolicyAPI.isDuration,
                                                  PolicyAPI.isEnum,
                                                  PolicyAPI.isInt,
@@ -319,10 +322,13 @@ class TestPolicyApi:
                                                  PolicyAPI.isTimestamp)
 
                     case 'parser':
-                        assert value in (GmailRulesParser,)
+                        assert value in (DlpRulesParser,
+                                         GmailRulesParser,
+                                         SystemRulesParser)
 
                     case 'reducer':
-                        assert value in (PolicyAPI._max_map_reducer,
+                        assert value in (PolicyAPI._list_reducer,
+                                         PolicyAPI._max_map_reducer,
                                          PolicyAPI._merge_reducer,)
 
             assert settings_found, f'section: {section_name}'

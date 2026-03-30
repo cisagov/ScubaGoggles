@@ -22,7 +22,9 @@ from time import sleep
 import google.auth.transport.requests as requests
 
 from scubagoggles.auth import GwsAuth
+from scubagoggles.parsers.dlp_rules_parser import DlpRulesParser
 from scubagoggles.parsers.gmail_rules_parser import GmailRulesParser
+from scubagoggles.parsers.system_rules_parser import SystemRulesParser
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +51,8 @@ class PolicyAPI:
     # to the policy settings where they're referenced.
 
     isBool = lambda x: isinstance(x, bool)
+
+    isDict = lambda x: isinstance(x, dict)
 
     # Google's "enum" type is essentially the string name for the enumeration
     # member.  It must be all alphanumeric characters with possible underscores.
@@ -81,6 +85,8 @@ class PolicyAPI:
     # a method.  The default "reducer" method is to select the policy with the
     # highest "sort order", and this is applied if a reducer is not specified
     # in the expected policy settings below.
+
+    _list_reducer = '_list'
 
     _merge_reducer = '_merge'
 
@@ -271,6 +277,20 @@ class PolicyAPI:
         'photos_user_takeout': {'settings': {'takeoutStatus': isEnum}},
         'play_console_user_takeout': {'settings': {'takeoutStatus': isEnum}},
         'play_user_takeout': {'settings': {'takeoutStatus': isEnum}},
+        'rule_dlp': {'parser': DlpRulesParser,
+                     'reducer': _list_reducer,
+                     'settings': {
+                         'action': isDict,
+                         'condition': isDict,
+                         'displayName': isString,
+                         'state': isEnum,
+                         'triggers': isListStrings}},
+        'rule_system_defined_alerts': {'parser': SystemRulesParser,
+                                       'reducer': _list_reducer,
+                                       'settings': {
+                                           'displayName': isString,
+                                           'description': isString,
+                                           'state':  isEnum}},
         'security_advanced_protection_program': {'settings': {
             'enableAdvancedProtectionSelfEnrollment': isBool,
             'securityCodeOption': isEnum}},
@@ -543,10 +563,10 @@ class PolicyAPI:
     def _get_groups(self) -> dict:
 
         """Calls Google's Directory API to get all groups in the root org unit,
-        and returns a mapping of group id to name.
+        and returns a mapping of group id to email.
 
         :return: dictionary with the Google group identifier as the key,
-            and the corresponding name as the value.
+            and the corresponding email as the value.
         :rtype: dict
         """
 
@@ -563,6 +583,11 @@ class PolicyAPI:
         while True:
 
             response = self._get(url, params)
+
+            # The group name was originally used instead of the group email,
+            # but the name does not have to be unique, where the email does.
+            # Using the email allows for uniquely identifying the group in
+            # the user's configuration file.
 
             for group_data in response.get('groups', ()):
                 group_id = group_data['id']
@@ -788,15 +813,27 @@ class PolicyAPI:
 
             key = (orgunit_name, section)
 
+            expected_settings = self._expectedPolicySettings.get(section)
+
+            reduce_name = (expected_settings.get('reducer')
+                           if expected_settings else '')
+
             # This is where the dictionary is populated, with policies
             # having the highest sort order for each orgunit/group and
             # section.  This is possible because of the initial sorting
             # above.
-            if key not in self._reduction_map:
-                self._reduction_map[key] = policy
-                continue
 
-            expected_settings = self._expectedPolicySettings.get(section)
+            if key not in self._reduction_map:
+
+                # The reduction map points to the policy value itself in nearly
+                # all cases, except for when the policy has a "list reduction".
+                # In this case, the policy is added to the reduction map as
+                # a single element list.
+
+                self._reduction_map[key] = ([policy]
+                                            if reduce_name == self._list_reducer
+                                            else policy)
+                continue
 
             if not expected_settings:
                 # The section is not in the expected settings, which means
@@ -805,8 +842,6 @@ class PolicyAPI:
 
             # If there is a reducer associated with this policy, it will
             # be invoked.
-            reduce_name = expected_settings.get('reducer')
-
             if reduce_name:
                 reduce_method = getattr(self, reduce_name)
                 reduce_method(key, policy)
@@ -836,8 +871,13 @@ class PolicyAPI:
 
             org_policies = policies[orgunit]
 
+            # Note that the parser is always called for the top orgunit.
+            # This allows the parser to add defaults when there are no
+            # settings.  The parser must handle the case where the top
+            # orgunit has no settings for the section.
+
             for section, parser in self._parser_map.items():
-                if section in org_policies:
+                if section in org_policies or orgunit == self._top_orgunit:
                     parser(orgunit, section)
 
     def _initialize_parser_map(self, policies):
@@ -884,12 +924,15 @@ class PolicyAPI:
     def _settings(policy: dict) -> dict:
 
         """Given a policy (dictionary) from Google's response, returns the
-        name/value pairs, which are the setting values for a section.
+        name/value pairs, which are the setting values for a section.  For
+        policies having "list reduction", the setting values are enclosed
+        in a list.
 
         :param policy: "raw" policy data dictionary returned by Google.
         """
 
-        return policy['setting']['value']
+        return ([p['setting']['value'] for p in policy]
+                if isinstance(policy, list) else policy['setting']['value'])
 
     @staticmethod
     def _sort_order(policy: dict) -> float:
@@ -997,6 +1040,34 @@ class PolicyAPI:
         for setting, value in self._settings(policy).items():
             if setting not in current_settings:
                 current_settings[setting] = value
+
+    def _list(self, key: tuple, policy: dict):
+
+        """Peforms a list "reduction" of the given policy with the current
+        policy.  Although it's categorized as a "reducer", the individual
+        policies are not reduced, but combined into a single list associated
+        with the key.  For these policies, the sort order has no effect and
+        generally has a value of 1 for each policy.
+
+        :param key: tuple containing the orgunit name and section name, used
+            for locating the corresponding policy in the reduction map.
+        :param policy: "raw" policy.
+        """
+
+        current_policy = self._reduction_map[key]
+
+        if not isinstance(current_policy, list):
+
+            # The first policy encountered for the given key is added to the
+            # reduction map during initialization in _reduce().  Because this
+            # policy section is meant to be a list, the section is converted to
+            # a list with the first policy inserted into it.
+
+            current_policy = self._reduction_map[key] = [current_policy]
+
+        # The given policy is added to the existing section list.
+
+        current_policy.append(policy)
 
     def _apply_defaults(self, policies: dict):
 
@@ -1133,11 +1204,48 @@ class PolicyAPI:
                     missing_settings.add(f'{section}.{expected_setting}')
                 continue
 
-            for setting_name, verifier in expected_settings.items():
-                policy_value = settings.get(setting_name)
-                if policy_value is None:
-                    missing_settings.add(f'{section}.{setting_name}')
-                elif not verifier(policy_value):
-                    invalid_settings.add(f'{section}.{setting_name}')
+            # There are a few policies that contain a list of settings.  This
+            # is handled here by creating a single-element tuple for each
+            # non-list policy.  This way we can handle all policies the same
+            # way in the next loop.
+
+            if not isinstance(settings, list):
+                settings = (settings,)
+
+            for policy_settings in settings:
+                self._verify_settings(section,
+                                      policy_settings,
+                                      expected_settings,
+                                      invalid_settings,
+                                      missing_settings)
 
         return missing_settings.union(invalid_settings)
+
+    @staticmethod
+    def _verify_settings(section: str,
+                         settings: dict,
+                         expected_settings: dict,
+                         invalid_settings: set,
+                         missing_settings: set):
+
+        """Compare the given settings with the expected settings.  Settings
+        that are missing are included in the given "missing" settings list.
+        Settings that have invalid values are included in the given "invalid"
+        settings list.
+
+        :param str section: policy section name
+        :param dict settings: policy settings
+        :param dict expected_settings: contains setting names and corresponding
+            verifier functions for setting values.
+        :param set invalid_settings: [output] set containing setting names with
+            invalid values.
+        :param set missing_settings: [output] set containing names for settings
+            that are missing.
+        """
+
+        for setting_name, verifier in expected_settings.items():
+            policy_value = settings.get(setting_name)
+            if policy_value is None:
+                missing_settings.add(f'{section}.{setting_name}')
+            elif not verifier(policy_value):
+                invalid_settings.add(f'{section}.{setting_name}')
