@@ -168,7 +168,7 @@ class Orchestrator:
         if local_machine_version < latest_version_on_pypi:
             local_goggles_install_is_behind = (
                 f"A new version of SCuBA Goggles is available (v{latest_version_on_pypi}),"
-                f" you're running {local_machine_version}.\nConsider updating via: "
+                f" you're running v{local_machine_version}.\nConsider updating via: "
                 f"pip install scubagoggles --upgrade."
             )
             log.warning(local_goggles_install_is_behind)
