@@ -140,14 +140,14 @@ class Orchestrator:
         """
         return cls._gws
 
-    def notify_user_if_new_release_is_available(self): 
+    def notify_user_if_new_release_is_available(self):
         """
         Compares the installed version of ScubaGoggles on the local machine
         to the latest version avaialable on PyPI. 
         """
-        
+
         local_machine_version = Version.number
-        
+
         # Error handling for retrieving latest Goggles version on PyPI
         try:
             goggles_url_response = requests.get(SCUBAGOGGLES_PACKAGE_URL, timeout=10)
@@ -644,7 +644,7 @@ class Orchestrator:
         args = self._args
         args.baselines = list(args.baselines)
         args.baselines.sort()
-        
+
         # checks if the local version is behind the latest version available and
         # notifies the user if so
         self.notify_user_if_new_release_is_available()
