@@ -317,5 +317,5 @@ Default sharing setting for Google AI notes SHALL be restricted to guests in you
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Gemini Settings**.
 4.  Click **Google AI notes sharing**.
-5.  Ensure **Default sharing setting for Google AI notes** is set to "The hosts and co-hosts".
+5.  Ensure **Default sharing setting for Google AI notes** is set to "The hosts and co-hosts" or "Invited Guests in your Organization".
 6.  Click **Save**.
