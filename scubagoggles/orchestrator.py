@@ -13,6 +13,7 @@ import uuid
 import webbrowser
 import glob
 import csv
+import requests
 
 from collections.abc import Callable
 from datetime import datetime, timezone, date
@@ -24,6 +25,8 @@ from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.reporter.reporter import Reporter
 from scubagoggles.run_rego import opa_eval, find_opa
 from scubagoggles.version import Version
+from scubagoggles.scuba_constants import SCUBAGOGGLES_PACKAGE_URL
+
 
 log = logging.getLogger(__name__)
 
@@ -135,6 +138,30 @@ class Orchestrator:
         Dictionary of the SCuBA GWS baselines short names plus full names
         """
         return cls._gws
+
+    def notify_user_if_new_release_is_available(self): 
+        """
+        Compares the installed version of ScubaGoggles on the local machine
+        to the latest version avaialable on PyPI. 
+        """
+    
+        local_machine_version = Version.number
+    
+        # Error handling for retrieving latest Goggles version on PyPI
+        try: 
+            goggles_url_response = requests.get(SCUBAGOGGLES_PACKAGE_URL, timeout=10)
+            goggles_url_response.raise_for_status()
+            latest_version_on_pypi = goggles_url_response.json()["info"]["version"]
+        except: 
+            print("Error in retrieving latest SCuBA Goggles Version")
+            return
+        
+        if local_machine_version < latest_version_on_pypi:
+            local_goggles_install_is_behind = (
+                f"A new version of SCuBA Goggles is available (v{latest_version_on_pypi}),"
+                f" you're running {local_machine_version}.\nConsider updating via: pip install scubagoggles."
+            )
+            print(local_goggles_install_is_behind)
 
     def _run_gws_providers(self):
         """
@@ -611,6 +638,10 @@ class Orchestrator:
         args = self._args
         args.baselines = list(args.baselines)
         args.baselines.sort()
+        
+        # checks if the local version is behind the latest version available and 
+        # notifies the user if so
+        self.notify_user_if_new_release_is_available()
 
         # get the absolute paths relative to this directory
         if not isinstance(args.outputpath, Path):

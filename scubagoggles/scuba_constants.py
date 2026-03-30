@@ -7,6 +7,7 @@ from enum import Enum
 
 BASE_URL_ADMINSDK = 'https://developers.google.com/admin-sdk'
 BASE_URL_WS_ADMIN = 'https://developers.google.com/workspace/admin'
+SCUBAGOGGLES_PACKAGE_URL = 'https://pypi.org/pypi/scubagoggles/json'
 
 
 class ApiReference(Enum):
@@ -58,3 +59,4 @@ API_SCOPES = (f'{BASE_AUTH_URL}/admin.reports.audit.readonly',
               f'{BASE_AUTH_URL}/admin.directory.customer.readonly',
               f'{BASE_AUTH_URL}/apps.groups.settings',
               f'{BASE_AUTH_URL}/cloud-identity.policies.readonly')
+
