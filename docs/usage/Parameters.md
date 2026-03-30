@@ -4,8 +4,6 @@ The scubagoggles gws cmdlet has several command-line parameters, which are descr
 
 > **Note**: Some parameters can also be specified in a [configuration file](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md). If specified in both, command-line parameters have precedence over the config file.
 
-> **Note**: Parameters use the Pascal case convention, and their names are consistent with those in the configuration file. 
-
 Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS,
 all commands will be under the `gws` "subcommand".
 
@@ -71,7 +69,7 @@ scubagoggles gws --accesstoken <access-token>
 |-------------|---------------------------------------------------|
 | Optional    | Yes                                               |
 | Datatype    | List of Strings                                   |
-| Default     | ["assuredcontrols", "calendar", "chat", "classroom", "commoncontrols", "drive", "gemini", "gmail", "groups", "meet", "sites""] |
+| Default     | ["assuredcontrols", "calendar", "chat", "classroom", "commoncontrols", "drive", "gemini", "gmail", "groups", "meet", "sites"] |
 | Config File | Yes                                               |
 
 The list of acceptable values are:
@@ -106,7 +104,7 @@ scubagoggles gws --baselines chat, meet
 |-------------|--------------------------------------------|
 | Optional    | Yes                                        |
 | Datatype    | String                                     |
-| Default     | `GWSBaselineConformance` with a timestamp |
+| Default     | Path indicated through the setup utility. If not configured during the setup, default to the directory where ScubaGoggles is executed. |
 | Config File | Yes                                        |
 
 Here is an example using `--outputpath`:
@@ -138,12 +136,12 @@ scubagoggles gws --outjasonfilename <output-JSON-file>
 
 **--config** identifies the local file path to a YAML formatted configuration file. Configuration file parameters can be used in place of command-line parameters. Additional parameters and variables not available on the command line can also be included in the file that will be provided to the tool for use in specific tests.
 
-| Parameter   | Value                                    |
-|-------------|------------------------------------------|
-| Optional    | Yes                                      |
-| Datatype    | String                                   |
-| Default     | Directory where ScubaGoggles is executed |
-| Config File | No                                       |
+| Parameter   | Value     |
+|-------------|-----------|
+| Optional    | Yes       |
+| Datatype    | String    |
+| Default     | n/a       |
+| Config File | No        |
 
 Here is an example using `--config`:
 
@@ -200,7 +198,7 @@ scubagoggles gws --customerid <customer-id>
 |-------------|----------------------------------|
 | Optional    | Yes                              |
 | Datatype    | String                           |
-| Default     | `C:\Users\johndoe\.scubagoggles\`|
+| Default     | path indicated through the setup utility |
 | Config File | Yes                              |
 
 Here is an example using ` --opapath`:
@@ -219,7 +217,7 @@ scubagoggles gws  --opapath C:\Users\johndoe\Downloads
 |-------------|----------------------------------|
 | Optional    | Yes                              |
 | Datatype    | String                           |
-| Default     | `C:\Users\johndoe\.scubagoggles\`|
+| Default     | The "rego" folder within the ScubaGoggles installation folder |
 | Config File | Yes                              |
 
 Here is an example using `--regopath`:
@@ -367,7 +365,7 @@ scubagoggles gws --preferreddnsresolvers 8.8.8.8 8.8.4.4
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes    |
 
 Here is an example using `--quiet`:
 
@@ -384,7 +382,7 @@ scubagoggles gws --quiet
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes    |
 
 ```powershell
 # Silence warning related to BOD submission requirements
@@ -445,7 +443,7 @@ scubagoggles gws --numberofuuidcharacterstotruncate 18
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes   |
 
 ```powershell
 # print debugging information for OPA
@@ -459,7 +457,7 @@ scubagoggles gws --debug
 |-------------|----------|
 | Optional    | Yes      |
 | Datatype    | Boolean  |
-| Default     | n/a      |
+| Default     | The system default theme      |
 | Config File | Yes      |
 
 ```powershell
@@ -502,14 +500,14 @@ scubagoggles gws --preferreddohservers 8.8.8.8 cloudfare-dns.com
 
 ## Run cache mode 
 
-**--runcached ** switch when added will run the tool in "RunCached mode". When combined with --skipexport allows the user to skip authentication and provider export.
+**--runcached** switch when added will run the tool in "RunCached mode". When combined with --skipexport allows the user to skip authentication and provider export.
 
 | Parameter   | Value  |
 |-------------|--------|
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes    |
 
 ```powershell
 # run the tool in "RunCached mode"
@@ -517,14 +515,14 @@ scubagoggles gws --runcached
 ```
 ## Skip Export
 
-**--runcached ** will skip the provider export. To be used in conjunction with --runcached.
+**--skipexport** will skip the provider export. To be used in conjunction with --runcached.
 
 | Parameter   | Value  |
 |-------------|--------|
 | Optional    | Yes    |
 | Datatype    | Switch |
 | Default     | n/a    |
-| Config File | No     |
+| Config File | Yes    |
 
 ```powershell
 # run the tool in "RunCached mode" and skip the provider export
