@@ -189,7 +189,7 @@ class TestGwsAuth:
 
     def test_credentials_refreshes_expired_token(self, mocker,
                                                  credentials_file,
-                                                 _token_file,
+                                                 token_file,
                                                  mock_fresh_credentials):
 
         """Verify an expired/stale token is refreshed when the
@@ -212,7 +212,7 @@ class TestGwsAuth:
 
     def test_credentials_returns_valid_token(self, mocker,
                                              credentials_file,
-                                             _token_file,
+                                             token_file,
                                              mock_fresh_credentials):
 
         """Verify a valid (FRESH) token is returned without triggering
