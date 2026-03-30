@@ -223,3 +223,27 @@ tests contains {
     "NoSuchEvent": true
 }
 #--
+
+MeetId6_1 := utils.PolicyIdWithSuffix("GWS.MEET.1.1")
+
+tests contains {
+    "PolicyId": MeetId6_1,
+    "Prerequisites": [],
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+
+MeetId6_2 := utils.PolicyIdWithSuffix("GWS.MEET.1.2")
+
+tests contains {
+    "PolicyId": MeetId6_2,
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
