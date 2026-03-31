@@ -992,8 +992,17 @@ class ScubaConfigApp:
         selected_baseline_policies = self._get_selected_baseline_policies()
         selected_baselines = st.session_state.config_data.get('baselines', [])
 
-        if not (selected_baselines and self.available_policies):
-            st.warning("⚠️ Please select products in the Main tab first to see available policies")
+        if not selected_baselines:
+            st.container(border=True).warning(
+                "**No products selected.** "
+                "Please select at least one product from the "
+                "**Main** tab to view and configure policies."
+            )
+        elif not self.available_policies:
+            st.warning(
+                "⚠️ Baseline policy data is unavailable. "
+                "Ensure the ScubaGoggles baselines directory exists."
+            )
         elif not selected_baseline_policies:
             st.info("ℹ️ No policies available for selected products")
         else:
@@ -1549,34 +1558,34 @@ class ScubaConfigApp:
             "If not provided, the system default will be used."
         )
 
-        def _add_dns_resolver():
-            """Callback: validate and add a DNS resolver IP, then clear the input."""
-            ip = st.session_state.get("new_dns_resolver", "").strip()
-            resolvers = st.session_state.config_data.get('preferreddnsresolvers', [])
+        with st.form("dns_resolver_form", clear_on_submit=True):
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                dns_ip_input = st.text_input(
+                    "DNS Resolver IP Address",
+                    placeholder="8.8.8.8",
+                    help="IP address of a DNS resolver (e.g., 8.8.8.8)",
+                    key="new_dns_resolver",
+                    label_visibility="collapsed"
+                )
+            with col2:
+                dns_submitted = st.form_submit_button(
+                    "➕ Add Resolver", type="primary"
+                )
+
+        if dns_submitted:
+            ip = dns_ip_input.strip()
             if not ip:
                 st.session_state.dns_add_status = ("empty", "")
             elif not re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
                 st.session_state.dns_add_status = ("invalid", ip)
-            elif ip in resolvers:
+            elif ip in dns_resolvers:
                 st.session_state.dns_add_status = ("duplicate", ip)
             else:
-                resolvers.append(ip)
-                st.session_state.config_data['preferreddnsresolvers'] = resolvers
+                dns_resolvers.append(ip)
+                st.session_state.config_data['preferreddnsresolvers'] = dns_resolvers
                 st.session_state.dns_add_status = ("success", ip)
-            st.session_state.new_dns_resolver = ""
-
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            st.text_input(
-                "DNS Resolver IP Address",
-                placeholder="8.8.8.8",
-                help="IP address of a DNS resolver (e.g., 8.8.8.8)",
-                key="new_dns_resolver",
-                label_visibility="collapsed"
-            )
-        with col2:
-            st.button("➕ Add Resolver", type="primary",
-                       on_click=_add_dns_resolver, key="add_dns_btn")
+            st.rerun()
 
         self._show_dns_add_status()
 
@@ -1756,33 +1765,34 @@ class ScubaConfigApp:
 
         st.subheader("➕ Add Break Glass Account")
 
-        def _add_break_glass_account():
-            """Callback: runs before the next render so we can clear the widget."""
-            email = st.session_state.get("new_break_glass", "").strip()
-            accounts = st.session_state.config_data.get('breakglassaccounts', [])
+        with st.form("break_glass_form", clear_on_submit=True):
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                bg_email_input = st.text_input(
+                    "Break Glass Account Email",
+                    placeholder="emergency-admin@example.org",
+                    help="Email address of break glass account",
+                    key="new_break_glass",
+                    label_visibility="collapsed"
+                )
+            with col2:
+                bg_submitted = st.form_submit_button(
+                    "➕ Add Account", type="primary"
+                )
+
+        if bg_submitted:
+            email = bg_email_input.strip()
             if not email:
                 st.session_state.bg_add_status = ("empty", "")
             elif not ConfigValidator.validate_email(email):
                 st.session_state.bg_add_status = ("invalid", email)
-            elif email in accounts:
+            elif email in break_glass_accounts:
                 st.session_state.bg_add_status = ("duplicate", email)
             else:
-                accounts.append(email)
-                st.session_state.config_data['breakglassaccounts'] = accounts
+                break_glass_accounts.append(email)
+                st.session_state.config_data['breakglassaccounts'] = break_glass_accounts
                 st.session_state.bg_add_status = ("success", email)
-            st.session_state.new_break_glass = ""
-
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            st.text_input(
-                "Break Glass Account Email",
-                placeholder="emergency-admin@example.org",
-                help="Email address of break glass account",
-                key="new_break_glass"
-            )
-
-        with col2:
-            st.button("➕ Add Account", type="primary", on_click=_add_break_glass_account)
+            st.rerun()
 
         status = st.session_state.pop("bg_add_status", None)
         if status:
