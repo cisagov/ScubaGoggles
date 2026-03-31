@@ -5,7 +5,6 @@ import argparse
 from pathlib import Path
 from types import SimpleNamespace
 import sys
-import logging
 import pytest
 from scubagoggles import main
 from scubagoggles.main import (
@@ -14,7 +13,6 @@ from scubagoggles.main import (
     get_setup_args,
     get_purge_args,
     get_version_args,
-    log_level
 )
 
 # These tests intentionally inspect argparse internals.
@@ -347,32 +345,7 @@ class TestMain:
         assert check_action in group._group_actions
         assert upgrade_action in group._group_actions
 
-    def test_log_level_normalizes_abbreviations(self):
-        """ Tests that log levels normalize into correct values """
 
-        cases = [
-            ("d", "DEBUG"),
-            ("dEbUG", "DEBUG"),
-            ("i", "INFO"),
-            ("inf", "INFO"),
-            ("w", "WARNING"),
-            ("wa", "WARNING"),
-            ("e", "ERROR"),
-            ("Err", "ERROR"),
-            ("c", "CRITICAL"),
-        ]
-
-        for abbreviation, expected in cases:
-            actual = log_level(abbreviation)
-            assert actual == expected, (
-                f"log_level({abbreviation!r}) -> {actual!r}, expected {expected!r}"
-            )
-
-    def test_log_level_raises_error_on_invalid_input(self):
-        """ Tests that log_level raises an error on invalid input """
-
-        with pytest.raises(RuntimeError, match=r" - unrecognized log level$"):
-            log_level("1234")
 
     @pytest.fixture
     def main_module(self):
@@ -390,7 +363,6 @@ class TestMain:
             pass
 
         monkeypatch.setattr(main_module, "UserConfig", DummyUserConfig)
-        monkeypatch.setattr(main_module, "log_level", lambda _lvl: logging.WARNING)
 
         class DummyScubaArgumentParser:
             """ Dummy class for testing """
