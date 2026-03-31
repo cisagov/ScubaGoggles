@@ -10,7 +10,7 @@ The ScubaGoggles Configuration UI provides a comprehensive web interface for cre
 - **Product/Baseline Selection**: Visual selection of Google Workspace products to assess (11 products available)
 - **Policy Omission**: Exclude specific policies with documented rationale and expiration dates
 - **Policy Annotation**: Add comments, mark incorrect results, and set remediation dates
-- **Break Glass Account Configuration**: Define emergency access accounts for special handling
+- **Exclusions**: Define break glass (emergency access) accounts and IMAP exceptions
 - **Configuration Preview & Export**: View and download YAML configuration files
 - **Dark Mode Support**: Toggle between light and dark themes for the interface
 
@@ -23,6 +23,7 @@ The application consolidates all configuration capabilities into a single, profe
 - **Policy Omission Management**: Exclude specific policies from assessment with documented rationale, optional expiration dates, and summary views
 - **Policy Annotation**: Add comments and documentation to policies, mark incorrect results, set remediation dates with visual status indicators
 - **Break Glass Account Configuration**: Define and manage super admin emergency access accounts with email validation
+- **IMAP Exception Configuration**: Define OUs and groups where IMAP access is allowed per GWS.GMAIL.9.1
 - **Authentication Settings**: Configure Service Account credentials (Customer ID, Subject Email, JSON file path), OAuth 2.0, or Application Default Credentials
 - **Output & Execution Options**: Set output directory, report formats, quiet mode, and dark mode preferences
 - **Configuration Management**: Import existing YAML files, preview generated configuration with validation, and download formatted YAML files
@@ -75,8 +76,9 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 1. **🏢 Main** - Configure organization information and select products to assess
 2. **🚫 Omit Policies** - Exclude specific policies with documented rationale
 3. **📝 Annotate Policies** - Add comments, mark incorrect results, and set remediation dates
-4. **🚨 Break Glass** - Configure emergency access accounts
-5. **👁️ Preview** - Review and download the generated YAML configuration
+4. **🔒 Exclusions** - Configure break glass accounts and IMAP exceptions
+5. **🌐 DNS Configuration** - Configure DNS resolvers and DoH fallback settings
+6. **👁️ Preview** - Review and download the generated YAML configuration
 
 ### Sidebar Features
 
@@ -98,7 +100,7 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 3. **Select Products**: Choose which Google Workspace products to assess (at least one required)
 4. **Omit Policies** (Optional): Exclude specific policies with documented rationale
 5. **Annotate Policies** (Optional): Add comments and documentation to policy results
-6. **Break Glass Accounts** (Optional): Configure emergency access accounts
+6. **Exclusions** (Optional): Configure break glass accounts and IMAP exceptions
 7. **Preview & Export**: Review the generated configuration and download the YAML file
 
 ### Typical Use Cases

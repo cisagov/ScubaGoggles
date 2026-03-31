@@ -150,6 +150,34 @@ class ConfigValidator:
         return bool(ConfigValidator.EMAIL_PATTERN.match(email.strip()))
 
     @staticmethod
+    def validate_imap_exceptions(
+        exceptions: List[Dict[str, Any]],
+    ) -> Tuple[bool, Optional[str]]:
+        """Validate IMAP exception entries."""
+        if not exceptions:
+            return True, None
+
+        errors: List[str] = []
+        for i, entry in enumerate(exceptions):
+            if not isinstance(entry, dict):
+                errors.append(f"Entry {i + 1}: must be a mapping")
+                continue
+            ou = entry.get('ou', '').strip() if entry.get('ou') else ''
+            group = entry.get('group', '').strip() if entry.get('group') else ''
+            if not ou and not group:
+                errors.append(
+                    f"Entry {i + 1}: at least an OU or group is required"
+                )
+            if group and not ConfigValidator.EMAIL_PATTERN.match(group):
+                errors.append(
+                    f"Entry {i + 1}: invalid group email format: {group}"
+                )
+
+        if errors:
+            return False, "; ".join(errors)
+        return True, None
+
+    @staticmethod
     def validate_tenant_domain(domain: str) -> Tuple[bool, Optional[str]]:
         """Validate tenant domain format"""
         if not domain:
@@ -213,6 +241,15 @@ class ConfigValidator:
             )
             if not is_valid:
                 errors.append(f"Break glass accounts validation: {error}")
+
+        # IMAP exceptions validation
+        imap_exceptions = config_dict.get("imapexceptions", [])
+        if imap_exceptions:
+            is_valid, error = ConfigValidator.validate_imap_exceptions(
+                imap_exceptions,
+            )
+            if not is_valid:
+                errors.append(f"IMAP exceptions validation: {error}")
 
         # Tenant domain validation
         tenant_domain = config_dict.get("tenant")

@@ -80,6 +80,7 @@ class ScubaConfigApp:
                 'omitpolicy': {},
                 'annotatepolicy': {},
                 'breakglassaccounts': [],
+                'imapexceptions': [],
                 'preferreddnsresolvers': [],
                 'skipdoh': False,
                 'ui_dark_mode': False,
@@ -679,6 +680,13 @@ class ScubaConfigApp:
                 st.session_state.config_data['breakglassaccounts'] = [breakglass]
             else:
                 st.session_state.config_data['breakglassaccounts'] = []
+
+        if 'imapexceptions' in config:
+            imap_exc = config['imapexceptions']
+            if isinstance(imap_exc, list):
+                st.session_state.config_data['imapexceptions'] = imap_exc
+            else:
+                st.session_state.config_data['imapexceptions'] = []
 
         if 'preferreddnsresolvers' in config:
             resolvers = config['preferreddnsresolvers']
@@ -1501,13 +1509,12 @@ class ScubaConfigApp:
                 f"{total_policies} policies total",
             )
 
-        self._render_dns_config()
-
         st.markdown('</div>', unsafe_allow_html=True)
 
-    def _render_dns_config(self):
-        """Render the DNS configuration section inside the Main tab."""
-        st.markdown('<h3 style="margin-top: 2rem;">DNS Configuration</h3>', unsafe_allow_html=True)
+    def render_dns_config_tab(self):
+        """Render the DNS Configuration tab."""
+        st.markdown('<div class="section-container">', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-title">DNS Configuration</h2>', unsafe_allow_html=True)
 
         with st.expander("ℹ️ Help: DNS Configuration", expanded=False):
             st.markdown("""
@@ -1584,6 +1591,8 @@ class ScubaConfigApp:
             key="skipdoh_checkbox"
         )
         st.session_state.config_data['skipdoh'] = skipdoh
+
+        st.markdown('</div>', unsafe_allow_html=True)
 
     @staticmethod
     def _show_dns_add_status():
@@ -1709,8 +1718,14 @@ class ScubaConfigApp:
             pre_render=self._annotate_pre_render,
         )
 
-    def render_break_glass_tab(self):
-        """Render break glass accounts configuration tab"""
+    def render_exclusions_tab(self):
+        """Render exclusions configuration tab (break glass + IMAP exceptions)"""
+        self._render_break_glass_section()
+        st.markdown("---")
+        self._render_imap_exceptions_section()
+
+    def _render_break_glass_section(self):
+        """Render break glass accounts section within the Exclusions tab."""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
         st.markdown('<h2 class="section-title">Break Glass Accounts</h2>', unsafe_allow_html=True)
 
@@ -1727,10 +1742,8 @@ class ScubaConfigApp:
         - Have minimal day-to-day access
         """)
 
-        # Current break glass accounts
         break_glass_accounts = st.session_state.config_data.get('breakglassaccounts', [])
 
-        # Add new break glass account
         st.subheader("➕ Add Break Glass Account")
 
         def _add_break_glass_account():
@@ -1773,7 +1786,6 @@ class ScubaConfigApp:
             else:
                 st.error("❌ Email address is required")
 
-        # Display current break glass accounts
         if break_glass_accounts:
             st.subheader("📋 Current Break Glass Accounts")
             for i, account in enumerate(break_glass_accounts):
@@ -1789,6 +1801,114 @@ class ScubaConfigApp:
                         st.rerun()
         else:
             st.info("ℹ️ No break glass accounts configured")
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    def _render_imap_exceptions_section(self):
+        """Render IMAP exceptions section within the Exclusions tab."""
+        st.markdown('<div class="section-container">', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-title">IMAP Exceptions</h2>', unsafe_allow_html=True)
+
+        st.markdown("""
+        **Configure OUs and groups where IMAP access is allowed per GWS.GMAIL.9.1.**
+
+        IMAP MAY be enabled on a per-OU or per-group basis when there is a specific need.
+        Each exception requires at least an OU or a group (or both). If both are provided,
+        the exception only applies to users in both the OU and the group.
+
+        ⚠️ **Important:**
+        - The OU must be a path relative to the top-level OU (cannot be the top-level OU itself)
+        - Groups should be entered as email addresses (e.g., `examplegroup@example.com`)
+        """)
+
+        imap_exceptions = st.session_state.config_data.get('imapexceptions', [])
+
+        st.subheader("➕ Add IMAP Exception")
+
+        def _add_imap_exception():
+            """Callback: validate and add an IMAP exception."""
+            ou = st.session_state.get("new_imap_ou", "").strip()
+            group = st.session_state.get("new_imap_group", "").strip()
+            justification = st.session_state.get("new_imap_justification", "").strip()
+
+            if not ou and not group:
+                st.session_state.imap_add_status = ("missing_target", "")
+            elif group and not ConfigValidator.validate_email(group):
+                st.session_state.imap_add_status = ("invalid_group", group)
+            else:
+                exceptions = st.session_state.config_data.get('imapexceptions', [])
+                entry: dict = {}
+                if ou:
+                    entry['ou'] = ou
+                if group:
+                    entry['group'] = group
+                if justification:
+                    entry['justification'] = justification
+                exceptions.append(entry)
+                st.session_state.config_data['imapexceptions'] = exceptions
+                st.session_state.imap_add_status = ("success", "")
+
+            st.session_state.new_imap_ou = ""
+            st.session_state.new_imap_group = ""
+            st.session_state.new_imap_justification = ""
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.text_input(
+                "Org Unit (OU)",
+                placeholder="My OU/My sub OU",
+                help="Org unit path relative to the top-level OU where IMAP should be allowed",
+                key="new_imap_ou"
+            )
+        with col2:
+            st.text_input(
+                "Group Email",
+                placeholder="examplegroup@example.com",
+                help="Group email address where IMAP should be allowed",
+                key="new_imap_group"
+            )
+
+        st.text_input(
+            "Justification",
+            placeholder="Brief explanation of why IMAP is needed",
+            help="Optional justification for the IMAP exception",
+            key="new_imap_justification"
+        )
+
+        st.button("➕ Add Exception", type="primary", on_click=_add_imap_exception,
+                   key="add_imap_exception_btn")
+
+        status = st.session_state.pop("imap_add_status", None)
+        if status:
+            kind, detail = status
+            if kind == "success":
+                st.success("✅ Added IMAP exception")
+            elif kind == "invalid_group":
+                st.error(f"❌ Invalid group email format: {detail}")
+            elif kind == "missing_target":
+                st.error("❌ At least an OU or group email is required")
+
+        if imap_exceptions:
+            st.subheader("📋 Current IMAP Exceptions")
+            for i, exc in enumerate(imap_exceptions):
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    parts = []
+                    if exc.get('ou'):
+                        parts.append(f"**OU:** {exc['ou']}")
+                    if exc.get('group'):
+                        parts.append(f"**Group:** {exc['group']}")
+                    st.markdown(" · ".join(parts))
+                    if exc.get('justification'):
+                        st.caption(exc['justification'])
+                with col2:
+                    if st.button("🗑️ Remove", key=f"remove_imap_{i}"):
+                        imap_exceptions.pop(i)
+                        st.session_state.config_data['imapexceptions'] = imap_exceptions
+                        st.success("✅ Removed IMAP exception")
+                        st.rerun()
+        else:
+            st.info("ℹ️ No IMAP exceptions configured")
 
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -1863,6 +1983,7 @@ class ScubaConfigApp:
             ('annotatepolicy', 'annotatepolicy'),
             ('omitpolicy', 'omitpolicy'),
             ('breakglassaccounts', 'breakglassaccounts'),
+            ('imapexceptions', 'imapexceptions'),
             ('preferreddnsresolvers', 'preferreddnsresolvers'),
         )
         for src, dest in _direct:
@@ -1896,7 +2017,8 @@ class ScubaConfigApp:
             "🏢 Main",
             "📝 Annotate Policies",
             "🚫 Omit Policies",
-            "🚨 Break Glass",
+            "🔒 Exclusions",
+            "🌐 DNS Configuration",
             "👁️ Preview"
         ])
 
@@ -1910,9 +2032,12 @@ class ScubaConfigApp:
             self.render_omit_policies_tab()
 
         with tabs[3]:
-            self.render_break_glass_tab()
+            self.render_exclusions_tab()
 
         with tabs[4]:
+            self.render_dns_config_tab()
+
+        with tabs[5]:
             self.render_preview_tab()
 
         # Status bar
