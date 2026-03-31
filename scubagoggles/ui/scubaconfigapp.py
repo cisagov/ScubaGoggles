@@ -601,12 +601,25 @@ class ScubaConfigApp:
         except Exception as e:
             st.error(f"❌ Import error: {str(e)}")
 
-    @staticmethod
-    def _normalize_config_keys(config: dict) -> dict:
-        """Return a copy of *config* with top-level keys normalized to lowercase."""
+    _SHORTHAND_ALIASES = {
+        'b': 'baselines',
+        'o': 'outputpath',
+        'c': 'credentials',
+    }
+
+    @classmethod
+    def _normalize_config_keys(cls, config: dict) -> dict:
+        """Return a copy of *config* with top-level keys normalized.
+
+        Normalization includes lowercasing and expanding shorthand
+        aliases (e.g. ``b`` -> ``baselines``) so that config files
+        using the CLI shorthand options are handled correctly.
+        """
         normalized = {}
         for key, value in config.items():
-            normalized[str(key).lower()] = value
+            canon = str(key).lower()
+            canon = cls._SHORTHAND_ALIASES.get(canon, canon)
+            normalized[canon] = value
         return normalized
 
     @staticmethod
