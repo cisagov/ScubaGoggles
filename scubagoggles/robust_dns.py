@@ -4,6 +4,7 @@ as well as DNS over HTTPS (DoH)'''
 import dns
 from dns import resolver
 import requests
+import re
 
 class RobustDNSClient:
     '''Class used to run robust DNS queries.'''
@@ -144,7 +145,7 @@ class RobustDNSClient:
         """Iterates through several DoH servers. Returns the first successful server.
         If none are successful, returns None.
         """
-        doh_servers = ["cloudflare-dns.com", "[2606:4700:4700::1111]", "1.1.1.1"]
+        doh_servers = ["cloudflare-dns.com", "2606:4700:4700::1111", "1.1.1.1"]
 
         if self.preferred_doh_list is not None:
             doh_servers = self.preferred_doh_list
@@ -152,27 +153,33 @@ class RobustDNSClient:
         preferred_server = None
         for server in doh_servers:
             try:
-                # User-preferred
-                uri = server
 
-                # Attempt to resolve a.root-servers.net over DoH if no preferred list is specified.
+                # Add square brackets if the DoH server is an IPv6
+                pattern = r"^[0-9a-fA-F]{4}(:[0-9a-fA-F]{4}){3}$"
+                if re.match(pattern, server):
+                    server = "[" + server + "]"
+
+                uri = f"https://{server}/dns-query"
+
+                # Attempt to resolve DoH server if no preferred list is specified.
                 # The domain chosen is somewhat arbitrary, as we don't care what the answer is,
-                # only if the query succeeds/fails. a.root-servers.net, the address of one of the
-                # DNS root servers, was chosen as a benign, highly-available domain.
-                if self.preferred_doh_list is None:
-                    uri = f"https://{server}/dns-query?name=a.root-servers.net"
+                # only if the query succeeds/fails.
 
-                headers = {"accept":"application/dns-json"}
-                requests.get(uri, headers=headers, timeout=2).json()
+                query = dns.message.make_query(uri, dns.rdatatype.TXT)
+                response = dns.query.https(query, uri, timeout=5)
+                rcode = response.rcode()
+
                 # No error was thrown, return this server
-                preferred_server = server
-                break
+                if rcode == dns.rcode.NOERROR:
+                    preferred_server = server
+                    break
+
             except Exception: # pylint: disable=broad-except
                 # This server didn't work, try the next one
                 continue
         return preferred_server
 
-    def doh_query(self, qname : str, max_tries : int) -> dict:
+    def doh_query(self, qname : str, max_tries : int, dohpath : str = "dns-query") -> dict:
         '''
         Requests the TXT record for the given qname over DoH.
 
@@ -201,22 +208,19 @@ class RobustDNSClient:
                 "errors": errors
             }
 
+        # Add square brackets if the selected DoH server is an IPv6
+        pattern = r"^[0-9a-fA-F]{4}(:[0-9a-fA-F]{4}){3}$"
+        if re.match(pattern, self.doh_server):
+            self.doh_server = "[" + self.doh_server + "]"
+
         # DoH is available, query for the domain
         try_number = 0
         while try_number < max_tries:
             try_number += 1
 
-            # perferred server is already in URI format
-            uri = self.doh_server
+            uri = f"https://{self.doh_server}/{dohpath}"
 
-            # Defeault DoH server is not a URI
-            if self.preferred_doh_list is None:
-                uri = f"https://{self.doh_server}/dns-query?name={qname}&type=txt"
-
-            #headers = {"accept":"application/dns-json"}
             try:
-
-                #response = requests.get(uri, headers=headers, timeout=5).json()
                 # True DoH
                 query = dns.message.make_query(qname, dns.rdatatype.TXT)
                 response = dns.query.https(query, uri, timeout=5)
