@@ -120,7 +120,11 @@ class ConfigValidator:
         return True, None
 
     EMAIL_PATTERN = re.compile(
-        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        r"^[a-zA-Z0-9_%+-]+(\.[a-zA-Z0-9_%+-]+)*"
+        r"@"
+        r"[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?"
+        r"(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*"
+        r"\.[a-zA-Z]{2,}$"
     )
 
     @staticmethod
