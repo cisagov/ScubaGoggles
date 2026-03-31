@@ -25,5 +25,5 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m pip install pytest-mock
-          python -m pytest ./scubagoggles/Testing/Unit/Python -vvv
+          python -m pip install pytest-mock coverage
+          coverage run -m pytest ./scubagoggles/Testing/Unit/Python -vvv
