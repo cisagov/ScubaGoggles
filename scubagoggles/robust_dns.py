@@ -218,9 +218,17 @@ class RobustDNSClient:
         while try_number < max_tries:
             try_number += 1
 
-            uri = f"https://{self.doh_server}/{dohpath}"
+            # perferred server is already in URI format
+            uri = self.doh_server
 
+            # Defeault DoH server is not a URI
+            if self.preferred_doh_list is None:
+                uri = f"https://{self.doh_server}/dns-query?name={qname}&type=txt"
+
+            #headers = {"accept":"application/dns-json"}
             try:
+
+                #response = requests.get(uri, headers=headers, timeout=5).json()
                 # True DoH
                 query = dns.message.make_query(qname, dns.rdatatype.TXT)
                 response = dns.query.https(query, uri, timeout=5)
