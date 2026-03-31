@@ -195,14 +195,11 @@ class ConfigValidator:
         return True, None
 
     @staticmethod
-    def validate_complete_config(
+    def _validate_auth(
         config_dict: Dict[str, Any],
-        available_baselines: List[str],
-    ) -> Tuple[bool, List[str]]:
-        """Validate complete configuration and return all errors"""
-        errors: List[str] = []
-
-        # Authentication validation
+        errors: List[str],
+    ):
+        """Validate authentication fields and append any errors."""
         has_creds = config_dict.get("credentials")
         has_token = config_dict.get("accesstoken")
 
@@ -217,6 +214,16 @@ class ConfigValidator:
             if not is_valid:
                 errors.append(f"Access token validation: {error}")
 
+    @staticmethod
+    def validate_complete_config(
+        config_dict: Dict[str, Any],
+        available_baselines: List[str],
+    ) -> Tuple[bool, List[str]]:
+        """Validate complete configuration and return all errors"""
+        errors: List[str] = []
+
+        ConfigValidator._validate_auth(config_dict, errors)
+
         # Baseline validation
         baselines = config_dict.get("baselines", [])
         is_valid, error = ConfigValidator.validate_baselines(
@@ -226,36 +233,22 @@ class ConfigValidator:
         if not is_valid:
             errors.append(f"Baseline validation: {error}")
 
-        # Output path validation
-        output_path = config_dict.get("outputpath")
-        if output_path:
-            is_valid, error = ConfigValidator.validate_output_path(output_path)
-            if not is_valid:
-                errors.append(f"Output path validation: {error}")
-
-        # Break glass accounts validation
-        break_glass = config_dict.get("breakglassaccounts", [])
-        if break_glass:
-            is_valid, error = ConfigValidator.validate_break_glass_accounts(
-                break_glass,
-            )
-            if not is_valid:
-                errors.append(f"Break glass accounts validation: {error}")
-
-        # IMAP exceptions validation
-        imap_exceptions = config_dict.get("imapexceptions", [])
-        if imap_exceptions:
-            is_valid, error = ConfigValidator.validate_imap_exceptions(
-                imap_exceptions,
-            )
-            if not is_valid:
-                errors.append(f"IMAP exceptions validation: {error}")
-
-        # Tenant domain validation
-        tenant_domain = config_dict.get("tenant")
-        if tenant_domain:
-            is_valid, error = ConfigValidator.validate_tenant_domain(tenant_domain)
-            if not is_valid:
-                errors.append(f"Tenant domain validation: {error}")
+        # Optional field validators: (config key, default, validator, label)
+        _optional_checks: List[tuple] = [
+            ("outputpath", None, ConfigValidator.validate_output_path,
+             "Output path validation"),
+            ("breakglassaccounts", [], ConfigValidator.validate_break_glass_accounts,
+             "Break glass accounts validation"),
+            ("imapexceptions", [], ConfigValidator.validate_imap_exceptions,
+             "IMAP exceptions validation"),
+            ("tenant", None, ConfigValidator.validate_tenant_domain,
+             "Tenant domain validation"),
+        ]
+        for key, default, validator, label in _optional_checks:
+            value = config_dict.get(key, default)
+            if value:
+                is_valid, error = validator(value)
+                if not is_valid:
+                    errors.append(f"{label}: {error}")
 
         return len(errors) == 0, errors

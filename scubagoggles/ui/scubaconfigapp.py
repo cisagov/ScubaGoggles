@@ -664,41 +664,38 @@ class ScubaConfigApp:
             st.session_state.config_data['quiet'] = bool(config['quiet'])
 
     @staticmethod
+    def _normalize_to_list(value, coerce=None):
+        """Normalize a config value to a list.
+
+        *coerce*, when provided, is applied to wrap a bare scalar
+        (e.g. ``str`` for DNS resolver IPs).
+        """
+        if isinstance(value, list):
+            return value
+        if value:
+            return [coerce(value) if coerce else value]
+        return []
+
+    @staticmethod
     def _import_policy_and_account_sections(config: dict):
         """Import omit-policy, annotate-policy, break-glass accounts, and DNS settings."""
-        if 'omitpolicy' in config and isinstance(config['omitpolicy'], dict):
-            st.session_state.config_data['omitpolicy'] = config['omitpolicy']
+        data = st.session_state.config_data
+        normalize = ScubaConfigApp._normalize_to_list
 
-        if 'annotatepolicy' in config and isinstance(config['annotatepolicy'], dict):
-            st.session_state.config_data['annotatepolicy'] = config['annotatepolicy']
+        for key in ('omitpolicy', 'annotatepolicy'):
+            if key in config and isinstance(config[key], dict):
+                data[key] = config[key]
 
-        if 'breakglassaccounts' in config:
-            breakglass = config['breakglassaccounts']
-            if isinstance(breakglass, list):
-                st.session_state.config_data['breakglassaccounts'] = breakglass
-            elif breakglass:
-                st.session_state.config_data['breakglassaccounts'] = [breakglass]
-            else:
-                st.session_state.config_data['breakglassaccounts'] = []
-
-        if 'imapexceptions' in config:
-            imap_exc = config['imapexceptions']
-            if isinstance(imap_exc, list):
-                st.session_state.config_data['imapexceptions'] = imap_exc
-            else:
-                st.session_state.config_data['imapexceptions'] = []
-
-        if 'preferreddnsresolvers' in config:
-            resolvers = config['preferreddnsresolvers']
-            if isinstance(resolvers, list):
-                st.session_state.config_data['preferreddnsresolvers'] = resolvers
-            elif resolvers:
-                st.session_state.config_data['preferreddnsresolvers'] = [str(resolvers)]
-            else:
-                st.session_state.config_data['preferreddnsresolvers'] = []
+        for key, coerce in (
+            ('breakglassaccounts', None),
+            ('imapexceptions', None),
+            ('preferreddnsresolvers', str),
+        ):
+            if key in config:
+                data[key] = normalize(config[key], coerce=coerce)
 
         if 'skipdoh' in config:
-            st.session_state.config_data['skipdoh'] = bool(config['skipdoh'])
+            data['skipdoh'] = bool(config['skipdoh'])
             st.session_state['skipdoh_checkbox'] = bool(config['skipdoh'])
 
     @staticmethod
