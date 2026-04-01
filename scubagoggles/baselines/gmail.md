@@ -727,6 +727,7 @@ This section determines whether users have POP3 and IMAP access. Doing so allows
 POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#imap-exceptions)
 
 - _Rationale:_ Enabling POP and IMAP access could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. This risk can be reduced by disabling POP and IMAP access, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ October 2025
