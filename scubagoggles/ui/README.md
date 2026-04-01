@@ -12,7 +12,7 @@ The ScubaGoggles Configuration UI provides a comprehensive web interface for cre
 - **Policy Annotation**: Add comments, mark incorrect results, and set remediation dates
 - **Exclusions**: Define break glass (emergency access) accounts and IMAP exceptions
 - **Configuration Preview & Export**: View and download YAML configuration files
-- **Dark Mode Support**: Toggle between light and dark themes for the interface
+- **Dark Mode Support**: Run the launcher with `--dark` or set `SCUBAGOGGLES_UI_DARK` to use a dark theme without changing OS settings
 
 ## Features
 
@@ -60,7 +60,36 @@ pip install -r requirements.txt
 python -m scubagoggles.ui.launch
 ```
 
-This will automatically detect and launch the configuration application.
+This will automatically detect and launch the configuration application (light or dark based on your system theme, unless you override as below).
+
+### Dark mode (without changing system settings)
+
+Use the launcher’s `--dark` flag to force dark mode for both Streamlit’s chrome and the app’s custom styling:
+
+```bash
+python -m scubagoggles.ui.launch --dark
+```
+
+Alternatively, set the environment variable before starting the launcher (or `streamlit run`). Truthy values: `1`, `true`, `yes`, `on` (case-insensitive):
+
+```bash
+# Linux / macOS
+export SCUBAGOGGLES_UI_DARK=1
+python -m scubagoggles.ui.launch
+
+# Windows (PowerShell)
+$env:SCUBAGOGGLES_UI_DARK = "1"
+python -m scubagoggles.ui.launch
+```
+
+If you use **Method 2** (Streamlit only), set `SCUBAGOGGLES_UI_DARK` and pass Streamlit’s theme so widgets match:
+
+```bash
+export SCUBAGOGGLES_UI_DARK=1
+streamlit run scubagoggles/ui/scubaconfigapp.py --theme.base dark
+```
+
+The environment variable is read when the session first starts; refresh the page or restart Streamlit if you change it after opening the app.
 
 ### Method 2: Streamlit Command
 
@@ -84,7 +113,7 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 
 - **Import Configuration**: Upload existing YAML configuration files
 - **Help Button**: Access comprehensive help and documentation
-- **Dark Mode Toggle**: Available in the header (🌙 icon)
+- **Dark mode**: Use `python -m scubagoggles.ui.launch --dark` or set `SCUBAGOGGLES_UI_DARK` (see [Dark mode](#dark-mode-without-changing-system-settings) above)
 
 ### Key Interface Elements
 

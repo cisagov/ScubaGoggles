@@ -3,9 +3,11 @@
 ScubaGoggles UI Launcher
 
 Starts the Streamlit backend and opens the app in a native window via pywebview.
-Automatically matches the system light/dark theme.
+Matches the system light/dark theme unless overridden with --dark or
+SCUBAGOGGLES_UI_DARK=1 (see scubaconfigapp for the same env var).
 """
 
+import argparse
 import atexit
 import ctypes
 import importlib.util
@@ -51,6 +53,12 @@ def _detect_theme() -> str:
     return theme.lower() if theme else "light"
 
 
+def _env_ui_dark() -> bool:
+    """True if SCUBAGOGGLES_UI_DARK requests dark mode (same as config UI)."""
+    val = os.environ.get("SCUBAGOGGLES_UI_DARK", "").strip().lower()
+    return val in ("1", "true", "yes", "on")
+
+
 def _is_streamlit_installed() -> bool:
     """Return True if the streamlit package is importable."""
     return importlib.util.find_spec("streamlit") is not None
@@ -58,6 +66,18 @@ def _is_streamlit_installed() -> bool:
 
 def main() -> None:
     """Launch the ScubaGoggles UI in a native window."""
+
+    parser = argparse.ArgumentParser(
+        description="ScubaGoggles Configuration UI (Streamlit + native window)",
+    )
+    parser.add_argument(
+        "--dark",
+        action="store_true",
+        help="Force dark theme (ignores system preference)",
+    )
+    args = parser.parse_args()
+    if args.dark:
+        os.environ["SCUBAGOGGLES_UI_DARK"] = "1"
 
     app_to_run = _resolve_app_file()
     if not app_to_run:
@@ -86,6 +106,8 @@ def main() -> None:
     # Start Streamlit immediately (theme flag added once detection finishes)
     theme_thread.join()  # typically < 50 ms
     theme_base = theme_result.get("base", "light")
+    if _env_ui_dark():
+        theme_base = "dark"
 
     cmd = [
         sys.executable, "-m", "streamlit", "run",

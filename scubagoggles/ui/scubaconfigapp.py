@@ -10,6 +10,7 @@ YAML config export/import.
 # pylint: disable=line-too-long,too-many-lines
 
 import base64
+import os
 import subprocess
 import sys
 from datetime import date, datetime
@@ -66,6 +67,8 @@ class ScubaConfigApp:
         self.available_policies = self.parse_baseline_policies()
 
         if 'config_data' not in st.session_state:
+            _ui_dark_env = os.environ.get("SCUBAGOGGLES_UI_DARK", "").strip().lower()
+            _ui_dark_initial = _ui_dark_env in ("1", "true", "yes", "on")
             st.session_state.config_data = {
                 'orgname': '',
                 'orgunitname': '',
@@ -83,7 +86,7 @@ class ScubaConfigApp:
                 'imapexceptions': [],
                 'preferreddnsresolvers': [],
                 'skipdoh': False,
-                'ui_dark_mode': False,
+                'ui_dark_mode': _ui_dark_initial,
             }
 
         if 'ui_show_help' not in st.session_state:
@@ -1311,7 +1314,7 @@ class ScubaConfigApp:
         - Use the import feature to load existing configurations
         - Green checkboxes indicate selected products in main tab
         - Status indicators show configuration progress
-        - Dark mode is available via the header toggle
+        - Dark mode: set environment variable SCUBAGOGGLES_UI_DARK=1 or run the launcher with --dark
         - All fields are validated before configuration generation
         - Preview tab shows the exact YAML that will be generated
         """)
