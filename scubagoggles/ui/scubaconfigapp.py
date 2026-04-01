@@ -467,18 +467,26 @@ class ScubaConfigApp:
         }}
 
         .status-success {{
-            background: #d4edda;
-            color: #155724;
+            background: {('#163a2d' if dark_mode else '#d4edda')};
+            color: {('#d1fae5' if dark_mode else '#155724')};
+            border: 1px solid {('#1f6f4a' if dark_mode else '#c3e6cb')};
         }}
 
         .status-warning {{
-            background: #fff3cd;
-            color: #856404;
+            background: {('#3f3110' if dark_mode else '#fff3cd')};
+            color: {('#fde68a' if dark_mode else '#856404')};
+            border: 1px solid {('#6b4f1d' if dark_mode else '#ffeeba')};
         }}
 
         .status-error {{
-            background: #f8d7da;
-            color: #721c24;
+            background: {('#3f1d20' if dark_mode else '#f8d7da')};
+            color: {('#fecaca' if dark_mode else '#721c24')};
+            border: 1px solid {('#7f1d1d' if dark_mode else '#f5c6cb')};
+        }}
+
+        .status-indicator,
+        .status-indicator * {{
+            color: inherit !important;
         }}
 
         /* Help modal styling */

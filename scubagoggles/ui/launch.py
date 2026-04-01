@@ -109,6 +109,10 @@ def main() -> None:
     if _env_ui_dark():
         theme_base = "dark"
 
+    # Keep app-level custom CSS in sync with Streamlit's detected base theme.
+    if theme_base == "dark":
+        os.environ.setdefault("SCUBAGOGGLES_UI_DARK", "1")
+
     cmd = [
         sys.executable, "-m", "streamlit", "run",
         str(app_to_run),

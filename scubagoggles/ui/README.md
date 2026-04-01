@@ -60,7 +60,7 @@ pip install -r requirements.txt
 python -m scubagoggles.ui.launch
 ```
 
-This will automatically detect and launch the configuration application (light or dark based on your system theme, unless you override as below).
+This will automatically detect and launch the configuration application (light or dark based on your system theme, unless you override as below). When system dark mode is detected, the launcher also syncs the app's custom CSS dark mode so the full UI is consistently dark.
 
 ### Dark mode (without changing system settings)
 
