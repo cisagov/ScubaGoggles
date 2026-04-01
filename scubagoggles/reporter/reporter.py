@@ -412,6 +412,9 @@ class Reporter:
         """
         Delegate HTML assembly to _reporter_html and capture rules_table for the orchestrator.
         """
+        legend_html = rh.build_indicator_legend(self._product_policies, product=self._product)
+        if legend_html:
+            fragments = [legend_html] + fragments
         html, rules_table = rh.build_individual_report_html(
             fragments=fragments,
             rules_data=rules_data,
@@ -457,7 +460,10 @@ class Reporter:
 
             for control in baseline_group["Controls"]:
                 control_id = control["Id"]
-                requirement = escape(control["Value"])
+                requirement_text = escape(control["Value"])
+                indicators_html = rh.render_indicators(control.get("Indicators", []), product=self._product)
+                requirement = requirement_text + indicators_html if indicators_html else requirement_text
+
 
                 tests = [test for test in test_results if test["PolicyId"] == control_id]
 

@@ -6,6 +6,39 @@ from pathlib import Path
 
 from scubagoggles.version import Version
 
+INDICATOR_DEFINITIONS = {
+    "Automated Check": {
+        "color": "#5E9732",
+        "text_color": "white",
+        "description": "Automatically verified by ScubaGoggles",
+    },
+    "Log-Based Check": {
+        "color": "#F6E8E5",
+        "text_color": "black",
+        "description": "Requires log-based verification",
+    },
+    "Manual": {
+        "color": "#046B9A",
+        "text_color": "white",
+        "description": "Requires manual verification",
+    },
+    "Configurable": {
+        "color": "#005288",
+        "text_color": "white",
+        "description": "Customizable via config file",
+    },
+    "BOD 25-01 Requirement": {
+        "color": "#DC3545",
+        "text_color": "white",
+        "description": "Required by CISA BOD 25-01",
+    },
+    "Requires Configuration": {
+        "color": "#DC3545",
+        "text_color": "white",
+        "description": "Config file required for check",
+    },
+}
+
 GITHUB_URL = "https://github.com/cisagov/scubagoggles"
 LIMITATIONS_URL = f"{GITHUB_URL}/blob/main/docs/usage/Limitations.md"
 
@@ -227,3 +260,115 @@ def build_individual_report_html(
 
     html = html.replace("{{DNS_LOGS}}", log_html)
     return html, rules_table
+
+def _indicator_text_color(bg_color: str) -> str:
+    # Minimal heuristic preserved from original: light backgrounds use black text.
+    if not bg_color:
+        return "white"
+    return "black" if bg_color.upper() in ["#F6E8E5", "#FFF7D6"] else "white"
+
+
+def _normalize_indicator_link(link_url: str | None, *, product: str | None, github_url: str) -> str | None:
+    if not link_url:
+        return None
+
+    # Anchor links -> baseline doc anchor on GitHub
+    if link_url.startswith("#") and product:
+        baseline_file = f"{product}.md"
+        return f"{github_url}/blob/{Version.current}/scubagoggles/baselines/{baseline_file}{link_url}"
+
+    # ../ relative paths -> GitHub blob path
+    if link_url.startswith("../"):
+        path = link_url.replace("../", "")
+        return f"{github_url}/blob/{Version.current}/{path}"
+
+    return link_url
+
+
+def render_indicator_badge(indicator: dict, *, product: str | None = None, github_url: str = GITHUB_URL) -> str:
+    indicator_name = indicator.get("name", "")
+    if not indicator_name:
+        return ""
+
+    definition = INDICATOR_DEFINITIONS.get(indicator_name, {})
+    color = indicator.get("color") or definition.get("color", "#6C757D")
+    description = definition.get("description", indicator_name)
+
+    text_color = _indicator_text_color(color)
+    link_url = _normalize_indicator_link(indicator.get("link"), product=product, github_url=github_url)
+
+    badge_style = (
+        f"background-color: {color}; color: {text_color}; "
+        "padding: 2px 8px; border-radius: 3px; "
+        "font-size: 0.85em; margin-right: 5px; "
+        "display: inline-block; white-space: nowrap; "
+        "font-weight: 500;"
+    )
+
+    if link_url:
+        badge_style += " text-decoration: none;"
+        return (
+            f'<a href="{link_url}" target="_blank" class="indicator-badge" '
+            f'style="{badge_style}" title="{description}">{indicator_name}</a>'
+        )
+
+    return f'<span class="indicator-badge" style="{badge_style}" title="{description}">{indicator_name}</span>'
+
+
+def render_indicators(indicators: list, *, product: str | None = None, github_url: str = GITHUB_URL) -> str:
+    if not indicators:
+        return ""
+    badges = [render_indicator_badge(ind, product=product, github_url=github_url) for ind in indicators]
+    badges = [b for b in badges if b]
+    if not badges:
+        return ""
+    return '<div style="margin-top: 5px;">' + "".join(badges) + "</div>"
+
+def _collect_all_indicators(product_policies: list) -> dict:
+    all_indicators = {}
+    for baseline_group in product_policies or []:
+        for control in baseline_group.get("Controls", []):
+            for indicator in control.get("Indicators", []) or []:
+                name = indicator.get("name", "")
+                if not name:
+                    continue
+                if name in all_indicators:
+                    continue
+                definition = INDICATOR_DEFINITIONS.get(name, {})
+                all_indicators[name] = {
+                    "color": indicator.get("color") or definition.get("color", "#6C757D"),
+                    "description": definition.get("description", name),
+                }
+    return all_indicators
+
+
+def build_indicator_legend(product_policies: list, *, product: str | None = None, github_url: str = GITHUB_URL) -> str:
+    all_indicators = _collect_all_indicators(product_policies)
+    if not all_indicators:
+        return ""
+
+    legend_html = (
+        '<div class="indicator-legend" style="margin: 20px 0; margin-left: 50px; font-size: 0.9em;">'
+        '<h3 style="margin: 0 0 10px 0; color: var(--header-color); font-weight: bold; '
+        'font-size: 0.95em; text-align: left;">Policy Indicators:</h3>'
+        '<ul style="list-style: none; padding-left: 0; margin: 0;">'
+    )
+
+    for name in sorted(all_indicators.keys()):
+        info = all_indicators[name]
+        indicator_dict = {"name": name, "color": info["color"]}
+
+        # Same behavior as original: some legend items link to key terminology
+        if name in ["Automated Check", "Manual", "Configurable"]:
+            indicator_dict["link"] = "#key-terminology"
+
+        badge = render_indicator_badge(indicator_dict, product=product, github_url=github_url)
+        legend_html += (
+            '<li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.85em;">'
+            f"{badge}"
+            f'<span style="color: var(--text-color);">{info["description"]}</span>'
+            "</li>"
+        )
+
+    legend_html += "</ul></div>"
+    return legend_html
