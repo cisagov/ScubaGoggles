@@ -25,4 +25,5 @@ jobs:
       - name: Run tests
         run: |
           python -m pip install coverage
-          coverage report source=. -m pytest ./scubagoggles/Testing/Unit/Python -vvv
+          coverage run -m pytest ./scubagoggles/Testing/Unit/Python -vvv
+          coverage report -m
