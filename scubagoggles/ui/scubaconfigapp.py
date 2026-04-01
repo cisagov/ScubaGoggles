@@ -1754,7 +1754,7 @@ class ScubaConfigApp:
         st.markdown("---")
         self._render_imap_exceptions_section()
 
-    def _render_break_glass_section(self):
+    def _render_break_glass_section(self):  # pylint: disable=too-many-branches
         """Render break glass accounts section within the Exclusions tab."""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
         st.markdown('<h2 class="section-title">Break Glass Accounts</h2>', unsafe_allow_html=True)
