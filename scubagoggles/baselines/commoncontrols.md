@@ -844,7 +844,6 @@ Agencies SHALL use GWS application access control policies to restrict access to
 Agencies SHALL NOT allow users to grant consent for access to low-risk scopes.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Allowing users to grant access to OAuth scopes not classified as high-risk could enable untrusted apps to gain access without non-administrative approval being allowlisted, violating policy 10.1.
 - _Last modified:_ July 2023
@@ -861,7 +860,6 @@ Agencies SHALL NOT allow users to grant consent for access to low-risk scopes.
 Agencies SHALL NOT trust unconfigured internal apps.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to GWS.
 - _Last modified:_ July 2023
@@ -878,7 +876,6 @@ Agencies SHALL NOT trust unconfigured internal apps.
 Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ External apps may contain vulnerabilities and malicious content. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
 - _Last modified:_ July 2023
