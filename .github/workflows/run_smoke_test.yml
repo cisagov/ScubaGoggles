@@ -163,7 +163,7 @@ jobs:
         uses: pypa/gh-action-pip-audit@v1.1.0
         with:
           inputs: requirements.txt
-          # no-deps: true
+          no-deps: true
 
       - name: Cache the output directory (ubuntu-latest)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}

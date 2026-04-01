@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
 
 jobs:
   test:
@@ -26,4 +25,4 @@ jobs:
       - name: Run tests
         run: |
           python -m pip install pytest-mock coverage
-          coverage run -m pytest ./scubagoggles/Testing/Unit/Python -vvv
+          coverage report -m pytest ./scubagoggles/Testing/Unit/Python -vvv

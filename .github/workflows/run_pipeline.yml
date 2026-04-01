@@ -4,9 +4,6 @@ on:
   push:
   workflow_dispatch:
 
-
-permissions: read-all
-
 jobs:
   pylint-yml:
     name: Pylint
