@@ -221,7 +221,6 @@ class RobustDNSClient:
             # form the DoH query
             qname = f"https://{self.doh_server}/{dohpath}"
 
-            #headers = {"accept":"application/dns-json"}
             try:
 
                 #response = requests.get(uri, headers=headers, timeout=5).json()
