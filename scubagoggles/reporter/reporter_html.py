@@ -60,6 +60,15 @@ LOG_BASED_WARNING_PLAINTEXT = (
 REPORTER_PATH = Path(__file__).parent
 
 
+def _inject_meta_tag(html: str) -> str:
+    # If a template doesn't contain the placeholder, do nothing.
+    if "{{META_TAG}}" not in html:
+        return html
+
+    meta_tag_template = REPORTER_PATH / "templates/MetaTagTemplate.html"
+    meta_tag = meta_tag_template.read_text(encoding="utf-8")
+    return html.replace("{{META_TAG}}", meta_tag)
+
 def create_html_table(table_data: list) -> str:
     table_html = ""
     if not table_data:
@@ -88,11 +97,12 @@ def create_html_table(table_data: list) -> str:
     return table_html
 
 
-def build_front_page_html(fragments: list, tenant_info: dict, report_uuid: str, darkmode: str) -> str:
+def build_front_page_html(fragments: list, tenant_info: dict, report_uuid: str, darkmode: str, redaction: str) -> str:
     template_file = REPORTER_PATH / "FrontPageReport/FrontPageReportTemplate.html"
     html = template_file.read_text(encoding="utf-8")
 
     table = "".join(fragments)
+    html = _inject_meta_tag(html)
 
     main_css_file = REPORTER_PATH / "styles/main.css"
     main_js_file = REPORTER_PATH / "scripts/main.js"
@@ -101,8 +111,10 @@ def build_front_page_html(fragments: list, tenant_info: dict, report_uuid: str, 
 
     dark_toggle = (REPORTER_PATH / "templates/DarkModeToggleTemplate.html").read_text(encoding="utf-8")
     html = html.replace("{{DARK_MODE_TOGGLE}}", dark_toggle)
-    html = html.replace("{{SGR_SETTINGS}}", f'<span id="sgr_settings" data-darkmode="{darkmode}"></span>')
-
+    html = html.replace(
+    "{{SGR_SETTINGS}}",
+    f'<span id="sgr_settings" data-darkmode="{darkmode}" data-redaction="{redaction}"></span>',
+)
     front_css_file = REPORTER_PATH / "styles/FrontPageStyle.css"
     html = html.replace("{{FRONT_CSS}}", f"<style>{front_css_file.read_text(encoding='utf-8')}</style>")
 
@@ -167,6 +179,7 @@ def build_individual_report_html(
     fragments: list,
     rules_data: dict | None,
     darkmode: str,
+    redaction: str,
     dns_logs: dict,
     full_name: str,
     main_report_name: str,
@@ -174,8 +187,10 @@ def build_individual_report_html(
     tenant_domain: str,
     tenant_id: str,
 ) -> tuple[str, list | None]:
+    
     template_file = REPORTER_PATH / "IndividualReport/IndividualReportTemplate.html"
     html = template_file.read_text(encoding="utf-8")
+    html = _inject_meta_tag(html)
 
     main_css_file = REPORTER_PATH / "styles/main.css"
     main_js_file = REPORTER_PATH / "scripts/main.js"
@@ -186,8 +201,10 @@ def build_individual_report_html(
 
     dark_toggle = (REPORTER_PATH / "templates/DarkModeToggleTemplate.html").read_text(encoding="utf-8")
     html = html.replace("{{DARK_MODE_TOGGLE}}", dark_toggle)
-    html = html.replace("{{SGR_SETTINGS}}", f'<span id="sgr_settings" data-darkmode="{darkmode}"></span>')
-
+    html = html.replace(
+    "{{SGR_SETTINGS}}",
+    f'<span id="sgr_settings" data-darkmode="{darkmode}" data-redaction="{redaction}"></span>',
+)
     html = insert_classroom_warning(html, full_name)
 
     html = html.replace("{{HOMELINK}}", f"../{main_report_name}.html")

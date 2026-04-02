@@ -108,7 +108,7 @@ class Reporter:
         redaction:str
     ) -> str:
         """Compatibility wrapper; implementation lives in _reporter_html.py."""
-        return rh.build_front_page_html(fragments, tenant_info, report_uuid, darkmode)
+        return rh.build_front_page_html(fragments, tenant_info, report_uuid, darkmode, redaction)
 
     def _is_control_omitted(self, control_id: str) -> bool:
         """Determine if the supplied control was marked for omission in the config file."""
@@ -408,7 +408,7 @@ class Reporter:
 
         return details
 
-    def _build_report_html(self, fragments: list, rules_data: dict, darkmode: str) -> str:
+    def _build_report_html(self, fragments: list, rules_data: dict, darkmode: str, redaction: str) -> str:
         """
         Delegate HTML assembly to _reporter_html and capture rules_table for the orchestrator.
         """
@@ -419,6 +419,7 @@ class Reporter:
             fragments=fragments,
             rules_data=rules_data,
             darkmode=darkmode,
+            redaction=redaction,
             dns_logs=self._dns_logs,
             full_name=self._full_name,
             main_report_name=self._main_report_name,
@@ -628,7 +629,7 @@ class Reporter:
             results_data.update({"Controls": self._sanitize_details(table_data)})
             json_data.append(results_data)
 
-        html = self._build_report_html(fragments, rules_data, darkmode)
+        html = self._build_report_html(fragments, rules_data, darkmode, redaction)
         with open(
             f"{out_path}/IndividualReports/{ind_report_name}.html",
             mode="w",
