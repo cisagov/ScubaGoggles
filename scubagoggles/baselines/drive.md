@@ -447,7 +447,7 @@ Drive automatically monitors unusual file changes to identify potential ransomwa
 
 - _Rationale:_ This setting helps prevent against malware and ransomware by auto-detecting potential attacks. This strengthens the overall security posture and mitigates risks of data loss and exfiltration.
 - _Last modified:_ April 2026
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ TBD
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CP-9, CP-10
 - MITRE ATT&CK TTP Mapping
   - [T1486: Data Encrypted for Impact](https://attack.mitre.org/techniques/T1486/)
   - [T1490: Inhibit System Recovery](https://attack.mitre.org/techniques/T1490/)
