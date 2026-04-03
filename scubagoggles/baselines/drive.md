@@ -436,7 +436,7 @@ Alternatively, [Context-Aware access policies](https://support.google.com/a/answ
 
 ## 6. Malware and Ransomware
 
-This section addresses Drive for Desktop, a feature that enables users to interact with their Drive files directly through their desktop's file explorer or finder, rather than through the browser.
+This section covers the malware and ransomware scanning feature within the Drive for Desktop.
 
 ### Policies
 
