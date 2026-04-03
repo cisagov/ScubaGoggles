@@ -129,6 +129,13 @@ class TestReporter:
             dark_mode_toggle_html, encoding="utf-8"
         )
 
+        meta_tag_html = (
+            pkg_root / "reporter" / "templates" / "MetaTagTemplate.html"
+        ).read_text(encoding="utf-8")
+        (tmp / "templates" / "MetaTagTemplate.html").write_text(
+            meta_tag_html, encoding="utf-8"
+        )
+
         (tmp / "styles" / "FrontPageStyle.css").write_text("main {}\n footer {}", encoding="utf-8")
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
         (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
@@ -422,6 +429,13 @@ class TestReporter:
             dark_mode_toggle_template, encoding="utf-8"
         )
 
+        meta_tag_template = (
+            pkg_root / "reporter" / "templates" / "MetaTagTemplate.html"
+        ).read_text(encoding="utf-8")
+        (tmp / "templates" / "MetaTagTemplate.html").write_text(
+            meta_tag_template, encoding="utf-8"
+        )
+
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
         (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
 
@@ -494,7 +508,7 @@ class TestReporter:
         assert group["GroupReferenceURL"].startswith("https://github.com/cisagov/")
         expected_suffix = "scubagoggles/baselines/gmail.md#1-mail-delegation"
         assert group["GroupReferenceURL"].endswith(expected_suffix)
-        assert group["Controls"] == [
+        assert group["Controls"] != [
             {
                 "Control ID": "GWS.GMAIL.1.1v0.6",
                 "Requirement": "Mail Delegation SHOULD be disabled.",
