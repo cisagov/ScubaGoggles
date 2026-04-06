@@ -436,6 +436,7 @@ class Orchestrator:
         return (f'{pass_summary}{warning_summary}{failure_summary}'
                 f'{manual_summary}{omit_summary}{incorrect_summary}{error_summary}')
 
+    # pylint: disable=too-many-branches
     def _run_reporter(self):
         """
         Creates the individual reports and the front page
@@ -600,6 +601,12 @@ class Orchestrator:
         report_file = out_folder / f'{out_jsonfile}.json'
         with report_file.open('w', encoding='utf-8') as results_file:
             json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
+
+        # Check for Test Run
+        if args.reportredaction == 'true':
+            # Lighthouse Config
+            lighthouserc_json = Path(__file__).parent / 'lighthouserc.json'
+            shutil.copy(lighthouserc_json, out_folder)
 
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
