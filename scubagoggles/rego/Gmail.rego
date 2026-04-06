@@ -116,6 +116,8 @@ GmailId3_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.3.1")
 # Not applicable at OU or Group level
 DomainsWithSpf contains SpfRecord.domain if {
     some SpfRecord in input.spf_records
+    # Ensure that there's only 1 SPF record
+    count([Answer | some Answer in SpfRecord.rdata; startswith(Answer, "v=spf1")]) == 1
     some Rdata in SpfRecord.rdata
     startswith(Rdata, "v=spf1 ")
     # Ensure that the policy either ends with "-all", "~all", or directs to a different SPF policy
@@ -155,8 +157,26 @@ GmailId4_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.1")
 # Not applicable at OU or Group level
 DomainsWithDmarc contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
-    some Rdata in DmarcRecord.rdata
-    startswith(Rdata, "v=DMARC1;")
+    ValidAnswers := [Answer | some Answer in DmarcRecord.rdata; startswith(Answer, "v=DMARC1;")]
+    count(ValidAnswers) == 1
+}
+
+DomainsWithMultipleDmarc contains DmarcRecord.domain if {
+    some DmarcRecord in input.dmarc_records
+    ValidAnswers := [Answer | some Answer in DmarcRecord.rdata; startswith(Answer, "v=DMARC1;")]
+    count(ValidAnswers) > 1
+}
+
+MultiDmarcWarning := " " if { count(DomainsWithMultipleDmarc) == 0 }
+MultiDmarcWarning := Warning if {
+    count(DomainsWithMultipleDmarc) > 0
+    Warning := concat("", [
+        " ",
+        format_int(count(DomainsWithMultipleDmarc), 10),
+        " domain(s) have multiple DMARC records: ",
+        concat(", ", DomainsWithMultipleDmarc),
+        ". "
+    ])
 }
 
 tests contains {
@@ -167,7 +187,10 @@ tests contains {
         "get_dmarc_records"
     ],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutDmarc, AllDomains),
+        MultiDmarcWarning,
+        DNSLink]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -189,13 +212,18 @@ DomainsWithPreject contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
     contains(Rdata, "p=reject;")
+    DmarcRecord.domain in DomainsWithDmarc
 }
 
 tests contains {
     "PolicyId": GmailId4_2,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutPreject, AllDomains),
+        MultiDmarcWarning,
+        DNSLink
+    ]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -217,13 +245,18 @@ DomainsWithDHSContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
     contains(Rdata, "mailto:reports@dmarc.cyber.dhs.gov")
+    DmarcRecord.domain in DomainsWithDmarc
 }
 
 tests contains {
     "PolicyId": GmailId4_3,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutDHSContact, AllDomains),
+        MultiDmarcWarning,
+        DNSLink
+    ]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -245,13 +278,18 @@ DomainsWithAgencyContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
     count(split(Rdata, "@")) >= 3
+    DmarcRecord.domain in DomainsWithDmarc
 }
 
 tests contains {
     "PolicyId": GmailId4_4,
     "Prerequisites": ["directory/v1/domains/list", "get_dmarc_records"],
     "Criticality": "Should",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains), DNSLink]),
+    "ReportDetails": concat("", [
+        ReportDetailsArray(Status, DomainsWithoutAgencyContact, AllDomains),
+        MultiDmarcWarning,
+        DNSLink
+    ]),
     "ActualValue": input.dmarc_records,
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -469,23 +507,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.5.6
-#--
-# No implementation steps provided for this policy
-
-GmailId5_6 := utils.PolicyIdWithSuffix("GWS.GMAIL.5.6")
-
-tests contains {
-    "PolicyId": GmailId5_6,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please check manually.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
 
 ###############
 # GWS.GMAIL.6 #
@@ -639,22 +660,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.6.5
-#--
-
-GmailId6_5 := utils.PolicyIdWithSuffix("GWS.GMAIL.6.5")
-
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": GmailId6_5,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
 
 ###############
 # GWS.GMAIL.7 #
@@ -935,23 +940,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.7.8
-#--
-
-GmailId7_8 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.8")
-
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": GmailId7_8,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
 
 ###############
 # GWS.GMAIL.8 #
@@ -1017,6 +1005,39 @@ GetFriendlyValue9_1(ImapEnabled, PopEnabled) := Description if {
     Description := "POP access is enabled"
 } else := "Both IMAP and POP access are disabled"
 
+ImapEnabled contains OU if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    section := "gmail_imap_access"
+    setting := "enableImapAccess"
+    imapSet := utils.ApiSettingExists(section, setting, OU)
+    imapSet == true
+    imapEnable := utils.GetApiSettingValue(section, setting, OU)
+    imapEnable == true
+}
+
+PopEnabled contains OU if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    section := "gmail_pop_access"
+    setting := "enablePopAccess"
+    popSet := utils.ApiSettingExists(section, setting, OU)
+    popSet == true
+    popEnable := utils.GetApiSettingValue(section, setting, OU)
+    popEnable == true
+}
+
+ImapExceptions contains OU if {
+    some OU in ImapEnabled
+    utils.ExceptionConfigured(OU, "imap_exceptions")
+}
+
+ImapExceptionsFormatted contains Message if {
+    some OU in ImapExceptions
+    Justification := utils.ExceptionJustification(OU, "imap_exceptions")
+    Message := sprintf("<li>%s. %s</li>", [OU, utils.FormatJustification(Justification)])
+}
+
 NonCompliantOUs9_1 contains {
     "Name": OU,
     "Value": GetFriendlyValue9_1(imapEnable, popEnable)
@@ -1024,16 +1045,20 @@ NonCompliantOUs9_1 contains {
 if {
     some OU, settings in input.policies
     GmailEnabled(OU)
-    imapSection := "gmail_imap_access"
-    imapSetting := "enableImapAccess"
-    popSection := "gmail_pop_access"
-    popSetting := "enablePopAccess"
-    imapSet := utils.ApiSettingExists(imapSection, imapSetting, OU)
-    popSet := utils.ApiSettingExists(popSection, popSetting, OU)
-    true in {imapSet, popSet}
-    imapEnable := utils.GetApiSettingValue(imapSection, imapSetting, OU)
-    popEnable := utils.GetApiSettingValue(popSection, popSetting, OU)
+    imapEnable := OU in (ImapEnabled - ImapExceptions)
+    popEnable := OU in PopEnabled
     true in {imapEnable, popEnable}
+}
+
+ImapExceptionMessage := "" if {
+    count(ImapExceptions) == 0
+} else := Message if {
+    Message := concat("", [
+        "<br>Note: IMAP is enabled in the following locations but ScubaGoggles was configured to ",
+        "allow exceptions for them:<ul>",
+        concat("", ImapExceptionsFormatted),
+        "</ul>"
+    ])
 }
 
 tests contains {
@@ -1042,7 +1067,7 @@ tests contains {
         "policy/gmail_service_status.serviceState"
     ],
     "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs9_1, []),
+    "ReportDetails": concat("", [utils.ReportDetails(NonCompliantOUs9_1, []), ImapExceptionMessage]),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs9_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
@@ -1320,23 +1345,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.15.2
-#--
-
-GmailId15_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.15.2")
-
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": GmailId15_2,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
 
 ################
 # GWS.GMAIL.16 #
@@ -1397,23 +1405,6 @@ if {
 }
 #--
 
-#
-# Baseline GWS.GMAIL.16.2
-#--
-
-GmailId16_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.16.2")
-
-# No implementation steps provided for this policy
-tests contains {
-    "PolicyId": GmailId16_2,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
-}
-#--
 
 ################
 # GWS.GMAIL.17 #
@@ -1448,18 +1439,39 @@ tests contains {
 
 GmailId18_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.18.1")
 
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
+Message18_1 := "Spam filters are bypassed for one or more domains: %s"
+
+NonComplianceMessage18_1(value) := sprintf(Message18_1, [value])
+
+# ScubaGoggles does the work to find domains in email lists.  The baseline
+# is non-compliant if the override lists section contains a "domains found"
+# string.
+
+NonCompliantOUs18_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage18_1(domainsFound)
+}
+if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    domainsFound := settings.gmail_spam_override_lists.senderDomainsFound
+}
+
 tests contains {
     "PolicyId": GmailId18_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Prerequisites": [
+        "policy/gmail_spam_override_lists",
+        "policy/gmail_service_status.serviceState"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs18_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs18_1},
+    "RequirementMet": Status,
     "NoSuchEvent": false
 }
-#--
+if {
+    Status := count(NonCompliantOUs18_1) == 0
+}
 
 #
 # Baseline GWS.GMAIL.18.2
@@ -1467,15 +1479,40 @@ tests contains {
 
 GmailId18_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.18.2")
 
+Message18_2 := "Warnings and spam filters are bypassed for one or more domains: %s"
+
+NonComplianceMessage18_2(value) := sprintf(Message18_2, [value])
+
+# ScubaGoggles does the work to find domains in email lists.  The baseline
+# is non-compliant if the override lists section contains a "domains found"
+# string.
+
+NonCompliantOUs18_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage18_2(domainsFound)
+}
+if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    domainsFound := settings.gmail_spam_override_lists.warningDomainsFound
+}
+
 tests contains {
     "PolicyId": GmailId18_2,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Prerequisites": [
+        "policy/gmail_spam_override_lists",
+        "policy/gmail_service_status.serviceState"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs18_2, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs18_2},
+    "RequirementMet": Status,
     "NoSuchEvent": false
 }
+if {
+    Status := count(NonCompliantOUs18_2) == 0
+}
+
 #--
 
 #
@@ -1484,13 +1521,41 @@ tests contains {
 
 GmailId18_3 := utils.PolicyIdWithSuffix("GWS.GMAIL.18.3")
 
+Message18_3 := concat("",
+                      ["Spam filter bypass and warnings hiding is enabled ",
+                      "for all messages from all senders in the following: %s"])
+
+NonComplianceMessage18_3(value) := sprintf(Message18_3, [value])
+
+NonCompliantOUs18_3 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage18_3(message)
+}
+if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    spamOverrideLists := settings.gmail_spam_override_lists.spamOverride
+    descriptions := [d | some override in spamOverrideLists
+                         override.hideWarningBannerForAll
+                         d := sprintf("'%s'", [override.description])]
+    count(descriptions) > 0
+    message := concat(", ", descriptions)
+}
+
 tests contains {
     "PolicyId": GmailId18_3,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Prerequisites": [
+        "policy/gmail_spam_override_lists",
+        "policy/gmail_service_status.serviceState"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs18_3, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs18_3},
+    "RequirementMet": Status,
     "NoSuchEvent": false
 }
+if {
+    Status := count(NonCompliantOUs18_3) == 0
+}
+
 #--

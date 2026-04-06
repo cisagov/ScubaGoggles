@@ -113,6 +113,7 @@ DKIM SHOULD be enabled for all domains.
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
   - [T1434: Internal Spear Phishing](https://attack.mitre.org/techniques/T1434/)
+  - [T1672: Email Spoofing](https://attack.mitre.org/techniques/T1672/)
 
 ### Resources
 
@@ -155,7 +156,7 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
 
 - _Rationale:_ Threat actors could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, an SPF policy is required for Federal Civilian Executive Branch (FCEB) agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - _Last modified:_ February 2024
-- _Note:_ 
+- _Note:_
   - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softfail (indicated by `~`). Either hard or soft fail may be used to comply with this baseline policy.
   - This policy is not applicable to user alias domains. Gmail uses the primary domain as the `envelope-from` domain and the alias domain as the `header-from` domain, SPF only verifies the `envelope-from` domain.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-2d
@@ -166,6 +167,9 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
     - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
+  - [T1672: Email Spoofing](https://attack.mitre.org/techniques/T1672/)
+  - [T1598: Phishing for Information](https://attack.mitre.org/techniques/T1598/)
+    - [T1598.003: Phishing for Information: Spearphishing Link](https://attack.mitre.org/techniques/T1598/003/)
 
 ### Resources
 
@@ -211,7 +215,9 @@ A DMARC policy SHALL be published at the full domain or the second-level domain 
   - User alias domains provide an alternative email address to send or receive email and therefore must have a DMARC policy in place.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
-  - None
+  - [T1672: Email Spoofing](https://attack.mitre.org/techniques/T1672/)
+  - [T1598: Phishing for Information](https://attack.mitre.org/techniques/T1598/)
+    - [T1598.003: Phishing for Information: Spearphishing Link](https://attack.mitre.org/techniques/T1598/003/)
 
 #### GWS.GMAIL.4.2v0.6
 The DMARC message rejection option SHALL be p=reject.
@@ -229,6 +235,7 @@ The DMARC message rejection option SHALL be p=reject.
     - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
   - [T1586:002: Compromise Accounts](https://attack.mitre.org/techniques/T1586/)
     - [T1586:002: Compromise Accounts: Email Accounts](https://attack.mitre.org/techniques/T1586/002/)
+  - [T1672: Email Spoofing](https://attack.mitre.org/techniques/T1672/)
 
 #### GWS.GMAIL.4.3v0.6
 The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.
@@ -384,18 +391,6 @@ Emails flagged by SCuBA policies GWS.GMAIL.5.1 through GWS.GMAIL.5.3 SHALL NOT b
     - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 
-#### GWS.GMAIL.5.6v0.6
-Any third-party or outside application selected for attachment protection SHOULD offer services comparable to those offered by Google Workspace (GWS).
-
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail56v06-instructions)
-
-- _Rationale:_ Using third-party or outside applications for attachment protection that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
-- MITRE ATT&CK TTP Mapping
-  - None
-
-
 ### Resources
 
 -   [Google Workspace Admin Help: Advanced phishing and malware protection](https://support.google.com/a/answer/9157861?product_name=UnuFlow&hl=en&visit_id=637831282628458101-2078141803&rd=1&src=supportwidget0&hl=en#zippy=%2Cturn-on-attachment-protection)
@@ -429,11 +424,6 @@ To configure the settings for Attachment Protections:
 
 #### GWS.GMAIL.5.5v0.6 Instructions
 1.  Under the setting for Policy 5.1 through Policy 5.3, ensure either "Move email to spam" or "Quarantine" is selected.
-
-
-
-#### GWS.GMAIL.5.6v0.6 Instructions
-1.  No implementation steps for this policy
 
 
 ## 6. Links and External Images Protection
@@ -500,17 +490,6 @@ Google SHALL be allowed to automatically apply future recommended settings for l
 - MITRE ATT&CK TTP Mapping
   - None
 
-#### GWS.GMAIL.6.5v0.6
-Any third-party or outside application selected for links and external images protection SHOULD offer services comparable to those offered by Google Workspace (GWS).
-
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail65v06-instructions)
-
-- _Rationale:_ Using third-party or outside applications for links and external images protection that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services enhances the safety and integrity of user data and systems.
-- _Last modified:_ July 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
-- MITRE ATT&CK TTP Mapping
-  - None
-
 
 ### Resources
 
@@ -545,9 +524,6 @@ To configure the settings for Links and External Images Protection:
 
 #### GWS.GMAIL.6.4v0.6 Instructions
 1.  Check the **Apply future recommended settings automatically** checkbox.
-
-#### GWS.GMAIL.6.5v0.6 Instructions
-1.  No implementation steps for this policy
 
 
 ## 7. Spoofing and Authentication Protection
@@ -658,20 +634,6 @@ Google SHALL be allowed to automatically apply future recommended settings for s
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
-#### GWS.GMAIL.7.8v0.6
-Any third-party or outside application selected for spoofing and authentication protection SHOULD offer services comparable to those offered by Google Workspace.
-
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail78v06-instructions)
-
-- _Rationale:_ Using third-party or outside applications for spoofing and authentication protection that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
-- MITRE ATT&CK TTP Mapping
-  - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
-  - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
-    - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
-    - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
-
 ### Resources
 
 -   [Google Workspace Admin Help: Advanced phishing and malware protection](https://support.google.com/a/answer/9157861?product_name=UnuFlow&hl=en&visit_id=637831282628458101-2078141803&rd=1&src=supportwidget0&hl=en#zippy=%2Cturn-on-attachment-protection)
@@ -709,12 +671,8 @@ To configure the settings for Spoofing and Authentication Protection:
 #### GWS.GMAIL.7.6v0.6 Instructions
 1.  Under each setting from Policy 7.1 through Policy 7.5, make sure either "Move email to spam" or "Quarantine" is selected.
 
-
 #### GWS.GMAIL.7.7v0.6 Instructions
 1.  Check the **Apply future recommended settings automatically** checkbox.
-
-#### GWS.GMAIL.7.8v0.6 Instructions
-1.  There is no implementation for this policy.
 
 
 ## 8. User Email Uploads
@@ -769,6 +727,7 @@ This section determines whether users have POP3 and IMAP access. Doing so allows
 POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#imap-exceptions)
 
 - _Rationale:_ Enabling POP and IMAP access could potentially expose sensitive agency or organization emails to unauthorized access through legacy applications or third-party mail clients, posing a security risk. This risk can be reduced by disabling POP and IMAP access, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ October 2025
@@ -1027,16 +986,6 @@ Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
     - [T1566:003: Phishing: Spearphishing via Service](https://attack.mitre.org/techniques/T1566/003/)
 
-#### GWS.GMAIL.15.2v0.6
-Any third-party or outside application selected for enhanced pre-delivery message scanning SHOULD offer services comparable to those offered by Google Workspace.
-
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail152v06-instructions)
-
-- _Rationale:_ Using third-party or outside applications for enhanced pre-delivery message scanning that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
-- MITRE ATT&CK TTP Mapping
-  - None
 
 ### Resources
 
@@ -1056,9 +1005,6 @@ To configure the settings for Enhanced Pre-Delivery Message Scanning:
 3.  Select **Spam, phishing, and malware -\> Enhanced pre-delivery message scanning**.
 4.  Check the **Enables improved detection of suspicious content prior to delivery** checkbox.
 5.  Select **Save**.
-
-#### GWS.GMAIL.15.2v0.6 Instructions
-1.  There is no implementation steps for this policy
 
 
 ## 16. Security Sandbox
@@ -1082,16 +1028,6 @@ Security sandbox SHOULD be enabled to provide additional protections for emails.
   - [T1566: Phishing](https://attack.mitre.org/techniques/T1566/)
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
 
-#### GWS.GMAIL.16.2v0.6
-Any third-party or outside application selected for security sandbox SHOULD offer services comparable to those offered by Google Workspace.
-
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail162v06-instructions)
-
-- _Rationale:_ Using third-party or outside applications for security sandbox that do not offer services comparable to those offered by GWS could potentially expose users to security risks. Using applications that offer comparable services reduces this risk, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 2023
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
-- MITRE ATT&CK TTP Mapping
-  - None
 
 ### Resources
 
@@ -1118,8 +1054,6 @@ To configure the settings for Security sandbox or Security sandbox rules:
     4. Action to take if expressions match.
 7. Select **Save**.
 
-#### GWS.GMAIL.16.2v0.6 Instructions
-1.  There is no implementation steps for this policy.
 
 ## 17. Comprehensive Mail Storage
 
@@ -1167,7 +1101,7 @@ This section covers the settings relating to bypassing spam filters.
 #### GWS.GMAIL.18.1v0.6
 Domains SHALL NOT be added to lists that bypass spam filters.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail181v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 
 - _Rationale:_ Spam protections may incorrectly filter legitimate emails. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, could enable numerous unknown users to bypass spam protections.
@@ -1183,7 +1117,7 @@ Domains SHALL NOT be added to lists that bypass spam filters.
 #### GWS.GMAIL.18.2v0.6
 Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail182v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Spam protections may incorrectly filter legitimate emails. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, could enable numerous unknown users to bypass spam protections.
 - _Last modified:_ April 2024
@@ -1197,7 +1131,7 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 #### GWS.GMAIL.18.3v0.6
 Bypass spam filters and hide warnings for all messages from internal and external senders SHALL NOT be enabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail183v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 
 - _Rationale:_ Bypassing spam filters and hiding warning for all messages from internal and external senders creates a security risk because all messages are allowed to bypass filters. Disabling this feature mitigates the risk.

@@ -692,97 +692,9 @@ if {
 
 DriveId5_1 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.5.1")
 
-LogMessage5_1 := "ENABLE_DOCS_ADD_ONS"
+NonComplianceMessage5_1(Value) := sprintf("Drive for Desktop is %s.", [Value])
 
-Check5_1_OK if {
-    events := utils.FilterEventsOU(LogEvents, LogMessage5_1, utils.TopLevelOU)
-    count(events) > 0
-}
-
-NonComplianceMessage5_1 := "Users can install Google Docs add-ons from add-ons store."
-
-NonCompliantOUs5_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage5_1
-}
-if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, LogMessage5_1, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "false"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
-}
-
-NonCompliantGroups5_1 contains {
-    "Name": Group,
-    "Value": NonComplianceMessage5_1
-}
-if {
-    some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, LogMessage5_1, Group)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "false"
-    LastEvent.NewValue != "INHERIT_FROM_PARENT"
-}
-
-# NOT yet implemented in policy API
-#NonCompliantOUs5_1 contains {
-#    "Name": OU,
-#    "Value": NonComplianceMessage5_1
-#}
-#if {
-#    some OU, settings in input.policies
-#    DriveEnabled(OU)
-#    addOns := settings.drive_and_docs_drive_sdk.enableDriveSdkApiAccess
-#    addOns != false
-#}
-
-tests contains {
-    "PolicyId": DriveId5_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    not Check5_1_OK
-}
-
-tests contains {
-    "PolicyId": DriveId5_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1,
-        "NonCompliantGroups": NonCompliantGroups5_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
-}
-if {
-    Check5_1_OK
-    Conditions := {count(NonCompliantOUs5_1) == 0, count(NonCompliantGroups5_1) == 0}
-    Status := (false in Conditions) == false
-}
-#--
-
-###################
-# GWS.DRIVEDOCS.6 #
-###################
-
-#
-# Baseline GWS.DRIVEDOCS.6.1
-#--
-
-DriveId6_1 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.6.1")
-
-NonComplianceMessage6_1(Value) := sprintf("Drive for Desktop is %s.", [Value])
-
-GetFriendlyValue6_1(CompanyOnly, DesktopEnabled) := "enabled and can be used on any device" if {
+GetFriendlyValue5_1(CompanyOnly, DesktopEnabled) := "enabled and can be used on any device" if {
         CompanyOnly == false
         DesktopEnabled == true
     }
@@ -794,9 +706,9 @@ GetFriendlyValue6_1(CompanyOnly, DesktopEnabled) := "enabled and can be used on 
         DesktopEnabled == true
     }
 
-NonCompliantOUs6_1 contains {
+NonCompliantOUs5_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage6_1(GetFriendlyValue6_1(allowAuthorized,
+    "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(allowAuthorized,
                                                          desktopEnabled))
 }
 if {
@@ -815,19 +727,19 @@ if {
 }
 
 tests contains {
-    "PolicyId": DriveId6_1,
+    "PolicyId": DriveId5_1,
     "Prerequisites": [
         "policy/drive_and_docs_drive_for_desktop.allowDriveForDesktop",
         "policy/drive_and_docs_drive_for_desktop.restrictToAuthorizedDevices",
         "policy/drive_and_docs_service_status.serviceState"
     ],
     "Criticality": "Should",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, []),
-    "ActualValue" : {"NonCompliantOUs": NonCompliantOUs6_1},
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
+    "ActualValue" : {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    Status := count(NonCompliantOUs6_1) == 0
+    Status := count(NonCompliantOUs5_1) == 0
 }
 #--
