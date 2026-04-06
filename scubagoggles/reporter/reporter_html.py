@@ -171,8 +171,26 @@ def insert_classroom_warning(html: str, full_name: str) -> str:
         "<h4>Note: Google Classroom is not available by default in GWS but as an additional "
         "Google Service.</h4>"
     )
-    return html.replace("{{WARNING_NOTIFICATION}}", classroom_note if full_name == "Google Classroom" else "")
-
+    assuredcontrols_note = ('<h4>Note: Assured Controls and Assured '
+                                'Controls Plus are paid add-ons with Google '
+                                'Workspace. This baseline is intended as '
+                                'guidance for agencies that already have '
+                                'these add-ons. Users that choose to implement '
+                                'this baseline should carefully consider the '
+                                'tradeoffs involved, including the potential '
+                                'security benefits, usability impacts, and '
+                                'increased licensing fees for the add-on '
+                                'licenses.</h4>')
+    if full_name == 'Google Classroom':
+            html = html.replace('{{WARNING_NOTIFICATION}}',
+                                classroom_note)
+    elif full_name == 'Assured Controls':
+            html = html.replace('{{WARNING_NOTIFICATION}}',
+                                assuredcontrols_note)
+    else:
+            html = html.replace('{{WARNING_NOTIFICATION}}', '')
+    return html
+   
 
 def build_individual_report_html(
     *,
