@@ -164,7 +164,7 @@ class RobustDNSClient:
                 # The domain chosen is somewhat arbitrary, as we don't care what the answer is,
                 # only if the query succeeds/fails.
 
-                query = dns.message.make_query(uri, dns.rdatatype.TXT)
+                query = dns.message.make_query("a.root-servers.net", dns.rdatatype.TXT)
                 response = dns.query.https(query, uri, timeout=5)
                 rcode = response.rcode()
 
