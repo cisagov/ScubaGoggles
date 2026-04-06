@@ -218,7 +218,7 @@ class RobustDNSClient:
             try_number += 1
 
             # form the DoH query
-            qname = f"https://{self.doh_server}/{dohpath}"
+            uri = f"https://{self.doh_server}/{dohpath}"
 
             try:
 
