@@ -108,7 +108,7 @@ for b in args.baselines:
             for c in command_list: command_display += f'\"{c}\" '
             print(command_display)
 
-            subprocess.run(command.split(), check=False)
+            subprocess.run(command_list, check=False)
     else:
         print(f"\n==== Testing {b} ====")
         command = f'{OPA_EXE}\" test\" {rego_dir}\" {test_dir}/Rego/{b}'
