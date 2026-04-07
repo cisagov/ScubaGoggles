@@ -3,8 +3,11 @@ run_unit_tests.py runs the rego unit tests
 
 Currently runs non-verbosely
 """
+import os
 import subprocess
 import argparse
+
+from scubagoggles.config import UserConfig
 
 from pathlib import Path
 from sys import platform
@@ -49,9 +52,11 @@ parser.add_argument('-c', '--controls', type = str, nargs="+",
 default=[], help="Space-separated list of control group numbers to test within a specific baseline."
 "Can only be used when a single baseline is specified. By default all are run.")
 
-parser.add_argument('-o', '--opapath', type=str, default='../../..', metavar='',
+# obtain the default OPA executable location from UserSetup()
+opa_dir = UserConfig().opa_dir or "../../.." 
+parser.add_argument('-o', '--opapath', type=str, default=opa_dir, metavar='',
 help='The relative path to the directory containing the OPA executable. ' +
-    'Defaults to "../../.." the current executing directory.')
+    'Defaults to the default location of the opa executable from UserConfig.')
 
 parser.add_argument('-v', action='store_true',
 help='Verbose flag, passed to opa, increases output.')
@@ -91,12 +96,20 @@ for b in args.baselines:
         for c in args.controls:
             print(f"\n==== Testing {b} control {c} ====")
             c = c.zfill(2)
-            command = (f'{OPA_EXE} test {rego_dir} '
-                       f'{test_dir}/Rego/{b}/{b}{c}_test.rego {V_FLAG}')
-            print(command)
+            command = f'{OPA_EXE}\" test\" {rego_dir}\"'
+            command += f'{test_dir}/Rego/{b}/{b}{c}_test.rego'
+            # only append if V_FLAG is set
+            if V_FLAG:
+                command += f'\"{V_FLAG}'
+            command_list = [s.strip() for s in command.split("\"")]
+            print(command_list)
             subprocess.run(command.split(), check=False)
     else:
         print(f"\n==== Testing {b} ====")
-        command = f'{OPA_EXE} test {rego_dir} {test_dir}/Rego/{b} {V_FLAG}'
-        print(command)
-        subprocess.run(command.split(), check=False)
+        command = f'{OPA_EXE}\" test\" {rego_dir}\" {test_dir}/Rego/{b}'
+        # only append if V_FLAG is set
+        if V_FLAG:
+            command += f'\"{V_FLAG}'
+        command_list = [s.strip() for s in command.split("\"")]
+        print(command_list)
+        subprocess.run(command_list, check=False)
