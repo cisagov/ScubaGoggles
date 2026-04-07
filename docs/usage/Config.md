@@ -135,17 +135,17 @@ Example CLI usage:
 scubagoggles gws --skipdoh
 ```
 
-### IMAP Exceptions
+### IMAP Exclusions
 Per GWS.GMAIL.9.1, IMAP MAY be enabled on a per-OU or per-group basis when there is a specific need.
-The `imapexceptions` top-level key allows the user to specify OUs and groups where IMAP is allowed.
-Each entry in the `imapexceptions` list accepts the following fields:
+The `imapexclusions` top-level key allows the user to specify OUs and groups where IMAP is allowed.
+Each entry in the `imapexclusions` list accepts the following fields:
 -  `ou`: Org unit where IMAP should be allowed. Cannot be the workspace's top-level OU. The OU must
     be input as a path relative to the top-level OU. Examples:
         - `My OU`
         - `My OU/My sub OU`.
 -  `group`: Group where IMAP should be allowed. Enter as the group email rather than the display
     name, e.g., `examplegroup@example.com`.
-- `justification`: A brief explanation of why the exception is allowed.
+- `justification`: A brief explanation of why the OU/group should be excluded from the IMAP check.
 
 `justification` is optional, but either `ou` or `group` must be provided. If both `ou` and `group`
 are provided, the exception only applies to users that are in both the OU and the group.

@@ -77,8 +77,8 @@ class ScubaArgumentParser:
         if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
             args.breakglassaccounts = []
 
-        if 'imapexceptions' not in args or args.imapexceptions is None:
-            args.imapexceptions = []
+        if 'imapexclusions' not in args or args.imapexclusions is None:
+            args.imapexclusions = []
 
         if not 'config' in args or not args.config:
             return args
@@ -167,7 +167,7 @@ class ScubaArgumentParser:
         if 'annotatepolicy' in args:
             ScubaArgumentParser.validate_annotations(args)
 
-        if 'imapexceptions' in args:
+        if 'imapexclusions' in args:
             ScubaArgumentParser.validate_imap_exceptions(args)
 
         # We want OrgName to be in PascalCase for consistency with ScubaGear.
@@ -241,15 +241,15 @@ class ScubaArgumentParser:
         Validate and standardize structure of the IMAP exceptions.
         """
 
-        if args.imapexceptions is None:
-            args.imapexceptions = []
+        if args.imapexclusions is None:
+            args.imapexclusions = []
 
-        for i, exception in enumerate(args.imapexceptions):
-            args.imapexceptions[i] = {
+        for i, exception in enumerate(args.imapexclusions):
+            args.imapexclusions[i] = {
                 'ou': exception.get('ou', ''),
                 'group': exception.get('group', ''),
                 'justification': exception.get('justification', '')
             }
-            if args.imapexceptions[i]['ou'] == '' and args.imapexceptions[i]['group'] == '':
-                log.warning('Invalid entry in config file "imapexceptions": each entry must '
+            if args.imapexclusions[i]['ou'] == '' and args.imapexclusions[i]['group'] == '':
+                log.warning('Invalid entry in config file "imapexclusions": each entry must '
                             'specify at least an OU or a group.')

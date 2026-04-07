@@ -103,13 +103,13 @@ outputreportfilename: BaselineReports
 # skipdoh: true
 
 # ============================
-# IMAP EXCEPTIONS
+# IMAP EXCLUSIONS
 # ============================
 # Users may configure specific OUs/groups where IMAP is allowed by listing them under the
-# "imapexceptions" key. For each entry, either "ou" or "group" must be specified. "justification" is
+# "imapexclusions" key. For each entry, either "ou" or "group" must be specified. "justification" is
 # optional. For example:
 #
-# imapexceptions:
+# imapexclusions:
 #   - ou: my ou
 #     group: example@example.com
 #     justification: perfectly valid reason
