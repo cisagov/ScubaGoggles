@@ -85,7 +85,7 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git checkout -b "$BRANCH_NAME"
-          git add -A
+          git add -u
           git commit -m "Bump OPA version from v${CURRENT_VERSION} to v${LATEST_VERSION}"
           git push origin "$BRANCH_NAME"
 
