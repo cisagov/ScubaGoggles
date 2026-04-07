@@ -441,7 +441,7 @@ This section covers the malware and ransomware scanning feature within the Drive
 ### Policies
 
 #### GWS.DRIVEDOCS.6.1v0.6
-Drive automatically monitors unusual file changes to identify potential ransomware corruption SHALL be set to ON.
+Monitoring for potential ransomware corruption SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
