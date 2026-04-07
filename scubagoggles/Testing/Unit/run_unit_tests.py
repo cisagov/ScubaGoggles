@@ -102,7 +102,12 @@ for b in args.baselines:
             if V_FLAG:
                 command += f'\"{V_FLAG}'
             command_list = [s.strip() for s in command.split("\"")]
-            print(command_list)
+            
+            # for the sake of displaying the command
+            command_display = ""
+            for c in command_list: command_display += f'\"{c}\" '
+            print(command_display)
+
             subprocess.run(command.split(), check=False)
     else:
         print(f"\n==== Testing {b} ====")
@@ -111,5 +116,11 @@ for b in args.baselines:
         if V_FLAG:
             command += f'\"{V_FLAG}'
         command_list = [s.strip() for s in command.split("\"")]
-        print(command_list)
+        # for the sake of displaying the command
+
+        # for the sake of displaying the command
+        command_display = ""
+        for c in command_list: command_display += f'\"{c}\" '
+        print(command_display)
+
         subprocess.run(command_list, check=False)
