@@ -116,7 +116,6 @@ for b in args.baselines:
         if V_FLAG:
             command += f'\"{V_FLAG}'
         command_list = [s.strip() for s in command.split("\"")]
-        # for the sake of displaying the command
 
         # for the sake of displaying the command
         command_display = ""
