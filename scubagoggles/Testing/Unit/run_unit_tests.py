@@ -3,7 +3,6 @@ run_unit_tests.py runs the rego unit tests
 
 Currently runs non-verbosely
 """
-import os
 import subprocess
 import argparse
 
