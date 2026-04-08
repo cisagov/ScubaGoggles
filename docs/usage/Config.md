@@ -1,5 +1,9 @@
 
 # Usage: Config File
+
+> [!TIP]
+> Prefer a graphical interface? The [Configuration UI](../../scubagoggles/ui/README.md) provides a web-based form for building config files with validation, policy browsing, and YAML export.
+
 All ScubaGoggles [parameters](Parameters.md) can be placed into a configuration file in order to made execution easier. The path of the file is specified by the `--config` parameter, and its contents are expected as YAML.
 
 > [!NOTE]
