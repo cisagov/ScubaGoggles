@@ -87,6 +87,15 @@ class ScubaConfigApp:
                 'preferreddnsresolvers': [],
                 'skipdoh': False,
                 'ui_dark_mode': _ui_dark_initial,
+                'outjsonfilename': '',
+                'regopath': '',
+                'documentpath': '',
+                'outputproviderfilename': '',
+                'outputactionplanfilename': '',
+                'outputregofilename': '',
+                'outputreportfilename': '',
+                'numberofuuidcharacterstotruncate': 18,
+                'accesstoken': '',
             }
 
         if 'ui_show_help' not in st.session_state:
@@ -603,6 +612,7 @@ class ScubaConfigApp:
             self._import_auth_fields(config)
             self._import_baselines(config)
             self._import_output_settings(config)
+            self._import_advanced_settings(config)
             self._import_policy_and_account_sections(config)
             self._show_import_summary()
             st.rerun()
@@ -686,6 +696,26 @@ class ScubaConfigApp:
                 st.session_state.config_data['darkmode'] = bool(darkmode)
         if 'quiet' in config:
             st.session_state.config_data['quiet'] = bool(config['quiet'])
+
+    @staticmethod
+    def _import_advanced_settings(config: dict):
+        """Import advanced / rarely-changed settings from *config*."""
+        data = st.session_state.config_data
+        for key in (
+            'outjsonfilename', 'regopath', 'documentpath',
+            'outputproviderfilename', 'outputactionplanfilename',
+            'outputregofilename', 'outputreportfilename',
+            'accesstoken',
+        ):
+            if key in config:
+                data[key] = str(config[key])
+        if 'numberofuuidcharacterstotruncate' in config:
+            try:
+                data['numberofuuidcharacterstotruncate'] = int(
+                    config['numberofuuidcharacterstotruncate'],
+                )
+            except (ValueError, TypeError):
+                pass
 
     @staticmethod
     def _normalize_to_list(value, coerce=None):
@@ -1943,6 +1973,168 @@ class ScubaConfigApp:
 
         st.markdown('</div>', unsafe_allow_html=True)
 
+    @staticmethod
+    def _on_advanced_field_change():
+        """Callback for advanced text inputs — sets a flag to show save feedback."""
+        st.session_state._adv_field_saved = True
+
+    def render_advanced_tab(self):
+        """Render advanced configuration options that most users will never need."""
+        if st.session_state.pop('_adv_field_saved', False):
+            st.toast("Setting saved", icon="✅")
+
+        st.markdown('<div class="section-container">', unsafe_allow_html=True)
+        st.markdown(
+            '<h2 class="section-title">Advanced Configuration</h2>',
+            unsafe_allow_html=True,
+        )
+
+        with st.expander("ℹ️ Help: Advanced Configuration", expanded=False):
+            st.markdown("""
+            <div class="context-help">
+            <strong>Advanced Configuration:</strong><br>
+            These settings override internal defaults used by ScubaGoggles.
+            Most users will never need to change them.<br><br>
+
+            <strong>Output File Names:</strong> Change the default base names
+            for the various output artifacts (JSON, HTML, CSV, etc.).<br><br>
+
+            <strong>Paths:</strong> Override the directories where Rego rules
+            and baseline documents are loaded from.<br><br>
+
+            <strong>Access Token:</strong> Provide a raw OAuth token instead
+            of a credentials file.  Using a credentials file is the
+            recommended approach; only use this when integrating with
+            external tooling such as ScubaConnect.<br><br>
+
+            <strong>UUID Truncation:</strong> Controls how many characters of
+            the report UUID are appended to the output JSON filename.
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.warning(
+            "⚠️ **These settings are for advanced users only.** "
+            "Leaving fields blank will use the ScubaGoggles defaults."
+        )
+
+        data = st.session_state.config_data
+        _on_change = self._on_advanced_field_change
+
+        # --- Output file names ---
+        st.markdown("### Output File Names")
+
+        col1, col2 = st.columns(2)
+        with col1:
+            data['outjsonfilename'] = st.text_input(
+                "Output JSON Filename",
+                value=data.get('outjsonfilename', ''),
+                placeholder="ScubaResults",
+                help="Base name for the consolidated assessment JSON output",
+                key="adv_outjsonfilename",
+                on_change=_on_change,
+            )
+            data['outputproviderfilename'] = st.text_input(
+                "Provider Output Filename",
+                value=data.get('outputproviderfilename', ''),
+                placeholder="ProviderSettingsExport",
+                help="Base name for the provider settings export JSON",
+                key="adv_outputproviderfilename",
+                on_change=_on_change,
+            )
+            data['outputregofilename'] = st.text_input(
+                "Rego Output Filename",
+                value=data.get('outputregofilename', ''),
+                placeholder="TestResults",
+                help="Base name for the Rego/test results JSON",
+                key="adv_outputregofilename",
+                on_change=_on_change,
+            )
+        with col2:
+            data['outputreportfilename'] = st.text_input(
+                "Report Output Filename",
+                value=data.get('outputreportfilename', ''),
+                placeholder="BaselineReports",
+                help="Base name for the main HTML report",
+                key="adv_outputreportfilename",
+                on_change=_on_change,
+            )
+            data['outputactionplanfilename'] = st.text_input(
+                "Action Plan Output Filename",
+                value=data.get('outputactionplanfilename', ''),
+                placeholder="ActionPlan",
+                help="Base name for the action plan CSV output",
+                key="adv_outputactionplanfilename",
+                on_change=_on_change,
+            )
+
+        st.divider()
+
+        # --- Paths ---
+        st.markdown("### Custom Paths")
+
+        col1, col2 = st.columns(2)
+        with col1:
+            data['regopath'] = st.text_input(
+                "Rego Path",
+                value=data.get('regopath', ''),
+                placeholder="(default: package rego/ directory)",
+                help="Directory containing Rego policy files",
+                key="adv_regopath",
+                on_change=_on_change,
+            )
+        with col2:
+            data['documentpath'] = st.text_input(
+                "Document Path",
+                value=data.get('documentpath', ''),
+                placeholder="(default: package baselines/ directory)",
+                help="Directory containing SCuBA baseline markdown documents",
+                key="adv_documentpath",
+                on_change=_on_change,
+            )
+
+        st.divider()
+
+        # --- UUID truncation ---
+        st.markdown("### Report Settings")
+
+        uuid_choices = [0, 13, 18, 36]
+        current_uuid = data.get('numberofuuidcharacterstotruncate', 18)
+        if current_uuid not in uuid_choices:
+            current_uuid = 18
+        data['numberofuuidcharacterstotruncate'] = st.selectbox(
+            "UUID Characters to Truncate",
+            options=uuid_choices,
+            index=uuid_choices.index(current_uuid),
+            help=(
+                "Controls how many characters are truncated from the "
+                "report UUID when appended to outjsonfilename. "
+                "Default is 18."
+            ),
+            key="adv_uuid_truncate",
+            on_change=_on_change,
+        )
+
+        st.divider()
+
+        # --- Access token ---
+        st.markdown("### Authentication")
+
+        data['accesstoken'] = st.text_input(
+            "Access Token",
+            value=data.get('accesstoken', ''),
+            placeholder="(optional — credentials file is recommended)",
+            help=(
+                "OAuth access token to use instead of a credentials file. "
+                "If provided, takes precedence over the credentials file. "
+                "Using a credentials file is the recommended authentication method."
+            ),
+            type="password",
+            key="adv_accesstoken",
+            on_change=_on_change,
+        )
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
     def render_preview_tab(self):
         """Render configuration preview"""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
@@ -2029,6 +2221,20 @@ class ScubaConfigApp:
         if data.get('skipdoh'):
             config['skipdoh'] = True
 
+        # Advanced settings (only emit when non-default)
+        for key in (
+            'outjsonfilename', 'regopath', 'documentpath',
+            'outputproviderfilename', 'outputactionplanfilename',
+            'outputregofilename', 'outputreportfilename',
+            'accesstoken',
+        ):
+            if data.get(key):
+                config[key] = data[key]
+
+        uuid_val = data.get('numberofuuidcharacterstotruncate', 18)
+        if uuid_val != 18:
+            config['numberofuuidcharacterstotruncate'] = uuid_val
+
         return config
 
     def run(self):
@@ -2050,6 +2256,7 @@ class ScubaConfigApp:
             "🚫 Omit Policies",
             "🔒 Exclusions",
             "🌐 DNS Configuration",
+            "⚙️ Advanced",
             "👁️ Preview"
         ])
 
@@ -2069,6 +2276,9 @@ class ScubaConfigApp:
             self.render_dns_config_tab()
 
         with tabs[5]:
+            self.render_advanced_tab()
+
+        with tabs[6]:
             self.render_preview_tab()
 
         # Status bar
