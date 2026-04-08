@@ -42,7 +42,7 @@ def _detect_theme() -> str:
     is not available.
     """
     try:
-        import darkdetect
+        import darkdetect  # pylint: disable=import-outside-toplevel
     except ImportError:
         return "light"
 
