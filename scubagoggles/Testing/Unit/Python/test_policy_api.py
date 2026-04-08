@@ -56,6 +56,27 @@ class CommonMethods:
             test_data = json.loads(input_file.read_text())
             yield test_name, test_data
 
+    def update_test_results(self, test_name: str, results: dict):
+
+        """Given a test name and results, the benchmark results data in
+        the test file will be updated.  This will result in modified files
+        in the git repository, and the changes can be reviewed before
+        committed to make sure the changes are expected.
+
+        :param str test_name: name of the test file located in the data
+            directory.  The file must be named <test_name>.json
+        :param dict results: the dictionary containing the new test results.
+        """
+
+        test_file = self._data_dir / f'{test_name}.json'
+
+        test_data = json.loads(test_file.read_text())
+
+        test_data['results'] = results
+
+        with test_file.open('w', encoding = 'utf-8') as out_stream:
+            json.dump(test_data, out_stream, indent = 2)
+
     @staticmethod
     def patch_policy_api(monkeypatch, test_data: dict = None):
 
@@ -125,6 +146,12 @@ class TestPolicyApi:
     # pylint: disable=protected-access
 
     _common = CommonMethods(Path(__file__).parent / 'data')
+
+    # This is set to True via update_test_results() and is used to indicate
+    # that the benchmark results should be updated with the results from the
+    # latest test run.
+
+    _update_results = False
 
     def test_close(self, monkeypatch):
 
@@ -434,6 +461,7 @@ class TestPolicyApi:
 
         next_test_data = self._common.next_test_data
         patch_policy_api = self._common.patch_policy_api
+        update_results = self._common.update_test_results
 
         for test_name, test_data in next_test_data('policyapi_get_policies'):
             with subtests.test(msg = f'subtest: {test_name}'):
@@ -444,6 +472,11 @@ class TestPolicyApi:
                 monkeypatch.setattr(PolicyAPI, '_defaults', test_defaults)
                 policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
                 result = policy_api.get_policies()
+
+                if self._update_results:
+                    update_results(test_name, result)
+                    continue
+
                 assert result == test_data['results']
 
     def test_get_ou(self, monkeypatch, subtests):
@@ -550,6 +583,18 @@ class TestPolicyApi:
                 policy_api._apply_defaults(test_data['policies'])
 
                 self._compare_defaults(test_data)
+
+    @classmethod
+    def update_test_results(cls):
+
+        """Sets a flag indicating that the current results from tests run
+        should be used to update the expected results benchmarks.
+
+        This can be called from the debugger via
+        TestPolicyApi.update_test_results()
+        """
+
+        cls._update_results = True
 
     @staticmethod
     def _compare_defaults(test_data: dict):
