@@ -408,11 +408,6 @@
           "state": "ACTIVE"
         },
         {
-          "displayName": "Calendar settings changed",
-          "description": "An admin has changed Google Workspace Calendar settings.",
-          "state": "ACTIVE"
-        },
-        {
           "displayName": "Device compromised",
           "description": "Provides details about devices in your domain that have entered a compromised state.",
           "state": "ACTIVE"
@@ -420,11 +415,6 @@
         {
           "displayName": "Domain data export initiated",
           "description": "A Super Administrator for your Google account has started exporting data from your domain.",
-          "state": "ACTIVE"
-        },
-        {
-          "displayName": "Email settings changed",
-          "description": "An admin has changed Google Workspace Gmail settings.",
           "state": "ACTIVE"
         },
         {
@@ -453,11 +443,6 @@
           "state": "ACTIVE"
         },
         {
-          "displayName": "Mobile settings changed",
-          "description": "An admin has changed mobile management settings.",
-          "state": "ACTIVE"
-        },
-        {
           "displayName": "Phishing in inboxes due to bad whitelist",
           "description": "Messages classified as spam by Gmail filters delivered to user inboxes due to whitelisting settings in the Google Admin console that override the spam filters.",
           "state": "ACTIVE"
@@ -465,11 +450,6 @@
         {
           "displayName": "Phishing message detected post-delivery",
           "description": "Messages detected as phishing post-delivery that are automatically reclassified.",
-          "state": "ACTIVE"
-        },
-        {
-          "displayName": "Rate limited recipient",
-          "description": "A high rate of incoming email indicating a potential malicious attack or misconfigured setting.",
           "state": "ACTIVE"
         },
         {
@@ -513,11 +493,6 @@
           "state": "ACTIVE"
         },
         {
-          "displayName": "User granted Admin privilege",
-          "description": "A user is granted an admin privilege.",
-          "state": "ACTIVE"
-        },
-        {
           "displayName": "User suspended (Google identity alert)",
           "description": "Google detected suspicious activity and suspended the account.",
           "state": "ACTIVE"
@@ -543,8 +518,33 @@
           "state": "ACTIVE"
         },
         {
+          "displayName": "Calendar settings changed",
+          "description": "An admin has changed Google Workspace Calendar settings.",
+          "state": "INACTIVE"
+        },
+        {
           "displayName": "Drive settings changed",
           "description": "An admin has changed Google Workspace Drive settings.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "Email settings changed",
+          "description": "An admin has changed Google Workspace Gmail settings.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "Mobile settings changed",
+          "description": "An admin has changed mobile management settings.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "Rate limited recipient",
+          "description": "A high rate of incoming email indicating a potential malicious attack or misconfigured setting.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "User granted Admin privilege",
+          "description": "A user is granted an admin privilege.",
           "state": "INACTIVE"
         },
         {

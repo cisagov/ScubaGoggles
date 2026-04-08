@@ -1,5 +1,5 @@
 {
-  "comment": "tests get_policies() in PolicyAPI, System Defined Rules, list reduction",
+  "comment": "tests get_policies() in PolicyAPI, DLP Rules",
   "orgunits": {
     "03ph8a2z2dvk5ts": {
       "name": "topOU",
@@ -9,29 +9,146 @@
   "response": {
     "policies": [
       {
-        "name": "policies/axp3f257c3my3zg4etezjp4byykr6",
+        "name": "policies/akajj264apm6bam2cq",
         "customer": "customers/C03ymv5su",
         "policyQuery": {
-          "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z2dvk5ts')) && entity.licenses.exists(license, license in ['/product/Google-Apps/sku/1010020020'])",
+          "query": "entity.org_units.exists(org_unit, org_unit.org_unit_id == orgUnitId('03ph8a2z2dvk5ts'))",
           "orgUnit": "orgUnits/03ph8a2z2dvk5ts",
-          "sortOrder": 101.00217
+          "sortOrder": 1
         },
         "setting": {
-          "type": "settings/gmail.confidential_mode",
+          "type": "settings/rule.dlp",
           "value": {
-            "enableConfidentialMode": true
+            "displayName": "Incorrect PII (insufficient blocking)",
+            "description": "Protect your organization from leaking PII data (US)",
+            "triggers": [
+              "google.workspace.calendar.event.v1.save",
+              "google.workspace.chat.message.v1.send",
+              "google.workspace.chat.attachment.v1.upload",
+              "google.workspace.drive.file.v1.share",
+              "google.workspace.gmail.email.v1.send"
+            ],
+            "condition": {
+              "contentCondition": "all_content.matches_dlp_detector('US_SOCIAL_SECURITY_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_DRIVERS_LICENSE_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_PASSPORT', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_ADOPTION_TAXPAYER_IDENTIFICATION_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_EMPLOYER_IDENTIFICATION_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_INDIVIDUAL_TAXPAYER_IDENTIFICATION_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_VEHICLE_IDENTIFICATION_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('CREDIT_CARD_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1})"
+            },
+            "action": {
+              "alertCenterAction": {
+                "recipients": [
+                  {
+                    "allSuperAdmins": true
+                  }
+                ],
+                "alertCenterConfig": {}
+              },
+              "chatAction": {
+                "blockContent": {
+                  "actionParams": {
+                    "applyInternalDirectMessages": true,
+                    "applyExternalDirectMessages": true,
+                    "applyInternalRooms": true,
+                    "applyExternalRooms": false,
+                    "applyInternalGroupChats": true,
+                    "applyExternalGroupChats": true
+                  }
+                }
+              },
+              "driveAction": {
+                "auditOnly": {}
+              },
+              "gmailAction": {
+                "blockContent": {
+                  "actionParams": {
+                    "applyInternalMessages": true,
+                    "applyExternalMessages": false
+                  }
+                }
+              },
+              "calendarAction": {
+                "blockEvent": {
+                  "actionParams": {}
+                }
+              }
+            },
+            "state": "ACTIVE",
+            "createTime": "2026-03-30T15:26:02.088852Z",
+            "updateTime": "2026-03-30T15:26:02.337763Z",
+            "ruleTypeMetadata": {
+              "dlpRuleMetadata": {
+                "alertSeverity": "LOW"
+              }
+            }
           }
         },
-        "type": "SYSTEM"
+        "type": "ADMIN"
       }
     ]
   },
   "defaults": {},
   "results": {
     "topOU": {
-      "gmail_confidential_mode": {
-        "enableConfidentialMode": true
-      },
+      "rule_dlp": [
+        {
+          "displayName": "Incorrect PII (insufficient blocking)",
+          "description": "Protect your organization from leaking PII data (US)",
+          "triggers": [
+            "google.workspace.calendar.event.v1.save",
+            "google.workspace.chat.message.v1.send",
+            "google.workspace.chat.attachment.v1.upload",
+            "google.workspace.drive.file.v1.share",
+            "google.workspace.gmail.email.v1.send"
+          ],
+          "condition": {
+            "contentCondition": "all_content.matches_dlp_detector('US_SOCIAL_SECURITY_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_DRIVERS_LICENSE_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_PASSPORT', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_ADOPTION_TAXPAYER_IDENTIFICATION_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_EMPLOYER_IDENTIFICATION_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_INDIVIDUAL_TAXPAYER_IDENTIFICATION_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('US_VEHICLE_IDENTIFICATION_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1}) || all_content.matches_dlp_detector('CREDIT_CARD_NUMBER', google.privacy.dlp.v2.Likelihood.LIKELY, {minimum_match_count: 1, minimum_unique_match_count: 1})"
+          },
+          "action": {
+            "alertCenterAction": {
+              "recipients": [
+                {
+                  "allSuperAdmins": true
+                }
+              ],
+              "alertCenterConfig": {}
+            },
+            "chatAction": {
+              "blockContent": {
+                "actionParams": {
+                  "applyInternalDirectMessages": true,
+                  "applyExternalDirectMessages": true,
+                  "applyInternalRooms": true,
+                  "applyExternalRooms": false,
+                  "applyInternalGroupChats": true,
+                  "applyExternalGroupChats": true
+                }
+              }
+            },
+            "driveAction": {
+              "auditOnly": {}
+            },
+            "gmailAction": {
+              "blockContent": {
+                "actionParams": {
+                  "applyInternalMessages": true,
+                  "applyExternalMessages": false
+                }
+              }
+            },
+            "calendarAction": {
+              "blockEvent": {
+                "actionParams": {}
+              }
+            }
+          },
+          "state": "ACTIVE",
+          "createTime": "2026-03-30T15:26:02.088852Z",
+          "updateTime": "2026-03-30T15:26:02.337763Z",
+          "ruleTypeMetadata": {
+            "dlpRuleMetadata": {
+              "alertSeverity": "LOW"
+            }
+          }
+        }
+      ],
+      "dlp_pii": [],
       "rule_system_defined_alerts": [
         {
           "displayName": "Account suspension warning",

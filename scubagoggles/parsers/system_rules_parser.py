@@ -21,16 +21,12 @@ ACTIVE_RULE_DEFAULTS = {
         'Workspace for Education Terms of Service, Google Cloud '
         'Platform Terms of Service or Cloud Identity Terms of '
         'Service.',
-    'Calendar settings changed':
-        'An admin has changed Google Workspace Calendar settings.',
     'Device compromised':
         'Provides details about devices in your domain that have entered '
         'a compromised state.',
     'Domain data export initiated':
         'A Super Administrator for your Google account has started '
         'exporting data from your domain.',
-    'Email settings changed':
-        'An admin has changed Google Workspace Gmail settings.',
     'Gmail potential employee spoofing':
         'Incoming messages where a sender\'s name is in your Google '
         'Workspace directory, but the mail is not from your company\'s '
@@ -46,8 +42,6 @@ ACTIVE_RULE_DEFAULTS = {
     'Malware message detected post-delivery':
         'Messages detected as malware post-delivery that are '
         'automatically reclassified.',
-    'Mobile settings changed':
-        'An admin has changed mobile management settings.',
     'Phishing in inboxes due to bad whitelist':
         'Messages classified as spam by Gmail filters delivered to user '
         'inboxes due to whitelisting settings in the Google Admin console '
@@ -55,9 +49,6 @@ ACTIVE_RULE_DEFAULTS = {
     'Phishing message detected post-delivery':
         'Messages detected as phishing post-delivery that are '
         'automatically reclassified.',
-    'Rate limited recipient':
-        'A high rate of incoming email indicating a potential malicious '
-        'attack or misconfigured setting.',
     'Spike in user-reported spam':
         'An unusually high volume of messages from a sender that users '
         'have marked as spam.',
@@ -84,8 +75,6 @@ ACTIVE_RULE_DEFAULTS = {
     'Suspicious programmatic login':
         'Google detected suspicious login attempts from potential '
         'applications or computer programs.',
-    'User granted Admin privilege':
-        'A user is granted an admin privilege.',
     'User suspended (Google identity alert)':
         'Google detected suspicious activity and suspended the account.',
     'User suspended due to suspicious activity':
@@ -102,8 +91,19 @@ ACTIVE_RULE_DEFAULTS = {
         'classified as phishings.'}
 
 INACTIVE_RULE_DEFAULTS = {
+    'Calendar settings changed':
+        'An admin has changed Google Workspace Calendar settings.',
     'Drive settings changed':
         'An admin has changed Google Workspace Drive settings.',
+    'Email settings changed':
+        'An admin has changed Google Workspace Gmail settings.',
+    'Mobile settings changed':
+        'An admin has changed mobile management settings.',
+    'Rate limited recipient':
+        'A high rate of incoming email indicating a potential malicious '
+        'attack or misconfigured setting.',
+    'User granted Admin privilege':
+        'A user is granted an admin privilege.',
     'User\'s Admin privilege revoked':
         'A user is revoked of their admin privilege.'}
 
@@ -179,12 +179,19 @@ class SystemRulesParser:
 
         found_rules = {r['displayName']: i for i, r in enumerate(section_data)}
 
+        if found_rules and log.isEnabledFor(logging.DEBUG):
+
+            log.debug('system-defined rules returned by Policy API:')
+
+            for rule in sorted(found_rules):
+                log.debug('  %s', rule)
+
         indices = {i: r for r, i in found_rules.items()
                    if r not in SYSTEM_RULES}
 
         for index in reversed(indices):
 
-            log.debug('"%s" - removing user-defined rule from policies',
+            log.debug('"%s" - removing "non-baseline" rule from policies',
                       indices[index])
 
             del section_data[index]
