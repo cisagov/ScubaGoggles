@@ -150,6 +150,22 @@ Each entry in the `imapexclusions` list accepts the following fields:
 `justification` is optional, but either `ou` or `group` must be provided. If both `ou` and `group`
 are provided, the exception only applies to users that are in both the OU and the group.
 
+### Sites Exclusions
+Per GWS.SITES.1.1, Sites MAY be enabled on a per-OU or per-group basis when there is a specific need.
+The `sitesexclusions` top-level key allows the user to specify OUs and groups where Sites is allowed.
+Each entry in the `sitesexclusions` list accepts the following fields:
+-  `ou`: Org unit where Sites should be allowed. Cannot be the workspace's top-level OU. The OU must
+    be input as a path relative to the top-level OU. Examples:
+        - `My OU`
+        - `My OU/My sub OU`.
+-  `group`: Group where Sites should be allowed. Enter as the group email rather than the display
+    name, e.g., `examplegroup@example.com`.
+- `justification`: A brief explanation of why the OU/group should be excluded from the Sites check.
+
+`justification` is optional, but either `ou` or `group` must be provided. If both `ou` and `group`
+are provided, the exception only applies to users that are in both the OU and the group.
+
+
 ## Navigation
 - Continue to [Usage: Examples](Examples.md)
 - Return to [Documentation Home](/README.md)

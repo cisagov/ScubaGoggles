@@ -116,6 +116,21 @@ outputreportfilename: BaselineReports
 #   - ou: my ou/sub ou
 #   - group: example@example.com
 
+# ============================
+# SITES EXCLUSIONS
+# ============================
+# Users may configure specific OUs/groups where Sites is allowed by listing them under the
+# "sitesexclusions" key. For each entry, either "ou" or "group" must be specified. "justification" is
+# optional. For example:
+#
+# sitesexclusions:
+#   - ou: my ou
+#     group: example@example.com
+#     justification: perfectly valid reason
+#   - ou: my ou/sub ou
+#   - group: example@example.com
+
+
 # =============================
 # ANNOTATE SECTION : ANNOTATE POLICIES
 # =============================

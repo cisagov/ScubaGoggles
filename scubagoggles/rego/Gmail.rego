@@ -1029,12 +1029,12 @@ PopEnabled contains OU if {
 
 imapexclusions contains OU if {
     some OU in ImapEnabled
-    utils.ExceptionConfigured(OU, "imap_exceptions")
+    utils.ExceptionConfigured(OU, "imap_exclusions")
 }
 
 imapexclusionsFormatted contains Message if {
     some OU in imapexclusions
-    Justification := utils.ExceptionJustification(OU, "imap_exceptions")
+    Justification := utils.ExceptionJustification(OU, "imap_exclusions")
     Message := sprintf("<li>%s. %s</li>", [OU, utils.FormatJustification(Justification)])
 }
 

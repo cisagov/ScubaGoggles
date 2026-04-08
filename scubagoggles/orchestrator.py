@@ -196,7 +196,7 @@ class Orchestrator:
         provider_dict['baseline_suffix'] = self._md_parser.default_version
         provider_dict['baseline_versions'] = self._md_parser.policy_version_map
         provider_dict['break_glass_accounts'] = args.breakglassaccounts
-        provider_dict['imap_exceptions'] = args.imapexclusions
+        provider_dict['imap_exclusions'] = args.imapexclusions
         provider_dict['report_uuid'] = args.report_uuid
 
         self._validate_ou_exceptions(provider_dict)
@@ -212,9 +212,8 @@ class Orchestrator:
         '''Validate any configuration items that require the user to provide an org unit.'''
 
         args = self._args
-        # List of settings where the user has to input an OU. Currently there's only one, but more
-        # are planned.
-        settings = ['imapexclusions']
+        # List of settings where the user has to input an OU
+        settings = ['imapexclusions', 'sitesexclusions']
 
         all_ous = provider_dict['organizational_units']['organizationUnits']
         top_level_ou = provider_dict['tenant_info']['topLevelOU']
@@ -245,9 +244,8 @@ class Orchestrator:
         '''Validate any configuration items that require the user to provide a group.'''
 
         args = self._args
-        # List of settings where the user has to input a group. Currently there's only one, but more
-        # are planned.
-        settings = ['imapexclusions']
+        # List of settings where the user has to input a group
+        settings = ['imapexclusions', 'sitesexclusions']
 
         all_groups = provider_dict['group_settings']
         group_emails = {group['email'] for group in all_groups}

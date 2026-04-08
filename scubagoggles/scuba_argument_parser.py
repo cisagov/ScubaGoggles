@@ -80,6 +80,9 @@ class ScubaArgumentParser:
         if 'imapexclusions' not in args or args.imapexclusions is None:
             args.imapexclusions = []
 
+        if 'sitesexclusions' not in args or args.sitesexclusions is None:
+            args.sitesexclusions = []
+
         if not 'config' in args or not args.config:
             return args
 
@@ -168,7 +171,10 @@ class ScubaArgumentParser:
             ScubaArgumentParser.validate_annotations(args)
 
         if 'imapexclusions' in args:
-            ScubaArgumentParser.validate_imap_exceptions(args)
+            ScubaArgumentParser.validate_imap_exclusions(args)
+
+        if 'sitesexclusions' in args:
+            ScubaArgumentParser.validate_sites_exclusions(args)
 
         # We want OrgName to be in PascalCase for consistency with ScubaGear.
         # But as all other options for ScubaGoggles are all lowercase, make
@@ -236,7 +242,7 @@ class ScubaArgumentParser:
 
 
     @staticmethod
-    def validate_imap_exceptions(args: argparse.Namespace) -> None:
+    def validate_imap_exclusions(args: argparse.Namespace) -> None:
         """
         Validate and standardize structure of the IMAP exceptions.
         """
@@ -252,4 +258,23 @@ class ScubaArgumentParser:
             }
             if args.imapexclusions[i]['ou'] == '' and args.imapexclusions[i]['group'] == '':
                 log.warning('Invalid entry in config file "imapexclusions": each entry must '
+                            'specify at least an OU or a group.')
+
+    @staticmethod
+    def validate_sites_exclusions(args: argparse.Namespace) -> None:
+        """
+        Validate and standardize structure of the sites exceptions.
+        """
+
+        if args.sitesexclusions is None:
+            args.sitesexclusions = []
+
+        for i, exception in enumerate(args.sitesexclusions):
+            args.sitesexclusions[i] = {
+                'ou': exception.get('ou', ''),
+                'group': exception.get('group', ''),
+                'justification': exception.get('justification', '')
+            }
+            if args.sitesexclusions[i]['ou'] == '' and args.sitesexclusions[i]['group'] == '':
+                log.warning('Invalid entry in config file "sitesexclusions": each entry must '
                             'specify at least an OU or a group.')
