@@ -1976,11 +1976,11 @@ class ScubaConfigApp:
     @staticmethod
     def _on_advanced_field_change():
         """Callback for advanced text inputs — sets a flag to show save feedback."""
-        st.session_state._adv_field_saved = True
+        st.session_state.adv_field_saved = True
 
     def render_advanced_tab(self):
         """Render advanced configuration options that most users will never need."""
-        if st.session_state.pop('_adv_field_saved', False):
+        if st.session_state.pop('adv_field_saved', False):
             st.toast("Setting saved", icon="✅")
 
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
