@@ -21,11 +21,6 @@ from pathlib import Path
 
 import webview
 
-try:
-    import darkdetect
-except ImportError:
-    darkdetect = None
-
 
 def _find_free_port() -> int:
     """Find an available port on localhost."""
@@ -46,7 +41,9 @@ def _detect_theme() -> str:
     Falls back to light mode if system theme cannot be detected or darkdetect
     is not available.
     """
-    if darkdetect is None:
+    try:
+        import darkdetect
+    except ImportError:
         return "light"
 
     theme = darkdetect.theme()
