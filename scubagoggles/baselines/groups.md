@@ -37,7 +37,7 @@ These settings are addressed in the following policies.
 
 ### Policies
 
-#### GWS.GROUPS.1.1v0.6
+#### GWS.GROUPS.1.1v1
 Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -48,7 +48,7 @@ Group access from outside the organization SHALL be disabled unless explicitly g
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.GROUPS.1.2v0.6
+#### GWS.GROUPS.1.2v1
 Group owners' ability to add external members to groups SHOULD be disabled unless necessary for agency mission fulfillment.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -62,7 +62,7 @@ Group owners' ability to add external members to groups SHOULD be disabled unles
     - [T1048:001: Exfiltration Over Alternative Protocol: Exfiltration Over Symmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/001/)
     - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
 
-#### GWS.GROUPS.1.3v0.6
+#### GWS.GROUPS.1.3v1
 Group owners' ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -90,24 +90,24 @@ Group owners' ability to allow posting to a group by an external, non-group memb
 
 ### Implementation
 
-#### GWS.GROUPS.1.1v0.6 Instructions
-To configure the settings for sharing options: 
+#### GWS.GROUPS.1.1v1 Instructions
+To configure the settings for sharing options:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Groups for Business**.
 3.  Select **Sharing settings** -\> **Sharing options**.
 4.  Select **Accessing groups from outside this organization** -\> **Private**.
 5.  Select **Save**.
 
-#### GWS.GROUPS.1.2v0.6 Instructions
-To configure the settings for sharing options: 
+#### GWS.GROUPS.1.2v1 Instructions
+To configure the settings for sharing options:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Groups for Business**.
 3.  Select **Sharing settings** -\> **Sharing options**.
 4.  **Uncheck** the **Group owners can allow external members** checkbox.
 5.  Select **Save**.
 
-#### GWS.GROUPS.1.3v0.6 Instructions
-To configure the settings for sharing options: 
+#### GWS.GROUPS.1.3v1 Instructions
+To configure the settings for sharing options:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Groups for Business**.
 3.  Select **Sharing settings** -\> **Sharing options**.
@@ -120,7 +120,7 @@ This section covers who has the ability to create a new group within the organiz
 
 ### Policies
 
-#### GWS.GROUPS.2.1v0.6
+#### GWS.GROUPS.2.1v1
 Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -144,7 +144,7 @@ Group creation SHOULD be restricted to admins within the organization unless nec
 
 ### Implementation
 
-#### GWS.GROUPS.2.1v0.6 Instructions
+#### GWS.GROUPS.2.1v1 Instructions
 To configure the settings for Sharing options:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
@@ -159,7 +159,7 @@ This section covers the default permissions assigned to the viewing of conversat
 
 ### Policies
 
-#### GWS.GROUPS.3.1v0.6
+#### GWS.GROUPS.3.1v1
 The default permission to view conversations SHOULD be set to "All Group Members."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -185,7 +185,7 @@ The default permission to view conversations SHOULD be set to "All Group Members
 
 ### Implementation
 
-#### GWS.GROUPS.3.1v0.6 Instructions
+#### GWS.GROUPS.3.1v1 Instructions
 To configure the settings for Sharing options:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
@@ -200,7 +200,7 @@ This section covers whether or not the owner of a group can hide the group from 
 
 ### Policies
 
-#### GWS.GROUPS.4.1v0.6
+#### GWS.GROUPS.4.1v1
 The ability for groups to be hidden from the directory SHALL be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -224,7 +224,7 @@ The ability for groups to be hidden from the directory SHALL be disabled.
 
 ### Implementation
 
-#### GWS.GROUPS.4.1v0.6 Instructions
+#### GWS.GROUPS.4.1v1 Instructions
 To configure the settings for Sharing options:
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).

@@ -238,7 +238,7 @@ class TestVersion:  # pylint: disable=too-many-public-methods
 
     def test_check_or_update_readme_check_mode(self, mocker):
         """Test check_or_update_readme in check mode."""
-        readme_content = "Download ScubaGoggles-v1.0.0 from GitHub"
+        readme_content = "Download ScubaGoggles-v0.6.0 from GitHub"
 
         mocker.patch.object(Path, 'exists', return_value=True)
         mocker.patch.object(Path, 'read_text', return_value=readme_content)
@@ -252,7 +252,7 @@ class TestVersion:  # pylint: disable=too-many-public-methods
 
     def test_check_or_update_readme_update_mode(self, mocker):
         """Test check_or_update_readme in update mode."""
-        readme_content = "Download ScubaGoggles-v1.0.0 from GitHub"
+        readme_content = "Download ScubaGoggles-v0.6.0 from GitHub"
 
         mocker.patch.object(Path, 'exists', return_value=True)
         mocker.patch.object(Path, 'read_text', return_value=readme_content)

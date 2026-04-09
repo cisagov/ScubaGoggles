@@ -44,7 +44,7 @@ This control limits external users not explicitly invited to the meeting from jo
 
 ### Policies
 
-#### GWS.MEET.1.1v0.6
+#### GWS.MEET.1.1v1
 External users who were not explicitly invited SHALL be required to ask to join.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -71,7 +71,7 @@ External users who were not explicitly invited SHALL be required to ask to join.
 
 To configure the settings for Access type Meet safety settings:
 
-#### GWS.MEET.1.1v0.6 Instructions
+#### GWS.MEET.1.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Access Type**.
@@ -85,7 +85,7 @@ This control determines which meetings users within the agency's organization ca
 
 ### Policies
 
-#### GWS.MEET.2.1v0.6
+#### GWS.MEET.2.1v1
 Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace (GWS) tenant or organization.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -112,7 +112,7 @@ Meeting access SHALL be disabled for meetings created by users who are not membe
 
 To configure the settings for Access within Meet safety settings:
 
-#### GWS.MEET.2.1v0.6 Instructions
+#### GWS.MEET.2.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Access**.
@@ -127,7 +127,7 @@ Note: When this feature is not enabled, any attendee that is a member of the hos
 
 ### Policies
 
-#### GWS.MEET.3.1v0.6
+#### GWS.MEET.3.1v1
 Host Management meeting features SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -156,7 +156,7 @@ Host Management meeting features SHALL be enabled.
 
 To enable Host Management meeting features:
 
-#### GWS.MEET.3.1v0.6 Instructions
+#### GWS.MEET.3.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Host management**.
@@ -169,7 +169,7 @@ This control provides a warning label for any participating a meeting who is not
 
 ### Policies
 
-#### GWS.MEET.4.1v0.6
+#### GWS.MEET.4.1v1
 "Warn for external participants" SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -199,7 +199,7 @@ This control provides a warning label for any participating a meeting who is not
 
 To enable Host Management meeting features:
 
-#### GWS.MEET.4.1v0.6 Instructions
+#### GWS.MEET.4.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Meet**.
 3.  Select **Meet safety settings** -\> **Warn for external participants**.
@@ -212,7 +212,7 @@ This section covers Google Meet video settings such as automatic video recording
 
 ### Policies
 
-#### GWS.MEET.5.1v0.6
+#### GWS.MEET.5.1v1
 Automatic recordings for Google Meet SHALL be disabled.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet61v06-instructions)
@@ -226,7 +226,7 @@ Automatic recordings for Google Meet SHALL be disabled.
   - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
   - [T1565: Data Manipulation](https://attack.mitre.org/techniques/T1565/)
 
-#### GWS.MEET.5.2v0.6
+#### GWS.MEET.5.2v1
 Automatic transcripts for Google Meet SHALL be disabled.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet62v06-instructions)
@@ -249,7 +249,7 @@ Automatic transcripts for Google Meet SHALL be disabled.
 
 ### Implementation
 
-#### GWS.MEET.5.1v0.6 Instructions
+#### GWS.MEET.5.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Meet video settings**.
@@ -257,7 +257,7 @@ Automatic transcripts for Google Meet SHALL be disabled.
 5.  Ensure **Meetings are recorded by default** is unselected.
 6.  Click **Save**.
 
-#### GWS.MEET.5.2v0.6 Instructions
+#### GWS.MEET.5.2v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Meet video settings**.
@@ -271,7 +271,7 @@ This section covers Google Gemini features within the Google Meet app.
 
 ### Policies
 
-#### GWS.MEET.6.1v0.6
+#### GWS.MEET.6.1v1
 Admins SHOULD NOT be allowed to override the default sharing level for meeting notes set by the organization.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet61v06-instructions)
@@ -283,7 +283,7 @@ Admins SHOULD NOT be allowed to override the default sharing level for meeting n
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud torage](https://attack.mitre.org/techniques/T1567/002/)
 
-#### GWS.MEET.6.2v0.6
+#### GWS.MEET.6.2v1
 Default sharing setting for Google AI notes SHALL be restricted to guests in your organization.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet62v06-instructions)
@@ -304,7 +304,7 @@ Default sharing setting for Google AI notes SHALL be restricted to guests in you
 
 ### Implementation
 
-#### GWS.MEET.6.1v0.6 Instructions
+#### GWS.MEET.6.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Gemini Settings**.
@@ -312,7 +312,7 @@ Default sharing setting for Google AI notes SHALL be restricted to guests in you
 5.  Ensure **Allow hosts to change who notes are shared to** is unselected.
 6.  Click **Save**.
 
-#### GWS.MEET.6.2v0.6 Instructions
+#### GWS.MEET.6.2v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Gemini Settings**.
