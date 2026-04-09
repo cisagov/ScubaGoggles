@@ -221,7 +221,6 @@ class RobustDNSClient:
             uri = f"https://{self.doh_server}/{dohpath}"
 
             try:
-
                 query = dns.message.make_query(qname, dns.rdatatype.TXT)
                 response = dns.query.https(query, uri, timeout=5)
                 rcode = response.rcode()
