@@ -402,7 +402,7 @@ Google Drive for Desktop SHALL be enabled only for authorized devices.
 #### GWS.DRIVEDOCS.5.2v0.6
 Monitoring for potential ransomware corruption SHALL be enabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols71v06-instructions)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols52v06-instructions)
 
 - _Rationale:_ This setting helps prevent against malware and ransomware by auto-detecting potential attacks. This strengthens the overall security posture and limits the potential damage posed by ransomware.
 - _Last modified:_ April 2026
