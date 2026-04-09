@@ -404,7 +404,7 @@ Monitoring for potential ransomware corruption SHALL be enabled.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols71v06-instructions)
 
-- _Rationale:_ This setting helps prevent against malware and ransomware by auto-detecting potential attacks. This strengthens the overall security posture and mitigates risks of data loss and exfiltration.
+- _Rationale:_ This setting helps prevent against malware and ransomware by auto-detecting potential attacks. This strengthens the overall security posture and limits the potential damage posed by ransomware.
 - _Last modified:_ April 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CP-9, CP-10
 - MITRE ATT&CK TTP Mapping
