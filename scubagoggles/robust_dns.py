@@ -222,8 +222,6 @@ class RobustDNSClient:
 
             try:
 
-                #response = requests.get(uri, headers=headers, timeout=5).json()
-                # True DoH
                 query = dns.message.make_query(qname, dns.rdatatype.TXT)
                 response = dns.query.https(query, uri, timeout=5)
                 rcode = response.rcode()
