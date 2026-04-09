@@ -196,64 +196,33 @@ if {
 
 MeetId5_1 := utils.PolicyIdWithSuffix("GWS.MEET.5.1")
 
-NonCompliantOUs5_1 contains {
-    "Name": OU,
-    "Value": "Users can receive calls from anyone"
-}
-if {
-    some OU in utils.OUsWithEvents
-    SettingName := "Incoming call restrictions Allowed caller type"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, OU)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "ALL"
-}
-
-NonCompliantGroups5_1 contains {
-    "Name": Group,
-    "Value": "Users can receive calls from anyone"
-}
-if {
-    some Group in utils.GroupsWithEvents
-    SettingName := "Incoming call restrictions Allowed caller type"
-    Events := utils.FilterEventsGroup(LogEvents, SettingName, Group)
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "ALL"
-}
-
 tests contains {
     "PolicyId": MeetId5_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event in the current logs",
-    "RequirementMet": DefaultSafe,
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
     "NoSuchEvent": true
 }
-if {
-    DefaultSafe := true
-    SettingName := "Incoming call restrictions Allowed caller type"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-}
+#--
+
+#
+# Baseline GWS.MEET.5.2
+#--
+
+MeetId5_2 := utils.PolicyIdWithSuffix("GWS.MEET.5.2")
 
 tests contains {
-    "PolicyId": MeetId5_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Shall",
-    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
-    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1, "NonCompliantGroups": NonCompliantGroups5_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
+    "PolicyId": MeetId5_2,
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
 }
-if {
-    SettingName := "Incoming call restrictions Allowed caller type"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) > 0
-    Conditions := {count(NonCompliantOUs5_1) == 0, count(NonCompliantGroups5_1) == 0}
-    Status := (false in Conditions) == false
-}
+#--
 
 ##############
 # GWS.MEET.6 #
@@ -268,7 +237,7 @@ MeetId6_1 := utils.PolicyIdWithSuffix("GWS.MEET.6.1")
 tests contains {
     "PolicyId": MeetId6_1,
     "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
+    "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,

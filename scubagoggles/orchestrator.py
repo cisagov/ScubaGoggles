@@ -19,11 +19,16 @@ from datetime import datetime, timezone, date
 from pathlib import Path
 from tqdm import tqdm
 
+import requests
+import packaging.version as packageVersion
+
 from scubagoggles.provider import Provider
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.reporter.reporter import Reporter
 from scubagoggles.run_rego import opa_eval, find_opa
 from scubagoggles.version import Version
+from scubagoggles.scuba_constants import SCUBAGOGGLES_PACKAGE_URL
+
 
 log = logging.getLogger(__name__)
 
@@ -136,6 +141,38 @@ class Orchestrator:
         """
         return cls._gws
 
+    def notify_user_if_new_release_is_available(self):
+        """
+        Compares the installed version of ScubaGoggles on the local machine
+        to the latest version avaialable on PyPI. 
+        """
+
+        local_machine_version = Version.number
+
+        # Error handling for retrieving latest Goggles version on PyPI
+        try:
+            goggles_url_response = requests.get(SCUBAGOGGLES_PACKAGE_URL, timeout=10)
+            goggles_url_response.raise_for_status()
+            latest_version_on_pypi = goggles_url_response.json()["info"]["version"]
+        except Exception as err:
+            error_message = (
+                f"An unexpected error occurred in retrieving latest SCuBA Goggles"
+                f"version: {err}"
+            )
+            log.error(error_message)
+            return
+
+        local_machine_version = packageVersion.Version(local_machine_version)
+        latest_version_on_pypi = packageVersion.Version(latest_version_on_pypi)
+
+        if local_machine_version < latest_version_on_pypi:
+            local_goggles_install_is_behind = (
+                f"A new version of SCuBA Goggles is available (v{latest_version_on_pypi}),"
+                f" you're running v{local_machine_version}.\nConsider updating via: "
+                f"pip install scubagoggles --upgrade."
+            )
+            log.warning(local_goggles_install_is_behind)
+
     def _run_gws_providers(self):
         """
         Runs the provider scripts and outputs a json to path
@@ -143,7 +180,6 @@ class Orchestrator:
 
         args = self._args
         products = args.baselines
-        break_glass_accounts = args.breakglassaccounts
 
         with Provider(args.customerid,
                       args.credentials,
@@ -158,13 +194,74 @@ class Orchestrator:
 
         provider_dict['baseline_suffix'] = self._md_parser.default_version
         provider_dict['baseline_versions'] = self._md_parser.policy_version_map
-        provider_dict['break_glass_accounts'] = break_glass_accounts
+        provider_dict['break_glass_accounts'] = args.breakglassaccounts
+        provider_dict['imap_exceptions'] = args.imapexceptions
         provider_dict['report_uuid'] = args.report_uuid
+
+        self._validate_ou_exceptions(provider_dict)
+        self._validate_group_exceptions(provider_dict)
 
         out_jsonfile = args.outputpath / args.outputproviderfilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(provider_dict, out_stream, indent=4)
+
+
+    def _validate_ou_exceptions(self, provider_dict: dict):
+        '''Validate any configuration items that require the user to provide an org unit.'''
+
+        args = self._args
+        # List of settings where the user has to input an OU. Currently there's only one, but more
+        # are planned.
+        settings = ['imapexceptions']
+
+        all_ous = provider_dict['organizational_units']['organizationUnits']
+        top_level_ou = provider_dict['tenant_info']['topLevelOU']
+        if not top_level_ou.startswith('/'):
+            top_level_ou = '/' + top_level_ou
+        ou_paths = {ou['orgUnitPath'] for ou in all_ous}
+        for setting in settings:
+            invalid = set()
+            for exception in vars(args)[setting]:
+                if 'ou' not in exception or exception['ou'] == '':
+                    continue
+                ou = exception['ou']
+                if not ou.startswith('/'):
+                    ou = '/' + ou
+                if ou == top_level_ou:
+                    if 'group' not in exception or exception['group'] == '':
+                        log.warning('%s - cannot create exception for entire top-level OU, "%s"',
+                                    setting, provider_dict['tenant_info']['topLevelOU'])
+                elif ou not in ou_paths:
+                    invalid.add(ou)
+
+            if len(invalid) > 0:
+                log.warning('%s - no OUs found matching %s.',
+                            setting, ', '.join([f'"{ou}"' for ou in invalid]))
+
+
+    def _validate_group_exceptions(self, provider_dict: dict):
+        '''Validate any configuration items that require the user to provide a group.'''
+
+        args = self._args
+        # List of settings where the user has to input a group. Currently there's only one, but more
+        # are planned.
+        settings = ['imapexceptions']
+
+        all_groups = provider_dict['group_settings']
+        group_emails = {group['email'] for group in all_groups}
+        for setting in settings:
+            invalid = set()
+            for exception in vars(args)[setting]:
+                if 'group' not in exception or exception['group'] == '':
+                    continue
+                group = exception['group']
+                if group not in group_emails:
+                    invalid.add(group)
+            if len(invalid) > 0:
+                log.warning('%s - no groups found matching %s.',
+                            setting, ', '.join([f'"{group}"' for group in invalid]))
+
 
     def _rego_eval(self):
         """
@@ -339,6 +436,7 @@ class Orchestrator:
         return (f'{pass_summary}{warning_summary}{failure_summary}'
                 f'{manual_summary}{omit_summary}{incorrect_summary}{error_summary}')
 
+    # pylint: disable=too-many-branches
     def _run_reporter(self):
         """
         Creates the individual reports and the front page
@@ -504,6 +602,12 @@ class Orchestrator:
         with report_file.open('w', encoding='utf-8') as results_file:
             json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
 
+        # Check for Test Run
+        if args.reportredaction == 'true':
+            # Lighthouse Config
+            lighthouserc_json = Path(__file__).parent / 'lighthouserc.json'
+            shutil.copy(lighthouserc_json, out_folder)
+
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
         scuba_results_file.unlink()
@@ -611,6 +715,10 @@ class Orchestrator:
         args = self._args
         args.baselines = list(args.baselines)
         args.baselines.sort()
+
+        # checks if the local version is behind the latest version available and
+        # notifies the user if so
+        self.notify_user_if_new_release_is_available()
 
         # get the absolute paths relative to this directory
         if not isinstance(args.outputpath, Path):

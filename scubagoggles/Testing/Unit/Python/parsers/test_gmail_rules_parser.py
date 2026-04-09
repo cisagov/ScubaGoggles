@@ -27,7 +27,10 @@ class MockGwsAuth:
     def credentials(self):
         return None
 
-
+    def __init__(self, credentials_path, customer_id, services):
+        self.credentials_path = credentials_path
+        self.customer_id = customer_id
+        self.services = services
 class MockSession:
 
     """Mocks Google's AuthorizedSession class.  This along with the above

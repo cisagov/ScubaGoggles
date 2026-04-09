@@ -7,7 +7,7 @@ from enum import Enum
 
 BASE_URL_ADMINSDK = 'https://developers.google.com/admin-sdk'
 BASE_URL_WS_ADMIN = 'https://developers.google.com/workspace/admin'
-
+SCUBAGOGGLES_PACKAGE_URL = 'https://pypi.org/pypi/scubagoggles/json'
 
 class ApiReference(Enum):
     '''

@@ -241,10 +241,10 @@ class Provider:
             Only pass the bound method, _cached_list() will invoke the function with
             open_resource()
 
-        :param str item_key: The key used in the API request to extract the list of items, 
+        :param str item_key: The key used in the API request to extract the list of items,
             e.g. 'domains', 'domainAliases', etc.
 
-        :param ApiReference api_reference: The ApiReference enum value corresponding 
+        :param ApiReference api_reference: The ApiReference enum value corresponding
             to the API call being made.
 
         :returns: List of items returned from the target Resource collection.
@@ -721,8 +721,7 @@ class Provider:
                 # add list of super admins if CC is being run
                 product_to_items.update(self.get_super_admins())
 
-            if 'groups' in product_to_logs:
-                product_to_items.update(self.get_group_settings())
+            product_to_items.update(self.get_group_settings())
 
         except Exception as exc:
             warnings.warn(

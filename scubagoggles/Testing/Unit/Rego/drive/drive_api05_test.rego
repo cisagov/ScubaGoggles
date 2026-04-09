@@ -4,7 +4,7 @@ import future.keywords
 import data.utils.FailTestOUNonCompliant
 import data.utils.PassTestResult
 
-GoodDriveApi06 := {
+GoodDriveApi05 := {
     "policies": {
         "topOU": {
             "drive_and_docs_drive_for_desktop": {
@@ -30,7 +30,7 @@ GoodDriveApi06 := {
     }
 }
 
-BadDriveApi06 := {
+BadDriveApi05 := {
     "policies": {
         "topOU": {
             "drive_and_docs_drive_for_desktop": {
@@ -45,7 +45,7 @@ BadDriveApi06 := {
     }
 }
 
-BadDriveApi06a := {
+BadDriveApi05a := {
     "policies": {
         "topOU": {
             "drive_and_docs_drive_for_desktop": {
@@ -64,26 +64,26 @@ BadDriveApi06a := {
 }
 
 test_DriveDesktop_Correct_1 if {
-    PolicyId := DriveId6_1
-    Output := tests with input as GoodDriveApi06
+    PolicyId := DriveId5_1
+    Output := tests with input as GoodDriveApi05
 
     PassTestResult(PolicyId, Output)
 }
 
 test_DriveDesktop_Incorrect_1 if {
-    PolicyId := DriveId6_1
-    Output := tests with input as BadDriveApi06
+    PolicyId := DriveId5_1
+    Output := tests with input as BadDriveApi05
 
     failedOU := [{"Name": "topOU",
-                  "Value": NonComplianceMessage6_1(GetFriendlyValue6_1(false, true))}]
+                  "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(false, true))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_DriveDesktop_Incorrect_2 if {
-    PolicyId := DriveId6_1
-    Output := tests with input as BadDriveApi06a
+    PolicyId := DriveId5_1
+    Output := tests with input as BadDriveApi05a
 
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage6_1(GetFriendlyValue6_1(false, true))}]
+                  "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(false, true))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

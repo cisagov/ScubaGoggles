@@ -566,7 +566,7 @@ class PolicyAPI:
 
             for group_data in response.get('groups', ()):
                 group_id = group_data['id']
-                group_id_map[group_id] = group_data['name']
+                group_id_map[group_id] = group_data['email']
 
             if 'nextPageToken' not in response:
                 break
@@ -754,7 +754,7 @@ class PolicyAPI:
                 # expected format, the value is kept as received as the
                 # group name.
                 group_name = self._group_id_map.get(group_id, group_id)
-                orgunit_name += f' (group "{group_name}")'
+                orgunit_name += f' (group {group_name})'
 
             # The setting has two layers in the policies dictionary.  Depending
             # on the setting, there may be one or multiple values - so the
