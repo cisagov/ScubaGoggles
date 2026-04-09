@@ -8,12 +8,6 @@ from pathlib import Path
 
 import pytest
 
-# The import is needed as stated and not how pylint wants it.
-# pylint: disable=consider-using-from-import
-
-import google.auth.transport.requests as requests
-import scubagoggles.auth as auth
-
 from scubagoggles.parsers.dlp_rules_parser import DlpRulesParser
 from scubagoggles.parsers.gmail_rules_parser import GmailRulesParser
 from scubagoggles.parsers.system_rules_parser import SystemRulesParser
@@ -97,43 +91,6 @@ class CommonMethods:
         monkeypatch.setattr(PolicyAPI, '_get_groups', mock_get_groups)
 
 
-class MockGwsAuth:
-
-    """Mocks the GwsAuth class - the tests in this module do not call any
-    Google API.
-    """
-
-    # pylint: disable=missing-function-docstring
-    # pylint: disable=too-few-public-methods
-
-    @property
-    def credentials(self):
-        return None
-
-
-class MockSession:
-
-    """Mocks Google's AuthorizedSession class.  This along with the above
-    class are used to allow the instantiation of the PolicyAPI class without
-    making any calls to the Google API.
-    """
-
-    # pylint: disable=missing-function-docstring
-
-    def __init__(self, credentials):
-        self._close_count = 0
-        self._credentials = credentials
-
-    def close(self):
-        self._close_count += 1
-
-    def get(self, *_):
-        pass
-
-auth.GwsAuth = MockGwsAuth
-
-requests.AuthorizedSession = MockSession
-
 # pylint: disable=too-many-public-methods
 
 
@@ -153,7 +110,7 @@ class TestPolicyApi:
 
     _update_results = False
 
-    def test_close(self, monkeypatch):
+    def test_close(self, monkeypatch, mock_policy_api):
 
         """Tests that the AuthorizedSession is closed when the PolicyAPI is
         used as a context manager.  Closing the session causes the resources
@@ -162,7 +119,7 @@ class TestPolicyApi:
 
         self._common.patch_policy_api(monkeypatch)
 
-        with PolicyAPI(auth.GwsAuth(), 'topOU') as policy_api:
+        with mock_policy_api('topOU') as policy_api:
             session = policy_api._session
 
         assert session._close_count == 1
@@ -381,7 +338,7 @@ class TestPolicyApi:
                 validator = section_settings[setting_name]
                 assert validator(setting_default)
 
-    def test_parser_map(self, monkeypatch, subtests):
+    def test_parser_map(self, monkeypatch, subtests, mock_policy_api):
 
         """Tests the initialization of the PolicyAPI parser map.
         """
@@ -397,7 +354,7 @@ class TestPolicyApi:
                 monkeypatch.setattr(PolicyAPI,
                                     '_expectedPolicySettings',
                                     expected_settings)
-                policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
+                policy_api = mock_policy_api('topOU')
 
                 # For custom parsers, the name of the parser class is stored
                 # in the test input and is converted here from the string
@@ -420,7 +377,7 @@ class TestPolicyApi:
                     policy_api._initialize_parser_map(policies)
                     self._compare_parser_map(policy_api, test_data)
 
-    def test_get_groups(self, monkeypatch, subtests):
+    def test_get_groups(self, monkeypatch, subtests, mock_policy_api):
 
         """Tests the Policy API method for getting GWS groups and storing
         them internally in the '_group_id_map'.
@@ -433,11 +390,11 @@ class TestPolicyApi:
         for test_name, test_data in next_test_data('policyapi_get_groups'):
             with subtests.test(msg = f'subtest: {test_name}'):
                 self._patch_get(monkeypatch, test_data)
-                policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
+                policy_api = mock_policy_api('topOU')
                 result = policy_api._group_id_map
                 assert result == test_data['results']
 
-    def test_get_policies(self, monkeypatch, subtests):
+    def test_get_policies(self, monkeypatch, subtests, mock_policy_api):
 
         """Tests the Policy API method for converting the raw policy data
         returned by Google to the format used by ScubaGoggles for Rego.
@@ -470,7 +427,7 @@ class TestPolicyApi:
                 self._patch_service_status(monkeypatch, test_data)
                 test_defaults = test_data['defaults']
                 monkeypatch.setattr(PolicyAPI, '_defaults', test_defaults)
-                policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
+                policy_api = mock_policy_api('topOU')
                 result = policy_api.get_policies()
 
                 if self._update_results:
@@ -479,7 +436,7 @@ class TestPolicyApi:
 
                 assert result == test_data['results']
 
-    def test_get_ou(self, monkeypatch, subtests):
+    def test_get_ou(self, monkeypatch, subtests, mock_policy_api):
 
         """Tests the Policy API method for getting GWS orgunits and storing
         them internally in the '_orgunit_id_map'.
@@ -492,11 +449,11 @@ class TestPolicyApi:
         for test_name, test_data in next_test_data('policyapi_get_ou'):
             with subtests.test(msg = f'subtest: {test_name}'):
                 self._patch_get(monkeypatch, test_data)
-                policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
+                policy_api = mock_policy_api('topOU')
                 result = policy_api._orgunit_id_map
                 assert result == test_data['results']
 
-    def test_verify(self, monkeypatch, subtests):
+    def test_verify(self, monkeypatch, subtests, mock_policy_api):
 
         """Tests the PolicyAPI verify() method for ensuring that policy
         setting values are the expected type.  Test data is stored in
@@ -516,11 +473,11 @@ class TestPolicyApi:
                 monkeypatch.setattr(PolicyAPI,
                                     '_expectedPolicySettings',
                                     expected_settings)
-                policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
+                policy_api = mock_policy_api('topOU')
                 missing_policies = policy_api.verify(test_data['policies'])
                 self._compare_verify(missing_policies, test_data)
 
-    def test_verify_novalue(self, monkeypatch, caplog):
+    def test_verify_novalue(self, monkeypatch, caplog, mock_policy_api):
 
         """Tests the simple case where the Policy API verify() method
         is provided with no policy settings for the top-level orgunit.
@@ -530,13 +487,13 @@ class TestPolicyApi:
         self._common.patch_policy_api(monkeypatch, {'orgunits': {top_ou}})
         expected_message = f'No policy settings found for orgunit: {top_ou}'
 
-        policy_api = PolicyAPI(auth.GwsAuth(), top_ou)
+        policy_api = mock_policy_api(top_ou)
         policy_api.verify({})
 
         assert len(caplog.records) == 1
         assert caplog.records[0].message == expected_message
 
-    def test_reducer(self, monkeypatch, subtests):
+    def test_reducer(self, monkeypatch, subtests, mock_policy_api):
 
         """Tests the Policy API reduction of policy data.  Test data is
         stored in JSON-formatted files in the "data" subdirectory.  The
@@ -555,12 +512,12 @@ class TestPolicyApi:
             with subtests.test(msg = f'subtest: {test_name}'):
                 patch_policy_api(monkeypatch, test_data)
 
-                policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
+                policy_api = mock_policy_api('topOU')
                 policy_api._reduce(test_data['policies'])
 
                 self._compare_reduction(policy_api, test_data)
 
-    def test_apply_defaults(self, monkeypatch, subtests):
+    def test_apply_defaults(self, monkeypatch, subtests, mock_policy_api):
 
         """Tests the method of the Policy API that applies default values
         to policy settings in the top-level orgunit when certain settings
@@ -579,7 +536,7 @@ class TestPolicyApi:
                 monkeypatch.setattr(PolicyAPI, '_defaults', test_defaults)
                 self._patch_service_status(monkeypatch, test_data)
 
-                policy_api = PolicyAPI(auth.GwsAuth(), 'topOU')
+                policy_api = mock_policy_api('topOU')
                 policy_api._apply_defaults(test_data['policies'])
 
                 self._compare_defaults(test_data)
