@@ -753,7 +753,7 @@ DriveId5_2 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.5.2")
 tests contains {
     "PolicyId": DriveId5_2,
     "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
