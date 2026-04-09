@@ -37,3 +37,4 @@ version = {attr = "scubagoggles.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["."]
+exclude = ["utils*"]
