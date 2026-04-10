@@ -8,6 +8,7 @@ import argparse
 
 import pytest
 
+from scubagoggles.scuba_constants import OPA_VERSION
 from scubagoggles.user_setup import (
     user_setup,
     user_directory,
@@ -179,7 +180,9 @@ class TestUserSetup:
         create_dir_download_opa(opa_dir, create_dir=True, download=True)
 
         # Verify download was called since OPA doesn't exist
-        mock_download.assert_called_once_with(opa_dir, verify=True)
+        mock_download.assert_called_once_with(opa_dir,
+                                              version = OPA_VERSION,
+                                              verify = True)
 
     def test_create_dir_download_opa_skips_download_if_exists(self, temp_dir, mocker):
 
