@@ -236,7 +236,7 @@ class RobustDNSClient:
                 errors.append(f"Response code {response['Status']}")
             except Exception as exception:
                 # The DoH query failed, likely due to a network issue. Retry if we haven't
-                # reached max_trues.
+                # reached max_tries.
                 log_entries.append({
                     "query_name": qname,
                     "query_method": "DoH",
