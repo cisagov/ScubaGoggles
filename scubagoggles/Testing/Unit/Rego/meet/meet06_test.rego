@@ -34,7 +34,6 @@ test_Sharing_Correct_V1 if {
 }
 
 test_Sharing_Incorrect_V1 if {
-    # Test not implemented
     PolicyId := MeetId6_1
     Output := tests with input as {
         "meet_logs": {"items": [
@@ -68,7 +67,6 @@ test_Sharing_Incorrect_V1 if {
 #--
 
 test_Default_Correct_V1 if {
-    # Test not implemented
     PolicyId := MeetId6_2
     Output := tests with input as {
         "meet_logs": {"items": [
@@ -93,8 +91,7 @@ test_Default_Correct_V1 if {
     PassTestResult(PolicyId, Output)
 }
 
-test_Default_Correct_V1 if {
-    # Test not implemented
+test_Default_Correct_V2 if {
     PolicyId := MeetId6_2
     Output := tests with input as {
         "meet_logs": {"items": [
@@ -120,7 +117,6 @@ test_Default_Correct_V1 if {
 }
 
 test_Default_Incorrect_V1 if {
-    # Test not implemented
     PolicyId := MeetId6_2
     Output := tests with input as {
         "meet_logs": {"items": [
