@@ -47,15 +47,7 @@ WARNING_ICON = (
     'alt="Warning icon." title="Warning" width="13" height="13"></object>'
 )
 
-LOG_BASED_WARNING = (
-    f'<span style="display: block;">{WARNING_ICON}&nbsp;'
-    f'Log-based check. See <a href="{LIMITATIONS_URL}">limitations</a>.</span>'
-)
 
-LOG_BASED_WARNING_PLAINTEXT = (
-    "Warning: log-based check. See documentation in ScubaGoggles GitHub repository "
-    "for limitations."
-)
 
 REPORTER_PATH = Path(__file__).parent
 
@@ -138,8 +130,7 @@ def build_front_page_html(fragments: list, tenant_info: dict, report_uuid: str, 
 def sanitize_details(table_data: list) -> list:
     for result in table_data:
         details = result["Details"]
-        details = details.replace(LOG_BASED_WARNING, LOG_BASED_WARNING_PLAINTEXT)
-        details = details.replace("<br>", "\n")
+        
 
         dns_link = '<a href="#dns-logs">View DNS logs</a> for more details.'
         details = details.replace(dns_link, "")
@@ -148,8 +139,7 @@ def sanitize_details(table_data: list) -> list:
 
         if "OriginalDetails" in result:
             orig = result["OriginalDetails"]
-            orig = orig.replace(LOG_BASED_WARNING, LOG_BASED_WARNING_PLAINTEXT)
-            orig = orig.replace("<br>", "\n")
+           
             orig = orig.replace(dns_link, "")
             orig = convert_html_lists_to_plaintext(orig)
             result["OriginalDetails"] = orig

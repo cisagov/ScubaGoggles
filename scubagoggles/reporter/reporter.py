@@ -556,8 +556,7 @@ class Reporter:
                     if reports_api_link in test["Prerequisites"]:
                         if not details.endswith("</ul>"):
                             details += "<br><br>"
-                        details += rh.LOG_BASED_WARNING
-
+                        
                     details_pre_annotation = details
                     details = self._add_annotation(control_id, result, details)
 
