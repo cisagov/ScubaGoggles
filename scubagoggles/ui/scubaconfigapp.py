@@ -411,7 +411,7 @@ class ScubaConfigApp:
     def parse_baseline_policies() -> Dict[str, Dict[str, str]]:
         """Parse policies from baseline markdown files using MarkdownParser.
 
-        Returns a dict keyed by uppercase product name, where each value is
+        Returns a dict keyed by lowercase product name, where each value is
         a dict mapping policy ID to its description text.
         """
 
@@ -432,15 +432,7 @@ class ScubaConfigApp:
         except (MarkdownParserError, OSError):
             return {}
 
-        policies: Dict[str, Dict[str, str]] = {}
-        for product, groups in parsed.items():
-            flat: Dict[str, str] = {}
-            for group in groups:
-                for control in group['Controls']:
-                    flat[control['Id']] = control['Value']
-            policies[product.upper()] = flat
-
-        return policies
+        return MarkdownParser.controls_by_product(parsed, True)
 
     def setup_page_config(self):
         """Configure the Streamlit page with professional styling"""
@@ -851,9 +843,9 @@ class ScubaConfigApp:
         result: Dict[str, Dict[str, str]] = {}
         if selected_baselines and self.available_policies:
             for baseline in selected_baselines:
-                upper = baseline.upper()
-                if upper in self.available_policies:
-                    result[baseline.title()] = self.available_policies[upper]
+                key = baseline.lower()
+                if key in self.available_policies:
+                    result[baseline.title()] = self.available_policies[key]
         return result
 
     @staticmethod
@@ -1467,7 +1459,8 @@ class ScubaConfigApp:
         cols = st.columns(2)
         for i, baseline in enumerate(available_baselines):
             info = baseline_info[baseline]
-            baseline_policies = self.available_policies.get(baseline.upper(), {}) if self.available_policies else {}
+            baseline_policies = (self.available_policies.get(baseline.lower(), {})
+                                 if self.available_policies else {})
             policy_count = len(baseline_policies)
 
             with cols[i % 2]:
@@ -1490,7 +1483,8 @@ class ScubaConfigApp:
         # Products supporting exclusions note
         if current_selection:
             total_policies = sum(
-                len(self.available_policies.get(b.upper(), {})) for b in current_selection
+                len(self.available_policies.get(b.lower(), {}))
+                for b in current_selection
             )
             # Filter out baselines that don't exist in baseline_info to prevent KeyError
             valid_baselines = [b for b in current_selection if b in baseline_info]

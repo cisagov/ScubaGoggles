@@ -4,8 +4,10 @@
 import re
 
 from collections import defaultdict
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Iterable, Union
+from urllib.parse import urlparse, urlunparse
 
 from scubagoggles.version import Version
 
@@ -24,31 +26,30 @@ class MarkdownParser:
     files to extract the policy baseline information.
     """
 
-    # Regular expressions used in parsing the Markdown text.  Note that these
-    # are intended to be used with match() and NOT search() (for search, the
-    # expressions need the start of string (^)).
-
-    _above4_re = re.compile(r'#{1,3}[^#]')
+    # Regular expressions used in parsing the Markdown text.  Note that most of
+    # these are intended to be used with match() and NOT search() (for search,
+    # the expressions need the start of string (^) in the expressions - for
+    # match() the "^" is implied).
 
     _group_re = re.compile(r'##\s*(?P<id>\d+)\.?\s+(?P<name>.+)$')
-
-    _level2_re = re.compile(r'##[^#]')
 
     _policies_re = re.compile(r'(?i)###\s*Policies$')
 
     _baseline_re = re.compile(r'####\s*(?P<baseline>GWS\.(?P<product>[^.]+)'
                               r'\.(?P<id>\d+)\.(?P<item>\d+)'
-                              r'(?P<version>v[^\s]*))$')
+                              r'(?P<version>[a-zA-Z]\S*))$')
 
-    # Regular expression to match badge indicators like:
-    # [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-    # [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](...)
-    # Captures: indicator name (group 1), color code (group 2, 6 hex digits),
-    # and link URL (group 3)
-    # Uses non-greedy match to capture everything up to the last dash before the color
-    _badge_pattern = (r'\[!\[([^\]]+)\]\(https://img\.shields\.io/badge/.+?-'
-                     r'([A-Fa-f0-9]{6})\)\]\(([^\)]*)\)')
-    _badge_re = re.compile(_badge_pattern)
+    _color_re = re.compile(r'(?i)-(?P<color>[a-f0-9]+)$')
+
+    _indicator_re = re.compile(r'\[!\[(?P<name>[^\]]+)\]\((?P<url>[^)]+)\)\]')
+
+    _valid_indicators = {'Automated Check',
+                         'Configurable',
+                         'Log-Based Check',
+                         'Manual'}
+
+    _normalized_indicators = {i.lower().replace(' ', ''): i
+                              for i in _valid_indicators}
 
     # This handles the single exception case where the combined drive
     # and docs product has a product name of "drive", but the baseline
@@ -69,11 +70,47 @@ class MarkdownParser:
         if not self._baseline_dir.is_dir():
             raise NotADirectoryError(f'{self._baseline_dir}')
 
+        # _baseline - contains the full policy identifier for the
+        #             currently parsed baseline (e.g., GWS.CHAT.1.2v1).
+        #
+        # _baseline_id - product name (e.g., chat) in lowercase for
+        #                the currently parsed baseline.
+        #
+        # _default_version - version suffix that occurs most often
+        #                    in the parsed baselines.
+        #
+        # _group - current group being parsed (dict).  This is part of
+        #
+        # _item - integer baseline item number (e.g., if the current policy
+        #         identifier is GWS.CHAT.1.2v1, the item number is 2).
+        #
+        # _md_file - Path for the current Markdown file being parsed.
+        #
+        # _version_policy_map - mapping of version suffix to list of policies
+        #                       having that version.  It's used to determine
+        #                       the default version and for generating the
+        #                       policy version map.
+        #
+        # _policy_version_map - mapping of policies to their version suffixes,
+        #                       excluding policies having the default version.
+        #                       Along with the default version, this mapping
+        #                       is input for Rego.
+
+        self._baseline = None
+
+        self._baseline_id = None
+
         self._default_version = None
 
-        self._version_policy_map = defaultdict(set)
+        self._group = {}
 
-        self._policy_version_map = {}
+        self._item = None
+
+        self._md_file = None
+
+        self._version_policy_map = None
+
+        self._policy_version_map = None
 
     @classmethod
     def baseline_identifier(cls, product: str) -> str:
@@ -88,7 +125,7 @@ class MarkdownParser:
         return cls._baseline_id_map.get(product, product).lower()
 
     @property
-    def default_version(self):
+    def default_version(self) -> str:
 
         """Returns the default policy id version suffix.  This is the suffix
         to use for any policy id which is not present in the "version policy
@@ -98,7 +135,7 @@ class MarkdownParser:
         return self._default_version
 
     @property
-    def policy_version_map(self):
+    def policy_version_map(self) -> dict:
 
         """Returns a dictionary where the policy identifier is the key and
         the value is its baseline suffix.  Policies will only be present in
@@ -118,6 +155,12 @@ class MarkdownParser:
             product names and the values are the product data.  See the
             _parse() method for the format of the returned data.
         """
+
+        self._default_version = None
+
+        self._policy_version_map = {}
+
+        self._version_policy_map = defaultdict(set)
 
         result = {}
 
@@ -148,283 +191,192 @@ class MarkdownParser:
         where <name> is a description of the group, <number> is the group
         identifier, and <control> is a dictionary for each baseline:
 
-        { 'Id': <identifier>, 'Value': <description> }
+        { 'Id': <identifier>,
+          'Indicators': [<indicator>, ...],
+          'Value': <description> }
 
         where <identifier> is the baseline identifier (e.g., 'GWS.GMAIL.1.1'),
         and <description> is the description of the baseline requirement.
+
+        If one or more indicators are present, the "Indicators" list will
+        contain and entry for each iterator:
+
+        { 'name': <name>,
+          'color': <hex-color>,
+          'link': <url> }
+
+        where <name> is one of the valid indicator names (defined above),
+        the <hex-color> is the hexadecimal HTML color code that's always
+        included as a suffix of the URL path.  The <url> is the link for
+        the indicator.
 
         :param str file_name: name of the Markdown file.  It's also used as
             the product name, unless one is explicitly given.
         :param str product: name of the GWS product.  This is used instead of
             the file name (in the normal case, the file name is the same as
             the product name).
+
         :return: baseline data parsed from the Markdown file
         :rtype: dict
         """
 
         result = defaultdict(list)
 
-        eof_message = 'unexpected end of file encountered'
         product = product if product else file_name
-        baseline_id = self.baseline_identifier(product)
-        md_file = self._baseline_dir / f'{file_name}.md'
+        self._baseline_id = self.baseline_identifier(product)
+        self._md_file = self._baseline_dir / f'{file_name}.md'
 
         content = [line.strip() for line
-                   in md_file.read_text(encoding = 'utf-8').splitlines()]
+                   in self._md_file.read_text(encoding = 'utf-8').splitlines()]
 
-        total_lines = len(content)
-        skip_lines = 0
+        # Parse the baselines one group at a time.
 
-        # This is the main loop of the parser.  It locates the start of a
-        # policy group.  Once found, the inner loops read the section
-        # related to the current policy group, first looking for the
-        # "Policies" section, and then the individual policies.  These
-        # inner loops keep track of the additional lines processed using
-        # the 'skip_lines' count.  When a policy group has been completely
-        # parsed, the outer loop regains control and will advance to the
-        # next unprocessed line based on this count.
+        for group_content in self._next_group(content):
 
-        for line_number, line in enumerate(content, start = 1):
+            self._parse_baselines(group_content)
 
-            if skip_lines:
-                skip_lines -= 1
-                continue
-
-            if not line:
-                continue
-
-            # Find the next policy group.
-
-            match = self._group_re.match(line)
-
-            if not match:
-                continue
-
-            group_id = match['id']
-            group_name = match['name']
-
-            group = {'GroupNumber': group_id,
-                     'GroupName': group_name,
-                     'Controls': []}
-
-            if line_number == total_lines:
-                self._parser_error(md_file, eof_message, group_id, group_name)
-
-            # We're in the start of the policy group, so next look for the
-            # "Policies" section, which contains the baseline definitions.
-
-            for next_line in content[line_number:]:
-
-                skip_lines += 1
-
-                match = self._policies_re.match(next_line)
-                if match or self._level2_re.match(next_line):
-                    break
-
-            if not match:
-                message = '"Policies" section missing'
-                self._parser_error(md_file, message, group_id, group_name)
-
-            if (line_number + skip_lines) == total_lines:
-                self._parser_error(md_file, eof_message, group_id, group_name)
-
-            baseline_content = content[line_number + skip_lines:]
-            skip_lines += self._parse_baselines(baseline_content,
-                                                md_file,
-                                                baseline_id,
-                                                group)
-
-            # All baseline items in the current group have been parsed.
-            # The group is added to the result dictionary.
-
-            result[product].append(group)
+            result[product].append(self._group)
 
         return result
 
-    # pylint: disable=too-many-branches
-    def _parse_baselines(self,
-                         baseline_content: list,
-                         md_file: Path,
-                         baseline_id: str,
-                         group: dict) -> int:
+    def _parse_baselines(self, group_content: list[str]) -> None:
 
         """This method parses the "Policies" sections of the baseline
         Markdown files.
 
-        The "controls" section of the given group is filled in, with each
+        The "controls" section of the current group is filled in, with each
         element in the list containing information about one baseline.
 
-        :param list baseline_content: lines from the Markdown content following
-            the "Policies" section.
-        :param Path md_file: file specification of the Markdown file for
-            error reporting.
-        :param str baseline_id: baseline identifier for the current file
-            (e.g., "gmail").
-        :param dict group: group data that will contain the controls parsed in
-            this method.  NOTE that the group is passed by reference, so all
-            additions made to it are essentially passed back to the caller.
-        :return:
+        :param list group_content: lines from the Markdown content following
+            the "Policies" section to the end of the baseline group.
         """
 
-        group_id = group['GroupNumber']
-        group_name = group['GroupName']
+        for baseline_content in self._next_baseline(group_content):
 
-        # We're in the section where the baselines are defined.  The
-        # following two loops parse the baseline sections.  The outer
-        # loop handles the transition from one baseline section to the
-        # next, while the inner loop locates the next baseline and
-        # parses it.
+            description = self._parse_description(baseline_content)
 
-        next_line = ''
-        prev_item = 0
-        lines_seen = 0
+            indicators = self._parse_indicators(baseline_content)
+
+            control = {'Id': self._baseline,
+                       'Indicators': indicators,
+                       'Value': description}
+
+            self._group['Controls'].append(control)
+
+    def _parse_description(self, baseline_content: list[str]) -> str:
+
+        """Given the baseline content, this method returns the concatenation
+        of one or more lines that make up the baseline's description.
+
+        :param list baseline_content: lines from the Markdown content that
+            begin with the line immediately following the baseline
+            identifier, which should be the first line of the description.
+
+        :return: description string.
+        :rtype: str
+        """
+
+        # Look for the end of the description line(s).  The description normally
+        # ends with a blank line, but an indicator (link), list, header, or end
+        # of the section will terminate the description.
+
         total_lines = len(baseline_content)
+        end_found = False
+        end_index = line = None
 
-        while (lines_seen < total_lines
-               and not self._above4_re.match(next_line)):
+        for end_index in range(total_lines):
 
-            for next_line in baseline_content[lines_seen:]:
+            line = baseline_content[end_index].strip()
 
-                if self._above4_re.match(next_line):
-                    break
-
-                lines_seen += 1
-
-                # Find the next baseline section.
-
-                match = self._baseline_re.match(next_line)
-                if not match:
-                    continue
-
-                # We've found a baseline section.  Check the baseline
-                # identifier to make sure it's expected (this is mainly
-                # to catch cut/paste errors and unintentional omissions).
-
-                current_baseline_id = match['product'].lower()
-
-                if current_baseline_id != baseline_id:
-                    message = ('different product encountered '
-                               f'{current_baseline_id} != {baseline_id}')
-                    self._parser_error(md_file,
-                                       message,
-                                       group_id,
-                                       group_name)
-
-                baseline = match['baseline']
-                ident = match['id']
-                item = int(match['item'])
-                version = match['version']
-
-                if ident != group_id:
-                    message = f'mismatching group number ({ident})'
-                    self._parser_error(md_file,
-                                       message,
-                                       group_id,
-                                       group_name)
-
-                if not Version.is_valid_suffix(version):
-                    message = f'invalid baseline version ({version})'
-                    self._parser_error(md_file,
-                                       message,
-                                       group_id,
-                                       group_name)
-
-                if item != (prev_item + 1):
-                    message = (f'expected baseline item {prev_item + 1}, '
-                               f'got item {item}')
-                    self._parser_error(md_file,
-                                       message,
-                                       group_id,
-                                       group_name)
-
-                prev_item = item
-                value_lines = []
-                indicators = []
-                found_requirement_end = False
-
-                for value_line in baseline_content[lines_seen:]:
-
-                    if (
-                        # Next baseline, e.g. #### GWS.GMAIL.1.2v1
-                        self._baseline_re.match(value_line)
-                        # New group, e.g., ## 2. Group Name
-                        or self._level2_re.match(value_line)
-                        # Any header above level 4, e.g., ### Policies
-                        or self._above4_re.match(value_line)
-                    ):
-                        break
-
-                    lines_seen += 1
-
-                    # Skip HTML comments
-                    if value_line.startswith("<!--") and value_line.endswith("-->"):
-                        continue
-
-                    # Check if this line contains badge indicators
-                    # Extract indicator name, color, and link URL from badge markdown
-                    badge_matches = self._badge_re.findall(value_line)
-                    if badge_matches:
-                        # badge_matches is a list of tuples: (indicator_name, color_code, link_url)
-                        for match in badge_matches:
-                            indicator_name = match[0]
-                            color_code = match[1] if len(match) > 1 else None
-                            link_url = match[2] if len(match) > 2 else None
-                            indicator_dict = {'name': indicator_name}
-                            if color_code:
-                                indicator_dict['color'] = f'#{color_code}'
-                            if link_url:
-                                indicator_dict['link'] = link_url
-                            indicators.append(indicator_dict)
-                        # Don't include the badge line in the requirement value
-                        # Mark that we've found badges (requirement text is done)
-                        found_requirement_end = True
-                        continue
-
-                    if not value_line:
-                        # If we've already found badges, we're done
-                        if found_requirement_end:
-                            break
-                        # If we haven't found requirement text yet, skip empty lines
-                        if not value_lines:
-                            continue
-                        # If we have requirement text but no badges yet, this might be
-                        # a separator before badges, so continue to look for badges
-                        found_requirement_end = True
-                        continue
-
-                    # If we've already found badges, don't add more to requirement
-                    if found_requirement_end:
-                        break
-
-                    value_lines.append(value_line)
-
-                value = ' '.join(value_lines)
-
-                if not value:
-                    message = ('missing description for baseline item '
-                               f'{item}')
-                    self._parser_error(md_file,
-                                       message,
-                                       group_id,
-                                       group_name)
-
-                control = {'Id': baseline, 'Value': value}
-                if indicators:
-                    control['Indicators'] = indicators
-                group['Controls'].append(control)
-
-                policy_id = baseline.removesuffix(version)
-                self._version_policy_map[version].add(policy_id)
-
-                # Break out of this inner loop, and as long as we're not
-                # at the end of the file, the outer loop will re-enter
-                # the inner loop to locate the next baseline section.
-
+            if not line or line[0] in ('-', '#', '['):
+                end_found = True
                 break
 
-        return lines_seen
+        if not end_found or not end_index:
 
-    def _create_policy_version_map(self):
+            # One of the ending delimiters wasn't found, and/or we've reached
+            # the end of the baseline content.  This isn't typical, but as long
+            # as we've got at least one line of description it's OK.
+
+            if end_index is None or end_index == 0 and not line:
+                message = f'missing description for baseline item {self._item}'
+                self._parser_error(message)
+
+            end_index += 1
+
+        # Multiple description lines are joined together with a single space
+        # between lines.
+
+        return ' '.join(baseline_content[:end_index])
+
+    def _parse_indicators(self, baseline_content: list[str]) -> list[dict]:
+
+        """Parses the indicators for the current baseline.  They are defined
+        as links immediately following the policy description and before the
+        "rationale" section.  The link title contains and image link itself,
+        which is the indicator.  Multiple indicator links must be specified
+        consecutively.
+
+        This method finds any indicators in the given baseline content and
+        returns the name, color, and URL for each indicator.
+
+        :param list baseline_content: lines from the Markdown content that
+            begin with the line immediately following the baseline
+            identifier, which should be the first line of the description.
+
+        :return: list of dictionaries, one for each indicator found,
+            which contains the name, color, and URL.
+        :rtype: list
+        """
+
+        indicators = []
+
+        indicator_found = False
+
+        for line in baseline_content:
+
+            line = line.strip()
+
+            match = self._indicator_re.match(line)
+
+            if not match:
+
+                # Indicators for a baseline are grouped together, so we're done
+                # if one has already been found and the current line is empty or
+                # is a header or list item.
+
+                if indicator_found and (not line or line[0] in ('-', '#')):
+                    break
+
+                continue
+
+            indicator_found = True
+
+            # Normalize the extracted name and get the name from the set of
+            # valid indicator names.
+
+            name = match['name'].lower().replace(' ', '')
+            name = self._normalized_indicators.get(name)
+
+            if not name:
+                self._parser_error(f'"{match["name"]}" - unrecognized indicator')
+
+            url = urlparse(match['url'])
+
+            match = self._color_re.search(url.path)
+
+            if not match:
+                self._parser_error(f'"{url.path}" - color suffix missing')
+
+            indicator = {'name': name,
+                         'color': f'#{match["color"].upper()}',
+                         'link': urlunparse(url)}
+
+            indicators.append(indicator)
+
+        return indicators
+
+    def _create_policy_version_map(self) -> None:
 
         """Creates the policy version map from the existing version policy map,
         which is a reverse mapping.  It also determines the "default" version
@@ -446,24 +398,231 @@ class MarkdownParser:
         self._policy_version_map = {p: v for v in sorted_versions[1:]
                                     for p in self._version_policy_map[v]}
 
-    @staticmethod
-    def _parser_error(md_file: Path,
-                      message: str,
-                      group_id: str = None,
-                      group_name: str = None):
+    def _parser_error(self, message: str) -> None:
 
         """Constructs an error message and raises a MarkdownParserError
         exception.
 
-        :param Path md_file: Markdown file specification.
         :param str message: error-specific message.
-        :param str group_id: [optional] identifier of the group - if this is
-            given, the group_name is also required.
-        :param str group_name: [optional] name of the policy group.
         """
 
-        message = f'{md_file}: {message}'
-        if group_id:
-            message += f' for group id {group_id} ({group_name})'
+        message = f'{self._md_file}: {message}'
+        if 'GroupNumber' in self._group:
+            message += (f' for group id {self._group["GroupNumber"]} '
+                        f'({self._group["GroupName"]})')
 
         raise MarkdownParserError(message)
+
+    def _next_group(self, content: list[str]) -> Iterator[list[str]]:
+
+        """Returns a generator that produces the content (lines) from the
+        given Markdown file content for each baseline group.
+
+        :param list group_content: lines from the Markdown content at the
+            beginning of the file or following a previously parsed baseline.
+
+        :yield: list of strings comprising the group content.
+        :rtype: list
+        """
+
+        # Each group section starts with a "level 2" heading giving the group
+        # number and the group name (e.g., "## 10. Google Workspace Sync").
+
+        total_lines = len(content)
+        found = False
+        next_index = 0
+
+        while next_index < total_lines:
+
+            line = content[next_index]
+
+            next_index += 1
+
+            if not line:
+                continue
+
+            # Find the next policy group.
+
+            match = self._group_re.match(line)
+
+            if not match:
+                continue
+
+            found = True
+
+            group_id = match['id']
+            group_name = match['name']
+
+            self._group = {'GroupNumber': group_id,
+                           'GroupName': group_name,
+                           'Controls': []}
+
+            group_index = next_index
+
+            # The end of the current group is either when we encounter the
+            # next group or the end of the file.
+
+            while (next_index < total_lines
+                   and not self._group_re.match(content[next_index])):
+                next_index += 1
+
+            yield content[group_index:next_index]
+
+        if not found:
+            self._parser_error('no valid group headings found')
+
+    def _next_baseline(self, group_content: list[str]) -> Iterator[list[str]]:
+
+        """Returns a generator that produces the content (lines) from the
+        given group for each baseline.
+
+        :param list group_content: lines from the Markdown content following
+            the heading that marks the start of the baseline group.
+
+        :yield: list of strings comprising the baseline content.
+        :rtype: list
+        """
+
+        total_lines = next_index = len(group_content)
+        found = False
+
+        # First locate the "Policies" section - this will contain all the
+        # baseline definitions.
+
+        for next_index, line in enumerate(group_content):
+
+            if self._policies_re.match(line):
+                found = True
+                break
+
+        if not found:
+            self._parser_error('"Policies" section missing')
+
+        # Find each baseline by looking for the starting baseline identifier.
+        # As each baseline is found, the contents of the baseline definition
+        # is returned to the caller.
+
+        found = False
+        prev_item = 0
+
+        while next_index < total_lines:
+
+            line = group_content[next_index]
+
+            next_index += 1
+
+            if not line:
+                continue
+
+            match = self._baseline_re.match(line)
+
+            if not match:
+                continue
+
+            # Check the baseline just found to make sure it's consistent
+            # with the expected product and already parsed baselines.
+
+            found = True
+
+            self._baseline = match['baseline']
+            baseline_id = match['product'].lower()
+            ident = match['id']
+            self._item = item = int(match['item'])
+            version = match['version']
+
+            self._check_baseline(baseline_id, ident, version, prev_item)
+
+            policy_id = self._baseline.removesuffix(version)
+
+            self._version_policy_map[version].add(policy_id)
+
+            baseline_index = next_index
+
+            # The end of the current baseline is either when we encounter the
+            # next baseline or the end of the file.
+
+            while (next_index < total_lines
+                and not group_content[next_index].strip().startswith('#')):
+                next_index += 1
+
+            yield group_content[baseline_index:next_index]
+
+            prev_item = item
+
+        if not found:
+            self._parser_error('no baselines found in "Policies" section')
+
+    def _check_baseline(self,
+                        baseline_id: str,
+                        ident: str,
+                        version: str,
+                        prev_item: int) -> None:
+
+        """Performs checks on a newly parsed baseline.  Any checks that
+        don't pass results in a MarkdownParserError being raised.  This
+        is intended to catch typical cut/paste errors in baseline files
+        when they're being modified.
+
+        :param str baseline_id: baseline id (product name).
+        :param str ident: baseline group number.
+        :param str version: baseline version.
+        :param int prev_item: item number of the previous baseline.
+        """
+
+        # All baselines in the same group must be associated with the same
+        # product (e.g., "gmail").
+
+        if baseline_id.lower() != self._baseline_id:
+            message = ('different product encountered '
+                        f'{baseline_id} != {self._baseline_id}')
+            self._parser_error(message)
+
+        # The baseline must have the same group number found at the start of
+        # the group section.
+
+        if ident != self._group['GroupNumber']:
+            message = f'mismatching group number ({ident})'
+            self._parser_error(message)
+
+        # Checking the version number itself is a bit tricky, but at least we
+        # can make sure the version has the correct format.
+
+        if not Version.is_valid_suffix(version):
+            message = f'invalid baseline version ({version})'
+            self._parser_error(message)
+
+        # Baselines in the same group must be in sequence, so if the current
+        # item is 3, the previous baseline item must be 2.
+
+        if self._item != (prev_item + 1):
+            message = (f'expected baseline item {prev_item + 1}, '
+                        f'got item {self._item}')
+            self._parser_error(message)
+
+    @staticmethod
+    def controls_by_product(baselines: dict, normalize: bool = False) -> dict:
+
+        """Given the parsed baselines structure returned by parse_baselines(),
+        this method returns a dictionary of product names to baseline
+        identifiers (e.g., 'GWS.GMAIL.1.1') with the corresponding descriptions.
+        This flattened data structure is possible because product names and
+        baseline identifiers are unique.
+
+        :param dict baselines: dictionary with product name keys and list
+            of groups as values.  This is the data structure returned by
+            parse_baselines()
+        :param bool normalize: in the returned dictionary, convert all product
+            names to lowercase if this is set to True; otherwise, the product
+            names are unaltered from the input.
+
+        :return: product name to baseline identifier mapping, with descriptions
+            ({<product>: {<baseline-1>: <description1>, ...}}).
+        :rtype: dict
+        """
+
+        products = {product.lower() if normalize else product:
+                    {ctrl['Id']: ctrl['Value'] for group in groups
+                              for ctrl in group['Controls']}
+                    for product, groups in baselines.items()}
+
+        return products
