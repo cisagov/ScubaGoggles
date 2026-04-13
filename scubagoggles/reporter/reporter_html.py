@@ -9,7 +9,7 @@ from scubagoggles.version import Version
 INDICATOR_DEFINITIONS = {
     "Automated Check": {
         "color": "#5E9732",
-        "text_color": "white",
+        "text_color": "black",
         "description": "Automatically verified by ScubaGoggles",
     },
     "Log-Based Check": {
@@ -290,7 +290,7 @@ def _indicator_text_color(bg_color: str) -> str:
     # Minimal heuristic preserved from original: light backgrounds use black text.
     if not bg_color:
         return "white"
-    return "black" if bg_color.upper() in ["#F6E8E5", "#FFF7D6"] else "white"
+    return "black" if bg_color.upper() in ["#F6E8E5", "#FFF7D6", "#5E9732"] else "white"
 
 
 def _normalize_indicator_link(link_url: str | None, *, product: str | None, github_url: str) -> str | None:
