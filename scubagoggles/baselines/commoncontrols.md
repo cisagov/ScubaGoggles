@@ -6,7 +6,7 @@ The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation and addresses the following:
 - [Phishing-Resistant Multifactor Authentication](#1-phishing-resistant-multifactor-authentication)
@@ -43,7 +43,7 @@ This Common Controls baseline document:
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 **Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
@@ -307,7 +307,7 @@ Note that the implementation details of context-aware access use cases will vary
 -   Use nested access levels instead of selecting multiple access levels during assignment
 
 ## 3. Login Challenges
-Login challenges are additional security measures used to verify a user's identity, including post-SSO verification.
+Login challenges are additional security measures used to verify a user's identity, including post single sign-on (SSO) verification.
 
 Post-SSO verification controls what additional checks are performed (e.g., Google 2SV) after a user succesfully authenticates through a third-party identity provider.
 SSO is managed through profiles, which can be assigned org-wide or to specific org units/groups.
@@ -316,7 +316,7 @@ Google Workspace handles post-SSO verification for profiles assigned org-wide as
 ### Policies
 
 #### GWS.COMMONCONTROLS.3.1v0.6
-Single sign-on (SSO) verification SHOULD be enabled for users signing in using the SSO profile for the organization.
+Post single sign-on (SSO) verification SHOULD be enabled for users signing in using the SSO profile for the organization.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
@@ -693,7 +693,7 @@ Account self-recovery for users and non-super admins SHALL be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential adversary to compromise an account.
+- _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential threat actor to compromise an account.
 - _Last modified:_ February 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-5d, IA-5g
 - MITRE ATT&CK TTP Mapping
@@ -820,16 +820,16 @@ To allow all users to enroll:
 
 ## 10. App Access to Google APIs
 
-Agencies need to have a process in place to manage and control application access to GWS data. This control enables the ability to restrict access to Google Workspace APIs from other applications and is aimed at mitigating the significant cybersecurity risk posed by the potential compromise of OAuth tokens. The baseline policy statements are written to allow implementers to balance operational need with risk posed by granting app access.
+Agencies need to have a process in place to manage and control application access to GWS data. This control enables the ability to restrict access to Google Workspace APIs from other applications and is aimed at mitigating the significant cybersecurity risk posed by the potential compromise of OAuth tokens. The baseline policy statements are written to allow implementers to balance operational need with risk posed by granting application access.
 
 ### Policies
 
 #### GWS.COMMONCONTROLS.10.1v0.6
-Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party apps.
+Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party applications.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols101v06-instructions)
 
-- _Rationale:_ Third-party apps may include malicious content. Restricting app access to only apps trusted by the agency reduces the risk of allowing malicious apps to connect to GWS.
+- _Rationale:_ Third-party applications may include malicious content. Restricting application access to only applications trusted by the agency reduces the risk of allowing malicious applications to connect to GWS.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3
 - MITRE ATT&CK TTP Mapping
@@ -1239,18 +1239,18 @@ Data SHALL be processed in the region selected for data at rest.
 #### GWS.COMMONCONTROLS.15.1v0.6 Instructions
 To configure Data Regions per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
+2.	Navigate to **Data** -\> **Compliance** -\> **Data Regions.**
 3.	Click the **Region** card.
 4.	Click the **Data at rest** card.
-5.	Select the radio button option: "**United States**".
+5.	Select the radio button option: "**United States.**"
 6.	Click **Save**.
 
 #### GWS.COMMONCONTROLS.15.2v0.6 Instructions
 1. Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2. Navigate to **Data** -\> **Compliance** -\> **Data Regions**.
+2. Navigate to **Data** -\> **Compliance** -\> **Data Regions.**
 3. Click the **Region** card.
 4. Click the **Data processing** card.
-5. Select the radio button option: "**Process data in the region selected for data at rest**".
+5. Select the radio button option: "**Process data in the region selected for data at rest.**"
 6. Click **Save**.
 
 
@@ -1277,11 +1277,11 @@ Service status for Google services that do not have an individual control SHOULD
     - [T1204:003: Trusted Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
 #### GWS.COMMONCONTROLS.16.2v0.6
-User access to Early Access apps SHOULD be disabled.
+User access to Early Access applications SHOULD be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale_: Allowing early access to apps may expose users to apps that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
+- _Rationale_: Allowing early access to applications may expose users to applications that have not yet been fully vetted and may still need to undergo robust testing to ensure compliance with applicable security standards.
 - _Last modified:_ January 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
@@ -1455,7 +1455,7 @@ A custom policy SHALL be configured for Gmail to protect PII and sensitive infor
 [//]: # (Keep the version suffix out of the anchor.)
 <a name="commoncontrols184"></a>
 #### GWS.COMMONCONTROLS.18.4v0.6
-The action for DLP policies SHOULD be set to block external sharing.
+The action for DLP policies SHOULD be set to "block external sharing."
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols184v06-instructions)
 
