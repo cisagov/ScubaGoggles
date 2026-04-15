@@ -277,8 +277,52 @@ GmailId4_4 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.4")
 DomainsWithAgencyContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
-    count(split(Rdata, "@")) >= 3
     DmarcRecord.domain in DomainsWithDmarc
+
+    # splits the DMARC record into semicolon-separated tags
+    parts := [trim(part, " ") |
+        some part in split(Rdata, ";")
+        trim(part, " ") != ""
+    ]
+
+    # collects any DMARC record tag with "rua="
+    ruaParts := [part |
+        some part in parts
+        startswith(lower(part), "rua=")
+    ]
+
+    # collects any DMARC record tag with "ruf="
+    rufParts := [part |
+        some part in parts
+        startswith(lower(part), "ruf=")
+    ]
+
+    # requires exactly 1 rau and 1 ruf field per DMARC record
+    count(ruaParts) == 1
+    count(rufParts) == 1
+
+    # takes each "rua=" tag and splits them on each comma
+    # then only keeps a record that starts with "mailto:"
+    ruaAddrs := [addr |
+        some part in ruaParts
+        values := split(split(part, "=")[1], ",")
+        some addr in values
+        startswith(lower(trim(addr, " ")), "mailto:")
+    ]
+
+    # takes each "ruf=" tag and splits them on each comma
+    # then only keeps a record that starts with "mailto:"
+    rufAddrs := [addr |
+        some part in rufParts
+        values := split(split(part, "=")[1], ",")
+        some addr in values
+        startswith(lower(trim(addr, " ")), "mailto:")
+    ]
+
+    # requires >= 2 rua tags that are correctly formed
+    # requires >= 1 ruf tag that is correctly formed 
+    count(ruaAddrs) >= 2
+    count(rufAddrs) >= 1
 }
 
 tests contains {
