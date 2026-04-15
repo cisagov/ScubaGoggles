@@ -112,24 +112,23 @@ def main() -> None:
     print(f"Opening http://localhost:{port} in your browser.")
     print("Press Ctrl+C to stop the server.\n")
 
-    server_process = subprocess.Popen(cmd, **popen_kwargs)
+    with subprocess.Popen(cmd, **popen_kwargs) as server_process:
+        # Register cleanup so the Streamlit process tree is always killed —
+        # even if the terminal window is closed or the parent exits unexpectedly.
+        atexit.register(_kill_process_tree, server_process.pid)
 
-    # Register cleanup so the Streamlit process tree is always killed —
-    # even if the terminal window is closed or the parent exits unexpectedly.
-    atexit.register(_kill_process_tree, server_process.pid)
+        if sys.platform != "win32":
+            signal.signal(
+                signal.SIGINT,
+                lambda *_: (_kill_process_tree(server_process.pid), sys.exit(0)),
+            )
 
-    if sys.platform != "win32":
-        signal.signal(
-            signal.SIGINT,
-            lambda *_: (_kill_process_tree(server_process.pid), sys.exit(0)),
-        )
-
-    try:
-        server_process.wait()
-    except KeyboardInterrupt:
-        print("\nScubaGoggles UI stopped by user")
-    finally:
-        _kill_process_tree(server_process.pid)
+        try:
+            server_process.wait()
+        except KeyboardInterrupt:
+            print("\nScubaGoggles UI stopped by user")
+        finally:
+            _kill_process_tree(server_process.pid)
 
 
 if __name__ == "__main__":

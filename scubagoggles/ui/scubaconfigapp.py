@@ -759,26 +759,26 @@ class ScubaConfigApp:
         msg = "Configuration imported successfully!"
         if imported_items:
             msg += "\n\nImported: " + " · ".join(imported_items)
-        st.session_state._import_toast = msg
+        st.session_state.pending_import_toast = msg
 
     @staticmethod
     def _flush_import_toast():
         """Show a pending import-success toast if one was stashed."""
-        msg = st.session_state.pop("_import_toast", None)
+        msg = st.session_state.pop("pending_import_toast", None)
         if msg:
             st.toast(msg, icon="✅")
 
     @st.dialog("Import Configuration")
     def _show_import_dialog(self):
         """Show a file upload dialog for importing YAML configuration."""
-        uploader_gen = st.session_state.get("_uploader_gen", 0)
+        uploader_gen = st.session_state.get("uploader_gen", 0)
         uploaded = st.file_uploader(
             "Upload a YAML configuration file",
             type=["yaml", "yml"],
             key=f"config_file_uploader_{uploader_gen}",
         )
         if uploaded is not None:
-            st.session_state._uploader_gen = uploader_gen + 1
+            st.session_state.uploader_gen = uploader_gen + 1
             st.success(f"✅ **{uploaded.name}** loaded successfully — importing...")
             self.import_configuration(uploaded)
 
