@@ -18,6 +18,7 @@ pytest-mock
 #
 # These packages are the minimum required versions for running Scubagoggles:
 dnspython>=2.6.1
+dnspython[doh]>=2.6.1
 google-api-python-client>=2.142.0
 google-auth-httplib2>=0.2.0
 google-auth-oauthlib>=1.2.1
