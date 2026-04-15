@@ -11,7 +11,6 @@ YAML config export/import.
 
 import base64
 import os
-import subprocess
 import sys
 from datetime import date, datetime
 from pathlib import Path
@@ -23,6 +22,312 @@ import yaml
 
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 from scubagoggles.ui.validation import ConfigValidator
+
+_CSS_LIGHT_BASE = """<style>
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #28a745;
+    --primary-color-dark: #1e7e34;
+    --sg-bg: #f6fbfe;
+    --sg-secondary-bg: #ffffff;
+    --sg-text: #262730;
+    --sg-section-bg: white;
+    --sg-border: #e8f4fd;
+    --sg-muted: #6b7280;
+    --sg-context-help-bg: rgba(74, 144, 226, 0.1);
+    --sg-status-success-bg: #d4edda;
+    --sg-status-success-text: #155724;
+    --sg-status-success-border: #c3e6cb;
+    --sg-status-warning-bg: #fff3cd;
+    --sg-status-warning-text: #856404;
+    --sg-status-warning-border: #ffeeba;
+    --sg-status-error-bg: #f8d7da;
+    --sg-status-error-text: #721c24;
+    --sg-status-error-border: #f5c6cb;
+}
+"""
+
+_CSS_COMMON = """
+.stApp {
+    background-color: var(--sg-bg);
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--sg-text);
+}
+
+.header-bar {
+    background: var(--sg-secondary-bg);
+    border-bottom: 1px solid var(--sg-border);
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0.25rem;
+}
+
+.header-logo {
+    font-size: 2rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.header-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.header-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--sg-text);
+    white-space: nowrap;
+}
+
+.header-subtitle {
+    font-size: 0.78rem;
+    color: var(--sg-muted);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0;
+    background-color: var(--sg-secondary-bg);
+    border-radius: 8px 8px 0 0;
+    padding: 0.5rem;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background-color: transparent;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    color: var(--sg-text);
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: var(--sg-section-bg);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.section-container {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 0;
+}
+
+.section-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--sg-text);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--sg-border);
+    padding-bottom: 0.5rem;
+}
+
+.stTextInput > div > div > input {
+    border: 1px solid #d0d5e0;
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.stTextInput > div > div > input:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.stSelectbox > div > div > div {
+    border: 1px solid #d0d5e0;
+    border-radius: 6px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.product-card {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.product-card:hover {
+    border-color: #4a90e2;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.1);
+}
+
+.product-card.selected {
+    border-color: #4a90e2;
+    background: #f0f8ff;
+}
+
+.product-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.product-description {
+    font-size: 0.9rem;
+    color: #6c757d;
+    line-height: 1.4;
+}
+
+.stButton > button {
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+}
+
+.stCheckbox {
+    margin-top: 0 !important;
+}
+
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.status-success {
+    background: var(--sg-status-success-bg);
+    color: var(--sg-status-success-text);
+    border: 1px solid var(--sg-status-success-border);
+}
+
+.status-warning {
+    background: var(--sg-status-warning-bg);
+    color: var(--sg-status-warning-text);
+    border: 1px solid var(--sg-status-warning-border);
+}
+
+.status-error {
+    background: var(--sg-status-error-bg);
+    color: var(--sg-status-error-text);
+    border: 1px solid var(--sg-status-error-border);
+}
+
+.status-indicator,
+.status-indicator * {
+    color: inherit !important;
+}
+
+.help-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.help-content {
+    background: var(--sg-section-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    color: var(--sg-text);
+}
+
+.help-close {
+    float: right;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--sg-text);
+    margin: -1rem -1rem 1rem 1rem;
+}
+
+.help-section {
+    margin-bottom: 1.5rem;
+}
+
+.help-title {
+    color: #4a90e2;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.context-help {
+    background: var(--sg-context-help-bg);
+    border-left: 4px solid #4a90e2;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+}
+
+.help-icon {
+    color: #4a90e2;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.help-icon:hover {
+    color: #3d5b96;
+}
+
+#MainMenu {display: none !important;}
+footer {display: none !important;}
+.stDeployButton {display: none !important;}
+button[kind="header"] {display: none !important;}
+[data-testid="stToolbar"] {display: none !important;}
+.stActionButton {display: none !important;}
+header {display: none !important;}
+[data-testid="stSidebar"],
+[data-testid="collapsedControl"] {display: none !important;}
+
+.stAppViewBlockContainer,
+[data-testid="stAppViewBlockContainer"] {
+    padding-top: 0 !important;
+}
+.block-container {
+    padding-top: 0 !important;
+}
+[data-testid="stApp"] > div:first-child {
+    padding-top: 0 !important;
+}
+.stMain {
+    padding-top: 0 !important;
+}
+.main .block-container {
+    padding-top: 0.25rem !important;
+    margin-top: 0 !important;
+}
+</style>
+"""
+
 
 class ScubaConfigApp:
     """Streamlit-based configuration editor for ScubaGoggles."""
@@ -67,8 +372,6 @@ class ScubaConfigApp:
         self.available_policies = self.parse_baseline_policies()
 
         if 'config_data' not in st.session_state:
-            _ui_dark_env = os.environ.get("SCUBAGOGGLES_UI_DARK", "").strip().lower()
-            _ui_dark_initial = _ui_dark_env in ("1", "true", "yes", "on")
             st.session_state.config_data = {
                 'orgname': '',
                 'orgunitname': '',
@@ -86,7 +389,6 @@ class ScubaConfigApp:
                 'imapexceptions': [],
                 'preferreddnsresolvers': [],
                 'skipdoh': False,
-                'ui_dark_mode': _ui_dark_initial,
                 'outjsonfilename': '',
                 'regopath': '',
                 'documentpath': '',
@@ -101,19 +403,9 @@ class ScubaConfigApp:
         if 'ui_show_help' not in st.session_state:
             st.session_state.ui_show_help = False
 
-        _defaults = {
-            'orgname': '', 'orgunitname': '', 'description': '',
-        }
-        for widget_key, source in _defaults.items():
-            if widget_key not in st.session_state:
-                if isinstance(source, tuple):
-                    st.session_state[widget_key] = (
-                        st.session_state.config_data.get(source[0], source[1])
-                    )
-                else:
-                    st.session_state[widget_key] = (
-                        st.session_state.config_data.get(widget_key, source)
-                    )
+        for key in ('orgname', 'orgunitname', 'description'):
+            if key not in st.session_state:
+                st.session_state[key] = st.session_state.config_data.get(key, '')
 
     @staticmethod
     def parse_baseline_policies() -> Dict[str, Dict[str, str]]:
@@ -158,441 +450,134 @@ class ScubaConfigApp:
             layout="wide",
             initial_sidebar_state="collapsed"
         )
+        st.markdown(self._generate_css(), unsafe_allow_html=True)
 
-        # Set custom theme with green primary color for checkboxes
-        st.markdown("""
-        <script>
-        const theme = {
-            primaryColor: "#28a745",
-            backgroundColor: "#f6fbfe",
-            secondaryBackgroundColor: "#ffffff",
-            textColor: "#262730"
-        };
-        window.streamlitTheme = theme;
-        </script>
-        """, unsafe_allow_html=True)
+    _DARK_MODE_CSS = """
+    :root {
+        --sg-bg: #0e1117;
+        --sg-secondary-bg: #262730;
+        --sg-text: #fafafa;
+        --sg-section-bg: #262730;
+        --sg-border: #4b5563;
+        --sg-muted: #9ca3af;
+        --sg-context-help-bg: rgba(74, 144, 226, 0.2);
+        --sg-status-success-bg: #163a2d;
+        --sg-status-success-text: #d1fae5;
+        --sg-status-success-border: #1f6f4a;
+        --sg-status-warning-bg: #3f3110;
+        --sg-status-warning-text: #fde68a;
+        --sg-status-warning-border: #6b4f1d;
+        --sg-status-error-bg: #3f1d20;
+        --sg-status-error-text: #fecaca;
+        --sg-status-error-border: #7f1d1d;
+    }
 
-        # Custom CSS to match ScubaGear's professional look with dark mode support
-        dark_mode = st.session_state.config_data.get('ui_dark_mode', False)
+    .stMarkdown, .stMarkdown p, .stMarkdown div, .stMarkdown span,
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6,
+    .stText, p, div, span, label {
+        color: #fafafa !important;
+    }
 
-        # Always regenerate CSS to ensure it matches current state
-        css_content = self._generate_css(dark_mode)
-        st.markdown(css_content, unsafe_allow_html=True)
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea,
+    .stSelectbox > div > div > div,
+    .stNumberInput > div > div > input {
+        background-color: #374151 !important;
+        color: #fafafa !important;
+        border-color: #6b7280 !important;
+    }
 
-    def _generate_css(self, dark_mode):
-        """Generate CSS based on dark mode setting"""
+    .stButton > button {
+        background-color: #374151 !important;
+        color: #fafafa !important;
+        border-color: #6b7280 !important;
+    }
 
-        if dark_mode:
-            bg_color = "#0e1117"
-            secondary_bg = "#262730"
-            text_color = "#fafafa"
-            section_bg = "#262730"
-            border_color = "#4b5563"
-        else:
-            bg_color = "#f6fbfe"
-            secondary_bg = "#ffffff"
-            text_color = "#262730"
-            section_bg = "white"
-            border_color = "#e8f4fd"
+    .stTextInput label, .stTextArea label, .stSelectbox label,
+    .stNumberInput label, .stCheckbox label {
+        color: #fafafa !important;
+    }
 
-        return f"""
-        <style>
-        /* Import Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap');
+    .stTabs [data-baseweb="tab"] {
+        color: #fafafa !important;
+    }
 
-        /* Set Streamlit theme variables for green checkboxes */
-        :root {{
-            --primary-color: #28a745;
-            --primary-color-dark: #1e7e34;
-        }}
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMarkdownContainer"] div,
+    [data-testid="stMarkdownContainer"] span,
+    [data-testid="stText"] {
+        color: #fafafa !important;
+    }
 
-        /* Main app styling */
-        .stApp {{
-            background-color: {bg_color};
-            font-family: 'Segoe UI', sans-serif;
-            color: {text_color};
-        }}
+    .stAlert, [data-testid="stNotification"],
+    [data-testid="stAlert"], .stWarning, .stError, .stSuccess, .stInfo {
+        background-color: #374151 !important;
+        color: #fafafa !important;
+        border-color: #6b7280 !important;
+    }
 
-        /* Header toolbar bar */
-        .header-bar {{
-            background: {secondary_bg};
-            border-bottom: 1px solid {border_color};
-            padding: 0.6rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 0.25rem;
-        }}
+    .stAlert > div, .stAlert p, .stAlert span,
+    [data-testid="stNotification"] > div,
+    [data-testid="stNotification"] p,
+    [data-testid="stNotification"] span {
+        color: #fafafa !important;
+    }
 
-        .header-logo {{
-            font-size: 2rem;
-            line-height: 1;
-            flex-shrink: 0;
-        }}
+    .streamlit-expander {
+        background-color: #374151 !important;
+        border-color: #6b7280 !important;
+    }
 
-        .header-text {{
-            flex: 1;
-            min-width: 0;
-        }}
+    .streamlit-expander .streamlit-expander-header {
+        background-color: #374151 !important;
+        color: #fafafa !important;
+    }
 
-        .header-title {{
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 0;
-            color: {text_color};
-            white-space: nowrap;
-        }}
+    .streamlit-expander .streamlit-expander-content {
+        background-color: #262730 !important;
+    }
 
-        .header-subtitle {{
-            font-size: 0.78rem;
-            color: {'#9ca3af' if dark_mode else '#6b7280'};
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }}
+    .stContainer, [data-testid="stVerticalBlock"] > div,
+    [data-testid="stHorizontalBlock"] > div {
+        background-color: transparent !important;
+    }
 
-        /* Tab styling */
-        .stTabs [data-baseweb="tab-list"] {{
-            gap: 0;
-            background-color: {secondary_bg};
-            border-radius: 8px 8px 0 0;
-            padding: 0.5rem;
-        }}
+    .metric-container, [data-testid="stMetric"] {
+        background-color: #374151 !important;
+        color: #fafafa !important;
+    }
 
-        .stTabs [data-baseweb="tab"] {{
-            background-color: transparent;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            color: {text_color};
-        }}
+    .stDataFrame, [data-testid="stDataFrame"] {
+        background-color: #374151 !important;
+        color: #fafafa !important;
+    }
+    """
 
-        .stTabs [aria-selected="true"] {{
-            background-color: {section_bg};
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }}
+    def _generate_css(self):
+        """Generate CSS with automatic browser dark mode via media query.
 
-        /* Section styling */
-        .section-container {{
-            background: transparent;
-            padding: 0;
-            border-radius: 0;
-            box-shadow: none;
-            margin-bottom: 0;
-        }}
-
-        .section-title {{
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: {text_color};
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid {border_color};
-            padding-bottom: 0.5rem;
-        }}
-
-        /* Dark mode specific overrides */
-        {'' if not dark_mode else '''
-        /* Text colors for dark mode */
-        .stMarkdown, .stMarkdown p, .stMarkdown div, .stMarkdown span,
-        .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6,
-        .stText, p, div, span, label {
-            color: #fafafa !important;
-        }
-
-        /* Form elements */
-        .stTextInput > div > div > input,
-        .stTextArea > div > div > textarea,
-        .stSelectbox > div > div > div,
-        .stNumberInput > div > div > input {
-            background-color: #374151 !important;
-            color: #fafafa !important;
-            border-color: #6b7280 !important;
-        }
-
-        /* Buttons */
-        .stButton > button {
-            background-color: #374151 !important;
-            color: #fafafa !important;
-            border-color: #6b7280 !important;
-        }
-
-        /* Labels and help text */
-        .stTextInput label, .stTextArea label, .stSelectbox label,
-        .stNumberInput label, .stCheckbox label {
-            color: #fafafa !important;
-        }
-
-        /* Tab labels */
-        .stTabs [data-baseweb="tab"] {
-            color: #fafafa !important;
-        }
-
-        /* General text elements */
-        [data-testid="stMarkdownContainer"] p,
-        [data-testid="stMarkdownContainer"] div,
-        [data-testid="stMarkdownContainer"] span,
-        [data-testid="stText"] {
-            color: #fafafa !important;
-        }
-
-        /* Alert boxes and notifications */
-        .stAlert, [data-testid="stNotification"],
-        [data-testid="stAlert"], .stWarning, .stError, .stSuccess, .stInfo {
-            background-color: #374151 !important;
-            color: #fafafa !important;
-            border-color: #6b7280 !important;
-        }
-
-        /* Warning/Error/Success box content */
-        .stAlert > div, .stAlert p, .stAlert span,
-        [data-testid="stNotification"] > div,
-        [data-testid="stNotification"] p,
-        [data-testid="stNotification"] span {
-            color: #fafafa !important;
-        }
-
-        /* Expander components */
-        .streamlit-expander {
-            background-color: #374151 !important;
-            border-color: #6b7280 !important;
-        }
-
-        .streamlit-expander .streamlit-expander-header {
-            background-color: #374151 !important;
-            color: #fafafa !important;
-        }
-
-        .streamlit-expander .streamlit-expander-content {
-            background-color: #262730 !important;
-        }
-
-
-        /* Container backgrounds */
-        .stContainer, [data-testid="stVerticalBlock"] > div,
-        [data-testid="stHorizontalBlock"] > div {
-            background-color: transparent !important;
-        }
-
-        /* Metric components */
-        .metric-container, [data-testid="stMetric"] {
-            background-color: #374151 !important;
-            color: #fafafa !important;
-        }
-
-        /* Dataframe/table styling */
-        .stDataFrame, [data-testid="stDataFrame"] {
-            background-color: #374151 !important;
-            color: #fafafa !important;
-        }
-
-        '''}
-
-        /* Form styling */
-        .stTextInput > div > div > input {{
-            border: 1px solid #d0d5e0;
-            border-radius: 6px;
-            padding: 0.75rem;
-            font-size: 0.95rem;
-        }}
-
-        .stTextInput > div > div > input:focus {{
-            border-color: #4a90e2;
-            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-        }}
-
-        .stSelectbox > div > div > div {{
-            border: 1px solid #d0d5e0;
-            border-radius: 6px;
-        }}
-
-        /* Product selection grid */
-        .product-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }}
-
-        .product-card {{
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            padding: 1.25rem;
-            transition: all 0.2s ease;
-        }}
-
-        .product-card:hover {{
-            border-color: #4a90e2;
-            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.1);
-        }}
-
-        .product-card.selected {{
-            border-color: #4a90e2;
-            background: #f0f8ff;
-        }}
-
-        .product-icon {{
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }}
-
-        .product-title {{
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }}
-
-        .product-description {{
-            font-size: 0.9rem;
-            color: #6c757d;
-            line-height: 1.4;
-        }}
-
-        /* Button styling */
-        .stButton > button {{
-            border-radius: 6px;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            transition: all 0.2s ease;
-            font-size: 0.85rem;
-        }}
-
-        .stCheckbox {{
-            margin-top: 0 !important;
-        }}
-
-        /* Status indicators */
-        .status-indicator {{
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }}
-
-        .status-success {{
-            background: {('#163a2d' if dark_mode else '#d4edda')};
-            color: {('#d1fae5' if dark_mode else '#155724')};
-            border: 1px solid {('#1f6f4a' if dark_mode else '#c3e6cb')};
-        }}
-
-        .status-warning {{
-            background: {('#3f3110' if dark_mode else '#fff3cd')};
-            color: {('#fde68a' if dark_mode else '#856404')};
-            border: 1px solid {('#6b4f1d' if dark_mode else '#ffeeba')};
-        }}
-
-        .status-error {{
-            background: {('#3f1d20' if dark_mode else '#f8d7da')};
-            color: {('#fecaca' if dark_mode else '#721c24')};
-            border: 1px solid {('#7f1d1d' if dark_mode else '#f5c6cb')};
-        }}
-
-        .status-indicator,
-        .status-indicator * {{
-            color: inherit !important;
-        }}
-
-        /* Help modal styling */
-        .help-modal {{
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }}
-
-        .help-content {{
-            background: {section_bg};
-            border-radius: 12px;
-            padding: 2rem;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            color: {text_color};
-        }}
-
-        .help-close {{
-            float: right;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: {text_color};
-            margin: -1rem -1rem 1rem 1rem;
-        }}
-
-        .help-section {{
-            margin-bottom: 1.5rem;
-        }}
-
-        .help-title {{
-            color: #4a90e2;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }}
-
-        /* Context help styling */
-        .context-help {{
-            background: {('rgba(74, 144, 226, 0.1)' if not dark_mode else 'rgba(74, 144, 226, 0.2)')};
-            border-left: 4px solid #4a90e2;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 4px;
-        }}
-
-        .help-icon {{
-            color: #4a90e2;
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-left: 0.5rem;
-        }}
-
-        .help-icon:hover {{
-            color: #3d5b96;
-        }}
-
-        /* Hide Streamlit default elements */
-        #MainMenu {{display: none !important;}}
-        footer {{display: none !important;}}
-        .stDeployButton {{display: none !important;}}
-        button[kind="header"] {{display: none !important;}}
-        [data-testid="stToolbar"] {{display: none !important;}}
-        .stActionButton {{display: none !important;}}
-        header {{display: none !important;}}
-        [data-testid="stSidebar"],
-        [data-testid="collapsedControl"] {{display: none !important;}}
-
-        /* Remove the top padding/margin Streamlit reserves for its hidden header */
-        .stAppViewBlockContainer,
-        [data-testid="stAppViewBlockContainer"] {{
-            padding-top: 0 !important;
-        }}
-        .block-container {{
-            padding-top: 0 !important;
-        }}
-        [data-testid="stApp"] > div:first-child {{
-            padding-top: 0 !important;
-        }}
-        .stMain {{
-            padding-top: 0 !important;
-        }}
-        .main .block-container {{
-            padding-top: 0.25rem !important;
-            margin-top: 0 !important;
-        }}
-        </style>
+        When SCUBAGOGGLES_UI_DARK is set, dark mode is forced regardless
+        of browser preference.  Otherwise the browser's
+        ``prefers-color-scheme`` media query controls it automatically.
         """
+        force_dark = os.environ.get(
+            "SCUBAGOGGLES_UI_DARK", "",
+        ).strip().lower() in ("1", "true", "yes", "on")
+
+        if force_dark:
+            dark_section = self._DARK_MODE_CSS
+        else:
+            dark_section = (
+                "@media (prefers-color-scheme: dark) {"
+                + self._DARK_MODE_CSS
+                + "\n}\n"
+            )
+
+        return (
+            _CSS_LIGHT_BASE
+            + dark_section
+            + _CSS_COMMON
+        )
 
     def import_configuration(self, uploaded_file):
         """Import configuration from uploaded YAML file."""
@@ -646,14 +631,10 @@ class ScubaConfigApp:
     @staticmethod
     def _import_org_fields(config: dict):
         """Import organization-level fields from *config* into session state."""
-        for yaml_key, state_key in (
-            ('orgname', 'orgname'),
-            ('orgunitname', 'orgunitname'),
-            ('description', 'description'),
-        ):
-            if yaml_key in config:
-                st.session_state.config_data[state_key] = config[yaml_key]
-                st.session_state[state_key] = config[yaml_key]
+        for key in ('orgname', 'orgunitname', 'description'):
+            if key in config:
+                st.session_state.config_data[key] = config[key]
+                st.session_state[key] = config[key]
 
     @staticmethod
     def _import_auth_fields(config: dict):
@@ -754,7 +735,13 @@ class ScubaConfigApp:
 
     @staticmethod
     def _show_import_summary():
-        """Display a success toast summarising what was imported."""
+        """Store import summary in session state to display after rerun.
+
+        Toasts called immediately before ``st.rerun()`` are lost because
+        the rerun halts execution before they reach the browser.  Instead
+        we stash the message and display it on the next render cycle via
+        ``_flush_import_toast``.
+        """
         summary_keys = {
             'orgname': lambda v: f"Organization: {v}",
             'baselines': lambda v: f"Baselines: {len(v)} selected",
@@ -769,94 +756,48 @@ class ScubaConfigApp:
             if (val := st.session_state.config_data.get(key))
         ]
 
-        st.success("✅ Configuration imported successfully!")
+        msg = "Configuration imported successfully!"
         if imported_items:
-            st.info("📋 **Imported:** " + " • ".join(imported_items))
-
-    def open_configuration_from_disk(self):
-        """Open a native file dialog and load the selected YAML config."""
-        try:
-            file_path = self._run_tk_dialog(
-                "from tkinter import filedialog; "
-                "print(filedialog.askopenfilename("
-                "defaultextension='.yaml', "
-                "filetypes=[('YAML files','*.yaml'),('YAML files','*.yml'),('All files','*.*')], "
-                "title='Open ScubaGoggles Configuration')); "
-                "root.destroy()"
-            )
-
-            if not file_path:
-                st.info("Open cancelled.")
-                return
-
-            path = Path(file_path)
-            if not path.is_file():
-                st.error(f"File not found: {file_path}")
-                return
-
-            yaml_content = path.read_text(encoding="utf-8")
-            config = yaml.safe_load(yaml_content)
-
-            if not config or not isinstance(config, dict):
-                st.error("Invalid or empty YAML file.")
-                return
-
-            class _Wrapper:  # pylint: disable=too-few-public-methods
-                """Mimic an uploaded file so import_configuration can be reused."""
-                def __init__(self, data: bytes):
-                    self._data = data
-                def read(self):
-                    """Return the stored bytes."""
-                    return self._data
-
-            self.import_configuration(_Wrapper(yaml_content.encode("utf-8")))
-
-        except subprocess.TimeoutExpired:
-            st.info("Open dialog timed out.")
-        except Exception as e:
-            st.error(f"Failed to open configuration: {e}")
+            msg += "\n\nImported: " + " · ".join(imported_items)
+        st.session_state._import_toast = msg
 
     @staticmethod
-    def _run_tk_dialog(script: str, timeout: int = 120) -> str:
-        """Run a tkinter dialog in a subprocess and return stdout.
+    def _flush_import_toast():
+        """Show a pending import-success toast if one was stashed."""
+        msg = st.session_state.pop("_import_toast", None)
+        if msg:
+            st.toast(msg, icon="✅")
 
-        The script is prefixed with the standard tkinter root-window
-        boilerplate (hidden, topmost) so callers only need to supply
-        the dialog-specific logic.
-        """
-        preamble = (
-            "import tkinter as tk; "
-            "root = tk.Tk(); root.withdraw(); "
-            "root.attributes('-topmost', True); root.update(); "
+    @st.dialog("Import Configuration")
+    def _show_import_dialog(self):
+        """Show a file upload dialog for importing YAML configuration."""
+        uploader_gen = st.session_state.get("_uploader_gen", 0)
+        uploaded = st.file_uploader(
+            "Upload a YAML configuration file",
+            type=["yaml", "yml"],
+            key=f"config_file_uploader_{uploader_gen}",
         )
-        result = subprocess.run(
-            [sys.executable, "-c", preamble + script],
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-            check=False,
-        )
-        return result.stdout.strip()
+        if uploaded is not None:
+            st.session_state._uploader_gen = uploader_gen + 1
+            st.success(f"✅ **{uploaded.name}** loaded successfully — importing...")
+            self.import_configuration(uploaded)
 
-    def _confirm_and_reset(self):
-        """Show a native Yes/No confirmation before resetting."""
-        try:
-            answer = self._run_tk_dialog(
-                "from tkinter import messagebox; "
-                "answer = messagebox.askyesno("
-                "'Confirm Reset', "
-                "'Are you sure you want to reset all fields to their defaults?\\n\\n"
-                "All unsaved changes will be lost.'); "
-                "print('yes' if answer else 'no'); "
-                "root.destroy()",
-                timeout=60,
-            )
-            if answer == "yes":
+    @st.dialog("Confirm Reset")
+    def _show_reset_dialog(self):
+        """Show a confirmation dialog before resetting all fields."""
+        st.warning(
+            "Are you sure you want to reset all fields to their defaults?\n\n"
+            "All unsaved changes will be lost."
+        )
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Yes, Reset", type="primary", key="confirm_reset_yes"):
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]
                 st.rerun()
-        except Exception:
-            pass
+        with col2:
+            if st.button("Cancel", key="confirm_reset_cancel"):
+                st.rerun()
 
     def _validate_before_save(self) -> list:
         """Validate the configuration and return a list of error messages."""
@@ -892,23 +833,11 @@ class ScubaConfigApp:
 
         return errors
 
-    def _show_validation_errors(self, errors: list):
-        """Show validation errors in a native warning dialog."""
-        bullet_list = "\n".join(f"  - {e}" for e in errors)
-        message = f"The following validation errors occurred:\n{bullet_list}"
-        encoded = base64.b64encode(message.encode("utf-8")).decode("ascii")
-        try:
-            self._run_tk_dialog(
-                "from tkinter import messagebox; "
-                "import base64; "
-                f"msg = base64.b64decode('{encoded}').decode('utf-8'); "
-                "messagebox.showwarning('Validation Errors', msg); "
-                "root.destroy()",
-                timeout=60,
-            )
-        except Exception:
-            for err in errors:
-                st.error(f"❌ {err}")
+    @staticmethod
+    def _show_validation_errors(errors: list):
+        """Display validation errors inline."""
+        for err in errors:
+            st.error(f"❌ {err}")
 
     # ------------------------------------------------------------------
     # Shared helpers to reduce duplication across tabs
@@ -1295,6 +1224,7 @@ class ScubaConfigApp:
 
     def render_header(self):
         """Render a header toolbar matching SCuBAGear style"""
+        self._flush_import_toast()
         st.markdown("""
         <div class="header-bar">
             <span class="header-logo">🤿</span>
@@ -1307,11 +1237,11 @@ class ScubaConfigApp:
 
         btn_open, btn_reset, btn_help, _spacer = st.columns([1, 1, 1, 4])
         with btn_open:
-            if st.button("📂 Open", use_container_width=True, help="Open an existing configuration file"):
-                self.open_configuration_from_disk()
+            if st.button("📂 Open", use_container_width=True, help="Import a YAML configuration file"):
+                self._show_import_dialog()
         with btn_reset:
             if st.button("🔄 Reset", use_container_width=True, help="Reset all fields to defaults"):
-                self._confirm_and_reset()
+                self._show_reset_dialog()
         with btn_help:
             if st.button("❓ Help", use_container_width=True, help="Show help & documentation"):
                 st.session_state.ui_show_help = True
@@ -1369,65 +1299,67 @@ class ScubaConfigApp:
             st.session_state.ui_show_help = False
             st.rerun()
 
+    _BASELINE_INFO = {
+        'commoncontrols': {
+            'icon': '🔐',
+            'title': 'Common Controls',
+            'description': 'Enterprise-level security controls across the entire GWS admin console including authentication, access control, and session management',
+        },
+        'assuredcontrols': {
+            'icon': '🛡️',
+            'title': 'Assured Controls',
+            'description': 'Advanced security controls for organizations with Assured Controls or Assured Controls Plus licenses including data access approvals and data regions',
+        },
+        'gmail': {
+            'icon': '📧',
+            'title': 'Gmail',
+            'description': 'Email security controls and policies for Gmail configuration',
+        },
+        'drive': {
+            'icon': '📁',
+            'title': 'Google Drive',
+            'description': 'File sharing and access controls for Google Drive',
+        },
+        'calendar': {
+            'icon': '📅',
+            'title': 'Calendar',
+            'description': 'Calendar sharing and privacy settings for Google Calendar',
+        },
+        'meet': {
+            'icon': '📹',
+            'title': 'Google Meet',
+            'description': 'Video conferencing security and access controls',
+        },
+        'groups': {
+            'icon': '👥',
+            'title': 'Groups',
+            'description': 'Google Groups configuration and permissions',
+        },
+        'chat': {
+            'icon': '💬',
+            'title': 'Google Chat',
+            'description': 'Chat and messaging security controls',
+        },
+        'sites': {
+            'icon': '🌐',
+            'title': 'Google Sites',
+            'description': 'Website creation and sharing controls',
+        },
+        'classroom': {
+            'icon': '🎓',
+            'title': 'Classroom',
+            'description': 'Educational platform security and privacy controls',
+        },
+        'gemini': {
+            'icon': '🤖',
+            'title': 'Gemini',
+            'description': 'AI-powered features and data processing controls',
+        },
+    }
+
     def get_baseline_info(self):
-        """Get information about available baselines"""
-        return {
-            'commoncontrols': {
-                'icon': '🔐',
-                'title': 'Common Controls',
-                'description': 'Enterprise-level security controls across the entire GWS admin console including authentication, access control, and session management'
-            },
-            'assuredcontrols': {
-                'icon': '🛡️',
-                'title': 'Assured Controls',
-                'description': 'Advanced security controls for organizations with Assured Controls or Assured Controls Plus licenses including data access approvals and data regions'
-            },
-            'gmail': {
-                'icon': '📧',
-                'title': 'Gmail',
-                'description': 'Email security controls and policies for Gmail configuration'
-            },
-            'drive': {
-                'icon': '📁',
-                'title': 'Google Drive',
-                'description': 'File sharing and access controls for Google Drive'
-            },
-            'calendar': {
-                'icon': '📅',
-                'title': 'Calendar',
-                'description': 'Calendar sharing and privacy settings for Google Calendar'
-            },
-            'meet': {
-                'icon': '📹',
-                'title': 'Google Meet',
-                'description': 'Video conferencing security and access controls'
-            },
-            'groups': {
-                'icon': '👥',
-                'title': 'Groups',
-                'description': 'Google Groups configuration and permissions'
-            },
-            'chat': {
-                'icon': '💬',
-                'title': 'Google Chat',
-                'description': 'Chat and messaging security controls'
-            },
-            'sites': {
-                'icon': '🌐',
-                'title': 'Google Sites',
-                'description': 'Website creation and sharing controls'
-            },
-            'classroom': {
-                'icon': '🎓',
-                'title': 'Classroom',
-                'description': 'Educational platform security and privacy controls'
-            },
-            'gemini': {
-                'icon': '🤖',
-                'title': 'Gemini',
-                'description': 'AI-powered features and data processing controls'
-            }
-        }
+        """Get information about available baselines."""
+        return self._BASELINE_INFO
 
     def render_main_tab(self):
         """Render the main configuration tab"""
@@ -1628,7 +1560,11 @@ class ScubaConfigApp:
                 st.session_state.dns_add_status = ("success", ip)
             st.rerun()
 
-        self._show_dns_add_status()
+        self._show_add_status("dns_add_status", {
+            "success": (st.success, lambda ip: f"✅ Added DNS resolver: {ip}"),
+            "invalid": (st.error, lambda ip: f"❌ Invalid IP address format: {ip}"),
+            "duplicate": (st.error, "❌ Resolver already exists in list"),
+        }, fallback_msg="❌ IP address is required")
 
         if dns_resolvers:
             for i, resolver in enumerate(dns_resolvers):
@@ -1655,18 +1591,19 @@ class ScubaConfigApp:
         st.markdown('</div>', unsafe_allow_html=True)
 
     @staticmethod
-    def _show_dns_add_status():
-        """Display feedback from the most recent DNS resolver add attempt."""
-        status = st.session_state.pop("dns_add_status", None)
+    def _show_add_status(session_key: str, messages: dict, fallback_msg: str = "❌ Input is required"):
+        """Display feedback from the most recent add attempt.
+
+        *session_key* is popped from session state.  *messages* maps a
+        status kind to ``(streamlit_func, message_text)`` pairs.
+        """
+        status = st.session_state.pop(session_key, None)
         if not status:
             return
-        kind, ip = status
-        _messages = {
-            "success": (st.success, f"✅ Added DNS resolver: {ip}"),
-            "invalid": (st.error, f"❌ Invalid IP address format: {ip}"),
-            "duplicate": (st.error, "❌ Resolver already exists in list"),
-        }
-        fn, msg = _messages.get(kind, (st.error, "❌ IP address is required"))
+        kind, detail = status
+        fn, msg = messages.get(kind, (st.error, fallback_msg))
+        if callable(msg):
+            msg = msg(detail)
         fn(msg)
 
     def render_omit_policies_tab(self):
@@ -1835,17 +1772,11 @@ class ScubaConfigApp:
                 st.session_state.bg_add_status = ("success", email)
             st.rerun()
 
-        status = st.session_state.pop("bg_add_status", None)
-        if status:
-            kind, email = status
-            if kind == "success":
-                st.success(f"✅ Added break glass account: {email}")
-            elif kind == "invalid":
-                st.error(f"❌ Invalid email format: {email}")
-            elif kind == "duplicate":
-                st.error("❌ Account already exists in list")
-            else:
-                st.error("❌ Email address is required")
+        self._show_add_status("bg_add_status", {
+            "success": (st.success, lambda e: f"✅ Added break glass account: {e}"),
+            "invalid": (st.error, lambda e: f"❌ Invalid email format: {e}"),
+            "duplicate": (st.error, "❌ Account already exists in list"),
+        }, fallback_msg="❌ Email address is required")
 
         if break_glass_accounts:
             st.subheader("📋 Current Break Glass Accounts")
@@ -1939,15 +1870,11 @@ class ScubaConfigApp:
         st.button("➕ Add Exception", type="primary", on_click=_add_imap_exception,
                    key="add_imap_exception_btn")
 
-        status = st.session_state.pop("imap_add_status", None)
-        if status:
-            kind, detail = status
-            if kind == "success":
-                st.success("✅ Added IMAP exception")
-            elif kind == "invalid_group":
-                st.error(f"❌ Invalid group email format: {detail}")
-            elif kind == "missing_target":
-                st.error("❌ At least an OU or group email is required")
+        self._show_add_status("imap_add_status", {
+            "success": (st.success, "✅ Added IMAP exception"),
+            "invalid_group": (st.error, lambda d: f"❌ Invalid group email format: {d}"),
+            "missing_target": (st.error, "❌ At least an OU or group email is required"),
+        })
 
         if imap_exceptions:
             st.subheader("📋 Current IMAP Exceptions")
@@ -2144,7 +2071,6 @@ class ScubaConfigApp:
         clean_config = self.generate_clean_config()
 
         if clean_config:
-            # Show YAML preview with flow style for arrays to match ScubaGoggles conventions
             yaml_config = yaml.dump(clean_config, default_flow_style=False, sort_keys=False)
 
             for key in ('baselines', 'breakglassaccounts', 'preferreddnsresolvers'):
@@ -2155,63 +2081,89 @@ class ScubaConfigApp:
             st.markdown("---")
             st.subheader("Save Configuration")
 
-            if st.button("💾 Save Configuration"):
-                errors = self._validate_before_save()
-                if errors:
-                    self._show_validation_errors(errors)
-                else:
-                    try:
-                        file_path = self._run_tk_dialog(
-                            "from tkinter import filedialog; "
-                            "print(filedialog.asksaveasfilename("
-                            "defaultextension='.yaml', "
-                            "filetypes=[('YAML files','*.yaml'),"
-                            "('YAML files','*.yml'),"
-                            "('All files','*.*')], "
-                            "initialfile='scubagoggles_config.yaml', "
-                            "title='Save ScubaGoggles Configuration')); "
-                            "root.destroy()"
-                        )
-
-                        if file_path:
-                            Path(file_path).parent.mkdir(parents=True, exist_ok=True)
-                            Path(file_path).write_text(yaml_config, encoding="utf-8")
-                            st.success(f"Configuration saved to **{Path(file_path).resolve()}**")
-                        else:
-                            st.info("Save cancelled.")
-                    except subprocess.TimeoutExpired:
-                        st.info("Save dialog timed out.")
-                    except Exception as e:
-                        st.error(f"Failed to save: {e}")
+            errors = self._validate_before_save()
+            if errors:
+                self._show_validation_errors(errors)
+            else:
+                self._render_save_button(yaml_config)
         else:
             st.warning("Please fill in required fields in the Main tab")
 
         st.markdown('</div>', unsafe_allow_html=True)
+
+    @staticmethod
+    def _render_save_button(yaml_config: str):
+        """Render a save button that opens a native Save-As dialog.
+
+        Uses the File System Access API (``showSaveFilePicker``) supported
+        by Chromium-based browsers (Chrome, Edge) to let the user choose
+        where to save.  Falls back to a standard download for other browsers.
+        """
+        b64 = base64.b64encode(yaml_config.encode("utf-8")).decode("ascii")
+
+        # The JS tries showSaveFilePicker first (Chrome/Edge).  If the
+        # browser doesn't support it, it falls back to a classic download.
+        save_js = f"""
+        <script>
+        async function saveConfig() {{
+            const data = atob("{b64}");
+            try {{
+                if (window.showSaveFilePicker) {{
+                    const handle = await window.showSaveFilePicker({{
+                        suggestedName: "scubagoggles_config.yaml",
+                        types: [{{
+                            description: "YAML files",
+                            accept: {{"text/yaml": [".yaml", ".yml"]}},
+                        }}],
+                    }});
+                    const writable = await handle.createWritable();
+                    await writable.write(data);
+                    await writable.close();
+                    return;
+                }}
+            }} catch (e) {{
+                if (e.name === "AbortError") return;
+            }}
+            // Fallback: standard download
+            const blob = new Blob([data], {{type: "text/yaml"}});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "scubagoggles_config.yaml";
+            a.click();
+            URL.revokeObjectURL(url);
+        }}
+        </script>
+        <button onclick="saveConfig()" style="
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        ">💾 Save Configuration</button>
+        """
+        st.components.v1.html(save_js, height=50)
 
     def generate_clean_config(self) -> Dict[str, Any]:
         """Generate clean configuration dictionary"""
         config = {}
         data = st.session_state.config_data
 
-        # data-key → config-key for simple pass-through fields
-        _direct = (
-            ('customerid', 'customerid'),
-            ('subjectemail', 'subjectemail'),
-            ('orgname', 'orgname'),
-            ('baselines', 'baselines'),
-            ('credentials', 'credentials'),
-            ('orgunitname', 'orgunitname'),
-            ('description', 'description'),
-            ('quiet', 'quiet'),
-            ('annotatepolicy', 'annotatepolicy'),
-            ('omitpolicy', 'omitpolicy'),
-            ('breakglassaccounts', 'breakglassaccounts'),
-            ('imapexceptions', 'imapexceptions'),
-            ('preferreddnsresolvers', 'preferreddnsresolvers'),
+        _pass_through = (
+            'customerid', 'subjectemail', 'orgname', 'baselines',
+            'credentials', 'orgunitname', 'description', 'quiet',
+            'annotatepolicy', 'omitpolicy', 'breakglassaccounts',
+            'imapexceptions', 'preferreddnsresolvers',
         )
-        for src, dest in _direct:
-            if data.get(src):
-                config[dest] = data[src]
+        for key in _pass_through:
+            if data.get(key):
+                config[key] = data[key]
 
         # Output settings with special handling
         if data.get('outputpath') and data['outputpath'] != './':

@@ -12,7 +12,7 @@ The ScubaGoggles Configuration UI provides a comprehensive web interface for cre
 - **Policy Annotation**: Add comments, mark incorrect results, and set remediation dates
 - **Exclusions**: Define break glass (emergency access) accounts and IMAP exceptions
 - **Configuration Preview & Export**: View and download YAML configuration files
-- **Dark Mode Support**: Run the launcher with `--dark` or set `SCUBAGOGGLES_UI_DARK` to use a dark theme without changing OS settings
+- **Dark Mode Support**: Automatically follows browser/OS dark mode preference, or use `--dark` / `SCUBAGOGGLES_UI_DARK` to force dark mode
 
 ## Features
 
@@ -32,7 +32,7 @@ The application consolidates all configuration capabilities into a single, profe
 ## Files
 
 - `scubaconfigapp.py` - Complete professional configuration application with all features
-- `launch.py` - Launcher script for starting the UI
+- `launch.py` - Launcher script that starts the Streamlit server and opens the browser
 - `validation.py` - Configuration validation utilities
 - `__init__.py` - Package initialization
 
@@ -42,7 +42,7 @@ The application consolidates all configuration capabilities into a single, profe
 
 1. **ScubaGoggles** must be installed and available
 2. **Python 3.10+** is required
-3. **Streamlit** and UI dependencies
+3. **Streamlit** UI dependency
 
 ### Install Dependencies
 
@@ -60,17 +60,17 @@ pip install -r requirements.txt
 python -m scubagoggles.ui.launch
 ```
 
-This will automatically detect and launch the configuration application (light or dark based on your system theme, unless you override as below). When system dark mode is detected, the launcher also syncs the app's custom CSS dark mode so the full UI is consistently dark.
+This will start the Streamlit server and open the app in your default web browser. Dark mode is automatically detected from your browser's preferred color scheme via CSS media queries.
 
-### Dark mode (without changing system settings)
+### Forcing dark mode
 
-Use the launcher’s `--dark` flag to force dark mode for both Streamlit’s chrome and the app’s custom styling:
+To force dark mode regardless of browser settings, use the `--dark` flag:
 
 ```bash
 python -m scubagoggles.ui.launch --dark
 ```
 
-Alternatively, set the environment variable before starting the launcher (or `streamlit run`). Truthy values: `1`, `true`, `yes`, `on` (case-insensitive):
+Alternatively, set the `SCUBAGOGGLES_UI_DARK` environment variable. Truthy values: `1`, `true`, `yes`, `on` (case-insensitive):
 
 ```bash
 # Linux / macOS
@@ -82,14 +82,12 @@ $env:SCUBAGOGGLES_UI_DARK = "1"
 python -m scubagoggles.ui.launch
 ```
 
-If you use **Method 2** (Streamlit only), set `SCUBAGOGGLES_UI_DARK` and pass Streamlit’s theme so widgets match:
+If you use **Method 2** (Streamlit only) and want to force dark mode, set the environment variable and pass the Streamlit theme flag:
 
 ```bash
 export SCUBAGOGGLES_UI_DARK=1
 streamlit run scubagoggles/ui/scubaconfigapp.py --theme.base dark
 ```
-
-The environment variable is read when the session first starts; refresh the page or restart Streamlit if you change it after opening the app.
 
 ### Method 2: Streamlit Command
 
@@ -102,25 +100,24 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 
 ### Navigation Tabs
 
-1. **🏢 Main** - Configure organization information and select products to assess
-2. **🚫 Omit Policies** - Exclude specific policies with documented rationale
-3. **📝 Annotate Policies** - Add comments, mark incorrect results, and set remediation dates
-4. **🔒 Exclusions** - Configure break glass accounts and IMAP exceptions
-5. **🌐 DNS Configuration** - Configure DNS resolvers and DoH fallback settings
-6. **👁️ Preview** - Review and download the generated YAML configuration
+1. **Main** - Configure organization information and select products to assess
+2. **Omit Policies** - Exclude specific policies with documented rationale
+3. **Annotate Policies** - Add comments, mark incorrect results, and set remediation dates
+4. **Exclusions** - Configure break glass accounts and IMAP exceptions
+5. **DNS Configuration** - Configure DNS resolvers and DoH fallback settings
+6. **Preview** - Review and download the generated YAML configuration
 
-### Sidebar Features
+### Header Toolbar
 
-- **Import Configuration**: Upload existing YAML configuration files
-- **Help Button**: Access comprehensive help and documentation
-- **Dark mode**: Use `python -m scubagoggles.ui.launch --dark` or set `SCUBAGOGGLES_UI_DARK` (see [Dark mode](#dark-mode-without-changing-system-settings) above)
+- **Open**: Import existing YAML configuration files via the browser file picker
+- **Reset**: Reset all fields to defaults (with confirmation dialog)
+- **Help**: Access comprehensive help and documentation
 
 ### Key Interface Elements
 
-- **Status Indicators**: Green dots (🟢) indicate configured items, orange dots (🟠) show items being edited
+- **Status Indicators**: Green dots indicate configured items, orange dots show items being edited
 - **Context Help**: Expandable help sections in each tab with guidelines and best practices
 - **Validation**: Real-time validation ensures required fields are completed before export
-- **Professional Styling**: CISA-inspired design with support for light and dark modes
 
 ## Configuration Workflow
 
@@ -134,10 +131,10 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 
 ### Typical Use Cases
 
-- **Creating a New Configuration**: Start with Main tab → Select products → Preview & Export
-- **Managing Policy Exceptions**: Select products → Go to Omit Policies tab → Configure exclusions with rationale
-- **Documentation & Remediation**: Select products → Go to Annotate Policies tab → Add comments and set remediation dates
-- **Importing Existing Configuration**: Use sidebar Import feature → Review/modify settings → Export updated configuration
+- **Creating a New Configuration**: Start with Main tab, select products, then Preview & Export
+- **Managing Policy Exceptions**: Select products, go to Omit Policies tab, configure exclusions with rationale
+- **Documentation & Remediation**: Select products, go to Annotate Policies tab, add comments and set remediation dates
+- **Importing Existing Configuration**: Use Open button in header to import, review/modify settings, then export updated configuration
 
 ## Development
 
