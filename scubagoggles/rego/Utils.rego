@@ -85,6 +85,82 @@ NonCompliantMessage(GroupsOrOU, Listing) := message if {
                        [GroupsOrOU, concat("", items)])
 }
 
+# Prepend a leading slash if Path does not already start with one.
+AddLeadingSlash(Path) := Path if {
+    startswith(Path, "/")
+} else := concat("", ["/", Path])
+
+# Convert the OU string displayed in the report to a path. Ignore groups, that will be handled in
+# a separate function. For example:
+# - "grandchild (in parent/child)" -> "/parent/child/grandchild"
+# - "example OU (group example@scubagws.org)" -> "/example OU"
+GetOuPath(OrgUnit) := Path if {
+    not contains(OrgUnit, "(in ")
+    not contains(OrgUnit, "(group ")
+    Path := AddLeadingSlash(OrgUnit)
+} else := Path if {
+    contains(OrgUnit, "(in ")
+    Child := trim_space(split(OrgUnit, "(in ")[0])
+    Parent := trim_suffix(split(OrgUnit, "(in ")[1], ")")
+    Path := AddLeadingSlash(concat("/", [Parent, Child]))
+} else := Path if {
+    contains(OrgUnit, "(group ")
+    Ou := trim_space(split(OrgUnit, "(group ")[0])
+    Path := AddLeadingSlash(Ou)
+}
+
+# Extract the group from the OU string displayed in the report. Return empty string if no group.
+# For example:
+# - "example OU (group example@scubagws.org)" -> "example@scubagws.org"
+# - "grandchild (in parent/child)" -> ""
+GetGroup(OrgUnit) := "" if {
+    not contains(OrgUnit, "(group ")
+} else := Group if {
+    Group := trim_suffix(split(OrgUnit, "(group ")[1], ")")
+}
+
+# Return true if an exception of the given type was configured for the OU, false otherwise.
+ExceptionConfigured(OrgUnit, Type) := true if {
+    # Currently IMAP is the only type of exception supported, but more to come
+    Type in {"imap_exceptions"}
+    OrgUnitPath := GetOuPath(OrgUnit)
+    Group := GetGroup(OrgUnit)
+    some Exception in input[Type]
+    # Exception is configured if groups match AND (ou paths match OR if the ou is blank)
+    # Blank is accepted because if the user configures an exception for a group, they don't have to
+    # input the OU. The arg parser ensures that the user specifies at the least an OU or a group so
+    # this logic won't give anyone a free pass.
+    true in [
+        AddLeadingSlash(Exception.ou) == OrgUnitPath,
+        AddLeadingSlash(Exception.ou) == "/"
+    ]
+    Exception.group == Group
+    # Users cannot configure exceptions for the entire top-level OU
+    false in [
+        OrgUnitPath == AddLeadingSlash(TopLevelOU),
+        Group == ""
+    ]
+} else := false
+
+# Return the justification, if any, the user provided for the given OU/exception type.
+ExceptionJustification(OrgUnit, Type) := Justification if {
+    Type in {"imap_exceptions"}
+    OrgUnitPath := GetOuPath(OrgUnit)
+    Group := GetGroup(OrgUnit)
+    some Exception in input[Type]
+    true in [
+        AddLeadingSlash(Exception.ou) == OrgUnitPath,
+        AddLeadingSlash(Exception.ou) == "/"
+    ]
+    Exception.group == Group
+    Justification := Exception.justification
+} else := ""
+
+# Format the justification for the HTML report
+FormatJustification(Justification) := "" if {
+    Justification == ""
+} else := sprintf("<i>Justification: %s</i>", [Justification])
+
 ReportDetails(NonCompOUs, NonCompGroups) := Description if {
     count(NonCompOUs) > 0
     count(NonCompGroups) > 0

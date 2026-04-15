@@ -138,6 +138,7 @@ class Provider:
                  access_token: str = None,
                  svc_account_email: str = None,
                  dns_resolvers: list = None,
+                 doh_servers: list = None,
                  skip_doh: bool = False):
 
         """Initialize the Provider.
@@ -151,6 +152,8 @@ class Provider:
             account.
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
+        :param doh_servers: (optional) list of DoH servers that should be used 
+            for DoH queries.           
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.
         """
@@ -162,7 +165,7 @@ class Provider:
         self._successful_calls = set()
         self._unsuccessful_calls = set()
         self._missing_policies = set()
-        self._dns_client = RobustDNSClient(dns_resolvers, skip_doh)
+        self._dns_client = RobustDNSClient(dns_resolvers, doh_servers, skip_doh)
         self._domains = []
         self._alias_domains = []
 
@@ -241,10 +244,10 @@ class Provider:
             Only pass the bound method, _cached_list() will invoke the function with
             open_resource()
 
-        :param str item_key: The key used in the API request to extract the list of items, 
+        :param str item_key: The key used in the API request to extract the list of items,
             e.g. 'domains', 'domainAliases', etc.
 
-        :param ApiReference api_reference: The ApiReference enum value corresponding 
+        :param ApiReference api_reference: The ApiReference enum value corresponding
             to the API call being made.
 
         :returns: List of items returned from the target Resource collection.
@@ -721,8 +724,7 @@ class Provider:
                 # add list of super admins if CC is being run
                 product_to_items.update(self.get_super_admins())
 
-            if 'groups' in product_to_logs:
-                product_to_items.update(self.get_group_settings())
+            product_to_items.update(self.get_group_settings())
 
         except Exception as exc:
             warnings.warn(

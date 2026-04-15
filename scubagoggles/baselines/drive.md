@@ -382,52 +382,13 @@ To configure the settings for Drive SDK:
 4.  Uncheck the **Allow users to access Google Drive with the Drive SDK API** checkbox.
 5.  Select **Save**.
 
-## 5. User Installation of Drive and Docs Add-Ons
-
-This section covers whether users can use add-ons in file editors within Google Drive, such as Docs, Sheets, Slides, and Forms. These add-ons include those available through Google Workspace Marketplace that have been built by other developers.
-
-### Policies
-
-#### GWS.DRIVEDOCS.5.1v0.6
-Agencies SHALL disable Google Drive Add-Ons.
-
-[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
-
-- _Rationale:_ Google Docs Add-Ons based on their granted permissions, may pose security risks, such as the potential exposure of sensitive content. Disabling unapproved add-ons and restricting their sharing can reduce the risk of data leakage.
-- _Last modified:_ January 2024
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
-- MITRE ATT&CK TTP Mapping
-  - [T1195: Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/)
-    - [T1195:001: Supply Chain Compromise: Compromise Software Dependencies and Development Tools](https://attack.mitre.org/techniques/T1195/001/)
-
-### Resources
-
--   [Google Workspace Admin Help: Allow or restrict add-ons in Docs editors](https://support.google.com/a/answer/4530135?product_name=UnuFlow&visit_id=637843582622955886-2417503403&rd=1&src=supportwidget0)
--   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
-
-### Prerequisites
-
--   None
-
-### Implementation
-
-To configure the settings for add-ons:
-
-#### GWS.DRIVEDOCS.5.1v0.6 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Apps -\> Google Workspace -\> Drive and Docs.**
-3.  Select **Features and Applications -\> Add-Ons.**
-4.  Uncheck the **Allow users to install Google Docs add-ons from add-ons stor**e checkbox.
-5.  Select **Save**.
-
-## 6. Drive for Desktop
+## 5. Drive for Desktop
 
 This section addresses Drive for Desktop, a feature that enables users to interact with their Drive files directly through their desktop's file explorer or finder, rather than through the browser.
 
 ### Policies
 
-#### GWS.DRIVEDOCS.6.1v0.6
+#### GWS.DRIVEDOCS.5.1v0.6
 Google Drive for Desktop SHALL be enabled only for authorized devices.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -437,11 +398,25 @@ Google Drive for Desktop SHALL be enabled only for authorized devices.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+ 
+#### GWS.DRIVEDOCS.5.2v0.6
+Monitoring for potential ransomware corruption SHALL be enabled.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols52v06-instructions)
+
+- _Rationale:_ This setting helps prevent against malware and ransomware by auto-detecting potential attacks. This strengthens the overall security posture and limits the potential damage posed by ransomware.
+- _Last modified:_ April 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CP-9, CP-10
+- MITRE ATT&CK TTP Mapping
+  - [T1486: Data Encrypted for Impact](https://attack.mitre.org/techniques/T1486/)
+  - [T1490: Inhibit System Recovery](https://attack.mitre.org/techniques/T1490/)
+
 
 ### Resources
 
 -   [Use Google Drive for desktop - Google Drive Help](https://support.google.com/drive/answer/10838124?sjid=7721208110884477761-NA&visit_id=638192503824884459-786860809&rd=1)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
+-   [Detect ransomware and recover files in Drive for desktop](https://knowledge.workspace.google.com/admin/drive/detect-ransomware-and-recover-files-in-drive-for-desktop)
 
 ### Prerequisites
 
@@ -449,7 +424,7 @@ Google Drive for Desktop SHALL be enabled only for authorized devices.
 
 ### Implementation
 
-#### GWS.DRIVEDOCS.6.1v0.6 Instructions
+#### GWS.DRIVEDOCS.5.1v0.6 Instructions
 To Disable Google Drive for Desktop:
 
 1.  Sign in to the [Google Admin console](https://admin.google.com).
@@ -471,3 +446,10 @@ To limit Google Drive for Desktop to authorized devices:
 8.  Select Save.
 
 Alternatively, [Context-Aware access policies](https://support.google.com/a/answer/9275380?hl=en) can be configured for more granular controls around authorized devices. The access level applied to Google Drive must have the "Apply to Google desktop and mobile apps" enabled to meet this requirement. For additional guidance, see [Context-Aware Access](/scubagoggles/baselines/commoncontrols.md#2-context-aware-access).
+
+#### GWS.DRIVEDOCS.5.2v0.6 Instructions:
+1.  Sign in to the [Google Admin console](https://admin.google.com).
+2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs**.
+3.  Select **Malware and Ransomware**.
+4.  Ensure **Drive automatically monitors unusual file changes to identify potential ransomware corruption** is set to ON.
+5.  Select **Save**.

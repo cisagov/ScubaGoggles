@@ -13,6 +13,7 @@ from pathlib import Path
 
 from scubagoggles.getopa import download_opa, opa_filespec
 from scubagoggles.run_rego import find_opa
+from scubagoggles.scuba_constants import OPA_VERSION
 
 log = logging.getLogger(__name__)
 
@@ -206,7 +207,7 @@ def create_dir_download_opa(opa_dir: Path, create_dir: bool, download: bool):
         opa = opa_filespec(opa_dir)
         if not opa.exists():
             print(f'OPA executable not present, downloading: {opa.name}')
-            download_opa(opa_dir, verify = True)
+            download_opa(opa_dir, version = OPA_VERSION, verify = True)
 
 def validate_opa_dir(opa_dir: Path = None):
 

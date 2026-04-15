@@ -7,7 +7,7 @@ from enum import Enum
 
 BASE_URL_ADMINSDK = 'https://developers.google.com/admin-sdk'
 BASE_URL_WS_ADMIN = 'https://developers.google.com/workspace/admin'
-
+SCUBAGOGGLES_PACKAGE_URL = 'https://pypi.org/pypi/scubagoggles/json'
 
 class ApiReference(Enum):
     '''
@@ -43,7 +43,7 @@ API_LINKS = {
 }
 
 
-OPA_VERSION = 'v1.13.1'
+OPA_VERSION = 'v1.15.2'
 
 NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES = (
     0, 13, 18, 36

@@ -41,7 +41,7 @@ This section covers who has the ability to join classes and what classes the use
 ### Policies
 
 #### GWS.CLASSROOM.1.1v0.6
-Who can join classes in your domain SHALL be restricted to users in your domain or allowlisted domains.
+Who can join classes in your domain SHOULD be restricted to users in your domain or allowlisted domains.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -53,7 +53,7 @@ Who can join classes in your domain SHALL be restricted to users in your domain 
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.CLASSROOM.1.2v0.6
-Which classes users in your domain can join SHALL be restricted to classes in your domain or allowlisted domains.
+Which classes users in your domain can join SHOULD be restricted to classes in your domain or allowlisted domains.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -95,7 +95,7 @@ This section covers policies related to the Google Classroom API.
 ### Policies
 
 #### GWS.CLASSROOM.2.1v0.6
-Users SHALL NOT be able to authorize apps to access their Google Classroom data.
+Users SHOULD NOT be able to authorize apps to access their Google Classroom data.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -167,7 +167,7 @@ This section covers policies related to unenrolling a student from a class.
 ### Policies
 
 #### GWS.CLASSROOM.4.1v0.6
-Only teachers SHALL be allowed to unenroll students from classes.
+Only teachers SHOULD be allowed to unenroll students from classes.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -202,7 +202,7 @@ The first time users sign in to Classroom, they self-identify as either a studen
 ### Policies
 
 #### GWS.CLASSROOM.5.1v0.6
-Class creation SHALL be restricted to verified teachers only.
+Class creation SHOULD be restricted to verified teachers only.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
