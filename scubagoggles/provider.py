@@ -138,6 +138,7 @@ class Provider:
                  access_token: str = None,
                  svc_account_email: str = None,
                  dns_resolvers: list = None,
+                 doh_servers: list = None,
                  skip_doh: bool = False):
 
         """Initialize the Provider.
@@ -151,6 +152,8 @@ class Provider:
             account.
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
+        :param doh_servers: (optional) list of DoH servers that should be used 
+            for DoH queries.           
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.
         """
@@ -162,7 +165,7 @@ class Provider:
         self._successful_calls = set()
         self._unsuccessful_calls = set()
         self._missing_policies = set()
-        self._dns_client = RobustDNSClient(dns_resolvers, skip_doh)
+        self._dns_client = RobustDNSClient(dns_resolvers, doh_servers, skip_doh)
         self._domains = []
         self._alias_domains = []
 

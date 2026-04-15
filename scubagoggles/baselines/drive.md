@@ -398,11 +398,25 @@ Google Drive for Desktop SHALL be enabled only for authorized devices.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+ 
+#### GWS.DRIVEDOCS.5.2v0.6
+Monitoring for potential ransomware corruption SHALL be enabled.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols52v06-instructions)
+
+- _Rationale:_ This setting helps prevent against malware and ransomware by auto-detecting potential attacks. This strengthens the overall security posture and limits the potential damage posed by ransomware.
+- _Last modified:_ April 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CP-9, CP-10
+- MITRE ATT&CK TTP Mapping
+  - [T1486: Data Encrypted for Impact](https://attack.mitre.org/techniques/T1486/)
+  - [T1490: Inhibit System Recovery](https://attack.mitre.org/techniques/T1490/)
+
 
 ### Resources
 
 -   [Use Google Drive for desktop - Google Drive Help](https://support.google.com/drive/answer/10838124?sjid=7721208110884477761-NA&visit_id=638192503824884459-786860809&rd=1)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
+-   [Detect ransomware and recover files in Drive for desktop](https://knowledge.workspace.google.com/admin/drive/detect-ransomware-and-recover-files-in-drive-for-desktop)
 
 ### Prerequisites
 
@@ -432,3 +446,10 @@ To limit Google Drive for Desktop to authorized devices:
 8.  Select Save.
 
 Alternatively, [Context-Aware access policies](https://support.google.com/a/answer/9275380?hl=en) can be configured for more granular controls around authorized devices. The access level applied to Google Drive must have the "Apply to Google desktop and mobile apps" enabled to meet this requirement. For additional guidance, see [Context-Aware Access](/scubagoggles/baselines/commoncontrols.md#2-context-aware-access).
+
+#### GWS.DRIVEDOCS.5.2v0.6 Instructions:
+1.  Sign in to the [Google Admin console](https://admin.google.com).
+2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs**.
+3.  Select **Malware and Ransomware**.
+4.  Ensure **Drive automatically monitors unusual file changes to identify potential ransomware corruption** is set to ON.
+5.  Select **Save**.
