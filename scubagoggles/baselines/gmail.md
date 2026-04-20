@@ -154,7 +154,7 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
-- _Rationale:_ Threat actors could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, an SPF policy is required for Federal civilian executive branch (FCEB) agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
+- _Rationale:_ Threat actors could potentially manipulate the 'FROM' field in an email to appear as a legitimate sender, increasing the risk of phishing attacks. By publishing an SPF policy for each domain that fails all non-approved senders, this risk can be reduced as it provides a means to detect and block such deceptive emails. Additionally, an SPF policy is required for federal civilian executive branch (FCEB) agencies by Binding Operational Directive 18-01, "Enhance Email and Web Security."
 - _Last modified:_ February 2024
 - _Note:_
   - SPF defines two different "fail" mechanisms: fail (indicated by `-`, sometimes referred to as hardfail) and softfail (indicated by `~`). Either hard or soft fail may be used to comply with this baseline policy.
@@ -225,7 +225,7 @@ The DMARC message rejection option SHALL be p=reject.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
-- _Rationale:_ Without stringent email authentication, threat actors could potentially send deceptive emails that appear to be from the organization's domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for Federal civilian executive branch (FCEB) agencies.
+- _Rationale:_ Without stringent email authentication, threat actors could potentially send deceptive emails that appear to be from the organization's domain, increasing the risk of phishing attacks. This policy reduces risk as it automatically rejects emails that fail SPF or DKIM checks, preventing potentially harmful emails from reaching recipients. Additionally, "reject" is the level of protection required by BOD 18-01, "Enhance Email and Web Security," for federal civilian executive branch (FCEB) agencies.
 - _Last modified:_ November 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
@@ -243,7 +243,7 @@ The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cy
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
-- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for Federal civilian executive branch (FCEB), set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows the CyberSecurity and Infrastructure Security Agency (CISA) to monitor and address email authentication issues.
+- _Rationale:_ Without a centralized point of contact for DMARC aggregate reports, potential email security issues may go unnoticed, increasing the risk of phishing attacks. As required by BOD 18-01 for federal civilian executive branch (FCEB), set reports@dmarc.cyber.dhs.gov as the DMARC aggregate report recipient, which allows the CyberSecurity and Infrastructure Security Agency (CISA) to monitor and address email authentication issues.
 - _Last modified:_ November 2023
 - _Note:_ Only FCEB agencies should include this email address in their DMARC record.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-4(5)
