@@ -1506,7 +1506,7 @@ class ScubaConfigApp:
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    def render_dns_config_tab(self):
+    def render_dns_config_tab(self):  # pylint: disable=too-many-branches
         """Render the DNS Configuration tab."""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
         st.markdown('<h2 class="section-title">DNS Configuration</h2>', unsafe_allow_html=True)
