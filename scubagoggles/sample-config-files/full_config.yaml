@@ -88,17 +88,12 @@ numberofuuidcharacterstotruncate: 18
 # Dark Mode: This field is used to enable dark mode styles for the report output.
 # darkmode
 
-# Preferred DoH Servers:  IP addresses or domain names of DoH servers that should be used to retrieve
-#any TXT records, should the traditional DNS queries fail, required by specific SCuBA policies.
-# See PreferredDnsResolvers for the list of applicable policies.
-preferreddohservers: cloudflare-dns.com, 2606:4700:4700::1111, 1.1.1.1
-
 # Run cache mode:  when added will run the tool in "RunCached mode".
 # When combined with --skipexport allows the user to skip authentication and provider export.
 # runcached
 
 # Skip Export: will skip the provider export. To be used in conjunction with --runcached.
-#skipexport
+# skipexport
 
 # =======================
 # BREAK GLASS ACCOUNTS
@@ -144,6 +139,7 @@ preferreddohservers:
 
 # Skip DOH: allows the user to disable the DoH fallback which would normally be done 
 # if the traditional DNS requests fail when retrieving any DNS records required by specific SCuBA policies.
+# skipdoh: true
 skipdoh: false
 
 # ============================
