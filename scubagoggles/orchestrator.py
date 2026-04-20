@@ -18,6 +18,7 @@ from collections.abc import Callable
 from datetime import datetime, timezone, date
 from pathlib import Path
 from tqdm import tqdm
+from operator import itemgetter
 
 import requests
 import packaging.version as packageVersion
@@ -129,9 +130,15 @@ class Orchestrator:
         """
 
         self._args = args
-        self._md_parser = MarkdownParser(args.documentpath)
 
-        md_products = set(args.baselines)
+        # Allows for "destructuring" via vars(args) dict creation
+        self.args_dict = vars(args)
+
+        documentpath, baselines = itemgetter("documentpath", "baselines")(self.args_dict)
+
+        self._md_parser = MarkdownParser(documentpath)
+
+        md_products = set(baselines)
         self._baseline_policies = self._md_parser.parse_baselines(md_products)
 
     @classmethod
@@ -144,10 +151,8 @@ class Orchestrator:
     def notify_user_if_new_release_is_available(self):
         """
         Compares the installed version of ScubaGoggles on the local machine
-        to the latest version avaialable on PyPI. 
+        to the latest version avaialable on PyPI.
         """
-
-        local_machine_version = Version.number
 
         # Error handling for retrieving latest Goggles version on PyPI
         try:
@@ -162,7 +167,7 @@ class Orchestrator:
             log.error(error_message)
             return
 
-        local_machine_version = packageVersion.Version(local_machine_version)
+        local_machine_version = packageVersion.Version(Version.number)
         latest_version_on_pypi = packageVersion.Version(latest_version_on_pypi)
 
         if local_machine_version < latest_version_on_pypi:
@@ -179,30 +184,39 @@ class Orchestrator:
         """
 
         args = self._args
-        products = args.baselines
+        args_dict = self.args_dict
 
-        with Provider(args.customerid,
-                      args.credentials,
-                      access_token=args.accesstoken,
-                      svc_account_email=args.subjectemail,
-                      dns_resolvers=args.preferreddnsresolvers,
-                      doh_servers=args.preferreddohservers,
-                      skip_doh=args.skipdoh) as provider:
-            provider_dict = provider.call_gws_providers(products, args.quiet)
+        baselines, customerid, credentials, accesstoken, subjectemail, preferreddnsresolvers, skipdoh, quiet, breakglassaccounts, imapexceptions, report_uuid, outputpath, outputproviderfilename = itemgetter(
+            "baselines", "customerid", "credentials",
+            "accesstoken", "subjectemail",
+            "preferreddnsresolvers", "skipdoh",
+            "quiet","breakglassaccounts",
+            "imapexceptions", "report_uuid",
+            "outputpath", "outputproviderfilename"
+            )(args_dict)
+        # products = baselines
+
+        with Provider(customerid,
+                      credentials,
+                      access_token=accesstoken,
+                      svc_account_email=subjectemail,
+                      dns_resolvers=preferreddnsresolvers,
+                      skip_doh=skipdoh) as provider:
+            provider_dict = provider.call_gws_providers(baselines, quiet)
             provider_dict['successful_calls'] = list(provider.successful_calls)
             provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
             provider_dict['missing_policies'] = list(provider.missing_policies)
 
         provider_dict['baseline_suffix'] = self._md_parser.default_version
         provider_dict['baseline_versions'] = self._md_parser.policy_version_map
-        provider_dict['break_glass_accounts'] = args.breakglassaccounts
-        provider_dict['imap_exceptions'] = args.imapexceptions
-        provider_dict['report_uuid'] = args.report_uuid
+        provider_dict['break_glass_accounts'] = breakglassaccounts
+        provider_dict['imap_exceptions'] = imapexceptions
+        provider_dict['report_uuid'] = report_uuid
 
         self._validate_ou_exceptions(provider_dict)
         self._validate_group_exceptions(provider_dict)
 
-        out_jsonfile = args.outputpath / args.outputproviderfilename
+        out_jsonfile = outputpath / outputproviderfilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(provider_dict, out_stream, indent=4)
@@ -437,19 +451,7 @@ class Orchestrator:
         return (f'{pass_summary}{warning_summary}{failure_summary}'
                 f'{manual_summary}{omit_summary}{incorrect_summary}{error_summary}')
 
-    # pylint: disable=too-many-branches
-    def _run_reporter(self):
-        """
-        Creates the individual reports and the front page
-        """
-
-        # Make the report output folders
-        args = self._args
-        out_folder = args.outputpath
-        individual_reports_path = out_folder / 'IndividualReports'
-        reports_images_path = individual_reports_path / 'images'
-        reports_images_path.mkdir(parents=True, exist_ok=True)
-
+    def _copy_cisa_logo(self, reports_images_path):
         # Copy the CISA logo to the repo folder so that it can be accessed
         # from there
         images_dir = Path(__file__).parent / 'reporter' / 'images'
@@ -458,17 +460,81 @@ class Orchestrator:
         shutil.copy2(cisa_logo, reports_images_path)
         shutil.copy2(triangle_svg, reports_images_path)
 
-        # load the rego results json here
-        products = args.baselines
-        prod_to_fullname = args.fullnamesdict
-        test_results_json = out_folder / f'{args.outputregofilename}.json'
+    def _load_json_results(self, outputpath, outputregofilename):
+        test_results_json = outputpath / f'{outputregofilename}.json'
         with test_results_json.open(encoding='UTF-8') as file:
             test_results_data = json.load(file)
+            return test_results_data
 
-        # Get the successful/unsuccessful commands
-        settings_name = out_folder / f'{args.outputproviderfilename}.json'
+    def _get_commands_statuses(self, outputpath, outputproviderfilename):
+        settings_name = outputpath / f'{outputproviderfilename}.json'
         with settings_name.open(encoding='UTF-8') as file:
             settings_data = json.load(file)
+            return settings_data
+
+    def _create_metadata(self, tenant_id, tenant_name, tenant_domain, products_assessed, product_abbreviation_mapping, report_uuid): # pylint: disable=line-too-long
+        timestamp_utc = datetime.now(timezone.utc)
+        timestamp_zulu = timestamp_utc.strftime(
+            '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+        report_metadata = {
+            'TenantId':  tenant_id,
+            'DisplayName':  tenant_name,
+            'DomainName':  tenant_domain,
+            'ProductSuite':  'Google Workspace',
+            'ProductsAssessed': products_assessed,
+            'ProductAbbreviationMapping': product_abbreviation_mapping,
+            'Tool':  'ScubaGoggles',
+            'ToolVersion':  Version.number,
+            'TimestampZulu': timestamp_zulu,
+            'ReportUUID': report_uuid
+        }
+
+        return report_metadata
+
+    def _load_scuba_results_file(self, outputpath, outputproviderfilename, args_dict):
+        scuba_results_file = outputpath / f'{outputproviderfilename}.json'
+        with scuba_results_file.open(encoding='UTF-8') as file:
+            raw_data = json.load(file)
+            raw_data.update({'scuba_config': args_dict})
+        return scuba_results_file
+
+    def _redact_lhci_reports(self, reportredaction, outputpath):
+        if reportredaction == 'true':
+            # Lighthouse Config
+            lighthouserc_json = Path(__file__).parent / 'lighthouserc.json'
+            shutil.copy(lighthouserc_json, outputpath)
+
+    def _dump_files(self, outputpath, out_jsonfile, total_output):
+        report_file = outputpath / f'{out_jsonfile}.json'
+        with report_file.open('w', encoding='utf-8') as results_file:
+            json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
+
+    # pylint: disable=too-many-branches
+    def _run_reporter(self):
+        """
+        Creates the individual reports and the front page
+        """
+
+        baselines,outputpath, fullnamesdict, outputregofilename, outputproviderfilename, darkmode, reportredaction, quiet = itemgetter( # pylint: disable=line-too-long
+            "baselines","outputpath","fullnamesdict","outputregofilename",
+            "outputproviderfilename", "darkmode", "reportredaction", "quiet"
+            )(self.args_dict)
+
+        # Make the report output folders
+        args = self._args
+        individual_reports_path = outputpath / 'IndividualReports'
+        reports_images_path = individual_reports_path / 'images'
+        reports_images_path.mkdir(parents=True, exist_ok=True)
+
+        self._copy_cisa_logo(reports_images_path)
+
+        # load the rego results json here
+        # products = baselines
+        prod_to_fullname = fullnamesdict
+        test_results_data = self._load_json_results(outputpath, outputregofilename)
+
+        # Get the successful/unsuccessful commands
+        settings_data = self._get_commands_statuses(outputpath, outputproviderfilename)
         tenant_info = settings_data['tenant_info']
         tenant_domain = tenant_info['domain']
         tenant_id = tenant_info['ID']
@@ -506,37 +572,23 @@ class Orchestrator:
         rules_table = {}
         stats_and_data = {}
 
-        products_assessed = [prod_to_fullname[product] for product in products
+        products_assessed = [prod_to_fullname[product] for product in baselines
                              if product in prod_to_fullname]
         product_abbreviation_mapping = {fullname: shortname for shortname,
                                         fullname in prod_to_fullname.items()}
 
-        timestamp_utc = datetime.now(timezone.utc)
-        timestamp_zulu = timestamp_utc.strftime(
-            '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-        report_metadata = {
-            'TenantId':  tenant_id,
-            'DisplayName':  tenant_name,
-            'DomainName':  tenant_domain,
-            'ProductSuite':  'Google Workspace',
-            'ProductsAssessed': products_assessed,
-            'ProductAbbreviationMapping': product_abbreviation_mapping,
-            'Tool':  'ScubaGoggles',
-            'ToolVersion':  Version.number,
-            'TimestampZulu': timestamp_zulu,
-            'ReportUUID': report_uuid
-        }
+        report_metadata = self._create_metadata(
+            tenant_id,
+            tenant_name,
+            tenant_domain,
+            products_assessed,
+            product_abbreviation_mapping,
+            report_uuid)
 
         total_output.update({'MetaData': report_metadata})
 
-        # Dark mode option for report
-        darkmode = args.darkmode
-
-        # Report redaction option for report
-        redaction = args.reportredaction
-
         main_report_name = args.outputreportfilename
-        products_bar = tqdm(products, leave=False, disable=args.quiet)
+        products_bar = tqdm(baselines, leave=False, disable=quiet)
         annotated_failed_policies = {}
         for product in products_bar:
             products_bar.set_description('Creating the HTML and JSON Report '
@@ -557,9 +609,9 @@ class Orchestrator:
                                 products_bar)
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
-                                                  out_folder,
+                                                  outputpath,
                                                   darkmode,
-                                                  redaction)
+                                                  reportredaction)
             baseline_product_summary = {product: stats_and_data[product][0]}
             baseline_product_results_json = {
                 product: stats_and_data[product][1]}
@@ -571,13 +623,12 @@ class Orchestrator:
             if reporter.rules_table is not None:
                 rules_table = reporter.rules_table
 
-        args_dict = vars(args)
-
         # Create the ScubaResults files
-        scuba_results_file = out_folder / f'{args.outputproviderfilename}.json'
+        scuba_results_file = outputpath / f'{outputproviderfilename}.json'
         with scuba_results_file.open(encoding='UTF-8') as file:
             raw_data = json.load(file)
-            raw_data.update({'scuba_config': args_dict})
+            raw_data.update({'scuba_config': self.args_dict})
+
         total_output.update({'Raw': raw_data})
         total_output['Raw']['rules_table'] = rules_table
         total_output['AnnotatedFailedPolicies'] = annotated_failed_policies
@@ -599,22 +650,18 @@ class Orchestrator:
         # Generate action report file
         self.convert_to_result_csv(total_output)
 
-        report_file = out_folder / f'{out_jsonfile}.json'
-        with report_file.open('w', encoding='utf-8') as results_file:
-            json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
+        # Dump output files
+        self._dump_files(outputpath, out_jsonfile, total_output)
 
         # Check for Test Run
-        if args.reportredaction == 'true':
-            # Lighthouse Config
-            lighthouserc_json = Path(__file__).parent / 'lighthouserc.json'
-            shutil.copy(lighthouserc_json, out_folder)
+        self._redact_lhci_reports(reportredaction, outputpath)
 
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
         scuba_results_file.unlink()
 
         # Make the report front page
-        report_path = out_folder / f'{args.outputreportfilename}.html'
+        report_path = outputpath / f'{args.outputreportfilename}.html'
 
         fragments = []
         table_data = []
@@ -629,17 +676,11 @@ class Orchestrator:
 
         fragments.append(Reporter.create_html_table(table_data))
 
-        # Dark mode option for report
-        darkmode = args.darkmode
-
-        # Report redaction option for report
-        redaction = args.reportredaction
-
         front_page_html = Reporter.build_front_page_html(fragments,
                                                          tenant_info,
                                                          report_uuid,
                                                          darkmode,
-                                                         redaction)
+                                                         reportredaction)
         report_path.write_text(front_page_html, encoding='utf-8')
 
         # suppress opening the report in the browser
