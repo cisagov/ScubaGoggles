@@ -388,6 +388,7 @@ class ScubaConfigApp:
                 'breakglassaccounts': [],
                 'imapexceptions': [],
                 'preferreddnsresolvers': [],
+                'preferreddohservers': [],
                 'skipdoh': False,
                 'outjsonfilename': '',
                 'regopath': '',
@@ -725,6 +726,7 @@ class ScubaConfigApp:
             ('breakglassaccounts', None),
             ('imapexceptions', None),
             ('preferreddnsresolvers', str),
+            ('preferreddohservers', str),
         ):
             if key in config:
                 data[key] = normalize(config[key], coerce=coerce)
@@ -749,6 +751,7 @@ class ScubaConfigApp:
             'omitpolicy': lambda v: f"Omitted Policies: {len(v)}",
             'breakglassaccounts': lambda v: f"Break Glass Accounts: {len(v)}",
             'preferreddnsresolvers': lambda v: f"DNS Resolvers: {len(v)} configured",
+            'preferreddohservers': lambda v: f"DoH Servers: {len(v)} configured",
         }
         imported_items = [
             fmt(val)
@@ -1514,12 +1517,16 @@ class ScubaConfigApp:
             <strong>DNS Configuration:</strong><br>
             • These settings control how ScubaGoggles resolves DNS records (SPF, DKIM, DMARC) required by Gmail security policies<br>
             • <strong>Preferred DNS Resolvers:</strong> Custom DNS resolver IP addresses to use instead of system defaults<br>
+            • <strong>Preferred DoH Servers:</strong> IP addresses or domain names of DNS-over-HTTPS servers used as fallback when traditional DNS queries fail<br>
             • <strong>Skip DoH:</strong> Disable DNS over HTTPS fallback when traditional DNS requests fail<br><br>
 
             <strong>Common DNS Resolvers:</strong><br>
             • Google: 8.8.8.8, 8.8.4.4<br>
             • Cloudflare: 1.1.1.1, 1.0.0.1<br>
-            • If not specified, the system default DNS resolver will be used
+            • If not specified, the system default DNS resolver will be used<br><br>
+
+            <strong>Default DoH Servers (when not customized):</strong><br>
+            • cloudflare-dns.com, 2606:4700:4700::1111, 1.1.1.1
             </div>
             """, unsafe_allow_html=True)
 
@@ -1587,6 +1594,60 @@ class ScubaConfigApp:
             key="skipdoh_checkbox"
         )
         st.session_state.config_data['skipdoh'] = skipdoh
+
+        st.divider()
+
+        doh_servers = st.session_state.config_data.get('preferreddohservers', [])
+
+        st.markdown("**Preferred DoH Servers**")
+        st.caption(
+            "Specify IP addresses or domain names of DNS-over-HTTPS servers to use "
+            "as fallback when traditional DNS queries fail. "
+            "If not provided, defaults to: cloudflare-dns.com, 2606:4700:4700::1111, 1.1.1.1"
+        )
+
+        with st.form("doh_server_form", clear_on_submit=True):
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                doh_input = st.text_input(
+                    "DoH Server (IP or domain)",
+                    placeholder="cloudflare-dns.com",
+                    help="IP address or domain name of a DoH server (e.g., 8.8.8.8 or cloudflare-dns.com)",
+                    key="new_doh_server",
+                    label_visibility="collapsed"
+                )
+            with col2:
+                doh_submitted = st.form_submit_button(
+                    "➕ Add Server", type="primary"
+                )
+
+        if doh_submitted:
+            server = doh_input.strip()
+            if not server:
+                st.session_state.doh_add_status = ("empty", "")
+            elif server in doh_servers:
+                st.session_state.doh_add_status = ("duplicate", server)
+            else:
+                doh_servers.append(server)
+                st.session_state.config_data['preferreddohservers'] = doh_servers
+                st.session_state.doh_add_status = ("success", server)
+            st.rerun()
+
+        self._show_add_status("doh_add_status", {
+            "success": (st.success, lambda s: f"✅ Added DoH server: {s}"),
+            "duplicate": (st.error, "❌ Server already exists in list"),
+        }, fallback_msg="❌ Server address is required")
+
+        if doh_servers:
+            for i, server in enumerate(doh_servers):
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    st.markdown(f"🔒 **{server}**")
+                with col2:
+                    if st.button("🗑️ Remove", key=f"remove_doh_{i}"):
+                        doh_servers.remove(server)
+                        st.session_state.config_data['preferreddohservers'] = doh_servers
+                        st.rerun()
 
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -2073,7 +2134,7 @@ class ScubaConfigApp:
         if clean_config:
             yaml_config = yaml.dump(clean_config, default_flow_style=False, sort_keys=False)
 
-            for key in ('baselines', 'breakglassaccounts', 'preferreddnsresolvers'):
+            for key in ('baselines', 'breakglassaccounts', 'preferreddnsresolvers', 'preferreddohservers'):
                 yaml_config = self._yaml_array_to_flow(yaml_config, key)
 
             st.code(yaml_config, language='yaml')
@@ -2159,7 +2220,7 @@ class ScubaConfigApp:
             'customerid', 'subjectemail', 'orgname', 'baselines',
             'credentials', 'orgunitname', 'description', 'quiet',
             'annotatepolicy', 'omitpolicy', 'breakglassaccounts',
-            'imapexceptions', 'preferreddnsresolvers',
+            'imapexceptions', 'preferreddnsresolvers', 'preferreddohservers',
         )
         for key in _pass_through:
             if data.get(key):
