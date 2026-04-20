@@ -62,7 +62,7 @@ customerid: my_customer
 # Document Path: --documentpath is the relative path to the directory containing the SCuBA baseline documents files.
 # documentpath: <C:\Users\johndoe\.scubagoggles\>
 
-#  Output Folder Name, Output Provider File Name, Output ActionPlan file name, Output rego file name, and Output report file name:
+# Output Folder Name, Output Provider File Name, Output ActionPlan file name, Output rego file name, and Output report file name:
 # The outputfoldername, outputproviderfilename,  outputactionplanfilenam, outputregofilename, and outputreportfilename fields
 # are used to specify the output directory and file names for the results of the SCuBA assessment.
 # Recommended to leave these as the default values unless there is a specific reason to change them.
