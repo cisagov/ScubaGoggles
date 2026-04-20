@@ -101,11 +101,12 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 ### Navigation Tabs
 
 1. **Main** - Configure organization information and select products to assess
-2. **Omit Policies** - Exclude specific policies with documented rationale
-3. **Annotate Policies** - Add comments, mark incorrect results, and set remediation dates
+2. **Annotate Policies** - Add comments, mark incorrect results, and set remediation dates
+3. **Omit Policies** - Exclude specific policies with documented rationale
 4. **Exclusions** - Configure break glass accounts and IMAP exceptions
 5. **DNS Configuration** - Configure DNS resolvers and DoH fallback settings
-6. **Preview** - Review and download the generated YAML configuration
+6. **Advanced** - Configure strict mode, report options, and fail-fast behavior
+7. **Preview** - Review and download the generated YAML configuration
 
 ### Header Toolbar
 
@@ -124,10 +125,12 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 1. **Start the UI**: Launch using one of the methods above
 2. **Organization Information**: Enter organization name (required) and unit name in the Main tab
 3. **Select Products**: Choose which Google Workspace products to assess (at least one required)
-4. **Omit Policies** (Optional): Exclude specific policies with documented rationale
-5. **Annotate Policies** (Optional): Add comments and documentation to policy results
+4. **Annotate Policies** (Optional): Add comments and documentation to policy results
+5. **Omit Policies** (Optional): Exclude specific policies with documented rationale
 6. **Exclusions** (Optional): Configure break glass accounts and IMAP exceptions
-7. **Preview & Export**: Review the generated configuration and download the YAML file
+7. **DNS Configuration** (Optional): Configure preferred DNS resolvers and DoH fallback behavior
+8. **Advanced** (Optional): Configure strict mode, report output, and fail-fast behavior
+9. **Preview & Export**: Review the generated configuration and download the YAML file
 
 ### Typical Use Cases
 

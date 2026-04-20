@@ -18,6 +18,7 @@ from typing import Any, Dict
 
 import re
 import streamlit as st
+import streamlit.components.v1 as components
 import yaml
 
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
@@ -1254,11 +1255,32 @@ class ScubaConfigApp:
     def render_help_modal(self):
         """Render help modal overlay"""
         if st.session_state.ui_show_help:
+            # Consume the open request once so closing with "X" does not reopen
+            # the dialog on the next rerun.
+            st.session_state.ui_show_help = False
             self._show_help_dialog()
 
     @st.dialog("🤿 ScubaGoggles Help & Documentation")
     def _show_help_dialog(self):
         """Show help content in a proper modal dialog"""
+
+        # Force dialog viewport to top on open without adding visible controls.
+        components.html(
+            """
+            <script>
+            (function() {
+              const scrollHelpDialogToTop = () => {
+                const dialog = window.parent.document.querySelector('[data-testid="stDialog"] [role="dialog"]');
+                if (!dialog) return;
+                dialog.scrollTo({ top: 0, behavior: "auto" });
+              };
+              setTimeout(scrollHelpDialogToTop, 0);
+              setTimeout(scrollHelpDialogToTop, 120);
+            })();
+            </script>
+            """,
+            height=0,
+        )
 
         # Help content
         st.markdown("### This professional interface helps you create configuration files for ScubaGoggles security assessments.")
@@ -1268,8 +1290,10 @@ class ScubaConfigApp:
         1. **Main Tab:** Select products and baselines to assess
         2. **Annotate Policies:** Add custom notes and documentation
         3. **Omit Policies:** Exclude specific policies from assessment
-        4. **Break Glass:** Configure emergency access accounts
-        5. **Preview:** Review your configuration before saving
+        4. **Exclusions:** Configure break glass accounts and IMAP exceptions
+        5. **DNS Configuration:** Configure DNS resolvers and DoH fallback behavior
+        6. **Advanced:** Configure strict mode, report options, and fail-fast behavior
+        7. **Preview:** Review your configuration before saving
         """)
 
         st.markdown("## 📋 Tab Documentation")
@@ -1277,7 +1301,10 @@ class ScubaConfigApp:
         - **Main:** Product selection with baseline coverage
         - **Annotate Policies:** Add rationale and documentation for policy decisions
         - **Omit Policies:** Use green dots to indicate configured policies, orange during editing
-        - **Break Glass:** Emergency accounts that bypass normal security controls
+        - **Exclusions:** Configure break glass accounts and IMAP policy exceptions
+        - **DNS Configuration:** Configure preferred DNS resolvers, DoH servers, and DoH fallback behavior
+        - **Advanced:** Configure strict mode, report generation, and fail-fast execution
+        - **Preview:** Review and export the generated YAML configuration
         """)
 
         st.markdown("## 💡 Tips & Best Practices")
@@ -1297,7 +1324,7 @@ class ScubaConfigApp:
         - [Documentation](https://github.com/cisagov/ScubaGoggles/blob/main/docs)
         """)
 
-        # Close button
+        # Secondary close button at the bottom for convenience
         if st.button("✅ Got it!", key="close_help_dialog", type="primary"):
             st.session_state.ui_show_help = False
             st.rerun()
