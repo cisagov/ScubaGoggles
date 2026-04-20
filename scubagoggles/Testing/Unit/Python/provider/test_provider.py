@@ -43,9 +43,17 @@ class TestProvider:
         """
         Fixture that patches the googleapiclient.discovery build()
         method so no Google API clients are created during tests.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         """
+        mock_credentials = mocker.Mock()
+        mock_credentials.scopes = []
+        mock_gws_auth = mocker.Mock()
+        mock_gws_auth.credentials = mock_credentials
+        mocker.patch(
+            "scubagoggles.provider.GwsAuth",
+            return_value=mock_gws_auth
+        )
         mock_service = mocker.Mock()
         mock_directory = mocker.Mock()
         mock_orgunits = mocker.MagicMock()
@@ -90,7 +98,7 @@ class TestProvider:
     def test_exit(self, mocker):
         """
         Verifies Provider.__exit__ closes all service resources.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         """
         provider = self._provider()
@@ -108,7 +116,7 @@ class TestProvider:
         """
         Verifies Provider initialization creates services for reports,
         directory, and groups.
-        
+
         :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         """
         # _initialize_services() is called in __init__,
@@ -134,9 +142,9 @@ class TestProvider:
         expected_domains
     ):
         """
-        Verifies Provider.list_domains() returns the `domains` list 
+        Verifies Provider.list_domains() returns the `domains` list
         from the Directory API.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param api_response: Parametrized object representing the API response.
         :param expected_domains: Parametrized list representing the expected domains.
@@ -170,7 +178,7 @@ class TestProvider:
         """
         Verifies Provider.list_alias_domains() returns the `domainAliases` list
         from the Directory API.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param api_response: Parametrized object representing the API response.
@@ -205,9 +213,9 @@ class TestProvider:
     ):
         """
         Verifies Provider.get_spf_records() queries/returns the expected
-        TXT records for each domain; returns expected output with `domain`, 
+        TXT records for each domain; returns expected output with `domain`,
         `rdata`, and `log` keys.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param domains: Parametrized set of domains to query for SPF records.
         :param query_response: Parametrized mapping of domain to query response.
@@ -242,7 +250,7 @@ class TestProvider:
         """
         Verifies Provider.get_dkim_records() queries DKIM TXT records
         using the configured selectors and returns expected output.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param domains: Parametrized set of domains to query for DKIM records.
         :param query_responses: Parametrized mapping of domain to query response.
@@ -299,11 +307,11 @@ class TestProvider:
         """
         Verifies Provider.get_dmarc_records() queries DMARC TXT records
         at "_dmarc.<domain>" and returns expected results.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param domains: Parametrized set of domains/subdomains to query for DMARC records.
-        :param query_responses: Parametrized mapping of query name, e.g. "_dmarc.example.com", 
-        to the DNS client response object that contains `answers`, `nxdomain`, and `log_entries`. 
+        :param query_responses: Parametrized mapping of query name, e.g. "_dmarc.example.com",
+        to the DNS client response object that contains `answers`, `nxdomain`, and `log_entries`.
         :param expected_dmarc_records: Parametrized list representing the DMARC results.
         """
         provider = self._provider()
@@ -341,7 +349,7 @@ class TestProvider:
         defined here confirm if the correct domains/alias domains are returned,
         returns the expected object format for domains/alias domains, spf_records,
         dkim_records, and dmarc_records.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param cases: Parametrized test cases containing domain and DNS record information.
         """
@@ -401,7 +409,7 @@ class TestProvider:
         """
         Verify if Provider.get_super_admins() retrieves admin users
         from the Directory API.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param cases: Parametrized test cases containing user list and expected results.
         """
@@ -459,7 +467,7 @@ class TestProvider:
         and returns the raw OU list. These tests cover successful API response
         with multiple OUs, no OUs, API exceptions, and correct
         successful/unsuccessful ApiReference calls.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param mock_build: Fixture that patches the googleapiclient.discovery build() method.
         :param cases: Parametrized test cases containing metadata for OU response/exceptions.
@@ -510,11 +518,11 @@ class TestProvider:
     @pytest.mark.usefixtures("mock_build")
     def test_get_toplevel_ou(self, mocker, cases):
         """
-        Verifies if Provider.get_toplevel_ou() gets the tenant's 
+        Verifies if Provider.get_toplevel_ou() gets the tenant's
         root OU. These test cases the presence of a root OU, absence of a root OU,
         exception handling for warning/raise, and RefreshError exceptions
         if access to the requested API is denied.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param cases: Parametrized test cases containing metadata for OU response/exceptions.
         """
@@ -576,10 +584,10 @@ class TestProvider:
     def test_get_tenant_info(self, mocker, cases):
         """
         Verifies if Provider.get_tenant_info() gets the tenant/customer
-        metadata. These test cases cover successful calls to customers.get().execute(), 
+        metadata. These test cases cover successful calls to customers.get().execute(),
         handling cases where a primary domain is missing, exception handling,
         and correct successful/unsuccessful ApiReference calls.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param cases: Parametrized test cases containing metadata
                       for tenant info response/exceptions.
@@ -628,10 +636,10 @@ class TestProvider:
     def test_get_gws_logs(self, mocker, cases):
         """
         Verifies if Provider.get_gws_logs() retrieves Admin logs and
-        filters them by the requested product/event type. These test 
+        filters them by the requested product/event type. These test
         cases cover calls to Provider._get_list() for reports.activities().list
         results, filtering on different events, and exception handling.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param cases: Parametrized test cases containing metadata for GWS logs response/exceptions.
         """
@@ -672,11 +680,11 @@ class TestProvider:
     def test_get_group_settings(self, mocker, cases):
         """
         Verifies Provider.get_group_settings() lists groups from the Directory
-        API and then gets group settings from the Groups Settings API. 
-        These test cases cover successful listing of groups, successful retrieval of 
-        each group's settings, Directory API exceptions, Groups Settings API 
+        API and then gets group settings from the Groups Settings API.
+        These test cases cover successful listing of groups, successful retrieval of
+        each group's settings, Directory API exceptions, Groups Settings API
         exceptions, and correct successful/unsuccessful ApiReference calls.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param cases: Parametrized test cases containing metadata for OU response/exceptions.
         """
@@ -752,7 +760,7 @@ class TestProvider:
         """
         Verifies Provider._get_list() handles single-page responses,
         multi-page pagination, empty responses, and missing item keys.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         :param cases: Parametrized test cases containing page responses and expected results.
         """
@@ -787,7 +795,7 @@ class TestProvider:
         """
         Verifies if Provider._check_scopes() handles auth-related
         exceptions.
-        
+
         :param mocker: pytest-mock fixture used to create mocks/patch functions.
         """
         provider = self._provider()

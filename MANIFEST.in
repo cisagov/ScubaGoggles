@@ -2,6 +2,7 @@
 # in the ScubaGoggles distribution.  The following subdirectories (and their
 # contents) are included:
 
+graft scubagoggles
 graft scubagoggles/baselines
 graft scubagoggles/rego
 graft scubagoggles/reporter

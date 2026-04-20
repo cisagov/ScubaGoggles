@@ -125,12 +125,22 @@ preferreddohservers: cloudflare-dns.com, 2606:4700:4700::1111, 1.1.1.1
 # GWS.GMAIL.4.3
 # GWS.GMAIL.4.4
 # Optional; if not provided, the system default resolver will be used.
+# preferreddnsresolvers:
+#     - 8.8.8.8
+#     - 8.8.4.4
 preferrreddnsresolvers: []
 
 # Preferred DoH Servers:  IP addresses or domain names of DoH servers that should be used to retrieve
 #any TXT records, should the traditional DNS queries fail, required by specific SCuBA policies.
 # See PreferredDnsResolvers for the list of applicable policies.
-preferreddohservers: cloudflare-dns.com, 2606:4700:4700::1111, 1.1.1.1
+# preferreddohservers:
+#   - 8.8.8.8
+#   - cloudflare-dns.com
+#   - 2606:4700:4700::1111
+preferreddohservers: 
+    - cloudflare-dns.com
+    - 2606:4700:4700::1111
+    - 1.1.1.1
 
 # Skip DOH: allows the user to disable the DoH fallback which would normally be done 
 # if the traditional DNS requests fail when retrieving any DNS records required by specific SCuBA policies.
