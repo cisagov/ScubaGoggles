@@ -144,3 +144,41 @@ if {
     Conditions := {count(NonCompliantOUs2_1) == 0, count(NonCompliantGroups2_1) == 0}
     Status := (false in Conditions) == false
 }
+
+##############
+# GWS.GEMINI.3 #
+##############
+
+#
+# Baseline GWS.GEMINI.3.1
+#--
+
+GeminiId6_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.1")
+
+tests contains {
+    "PolicyId": GeminiId3_1,
+    "Prerequisites": [],
+    "Criticality": "Shall",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
+
+#
+# Baseline GWS.GEMINI.3.2
+#--
+
+GeminiId6_2 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.2")
+
+tests contains {
+    "PolicyId": GeminiId3_2,
+    "Prerequisites": [],
+    "Criticality": "Shall",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
