@@ -9,7 +9,6 @@ YAML config export/import.
 
 # pylint: disable=line-too-long,too-many-lines
 
-import base64
 import os
 import sys
 from datetime import date, datetime
@@ -18,7 +17,6 @@ from typing import Any, Dict
 
 import re
 import streamlit as st
-import streamlit.components.v1 as components
 import yaml
 
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
@@ -1264,24 +1262,6 @@ class ScubaConfigApp:
     def _show_help_dialog(self):
         """Show help content in a proper modal dialog"""
 
-        # Force dialog viewport to top on open without adding visible controls.
-        components.html(
-            """
-            <script>
-            (function() {
-              const scrollHelpDialogToTop = () => {
-                const dialog = window.parent.document.querySelector('[data-testid="stDialog"] [role="dialog"]');
-                if (!dialog) return;
-                dialog.scrollTo({ top: 0, behavior: "auto" });
-              };
-              setTimeout(scrollHelpDialogToTop, 0);
-              setTimeout(scrollHelpDialogToTop, 120);
-            })();
-            </script>
-            """,
-            height=0,
-        )
-
         # Help content
         st.markdown("### This professional interface helps you create configuration files for ScubaGoggles security assessments.")
 
@@ -2181,62 +2161,15 @@ class ScubaConfigApp:
 
     @staticmethod
     def _render_save_button(yaml_config: str):
-        """Render a save button that opens a native Save-As dialog.
-
-        Uses the File System Access API (``showSaveFilePicker``) supported
-        by Chromium-based browsers (Chrome, Edge) to let the user choose
-        where to save.  Falls back to a standard download for other browsers.
-        """
-        b64 = base64.b64encode(yaml_config.encode("utf-8")).decode("ascii")
-
-        # The JS tries showSaveFilePicker first (Chrome/Edge).  If the
-        # browser doesn't support it, it falls back to a classic download.
-        save_js = f"""
-        <script>
-        async function saveConfig() {{
-            const data = atob("{b64}");
-            try {{
-                if (window.showSaveFilePicker) {{
-                    const handle = await window.showSaveFilePicker({{
-                        suggestedName: "scubagoggles_config.yaml",
-                        types: [{{
-                            description: "YAML files",
-                            accept: {{"text/yaml": [".yaml", ".yml"]}},
-                        }}],
-                    }});
-                    const writable = await handle.createWritable();
-                    await writable.write(data);
-                    await writable.close();
-                    return;
-                }}
-            }} catch (e) {{
-                if (e.name === "AbortError") return;
-            }}
-            // Fallback: standard download
-            const blob = new Blob([data], {{type: "text/yaml"}});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "scubagoggles_config.yaml";
-            a.click();
-            URL.revokeObjectURL(url);
-        }}
-        </script>
-        <button onclick="saveConfig()" style="
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-        ">💾 Save Configuration</button>
-        """
-        st.components.v1.html(save_js, height=50)
+        """Render a native Streamlit download button for the YAML config."""
+        st.download_button(
+            label="💾 Save Configuration",
+            data=yaml_config,
+            file_name="scubagoggles_config.yaml",
+            mime="text/yaml",
+            type="primary",
+            use_container_width=False,
+        )
 
     def generate_clean_config(self) -> Dict[str, Any]:
         """Generate clean configuration dictionary"""
