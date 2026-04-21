@@ -1292,7 +1292,7 @@ class ScubaConfigApp:
         3. **Omit Policies:** Exclude specific policies from assessment
         4. **Exclusions:** Configure break glass accounts and IMAP exceptions
         5. **DNS Configuration:** Configure DNS resolvers and DoH fallback behavior
-        6. **Advanced:** Configure strict mode, report options, and fail-fast behavior
+        6. **Advanced:** Override internal defaults for output names, paths, access token, and UUID truncation
         7. **Preview:** Review your configuration before saving
         """)
 
@@ -1303,7 +1303,7 @@ class ScubaConfigApp:
         - **Omit Policies:** Use green dots to indicate configured policies, orange during editing
         - **Exclusions:** Configure break glass accounts and IMAP policy exceptions
         - **DNS Configuration:** Configure preferred DNS resolvers, DoH servers, and DoH fallback behavior
-        - **Advanced:** Configure strict mode, report generation, and fail-fast execution
+        - **Advanced:** Override internal defaults for output names, paths, access token, and UUID truncation
         - **Preview:** Review and export the generated YAML configuration
         """)
 
