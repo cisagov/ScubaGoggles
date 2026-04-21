@@ -36,7 +36,7 @@ class Reporter:
     _indicator_definitions = {
         'Automated Check': {
             'color': '#5E9732',
-            'text_color': 'white',
+            'text_color': 'black',
             'description': 'Automatically verified by ScubaGoggles'
         },
         'Log-Based Check': {
@@ -184,6 +184,8 @@ class Reporter:
         # Simple heuristic: if color is light (like #F6E8E5), use black text
         if color and color.upper() in ['#F6E8E5', '#FFF7D6']:
             text_color = 'black'
+        elif color == '#5E9732':
+            text_color  = 'black'
         else:
             text_color = 'white'
 
@@ -258,7 +260,7 @@ class Reporter:
     def _collect_all_indicators(self) -> dict:
         """
         Collects all unique indicators from all controls across all baseline groups.
-        
+
         :return: Dictionary mapping indicator names to their info (color, description)
         """
         all_indicators = {}
@@ -275,7 +277,7 @@ class Reporter:
                                 {'description': indicator_name}
                             )
                             all_indicators[indicator_name] = {
-                                'color': indicator.get('color', 
+                                'color': indicator.get('color',
                                     self._indicator_definitions.get(
                                         indicator_name, {}
                                     ).get('color', '#6C757D')),
@@ -875,7 +877,7 @@ class Reporter:
                         "Query Name": qname,
                         "Query Method": query['query_method'],
                         "Summary": query['query_result'],
-                        "Answers": '\n'.join(answers)
+                        "Answers": '<br>'.join(answers)
                     })
             log_table = self.create_html_table(logs)
             log_table = log_table.replace("<table>", "<table class='alternating dns-table'>")

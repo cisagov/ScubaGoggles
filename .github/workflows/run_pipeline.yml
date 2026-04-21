@@ -1,0 +1,19 @@
+name: Run CI Pipeline for ScubaGoggles
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  pylint-yml:
+    name: Pylint
+    uses: ./.github/workflows/pylint.yml
+  opa-yml:
+    name: Run OPA Tests
+    uses: ./.github/workflows/run_opa_tests.yml
+  md-check-yml:
+    name: Run Markdown Link Check
+    uses: ./.github/workflows/run_link_checker_for_md_edits.yml
+  pytest-yml:
+    name: Run Python Tests
+    uses: ./.github/workflows/run_pytest_coverage.yml

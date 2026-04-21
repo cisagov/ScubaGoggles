@@ -14,7 +14,7 @@ Description: |
 
 # The list of GWS Product/SCuBA baselines ScubaGoggles will assess. ScubaGoggles defaults to run against all baselines.
 # For a list of acceptable values, See https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Parameters.md#usage-parameters
-baselines: 
+baselines:
 - assuredcontrols
 - calendar
 - chat
@@ -94,8 +94,27 @@ outputreportfilename: BaselineReports
 #     - 8.8.8.8
 #     - 8.8.4.4
 
+# Use this field to control what DNS over HTTPS (DoH) servers are used (if specified) execute DoH queries.
+# preferreddohservers:
+#   - 8.8.8.8
+#   - cloudflare-dns.com
+#   - 2606:4700:4700::1111
 # Use this field to assign true, to not fallback to DoH should the traditional DNS requests fail when retrieving any DNS records required by the specific SCuBA policies listed above.
 # skipdoh: true
+
+# ============================
+# IMAP EXCEPTIONS
+# ============================
+# Users may configure specific OUs/groups where IMAP is allowed by listing them under the
+# "imapexceptions" key. For each entry, either "ou" or "group" must be specified. "justification" is
+# optional. For example:
+#
+# imapexceptions:
+#   - ou: my ou
+#     group: example@example.com
+#     justification: perfectly valid reason
+#   - ou: my ou/sub ou
+#   - group: example@example.com
 
 # =============================
 # ANNOTATE SECTION : ANNOTATE POLICIES
@@ -157,7 +176,7 @@ omitpolicy:
   GWS.GMAIL.1.1v0.6:
     rationale: "Accepting risk for now, will reevaluate at a later date."
     expiration: "2025-12-31"
-  
+
   # -------------------------------------
   # OMIT POLICY : COMMONCONTROLS SAMPLE
   # -------------------------------------
@@ -165,7 +184,7 @@ omitpolicy:
   GWS.COMMONCONTROLS.18.1v0.6:
     rationale: &DLPRationale "The DLP capability required by the baselines is implemented by third party product, [x],
       which ScubaGoggles does not have the ability to check."
- 
+
   # A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
   GWS.COMMONCONTROLS.18.2v0.6:
     rationale: *DLPRationale
