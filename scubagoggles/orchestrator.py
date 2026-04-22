@@ -183,7 +183,6 @@ class Orchestrator:
         Runs the provider scripts and outputs a json to path
         """
 
-        args = self._args
         args_dict = self.args_dict
 
         baselines, customerid, credentials, accesstoken, subjectemail, preferreddnsresolvers, skipdoh, quiet, breakglassaccounts, imapexceptions, report_uuid, outputpath, outputproviderfilename = itemgetter(
@@ -451,7 +450,7 @@ class Orchestrator:
         return (f'{pass_summary}{warning_summary}{failure_summary}'
                 f'{manual_summary}{omit_summary}{incorrect_summary}{error_summary}')
 
-    def _copy_cisa_logo(self, reports_images_path):
+    def _copy_cisa_logo(self, reports_images_path) -> None:
         # Copy the CISA logo to the repo folder so that it can be accessed
         # from there
         images_dir = Path(__file__).parent / 'reporter' / 'images'
@@ -460,19 +459,19 @@ class Orchestrator:
         shutil.copy2(cisa_logo, reports_images_path)
         shutil.copy2(triangle_svg, reports_images_path)
 
-    def _load_json_results(self, outputpath, outputregofilename):
+    def _load_test_results_json(self, outputpath, outputregofilename) -> list:
         test_results_json = outputpath / f'{outputregofilename}.json'
         with test_results_json.open(encoding='UTF-8') as file:
             test_results_data = json.load(file)
             return test_results_data
 
-    def _get_commands_statuses(self, outputpath, outputproviderfilename):
+    def _get_commands_statuses(self, outputpath, outputproviderfilename) -> dict:
         settings_name = outputpath / f'{outputproviderfilename}.json'
         with settings_name.open(encoding='UTF-8') as file:
             settings_data = json.load(file)
             return settings_data
 
-    def _create_metadata(self, tenant_id, tenant_name, tenant_domain, products_assessed, product_abbreviation_mapping, report_uuid): # pylint: disable=line-too-long
+    def _create_metadata(self, tenant_id, tenant_name, tenant_domain, products_assessed, product_abbreviation_mapping, report_uuid) -> dict: # pylint: disable=line-too-long
         timestamp_utc = datetime.now(timezone.utc)
         timestamp_zulu = timestamp_utc.strftime(
             '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
@@ -491,20 +490,22 @@ class Orchestrator:
 
         return report_metadata
 
-    def _load_scuba_results_file(self, outputpath, outputproviderfilename, args_dict):
+    def _load_scuba_results_file(self, outputpath, outputproviderfilename, args_dict) -> dict:
         scuba_results_file = outputpath / f'{outputproviderfilename}.json'
         with scuba_results_file.open(encoding='UTF-8') as file:
             raw_data = json.load(file)
+            print('type(raw_data): ')
+            print(type(raw_data))
             raw_data.update({'scuba_config': args_dict})
-        return scuba_results_file
+        return raw_data
 
-    def _redact_lhci_reports(self, reportredaction, outputpath):
+    def _redact_lhci_reports(self, reportredaction, outputpath) -> None:
         if reportredaction == 'true':
             # Lighthouse Config
             lighthouserc_json = Path(__file__).parent / 'lighthouserc.json'
             shutil.copy(lighthouserc_json, outputpath)
 
-    def _dump_files(self, outputpath, out_jsonfile, total_output):
+    def _dump_report_files(self, outputpath, out_jsonfile, total_output) -> None:
         report_file = outputpath / f'{out_jsonfile}.json'
         with report_file.open('w', encoding='utf-8') as results_file:
             json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
@@ -531,7 +532,7 @@ class Orchestrator:
         # load the rego results json here
         # products = baselines
         prod_to_fullname = fullnamesdict
-        test_results_data = self._load_json_results(outputpath, outputregofilename)
+        test_results_data = self._load_test_results_json(outputpath, outputregofilename)
 
         # Get the successful/unsuccessful commands
         settings_data = self._get_commands_statuses(outputpath, outputproviderfilename)
@@ -625,9 +626,7 @@ class Orchestrator:
 
         # Create the ScubaResults files
         scuba_results_file = outputpath / f'{outputproviderfilename}.json'
-        with scuba_results_file.open(encoding='UTF-8') as file:
-            raw_data = json.load(file)
-            raw_data.update({'scuba_config': self.args_dict})
+        raw_data = self._load_scuba_results_file(outputpath, outputproviderfilename, args_dict=self.args_dict)
 
         total_output.update({'Raw': raw_data})
         total_output['Raw']['rules_table'] = rules_table
@@ -651,7 +650,7 @@ class Orchestrator:
         self.convert_to_result_csv(total_output)
 
         # Dump output files
-        self._dump_files(outputpath, out_jsonfile, total_output)
+        self._dump_report_files(outputpath, out_jsonfile, total_output)
 
         # Check for Test Run
         self._redact_lhci_reports(reportredaction, outputpath)
