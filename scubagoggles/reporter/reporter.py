@@ -8,6 +8,7 @@ import logging
 import re
 from datetime import date, datetime
 from html import escape
+from pathlib import Path
 
 from scubagoggles.scuba_constants import API_LINKS, ApiReference
 from scubagoggles.version import Version
