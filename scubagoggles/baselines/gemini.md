@@ -133,8 +133,7 @@ This section covers the Gemini conversation history retention.
 #### GWS.GEMINI.3.1v1.0
 Gemini conversation history SHALL be enabled.
 
-[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols61v06-instructions)
 
 - _Rationale:_ Enabling this setting helps to ensure that all retention policies are met.
 - _Last modified:_ March 2026
@@ -145,8 +144,7 @@ Gemini conversation history SHALL be enabled.
 #### GWS.GEMINI.3.2v1.0
 Conversation retention SHALL be set to minimum of 18 months.
 
-[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols61v06-instructions)
 
 - _Rationale:_ Enabling this setting helps to ensure that all retention policies are met.
 - _Last modified:_ March 2026
