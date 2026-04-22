@@ -178,7 +178,7 @@ skipdoh: false
 # - Explain compensating controls or mitigating factors.
 # - Note planned improvements or future implementation details.
 
-# annotatePolicy:
+# annotatepolicy:
   # -------------------------------------
   # ANNOTATE POLICY : GMAIL SAMPLE
   # -------------------------------------
