@@ -5,7 +5,6 @@ Tests for the PolicyAPI class.
 from unittest.mock import Mock
 import pytest
 import dns
-import requests
 from scubagoggles.robust_dns import RobustDNSClient
 
 class TestRobustDNSClient:
@@ -17,17 +16,17 @@ class TestRobustDNSClient:
         return mocker.patch('scubagoggles.robust_dns.dns.resolver.Resolver')
 
     @pytest.fixture
-    def mock_requests_get(self, mocker):
-        """ Mocks the requests.get method """
-        return mocker.patch('scubagoggles.robust_dns.requests.get')
+    def mock_dns_query_https(self, mocker):
+        """Mocks dns.query.https."""
+        return mocker.patch('scubagoggles.robust_dns.dns.query.https')
 
     @pytest.mark.parametrize("subtest, expected",
     [
         (1, "cloudflare-dns.com"),
-        (2, "[2606:4700:4700::1111]"),
+        (2, "2606:4700:4700::1111"),
         (3, ""),
     ])
-    def test_get_doh_server(self, mock_resolver, mock_requests_get, subtest, expected):
+    def test_get_doh_server(self, mock_resolver, mock_dns_query_https, subtest, expected):
         """
         Test DOH Server Retrieval
         This method tests the 'doh_server' method, and simulates 
@@ -44,21 +43,21 @@ class TestRobustDNSClient:
         match subtest:
             # The first server works as intended (cloudflare-dns.com)
             case 1:
-                # aribtrary return value
-                mock_requests_get.return_value.json.return_value = {"status": "ok"}
+                good_response = Mock()
+                good_response.rcode.return_value = dns.rcode.NOERROR
+                mock_dns_query_https.return_value = good_response
                 assert robust_dns_client.get_doh_server() == expected
             # The first server is not valid but the second server is valid ([2606:4700:4700::1111])
             case 2:
-                good_return = Mock(spec=requests.Response)
-                good_return.json.return_value = {"status": "ok"}
-                # simulate effects (exceptions/returns) for the
-                # next two function calls of requests.get()
-                mock_requests_get.side_effect = [requests.exceptions.Timeout, good_return]
+                good_return = Mock()
+                good_return.rcode.return_value = dns.rcode.NOERROR
+                # simulate effects (exceptions/returns) for the next two DoH requests
+                mock_dns_query_https.side_effect = [Exception("time out"), good_return]
                 assert robust_dns_client.get_doh_server() == expected
             # none of the servers are availible
             case 3:
-                # Timeout side effect for all three calls to requests.get()
-                mock_requests_get.side_effect = requests.exceptions.Timeout
+                # Timeout side effect for all three DoH requests
+                mock_dns_query_https.side_effect = Exception("time out")
                 assert robust_dns_client.get_doh_server() is None
         # Move the Assert Statements inside the cases (match)
         # since case #3 uses 'is None' instead of '==' comparison
@@ -75,7 +74,7 @@ class TestRobustDNSClient:
         (8,3)
     ])
     #pylint: disable
-    def test_doh_query(self, mocker, mock_resolver, mock_requests_get, subtest, max_tries): # pylint: disable=too-many-positional-arguments
+    def test_doh_query(self, mocker, mock_resolver, mock_dns_query_https, subtest, max_tries): # pylint: disable=too-many-positional-arguments
         """
         Test DOH Query
         This method tests the 'doh_query' method and provides extensive unit 
@@ -115,7 +114,10 @@ class TestRobustDNSClient:
             # Case where there is a valid server availible but
             # Response is 0, 'Answer' IS NOT in the Json response
             case 2:
-                mock_requests_get.return_value.json.return_value = {"Status" : 0}
+                response = Mock()
+                response.rcode.return_value = dns.rcode.NOERROR
+                response.answer = []
+                mock_dns_query_https.return_value = response
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
@@ -129,10 +131,15 @@ class TestRobustDNSClient:
                 json_answer_array = [{"data": "\"An answer with quotes, to be removed.\""},
                  {"data": "A quote-free answer"},
                  {"data": ""}]
-                mock_requests_get.return_value.json.return_value = {
-                    "Status" : 0, 
-                    "Answer": json_answer_array
-                }
+                answer_set = []
+                for item in json_answer_array:
+                    answer = Mock()
+                    answer.to_text.return_value = item["data"]
+                    answer_set.append(answer)
+                response = Mock()
+                response.rcode.return_value = dns.rcode.NOERROR
+                response.answer = [answer_set]
+                mock_dns_query_https.return_value = response
                 # expected answers (double-quotes removed)
                 answers = ["An answer with quotes, to be removed.", "A quote-free answer", ""]
                 log_entries.append({
@@ -144,7 +151,10 @@ class TestRobustDNSClient:
             # Case where there is a valid server
             # availible but Response is 3
             case 4:
-                mock_requests_get.return_value.json.return_value = {"Status" : 3}
+                response = Mock()
+                response.rcode.return_value = dns.rcode.NXDOMAIN
+                response.answer = []
+                mock_dns_query_https.return_value = response
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
@@ -155,7 +165,10 @@ class TestRobustDNSClient:
             # Status code is non-Zero and not 3
             case 5:
                 # non-zero Status code and Status code is not 1
-                mock_requests_get.return_value.json.return_value = {"Status" : 1}
+                response = Mock()
+                response.rcode.return_value = 1
+                response.answer = []
+                mock_dns_query_https.return_value = response
                 # 2 tries
                 for _ in range(max_tries):
                     log_entries.append({
@@ -169,14 +182,16 @@ class TestRobustDNSClient:
             # Status code is 1 the first iteration,
             # and 3 the second iteration.
             case 6:
-                # Mock requests.Response() [Status 1]
-                status_one_return = Mock(spec=requests.Response)
-                status_one_return.json.return_value = {"Status" : 1}
-                # Mock requests.Response() [Status 3]
-                status_three_return = Mock(spec=requests.Response)
-                status_three_return.json.return_value = {"Status" : 3}
+                # Mock response [rcode 1]
+                status_one_return = Mock()
+                status_one_return.rcode.return_value = 1
+                status_one_return.answer = []
+                # Mock response [rcode NXDOMAIN]
+                status_three_return = Mock()
+                status_three_return.rcode.return_value = dns.rcode.NXDOMAIN
+                status_three_return.answer = []
                 # return values for the next two iterations
-                mock_requests_get.side_effect = [status_one_return, status_three_return]
+                mock_dns_query_https.side_effect = [status_one_return, status_three_return]
 
                 # Expected return values for status code 1
                 log_entries.append({
@@ -196,7 +211,7 @@ class TestRobustDNSClient:
                 })
             # Exception case (from requests.get)
             case 7:
-                mock_requests_get.side_effect = requests.exceptions.Timeout("time out")
+                mock_dns_query_https.side_effect = Exception("time out")
                 # append log entries from Exception
                 for _ in range(max_tries):
                     log_entries.append({
@@ -208,11 +223,12 @@ class TestRobustDNSClient:
                     errors.append("time out")
             # Exception occurs on First Iteration, but Status Code 3 occurs on next iteration
             case 8:
-                status_three_return = Mock(spec=requests.Response)
-                status_three_return.json.return_value = {"Status" : 3}
+                status_three_return = Mock()
+                status_three_return.rcode.return_value = dns.rcode.NXDOMAIN
+                status_three_return.answer = []
                 #return values for the next two iterations
-                mock_requests_get.side_effect = [
-                    requests.exceptions.Timeout("time out"),
+                mock_dns_query_https.side_effect = [
+                    Exception("time out"),
                     status_three_return
                 ]
 
