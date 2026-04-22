@@ -130,7 +130,7 @@ This section covers the Gemini conversation history retention.
 
 ### Policies
 
-#### GWS.GEMINI.3.1v0.6
+#### GWS.GEMINI.3.1v1.0
 Gemini conversation history SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -142,7 +142,7 @@ Gemini conversation history SHALL be enabled.
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.GEMINI.3.2v0.6
+#### GWS.GEMINI.3.2v1.0
 Conversation retention SHALL be set to minimum of 18 months.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -164,14 +164,14 @@ Conversation retention SHALL be set to minimum of 18 months.
 
 ### Implementation
 
-#### GWS.GEMINI.3.1v0.6 Instructions
+#### GWS.GEMINI.3.1v1.0 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **Gemini Conversation History**
 4.  Ensure **Gemini conversation history** is selected.
 5.  Select **Save**.
 
-#### GWS.GEMINI.3.2v0.6 Instructions
+#### GWS.GEMINI.3.2v1.0 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **Gemini Conversation History**
