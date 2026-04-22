@@ -46,6 +46,7 @@ We use a three-step process:
 
 - [Usage: Parameters](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Parameters.md)
 - [Usage: Config File](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md)
+- [Configuration UI](https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/ui/README.md) — web-based form for building config files
 - [Usage: Examples](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Examples.md)
 - [Reviewing Output](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/ReviewOutput.md)
 - [Limitations](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Limitations.md)

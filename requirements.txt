@@ -26,4 +26,8 @@ MarkupSafe>=2.1.5
 pyyaml>=6.0.2
 requests>=2.32.3
 tqdm>=4.66.5
+
 packaging>=26.0
+
+# UI dependencies for the Streamlit-based configuration interface
+streamlit>=1.35.0
