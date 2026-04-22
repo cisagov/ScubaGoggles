@@ -153,7 +153,7 @@ if {
 # Baseline GWS.GEMINI.3.1
 #--
 
-GeminiId6_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.1")
+GeminiId3_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.1")
 
 tests contains {
     "PolicyId": GeminiId3_1,
@@ -170,7 +170,7 @@ tests contains {
 # Baseline GWS.GEMINI.3.2
 #--
 
-GeminiId6_2 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.2")
+GeminiId3_2 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.2")
 
 tests contains {
     "PolicyId": GeminiId3_2,
