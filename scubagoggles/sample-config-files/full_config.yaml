@@ -83,7 +83,7 @@ silencebodwarnings: false
 numberofuuidcharacterstotruncate: 18
 
 # Debug OPA: This field is used to print debugging information for OPA.
-# debug
+debug: false
 
 # Dark Mode: This field is used to enable dark mode styles for the report output.
 # darkmode
