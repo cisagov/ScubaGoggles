@@ -86,7 +86,7 @@ numberofuuidcharacterstotruncate: 18
 debug: false
 
 # Dark Mode: This field is used to enable dark mode styles for the report output.
-# darkmode
+# darkmode: true
 
 # Preferred DoH Servers:  IP addresses or domain names of DoH servers that should be used to retrieve
 #any TXT records, should the traditional DNS queries fail, required by specific SCuBA policies.
