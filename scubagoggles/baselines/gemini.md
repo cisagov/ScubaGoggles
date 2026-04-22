@@ -131,7 +131,7 @@ This section covers the Gemini conversation history retention.
 ### Policies
 
 #### GWS.GEMINI.3.1v0.6
-Enable Gemini conversation history SHALL be enabled
+Gemini conversation history SHALL be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
