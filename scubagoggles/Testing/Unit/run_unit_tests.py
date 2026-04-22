@@ -7,6 +7,7 @@ import subprocess
 import argparse
 
 from scubagoggles.config import UserConfig
+from scubagoggles.run_rego import find_opa
 
 from pathlib import Path
 from sys import platform
@@ -52,7 +53,7 @@ default=[], help="Space-separated list of control group numbers to test within a
 "Can only be used when a single baseline is specified. By default all are run.")
 
 # obtain the default OPA executable location from UserSetup()
-opa_dir = UserConfig().opa_dir or "../../.." 
+opa_dir = UserConfig().opa_dir
 parser.add_argument('-o', '--opapath', type=str, default=opa_dir, metavar='',
 help='The relative path to the directory containing the OPA executable. ' +
     'Defaults to the default location of the opa executable from UserConfig.')
@@ -74,20 +75,7 @@ if args.v:
 
 #Get OPA Path from command line args
 opa_path = args.opapath
-OPA_EXE = ""
-command = []
-if platform == 'win32':
-    OPA_EXE = f'{opa_path}/opa_windows_amd64.exe'
-elif platform == 'darwin':
-    OPA_EXE = f'{opa_path}/opa_darwin_amd64'
-elif platform in ('linux', 'linux2'):
-    OPA_EXE = f'{opa_path}opa_linux_amd64_static'
-
-if not OPA_EXE or not Path(OPA_EXE).exists():
-    OPA_EXE = f'{opa_path}/opa'
-
-if not Path(OPA_EXE).exists():
-    raise FileNotFoundError(f'? {OPA_EXE}: OPA executable not found')
+OPA_EXE = find_opa(opa_path)
 
 for b in args.baselines:
     b = b.lower()
