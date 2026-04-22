@@ -136,7 +136,7 @@ Gemini conversation history SHALL be enabled.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
-- _Rationale:_ Enabling this setting ensures that all retention policies are met.
+- _Rationale:_ Enabling this setting helps to ensure that all retention policies are met.
 - _Last modified:_ March 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11, DM-2
 - MITRE ATT&CK TTP Mapping
@@ -148,7 +148,7 @@ Conversation retention SHALL be set to minimum of 18 months.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
-- _Rationale:_ Enabling this setting ensures that all retention policies are met.
+- _Rationale:_ Enabling this setting helps to ensure that all retention policies are met.
 - _Last modified:_ March 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11, DM-2
 - MITRE ATT&CK TTP Mapping
