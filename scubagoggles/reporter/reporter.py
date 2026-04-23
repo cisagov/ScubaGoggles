@@ -1,8 +1,8 @@
 """
-reporter.py creates the report html page
+reporter.py creates the report html page - main
 """
 # Must remove pylint disable too many lines when fixing this file.
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines disable=too-many-arguments, too-many-locals, too-many-positional-arguments
 
 import logging
 import re
@@ -38,7 +38,7 @@ class Reporter:
         dns_logs: dict,
         omissions: dict,
         annotations: dict,
-        omit_ou: dict,
+        omit_ou: dict | None = None,
         progress_bar=None,
     ):
         """Reporter class initialization"""
@@ -51,6 +51,7 @@ class Reporter:
         self._product_policies = product_policies
         self._successful_calls = successful_calls
         self._unsuccessful_calls = unsuccessful_calls
+        self._omit_ou = omit_ou or {}
 
         self._missing_policies = set()
         for policy in missing_policies:
@@ -377,7 +378,8 @@ class Reporter:
         if incorrect_result and result in ("Pass", "Fail", "Warning"):
             if comment is None:
                 self._warn(
-                    f"Config file marks the result for {control_id} incorrect, but no justification provided."
+                    f"Config file marks the result for {control_id} incorrect, "
+                    "but no justification provided."
                 )
                 details = (
                     "Test result marked incorrect by user. "
@@ -413,13 +415,212 @@ class Reporter:
                 today = datetime.now().date()
                 if parsed_date < today and result in ("Fail", "Warning"):
                     warning = (
-                        f"Anticipated remediation date for {control_id}, {remediation_date}, has passed. "
+                        f"Anticipated remediation date for {control_id}, "
+                        "{remediation_date}, has passed. "
                     )
                     self._warn(warning)
 
         return details
 
-    def _build_report_html(self, fragments: list, rules_data: dict, darkmode: str, redaction: str) -> str:
+    def _process_control(
+        self,
+        control: dict,
+        test_results: list,
+        report_stats: dict,
+        github_url: str,
+        rules_data: dict | None,
+    ) -> tuple[list[dict], dict | None]:
+        """Process a single control and return its table rows and updated rules_data."""
+        table_rows: list[dict] = []
+
+        control_id = control["Id"]
+        requirement_text = escape(control["Value"])
+        indicators_html = rh.render_indicators(control.get("Indicators", []),
+                                            product=self._product)
+        requirement = (
+            requirement_text + indicators_html
+            if indicators_html else requirement_text
+        )
+
+        tests = [test for test in test_results if test["PolicyId"] == control_id]
+
+        # No test results
+        if len(tests) == 0:
+            report_stats["Errors"] += 1
+            issues_link = f'<a href="{github_url}/issues" target="_blank">GitHub</a>'
+            error_details = f"Report issue on {issues_link}"
+            table_rows.append(
+                {
+                    "Control ID": control_id,
+                    "Requirement": requirement,
+                    "Result": "Error - Test results missing",
+                    "Criticality": "-",
+                    "Details": error_details,
+                    "OriginalResult": "Error - Test results missing",
+                    "OriginalDetails": error_details,
+                    "Comments": self._build_comments_array(control_id),
+                    "ResolutionDate": self._build_resolution_date(control_id),
+                }
+            )
+            log.error("No test results found for Control Id %s", control_id)
+            return table_rows, rules_data
+
+        # Omitted control
+        if self._is_control_omitted(control_id):
+            rationale = self._get_omission_rationale(control_id)
+            original_result = None
+            original_details = None
+
+            report_stats["Omit"] += 1
+
+                    for test in tests:
+                        result = self._get_test_result(test)
+                        details = test["ReportDetails"]
+                        original_result = result
+                        original_details = details
+                        details = self._add_annotation(control_id, result, details)
+
+            table_rows.append(
+                {
+                    "Control ID": control_id,
+                    "Requirement": requirement,
+                    "Result": "Omitted",
+                    "Criticality": tests[0]["Criticality"],
+                    "Details": f"Test omitted by user. {rationale}",
+                    "OriginalResult": original_result if original_result else "N/A",
+                    "OriginalDetails": original_details if original_details else "N/A",
+                    "Comments": self._build_comments_array(control_id),
+                    "ResolutionDate": self._build_resolution_date(control_id),
+                }
+            )
+            return table_rows, rules_data
+
+        # Normal controls
+        for test in tests:
+            failed_prereqs = self._get_failed_prereqs(test)
+            if len(failed_prereqs) > 0:
+                report_stats["Errors"] += 1
+                failed_details = self._get_failed_details(failed_prereqs)
+                table_rows.append(
+                    {
+                        "Control ID": control_id,
+                        "Requirement": requirement,
+                        "Result": "Error",
+                        "Criticality": test["Criticality"],
+                        "Details": failed_details,
+                        "OriginalResult": "Error",
+                        "OriginalDetails": failed_details,
+                        "Comments": self._build_comments_array(control_id),
+                        "ResolutionDate": self._build_resolution_date(control_id),
+                    }
+                )
+                continue
+
+            if control_id.startswith("GWS.COMMONCONTROLS.13.1"):
+                rules_data = test["ActualValue"]
+
+                    result = self._get_test_result(test)
+
+            details = test["ReportDetails"]
+
+                    reports_api_link = ApiReference.LIST_ACTIVITIES.value
+                    if reports_api_link in test["Prerequisites"]:
+                        if not details.endswith("</ul>"):
+                            details += "<br><br>"
+
+                    details_pre_annotation = details
+                    details = self._add_annotation(control_id, result, details)
+
+            incorrect_result = self._is_control_marked_incorrect(control_id)
+
+            if result == "Fail":
+                self.annotated_failed_policies[control_id] = {
+                    "Comment": self._get_annotation_comment(control_id),
+                    "RemediationDate": self._get_remediation_date(control_id),
+                    "IncorrectResult": incorrect_result,
+                }
+
+            if incorrect_result and result in ("Pass", "Fail", "Warning"):
+                report_stats["IncorrectResults"] += 1
+                table_rows.append(
+                    {
+                        "Control ID": control_id,
+                        "Requirement": requirement,
+                        "Result": "Incorrect result",
+                        "Criticality": test["Criticality"],
+                        "Details": details,
+                        "OriginalResult": result,
+                        "OriginalDetails": details_pre_annotation,
+                        "Comments": self._build_comments_array(control_id),
+                        "ResolutionDate": self._build_resolution_date(control_id),
+                    }
+                )
+                continue
+
+            report_stats[self._get_summary_category(result)] += 1
+            table_rows.append(
+                {
+                    "Control ID": control_id,
+                    "Requirement": requirement,
+                    "Result": result,
+                    "Criticality": test["Criticality"],
+                    "Details": details,
+                    "OriginalResult": result,
+                    "OriginalDetails": details_pre_annotation,
+                    "Comments": self._build_comments_array(control_id),
+                    "ResolutionDate": self._build_resolution_date(control_id),
+                }
+            )
+
+        return table_rows, rules_data
+
+    def _build_group_output(
+        self,
+        baseline_group: dict,
+        product: str,
+        product_upper: str,
+        github_url: str,
+        table_data: list[dict],
+    ) -> tuple[list[str], dict]:
+        """Build the HTML fragments and JSON result data for a baseline group."""
+        fragments: list[str] = []
+
+        markdown_group_name = re.sub(
+            r"[^\w\s-]", "-", baseline_group["GroupName"].lower()
+        )
+        markdown_group_name = re.sub(r"-+", "-", markdown_group_name)
+        markdown_group_name = markdown_group_name.strip("-")
+        markdown_group_name = markdown_group_name.replace(" ", "-")
+
+        group_reference_url = (
+            f"{github_url}/blob/{Version.current}/scubagoggles/baselines/{product}.md"
+            f'#{baseline_group["GroupNumber"]}-' + markdown_group_name
+        )
+        markdown_link = (
+            f'<a class="control_group" href="{group_reference_url}" target="_blank">'
+            f'{baseline_group["GroupName"]}</a>'
+        )
+
+        fragments.append(
+            f"<h2>{product_upper}-{baseline_group['GroupNumber']} {markdown_link}</h2>"
+        )
+        json_only = ["OriginalResult", "OriginalDetails", "Comments", "ResolutionDate"]
+        filtered_table_data = [
+            {k: v for k, v in row.items() if k not in json_only}
+            for row in table_data
+        ]
+        fragments.append(self.create_html_table(filtered_table_data))
+
+        results_data: dict = {}
+        results_data.update({"GroupName": baseline_group["GroupName"]})
+        results_data.update({"GroupNumber": baseline_group["GroupNumber"]})
+        results_data.update({"GroupReferenceURL": group_reference_url})
+        results_data.update({"Controls": self._sanitize_details(table_data)})
+
+        return fragments, results_data
+
+    def _build_report_html(self, fragments: list, rules_data: dict, darkmode: str,
+                           redaction: str) -> str:
         """
         Delegate HTML assembly to _reporter_html and capture rules_table for the orchestrator.
         """
@@ -441,7 +642,41 @@ class Reporter:
         self.rules_table = rules_table
         return html
 
-    def rego_json_to_ind_reports(self, test_results: list, out_path: str, darkmode: str, redaction: str) -> list:
+    def _process_baseline_group(
+        self,
+        baseline_group: dict,
+        test_results: list,
+        report_stats: dict,
+        github_url: str,
+        product: str,
+        product_upper: str,
+        rules_data: dict | None,
+    ) -> tuple[list[str], dict, dict | None]:
+        """Process a single baseline group and return HTML fragments, JSON data, and rules_data."""
+        table_data: list[dict] = []
+
+        for control in baseline_group["Controls"]:
+            control_rows, rules_data = self._process_control(
+                control=control,
+                test_results=test_results,
+                report_stats=report_stats,
+                github_url=github_url,
+                rules_data=rules_data,
+            )
+            table_data.extend(control_rows)
+
+        fragments, results_data = self._build_group_output(
+            baseline_group=baseline_group,
+            product=product,
+            product_upper=product_upper,
+            github_url=github_url,
+            table_data=table_data,
+        )
+
+        return fragments, results_data, rules_data
+
+    def rego_json_to_ind_reports(self, test_results: list, out_path: str,
+                                 darkmode: str, redaction: str) -> list:
         """
         Transforms the Rego JSON output into individual HTML and JSON reports
         """
@@ -467,168 +702,16 @@ class Reporter:
         rules_data = None
 
         for baseline_group in self._product_policies:
-            table_data = []
-            results_data = {}
-
-            for control in baseline_group["Controls"]:
-                control_id = control["Id"]
-                requirement_text = escape(control["Value"])
-                indicators_html = rh.render_indicators(control.get("Indicators", []), product=self._product)
-                requirement = requirement_text + indicators_html if indicators_html else requirement_text
-
-
-                tests = [test for test in test_results if test["PolicyId"] == control_id]
-
-                if len(tests) == 0:
-                    report_stats["Errors"] += 1
-                    issues_link = f'<a href="{github_url}/issues" target="_blank">GitHub</a>'
-                    error_details = f"Report issue on {issues_link}"
-                    table_data.append(
-                        {
-                            "Control ID": control_id,
-                            "Requirement": requirement,
-                            "Result": "Error - Test results missing",
-                            "Criticality": "-",
-                            "Details": error_details,
-                            "OriginalResult": "Error - Test results missing",
-                            "OriginalDetails": error_details,
-                            "Comments": self._build_comments_array(control_id),
-                            "ResolutionDate": self._build_resolution_date(control_id),
-                        }
-                    )
-                    log.error("No test results found for Control Id %s", control_id)
-                    continue
-
-                if self._is_control_omitted(control_id):
-                    rationale = self._get_omission_rationale(control_id)
-                    original_result = None
-                    original_details = None
-
-                    report_stats["Omit"] += 1
-
-                    for test in tests:
-                        result = self._get_test_result(test)
-                        details = test["ReportDetails"]
-                        original_result = result
-                        original_details = details
-                        details = self._add_annotation(control_id, result, details)
-
-                    table_data.append(
-                        {
-                            "Control ID": control_id,
-                            "Requirement": requirement,
-                            "Result": "Omitted",
-                            "Criticality": tests[0]["Criticality"],
-                            "Details": f"Test omitted by user. {rationale}",
-                            "OriginalResult": original_result if original_result else "N/A",
-                            "OriginalDetails": original_details if original_details else "N/A",
-                            "Comments": self._build_comments_array(control_id),
-                            "ResolutionDate": self._build_resolution_date(control_id),
-                        }
-                    )
-                    continue
-
-                for test in tests:
-                    failed_prereqs = self._get_failed_prereqs(test)
-                    if len(failed_prereqs) > 0:
-                        report_stats["Errors"] += 1
-                        failed_details = self._get_failed_details(failed_prereqs)
-                        table_data.append(
-                            {
-                                "Control ID": control_id,
-                                "Requirement": requirement,
-                                "Result": "Error",
-                                "Criticality": test["Criticality"],
-                                "Details": failed_details,
-                                "OriginalResult": "Error",
-                                "OriginalDetails": failed_details,
-                                "Comments": self._build_comments_array(control_id),
-                                "ResolutionDate": self._build_resolution_date(control_id),
-                            }
-                        )
-                        continue
-
-                    if control_id.startswith("GWS.COMMONCONTROLS.13.1"):
-                        rules_data = test["ActualValue"]
-
-                    result = self._get_test_result(test)
-
-                    details = test["ReportDetails"]
-
-                    reports_api_link = ApiReference.LIST_ACTIVITIES.value
-                    if reports_api_link in test["Prerequisites"]:
-                        if not details.endswith("</ul>"):
-                            details += "<br><br>"
-
-                    details_pre_annotation = details
-                    details = self._add_annotation(control_id, result, details)
-
-                    incorrect_result = self._is_control_marked_incorrect(control_id)
-
-                    if result == "Fail":
-                        self.annotated_failed_policies[control_id] = {
-                            "Comment": self._get_annotation_comment(control_id),
-                            "RemediationDate": self._get_remediation_date(control_id),
-                            "IncorrectResult": incorrect_result,
-                        }
-
-                    if incorrect_result and result in ("Pass", "Fail", "Warning"):
-                        report_stats["IncorrectResults"] += 1
-                        table_data.append(
-                            {
-                                "Control ID": control_id,
-                                "Requirement": requirement,
-                                "Result": "Incorrect result",
-                                "Criticality": test["Criticality"],
-                                "Details": details,
-                                "OriginalResult": result,
-                                "OriginalDetails": details_pre_annotation,
-                                "Comments": self._build_comments_array(control_id),
-                                "ResolutionDate": self._build_resolution_date(control_id),
-                            }
-                        )
-                        continue
-
-                    report_stats[self._get_summary_category(result)] += 1
-                    table_data.append(
-                        {
-                            "Control ID": control_id,
-                            "Requirement": requirement,
-                            "Result": result,
-                            "Criticality": test["Criticality"],
-                            "Details": details,
-                            "OriginalResult": result,
-                            "OriginalDetails": details_pre_annotation,
-                            "Comments": self._build_comments_array(control_id),
-                            "ResolutionDate": self._build_resolution_date(control_id),
-                        }
-                    )
-
-            markdown_group_name = re.sub(r"[^\w\s-]", "-", baseline_group["GroupName"].lower())
-            markdown_group_name = re.sub(r"-+", "-", markdown_group_name)
-            markdown_group_name = markdown_group_name.strip("-")
-            markdown_group_name = markdown_group_name.replace(" ", "-")
-
-            group_reference_url = (
-                f"{github_url}/blob/{Version.current}/scubagoggles/baselines/{product}.md"
-                f'#{baseline_group["GroupNumber"]}-' + markdown_group_name
-            )
-            markdown_link = (
-                f'<a class="control_group" href="{group_reference_url}" target="_blank">'
-                f'{baseline_group["GroupName"]}</a>'
-            )
-
-            fragments.append(f"<h2>{product_upper}-{baseline_group['GroupNumber']} {markdown_link}</h2>")
-
-            json_only = ["OriginalResult", "OriginalDetails", "Comments", "ResolutionDate"]
-            filtered_table_data = [{k: v for k, v in row.items() if k not in json_only} for row in table_data]
-
-            fragments.append(self.create_html_table(filtered_table_data))
-
-            results_data.update({"GroupName": baseline_group["GroupName"]})
-            results_data.update({"GroupNumber": baseline_group["GroupNumber"]})
-            results_data.update({"GroupReferenceURL": group_reference_url})
-            results_data.update({"Controls": self._sanitize_details(table_data)})
+            group_fragments, results_data, rules_data = self._process_baseline_group(
+            baseline_group,
+            test_results,
+            report_stats,
+            github_url,
+            product,
+            product_upper,
+            rules_data,
+        )
+            fragments.extend(group_fragments)
             json_data.append(results_data)
 
         html = self._build_report_html(fragments, rules_data, darkmode, redaction)
