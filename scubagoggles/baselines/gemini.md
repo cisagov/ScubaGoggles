@@ -137,7 +137,7 @@ Gemini conversation history SHALL be enabled.
 
 - _Rationale:_ Enabling this setting helps to ensure that all retention policies are met.
 - _Last modified:_ March 2026
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11, DM-2
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
@@ -148,7 +148,7 @@ Conversation retention SHALL be set to minimum of 18 months.
 
 - _Rationale:_ Enabling this setting helps to ensure that all retention policies are met.
 - _Last modified:_ March 2026
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11, DM-2
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
