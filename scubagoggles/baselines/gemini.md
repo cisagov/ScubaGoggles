@@ -182,7 +182,7 @@ This section covers the Gemini conversation history retention.
 ### Policies
 
 #### GWS.GEMINI.4.1v1
-Gemini conversation history SHALL be enabled.
+Gemini conversation sharing SHALL be set to OFF.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini31v1-instructions)
 
