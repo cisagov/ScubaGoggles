@@ -5,8 +5,6 @@ following the ScubaGoggles testing framework patterns.
 """
 
 import argparse
-import csv
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -56,22 +54,6 @@ class TestVersion:  # pylint: disable=too-many-public-methods
             'no_policy_ids': 'This is just regular text with no policy IDs',
             'malformed_policy': 'GWS.INVALID.FORMAT'
         }
-
-    @pytest.fixture
-    def temp_csv_file(self):
-        """Fixture creating a temporary CSV file for testing."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
-            writer = csv.DictWriter(f, fieldnames=['PolicyId', 'Description'])
-            writer.writeheader()
-            writer.writerow({'PolicyId': 'GWS.CHAT.1.1v0', 'Description': 'Test policy'})
-            writer.writerow({'PolicyId': 'GWS.DRIVEDOCS.3.0v0', 'Description': 'Another policy'})
-            temp_path = Path(f.name)
-
-        yield temp_path
-
-        # Cleanup
-        if temp_path.exists():
-            temp_path.unlink()
 
     @pytest.fixture
     def temp_md_file(self):
@@ -140,20 +122,15 @@ class TestVersion:  # pylint: disable=too-many-public-methods
         """Test check_versions method."""
         mock_readme = mocker.patch.object(Version, 'check_or_update_readme', return_value=False)
         mock_md = mocker.patch.object(Version, 'check_md')
-        mock_csv = mocker.patch.object(Version, 'check_csv')
         mock_glob = mocker.patch('pathlib.Path.glob')
-        mocker.patch.object(Path, 'is_dir', return_value=True)
 
         # Mock file paths
         mock_md_files = [Path('test1.md'), Path('test2.md')]
-        mock_csv_files = [Path('test1.csv'), Path('test2.csv')]
 
         # Configure glob to return different results based on pattern
         def glob_side_effect(pattern):
             if pattern == '**/*.md':
                 return mock_md_files
-            if pattern == '*.csv':
-                return mock_csv_files
             return []
 
         mock_glob.side_effect = glob_side_effect
@@ -162,55 +139,18 @@ class TestVersion:  # pylint: disable=too-many-public-methods
 
         mock_readme.assert_called_once_with(False)
         assert mock_md.call_count == len(mock_md_files)
-        assert mock_csv.call_count == len(mock_csv_files)
         assert result is False
 
     def test_check_versions_update_mode(self, mocker):
         """Test check_versions method in update mode."""
         mock_readme = mocker.patch.object(Version, 'check_or_update_readme', return_value=True)
         mocker.patch.object(Version, 'check_md')
-        mocker.patch.object(Version, 'check_csv')
         mocker.patch('pathlib.Path.glob', return_value=[])
-        mocker.patch.object(Path, 'is_dir', return_value=True)
 
         result = Version.check_versions(update=True)
 
         mock_readme.assert_called_once_with(True)
         assert result is True
-
-    def test_check_versions_missing_drift_rules_dir(self, mocker):
-        """Test check_versions when drift-rules directory is missing."""
-        mocker.patch.object(Version, 'check_or_update_readme', return_value=False)
-        mocker.patch('pathlib.Path.glob', return_value=[])
-        mocker.patch.object(Path, 'is_dir', return_value=False)
-
-        with pytest.raises(NotADirectoryError):
-            Version.check_versions()
-
-    def test_check_csv_valid(self, temp_csv_file):
-        """Test check_csv with valid CSV file."""
-
-        result = Version.check_csv(temp_csv_file)
-
-        assert result is True
-
-    def test_check_csv_invalid_policy_id(self, mocker):
-        """Test check_csv with invalid policy ID format."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
-            writer = csv.DictWriter(f, fieldnames=['PolicyId', 'Description'])
-            writer.writeheader()
-            writer.writerow({'PolicyId': 'INVALID.FORMAT', 'Description': 'Invalid policy'})
-            temp_path = Path(f.name)
-
-        try:
-            mock_log = mocker.patch('scubagoggles.version.log')
-            result = Version.check_csv(temp_path)
-
-            assert result is False
-            mock_log.error.assert_called()
-        finally:
-            if temp_path.exists():
-                temp_path.unlink()
 
     def test_check_md_valid(self, temp_md_file):
         """Test check_md with valid Markdown file."""
