@@ -115,8 +115,9 @@ class TestMarkdownParser:
     @pytest.mark.parametrize(
         ("suffix", "expect_error"),
         [
-            ("v1.0", False),
+            ("v1", False),
             ("v2", False),
+            ("v1.0", True),
             ("version1", True),
             ("v1.0.0.0", True),
             ("vabc", True),

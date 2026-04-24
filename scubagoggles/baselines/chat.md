@@ -40,7 +40,7 @@ This section covers chat history retention for users within the organization and
 
 ### Policies
 
-#### GWS.CHAT.1.1v0.6
+#### GWS.CHAT.1.1v1
 Chat history SHALL be enabled for information traceability.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -52,7 +52,7 @@ Chat history SHALL be enabled for information traceability.
   - [T1562: Impair Defenses](https://attack.mitre.org/techniques/T1562/)
     - [T1562:001: Impair Defenses: Disable or Modify Tools](https://attack.mitre.org/techniques/T1562/001/)
 
-#### GWS.CHAT.1.2v0.6
+#### GWS.CHAT.1.2v1
 Users SHALL NOT be allowed to change their history setting.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -76,14 +76,14 @@ Users SHALL NOT be allowed to change their history setting.
 
 To configure the settings for History for chats:
 
-#### GWS.CHAT.1.1v0.6 Instructions
+#### GWS.CHAT.1.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **History for chats**.
 4.  Select **History is ON**.
 5.  Select **Save**
 
-#### GWS.CHAT.1.2v0.6 Instructions
+#### GWS.CHAT.1.2v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **History for chats**.
@@ -96,7 +96,7 @@ This section covers what types of files users are allowed to share external to t
 
 ### Policies
 
-#### GWS.CHAT.2.1v0.6
+#### GWS.CHAT.2.1v1
 External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -120,7 +120,7 @@ External file sharing SHALL be disabled to protect sensitive information from un
 
 To configure the settings for External filesharing:
 
-#### GWS.CHAT.2.1v0.6 Instructions
+#### GWS.CHAT.2.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **Chat File Sharing**.
@@ -133,7 +133,7 @@ This section covers whether chat history is retained by default for users within
 
 ### Policies
 
-#### GWS.CHAT.3.1v0.6
+#### GWS.CHAT.3.1v1
 Space history SHOULD be enabled for information traceability.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -157,7 +157,7 @@ Space history SHOULD be enabled for information traceability.
 
 To configure the settings for History for spaces:
 
-#### GWS.CHAT.3.1v0.6 Instructions
+#### GWS.CHAT.3.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **History for spaces**.
@@ -170,7 +170,7 @@ This section permits users to send Chat messages outside of their organization, 
 
 ### Policies
 
-#### GWS.CHAT.4.1v0.6
+#### GWS.CHAT.4.1v1
 External chat messaging SHALL be restricted to allowlisted domains only.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -196,7 +196,7 @@ External chat messaging SHALL be restricted to allowlisted domains only.
 
 To configure the settings for External Chat:
 
-#### GWS.CHAT.4.1v0.6 Instructions
+#### GWS.CHAT.4.1v1 Instructions
 To enable external chat for allowlisted domains only:
 1. Sign in to the [Google Admin Console](https://admin.google.com).
 2. Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
@@ -220,7 +220,7 @@ This section covers the content reporting functionality, a feature that allows u
 
 ### Policies
 
-#### GWS.CHAT.5.1v0.6
+#### GWS.CHAT.5.1v1
 Chat content reporting SHALL be enabled for all conversation types.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -232,7 +232,7 @@ Chat content reporting SHALL be enabled for all conversation types.
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.CHAT.5.2v0.6
+#### GWS.CHAT.5.2v1
 All reporting message categories SHOULD be selected.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -252,7 +252,7 @@ All reporting message categories SHOULD be selected.
 
 ### Implementation
 
-#### GWS.CHAT.5.1v0.6 Instructions
+#### GWS.CHAT.5.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.
@@ -260,7 +260,7 @@ All reporting message categories SHOULD be selected.
 5.  Ensure all conversation type checkboxes are selected.
 6.  Click **Save**.
 
-#### GWS.CHAT.5.2v0.6 Instructions
+#### GWS.CHAT.5.2v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
 3.  Click **Content Reporting**.

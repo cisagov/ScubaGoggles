@@ -40,7 +40,7 @@ This section covers who has the ability to join classes and what classes the use
 
 ### Policies
 
-#### GWS.CLASSROOM.1.1v0.6
+#### GWS.CLASSROOM.1.1v1
 "Who can join classes in your domain" SHOULD be set to "Users in your domain only."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -52,7 +52,7 @@ This section covers who has the ability to join classes and what classes the use
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.CLASSROOM.1.2v0.6
+#### GWS.CLASSROOM.1.2v1
 "Which classes users in your domain can join" SHOULD be set to "Classes in your domain only."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -80,11 +80,11 @@ To configure the settings for Class Membership:
 3.  Select **Class Settings**.
 4.  Select **About Class Membership**.
 
-#### GWS.CLASSROOM.1.1v0.6 Instructions
+#### GWS.CLASSROOM.1.1v1 Instructions
 1.  For **Who can join classes in your domain**, select **Users in your domain only**.
 2.  Select **Save**.
 
-#### GWS.CLASSROOM.1.2v0.6 Instructions
+#### GWS.CLASSROOM.1.2v1 Instructions
 1.  For **Which classes can users in your domain join**, select **Classes in your domain only**.
 2.  Select **Save**.
 
@@ -94,7 +94,7 @@ This section covers policies related to the Google Classroom API.
 
 ### Policies
 
-#### GWS.CLASSROOM.2.1v0.6
+#### GWS.CLASSROOM.2.1v1
 Users SHOULD NOT be able to authorize apps to access their Google Classroom data.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -118,7 +118,7 @@ Users SHOULD NOT be able to authorize apps to access their Google Classroom data
 ### Implementation
 To configure the settings for Classroom API:
 
-#### GWS.CLASSROOM.2.1v0.6 Instructions
+#### GWS.CLASSROOM.2.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Data Access**.
@@ -131,7 +131,7 @@ This section covers policies related to importing rosters from Clever.
 
 ### Policies
 
-#### GWS.CLASSROOM.3.1v0.6
+#### GWS.CLASSROOM.3.1v1
 "Roster Import" with Clever SHOULD be turned off.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -153,7 +153,7 @@ This section covers policies related to importing rosters from Clever.
 ### Implementation
 To configure the settings for Roster Import:
 
-#### GWS.CLASSROOM.3.1v0.6 Instructions
+#### GWS.CLASSROOM.3.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Roster Import**.
@@ -166,7 +166,7 @@ This section covers policies related to unenrolling a student from a class.
 
 ### Policies
 
-#### GWS.CLASSROOM.4.1v0.6
+#### GWS.CLASSROOM.4.1v1
 Only teachers SHOULD be allowed to unenroll students from classes.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -188,7 +188,7 @@ Only teachers SHOULD be allowed to unenroll students from classes.
 ### Implementation
 To configure the settings for Student Unenrollment:
 
-#### GWS.CLASSROOM.4.1v0.6 Instructions
+#### GWS.CLASSROOM.4.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Student unenrollment**.
@@ -201,7 +201,7 @@ The first time users sign in to Classroom, they self-identify as either a studen
 
 ### Policies
 
-#### GWS.CLASSROOM.5.1v0.6
+#### GWS.CLASSROOM.5.1v1
 Class creation SHOULD be restricted to verified teachers only.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -228,7 +228,7 @@ Class creation SHOULD be restricted to verified teachers only.
 ### Implementation
 To configure the settings for Class Creation:
 
-#### GWS.CLASSROOM.5.1v0.6 Instructions
+#### GWS.CLASSROOM.5.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **General Settings**.

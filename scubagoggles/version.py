@@ -2,7 +2,6 @@
 """
 
 import argparse
-import csv
 import logging
 import re
 
@@ -43,7 +42,7 @@ class Version:
 
     _code_root = Path(__file__).parent
 
-    _suffix_regex = r'v(?P<major>\d+)(?:\.(?P<minor>\d+))?$'
+    _suffix_regex = r'v(?P<major>\d+)$'
 
     suffix_re = re.compile(_suffix_regex, re.IGNORECASE)
 
@@ -51,7 +50,7 @@ class Version:
     # version suffix) within a string.  It separates the policy ID from the
     # suffix.
 
-    _version_regex = r'(?P<policy_id>GWS\.\w+\.\d+\.\d+)(?P<sfx>v\d+\.?\d*)'
+    _version_regex = r'(?P<policy_id>GWS\.\w+\.\d+\.\d+)(?P<sfx>v\d+)'
 
     version_re = re.compile(_version_regex, re.IGNORECASE)
 
@@ -212,69 +211,7 @@ class Version:
         for md_file in cls._code_root.glob('**/*.md'):
             cls.check_md(md_file)
 
-        # The drift rules CSV files are not part of the code content, and
-        # exist in the directory above the code root.
-
-        drift_rules_dir = cls._code_root.parent / 'drift-rules'
-
-        if not drift_rules_dir.is_dir():
-            raise NotADirectoryError(f'{drift_rules_dir} - drift rules '
-                                     'directory missing')
-
-        for csv_file in drift_rules_dir.glob('*.csv'):
-            cls.check_csv(csv_file)
-
         return modified
-
-    @classmethod
-    def check_csv(cls, drift_csv: Path) -> bool:
-
-        """Validates the ScubaGoggles version number embedded in the given
-        drift monitoring rules CSV file.
-
-        :param Path drift_csv: file specification for a drift CSV file.
-        :return:  True if the versions of the policy IDs found in the file
-            are reasonable and consistent with the current version; False
-            otherwise.
-        """
-
-        log.debug(str(drift_csv))
-
-        with drift_csv.open(encoding = 'utf-8') as csvfile:
-
-            reader = csv.DictReader(csvfile)
-
-            contents = list(reader)
-
-        error_found = False
-
-        for index, row in enumerate(contents):
-
-            # These CSV files have a field for the policy ID, so it must
-            # exist.  In addition to the version suffix, we also check the
-            # format of the policy ID itself.
-
-            match = cls.version_re.match(row['PolicyId'])
-
-            sfx_ok = errors = None
-
-            if match:
-                sfx_ok, errors = cls.check_version(row['PolicyId'])
-
-            if not sfx_ok:
-
-                if not error_found:
-                    log.error('%s:', str(drift_csv))
-                    error_found = True
-
-                if not match:
-                    log.error('  %3d) Invalid PolicyId: "%s"',
-                              index + 2,
-                              row['PolicyId'])
-                else:
-                    cls.log_version_errors(index + 2, errors)
-
-        return not error_found
 
     @classmethod
     def check_md(cls, md_file: Path) -> bool:
@@ -368,7 +305,7 @@ class Version:
 
         """Sets the ScubaGoggles OFFICIAL version number and updates version
         number references throughout the code base.  This is done because
-        unfortunately certain files (CSV, Markdown) can't reference the
+        unfortunately certain files (e.g., Markdown) can't reference the
         version number in Python code and must hardcode the version.
 
         :param str version: version number in '<major>.<minor>.<build>' format.
@@ -419,7 +356,12 @@ class Version:
 
         match = cls.suffix_re.match(version_sfx)
 
-        return bool(match)
+        if not match:
+            return False
+
+        major = int(match['major'])
+
+        return major >= 1
 
     @staticmethod
     def log_version_errors(line_number: int, errors: dict) -> None:
