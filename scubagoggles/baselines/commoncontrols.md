@@ -1410,7 +1410,7 @@ Though use of Google's DLP solution is not strictly required, guidance for confi
 
 ### Policies
 #### GWS.COMMONCONTROLS.18.1v0.6
-A custom policy SHALL be configured for Google Drive, Gooogle Calendar, Google Chat, and Gmail to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
+A custom policy SHALL be configured for Google Drive, Google Calendar, Google Chat, and Gmail to protect PII and sensitive information as defined by the agency, covering at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols181v06-instructions)
 
