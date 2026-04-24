@@ -6,7 +6,7 @@ The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Gemini for Google Workspace](https://support.google.com/a/topic/13853688?hl=en&ref_topic=9197&sjid=1480967616439197109-NA) and addresses the following:
 
@@ -21,7 +21,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 **Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
@@ -46,7 +46,7 @@ for more details on configuring these additional services.
 
 ### Policies
 
-#### GWS.GEMINI.1.1v0.6
+#### GWS.GEMINI.1.1v1
 Gemini app user access SHALL be set to OFF for everyone without a license.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -72,7 +72,7 @@ allowing user access to Gemini under any license creates the risk of data leakag
 
 ### Implementation
 
-#### GWS.GEMINI.1.1v0.6 Instructions
+#### GWS.GEMINI.1.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **User Access**.
@@ -80,7 +80,7 @@ allowing user access to Gemini under any license creates the risk of data leakag
 5.  Select **Save**.
 
 
-## 2. Alpha Gemini features
+## 2. Gemini Alpha features
 Google Workspace permits admins to restrict or enable access to Gemini Alpha features
 before they're made generally available.
 
@@ -91,8 +91,8 @@ production data in connection with Pre-Gemini Alpha Offerings.
 
 ### Policies
 
-#### GWS.GEMINI.2.1v0.6
-Alpha Gemini features SHALL be disabled.
+#### GWS.GEMINI.2.1v1
+Gemini Alpha features SHALL be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
@@ -118,9 +118,60 @@ Service Specific Terms.
 
 ### Implementation
 
-#### GWS.GEMINI.2.1v0.6 Instructions
+#### GWS.GEMINI.2.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Generative AI** -\> **Gemini for Workspace**.
-3.  Select **Alpha Gemini features** -\>  **Alpha features**.
+2.  Select **Generative AI** -\> **Gemini for Workspace.**
+3.  Select **Alpha features.**
 4.  Ensure **Turn off access to Alpha features in Gemini for Google Workspace** is selected.
+5.  Select **Save**.
+
+## 3. Gemini Conversation History
+This section covers the Gemini conversation history retention.
+
+### Policies
+
+#### GWS.GEMINI.3.1v1
+Gemini conversation history SHALL be enabled.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini31v1-instructions)
+
+- _Rationale:_ Users engaged in Gemini conversations may inadvertently share sensitive or private information. Enabling conversation history may mitigate this risk by providing a traceable record of Gemini conversations, enhancing information accountability and security. Additionally, this may help meet data retention requirements.
+- _Last modified:_ March 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
+#### GWS.GEMINI.3.2v1
+Conversation retention SHALL be set to minimum of 18 months.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini32v1-instructions)
+
+- _Rationale:_ Users engaged in Gemini conversations may inadvertently share sensitive or private information. Enabling conversation history may mitigate this risk by providing a traceable record of Gemini conversations, enhancing information accountability and security. Additionally, this may help meet data retention requirements.
+- _Last modified:_ March 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
+### Resources
+
+-   [Manage Gemini in Workspace conversation history settings](https://knowledge.workspace.google.com/admin/gemini/manage-gemini-in-workspace-conversation-history-settings)
+
+### Prerequisites
+
+-   None
+
+### Implementation
+
+#### GWS.GEMINI.3.1v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Generative AI** -\> **Gemini App**.
+3.  Select **Gemini Conversation History**
+4.  Ensure **Gemini conversation history** is selected.
+5.  Select **Save**.
+
+#### GWS.GEMINI.3.2v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Generative AI** -\> **Gemini App**.
+3.  Select **Gemini Conversation History**
+4.  Ensure **Conversation retention** is set to at least 18 months.
 5.  Select **Save**.

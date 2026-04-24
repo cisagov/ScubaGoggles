@@ -8,7 +8,7 @@ The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Classroom](https://support.google.com/edu/classroom/?hl=en#topic=10298088) and addresses the following:
 
@@ -28,7 +28,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 **Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
@@ -40,8 +40,8 @@ This section covers who has the ability to join classes and what classes the use
 
 ### Policies
 
-#### GWS.CLASSROOM.1.1v0.6
-Who can join classes in your domain SHOULD be restricted to users in your domain or allowlisted domains.
+#### GWS.CLASSROOM.1.1v1
+"Who can join classes in your domain" SHOULD be set to "Users in your domain only."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -52,8 +52,8 @@ Who can join classes in your domain SHOULD be restricted to users in your domain
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.CLASSROOM.1.2v0.6
-Which classes users in your domain can join SHOULD be restricted to classes in your domain or allowlisted domains.
+#### GWS.CLASSROOM.1.2v1
+"Which classes users in your domain can join" SHOULD be set to "Classes in your domain only."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -80,11 +80,11 @@ To configure the settings for Class Membership:
 3.  Select **Class Settings**.
 4.  Select **About Class Membership**.
 
-#### GWS.CLASSROOM.1.1v0.6 Instructions
+#### GWS.CLASSROOM.1.1v1 Instructions
 1.  For **Who can join classes in your domain**, select **Users in your domain only**.
 2.  Select **Save**.
 
-#### GWS.CLASSROOM.1.2v0.6 Instructions
+#### GWS.CLASSROOM.1.2v1 Instructions
 1.  For **Which classes can users in your domain join**, select **Classes in your domain only**.
 2.  Select **Save**.
 
@@ -94,7 +94,7 @@ This section covers policies related to the Google Classroom API.
 
 ### Policies
 
-#### GWS.CLASSROOM.2.1v0.6
+#### GWS.CLASSROOM.2.1v1
 Users SHOULD NOT be able to authorize apps to access their Google Classroom data.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -118,7 +118,7 @@ Users SHOULD NOT be able to authorize apps to access their Google Classroom data
 ### Implementation
 To configure the settings for Classroom API:
 
-#### GWS.CLASSROOM.2.1v0.6 Instructions
+#### GWS.CLASSROOM.2.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Data Access**.
@@ -131,8 +131,8 @@ This section covers policies related to importing rosters from Clever.
 
 ### Policies
 
-#### GWS.CLASSROOM.3.1v0.6
-Roster import with Clever SHOULD be turned off.
+#### GWS.CLASSROOM.3.1v1
+"Roster Import" with Clever SHOULD be turned off.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -153,7 +153,7 @@ Roster import with Clever SHOULD be turned off.
 ### Implementation
 To configure the settings for Roster Import:
 
-#### GWS.CLASSROOM.3.1v0.6 Instructions
+#### GWS.CLASSROOM.3.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Roster Import**.
@@ -166,7 +166,7 @@ This section covers policies related to unenrolling a student from a class.
 
 ### Policies
 
-#### GWS.CLASSROOM.4.1v0.6
+#### GWS.CLASSROOM.4.1v1
 Only teachers SHOULD be allowed to unenroll students from classes.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -188,7 +188,7 @@ Only teachers SHOULD be allowed to unenroll students from classes.
 ### Implementation
 To configure the settings for Student Unenrollment:
 
-#### GWS.CLASSROOM.4.1v0.6 Instructions
+#### GWS.CLASSROOM.4.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Student unenrollment**.
@@ -201,7 +201,7 @@ The first time users sign in to Classroom, they self-identify as either a studen
 
 ### Policies
 
-#### GWS.CLASSROOM.5.1v0.6
+#### GWS.CLASSROOM.5.1v1
 Class creation SHOULD be restricted to verified teachers only.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -228,7 +228,7 @@ Class creation SHOULD be restricted to verified teachers only.
 ### Implementation
 To configure the settings for Class Creation:
 
-#### GWS.CLASSROOM.5.1v0.6 Instructions
+#### GWS.CLASSROOM.5.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **General Settings**.
