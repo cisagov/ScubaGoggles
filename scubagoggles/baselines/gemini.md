@@ -177,7 +177,7 @@ Conversation retention SHALL be set to minimum of 18 months.
 5.  Select **Save**.
 
 ## 4. Gemini Conversation Sharing
-This section covers the Gemini conversation history retention.
+This section covers the Gemini conversation sharing.
 
 ### Policies
 
@@ -206,6 +206,6 @@ Conversation sharing SHALL be set to OFF.
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **Sharing**
-4.  Ensure **Conversation Sharing** is set to OFF.
+4.  Ensure **Allow conversation sharing via link** is set to OFF.
 5.  Select **Save**.
 
