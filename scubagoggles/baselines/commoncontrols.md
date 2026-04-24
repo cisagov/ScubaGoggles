@@ -1409,7 +1409,7 @@ There are several commercial DLP solutions available that document support for G
 Though use of Google's DLP solution is not strictly required, guidance for configuring Google's DLP solution can be found in the instructions of this policy section.
 
 ### Policies
-#### GWS.COMMONCONTROLS.18.1v0.6
+#### GWS.COMMONCONTROLS.18.1v1
 A custom policy SHALL be configured for Google Drive, Google Calendar, Google Chat, and Gmail to protect PII and sensitive information as defined by the agency, covering at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols181v06-instructions)
@@ -1426,7 +1426,7 @@ A custom policy SHALL be configured for Google Drive, Google Calendar, Google Ch
 
 [//]: # (Keep the version suffix out of the anchor.)
 <a name="commoncontrols182"></a>
-#### GWS.COMMONCONTROLS.18.2v0.6
+#### GWS.COMMONCONTROLS.18.2v1
 The action for DLP policies SHOULD be set to block.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols184v06-instructions)
@@ -1460,7 +1460,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 3.  Under **Data protection rules and detectors** click **Manage Rules**.
 4.  Click **Add rule** -\> **New rule**.
 
-#### GWS.COMMONCONTROLS.18.1v0.6 Instructions
+#### GWS.COMMONCONTROLS.18.1v1 Instructions
 1. In the **Name and apps** section, add the name and description of the rule.
 2. In the **Name and apps** section, under **Google Calendar**, choose the trigger for **Event saved**.
 3. In the **Name and apps** section, under **Google Chat**, choose the trigger for **Message Sent** and **File uploaded**.
@@ -1477,7 +1477,7 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 10. Review the rule details, mark the rule as **Active**, and click **Create.**
 
 
-#### GWS.COMMONCONTROLS.18.2v0.6 Instructions
+#### GWS.COMMONCONTROLS.18.2v1 Instructions
 1.  For each rule in the **Actions** section follow these steps depending on application:
     1. For Google Calendar policies select **Block event**.
     2. For Chat policies rules select **Block message** and select **External Conversations** and **Spaces**, **Group chats**, and **1:1 chats**.
