@@ -182,7 +182,7 @@ This section covers the Gemini conversation history retention.
 ### Policies
 
 #### GWS.GEMINI.4.1v1
-Gemini conversation sharing SHALL be set to OFF.
+Conversation sharing SHALL be set to OFF.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini31v1-instructions)
 
@@ -194,7 +194,7 @@ Gemini conversation sharing SHALL be set to OFF.
 
 ### Resources
 
--   [Manage Gemini in Workspace conversation history settings](https://knowledge.workspace.google.com/admin/gemini/manage-gemini-in-workspace-conversation-history-settings)
+-   [Turn conversation sharing on or off](https://knowledge.workspace.google.com/admin/gemini/turn-conversation-sharing-on-or-off)
 
 ### Prerequisites
 
