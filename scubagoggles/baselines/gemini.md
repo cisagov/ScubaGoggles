@@ -124,3 +124,54 @@ Service Specific Terms.
 3.  Select **Alpha features.**
 4.  Ensure **Turn off access to Alpha features in Gemini for Google Workspace** is selected.
 5.  Select **Save**.
+
+## 3. Gemini Conversation History
+This section covers the Gemini conversation history retention.
+
+### Policies
+
+#### GWS.GEMINI.3.1v1
+Gemini conversation history SHALL be enabled.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini31v1-instructions)
+
+- _Rationale:_ Users engaged in Gemini conversations may inadvertently share sensitive or private information. Enabling conversation history may mitigate this risk by providing a traceable record of Gemini conversations, enhancing information accountability and security. Additionally, this may help meet data retention requirements.
+- _Last modified:_ March 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
+#### GWS.GEMINI.3.2v1
+Conversation retention SHALL be set to minimum of 18 months.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini32v1-instructions)
+
+- _Rationale:_ Users engaged in Gemini conversations may inadvertently share sensitive or private information. Enabling conversation history may mitigate this risk by providing a traceable record of Gemini conversations, enhancing information accountability and security. Additionally, this may help meet data retention requirements.
+- _Last modified:_ March 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-2, AU-11
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
+### Resources
+
+-   [Manage Gemini in Workspace conversation history settings](https://knowledge.workspace.google.com/admin/gemini/manage-gemini-in-workspace-conversation-history-settings)
+
+### Prerequisites
+
+-   None
+
+### Implementation
+
+#### GWS.GEMINI.3.1v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Generative AI** -\> **Gemini App**.
+3.  Select **Gemini Conversation History**
+4.  Ensure **Gemini conversation history** is selected.
+5.  Select **Save**.
+
+#### GWS.GEMINI.3.2v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Generative AI** -\> **Gemini App**.
+3.  Select **Gemini Conversation History**
+4.  Ensure **Conversation retention** is set to at least 18 months.
+5.  Select **Save**.
