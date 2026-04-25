@@ -209,7 +209,8 @@ class Version:
         modified = cls.check_or_update_readme(update)
 
         for md_file in cls._code_root.glob('**/*.md'):
-            cls.check_md(md_file)
+            if 'testing' not in {d.lower() for d in md_file.parts}:
+                cls.check_md(md_file)
 
         return modified
 

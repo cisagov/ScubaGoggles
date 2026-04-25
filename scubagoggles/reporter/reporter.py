@@ -115,23 +115,34 @@ class Reporter:
         self.annotated_failed_policies = {}
 
     @staticmethod
-    def _get_test_result(requirement_met: bool, criticality: str, no_such_events: bool) -> str:
+    def _get_test_result(test: dict) -> str:
+
         """
         Checks the Rego to see if the baseline passed or failed and indicates
         the criticality of the baseline.
-        """
-        criticality = criticality.lower()
 
-        if "3rd party" in criticality or "not-implemented" in criticality:
-            result = "N/A"
+        :param dict test: result data from the Rego test.
+        """
+
+        # If there were no log events for the test, the state of
+        # "requirement_met" doesn't matter - it's a test requiring a manual
+        # check (i.e., "no events found").  For policies using the Policy API,
+        # events are not applicable (and the related field might be missing).
+
+        requirement_met = test['RequirementMet']
+        criticality = test['Criticality'].lower()
+        no_such_events = test.get('NoSuchEvent', False)
+
+        if '3rd party' in criticality or 'not-implemented' in criticality:
+            result = 'N/A'
         elif no_such_events:
-            result = "No events found"
+            result = 'No events found'
         elif requirement_met:
-            result = "Pass"
-        elif criticality in ("should", "may"):
-            result = "Warning"
+            result = 'Pass'
+        elif criticality in ('should', 'may'):
+            result = 'Warning'
         else:
-            result = "Fail"
+            result = 'Fail'
 
         return result
 
@@ -697,11 +708,7 @@ class Reporter:
                     report_stats["Omit"] += 1
 
                     for test in tests:
-                        result = self._get_test_result(
-                            test["RequirementMet"],
-                            test["Criticality"],
-                            test["NoSuchEvent"],
-                        )
+                        result = self._get_test_result(test)
                         details = test["ReportDetails"]
                         original_result = result
                         original_details = details
@@ -745,11 +752,7 @@ class Reporter:
                     if control_id.startswith("GWS.COMMONCONTROLS.13.1"):
                         rules_data = test["ActualValue"]
 
-                    result = self._get_test_result(
-                        test["RequirementMet"],
-                        test["Criticality"],
-                        test["NoSuchEvent"],
-                    )
+                    result = self._get_test_result(test)
 
                     details = test["ReportDetails"]
 
@@ -757,7 +760,7 @@ class Reporter:
                     if reports_api_link in test["Prerequisites"]:
                         if not details.endswith("</ul>"):
                             details += "<br><br>"
-                        
+
                     details_pre_annotation = details
                     details = self._add_annotation(control_id, result, details)
 
