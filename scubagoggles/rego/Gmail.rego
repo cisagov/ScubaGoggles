@@ -1027,13 +1027,13 @@ PopEnabled contains OU if {
     popEnable == true
 }
 
-imapexclusions contains OU if {
+ImapExclusions contains OU if {
     some OU in ImapEnabled
     utils.ExceptionConfigured(OU, "imap_exclusions")
 }
 
-imapexclusionsFormatted contains Message if {
-    some OU in imapexclusions
+ImapExclusionsFormatted contains Message if {
+    some OU in ImapExclusions
     Justification := utils.ExceptionJustification(OU, "imap_exclusions")
     Message := sprintf("<li>%s. %s</li>", [OU, utils.FormatJustification(Justification)])
 }
@@ -1045,18 +1045,18 @@ NonCompliantOUs9_1 contains {
 if {
     some OU, settings in input.policies
     GmailEnabled(OU)
-    imapEnable := OU in (ImapEnabled - imapexclusions)
+    imapEnable := OU in (ImapEnabled - ImapExclusionsFormatted)
     popEnable := OU in PopEnabled
     true in {imapEnable, popEnable}
 }
 
 ImapExceptionMessage := "" if {
-    count(imapexclusions) == 0
+    count(ImapExclusions) == 0
 } else := Message if {
     Message := concat("", [
         "<br>Note: IMAP is enabled in the following locations but ScubaGoggles was configured to ",
         "allow exceptions for them:<ul>",
-        concat("", imapexclusionsFormatted),
+        concat("", ImapExclusionsFormatted),
         "</ul>"
     ])
 }
