@@ -1045,7 +1045,7 @@ NonCompliantOUs9_1 contains {
 if {
     some OU, settings in input.policies
     GmailEnabled(OU)
-    imapEnable := OU in (ImapEnabled - ImapExclusionsFormatted)
+    imapEnable := OU in (ImapEnabled - ImapExclusions)
     popEnable := OU in PopEnabled
     true in {imapEnable, popEnable}
 }
