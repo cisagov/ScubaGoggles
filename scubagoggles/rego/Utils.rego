@@ -122,7 +122,7 @@ GetGroup(OrgUnit) := "" if {
 # Return true if an exception of the given type was configured for the OU, false otherwise.
 ExceptionConfigured(OrgUnit, Type) := true if {
     # Currently IMAP is the only type of exception supported, but more to come
-    Type in {"imap_exceptions"}
+    Type in {"imap_exclusions", "sites_exclusions"}
     OrgUnitPath := GetOuPath(OrgUnit)
     Group := GetGroup(OrgUnit)
     some Exception in input[Type]
@@ -144,7 +144,7 @@ ExceptionConfigured(OrgUnit, Type) := true if {
 
 # Return the justification, if any, the user provided for the given OU/exception type.
 ExceptionJustification(OrgUnit, Type) := Justification if {
-    Type in {"imap_exceptions"}
+    Type in {"imap_exclusions", "sites_exclusions"}
     OrgUnitPath := GetOuPath(OrgUnit)
     Group := GetGroup(OrgUnit)
     some Exception in input[Type]

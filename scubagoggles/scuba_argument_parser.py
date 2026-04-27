@@ -250,15 +250,19 @@ class ScubaArgumentParser:
         if args.imapexclusions is None:
             args.imapexclusions = []
 
-        for i, exception in enumerate(args.imapexclusions):
-            args.imapexclusions[i] = {
+        validated_exclusions = []
+        for exception in args.imapexclusions:
+            validated_exclusion = {
                 'ou': exception.get('ou', ''),
                 'group': exception.get('group', ''),
                 'justification': exception.get('justification', '')
             }
-            if args.imapexclusions[i]['ou'] == '' and args.imapexclusions[i]['group'] == '':
+            if validated_exclusion['ou'] == '' and validated_exclusion['group'] == '':
                 log.warning('Invalid entry in config file "imapexclusions": each entry must '
                             'specify at least an OU or a group.')
+                continue
+            validated_exclusions.append(validated_exclusion)
+        args.imapexclusions = validated_exclusions
 
     @staticmethod
     def validate_sites_exclusions(args: argparse.Namespace) -> None:
@@ -269,12 +273,16 @@ class ScubaArgumentParser:
         if args.sitesexclusions is None:
             args.sitesexclusions = []
 
-        for i, exception in enumerate(args.sitesexclusions):
-            args.sitesexclusions[i] = {
+        validated_exclusions = []
+        for exception in args.sitesexclusions:
+            validated_exclusion = {
                 'ou': exception.get('ou', ''),
                 'group': exception.get('group', ''),
                 'justification': exception.get('justification', '')
             }
-            if args.sitesexclusions[i]['ou'] == '' and args.sitesexclusions[i]['group'] == '':
+            if validated_exclusion['ou'] == '' and validated_exclusion['group'] == '':
                 log.warning('Invalid entry in config file "sitesexclusions": each entry must '
                             'specify at least an OU or a group.')
+                continue
+            validated_exclusions.append(validated_exclusion)
+        args.sitesexclusions = validated_exclusions

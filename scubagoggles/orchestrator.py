@@ -197,6 +197,7 @@ class Orchestrator:
         provider_dict['baseline_versions'] = self._md_parser.policy_version_map
         provider_dict['break_glass_accounts'] = args.breakglassaccounts
         provider_dict['imap_exclusions'] = args.imapexclusions
+        provider_dict['sites_exclusions'] = args.sitesexclusions
         provider_dict['report_uuid'] = args.report_uuid
 
         self._validate_ou_exceptions(provider_dict)
