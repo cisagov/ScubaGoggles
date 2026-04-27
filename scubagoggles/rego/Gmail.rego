@@ -297,7 +297,7 @@ DomainsWithAgencyContact contains DmarcRecord.domain if {
         startswith(lower(part), "ruf=")
     ]
 
-    # requires exactly 1 rau and 1 ruf field per DMARC record
+    # requires exactly 1 rua and 1 ruf field per DMARC record
     count(ruaParts) == 1
     count(rufParts) == 1
 
