@@ -154,10 +154,10 @@ class ConfigValidator:
         return bool(ConfigValidator.EMAIL_PATTERN.match(email.strip()))
 
     @staticmethod
-    def validate_imap_exceptions(
+    def validate_exclusions(
         exceptions: List[Dict[str, Any]],
     ) -> Tuple[bool, Optional[str]]:
-        """Validate IMAP exception entries."""
+        """Validate IMAP/Sites exclusion entries."""
         if not exceptions:
             return True, None
 
@@ -243,8 +243,10 @@ class ConfigValidator:
              "Output path validation"),
             ("breakglassaccounts", [], ConfigValidator.validate_break_glass_accounts,
              "Break glass accounts validation"),
-            ("imapexceptions", [], ConfigValidator.validate_imap_exceptions,
-             "IMAP exceptions validation"),
+            ("imapexclusions", [], ConfigValidator.validate_exclusions,
+             "IMAP exclusion validation"),
+            ("sitesexclusions", [], ConfigValidator.validate_exclusions,
+             "Sites exclusion validation"),
             ("tenant", None, ConfigValidator.validate_tenant_domain,
              "Tenant domain validation"),
         ]

@@ -386,6 +386,7 @@ class ScubaConfigApp:
                 'annotatepolicy': {},
                 'breakglassaccounts': [],
                 'imapexclusions': [],
+                'sitesexclusions': [],
                 'preferreddnsresolvers': [],
                 'preferreddohservers': [],
                 'skipdoh': False,
@@ -716,6 +717,7 @@ class ScubaConfigApp:
         for key, coerce in (
             ('breakglassaccounts', None),
             ('imapexclusions', None),
+            ('sitesexclusions', None),
             ('preferreddnsresolvers', str),
             ('preferreddohservers', str),
         ):
@@ -1273,7 +1275,7 @@ class ScubaConfigApp:
         - **Main:** Product selection with baseline coverage
         - **Annotate Policies:** Add rationale and documentation for policy decisions
         - **Omit Policies:** Use green dots to indicate configured policies, orange during editing
-        - **Exclusions:** Configure break glass accounts and IMAP policy exclusions
+        - **Exclusions:** Configure break glass accounts and Sites and IMAP policy exclusions
         - **DNS Configuration:** Configure preferred DNS resolvers, DoH servers, and DoH fallback behavior
         - **Advanced:** Override internal defaults for output names, paths, access token, and UUID truncation
         - **Preview:** Review and export the generated YAML configuration
@@ -1778,10 +1780,12 @@ class ScubaConfigApp:
         )
 
     def render_exclusions_tab(self):
-        """Render exclusions configuration tab (break glass + IMAP exclusions)"""
+        """Render exclusions configuration tab (break glass + IMAP + sites exclusions)"""
         self._render_break_glass_section()
         st.markdown("---")
         self._render_imap_exclusions_section()
+        st.markdown("---")
+        self._render_sites_exclusions_section()
 
     def _render_break_glass_section(self):  # pylint: disable=too-many-branches
         """Render break glass accounts section within the Exclusions tab."""
@@ -1961,6 +1965,112 @@ class ScubaConfigApp:
             st.info("ℹ️ No IMAP exclusion configured")
 
         st.markdown('</div>', unsafe_allow_html=True)
+
+
+    def _render_sites_exclusions_section(self):
+        """Render Sites exclusions section within the Exclusions tab."""
+        st.markdown('<div class="section-container">', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-title">Sites Exclusions</h2>', unsafe_allow_html=True)
+
+        st.markdown("""
+        **Configure OUs and groups where Sites access is allowed per GWS.SITES.1.1.**
+
+        Sites MAY be enabled on a per-OU or per-group basis when there is a specific need.
+        Each exclusion requires at least an OU or a group (or both). If both are provided,
+        the exclusion only applies to users in both the OU and the group.
+
+        ⚠️ **Important:**
+        - The OU must be a path relative to the top-level OU (cannot be the top-level OU itself)
+        - Groups should be entered as email addresses (e.g., `examplegroup@example.com`)
+        """)
+
+        sites_exceptions = st.session_state.config_data.get('sitesexclusions', [])
+
+        st.subheader("➕ Add Sites Exclusion")
+
+        def _add_sites_exclusion():
+            """Callback: validate and add a Sites exclusion."""
+            ou = st.session_state.get("new_sites_ou", "").strip()
+            group = st.session_state.get("new_sites_group", "").strip()
+            justification = st.session_state.get("new_sites_justification", "").strip()
+
+            if not ou and not group:
+                st.session_state.sites_add_status = ("missing_target", "")
+            elif group and not ConfigValidator.validate_email(group):
+                st.session_state.sites_add_status = ("invalid_group", group)
+            else:
+                exceptions = st.session_state.config_data.get('sitesexclusions', [])
+                entry: dict = {}
+                if ou:
+                    entry['ou'] = ou
+                if group:
+                    entry['group'] = group
+                if justification:
+                    entry['justification'] = justification
+                exceptions.append(entry)
+                st.session_state.config_data['sitesexclusions'] = exceptions
+                st.session_state.sites_add_status = ("success", "")
+
+            st.session_state.new_sites_ou = ""
+            st.session_state.new_sites_group = ""
+            st.session_state.new_sites_justification = ""
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.text_input(
+                "Org Unit (OU)",
+                placeholder="My OU/My sub OU",
+                help="Org unit path relative to the top-level OU where Sites should be allowed",
+                key="new_sites_ou"
+            )
+        with col2:
+            st.text_input(
+                "Group Email",
+                placeholder="examplegroup@example.com",
+                help="Group email address where Sites should be allowed",
+                key="new_sites_group"
+            )
+
+        st.text_input(
+            "Justification",
+            placeholder="Brief explanation of why Sites is needed",
+            help="Optional justification for the Sites exclusion",
+            key="new_sites_justification"
+        )
+
+        st.button("➕ Add Exclusion", type="primary", on_click=_add_sites_exclusion,
+                   key="add_sites_exception_btn")
+
+        self._show_add_status("sites_add_status", {
+            "success": (st.success, "✅ Added Sites exclusion"),
+            "invalid_group": (st.error, lambda d: f"❌ Invalid group email format: {d}"),
+            "missing_target": (st.error, "❌ At least an OU or group email is required"),
+        })
+
+        if sites_exceptions:
+            st.subheader("📋 Current Sites Exclusions")
+            for i, exc in enumerate(sites_exceptions):
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    parts = []
+                    if exc.get('ou'):
+                        parts.append(f"**OU:** {exc['ou']}")
+                    if exc.get('group'):
+                        parts.append(f"**Group:** {exc['group']}")
+                    st.markdown(" · ".join(parts))
+                    if exc.get('justification'):
+                        st.caption(exc['justification'])
+                with col2:
+                    if st.button("🗑️ Remove", key=f"remove_sites_{i}"):
+                        sites_exceptions.pop(i)
+                        st.session_state.config_data['sitesexclusions'] = sites_exceptions
+                        st.success("✅ Removed Sties exclusion")
+                        st.rerun()
+        else:
+            st.info("ℹ️ No Sites exclusion configured")
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
 
     @staticmethod
     def _on_advanced_field_change():
@@ -2174,7 +2284,8 @@ class ScubaConfigApp:
             'customerid', 'subjectemail', 'orgname', 'baselines',
             'credentials', 'orgunitname', 'description', 'quiet',
             'annotatepolicy', 'omitpolicy', 'breakglassaccounts',
-            'imapexclusions', 'preferreddnsresolvers', 'preferreddohservers',
+            'imapexclusions', 'sitesexclusions', 'preferreddnsresolvers',
+            'preferreddohservers',
         )
         for key in _pass_through:
             if data.get(key):
