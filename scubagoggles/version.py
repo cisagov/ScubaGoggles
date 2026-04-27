@@ -42,7 +42,7 @@ class Version:
 
     _code_root = Path(__file__).parent
 
-    _suffix_regex = r'v(?P<major>\d+)(?:\.(?P<minor>\d+))?$'
+    _suffix_regex = r'v(?P<major>\d+)$'
 
     suffix_re = re.compile(_suffix_regex, re.IGNORECASE)
 
@@ -50,7 +50,7 @@ class Version:
     # version suffix) within a string.  It separates the policy ID from the
     # suffix.
 
-    _version_regex = r'(?P<policy_id>GWS\.\w+\.\d+\.\d+)(?P<sfx>v\d+\.?\d*)'
+    _version_regex = r'(?P<policy_id>GWS\.\w+\.\d+\.\d+)(?P<sfx>v\d+)'
 
     version_re = re.compile(_version_regex, re.IGNORECASE)
 
@@ -209,7 +209,8 @@ class Version:
         modified = cls.check_or_update_readme(update)
 
         for md_file in cls._code_root.glob('**/*.md'):
-            cls.check_md(md_file)
+            if 'testing' not in {d.lower() for d in md_file.parts}:
+                cls.check_md(md_file)
 
         return modified
 
@@ -305,7 +306,7 @@ class Version:
 
         """Sets the ScubaGoggles OFFICIAL version number and updates version
         number references throughout the code base.  This is done because
-        unfortunately certain files (Markdown) can't reference the
+        unfortunately certain files (e.g., Markdown) can't reference the
         version number in Python code and must hardcode the version.
 
         :param str version: version number in '<major>.<minor>.<build>' format.
@@ -356,7 +357,12 @@ class Version:
 
         match = cls.suffix_re.match(version_sfx)
 
-        return bool(match)
+        if not match:
+            return False
+
+        major = int(match['major'])
+
+        return major >= 1
 
     @staticmethod
     def log_version_errors(line_number: int, errors: dict) -> None:

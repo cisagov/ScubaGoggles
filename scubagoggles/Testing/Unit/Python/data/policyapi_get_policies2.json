@@ -19,19 +19,20 @@
     }
   },
   "groups": {
-    "02xcytpi2smgulh": "group1",
-    "019c6y181lsgu1p": "group2"
+    "02xcytpi2smgulh": "group1@scubagws.org",
+    "019c6y181lsgu1p": "group2@scubagws.org"
   },
   "defaults": {
     "groups_for_business_groups_sharing": {
-        "collaborationCapability": "DOMAIN_USERS_ONLY",
-        "createGroupsAccessLevel": "USERS_IN_DOMAIN",
-        "newGroupsAreHidden": false,
-        "ownersCanAllowExternalMembers": false,
-        "ownersCanAllowIncomingMailFromPublic": true,
-        "ownersCanHideGroups": false,
-        "viewTopicsDefaultAccessLevel": "DOMAIN_USERS"}
-    },
+      "collaborationCapability": "DOMAIN_USERS_ONLY",
+      "createGroupsAccessLevel": "USERS_IN_DOMAIN",
+      "newGroupsAreHidden": false,
+      "ownersCanAllowExternalMembers": false,
+      "ownersCanAllowIncomingMailFromPublic": true,
+      "ownersCanHideGroups": false,
+      "viewTopicsDefaultAccessLevel": "DOMAIN_USERS"
+    }
+  },
   "service_status": [
     "chat",
     "drive_and_docs",
@@ -307,33 +308,38 @@
           "type": "ADMIN"
         },
         {
-        "name": "policies/awd5vxv7ckojjohaegy4pl4rvaddg",
-        "customer": "customers/C027ru8g4",
-        "policyQuery": {
+          "name": "policies/awd5vxv7ckojjohaegy4pl4rvaddg",
+          "customer": "customers/C027ru8g4",
+          "policyQuery": {
             "sortOrder": 101.00125
-        },
-        "setting": {
+          },
+          "setting": {
             "testing comment": "NOTE no orgunit!",
             "type": "settings/chat.chat_file_sharing",
             "value": {
-                "externalFileSharing": "ALL_FILES",
-                "internalFileSharing": "ALL_FILES"
+              "externalFileSharing": "ALL_FILES",
+              "internalFileSharing": "ALL_FILES"
             }
-        },
-        "type": "SYSTEM"
+          },
+          "type": "SYSTEM"
         }
       ]
     }
   ],
   "results": {
-    "topOU (group \"group1\")": {
+    "topOU (group group1@scubagws.org)": {
       "security_super_admin_account_recovery": {
         "enableAccountRecovery": true
       }
     },
-    "topOU (group \"group2\")": {
+    "topOU (group group2@scubagws.org)": {
       "security_super_admin_account_recovery": {
         "enableAccountRecovery": true
+      }
+    },
+    "1-1-1-1 (in 1/1-1/1-1-1)": {
+      "chat_service_status": {
+        "serviceState": "DISABLED"
       }
     },
     "subOU": {
@@ -351,10 +357,6 @@
         "allowUserModification": false,
         "historyOnByDefault": true
       },
-      "chat_chat_file_sharing": {
-        "externalFileSharing": "ALL_FILES",
-        "internalFileSharing": "ALL_FILES"
-      },
       "chat_service_status": {
         "serviceState": "ENABLED"
       },
@@ -363,6 +365,10 @@
       },
       "security_super_admin_account_recovery": {
         "enableAccountRecovery": false
+      },
+      "chat_chat_file_sharing": {
+        "externalFileSharing": "ALL_FILES",
+        "internalFileSharing": "ALL_FILES"
       },
       "drive_and_docs_service_status": {
         "serviceState": "DISABLED"
@@ -378,16 +384,163 @@
         "ownersCanAllowIncomingMailFromPublic": true,
         "ownersCanHideGroups": false,
         "viewTopicsDefaultAccessLevel": "DOMAIN_USERS"
-      }
+      },
+      "rule_system_defined_alerts": [
+        {
+          "displayName": "Account suspension warning",
+          "description": "Google Workspace accounts engaging in suspicious activity may have their account suspended. Google Workspace accounts must comply with the Google Workspace Terms of Service, Google Workspace for Education Terms of Service, Google Cloud Platform Terms of Service or Cloud Identity Terms of Service.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Device compromised",
+          "description": "Provides details about devices in your domain that have entered a compromised state.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Domain data export initiated",
+          "description": "A Super Administrator for your Google account has started exporting data from your domain.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Gmail potential employee spoofing",
+          "description": "Incoming messages where a sender's name is in your Google Workspace directory, but the mail is not from your company's domains or domain aliases.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Google Operations",
+          "description": "Provides details about security and privacy issues that affect your Google Workspace services.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Government-backed attacks",
+          "description": "Warnings about potential government-backed attacks.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Leaked password",
+          "description": "Google detected compromised credentials requiring a reset of the user's password.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Malware message detected post-delivery",
+          "description": "Messages detected as malware post-delivery that are automatically reclassified.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Phishing in inboxes due to bad whitelist",
+          "description": "Messages classified as spam by Gmail filters delivered to user inboxes due to whitelisting settings in the Google Admin console that override the spam filters.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Phishing message detected post-delivery",
+          "description": "Messages detected as phishing post-delivery that are automatically reclassified.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Spike in user-reported spam",
+          "description": "An unusually high volume of messages from a sender that users have marked as spam.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "SSO profile added",
+          "description": "Alerts you when a new SSO profile allows users to sign in to Google services through your third-party identity provider.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "SSO profile updated",
+          "description": "Alerts you when there's a change to the SSO profile that allows users to sign in to Google services through your third-party identity provider.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Super admin password reset",
+          "description": "Alerts you when the password for a super admin account changes. This admin can manage all features in your Admin console and Admin APIs.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Suspicious device activity",
+          "description": "Provides details if device properties such as device ID, serial number, type of device, or device manufacturer are updated.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Suspicious login",
+          "description": "Google detected a sign-in attempt that doesn't match a user's normal behavior, such as a sign-in from an unusual location.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Suspicious message reported",
+          "description": "A sender has sent messages to your domain that users have classified as spam.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Suspicious programmatic login",
+          "description": "Google detected suspicious login attempts from potential applications or computer programs.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "User suspended (Google identity alert)",
+          "description": "Google detected suspicious activity and suspended the account.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "User suspended due to suspicious activity",
+          "description": "Google suspended a user's account due to a potential compromise detected.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "User suspended for spamming through relay",
+          "description": "Google detected suspicious activity such as spamming through a SMTP relay service and suspended the account.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "User suspended for spamming",
+          "description": "Google detected suspicious activity such as spamming and suspended the account.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "User-reported phishing",
+          "description": "A sender has sent messages to your domain that users have classified as phishings.",
+          "state": "ACTIVE"
+        },
+        {
+          "displayName": "Calendar settings changed",
+          "description": "An admin has changed Google Workspace Calendar settings.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "Drive settings changed",
+          "description": "An admin has changed Google Workspace Drive settings.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "Email settings changed",
+          "description": "An admin has changed Google Workspace Gmail settings.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "Mobile settings changed",
+          "description": "An admin has changed mobile management settings.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "Rate limited recipient",
+          "description": "A high rate of incoming email indicating a potential malicious attack or misconfigured setting.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "User granted Admin privilege",
+          "description": "A user is granted an admin privilege.",
+          "state": "INACTIVE"
+        },
+        {
+          "displayName": "User's Admin privilege revoked",
+          "description": "A user is revoked of their admin privilege.",
+          "state": "INACTIVE"
+        }
+      ]
     },
-    "topOU (group \"WORKSPACE_ALL_ADMIN_GROUP\")": {
+    "topOU (group WORKSPACE_ALL_ADMIN_GROUP)": {
       "chat_space_history": {
         "historyState": "DEFAULT_HISTORY_ON"
-      }
-    },
-    "1-1-1-1 (in 1/1-1/1-1-1)": {
-      "chat_service_status": {
-        "serviceState": "DISABLED"
       }
     }
   }

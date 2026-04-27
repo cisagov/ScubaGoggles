@@ -1,9 +1,9 @@
 import io
-import json
 import time
 from datetime import datetime
 from pathlib import Path
 
+from scubagoggles.parsers.system_rules_parser import SYSTEM_RULES
 from scubagoggles.version import Version
 
 INDICATOR_DEFINITIONS = {
@@ -130,7 +130,6 @@ def build_front_page_html(fragments: list, tenant_info: dict, report_uuid: str, 
 def sanitize_details(table_data: list) -> list:
     for result in table_data:
         details = result["Details"]
-        
 
         dns_link = '<a href="#dns-logs">View DNS logs</a> for more details.'
         details = details.replace(dns_link, "")
@@ -139,7 +138,7 @@ def sanitize_details(table_data: list) -> list:
 
         if "OriginalDetails" in result:
             orig = result["OriginalDetails"]
-           
+
             orig = orig.replace(dns_link, "")
             orig = convert_html_lists_to_plaintext(orig)
             result["OriginalDetails"] = orig
@@ -180,7 +179,7 @@ def insert_classroom_warning(html: str, full_name: str) -> str:
     else:
             html = html.replace('{{WARNING_NOTIFICATION}}', '')
     return html
-   
+
 
 def build_individual_report_html(
     *,
@@ -195,7 +194,7 @@ def build_individual_report_html(
     tenant_domain: str,
     tenant_id: str,
 ) -> tuple[str, list | None]:
-    
+
     template_file = REPORTER_PATH / "IndividualReport/IndividualReportTemplate.html"
     html = template_file.read_text(encoding="utf-8")
     html = _inject_meta_tag(html)
@@ -230,27 +229,8 @@ def build_individual_report_html(
     html = html.replace("{{METADATA}}", meta)
     html = html.replace("{{TABLES}}", "".join(fragments))
 
-    rules_table = None
-    if rules_data:
-        alert_descriptions = json.loads((REPORTER_PATH / "IndividualReport/AlertsDescriptions.json").read_text())
-        rules_html = "<hr><h2 id=\"alerts\">System Defined Alerts</h2>"
-        rules_html += (
-            "<p>Note: As ScubaGoggles currently relies on admin log events to determine alert status, "
-            "ScubaGoggles will not be able to determine the current status of any alerts whose state has "
-            "not changed recently.</p>"
-        )
-        rules_table = []
-        for rule in rules_data["enabled_rules"]:
-            rules_table.append({"Alert Name": rule, "Description": alert_descriptions[rule], "Status": "Enabled"})
-        for rule in rules_data["disabled_rules"]:
-            rules_table.append({"Alert Name": rule, "Description": alert_descriptions[rule], "Status": "Disabled"})
-        for rule in rules_data["unknown"]:
-            rules_table.append({"Alert Name": rule, "Description": alert_descriptions[rule], "Status": "Unknown"})
-        rules_table.sort(key=lambda r: r["Alert Name"])
-        rules_html += create_html_table(rules_table)
-        html = html.replace("{{RULES}}", rules_html)
-    else:
-        html = html.replace("{{RULES}}", "")
+    rules_table = _build_rules_table(rules_data)
+    html = html.replace('{{RULES}}', rules_table)
 
     if full_name != "Gmail":
         html = html.replace("{{DNS_LOGS}}", "")
@@ -285,6 +265,43 @@ def build_individual_report_html(
 
     html = html.replace("{{DNS_LOGS}}", log_html)
     return html, rules_table
+
+
+def _build_rules_table(rules: dict) -> str:
+
+    """Given the rules dictionary from the Rego evaluation, an HTML
+    table is created which lists each system defined rule and whether
+    the rule is enabled.
+
+    :param dict rules: dictionary with keys 'enabled_rules' and
+        'disabled_rules'.  The values for each are lists of rule
+        display names.
+
+    :return: HTML table with system-defined rules.
+    :rtype: str
+    """
+
+    if not rules:
+        return ''
+
+    # To create the table, we use the enabled rules returned from the
+    # Rego run.  The table is populated with all rules listed in the
+    # complete definition (SYSTEM_RULES), with the status determined using
+    # the set of enabled rules.  The disabled rules table is not needed.
+
+    enabled_rules = frozenset(rules['enabled_rules'])
+
+    rules_table = [{'Alert Name': name,
+                    'Description': description,
+                    'Status': ('Enabled' if name in enabled_rules
+                               else 'Disabled')}
+                   for name, description in SYSTEM_RULES.items()]
+
+    html_table = ('\n<hr>\n<h2 id="alerts">System Defined Alerts</h2>\n'
+                  + create_html_table(rules_table)) + '\n'
+
+    return html_table
+
 
 def _indicator_text_color(bg_color: str) -> str:
     # Minimal heuristic preserved from original: light backgrounds use black text.

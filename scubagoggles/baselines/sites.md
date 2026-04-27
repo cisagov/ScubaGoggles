@@ -36,7 +36,7 @@ This section covers whether users are able to access Google Sites.
 
 ### Policies
 
-#### GWS.SITES.1.1v0.6
+#### GWS.SITES.1.1v1
 Sites Service SHOULD be disabled for all users.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -62,7 +62,7 @@ Sites Service SHOULD be disabled for all users.
 
 To configure the settings for Site creation and editing:
 
-#### GWS.SITES.1.1v0.6 Instructions
+#### GWS.SITES.1.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Sites**.
 3.  Select **Service Status**
