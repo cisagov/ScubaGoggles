@@ -1409,12 +1409,12 @@ Though use of Google's DLP solution is not strictly required, guidance for confi
 
 ### Policies
 #### GWS.COMMONCONTROLS.18.1v1
-A custom policy SHALL be configured for Google Drive to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
+A custom policy SHALL be configured for Google Drive, Google Calendar, Google Chat, and Gmail to protect PII and sensitive information as defined by the agency, covering at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols181v06-instructions)
 
 - _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ January 2025
+- _Last modified:_ April 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -1422,39 +1422,11 @@ A custom policy SHALL be configured for Google Drive to protect PII and sensitiv
     - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
   - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
-
-#### GWS.COMMONCONTROLS.18.2v1
-A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
-
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols182v06-instructions)
-
-- _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ January 2025
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
-  - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
-
-#### GWS.COMMONCONTROLS.18.3v1
-A custom policy SHALL be configured for Gmail to protect PII and sensitive information as defined by the agency, blocking at a minimum: credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
-
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols183v06-instructions)
-
-- _Rationale:_ Users may inadvertently share sensitive information with others who should not have access to it. DLP policies provide a way for agencies to detect and prevent unauthorized disclosures.
-- _Last modified:_ January 2025
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
-- MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
-  - [T1048: Exfiltration Over Alternative Protocol](https://attack.mitre.org/techniques/T1048/)
-    - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
-  - [T1213: Data from Information Repositories](https://attack.mitre.org/techniques/T1213/)
 
 [//]: # (Keep the version suffix out of the anchor.)
-<a name="commoncontrols184"></a>
-#### GWS.COMMONCONTROLS.18.4v1
-The action for DLP policies SHOULD be set to "block external sharing."
+<a name="commoncontrols182"></a>
+#### GWS.COMMONCONTROLS.18.2v1
+The action for DLP policies SHOULD be set to block.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols184v06-instructions)
 
@@ -1488,47 +1460,27 @@ Drive DLP and Chat DLP are available to Cloud Identity Premium users with a Goog
 4.  Click **Add rule** -\> **New rule**.
 
 #### GWS.COMMONCONTROLS.18.1v1 Instructions
-1. In the **Name** section, add the name and description of the rule.
-2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
-3. In the **Apps** section, under **Google Drive**, choose the trigger for **Drive files**, then click **Continue**.
-4. In the **Conditions** section:
+1. In the **Name and apps** section, add the name and description of the rule.
+2. In the **Name and apps** section, under **Google Calendar**, choose the trigger for **Event saved**.
+3. In the **Name and apps** section, under **Google Chat**, choose the trigger for **Message Sent** and **File uploaded**.
+4. In the **Name and apps** section, under **Google Drive**, choose the trigger for **Drive files**.
+5. In the **Name and apps** section, under **Gmail**, choose the trigger for **Message Sent** and **Message received**.
+6. In the **Actions** section, select the appropriate action for each application (per [GWS.COMMONCONTROLS.18.2](#commoncontrols182)).
+7. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
+8. Under **Scope** Click **All in your tennant**
+9. In the **Conditions** section:
     1. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **Global - Credit card number**. Select the remaining condition properties according to agency need.
     2. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
     3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number**. Select the remaining condition properties according to agency need.
     4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-5. In the **Actions** section, select **Block external sharing** (per [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
-6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-7. Review the rule details, mark the rule as **Active**, and click **Create.**
+10. Review the rule details, mark the rule as **Active**, and click **Create.**
+
 
 #### GWS.COMMONCONTROLS.18.2v1 Instructions
-1. In the **Name** section, add the name and description of the rule.
-2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
-3. In the **Apps** section, choose the trigger for **Google Chat, Message sent, File uploaded** then click **Continue**.
-4. In the **Conditions** section:
-    1. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
-    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number**. Select the remaining condition properties according to agency need.
-    4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-5. In the **Actions** section, select **Block**. Under **Select when this action should apply**, select **External Conversations**, **Spaces**, **Group chats**, and **1:1 chats** (See [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
-6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-7. Review the rule details, mark the rule as **Active**, and click **Create.**
-
-#### GWS.COMMONCONTROLS.18.3v1 Instructions
-1. In the **Name** section, add the name and description of the rule.
-2. In the **Scope** section, apply this rule to the entire domain and click **Continue**.
-3. In the **Apps** section, choose the trigger for **Gmail, Message sent** then click **Continue**.
-4. In the **Conditions** section:
-    1. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **Global - Credit card number**. Select the remaining condition properties according to agency need.
-    2. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Individual Taxpayer Identification Number**. Select the remaining condition properties according to agency need.
-    3. Click **Add Condition**. For **Content type to scan**, select **All content**. For **What to scan for**, select **Matches predefined data type**. For **Select data type**, select **United States - Social Security Number**. Select the remaining condition properties according to agency need.
-    4. Configure other appropriate content and condition definition(s) based upon the agency's individual requirements and click **Continue**.
-5. In the **Actions** section, select **Block message**. Under **Select when this action should apply**, check **Messages sent to external recipients** (See [GWS.COMMONCONTROLS.18.4](#commoncontrols184)).
-6. In the **Alerting** section, choose a severity level, and optionally, check **Send to alert center to trigger notifications**.
-7. Review the rule details, mark the rule as **Active**, and click **Create.**
-
-#### GWS.COMMONCONTROLS.18.4v1 Instructions
 1.  For each rule in the **Actions** section follow these steps depending on application:
-    1. For Google Drive policies select **Block external sharing**.
+    1. For Google Calendar policies select **Block event**.
     2. For Chat policies rules select **Block message** and select **External Conversations** and **Spaces**, **Group chats**, and **1:1 chats**.
-    3. For Gmail policies select **Block message**, and then select **Messages sent to external recipients**.
+    3. Optionally, for Chat policies rules select **Block message** and select **Internal Conversations** and **Spaces**, **Group chats**, and **1:1 chats**.
+    4. For Gmail policies select **Audit Only**, and then select **Messages sent to external recipients**, **Messages to internal recipients**, **Messages from external senders**, and **Messages from internal senders** .
+    5. For Google Drive policies select **Block external sharing**.
 2. Click **Continue**.
