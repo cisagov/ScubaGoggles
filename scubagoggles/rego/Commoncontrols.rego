@@ -1817,40 +1817,6 @@ CommonControlsId18_2 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.18.2")
 tests contains {
     "PolicyId": CommonControlsId18_2,
     "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.18.3
-#--
-
-CommonControlsId18_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.18.3")
-
-tests contains {
-    "PolicyId": CommonControlsId18_3,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
-}
-#--
-
-#
-# Baseline GWS.COMMONCONTROLS.18.4
-#--
-
-CommonControlsId18_4 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.18.4")
-
-tests contains {
-    "PolicyId": CommonControlsId18_4,
-    "Prerequisites": [],
     "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
