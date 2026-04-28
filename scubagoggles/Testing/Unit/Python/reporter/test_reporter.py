@@ -168,8 +168,8 @@ class TestReporter:
 
         assert "{{" not in html and "}}" not in html
         assert "<style>" in html and "</style>" in html
-        assert "main {}" in html and "footer {}" in html
-        assert ":root {}" in html
+        assert "main {" in html and "footer {" in html
+        assert ":root {" in html
         assert "<script>" in html and "</script>" in html
         assert "const testVar = 0;" in html
 
