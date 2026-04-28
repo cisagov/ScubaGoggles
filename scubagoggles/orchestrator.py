@@ -17,8 +17,8 @@ import csv
 from collections.abc import Callable
 from datetime import datetime, timezone, date
 from pathlib import Path
-from tqdm import tqdm
 from operator import itemgetter
+from tqdm import tqdm
 
 import requests
 import packaging.version as packageVersion
@@ -185,6 +185,7 @@ class Orchestrator:
 
         args_dict = self.args_dict
 
+        # pylint: disable=line-too-long
         baselines, customerid, credentials, accesstoken, subjectemail, preferreddnsresolvers, skipdoh, quiet, breakglassaccounts, imapexceptions, report_uuid, outputpath, outputproviderfilename = itemgetter(
             "baselines", "customerid", "credentials",
             "accesstoken", "subjectemail",
@@ -471,7 +472,8 @@ class Orchestrator:
             settings_data = json.load(file)
             return settings_data
 
-    def _create_metadata(self, tenant_id, tenant_name, tenant_domain, products_assessed, product_abbreviation_mapping, report_uuid) -> dict: # pylint: disable=line-too-long
+    # pylint: disable=line-too-long
+    def _create_metadata(self, tenant_id, tenant_name, tenant_domain, products_assessed, product_abbreviation_mapping, report_uuid) -> dict:
         timestamp_utc = datetime.now(timezone.utc)
         timestamp_zulu = timestamp_utc.strftime(
             '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
@@ -516,7 +518,8 @@ class Orchestrator:
         Creates the individual reports and the front page
         """
 
-        baselines,outputpath, fullnamesdict, outputregofilename, outputproviderfilename, darkmode, reportredaction, quiet = itemgetter( # pylint: disable=line-too-long
+        # pylint: disable=line-too-long
+        baselines,outputpath, fullnamesdict, outputregofilename, outputproviderfilename, darkmode, reportredaction, quiet = itemgetter(
             "baselines","outputpath","fullnamesdict","outputregofilename",
             "outputproviderfilename", "darkmode", "reportredaction", "quiet"
             )(self.args_dict)
