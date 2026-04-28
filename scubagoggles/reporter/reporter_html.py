@@ -222,7 +222,7 @@ def build_individual_report_html(
     tenant_domain: str,
     tenant_id: str,
 ) -> tuple[str, list | None]:
-
+    """Build an individual baseline report HTML page and optional rules table data."""
     template_file = REPORTER_PATH / "IndividualReport/IndividualReportTemplate.html"
     html = template_file.read_text(encoding="utf-8")
     html = _inject_meta_tag(html)

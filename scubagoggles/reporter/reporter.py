@@ -476,12 +476,12 @@ class Reporter:
 
             report_stats["Omit"] += 1
 
-                    for test in tests:
-                        result = self._get_test_result(test)
-                        details = test["ReportDetails"]
-                        original_result = result
-                        original_details = details
-                        details = self._add_annotation(control_id, result, details)
+            for test in tests:
+                result = self._get_test_result(test)
+                details = test["ReportDetails"]
+                original_result = result
+                original_details = details
+                details = self._add_annotation(control_id, result, details)
 
             table_rows.append(
                 {
@@ -522,17 +522,17 @@ class Reporter:
             if control_id.startswith("GWS.COMMONCONTROLS.13.1"):
                 rules_data = test["ActualValue"]
 
-                    result = self._get_test_result(test)
+            result = self._get_test_result(test)
 
             details = test["ReportDetails"]
 
-                    reports_api_link = ApiReference.LIST_ACTIVITIES.value
-                    if reports_api_link in test["Prerequisites"]:
-                        if not details.endswith("</ul>"):
-                            details += "<br><br>"
+            reports_api_link = ApiReference.LIST_ACTIVITIES.value
+            if reports_api_link in test["Prerequisites"]:
+                if not details.endswith("</ul>"):
+                    details += "<br><br>"
 
-                    details_pre_annotation = details
-                    details = self._add_annotation(control_id, result, details)
+            details_pre_annotation = details
+            details = self._add_annotation(control_id, result, details)
 
             incorrect_result = self._is_control_marked_incorrect(control_id)
 
