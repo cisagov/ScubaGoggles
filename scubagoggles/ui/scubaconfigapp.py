@@ -1264,7 +1264,7 @@ class ScubaConfigApp:
         1. **Main Tab:** Select products and baselines to assess
         2. **Annotate Policies:** Add custom notes and documentation
         3. **Omit Policies:** Exclude specific policies from assessment
-        4. **Exclusions:** Configure break glass accounts and IMAP exclusions
+        4. **Exclusions:** Configure break glass accounts, IMAP, and Sites exclusions
         5. **DNS Configuration:** Configure DNS resolvers and DoH fallback behavior
         6. **Advanced:** Override internal defaults for output names, paths, access token, and UUID truncation
         7. **Preview:** Review your configuration before saving
@@ -1275,7 +1275,7 @@ class ScubaConfigApp:
         - **Main:** Product selection with baseline coverage
         - **Annotate Policies:** Add rationale and documentation for policy decisions
         - **Omit Policies:** Use green dots to indicate configured policies, orange during editing
-        - **Exclusions:** Configure break glass accounts and Sites and IMAP policy exclusions
+        - **Exclusions:** Configure break glass accounts, IMAP, and Sites exclusions
         - **DNS Configuration:** Configure preferred DNS resolvers, DoH servers, and DoH fallback behavior
         - **Advanced:** Override internal defaults for output names, paths, access token, and UUID truncation
         - **Preview:** Review and export the generated YAML configuration
