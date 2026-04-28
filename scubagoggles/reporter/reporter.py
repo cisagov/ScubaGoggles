@@ -8,6 +8,7 @@ import logging
 import re
 from datetime import date, datetime
 from html import escape
+from pathlib import Path
 
 from scubagoggles.scuba_constants import API_LINKS, ApiReference
 from scubagoggles.version import Version
@@ -21,7 +22,9 @@ log = logging.getLogger(__name__)
 # pylint: disable=too-many-instance-attributes
 class Reporter:
     """The Reporter class generates the HTML files containing the conformance reports."""
+    _github_url = 'https://github.com/cisagov/scubagoggles'
 
+    _reporter_path = Path(__file__).parent
     # pylint: disable-next=too-many-positional-arguments
     def __init__(
         self,
