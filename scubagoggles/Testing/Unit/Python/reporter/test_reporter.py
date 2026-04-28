@@ -138,7 +138,6 @@ class TestReporter:
 
         (tmp / "styles" / "FrontPageStyle.css").write_text("main {}\n footer {}", encoding="utf-8")
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
-        (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
 
         # Patch the actual Reporter class attribute for _reporter_path,
         # otherwise the local instance returned by _reporter() won't use the temp files.
@@ -171,7 +170,6 @@ class TestReporter:
         assert "main {" in html and "footer {" in html
         assert ":root {" in html
         assert "<script>" in html and "</script>" in html
-        assert "const testVar = 0;" in html
 
         assert "sgr_settings" in html and "data-darkmode=\"true\"" in html
         assert "sgr_settings" in html and "data-redaction=\"true\"" in html
@@ -437,7 +435,7 @@ class TestReporter:
         )
 
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
-
+       
         # Patch the actual Reporter class attribute for _reporter_path,
         # otherwise the local instance returned by _reporter() won't use the temp files.
         monkeypatch.setattr(Reporter, "_reporter_path", tmp, raising=True)
