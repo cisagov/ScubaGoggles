@@ -146,7 +146,6 @@ class TestVersion:  # pylint: disable=too-many-public-methods
         mock_readme = mocker.patch.object(Version, 'check_or_update_readme', return_value=False)
         mock_md = mocker.patch.object(Version, 'check_md')
         mock_glob = mocker.patch('pathlib.Path.glob')
-        mocker.patch.object(Path, 'is_dir', return_value=True)
 
         # Mock file paths
         mock_md_files = [Path('test1.md'), Path('test2.md')]
@@ -172,7 +171,6 @@ class TestVersion:  # pylint: disable=too-many-public-methods
         mock_readme = mocker.patch.object(Version, 'check_or_update_readme', return_value=True)
         mocker.patch.object(Version, 'check_md')
         mocker.patch('pathlib.Path.glob', return_value=[])
-        mocker.patch.object(Path, 'is_dir', return_value=True)
 
         result = Version.check_versions(update=True)
 
