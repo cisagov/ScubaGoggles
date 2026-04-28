@@ -435,7 +435,6 @@ class TestReporter:
         )
 
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
-       
         # Patch the actual Reporter class attribute for _reporter_path,
         # otherwise the local instance returned by _reporter() won't use the temp files.
         monkeypatch.setattr(Reporter, "_reporter_path", tmp, raising=True)
