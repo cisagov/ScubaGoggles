@@ -201,6 +201,7 @@ class Orchestrator:
                       access_token=accesstoken,
                       svc_account_email=subjectemail,
                       dns_resolvers=preferreddnsresolvers,
+                      doh_servers=args_dict['preferreddohservers'],
                       skip_doh=skipdoh) as provider:
             provider_dict = provider.call_gws_providers(baselines, quiet)
             provider_dict['successful_calls'] = list(provider.successful_calls)
@@ -283,30 +284,33 @@ class Orchestrator:
         Executes the OPA executable with provider json input against
         specified rego files and outputs a json to path
         """
+        args_dict = self.args_dict
 
-        args = self._args
-        products = args.baselines
-        products_bar = tqdm(products, leave=False, disable=args.quiet)
+        # pylint: disable=line-too-long
+        baselines, opapath, outputpath, regopath, outputregofilename, outputproviderfilename, debug, quiet = itemgetter(
+            'baselines', 'opapath', 'outputpath', 'regopath', 'outputregofilename',
+            'outputproviderfilename', 'debug', 'quiet'
+            )(args_dict)
+
+        products_bar = tqdm(baselines, leave=False, disable=quiet)
         results = []
         for product in products_bar:
             product_name = product
-            input_file = args.outputpath / f'{args.outputproviderfilename}.json'
-            opa_path = args.opapath
-            rego_path = args.regopath
+            input_file = outputpath / f'{outputproviderfilename}.json'
 
             products_bar.set_description(
                 f'Running Rego verification for {product}...')
             product_tests = opa_eval(product_name,
                                      input_file,
-                                     opa_path,
-                                     rego_path,
-                                     args.debug)
+                                     opapath,
+                                     regopath,
+                                     debug)
             try:
                 results.extend(product_tests[0])
             except Exception as exc:
                 raise Exception('run_rego error') from exc
 
-        out_jsonfile = args.outputpath / args.outputregofilename
+        out_jsonfile = outputpath / outputregofilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(results, out_stream, indent=4)
@@ -473,6 +477,7 @@ class Orchestrator:
             return settings_data
 
     # pylint: disable=line-too-long
+    # pylint: disable=too-many-positional-arguments
     def _create_metadata(self, tenant_id, tenant_name, tenant_domain, products_assessed, product_abbreviation_mapping, report_uuid) -> dict:
         timestamp_utc = datetime.now(timezone.utc)
         timestamp_zulu = timestamp_utc.strftime(
@@ -496,8 +501,7 @@ class Orchestrator:
         scuba_results_file = outputpath / f'{outputproviderfilename}.json'
         with scuba_results_file.open(encoding='UTF-8') as file:
             raw_data = json.load(file)
-            print('type(raw_data): ')
-            print(type(raw_data))
+
             raw_data.update({'scuba_config': args_dict})
         return raw_data
 
