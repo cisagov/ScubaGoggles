@@ -7,17 +7,18 @@ description: |
 
 # The list of GWS SCuBA baselines ScubaGoggles will assess.
 baselines: 
-    - assuredcontrols
-    - calendar
-    - chat
-    - classroom
-    - commoncontrols
-    - drive
-    - gemini
-    - gmail
-    - groups
-    - meet
-    - sites
+  - assuredcontrols
+  - calendar
+  - chat
+  - classroom
+  - commoncontrols
+  - drive
+  - gemini
+  - gmail
+  - groups
+  - meet
+  - sites
+
 # Uncomment and fill in the following for automated submissions:
 # subjectemail: ""
 # customerid: ""
