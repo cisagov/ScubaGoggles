@@ -93,17 +93,19 @@ debug: false
 # runcached: true
 
 # Skip Export: will skip the provider export. To be used in conjunction with --runcached.
-# skipexport
+# skipexport: true
 
 # =======================
 # BREAK GLASS ACCOUNTS
 # =======================
-# This is for the Common Controls product. In some cases, it may be appropriate to specify the number of break glass accounts to be omitted from the total admin count. For example: When a policy is looking for the total number of break glass accounts in policy GWS.COMMONCONTROLS.6.2.
-
+# This is for the Common Controls product. In some cases, it may be appropriate to specify the number of break glass accounts 
+# to be omitted from the total admin count. For example: When a policy is looking for the total number of break glass accounts in policy GWS.COMMONCONTROLS.6.2.
 # YAML configuration demonstrating specifiying break glass accounts to be
 # exempt from from an admin count.
 
-# breakglassaccounts: [admin@example.org, admin2@example.org]
+# breakglassaccounts: 
+#   - admin@example.org
+#   - admin2@example.org
 
 # ============================
 # DNS CONFIGURATION
@@ -120,7 +122,8 @@ debug: false
 # GWS.GMAIL.4.3
 # GWS.GMAIL.4.4
 # Optional; if not provided, the system default resolver will be used.
-preferrreddnsresolvers: []
+preferrreddnsresolvers: 
+    - []
 
 # Preferred DoH Servers:  IP addresses or domain names of DoH servers that should be used to retrieve
 # any TXT records, should the traditional DNS queries fail, required by specific SCuBA policies.
@@ -145,8 +148,8 @@ skipdoh: false
 #
 # imapexceptions:
 #   - ou: my ou
-#     group: example@example.com
-#     justification: perfectly valid reason
+#   - group: example@example.com
+#   - justification: perfectly valid reason
 #   - ou: my ou/sub ou
 #   - group: example@example.com
 
@@ -163,10 +166,16 @@ skipdoh: false
 
 # Reasons for using Annotate Policies
 # -----------------------------------
-# - Provide context about implementation decisions or risk acceptance.
-# - Add references to supporting documentation or evidence.
-# - Explain compensating controls or mitigating factors.
-# - Note planned improvements or future implementation details.
+# - Document action plans for any failed controls. ScubaGear will output a warning for any failing controls that are not documented 
+# in the config file, though this warning can be silenced with the -SilenceBODWarnings flag.
+# - Help contextualize results
+# - Allow users to identify incorrect results
+
+# For each annotated policy, the config file allows you to indicate the following:
+# -----------------------------------
+# comment: The annotation to add to the report. A warning will be printed if control is marked incorrect with no comment provided as justification.
+# incorrectresult: Boolean, whether or not to mark the result incorrect. Optional, defaults to false.
+# remediationdate: Optional. The date a failing control is anticipated to be implemented. The expected format is yyyy-mm-dd.
 
 # annotatepolicy:
   # -------------------------------------
@@ -174,17 +183,17 @@ skipdoh: false
   # -------------------------------------
   # An SPF policy SHALL be published for each domain that fails all non-approved senders.
 #  GWS.GMAIL.3.1v0.6:
-#    comment: Known incorrect result; our SPF policy currently cannot to be retrieved via ScubaGoggles due to a split
+#   comment: Known incorrect result; our SPF policy currently cannot to be retrieved via ScubaGoggles due to a split
 #      horizon setup but is available publicly.
-#    incorrectresult: true
+#   incorrectresult: true
 
   # -------------------------------------
   # ANNOTATEPOLICY : COMMONCONTROLS SAMPLE
   # -------------------------------------
   # Phishing-Resistant MFA SHALL be required for all users.
-#  GWS.COMMONCONTROLS.1.1v0.6:
-#    comment: Implementation in progress.
-#    remediationdate: "2030-08-01"
+# GWS.COMMONCONTROLS.1.1v0.6:
+#   comment: Implementation in progress.
+#   remediationdate: "2030-08-01"
 
 # ============================
 # OMIT SECTION : OMIT POLICIES
@@ -192,15 +201,19 @@ skipdoh: false
 # The OmitPolicy field can be used to exclude policies from the SCuBA assessment
 # results (e.g., for controls that are met using a third party tool).
 # For in depth details, See https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md#omit-policies
-# Note:  This section is used to omit policies from the assessment from any product.
+# Note: This section is used to omit policies from the assessment from any product.
 #       The policies listed here will not be included in the assessment results.
 #       You must provide a rationale for each omitted policy.
 
 # Reasons for using Omit Policies
 # --------------------------------
-# - The policy is not applicable to the organization's environment.
-# - The policy is met using a third-party tool or solution that is not assessed by ScubaGoggles.
-# - The policy is an acceptable risk that has been documented and approved by the organization.
+# - When a policy is implemented by a third-party service that ScubaGoggles does not audit.
+# - When a policy is not applicable to your organization (e.g., policy GWS.GMAIL.4.3, which is only applicable to federal, executive branch, departments and agencies).
+
+# For each omitted policy, the config file allows you to indicate the following:
+# --------------------------------
+# rationale: The reason the policy should be omitted from the report. This value will be displayed in the "Details" column of the report. ScubaGoggles will output a warning if no rationale is provided.
+# expiration: Optional. A date after which the policy should no longer be omitted from the report. The expected format is yyyy-mm-dd.
 
 # omitpolicy:
   # -------------------------------------
@@ -208,8 +221,8 @@ skipdoh: false
   # -------------------------------------
   # Mail Delegation SHOULD be disabled.
 #  GWS.GMAIL.1.1v0.6:
-#    rationale: "Accepting risk for now, will reevaluate at a later date."
-#    expiration: "2030-12-31"
+#   rationale: "Accepting risk for now, will reevaluate at a later date."
+#   expiration: "2030-12-31"
 
   # -------------------------------------
   # OMIT POLICY : COMMONCONTROLS SAMPLE
@@ -217,13 +230,13 @@ skipdoh: false
   # A custom policy SHALL be configured for Google Drive to protect PII and sensitive information as defined by the agency, blocking at a minimum:
   # credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 #  GWS.COMMONCONTROLS.18.1v0.6:
-#    rationale: &DLPRationale "The DLP capability required by the baselines is implemented by third party product, [x],
-#      which ScubaGoggles does not have the ability to check."
+#   rationale: &DLPRationale "The DLP capability required by the baselines is implemented by third party product, [x],
+#    which ScubaGoggles does not have the ability to check."
 
   # A custom policy SHALL be configured for Google Chat to protect PII and sensitive information as defined by the agency, blocking at a minimum:
   # credit card numbers, U.S. Individual Taxpayer Identification Numbers (ITIN), and U.S. Social Security numbers (SSN).
 #  GWS.COMMONCONTROLS.18.2v0.6:
-#    rationale: *DLPRationale
+#   rationale: *DLPRationale
 
 # The "&" character used in the above example defines an anchor, which saves a value
 # for future reference. This value can then be retrieved with the "*" character. See
