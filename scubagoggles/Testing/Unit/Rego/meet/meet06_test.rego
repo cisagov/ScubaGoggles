@@ -17,7 +17,7 @@ test_Sharing_Correct_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "NEW_VALUE", "value": "false"},
-                        {"name": "SETTING_NAME", 
+                        {"name": "SETTING_NAME",
                         "value": "MeetGenAiSmartNotesDocAccessProto manage_smart_notes_doc_access"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "APPLICATION_NAME", "value": "Google Meet GenAI"}
@@ -42,7 +42,7 @@ test_Sharing_Incorrect_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "NEW_VALUE", "value": "true"},
-                        {"name": "SETTING_NAME", 
+                        {"name": "SETTING_NAME",
                         "value": "MeetGenAiSmartNotesDocAccessProto manage_smart_notes_doc_access"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "APPLICATION_NAME", "value": "Google Meet GenAI"}
@@ -75,7 +75,7 @@ test_Default_Correct_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "NEW_VALUE", "value": "IN_DOMAIN"},
-                        {"name": "SETTING_NAME", 
+                        {"name": "SETTING_NAME",
                         "value": "MeetGenAiSmartNotesDocAccessProto default_smart_notes_doc_access"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "APPLICATION_NAME", "value": "Google Meet GenAI"}
@@ -100,7 +100,7 @@ test_Default_Correct_V2 if {
                 "events": [{
                     "parameters": [
                         {"name": "NEW_VALUE", "value": "HOSTS_AND_COHOSTS_ONLY"},
-                        {"name": "SETTING_NAME", 
+                        {"name": "SETTING_NAME",
                         "value": "MeetGenAiSmartNotesDocAccessProto default_smart_notes_doc_access"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "APPLICATION_NAME", "value": "Google Meet GenAI"}
@@ -125,7 +125,7 @@ test_Default_Incorrect_V1 if {
                 "events": [{
                     "parameters": [
                         {"name": "NEW_VALUE", "value": "EVERYONE"},
-                        {"name": "SETTING_NAME", 
+                        {"name": "SETTING_NAME",
                         "value": "MeetGenAiSmartNotesDocAccessProto default_smart_notes_doc_access"},
                         {"name": "ORG_UNIT_NAME", "value": "Test Top-Level OU"},
                         {"name": "APPLICATION_NAME", "value": "Google Meet GenAI"}
