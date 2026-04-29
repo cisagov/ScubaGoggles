@@ -9,7 +9,7 @@ The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation and addresses the following:
 - [Google Support Staff Data Access](#1-google-support-staff-data-access)
@@ -22,7 +22,7 @@ This document assumes the organization is using both GWS Enterprise Plus and the
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 **Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
@@ -39,7 +39,7 @@ However, these features require additional licensing and are not available by de
 
 ### Policies
 
-#### GWS.ASSUREDCONTROLS.1.1v0.6
+#### GWS.ASSUREDCONTROLS.1.1v1
 Access Approvals SHOULD be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -53,7 +53,7 @@ Access Approvals SHOULD be enabled.
     - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
     - [T1589: Gather Victim Identity Information](https://attack.mitre.org/techniques/T1589/)
 
-#### GWS.ASSUREDCONTROLS.1.2v0.6
+#### GWS.ASSUREDCONTROLS.1.2v1
 Agencies SHOULD restrict support access to U.S. Google staff only.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -80,13 +80,13 @@ Agencies SHOULD restrict support access to U.S. Google staff only.
 
 ### Implementation
 
-#### GWS.ASSUREDCONTROLS.1.1v0.6 Instructions
+#### GWS.ASSUREDCONTROLS.1.1v1 Instructions
 1.  Sign in to the [Google Admin console](https://admin.google.com/) as a super admin.
 2.  Select **Data** -\> **Compliance** -\> **Access Approvals**.
 3.  Check the **Require Google staff to request approval before viewing data necessary for support services** box.
 4.  Click **SAVE**.
 
-#### GWS.ASSUREDCONTROLS.1.2v0.6 Instructions
+#### GWS.ASSUREDCONTROLS.1.2v1 Instructions
 
 1.  Sign in to the [Google Admin console](https://admin.google.com/) as a super admin.
 2.  Select **Data** -\> **Compliance** -\> **Access Management**.
@@ -99,7 +99,7 @@ However, these settings only apply to users with the Assured Controls Plus add-o
 
 ### Policies
 
-#### GWS.ASSUREDCONTROLS.2.1v0.6
+#### GWS.ASSUREDCONTROLS.2.1v1
 Data processing across multiple regions SHOULD be disabled for all Google Workspace products.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -122,7 +122,7 @@ Data processing across multiple regions SHOULD be disabled for all Google Worksp
 
 ### Implementation
 
-#### GWS.ASSUREDCONTROLS.2.1v0.6 Instructions
+#### GWS.ASSUREDCONTROLS.2.1v1 Instructions
 1. Sign in to the [Google Admin Console](https://admin.google.com/) as an administrator.
 2. Navigate to **Data** -\> **Compliance** -\> **Data Regions** -\> **Advanced Settings**.
 3. Select **Calendar**, choose **Disable features that may process data across multiple regions**, then click **SAVE**.

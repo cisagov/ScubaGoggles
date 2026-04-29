@@ -46,6 +46,7 @@ rules:
         - data.utils.FailTestNoEvent
         - data.utils.PassTestResult
         - data.utils.PassTestResultWithMessage
+        - data.utils.TestResult
     use-rego-v1:
       # For now, anyway...
       level: ignore

@@ -127,7 +127,7 @@ jobs:
 
       - name: Cache the output directory (macos-latest)
         if: ${{ matrix.operating-system == 'macos-latest'}}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /Users/runner/scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.mac-path.outputs.cachepath }}
@@ -144,7 +144,7 @@ jobs:
 
       - name: Cache the output directory (windows-latest)
         if: ${{ matrix.operating-system == 'windows-latest' }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: C:\Users\runneradmin\scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.windows-path.outputs.cachepath }}
@@ -167,7 +167,7 @@ jobs:
 
       - name: Cache the output directory (ubuntu-latest)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /home/runner/scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.linux-path.outputs.cachepath }}
@@ -180,7 +180,7 @@ jobs:
     if: ${{ always() }}
     steps:
       - name: Restore cached baseline folder (ubuntu-latest)
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             /home/runner/scubagoggles

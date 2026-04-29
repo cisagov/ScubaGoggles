@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 from google.auth.credentials import TokenState
+from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google.oauth2.service_account import Credentials as SvcCredentials
@@ -144,7 +145,18 @@ class GwsAuth:
         self._token = Credentials.from_authorized_user_file(token_file,
                                                             API_SCOPES)
 
-        self._refresh_token()
+        try:
+            self._refresh_token()
+        except RefreshError as error:
+            if 'deleted_client' not in str(error):
+                raise
+
+            # If the user has a new credentials file but still has a token
+            # file from previous credentials (now replaced), the token file
+            # needs to be deleted for the new credentials to be used.
+
+            self._token_path.unlink()
+            self._token = None
 
     def _refresh_token(self):
         """Refreshes the credentials token if needed and writes the

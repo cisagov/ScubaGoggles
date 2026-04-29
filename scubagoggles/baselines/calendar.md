@@ -6,7 +6,7 @@ The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity
 
 The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-Federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Set Calendar sharing options](https://support.google.com/a/answer/60765?hl=en#zippy=%2Cset-a-default-for-internal-sharing%2Callow-or-restrict-external-sharing) and addresses the following:
 
@@ -25,7 +25,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 **Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
@@ -39,23 +39,23 @@ This section determines what information is shared from calendars with external 
 
 ### Policies
 
-#### GWS.CALENDAR.1.1v0.6
+#### GWS.CALENDAR.1.1v1
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
+- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to "only free/busy information" helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
 
-#### GWS.CALENDAR.1.2v0.6
+#### GWS.CALENDAR.1.2v1
 External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to only free/busy information helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
+- _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to "only free/busy information" helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -74,14 +74,14 @@ External sharing options for secondary calendars SHALL be configured to "Only fr
 
 To configure the settings for External Sharing in Primary Calendar:
 
-#### GWS.CALENDAR.1.1v0.6 Instructions
+#### GWS.CALENDAR.1.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Calendar**.
 3.  Select **Sharing settings** -\> **External sharing options for primary calendars**.
 4.  Select **Only free/busy information (hide event details)**.
 5.  Select **Save**.
 
-#### GWS.CALENDAR.1.2v0.6 Instructions
+#### GWS.CALENDAR.1.2v1 Instructions
 
 To configure the settings for External Sharing in secondary calendars:
 
@@ -97,7 +97,7 @@ This section determines whether users are warned when inviting one or more guest
 
 ### Policies
 
-#### GWS.CALENDAR.2.1v0.6
+#### GWS.CALENDAR.2.1v1
 External invitations warnings SHALL be enabled to prompt users before sending invitations.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -123,7 +123,7 @@ External invitations warnings SHALL be enabled to prompt users before sending in
 
 ### Implementation
 
-#### GWS.CALENDAR.2.1v0.6 Instructions
+#### GWS.CALENDAR.2.1v1 Instructions
 
 To configure the settings for Confidential Mode:
 
@@ -141,12 +141,12 @@ Due to the added complexity and attack surface associated with configuring Calen
 
 ### Policies
 
-#### GWS.CALENDAR.3.1v0.6
+#### GWS.CALENDAR.3.1v1
 Calendar Interop SHOULD be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Enabling Calendar interop adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature unless required by the organization conforms to the principle of least functionality.
+- _Rationale:_ Enabling Calendar interop adds a layer of complexity to Calendar management, possibly increasing the attack surface. Disabling this feature (unless required by the organization) conforms to the principle of least functionality.
 - _Last modified:_ July 2023
 - _Note:_ This policy applies unless agency mission fulfillment requires collaboration between users internal and external to an organization who use both Microsoft Exchange and Google Calendar
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
@@ -154,7 +154,7 @@ Calendar Interop SHOULD be disabled.
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1199: Trusted Relationship](https://attack.mitre.org/techniques/T1199/)
 
-#### GWS.CALENDAR.3.2v0.6
+#### GWS.CALENDAR.3.2v1
 Microsoft 365 (Graph API) SHALL be used in lieu of basic authentication to establish connectivity between tenants or organizations in cases where Calendar Interop is deemed necessary for agency mission fulfillment.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscalendar32v06-instructions)
@@ -176,7 +176,7 @@ Microsoft 365 (Graph API) SHALL be used in lieu of basic authentication to estab
 
 ### Implementation
 
-#### GWS.CALENDAR.3.1v0.6 Instructions
+#### GWS.CALENDAR.3.1v1 Instructions
 
 To configure the settings for Calendar Interop:
 
@@ -187,7 +187,7 @@ To configure the settings for Calendar Interop:
 5.  Uncheck the **Allow Google Calendar to display Exchange users availability** checkbox.
 6.  Select **Save**.
 
-#### GWS.CALENDAR.3.2v0.6 Instructions
+#### GWS.CALENDAR.3.2v1 Instructions
 
 To configure the settings for Calendar Interop:
 
@@ -208,8 +208,8 @@ This section covers whether or not the paid appointment booking feature is enabl
 
 ### Policies
 
-#### GWS.CALENDAR.4.1v0.6
-Appointment Schedule with Payments SHOULD be disabled.
+#### GWS.CALENDAR.4.1v1
+"Appointment Schedule with Payments" SHOULD be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -230,7 +230,7 @@ Appointment Schedule with Payments SHOULD be disabled.
 
 ### Implementation
 
-#### GWS.CALENDAR.4.1v0.6 Instructions
+#### GWS.CALENDAR.4.1v1 Instructions
 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Calendar**.

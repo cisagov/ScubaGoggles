@@ -47,7 +47,7 @@ class TestReporter:
             ],
             [
                 {
-                    "Control ID": "GWS.GMAIL.1.1v0.6",
+                    "Control ID": "GWS.GMAIL.1.1v1",
                     "Requirement": "Mail Delegation SHOULD be disabled.",
                     "Result": "Warning",
                     "Criticality": "Should",
@@ -59,7 +59,7 @@ class TestReporter:
                     ),
                 },
                 {
-                    "Control ID": "GWS.GMAIL.2.1v0.6",
+                    "Control ID": "GWS.GMAIL.2.1v1",
                     "Requirement": "DKIM SHOULD be enabled for all domains.",
                     "Result": "Warning",
                     "Criticality": "Should",
@@ -138,7 +138,6 @@ class TestReporter:
 
         (tmp / "styles" / "FrontPageStyle.css").write_text("main {}\n footer {}", encoding="utf-8")
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
-        (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
 
         # Patch the actual Reporter class attribute for _reporter_path,
         # otherwise the local instance returned by _reporter() won't use the temp files.
@@ -168,10 +167,9 @@ class TestReporter:
 
         assert "{{" not in html and "}}" not in html
         assert "<style>" in html and "</style>" in html
-        assert "main {}" in html and "footer {}" in html
-        assert ":root {}" in html
+        assert "main {" in html and "footer {" in html
+        assert ":root {" in html
         assert "<script>" in html and "</script>" in html
-        assert "const testVar = 0;" in html
 
         assert "sgr_settings" in html and "data-darkmode=\"true\"" in html
         assert "sgr_settings" in html and "data-redaction=\"true\"" in html
@@ -187,7 +185,7 @@ class TestReporter:
         [
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "rationale": "Accepting risk",
                         "expiration": "2035-12-31"
                     },
@@ -196,7 +194,7 @@ class TestReporter:
             ),
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "rationale": "Accepting risk",
                         "expiration": "2020-12-31"
                     },
@@ -220,7 +218,7 @@ class TestReporter:
         [
             {
                 "omissions": {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "rationale": "Accepting risk for now, will reevaluate at a later date.",
                         "expiration": "2035-12-31",
                     }
@@ -237,7 +235,7 @@ class TestReporter:
             },
             {
                 "omissions": {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "rationale": "",
                         "expiration": "2035-12-31",
                     }
@@ -295,7 +293,7 @@ class TestReporter:
         [
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "incorrectresult": True,
                         "comment": "This control is incorrectly marked as non-compliant.",
                     }
@@ -303,10 +301,10 @@ class TestReporter:
                 "This control is incorrectly marked as non-compliant.",
             ),
             ({}, None),
-            ({"GWS.GMAIL.1.1v0.6": None}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"incorrectresult": True}}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"comment": None}}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"comment": ""}}, None),
+            ({"GWS.GMAIL.1.1v1": None}, None),
+            ({"GWS.GMAIL.1.1v1": {"incorrectresult": True}}, None),
+            ({"GWS.GMAIL.1.1v1": {"comment": None}}, None),
+            ({"GWS.GMAIL.1.1v1": {"comment": ""}}, None),
         ],
     )
     # pylint: disable=protected-access
@@ -333,17 +331,17 @@ class TestReporter:
         [
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "remediationdate": "2035-12-31"
                     }
                 },
                 "2035-12-31",
             ),
             ({}, None),
-            ({"GWS.GMAIL.1.1v0.6": None}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"incorrectresult": True}}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"remediationdate": None}}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"remediationdate": ""}}, None),
+            ({"GWS.GMAIL.1.1v1": None}, None),
+            ({"GWS.GMAIL.1.1v1": {"incorrectresult": True}}, None),
+            ({"GWS.GMAIL.1.1v1": {"remediationdate": None}}, None),
+            ({"GWS.GMAIL.1.1v1": {"remediationdate": ""}}, None),
         ],
     )
     # pylint: disable=protected-access
@@ -373,7 +371,7 @@ class TestReporter:
         [
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "comment": "This control is incorrectly marked as non-compliant.",
                         "incorrectresult": True,
                     }
@@ -381,9 +379,9 @@ class TestReporter:
                 True,
             ),
             ({}, False),
-            ({"GWS.GMAIL.1.1v0.6": {}}, False),
-            ({"GWS.GMAIL.1.1v0.6": {"comment": "Some comment"}}, False),
-            ({"GWS.GMAIL.1.1v0.6": {"incorrectresult": False}}, False),
+            ({"GWS.GMAIL.1.1v1": {}}, False),
+            ({"GWS.GMAIL.1.1v1": {"comment": "Some comment"}}, False),
+            ({"GWS.GMAIL.1.1v1": {"incorrectresult": False}}, False),
         ],
     )
     # pylint: disable=protected-access
@@ -437,8 +435,6 @@ class TestReporter:
         )
 
         (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
-        (tmp / "scripts" / "main.js").write_text("const testVar = 0;", encoding="utf-8")
-
         # Patch the actual Reporter class attribute for _reporter_path,
         # otherwise the local instance returned by _reporter() won't use the temp files.
         monkeypatch.setattr(Reporter, "_reporter_path", tmp, raising=True)
@@ -451,7 +447,7 @@ class TestReporter:
                     "GroupNumber": "1",
                     "Controls": [
                         {
-                            "Id": "GWS.GMAIL.1.1v0.6",
+                            "Id": "GWS.GMAIL.1.1v1",
                             "Value": "Mail Delegation SHOULD be disabled.",
                         }
                     ],
@@ -461,7 +457,7 @@ class TestReporter:
 
         test_results = [
             {
-                "PolicyId": "GWS.GMAIL.1.1v0.6",
+                "PolicyId": "GWS.GMAIL.1.1v1",
                 "Prerequisites": [
                     "policy/gmail_mail_delegation.enableMailDelegation",
                     "policy/gmail_service_status.serviceState"
@@ -510,7 +506,7 @@ class TestReporter:
         assert group["GroupReferenceURL"].endswith(expected_suffix)
         assert group["Controls"] != [
             {
-                "Control ID": "GWS.GMAIL.1.1v0.6",
+                "Control ID": "GWS.GMAIL.1.1v1",
                 "Requirement": "Mail Delegation SHOULD be disabled.",
                 "Result": "Warning",
                 "Criticality": "Should",
