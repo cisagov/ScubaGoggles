@@ -123,7 +123,7 @@ debug: false
 # GWS.GMAIL.4.4
 # Optional; if not provided, the system default resolver will be used.
 preferrreddnsresolvers: 
-    - []
+  - []
 
 # Preferred DoH Servers:  IP addresses or domain names of DoH servers that should be used to retrieve
 # any TXT records, should the traditional DNS queries fail, required by specific SCuBA policies.
