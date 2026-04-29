@@ -22,6 +22,14 @@ import yaml
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 from scubagoggles.ui.validation import ConfigValidator
 
+
+class _IndentedListDumper(yaml.SafeDumper):
+    """YAML dumper that indents sequence items by two spaces."""
+
+    def increase_indent(self, flow=False, indentless=False):
+        """Force list items to indent under their parent mapping key."""
+        return super().increase_indent(flow, False)
+
 _CSS_LIGHT_BASE = """<style>
 @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap');
 
@@ -889,6 +897,17 @@ class ScubaConfigApp:
         """Synchronise per-baseline checkbox session keys with *selected*."""
         for baseline in self.get_baseline_info():
             st.session_state[f"baseline_{baseline}"] = baseline in selected
+
+    @staticmethod
+    def _render_yaml(clean_config: Dict[str, Any]) -> str:
+        """Render YAML with explicit list indentation for UI consistency."""
+        return yaml.dump(
+            clean_config,
+            Dumper=_IndentedListDumper,
+            default_flow_style=False,
+            sort_keys=False,
+            indent=2,
+        )
 
     @staticmethod
     def _yaml_array_to_flow(yaml_str: str, key: str) -> str:
@@ -2243,7 +2262,7 @@ class ScubaConfigApp:
         clean_config = self.generate_clean_config()
 
         if clean_config:
-            yaml_config = yaml.dump(clean_config, default_flow_style=False, sort_keys=False)
+            yaml_config = self._render_yaml(clean_config)
 
             for key in ('baselines', 'breakglassaccounts', 'preferreddnsresolvers', 'preferreddohservers'):
                 yaml_config = self._yaml_array_to_flow(yaml_config, key)
