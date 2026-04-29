@@ -12,7 +12,29 @@ GoodSitesApi01 := {
     },
     "tenant_info": {
         "topLevelOU": "topOU"
-    }
+    },
+    "sites_exclusions": []
+}
+
+GoodSitesApi02 := {
+    "policies": {
+        "topOU": {
+            "sites_service_status": {"serviceState": "DISABLED"}
+        },
+        "nextOU": {
+            "sites_service_status": {"serviceState": "ENABLED"}
+        }
+    },
+    "tenant_info": {
+        "topLevelOU": "topOU"
+    },
+    "sites_exclusions": [
+        {
+            "ou": "nextOU",
+            "group": "",
+            "justification": "perfectly valid reason"
+        }
+    ]
 }
 
 BadSitesApi01 := {
@@ -26,7 +48,8 @@ BadSitesApi01 := {
     },
     "tenant_info": {
         "topLevelOU": "topOU"
-    }
+    },
+    "sites_exclusions": []
 }
 
 BadSitesApi01a := {
@@ -40,7 +63,8 @@ BadSitesApi01a := {
     },
     "tenant_info": {
         "topLevelOU": "topOU"
-    }
+    },
+    "sites_exclusions": []
 }
 
 test_SitesAPI_Correct_1 if {
@@ -48,6 +72,21 @@ test_SitesAPI_Correct_1 if {
     Output := tests with input as GoodSitesApi01
 
     PassTestResult(PolicyId, Output)
+}
+
+test_SitesAPI_Correct_2 if {
+    PolicyId := SitesId1_1
+    Output := tests with input as GoodSitesApi02
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat("", [
+        "Requirement met in all OUs and groups.",
+        "<br>Note: Sites is enabled in the following locations but ScubaGoggles was configured to ",
+        "allow exceptions for them:<ul><li>nextOU. <i>Justification: perfectly valid reason</i></li></ul>"
+    ])
 }
 
 test_SitesAPI_Incorrect_1 if {

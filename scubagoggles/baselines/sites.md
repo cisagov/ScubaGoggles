@@ -40,6 +40,7 @@ This section covers whether users are able to access Google Sites.
 Sites Service SHOULD be disabled for all users.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#sites-exclusions)
 
 - _Rationale:_ Google Sites can increase the attack surface of Google Workspace (GWS). Disabling this feature unless it is needed conforms to the principle of least functionality.
 - _Last modified:_ December 2025

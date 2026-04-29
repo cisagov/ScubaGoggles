@@ -22,6 +22,14 @@ import yaml
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 from scubagoggles.ui.validation import ConfigValidator
 
+
+class _IndentedListDumper(yaml.SafeDumper):
+    """YAML dumper that indents sequence items by two spaces."""
+
+    def increase_indent(self, flow=False, indentless=False):
+        """Force list items to indent under their parent mapping key."""
+        return super().increase_indent(flow, False)
+
 _CSS_LIGHT_BASE = """<style>
 @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap');
 
@@ -385,7 +393,8 @@ class ScubaConfigApp:
                 'omitpolicy': {},
                 'annotatepolicy': {},
                 'breakglassaccounts': [],
-                'imapexceptions': [],
+                'imapexclusions': [],
+                'sitesexclusions': [],
                 'preferreddnsresolvers': [],
                 'preferreddohservers': [],
                 'skipdoh': False,
@@ -715,7 +724,8 @@ class ScubaConfigApp:
 
         for key, coerce in (
             ('breakglassaccounts', None),
-            ('imapexceptions', None),
+            ('imapexclusions', None),
+            ('sitesexclusions', None),
             ('preferreddnsresolvers', str),
             ('preferreddohservers', str),
         ):
@@ -887,6 +897,17 @@ class ScubaConfigApp:
         """Synchronise per-baseline checkbox session keys with *selected*."""
         for baseline in self.get_baseline_info():
             st.session_state[f"baseline_{baseline}"] = baseline in selected
+
+    @staticmethod
+    def _render_yaml(clean_config: Dict[str, Any]) -> str:
+        """Render YAML with explicit list indentation for UI consistency."""
+        return yaml.dump(
+            clean_config,
+            Dumper=_IndentedListDumper,
+            default_flow_style=False,
+            sort_keys=False,
+            indent=2,
+        )
 
     @staticmethod
     def _yaml_array_to_flow(yaml_str: str, key: str) -> str:
@@ -1262,7 +1283,7 @@ class ScubaConfigApp:
         1. **Main Tab:** Select products and baselines to assess
         2. **Annotate Policies:** Add custom notes and documentation
         3. **Omit Policies:** Exclude specific policies from assessment
-        4. **Exclusions:** Configure break glass accounts and IMAP exceptions
+        4. **Exclusions:** Configure break glass accounts, IMAP, and Sites exclusions
         5. **DNS Configuration:** Configure DNS resolvers and DoH fallback behavior
         6. **Advanced:** Override internal defaults for output names, paths, access token, and UUID truncation
         7. **Preview:** Review your configuration before saving
@@ -1273,7 +1294,7 @@ class ScubaConfigApp:
         - **Main:** Product selection with baseline coverage
         - **Annotate Policies:** Add rationale and documentation for policy decisions
         - **Omit Policies:** Use green dots to indicate configured policies, orange during editing
-        - **Exclusions:** Configure break glass accounts and IMAP policy exceptions
+        - **Exclusions:** Configure break glass accounts, IMAP, and Sites exclusions
         - **DNS Configuration:** Configure preferred DNS resolvers, DoH servers, and DoH fallback behavior
         - **Advanced:** Override internal defaults for output names, paths, access token, and UUID truncation
         - **Preview:** Review and export the generated YAML configuration
@@ -1778,10 +1799,12 @@ class ScubaConfigApp:
         )
 
     def render_exclusions_tab(self):
-        """Render exclusions configuration tab (break glass + IMAP exceptions)"""
+        """Render exclusions configuration tab (break glass + IMAP + sites exclusions)"""
         self._render_break_glass_section()
         st.markdown("---")
-        self._render_imap_exceptions_section()
+        self._render_imap_exclusions_section()
+        st.markdown("---")
+        self._render_sites_exclusions_section()
 
     def _render_break_glass_section(self):  # pylint: disable=too-many-branches
         """Render break glass accounts section within the Exclusions tab."""
@@ -1858,29 +1881,29 @@ class ScubaConfigApp:
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    def _render_imap_exceptions_section(self):
-        """Render IMAP exceptions section within the Exclusions tab."""
+    def _render_imap_exclusions_section(self):
+        """Render IMAP exclusions section within the Exclusions tab."""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
-        st.markdown('<h2 class="section-title">IMAP Exceptions</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-title">IMAP Exclusions</h2>', unsafe_allow_html=True)
 
         st.markdown("""
         **Configure OUs and groups where IMAP access is allowed per GWS.GMAIL.9.1.**
 
         IMAP MAY be enabled on a per-OU or per-group basis when there is a specific need.
-        Each exception requires at least an OU or a group (or both). If both are provided,
-        the exception only applies to users in both the OU and the group.
+        Each exclusion requires at least an OU or a group (or both). If both are provided,
+        the exclusion only applies to users in both the OU and the group.
 
         ⚠️ **Important:**
         - The OU must be a path relative to the top-level OU (cannot be the top-level OU itself)
         - Groups should be entered as email addresses (e.g., `examplegroup@example.com`)
         """)
 
-        imap_exceptions = st.session_state.config_data.get('imapexceptions', [])
+        imap_exceptions = st.session_state.config_data.get('imapexclusions', [])
 
-        st.subheader("➕ Add IMAP Exception")
+        st.subheader("➕ Add IMAP Exclusion")
 
-        def _add_imap_exception():
-            """Callback: validate and add an IMAP exception."""
+        def _add_imap_exclusion():
+            """Callback: validate and add an IMAP exclusion."""
             ou = st.session_state.get("new_imap_ou", "").strip()
             group = st.session_state.get("new_imap_group", "").strip()
             justification = st.session_state.get("new_imap_justification", "").strip()
@@ -1890,7 +1913,7 @@ class ScubaConfigApp:
             elif group and not ConfigValidator.validate_email(group):
                 st.session_state.imap_add_status = ("invalid_group", group)
             else:
-                exceptions = st.session_state.config_data.get('imapexceptions', [])
+                exceptions = st.session_state.config_data.get('imapexclusions', [])
                 entry: dict = {}
                 if ou:
                     entry['ou'] = ou
@@ -1899,7 +1922,7 @@ class ScubaConfigApp:
                 if justification:
                     entry['justification'] = justification
                 exceptions.append(entry)
-                st.session_state.config_data['imapexceptions'] = exceptions
+                st.session_state.config_data['imapexclusions'] = exceptions
                 st.session_state.imap_add_status = ("success", "")
 
             st.session_state.new_imap_ou = ""
@@ -1925,21 +1948,21 @@ class ScubaConfigApp:
         st.text_input(
             "Justification",
             placeholder="Brief explanation of why IMAP is needed",
-            help="Optional justification for the IMAP exception",
+            help="Optional justification for the IMAP exclusion",
             key="new_imap_justification"
         )
 
-        st.button("➕ Add Exception", type="primary", on_click=_add_imap_exception,
+        st.button("➕ Add Exclusion", type="primary", on_click=_add_imap_exclusion,
                    key="add_imap_exception_btn")
 
         self._show_add_status("imap_add_status", {
-            "success": (st.success, "✅ Added IMAP exception"),
+            "success": (st.success, "✅ Added IMAP exclusion"),
             "invalid_group": (st.error, lambda d: f"❌ Invalid group email format: {d}"),
             "missing_target": (st.error, "❌ At least an OU or group email is required"),
         })
 
         if imap_exceptions:
-            st.subheader("📋 Current IMAP Exceptions")
+            st.subheader("📋 Current IMAP Exclusions")
             for i, exc in enumerate(imap_exceptions):
                 col1, col2 = st.columns([4, 1])
                 with col1:
@@ -1954,13 +1977,119 @@ class ScubaConfigApp:
                 with col2:
                     if st.button("🗑️ Remove", key=f"remove_imap_{i}"):
                         imap_exceptions.pop(i)
-                        st.session_state.config_data['imapexceptions'] = imap_exceptions
-                        st.success("✅ Removed IMAP exception")
+                        st.session_state.config_data['imapexclusions'] = imap_exceptions
+                        st.success("✅ Removed IMAP exclusion")
                         st.rerun()
         else:
-            st.info("ℹ️ No IMAP exceptions configured")
+            st.info("ℹ️ No IMAP exclusion configured")
 
         st.markdown('</div>', unsafe_allow_html=True)
+
+
+    def _render_sites_exclusions_section(self):
+        """Render Sites exclusions section within the Exclusions tab."""
+        st.markdown('<div class="section-container">', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-title">Sites Exclusions</h2>', unsafe_allow_html=True)
+
+        st.markdown("""
+        **Configure OUs and groups where Sites access is allowed per GWS.SITES.1.1.**
+
+        Sites MAY be enabled on a per-OU or per-group basis when there is a specific need.
+        Each exclusion requires at least an OU or a group (or both). If both are provided,
+        the exclusion only applies to users in both the OU and the group.
+
+        ⚠️ **Important:**
+        - The OU must be a path relative to the top-level OU (cannot be the top-level OU itself)
+        - Groups should be entered as email addresses (e.g., `examplegroup@example.com`)
+        """)
+
+        sites_exceptions = st.session_state.config_data.get('sitesexclusions', [])
+
+        st.subheader("➕ Add Sites Exclusion")
+
+        def _add_sites_exclusion():
+            """Callback: validate and add a Sites exclusion."""
+            ou = st.session_state.get("new_sites_ou", "").strip()
+            group = st.session_state.get("new_sites_group", "").strip()
+            justification = st.session_state.get("new_sites_justification", "").strip()
+
+            if not ou and not group:
+                st.session_state.sites_add_status = ("missing_target", "")
+            elif group and not ConfigValidator.validate_email(group):
+                st.session_state.sites_add_status = ("invalid_group", group)
+            else:
+                exceptions = st.session_state.config_data.get('sitesexclusions', [])
+                entry: dict = {}
+                if ou:
+                    entry['ou'] = ou
+                if group:
+                    entry['group'] = group
+                if justification:
+                    entry['justification'] = justification
+                exceptions.append(entry)
+                st.session_state.config_data['sitesexclusions'] = exceptions
+                st.session_state.sites_add_status = ("success", "")
+
+            st.session_state.new_sites_ou = ""
+            st.session_state.new_sites_group = ""
+            st.session_state.new_sites_justification = ""
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.text_input(
+                "Org Unit (OU)",
+                placeholder="My OU/My sub OU",
+                help="Org unit path relative to the top-level OU where Sites should be allowed",
+                key="new_sites_ou"
+            )
+        with col2:
+            st.text_input(
+                "Group Email",
+                placeholder="examplegroup@example.com",
+                help="Group email address where Sites should be allowed",
+                key="new_sites_group"
+            )
+
+        st.text_input(
+            "Justification",
+            placeholder="Brief explanation of why Sites is needed",
+            help="Optional justification for the Sites exclusion",
+            key="new_sites_justification"
+        )
+
+        st.button("➕ Add Exclusion", type="primary", on_click=_add_sites_exclusion,
+                   key="add_sites_exception_btn")
+
+        self._show_add_status("sites_add_status", {
+            "success": (st.success, "✅ Added Sites exclusion"),
+            "invalid_group": (st.error, lambda d: f"❌ Invalid group email format: {d}"),
+            "missing_target": (st.error, "❌ At least an OU or group email is required"),
+        })
+
+        if sites_exceptions:
+            st.subheader("📋 Current Sites Exclusions")
+            for i, exc in enumerate(sites_exceptions):
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    parts = []
+                    if exc.get('ou'):
+                        parts.append(f"**OU:** {exc['ou']}")
+                    if exc.get('group'):
+                        parts.append(f"**Group:** {exc['group']}")
+                    st.markdown(" · ".join(parts))
+                    if exc.get('justification'):
+                        st.caption(exc['justification'])
+                with col2:
+                    if st.button("🗑️ Remove", key=f"remove_sites_{i}"):
+                        sites_exceptions.pop(i)
+                        st.session_state.config_data['sitesexclusions'] = sites_exceptions
+                        st.success("✅ Removed Sties exclusion")
+                        st.rerun()
+        else:
+            st.info("ℹ️ No Sites exclusion configured")
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
 
     @staticmethod
     def _on_advanced_field_change():
@@ -2133,7 +2262,7 @@ class ScubaConfigApp:
         clean_config = self.generate_clean_config()
 
         if clean_config:
-            yaml_config = yaml.dump(clean_config, default_flow_style=False, sort_keys=False)
+            yaml_config = self._render_yaml(clean_config)
 
             for key in ('baselines', 'breakglassaccounts', 'preferreddnsresolvers', 'preferreddohservers'):
                 yaml_config = self._yaml_array_to_flow(yaml_config, key)
@@ -2174,7 +2303,8 @@ class ScubaConfigApp:
             'customerid', 'subjectemail', 'orgname', 'baselines',
             'credentials', 'orgunitname', 'description', 'quiet',
             'annotatepolicy', 'omitpolicy', 'breakglassaccounts',
-            'imapexceptions', 'preferreddnsresolvers', 'preferreddohservers',
+            'imapexclusions', 'sitesexclusions', 'preferreddnsresolvers',
+            'preferreddohservers',
         )
         for key in _pass_through:
             if data.get(key):
