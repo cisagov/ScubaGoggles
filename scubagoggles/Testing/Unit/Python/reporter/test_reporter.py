@@ -47,7 +47,7 @@ class TestReporter:
             ],
             [
                 {
-                    "Control ID": "GWS.GMAIL.1.1v0.6",
+                    "Control ID": "GWS.GMAIL.1.1v1",
                     "Requirement": "Mail Delegation SHOULD be disabled.",
                     "Result": "Warning",
                     "Criticality": "Should",
@@ -59,7 +59,7 @@ class TestReporter:
                     ),
                 },
                 {
-                    "Control ID": "GWS.GMAIL.2.1v0.6",
+                    "Control ID": "GWS.GMAIL.2.1v1",
                     "Requirement": "DKIM SHOULD be enabled for all domains.",
                     "Result": "Warning",
                     "Criticality": "Should",
@@ -187,7 +187,7 @@ class TestReporter:
         [
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "rationale": "Accepting risk",
                         "expiration": "2035-12-31"
                     },
@@ -196,7 +196,7 @@ class TestReporter:
             ),
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "rationale": "Accepting risk",
                         "expiration": "2020-12-31"
                     },
@@ -220,7 +220,7 @@ class TestReporter:
         [
             {
                 "omissions": {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "rationale": "Accepting risk for now, will reevaluate at a later date.",
                         "expiration": "2035-12-31",
                     }
@@ -237,7 +237,7 @@ class TestReporter:
             },
             {
                 "omissions": {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "rationale": "",
                         "expiration": "2035-12-31",
                     }
@@ -295,7 +295,7 @@ class TestReporter:
         [
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "incorrectresult": True,
                         "comment": "This control is incorrectly marked as non-compliant.",
                     }
@@ -303,10 +303,10 @@ class TestReporter:
                 "This control is incorrectly marked as non-compliant.",
             ),
             ({}, None),
-            ({"GWS.GMAIL.1.1v0.6": None}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"incorrectresult": True}}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"comment": None}}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"comment": ""}}, None),
+            ({"GWS.GMAIL.1.1v1": None}, None),
+            ({"GWS.GMAIL.1.1v1": {"incorrectresult": True}}, None),
+            ({"GWS.GMAIL.1.1v1": {"comment": None}}, None),
+            ({"GWS.GMAIL.1.1v1": {"comment": ""}}, None),
         ],
     )
     # pylint: disable=protected-access
@@ -333,17 +333,17 @@ class TestReporter:
         [
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "remediationdate": "2035-12-31"
                     }
                 },
                 "2035-12-31",
             ),
             ({}, None),
-            ({"GWS.GMAIL.1.1v0.6": None}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"incorrectresult": True}}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"remediationdate": None}}, None),
-            ({"GWS.GMAIL.1.1v0.6": {"remediationdate": ""}}, None),
+            ({"GWS.GMAIL.1.1v1": None}, None),
+            ({"GWS.GMAIL.1.1v1": {"incorrectresult": True}}, None),
+            ({"GWS.GMAIL.1.1v1": {"remediationdate": None}}, None),
+            ({"GWS.GMAIL.1.1v1": {"remediationdate": ""}}, None),
         ],
     )
     # pylint: disable=protected-access
@@ -373,7 +373,7 @@ class TestReporter:
         [
             (
                 {
-                    "GWS.GMAIL.1.1v0.6": {
+                    "GWS.GMAIL.1.1v1": {
                         "comment": "This control is incorrectly marked as non-compliant.",
                         "incorrectresult": True,
                     }
@@ -381,9 +381,9 @@ class TestReporter:
                 True,
             ),
             ({}, False),
-            ({"GWS.GMAIL.1.1v0.6": {}}, False),
-            ({"GWS.GMAIL.1.1v0.6": {"comment": "Some comment"}}, False),
-            ({"GWS.GMAIL.1.1v0.6": {"incorrectresult": False}}, False),
+            ({"GWS.GMAIL.1.1v1": {}}, False),
+            ({"GWS.GMAIL.1.1v1": {"comment": "Some comment"}}, False),
+            ({"GWS.GMAIL.1.1v1": {"incorrectresult": False}}, False),
         ],
     )
     # pylint: disable=protected-access
@@ -451,7 +451,7 @@ class TestReporter:
                     "GroupNumber": "1",
                     "Controls": [
                         {
-                            "Id": "GWS.GMAIL.1.1v0.6",
+                            "Id": "GWS.GMAIL.1.1v1",
                             "Value": "Mail Delegation SHOULD be disabled.",
                         }
                     ],
@@ -461,7 +461,7 @@ class TestReporter:
 
         test_results = [
             {
-                "PolicyId": "GWS.GMAIL.1.1v0.6",
+                "PolicyId": "GWS.GMAIL.1.1v1",
                 "Prerequisites": [
                     "policy/gmail_mail_delegation.enableMailDelegation",
                     "policy/gmail_service_status.serviceState"
@@ -510,7 +510,7 @@ class TestReporter:
         assert group["GroupReferenceURL"].endswith(expected_suffix)
         assert group["Controls"] != [
             {
-                "Control ID": "GWS.GMAIL.1.1v0.6",
+                "Control ID": "GWS.GMAIL.1.1v1",
                 "Requirement": "Mail Delegation SHOULD be disabled.",
                 "Result": "Warning",
                 "Criticality": "Should",

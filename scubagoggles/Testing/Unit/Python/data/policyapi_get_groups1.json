@@ -4,21 +4,24 @@
     "groups": [
       {
         "id": "00gjdgxs0jy4ar3",
+        "email": "secgroup@scubagws.org",
         "name": "Security Group"
       },
       {
         "id": "02u6wntf4co42dm",
+        "email": "secret@scubagws.org",
         "name": "Secret Group"
       },
       {
         "id": "03mzq4wv2ss2jml",
+        "email": "test_alias@scubagws.org",
         "name": "test-alias-domains-are-added-to-group-info"
       }
     ]
   },
   "results": {
-      "00gjdgxs0jy4ar3": "Security Group",
-      "02u6wntf4co42dm": "Secret Group",
-      "03mzq4wv2ss2jml": "test-alias-domains-are-added-to-group-info"
+    "00gjdgxs0jy4ar3": "secgroup@scubagws.org",
+    "02u6wntf4co42dm": "secret@scubagws.org",
+    "03mzq4wv2ss2jml": "test_alias@scubagws.org"
   }
 }

@@ -15,5 +15,5 @@ This section determines what information is shared from calendars with external 
     does not match under section "1. External Sharing Options".
     The parser must raise an error if this occurs.
 -->
-#### GWS.group_mismatch.2.1v0.6
+#### GWS.group_mismatch.2.1v1
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."
