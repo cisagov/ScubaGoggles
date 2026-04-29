@@ -387,7 +387,12 @@ test_DMARCAgencyPOC_Correct_V1 if {
             {
                 "domain": "test.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics@dhs.gov"
+                    concat("", [
+                        "v=DMARC1; p=reject; pct=100; ",
+                        "rua=mailto:DMARC@hq.dhs.gov, ",
+                        "mailto:reports@dmarc.cyber.dhs.gov; ",
+                        "ruf=mailto:forensics@dhs.gov",
+                    ])
                 ]
             }
         ],
@@ -409,13 +414,23 @@ test_DMARCAgencyPOC_Correct_V2 if {
             {
                 "domain": "test1.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics@dhs.gov"
+                    concat("", [
+                        "v=DMARC1; p=reject; pct=100; ",
+                        "rua=mailto:DMARC@hq.dhs.gov, ",
+                        "mailto:reports@dmarc.cyber.dhs.gov; ",
+                        "ruf=mailto:forensics@dhs.gov",
+                    ])
                 ]
             },
             {
                 "domain": "test2.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics@dhs.gov"
+                    concat("", [
+                        "v=DMARC1; p=reject; pct=100; ",
+                        "rua=mailto:DMARC@hq.dhs.gov, ",
+                        "mailto:reports@dmarc.cyber.dhs.gov; ",
+                        "ruf=mailto:forensics@dhs.gov",
+                    ])
                 ]
             }
         ],
@@ -437,7 +452,12 @@ test_DMARCAgencyPOC_Incorrect_V1 if {
             {
                 "domain": "test1.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics@dhs.gov"
+                    concat("", [
+                        "v=DMARC1; p=reject; pct=100; ",
+                        "rua=mailto:DMARC@hq.dhs.gov, ",
+                        "mailto:reports@dmarc.cyber.dhs.gov; ",
+                        "ruf=mailto:forensics@dhs.gov",
+                    ])
                 ]
             },
             {
@@ -552,7 +572,12 @@ test_DMARCAgencyPOC_Incorrect_DuplicateRuaTags if {
             {
                 "domain": "test.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov; rua=mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics@dhs.gov"
+                    concat("", [
+                        "v=DMARC1; p=reject; pct=100; ",
+                        "rua=mailto:DMARC@hq.dhs.gov; ",
+                        "rua=mailto:reports@dmarc.cyber.dhs.gov; ",
+                        "ruf=mailto:forensics@dhs.gov",
+                    ])
                 ]
             }
         ],
@@ -574,7 +599,13 @@ test_DMARCAgencyPOC_Incorrect_DuplicateRufTags if {
             {
                 "domain": "test.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics1@dhs.gov; ruf=mailto:forensics2@dhs.gov"
+                    concat("", [
+                        "v=DMARC1; p=reject; pct=100; ",
+                        "rua=mailto:DMARC@hq.dhs.gov, ",
+                        "mailto:reports@dmarc.cyber.dhs.gov; ",
+                        "ruf=mailto:forensics1@dhs.gov; ",
+                        "ruf=mailto:forensics2@dhs.gov",
+                    ])
                 ]
             }
         ],
@@ -618,7 +649,12 @@ test_DMARCAgencyPOC_Incorrect_RufNotMailto if {
             {
                 "domain": "test.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=https://dhs.gov/forensics"
+                    concat("", [
+                        "v=DMARC1; p=reject; pct=100; ",
+                        "rua=mailto:DMARC@hq.dhs.gov, ",
+                        "mailto:reports@dmarc.cyber.dhs.gov; ",
+                        "ruf=https://dhs.gov/forensics",
+                    ])
                 ]
             }
         ],
@@ -640,7 +676,12 @@ test_DMARCAgencyPOC_Incorrect_RuaNotMailto if {
             {
                 "domain": "test.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=https://dhs.gov/aggregateReporting, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics2@dhs.gov"
+                    concat("", [
+                        "v=DMARC1; p=reject; pct=100; ",
+                        "rua=https://dhs.gov/aggregateReporting, ",
+                        "mailto:reports@dmarc.cyber.dhs.gov; ",
+                        "ruf=mailto:forensics2@dhs.gov",
+                    ])
                 ]
             }
         ],
