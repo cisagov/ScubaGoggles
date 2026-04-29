@@ -83,14 +83,14 @@ silencebodwarnings: false
 numberofuuidcharacterstotruncate: 18
 
 # Debug OPA: This field is used to print debugging information for OPA.
-# debug
+debug: false
 
 # Dark Mode: This field is used to enable dark mode styles for the report output.
-# darkmode
+# darkmode: true
 
 # Run cache mode:  when added will run the tool in "RunCached mode".
 # When combined with --skipexport allows the user to skip authentication and provider export.
-# runcached
+# runcached: true
 
 # Skip Export: will skip the provider export. To be used in conjunction with --runcached.
 # skipexport
@@ -120,18 +120,12 @@ numberofuuidcharacterstotruncate: 18
 # GWS.GMAIL.4.3
 # GWS.GMAIL.4.4
 # Optional; if not provided, the system default resolver will be used.
-# preferreddnsresolvers:
-#     - 8.8.8.8
-#     - 8.8.4.4
 preferrreddnsresolvers: []
 
 # Preferred DoH Servers:  IP addresses or domain names of DoH servers that should be used to retrieve
-#any TXT records, should the traditional DNS queries fail, required by specific SCuBA policies.
+# any TXT records, should the traditional DNS queries fail, required by specific SCuBA policies.
+# Default perferred DoH servers are: 1.1.1.1, cloudflare-dns.com, and 2606:4700:4700::1111
 # See PreferredDnsResolvers for the list of applicable policies.
-# preferreddohservers:
-#   - 8.8.8.8
-#   - cloudflare-dns.com
-#   - 2606:4700:4700::1111
 preferreddohservers: 
     - cloudflare-dns.com
     - 2606:4700:4700::1111
@@ -174,7 +168,7 @@ skipdoh: false
 # - Explain compensating controls or mitigating factors.
 # - Note planned improvements or future implementation details.
 
-# annotatePolicy:
+# annotatepolicy:
   # -------------------------------------
   # ANNOTATE POLICY : GMAIL SAMPLE
   # -------------------------------------
