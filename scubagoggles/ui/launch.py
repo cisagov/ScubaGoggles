@@ -79,7 +79,26 @@ def _check_requirements() -> bool:
         print("Please install requirements:")
         print("  pip install -r requirements.txt")
         return False
-    return True   
+    return True
+
+def _build_streamlit_command(app_to_run: Path, force_dark : bool):
+    # Find availible port
+    port = _find_free_port()
+    # Build command as list of strings
+    cmd = [
+        sys.executable, "-m", "streamlit", "run",
+        str(app_to_run),
+        "--server.address", "localhost",
+        "--server.port", str(port),
+        "--server.headless", "false",
+        "--browser.gatherUsageStats", "false",
+    ]
+
+    # add extra option if dark option specified on command line
+    if force_dark:
+        cmd += ["--theme.base", "dark"]
+    return cmd
+
 
 def main() -> None:
     """Launch the ScubaGoggles UI in the default web browser."""
@@ -100,21 +119,14 @@ def main() -> None:
         "SCUBAGOGGLES_UI_DARK", "",
     ).strip().lower() in ("1", "true", "yes", "on")
 
+    # check if requirements are met
     if not _check_requirements():
         sys.exit(1)
 
-    port = _find_free_port()
+    # get the application path
+    app_to_run = _resolve_app_file()
 
-    cmd = [
-        sys.executable, "-m", "streamlit", "run",
-        str(app_to_run),
-        "--server.address", "localhost",
-        "--server.port", str(port),
-        "--server.headless", "false",
-        "--browser.gatherUsageStats", "false",
-    ]
-    if force_dark:
-        cmd += ["--theme.base", "dark"]
+    cmd = _build_streamlit_command(app_to_run, force_dark)
 
     _prevent_streamlit_promotion()
 
@@ -143,7 +155,6 @@ def main() -> None:
                 signal.SIGINT,
                 lambda *_: (_kill_process_tree(server_process.pid), sys.exit(0)),
             )
-
         try:
             server_process.wait()
         except KeyboardInterrupt:
