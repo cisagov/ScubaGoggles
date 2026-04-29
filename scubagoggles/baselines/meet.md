@@ -274,7 +274,8 @@ This section covers Google Gemini features within the Google Meet app.
 #### GWS.MEET.6.1v1
 Admins SHOULD NOT be allowed to override the default sharing level for meeting notes set by the organization.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet61v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Meeting notes may contain sensitive information that should not be shared outside of the organization. Preventing hosts from overriding the default sharing level reduces the risk of inadvertent sharing of meeting notes.
 - _Last modified:_ March 2026
@@ -286,7 +287,8 @@ Admins SHOULD NOT be allowed to override the default sharing level for meeting n
 #### GWS.MEET.6.2v1
 Default sharing setting for Google AI notes SHALL be restricted to guests in your organization.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet62v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Meeting notes may contain sensitive information that should not be shared outside of the organization. Setting a secure default sharing level reduces the risk of inadvertent sharing of meeting notes.
 - _Last modified:_ March 2026
