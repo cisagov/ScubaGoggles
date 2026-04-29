@@ -130,9 +130,9 @@ preferrreddnsresolvers:
 # Default perferred DoH servers are: 1.1.1.1, cloudflare-dns.com, and 2606:4700:4700::1111
 # See PreferredDnsResolvers for the list of applicable policies.
 preferreddohservers: 
-    - cloudflare-dns.com
-    - 2606:4700:4700::1111
-    - 1.1.1.1
+  - cloudflare-dns.com
+  - 2606:4700:4700::1111
+  - 1.1.1.1
 
 # Skip DOH: allows the user to disable the DoH fallback which would normally be done 
 # if the traditional DNS requests fail when retrieving any DNS records required by specific SCuBA policies.
