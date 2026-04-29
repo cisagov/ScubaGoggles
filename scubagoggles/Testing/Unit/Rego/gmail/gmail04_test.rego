@@ -387,7 +387,7 @@ test_DMARCAgencyPOC_Correct_V1 if {
             {
                 "domain": "test.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics@dhs.gov"
                 ]
             }
         ],
@@ -409,13 +409,13 @@ test_DMARCAgencyPOC_Correct_V2 if {
             {
                 "domain": "test1.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics@dhs.gov"
                 ]
             },
             {
                 "domain": "test2.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics@dhs.gov"
                 ]
             }
         ],
@@ -437,7 +437,7 @@ test_DMARCAgencyPOC_Incorrect_V1 if {
             {
                 "domain": "test1.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov; ruf=mailto:forensics@dhs.gov"
                 ]
             },
             {
