@@ -45,7 +45,6 @@ class GmailRulesParser:
         parser examines and manipulates the policy data so that it is much
         easier to deal with in the Rego code for the baselines.
 
-        :param dict policies: dictionary of policies, keyed by orgunit name.
         :param str orgunit: name of the orgunit being parsed.
         :param str section: name of the policy section, which should indicate
             either the "blocked sender" or "spam override" lists section.
@@ -66,8 +65,16 @@ class GmailRulesParser:
         # rule identifiers for only the rules that are enabled.
 
         ou_policies = self._policies[orgunit]
+
+        section_data = ou_policies.get(section)
+
+        # No section data - the only way this happens is if the top orgunit
+        # has no settings.
+
+        if not section_data:
+            return
+
         enabled_rules = self._enabled_rules(ou_policies)
-        section_data = ou_policies[section]
         setting_name = gmail_fields[section]['setting']
         field_names = gmail_fields[section]['fields']
 

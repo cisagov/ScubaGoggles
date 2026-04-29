@@ -18,7 +18,7 @@ This section determines whether users can delegate access to their mailbox to ot
 
 - None
 
-#### GWS.GMAIL.1.1v0.6 Instructions
+#### GWS.GMAIL.1.1v1 Instructions
 To configure the settings for Mail Delegation:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps -\> Google Workspace -\> Gmail**.
