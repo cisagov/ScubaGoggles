@@ -585,13 +585,21 @@ class Orchestrator:
         product_abbreviation_mapping = {fullname: shortname for shortname,
                                         fullname in prod_to_fullname.items()}
 
-        report_metadata = self._create_metadata(
-            tenant_id,
-            tenant_name,
-            tenant_domain,
-            products_assessed,
-            product_abbreviation_mapping,
-            report_uuid)
+        timestamp_utc = datetime.now(timezone.utc)
+        timestamp_zulu = timestamp_utc.strftime(
+            '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+        report_metadata = {
+            'TenantId':  tenant_id,
+            'DisplayName':  tenant_name,
+            'DomainName':  tenant_domain,
+            'ProductSuite':  'Google Workspace',
+            'ProductsAssessed': products_assessed,
+            'ProductAbbreviationMapping': product_abbreviation_mapping,
+            'Tool':  'ScubaGoggles',
+            'ToolVersion':  Version.number,
+            'TimestampZulu': timestamp_zulu,
+            'ReportUUID': report_uuid
+        }
 
         total_output.update({'MetaData': report_metadata})
 
