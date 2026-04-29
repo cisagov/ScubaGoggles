@@ -68,6 +68,18 @@ def _kill_process_tree(pid: int) -> None:
     except (ProcessLookupError, OSError):
         pass
 
+def _check_requirements() -> bool:
+    app_to_run = _resolve_app_file()
+    if not app_to_run:
+        print("No UI application found!")
+        print("Please ensure the UI modules are properly installed.")
+        return False
+    if not _is_streamlit_installed():
+        print("Streamlit is not installed!")
+        print("Please install requirements:")
+        print("  pip install -r requirements.txt")
+        return False
+    return True   
 
 def main() -> None:
     """Launch the ScubaGoggles UI in the default web browser."""
@@ -88,16 +100,7 @@ def main() -> None:
         "SCUBAGOGGLES_UI_DARK", "",
     ).strip().lower() in ("1", "true", "yes", "on")
 
-    app_to_run = _resolve_app_file()
-    if not app_to_run:
-        print("No UI application found!")
-        print("Please ensure the UI modules are properly installed.")
-        sys.exit(1)
-
-    if not _is_streamlit_installed():
-        print("Streamlit is not installed!")
-        print("Please install requirements:")
-        print("  pip install -r requirements.txt")
+    if not _check_requirements():
         sys.exit(1)
 
     port = _find_free_port()
