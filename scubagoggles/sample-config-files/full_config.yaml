@@ -16,17 +16,17 @@ description: |
 # The list of GWS Product/SCuBA baselines ScubaGoggles will assess. ScubaGoggles defaults to run against all baselines.
 # For a list of acceptable values, See https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Parameters.md#usage-parameters
 baselines:
-    - assuredcontrols
-    - calendar
-    - chat
-    - classroom
-    - commoncontrols
-    - drive
-    - gemini
-    - gmail
-    - groups
-    - meet
-    - sites
+  - assuredcontrols
+  - calendar
+  - chat
+  - classroom
+  - commoncontrols
+  - drive
+  - gemini
+  - gmail
+  - groups
+  - meet
+  - sites
 
 # Credentials: -c or --credentials is the location and name of the OAuth / service account credentials json file. 
 # Required unless the credentials path has been saved using the ScubaGoggles setup utility or an access token is provided.
