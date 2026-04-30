@@ -69,6 +69,60 @@ def _kill_process_tree(pid: int) -> None:
         pass
 
 
+def _get_app_to_run() -> Path:
+    """Cheks if UI application path and streamlit module exist/is installed
+    Returns Application path if so"""
+    app_to_run = _resolve_app_file()
+    if not app_to_run:
+        print("No UI application found!")
+        print("Please ensure the UI modules are properly installed.")
+        raise SystemExit(1)
+    if not _is_streamlit_installed():
+        print("Streamlit is not installed!")
+        print("Please install requirements:")
+        print("  pip install -r requirements.txt")
+        raise SystemExit(1)
+    return app_to_run
+
+
+def _build_streamlit_command(app_to_run: Path, force_dark : bool) -> list[str]:
+    """Builds the streamlit command needed to launch the UI"""
+    # Find availible port
+    port = _find_free_port()
+    # Build command as list of strings
+    cmd = [
+        sys.executable, "-m", "streamlit", "run",
+        str(app_to_run),
+        "--server.address", "localhost",
+        "--server.port", str(port),
+        "--server.headless", "false",
+        "--browser.gatherUsageStats", "false",
+    ]
+    # add extra option if dark option specified on command line
+    if force_dark:
+        cmd += ["--theme.base", "dark"]
+    return cmd
+
+def _run_server(cmd : list[str], popen_kwargs : dict):
+    """Runs the Streamlit server"""
+    with subprocess.Popen(cmd, **popen_kwargs) as server_process:
+        # Register cleanup so the Streamlit process tree is always killed —
+        # even if the terminal window is closed or the parent exits unexpectedly.
+        atexit.register(_kill_process_tree, server_process.pid)
+
+        if sys.platform != "win32":
+            signal.signal(
+                signal.SIGINT,
+                lambda *_: (_kill_process_tree(server_process.pid), sys.exit(0)),
+            )
+        try:
+            server_process.wait()
+        except KeyboardInterrupt:
+            print("\nScubaGoggles UI stopped by user")
+        finally:
+            _kill_process_tree(server_process.pid)
+
+
 def main() -> None:
     """Launch the ScubaGoggles UI in the default web browser."""
 
@@ -88,30 +142,11 @@ def main() -> None:
         "SCUBAGOGGLES_UI_DARK", "",
     ).strip().lower() in ("1", "true", "yes", "on")
 
-    app_to_run = _resolve_app_file()
-    if not app_to_run:
-        print("No UI application found!")
-        print("Please ensure the UI modules are properly installed.")
-        sys.exit(1)
+    # get the application path
+    # check to see it exists and streamlit is installed
+    app_to_run = _get_app_to_run()
 
-    if not _is_streamlit_installed():
-        print("Streamlit is not installed!")
-        print("Please install requirements:")
-        print("  pip install -r requirements.txt")
-        sys.exit(1)
-
-    port = _find_free_port()
-
-    cmd = [
-        sys.executable, "-m", "streamlit", "run",
-        str(app_to_run),
-        "--server.address", "localhost",
-        "--server.port", str(port),
-        "--server.headless", "false",
-        "--browser.gatherUsageStats", "false",
-    ]
-    if force_dark:
-        cmd += ["--theme.base", "dark"]
+    cmd = _build_streamlit_command(app_to_run, force_dark)
 
     _prevent_streamlit_promotion()
 
@@ -127,27 +162,12 @@ def main() -> None:
         "Starting ScubaGoggles Configuration UI "
         f"({theme_label} theme) ...",
     )
+    # port number
+    port = cmd[cmd.index("--server.port") + 1]
     print(f"Opening http://localhost:{port} in your browser.")
     print("Press Ctrl+C to stop the server.\n")
 
-    with subprocess.Popen(cmd, **popen_kwargs) as server_process:
-        # Register cleanup so the Streamlit process tree is always killed —
-        # even if the terminal window is closed or the parent exits unexpectedly.
-        atexit.register(_kill_process_tree, server_process.pid)
-
-        if sys.platform != "win32":
-            signal.signal(
-                signal.SIGINT,
-                lambda *_: (_kill_process_tree(server_process.pid), sys.exit(0)),
-            )
-
-        try:
-            server_process.wait()
-        except KeyboardInterrupt:
-            print("\nScubaGoggles UI stopped by user")
-        finally:
-            _kill_process_tree(server_process.pid)
-
+    _run_server(cmd, popen_kwargs)
 
 if __name__ == "__main__":
     main()
