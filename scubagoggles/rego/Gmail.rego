@@ -175,7 +175,7 @@ MultiDmarcWarning := Warning if {
         format_int(count(DomainsWithMultipleDmarc), 10),
         " domain(s) have multiple DMARC records and will fail the policy check: ",
         concat(", ", DomainsWithMultipleDmarc),
-        ". DMARC records should only have one record according to RFC 7489."
+        ". DMARC records should only have one record according to RFC 7489. "
     ])
 }
 
