@@ -1,7 +1,10 @@
 package gmail
 import future.keywords
 
-MultipleWarning := "1 domain(s) have multiple DMARC records: test.name."
+MultipleWarning := concat("", [
+    "1 domain(s) have multiple DMARC records and will fail the policy check: ",
+    "test.name. DMARC records should only have one record according to RFC 7489."
+])
 #
 # GWS.GMAIL.4.1
 #--
