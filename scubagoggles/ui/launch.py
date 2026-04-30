@@ -25,6 +25,22 @@ def _find_free_port() -> int:
         s.bind(("localhost", 0))
         return s.getsockname()[1]
 
+def _prevent_streamlit_promotion() -> None:
+
+    """Streamlit self-promotes upon initial invocation, which is not
+    appropriate particularly for this application.  It can be avoided by
+    creating its "credentials" file with an empty email address.  This is
+    only done if the file doesn't already exist.
+    """
+
+    streamlit_dir = Path('~/.streamlit').expanduser()
+
+    streamlit_dir.mkdir(exist_ok = True)
+
+    streamlit_config = streamlit_dir / 'credentials.toml'
+
+    if not streamlit_config.exists():
+        streamlit_config.write_text('[general]\nemail = ""\n')
 
 def _resolve_app_file() -> Path | None:
     """Return the path to the Streamlit app file."""
@@ -96,6 +112,8 @@ def main() -> None:
     ]
     if force_dark:
         cmd += ["--theme.base", "dark"]
+
+    _prevent_streamlit_promotion()
 
     popen_kwargs: dict = {}
     if sys.platform != "win32":

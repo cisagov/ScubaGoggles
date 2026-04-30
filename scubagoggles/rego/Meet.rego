@@ -234,15 +234,67 @@ tests contains {
 
 MeetId6_1 := utils.PolicyIdWithSuffix("GWS.MEET.6.1")
 
+NonComplianceSetting6_1 := "MeetGenAiSmartNotesDocAccessProto manage_smart_notes_doc_access"
+
+NonComplianceMessage6_1 := "Google AI notes sharing setting is set to: Allow hosts to change who notes are shared to."
+
+NonCompliantOUs6_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage6_1
+} if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting6_1, OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "true"
+}
+
+NonCompliantGroups6_1 contains {
+    "Name": Group,
+    "Value": NonComplianceMessage6_1
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, NonComplianceSetting6_1, Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "true"
+}
+
 tests contains {
     "PolicyId": MeetId6_1,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Prerequisites": [
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
 }
+if {
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting6_1, utils.TopLevelOU)
+    count(Events) == 0
+    DefaultSafe := true
+}
+
+tests contains {
+    "PolicyId": MeetId6_1,
+    "Prerequisites": [
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, NonCompliantGroups6_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1, "NonCompliantGroups": NonCompliantGroups6_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting6_1, utils.TopLevelOU)
+    count(Events) > 0
+    Conditions := {count(NonCompliantOUs6_1) == 0, count(NonCompliantGroups6_1) == 0}
+    Status := (false in Conditions) == false
+}
+
 #--
 
 #
@@ -251,13 +303,64 @@ tests contains {
 
 MeetId6_2 := utils.PolicyIdWithSuffix("GWS.MEET.6.2")
 
+NonComplianceSetting6_2 := "MeetGenAiSmartNotesDocAccessProto default_smart_notes_doc_access"
+
+NonComplianceMessage6_2 := "Default sharing setting for Google AI notes is set to: All invited guests."
+
+NonCompliantOUs6_2 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage6_2
+} if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting6_2, OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "EVERYONE"
+}
+
+NonCompliantGroups6_2 contains {
+    "Name": Group,
+    "Value": NonComplianceMessage6_2
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, NonComplianceSetting6_2, Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "EVERYONE"
+}
+
 tests contains {
     "PolicyId": MeetId6_2,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Prerequisites": [
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
+}
+if {
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting6_2, utils.TopLevelOU)
+    count(Events) == 0
+    DefaultSafe := true
+}
+
+tests contains {
+    "PolicyId": MeetId6_2,
+    "Prerequisites": [
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs6_2, NonCompliantGroups6_2),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_2, "NonCompliantGroups": NonCompliantGroups6_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting6_2, utils.TopLevelOU)
+    count(Events) > 0
+    Conditions := {count(NonCompliantOUs6_2) == 0, count(NonCompliantGroups6_2) == 0}
+    Status := (false in Conditions) == false
 }
 #--

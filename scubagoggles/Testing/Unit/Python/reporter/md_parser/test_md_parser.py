@@ -1,15 +1,19 @@
 """
 test_md_parser.py tests the MarkdownParser class.
 """
-from pathlib import Path
 import re
+
+from pathlib import Path
+
 import pytest
 
 import scubagoggles as scubagoggles_pkg
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 
 class TestMarkdownParser:
+
     """Unit tests for the MarkdownParser class."""
+
     def _baselines_directory(self) -> Path:
         return Path(scubagoggles_pkg.__file__).resolve().parent / "baselines"
 
@@ -81,6 +85,14 @@ class TestMarkdownParser:
             (
                 "duplicate_policy_id_nonconsecutive",
                 "expected baseline item 3, got item 2 for group id 1 (Example Group)"
+            ),
+            (
+                'no_baselines',
+                'no baselines found in "Policies" section'
+            ),
+            (
+                'no_group_heading',
+                'no valid group headings found'
             ),
         ],
     )
@@ -162,3 +174,124 @@ class TestMarkdownParser:
         msg = str(exception_info.value)
         # md_parser.py will raise:
         assert "missing description for baseline item 1 for group id 1 (Example Group)" in msg
+
+    @pytest.mark.parametrize(('name, expected'),
+                             (('gmail', 'gmail'),
+                              ('Calendar', 'calendar'),
+                              ('drivedocs', 'drivedocs'),
+                              ('drive', 'drivedocs'),
+                              ('DRIVE', 'drive'),
+                              ('GMail', 'gmail')))
+    def test_baseline_identifier(self, name: str, expected: str):
+
+        """The following list contains test data for the
+        "baseline_identifier" method.  The first value is the product name and
+        the second value is the expected identifier returned.  The method is
+        expected to return the lowercase copy of the input, except in the case
+        of "drive" where it should return "drivedocs".
+        """
+
+        assert MarkdownParser.baseline_identifier(name) == expected
+
+    @pytest.mark.parametrize(('invalid_indicator'),
+                             ('[![unknown name](https://any_url)]',
+                              '[![manual](https://no_color_suffix)]'))
+    def test_baseline_indicators(self, invalid_indicator: str):
+
+        """Tests that invalid baseline indicators are detected and raise
+        an exception.
+        """
+
+        # pylint: disable=protected-access
+
+        with pytest.raises(MarkdownParserError):
+            MarkdownParser('.')._parse_indicators([invalid_indicator])
+
+    @pytest.mark.parametrize(('data, normalize, expected'),
+                             (({'Chat':
+                                 [{'Controls': [{'Id': 'GWS.CHAT.1.1v1',
+                                                 'Value': '1.1 value'},
+                                                {'Id': 'GWS.CHAT.1.2v1',
+                                                 'Value': '1.2 value'}],
+                                   'GroupNumber': '1'},
+                                  {'Controls': [{'Id': 'GWS.CHAT.2.1v1',
+                                                 'Value': '2.1 value'}],
+                                   'GroupNumber': '2'}],
+                                'Sites':
+                                  [{'Controls': [{'Id': 'GWS.SITES.1.1v1',
+                                                  'Value': 'sites value'}],
+                                    'GroupNumber': '1'}]},
+                               False,
+                               {'Chat': {'GWS.CHAT.1.1v1': '1.1 value',
+                                         'GWS.CHAT.1.2v1': '1.2 value',
+                                         'GWS.CHAT.2.1v1': '2.1 value'},
+                                'Sites': {'GWS.SITES.1.1v1': 'sites value'}}),
+                              ({'Calendar':
+                                  [{'Controls': [{'Id': 'GWS.CALENDAR.1.1v0.6',
+                                                  'Value': '1.1 value'},
+                                                 {'Id': 'GWS.CALENDAR.1.2v0.6',
+                                                  'Value': '1.2 value'}],
+                                    'GroupNumber': '1'},
+                                   {'Controls': [{'Id': 'GWS.CALENDAR.2.1v0.6',
+                                                  'Value': '2.1 value'}],
+                                    'GroupNumber': '2'},
+                                   {'Controls': [{'Id': 'GWS.CALENDAR.3.1v0.6',
+                                                  'Value': '3.1 value'},
+                                                 {'Id': 'GWS.CALENDAR.3.2v0.6',
+                                                  'Value': '3.2 value'}],
+                                    'GroupNumber': '3'},
+                                   {'Controls': [{'Id': 'GWS.CALENDAR.4.1v0.6',
+                                                  'Value': '4.1 value'}],
+                                    'GroupNumber': '4'}],
+                                'Meet':
+                                  [{'Controls': [{'Id': 'GWS.MEET.1.1v0.6',
+                                                  'Value': '1.1 value'}],
+                                    'GroupNumber': '1'},
+                                   {'Controls': [{'Id': 'GWS.MEET.2.1v0.6',
+                                                  'Value': '2.1 value'}],
+                                    'GroupNumber': '2'},
+                                   {'Controls': [{'Id': 'GWS.MEET.3.1v0.6',
+                                                  'Value': '3.1 value'}],
+                                    'GroupNumber': '3'},
+                                   {'Controls': [{'Id': 'GWS.MEET.4.1v0.6',
+                                                  'Value': '4.1 value'}],
+                                    'GroupNumber': '4'},
+                                   {'Controls': [{'Id': 'GWS.MEET.5.1v0.6',
+                                                  'Value': '5.1 value'},
+                                                 {'Id': 'GWS.MEET.5.2v0.6',
+                                                  'Value': '5.2 value'}],
+                                    'GroupNumber': '5'},
+                                   {'Controls': [{'Id': 'GWS.MEET.6.1v0.6',
+                                                  'Value': '6.1 value'},
+                                                 {'Id': 'GWS.MEET.6.2v0.6',
+                                                  'Value': '6.2 value'}],
+                                    'GroupNumber': '6'}]},
+                               True,
+                               {'calendar':
+                                  {'GWS.CALENDAR.1.1v0.6': '1.1 value',
+                                   'GWS.CALENDAR.1.2v0.6': '1.2 value',
+                                   'GWS.CALENDAR.2.1v0.6': '2.1 value',
+                                   'GWS.CALENDAR.3.1v0.6': '3.1 value',
+                                   'GWS.CALENDAR.3.2v0.6': '3.2 value',
+                                   'GWS.CALENDAR.4.1v0.6': '4.1 value'},
+                                'meet':
+                                  {'GWS.MEET.1.1v0.6': '1.1 value',
+                                   'GWS.MEET.2.1v0.6': '2.1 value',
+                                   'GWS.MEET.3.1v0.6': '3.1 value',
+                                   'GWS.MEET.4.1v0.6': '4.1 value',
+                                   'GWS.MEET.5.1v0.6': '5.1 value',
+                                   'GWS.MEET.5.2v0.6': '5.2 value',
+                                   'GWS.MEET.6.1v0.6': '6.1 value',
+                                   'GWS.MEET.6.2v0.6': '6.2 value'}})))
+
+    def test_controls_by_product(self,
+                                 data: dict,
+                                 normalize: bool,
+                                 expected: dict):
+
+        """Tests the utility method controls_by_product() that takes the results
+        returned from the parsing and yields a mapping of product to baseline
+        id/description pairs.
+        """
+
+        assert MarkdownParser.controls_by_product(data, normalize) == expected

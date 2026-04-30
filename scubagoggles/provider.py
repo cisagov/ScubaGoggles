@@ -570,7 +570,7 @@ class Provider:
             'gmail': ['Gmail'],
             'gemini': ['Gemini app', 'Gemini in Workspace apps'],
             'groups': ['Groups for Business'],
-            'meet': ['Google Meet'],
+            'meet': ['Google Meet', 'Google Meet GenAI'],
             'sites': ['Sites'],
             'classroom': ['Classroom']
         }
