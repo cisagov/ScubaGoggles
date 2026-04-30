@@ -4,6 +4,295 @@ Parametrized test case data for admin/OU Provider methods.
 
 from google.auth.exceptions import RefreshError
 
+# Test cases for Provider.get_privileged_users(); see GWS.COMMONCONTROLS.6.1
+# (cisagov/ScubaGoggles#589).  Each case provides the responses from the
+# directory users, roles, and roleAssignments APIs (in that order, since
+# users are listed first to capture isAdmin Super Admins) and the expected
+# output.
+GET_PRIVILEGED_USERS_CASES = [
+    # Super Admin detected via the Directory user.isAdmin flag.  This
+    # mirrors how get_super_admins() identifies super admins and ensures
+    # we don't miss them when the Super Admin role's privileges aren't
+    # reported in rolePrivileges (Google identifies that role with
+    # isSuperAdminRole instead).
+    {
+        "user_list": [
+            {
+                "id": "user-1",
+                "primaryEmail": "admin1@example.org",
+                "orgUnitPath": "/",
+                "isAdmin": True,
+            },
+            {
+                "id": "user-2",
+                "primaryEmail": "user2@example.org",
+                "orgUnitPath": "/",
+                "isAdmin": False,
+            },
+        ],
+        "role_list": [],
+        "assignment_list": [],
+        "raises": None,
+        "expected": {
+            "privileged_users": [
+                {
+                    "primaryEmail": "admin1@example.org",
+                    "orgUnitPath": "",
+                },
+            ],
+            "privileged_users_error": None,
+        },
+        "expect_success_call": True,
+    },
+    # Privileged delegated admin detected by holding a role whose
+    # privileges intersect HIGHLY_PRIVILEGED_PRIVILEGES.  The non-
+    # privileged "helpdesk" role assignment is ignored.
+    {
+        "user_list": [
+            {
+                "id": "user-1",
+                "primaryEmail": "admin1@example.org",
+                "orgUnitPath": "/Admins",
+                "isAdmin": False,
+                "isDelegatedAdmin": True,
+            },
+            {
+                "id": "user-2",
+                "primaryEmail": "user2@example.org",
+                "orgUnitPath": "/",
+                "isAdmin": False,
+                "isDelegatedAdmin": False,
+            },
+        ],
+        "role_list": [
+            {
+                "roleId": "role-users",
+                "rolePrivileges": [
+                    {"privilegeName": "USERS_ALL", "serviceId": "all"},
+                ],
+            },
+            {
+                "roleId": "role-helpdesk",
+                "rolePrivileges": [
+                    {"privilegeName": "USERS_VIEW", "serviceId": "all"},
+                ],
+            },
+        ],
+        "assignment_list": [
+            {
+                "assigneeType": "USER",
+                "assignedTo": "user-1",
+                "roleId": "role-users",
+                "scopeType": "CUSTOMER",
+            },
+            {
+                "assigneeType": "USER",
+                "assignedTo": "user-2",
+                "roleId": "role-helpdesk",
+                "scopeType": "CUSTOMER",
+            },
+        ],
+        "raises": None,
+        "expected": {
+            "privileged_users": [
+                {
+                    "primaryEmail": "admin1@example.org",
+                    "orgUnitPath": "Admins",
+                },
+            ],
+            "privileged_users_error": None,
+        },
+        "expect_success_call": True,
+    },
+    # Built-in Super Admin role is identified by isSuperAdminRole=True
+    # rather than by privilegeName.  A user assigned this role (but
+    # without isAdmin set on their User record - which can happen for
+    # service-specific super admins in some tenants) must still be
+    # detected.
+    {
+        "user_list": [
+            {
+                "id": "user-1",
+                "primaryEmail": "super1@example.org",
+                "orgUnitPath": "/",
+                "isAdmin": False,
+            },
+        ],
+        "role_list": [
+            {
+                "roleId": "role-super",
+                "roleName": "_SEED_ADMIN_ROLE",
+                "isSuperAdminRole": True,
+                "rolePrivileges": [],
+            },
+        ],
+        "assignment_list": [
+            {
+                "assigneeType": "USER",
+                "assignedTo": "user-1",
+                "roleId": "role-super",
+                "scopeType": "CUSTOMER",
+            },
+        ],
+        "raises": None,
+        "expected": {
+            "privileged_users": [
+                {
+                    "primaryEmail": "super1@example.org",
+                    "orgUnitPath": "",
+                },
+            ],
+            "privileged_users_error": None,
+        },
+        "expect_success_call": True,
+    },
+    # Built-in User Management Admin role name should be treated as privileged
+    # even if returned rolePrivileges don't include expected identifiers.
+    {
+        "user_list": [
+            {
+                "id": "user-1",
+                "primaryEmail": "test.admin@scubagws.org",
+                "orgUnitPath": "/Devesh's Test OU",
+                "isAdmin": False,
+                "isDelegatedAdmin": True,
+            },
+        ],
+        "role_list": [
+            {
+                "roleId": "role-user-mgmt",
+                "roleName": "User Management Admin",
+                "rolePrivileges": [
+                    {"privilegeName": "SOME_TENANT_SPECIFIC_VALUE", "serviceId": "all"},
+                ],
+            },
+        ],
+        "assignment_list": [
+            {
+                "assigneeType": "USER",
+                "assignedTo": "user-1",
+                "roleId": "role-user-mgmt",
+                "scopeType": "CUSTOMER",
+            },
+        ],
+        "raises": None,
+        "expected": {
+            "privileged_users": [
+                {
+                    "primaryEmail": "test.admin@scubagws.org",
+                    "orgUnitPath": "Devesh's Test OU",
+                },
+            ],
+            "privileged_users_error": None,
+        },
+        "expect_success_call": True,
+    },
+    # User detected by both isAdmin and a role assignment is reported
+    # only once (deduplicated by primaryEmail).
+    {
+        "user_list": [
+            {
+                "id": "user-1",
+                "primaryEmail": "admin1@example.org",
+                "orgUnitPath": "/",
+                "isAdmin": True,
+            },
+        ],
+        "role_list": [
+            {
+                "roleId": "role-a",
+                "rolePrivileges": [
+                    {"privilegeName": "USERS_ALL", "serviceId": "all"},
+                ],
+            },
+        ],
+        "assignment_list": [
+            {
+                "assigneeType": "USER",
+                "assignedTo": "user-1",
+                "roleId": "role-a",
+                "scopeType": "CUSTOMER",
+            },
+        ],
+        "raises": None,
+        "expected": {
+            "privileged_users": [
+                {
+                    "primaryEmail": "admin1@example.org",
+                    "orgUnitPath": "",
+                },
+            ],
+            "privileged_users_error": None,
+        },
+        "expect_success_call": True,
+    },
+    # Group assignments to a privileged role are ignored (only USER
+    # assigneeType is considered for CC 6.1).
+    {
+        "user_list": [],
+        "role_list": [
+            {
+                "roleId": "role-super",
+                "isSuperAdminRole": True,
+                "rolePrivileges": [],
+            },
+        ],
+        "assignment_list": [
+            {
+                "assigneeType": "GROUP",
+                "assignedTo": "group-1",
+                "roleId": "role-super",
+                "scopeType": "CUSTOMER",
+            },
+        ],
+        "raises": None,
+        "expected": {
+            "privileged_users": [],
+            "privileged_users_error": None,
+        },
+        "expect_success_call": True,
+    },
+    # If role metadata is sparse or non-standard, delegated admins should
+    # still be included via users.isDelegatedAdmin fallback.
+    {
+        "user_list": [
+            {
+                "id": "user-1",
+                "primaryEmail": "test.admin@scubagws.org",
+                "orgUnitPath": "/Devesh's Test OU",
+                "isAdmin": False,
+                "isDelegatedAdmin": True,
+            },
+        ],
+        "role_list": [],
+        "assignment_list": [],
+        "raises": None,
+        "expected": {
+            "privileged_users": [
+                {
+                    "primaryEmail": "test.admin@scubagws.org",
+                    "orgUnitPath": "Devesh's Test OU",
+                },
+            ],
+            "privileged_users_error": None,
+        },
+        "expect_success_call": True,
+    },
+    # API failure.  An error is reported in privileged_users_error so the
+    # rego treats the policy as NoSuchEvent rather than passing silently.
+    {
+        "user_list": None,
+        "role_list": None,
+        "assignment_list": None,
+        "raises": Exception("API error"),
+        "expected": {
+            "privileged_users": [],
+            "privileged_users_error": "API error",
+        },
+        "expect_success_call": False,
+    },
+]
+
 GET_SUPER_ADMIN_CASES = [
     # Multiple super admins returned
     {

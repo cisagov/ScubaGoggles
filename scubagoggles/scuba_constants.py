@@ -18,6 +18,8 @@ class ApiReference(Enum):
     LIST_DOMAINS = 'directory/v1/domains/list'
     LIST_ALIAS_DOMAINS = 'directory/reference/rest/v1/domainAliases/list'
     LIST_GROUPS = 'directory/v1/groups/list'
+    LIST_ROLES = 'directory/v1/roles/list'
+    LIST_ROLE_ASSIGNMENTS = 'directory/v1/roleAssignments/list'
     LIST_CUSTOMERS = 'directory/v1/customer/get'
     LIST_ACTIVITIES = 'reports/v1/activities/list'
     GET_GROUP = 'groups-settings/v1/groups/get'
@@ -32,6 +34,9 @@ class ApiUrl(Enum):
     LIST_DOMAINS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/domains/list'
     LIST_ALIAS_DOMAINS = f'{BASE_URL_WS_ADMIN}/directory/reference/rest/v1/domainAliases/list'
     LIST_GROUPS = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/groups/list'
+    LIST_ROLES = f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/roles/list'
+    LIST_ROLE_ASSIGNMENTS = (
+        f'{BASE_URL_ADMINSDK}/directory/reference/rest/v1/roleAssignments/list')
     LIST_CUSTOMERS = f'{BASE_URL_ADMINSDK}/directory/v1/customer/get'
     LIST_ACTIVITIES = f'{BASE_URL_ADMINSDK}/reports/reference/rest/v1/activities/list'
     GET_GROUP = f'{BASE_URL_ADMINSDK}/groups-settings/v1/reference/groups/get'
@@ -54,6 +59,7 @@ API_SCOPES = (f'{BASE_AUTH_URL}/admin.reports.audit.readonly',
               f'{BASE_AUTH_URL}/admin.directory.domain.readonly',
               f'{BASE_AUTH_URL}/admin.directory.orgunit.readonly',
               f'{BASE_AUTH_URL}/admin.directory.user.readonly',
+              f'{BASE_AUTH_URL}/admin.directory.rolemanagement.readonly',
               f'{BASE_AUTH_URL}/admin.directory.group.readonly',
               f'{BASE_AUTH_URL}/admin.directory.customer.readonly',
               f'{BASE_AUTH_URL}/apps.groups.settings',

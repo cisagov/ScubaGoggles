@@ -938,14 +938,102 @@ if {
 
 CommonControlsId6_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.6.1")
 
+# Reference: https://github.com/cisagov/ScubaGoggles/issues/589
+# CC 6.1 requires that all administrative (i.e. highly privileged) accounts
+# authenticate via Google Workspace and not via an external SSO/IdP.  The
+# provider supplies the list of privileged users (those holding admin roles
+# whose privileges include any of HIGHLY_PRIVILEGED_PRIVILEGES).  Each
+# privileged user's OU is then inspected to ensure SSO is disabled (i.e.
+# the most recent "Inbound SSO Settings SSO mode" event for that OU is
+# either "SSO off" or DELETE_APPLICATION_SETTING).  An OU with no SSO
+# events is assumed to inherit the default ("SSO off").
+
+LogMessage6_1 := "Inbound SSO Settings SSO mode"
+
+# OUs in which at least one privileged user resides.  Empty/root paths are
+# treated as the top-level OU so the OU lookup against log events works
+# correctly (events are keyed by the OU name, not the path).
+PrivilegedAccountOUs contains OU if {
+    some user in input.privileged_users
+    user.orgUnitPath != ""
+    OU := user.orgUnitPath
+}
+
+PrivilegedAccountOUs contains utils.TopLevelOU if {
+    some user in input.privileged_users
+    user.orgUnitPath == ""
+    utils.TopLevelOU != ""
+}
+
+NonComplianceMessage6_1 := concat(" ", [
+    "SSO is enabled for an OU containing privileged accounts.",
+    "Privileged accounts must authenticate via Google Workspace,",
+    "not via an external identity provider."
+])
+
+NonCompliantOUs6_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage6_1
+}
+if {
+    some OU in PrivilegedAccountOUs
+    Events := utils.FilterEventsOU(LogEvents, LogMessage6_1, OU)
+    # If there are no events for this OU, assume it inherits the default
+    # ("SSO off") from its parent and treat it as compliant.
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue != "SSO off"
+    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+}
+
+# If the provider was unable to enumerate privileged users (e.g. missing
+# scope or API failure), report NoSuchEvent so the policy is treated as
+# manual rather than silently passing.
+PrivilegedUsersError if {
+    input.privileged_users_error
+    input.privileged_users_error != null
+}
+
 tests contains {
     "PolicyId": CommonControlsId6_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
+    "Prerequisites": [
+        "directory/v1/roles/list",
+        "directory/v1/roleAssignments/list",
+        "directory/v1/users/list",
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": concat("", [
+        "Unable to determine privileged accounts: ",
+        sprintf("%v", [input.privileged_users_error]),
+        ". Please manually verify that all administrative accounts use ",
+        "Google Workspace authentication and not an external IdP."
+    ]),
+    "ActualValue": {"NonCompliantOUs": []},
     "RequirementMet": false,
     "NoSuchEvent": true
+}
+if {
+    PrivilegedUsersError
+}
+
+tests contains {
+    "PolicyId": CommonControlsId6_1,
+    "Prerequisites": [
+        "directory/v1/roles/list",
+        "directory/v1/roleAssignments/list",
+        "directory/v1/users/list",
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    not PrivilegedUsersError
+    Status := count(NonCompliantOUs6_1) == 0
 }
 #--
 

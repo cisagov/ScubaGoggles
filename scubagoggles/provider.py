@@ -108,6 +108,42 @@ EVENTS = {
 
 
 SELECTORS = ['google', 'selector1', 'selector2']
+
+# Privilege names (the values of role.rolePrivileges[*].privilegeName
+# returned by directory/v1/roles/list) that indicate a "highly privileged"
+# admin role for the purposes of GWS.COMMONCONTROLS.6.  Any custom role
+# that contains at least one of these privileges is treated as privileged.
+#
+# NOTE: the Super Admin role is NOT identified through this set - Google
+# represents it with the role-level boolean ``isSuperAdminRole`` instead of
+# a privilege.  See _is_privileged_role().
+HIGHLY_PRIVILEGED_PRIVILEGES = frozenset({
+    'ADMIN_OAUTH_PRIVILEGE_GROUP',  # User Management Admin (legacy alias)
+    'ADMIN_ROLE_MANAGEMENT',        # manage admin roles (Services Admin)
+    'GROUPS_ALL',                   # Groups Admin
+    'MANAGE_USER_LICENSES',
+    'MOBILE_ALL',                   # Mobile Admin
+    'ORGANIZATION_UNITS_ALL',
+    'SERVICES_ALL',                 # Services Admin
+    'USERS_ALL',                    # User Management Admin
+    'USERS_CREATE',
+    'USERS_SECURITY',               # change passwords / 2SV
+    'USERS_UPDATE',
+})
+
+# Built-in role names that are considered privileged in the baseline text.
+# This is used as a fallback for tenants where rolePrivileges values differ
+# from expected privilege identifiers.
+HIGHLY_PRIVILEGED_ROLE_NAMES = frozenset({
+    'SUPER_ADMIN',
+    '_SEED_ADMIN_ROLE',
+    'USER MANAGEMENT ADMIN',
+    'USER MANAGEMENT ADMINISTRATOR',
+    'SERVICES ADMIN',
+    'MOBILE ADMIN',
+    'GROUPS ADMIN',
+})
+
 # For DKIM.
 # Unfortunately, hard-coded. Ideally, we'd be able to use an API to get
 # the selectors used programmatically, but it doesn't seem like there is
@@ -441,6 +477,133 @@ class Provider:
             self._unsuccessful_calls.add(ApiReference.LIST_USERS.value)
             return {'super_admins': []}
 
+    def get_privileged_users(self) -> dict:
+        """
+        Gets all "highly privileged" users (per GWS.COMMONCONTROLS.6 -
+        cisagov/ScubaGoggles#589).  A user is considered privileged if any
+        of the following are true:
+
+          1. They are a Super Admin (``user.isAdmin == True``).
+          2. They hold an assignment to the built-in Super Admin role
+             (``role.isSuperAdminRole == True``).
+          3. They hold an assignment to any role whose ``rolePrivileges``
+             contains at least one privilege from
+             ``HIGHLY_PRIVILEGED_PRIVILEGES`` (covers the User Management,
+             Services, Mobile, and Groups admin roles, plus any custom
+             role that grants the same privileges).
+
+        Returns a dictionary with two keys:
+          - ``privileged_users``: list of dictionaries, each with
+            ``primaryEmail`` and ``orgUnitPath``.
+          - ``privileged_users_error``: ``None`` on success, otherwise a
+            string describing the failure.
+        """
+
+        api_calls = (ApiReference.LIST_ROLES.value,
+                     ApiReference.LIST_ROLE_ASSIGNMENTS.value,
+                     ApiReference.LIST_USERS.value)
+
+        try:
+            users = self._list_directory_users()
+            privileged_user_ids = self._collect_privileged_user_ids(users)
+            privileged_users = self._build_privileged_user_records(
+                users, privileged_user_ids)
+
+            for call in api_calls:
+                self._successful_calls.add(call)
+            return {'privileged_users': privileged_users,
+                    'privileged_users_error': None}
+        except Exception as exc:
+            warnings.warn(
+                'Exception thrown while getting privileged users; '
+                f'GWS.COMMONCONTROLS.6.1 cannot be evaluated: {exc}',
+                RuntimeWarning
+            )
+            for call in api_calls:
+                self._unsuccessful_calls.add(call)
+            return {'privileged_users': [],
+                    'privileged_users_error': str(exc)}
+
+    def _collect_privileged_user_ids(self, users: list) -> set:
+        """Helper: Returns the union of:
+          - user ids of Super Admins (``isAdmin`` flag)
+          - user ids assigned a privileged role (Super Admin role or any
+            role whose privileges include a HIGHLY_PRIVILEGED_PRIVILEGES
+            entry)
+
+        Raises any exception from the underlying Directory API calls."""
+
+        super_admin_ids = {u['id'] for u in users
+                           if u.get('isAdmin') and u.get('id')}
+        delegated_admin_ids = {u['id'] for u in users
+                               if u.get('isDelegatedAdmin') and u.get('id')}
+
+        directory = self._services['directory']
+        with directory.roles() as roles:
+            role_list = self._get_list(roles, 'items',
+                                       customer = self._customer_id)
+        privileged_role_ids = {role['roleId'] for role in role_list
+                               if self._is_privileged_role(role)}
+
+        with directory.roleAssignments() as assignments:
+            assignment_list = self._get_list(assignments, 'items',
+                                             customer = self._customer_id)
+        role_assigned_ids = {
+            a['assignedTo']
+            for a in assignment_list
+            if a.get('assigneeType', 'USER') == 'USER'
+            and a.get('roleId') in privileged_role_ids
+        }
+
+        # In some tenants, roles.list may not return enough metadata to map
+        # delegated admin assignments to privilege identifiers reliably.  As a
+        # safety fallback, include all delegated admins from the users feed.
+        return super_admin_ids | role_assigned_ids | delegated_admin_ids
+
+    @staticmethod
+    def _is_privileged_role(role: dict) -> bool:
+        """Helper: True if the given Directory role is highly privileged
+        (the Super Admin role, or any role granting one of the watched
+        privileges)."""
+
+        if role.get('isSuperAdminRole', False):
+            return True
+        role_name = str(role.get('roleName', '')).upper()
+        if role_name in HIGHLY_PRIVILEGED_ROLE_NAMES:
+            return True
+        privilege_names = {p.get('privilegeName')
+                           for p in role.get('rolePrivileges', ())}
+        return bool(privilege_names & HIGHLY_PRIVILEGED_PRIVILEGES)
+
+    def _list_directory_users(self) -> list:
+        """Helper: lists all directory users for the configured customer."""
+
+        with self._services['directory'].users() as users:
+            return self._get_list(users, 'users',
+                                  customer = self._customer_id)
+
+    @staticmethod
+    def _build_privileged_user_records(users: list,
+                                       privileged_user_ids: set) -> list:
+        """Helper: builds the list of {primaryEmail, orgUnitPath} dicts for
+        the privileged users among the supplied directory users."""
+
+        records = []
+        seen = set()
+        for user in users:
+            if user.get('id') not in privileged_user_ids:
+                continue
+            email = user.get('primaryEmail', '')
+            if email in seen:
+                continue
+            seen.add(email)
+            org_unit = user.get('orgUnitPath', '')
+            if org_unit.startswith('/'):
+                org_unit = org_unit[1:]
+            records.append({'primaryEmail': email,
+                            'orgUnitPath': org_unit})
+        return records
+
     def get_ous(self) -> dict:
         """
         Gets the organizational units using the directory API
@@ -723,6 +886,8 @@ class Provider:
             if 'commoncontrols' in product_to_logs:
                 # add list of super admins if CC is being run
                 product_to_items.update(self.get_super_admins())
+                # add list of highly privileged users (CC 6.1)
+                product_to_items.update(self.get_privileged_users())
 
             product_to_items.update(self.get_group_settings())
 

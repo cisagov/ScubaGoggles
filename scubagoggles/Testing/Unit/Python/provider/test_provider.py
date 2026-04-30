@@ -18,6 +18,7 @@ from scubagoggles.Testing.Unit.Python.provider.dns_cases import (
 )
 from scubagoggles.Testing.Unit.Python.provider.admin_ou_cases import (
     GET_SUPER_ADMIN_CASES,
+    GET_PRIVILEGED_USERS_CASES,
     GET_OU_CASES,
     GET_TOPLEVEL_OU_CASES,
     GET_TENANT_INFO_CASES,
@@ -455,6 +456,82 @@ class TestProvider:
         else:
             assert ApiReference.LIST_USERS.value not in provider._successful_calls
             assert ApiReference.LIST_USERS.value in provider._unsuccessful_calls
+
+    @pytest.mark.parametrize(
+        "cases",
+        GET_PRIVILEGED_USERS_CASES
+    )
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_privileged_users(
+        self,
+        mocker,
+        cases
+    ):
+        """
+        Verify Provider.get_privileged_users() identifies admins by privilege
+        and returns their primaryEmail and orgUnitPath.  Backs the
+        GWS.COMMONCONTROLS.6.1 automated check (cisagov/ScubaGoggles#589).
+        """
+        provider = self._provider()
+
+        directory = provider._services["directory"]
+
+        roles_resource = mocker.Mock(name="roles_resource")
+        roles_ctx = mocker.MagicMock(name="roles_ctx")
+        roles_ctx.__enter__.return_value = roles_resource
+        roles_ctx.__exit__.return_value = False
+        directory.roles.return_value = roles_ctx
+
+        assignments_resource = mocker.Mock(name="role_assignments_resource")
+        assignments_ctx = mocker.MagicMock(name="role_assignments_ctx")
+        assignments_ctx.__enter__.return_value = assignments_resource
+        assignments_ctx.__exit__.return_value = False
+        directory.roleAssignments.return_value = assignments_ctx
+
+        users_resource = mocker.Mock(name="users_resource")
+        users_ctx = mocker.MagicMock(name="users_ctx")
+        users_ctx.__enter__.return_value = users_resource
+        users_ctx.__exit__.return_value = False
+        directory.users.return_value = users_ctx
+
+        get_list_mock = mocker.patch.object(Provider, "_get_list", autospec=True)
+        if cases["raises"]:
+            get_list_mock.side_effect = cases["raises"]
+        else:
+            # _get_list is called in this order by get_privileged_users:
+            #   1. directory.users() -> users (so isAdmin Super Admins are
+            #      captured even when the role API doesn't surface them)
+            #   2. directory.roles() -> items
+            #   3. directory.roleAssignments() -> items
+            get_list_mock.side_effect = [
+                cases["user_list"],
+                cases["role_list"],
+                cases["assignment_list"],
+            ]
+
+        if cases["expect_success_call"]:
+            result = provider.get_privileged_users()
+        else:
+            with pytest.warns(
+                RuntimeWarning,
+                match="Exception thrown while getting privileged users"
+            ):
+                result = provider.get_privileged_users()
+
+        assert result == cases["expected"]
+
+        api_calls = (
+            ApiReference.LIST_ROLES.value,
+            ApiReference.LIST_ROLE_ASSIGNMENTS.value,
+            ApiReference.LIST_USERS.value,
+        )
+        if cases["expect_success_call"]:
+            for call in api_calls:
+                assert call in provider._successful_calls
+                assert call not in provider._unsuccessful_calls
+        else:
+            for call in api_calls:
+                assert call in provider._unsuccessful_calls
 
     @pytest.mark.parametrize(
         "cases",
