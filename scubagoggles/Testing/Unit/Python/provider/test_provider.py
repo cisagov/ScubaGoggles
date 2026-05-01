@@ -822,3 +822,151 @@ class TestProvider:
 
         assert excinfo.value is other_exc
         log_error.assert_not_called()
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_is_privileged_role(self):
+        """Verifies privileged role classification logic."""
+        assert Provider._is_privileged_role({"isSuperAdminRole": True})
+        assert Provider._is_privileged_role({"roleName": "SERVICES ADMIN"})
+        assert Provider._is_privileged_role({
+            "rolePrivileges": [{"privilegeName": "USERS_ALL"}]
+        })
+        assert not Provider._is_privileged_role({
+            "roleName": "Help Desk",
+            "rolePrivileges": [{"privilegeName": "NOT_PRIVILEGED"}]
+        })
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_collect_privileged_user_ids(self, mocker):
+        """Verifies role/user aggregation for privileged IDs."""
+        provider = self._provider()
+        users = [
+            {"id": "super-1", "isAdmin": True, "isDelegatedAdmin": False},
+            {"id": "delegated-1", "isAdmin": False, "isDelegatedAdmin": True},
+            {"id": "normal-1", "isAdmin": False, "isDelegatedAdmin": False},
+        ]
+
+        directory = provider._services["directory"]
+        roles_resource = mocker.Mock(name="roles_resource")
+        roles_ctx = mocker.MagicMock(name="roles_ctx")
+        roles_ctx.__enter__.return_value = roles_resource
+        roles_ctx.__exit__.return_value = False
+        directory.roles.return_value = roles_ctx
+
+        assignments_resource = mocker.Mock(name="assignments_resource")
+        assignments_ctx = mocker.MagicMock(name="assignments_ctx")
+        assignments_ctx.__enter__.return_value = assignments_resource
+        assignments_ctx.__exit__.return_value = False
+        directory.roleAssignments.return_value = assignments_ctx
+
+        get_list_mock = mocker.patch.object(Provider, "_get_list", autospec=True)
+        get_list_mock.side_effect = [
+            [
+                {"roleId": "role-priv", "roleName": "GROUPS ADMIN"},
+                {"roleId": "role-unpriv", "roleName": "Help Desk"}
+            ],
+            [
+                {"assigneeType": "USER", "assignedTo": "normal-1", "roleId": "role-priv"},
+                {"assigneeType": "GROUP", "assignedTo": "group-1", "roleId": "role-priv"},
+                {"assigneeType": "USER", "assignedTo": "normal-2", "roleId": "role-unpriv"}
+            ]
+        ]
+
+        result = provider._collect_privileged_user_ids(users)
+        assert result == {"super-1", "delegated-1", "normal-1"}
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_privileged_users_error_propagation(self, mocker):
+        """Verifies privileged_users_error and unsuccessful API references."""
+        provider = self._provider()
+        mocker.patch.object(
+            provider,
+            "_list_directory_users",
+            side_effect=Exception("roles unavailable")
+        )
+
+        with pytest.warns(
+            RuntimeWarning,
+            match="Exception thrown while getting privileged users"
+        ):
+            result = provider.get_privileged_users()
+
+        assert result["privileged_users"] == []
+        assert result["privileged_users_error"] == "roles unavailable"
+        assert ApiReference.LIST_ROLES.value in provider._unsuccessful_calls
+        assert ApiReference.LIST_ROLE_ASSIGNMENTS.value in provider._unsuccessful_calls
+        assert ApiReference.LIST_USERS.value in provider._unsuccessful_calls
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_cloud_identity_customer_parent_my_customer(self, mocker):
+        """Verifies my_customer alias resolves to canonical customer id."""
+        provider = self._provider(customer_id="my_customer")
+        customers_resource = mocker.Mock(name="customers_resource")
+        provider._services["directory"].customers.return_value = customers_resource
+        customers_resource.get.return_value.execute.return_value = {"id": "C00abc123"}
+
+        result = provider._get_cloud_identity_customer_parent()
+        assert result == "customers/C00abc123"
+        customers_resource.get.assert_called_once_with(customerKey="my_customer")
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_cloud_identity_customer_parent_my_customer_missing_id(self, mocker):
+        """Verifies alias resolution fails when canonical customer id missing."""
+        provider = self._provider(customer_id="my_customer")
+        customers_resource = mocker.Mock(name="customers_resource")
+        provider._services["directory"].customers.return_value = customers_resource
+        customers_resource.get.return_value.execute.return_value = {}
+
+        with pytest.raises(RuntimeError, match="Unable to resolve canonical customer id"):
+            provider._get_cloud_identity_customer_parent()
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_inbound_sso_assignments_pagination(self, mocker):
+        """Verifies paged inbound SSO responses are combined correctly."""
+        provider = self._provider(customer_id="test_customer")
+        session = mocker.Mock(name="authorized_session")
+        response_page_1 = mocker.Mock(name="response_page_1")
+        response_page_1.raise_for_status.return_value = None
+        response_page_1.json.return_value = {
+            "inboundSsoAssignments": [{"name": "a1"}],
+            "nextPageToken": "next"
+        }
+        response_page_2 = mocker.Mock(name="response_page_2")
+        response_page_2.raise_for_status.return_value = None
+        response_page_2.json.return_value = {
+            "inboundSsoAssignments": [{"name": "a2"}]
+        }
+        session.get.side_effect = [response_page_1, response_page_2]
+        mocker.patch("scubagoggles.provider.auth_requests.AuthorizedSession",
+                     return_value=session)
+
+        result = provider.get_inbound_sso_assignments()
+        assert result == {
+            "inbound_sso_assignments": [{"name": "a1"}, {"name": "a2"}],
+            "inbound_sso_assignments_error": None
+        }
+        assert ApiReference.LIST_INBOUND_SSO_ASSIGNMENTS.value in provider._successful_calls
+        assert session.get.call_count == 2
+        first_call_params = session.get.call_args_list[0].kwargs["params"]
+        assert first_call_params["filter"] == 'customer=="customers/test_customer"'
+        session.close.assert_called_once()
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_inbound_sso_assignments_error_propagation(self, mocker):
+        """Verifies inbound_sso_assignments_error on request failures."""
+        provider = self._provider(customer_id="test_customer")
+        session = mocker.Mock(name="authorized_session")
+        session.get.side_effect = Exception("cloud identity denied")
+        mocker.patch("scubagoggles.provider.auth_requests.AuthorizedSession",
+                     return_value=session)
+
+        with pytest.warns(
+            RuntimeWarning,
+            match="Exception thrown while getting inbound SSO assignments"
+        ):
+            result = provider.get_inbound_sso_assignments()
+
+        assert result["inbound_sso_assignments"] == []
+        assert result["inbound_sso_assignments_error"] == "cloud identity denied"
+        assert ApiReference.LIST_INBOUND_SSO_ASSIGNMENTS.value in provider._unsuccessful_calls
+        session.close.assert_called_once()

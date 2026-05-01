@@ -61,7 +61,7 @@ test_NoPrivilegedUsers_Compliant_V1 if {
 test_PrivilegedUser_ExplicitSsoOff_Compliant_V1 if {
     PolicyId := CommonControlsId6_1
     Output := tests with input as object.union(BaseInput, {
-        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent"}],
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent", "groupKeys": []}],
         "inbound_sso_assignments": [
             {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SSO_OFF"}
         ]
@@ -76,7 +76,7 @@ test_PrivilegedUser_ExplicitSsoOff_Compliant_V1 if {
 test_PrivilegedUser_ExplicitSsoOn_NonCompliant_V1 if {
     PolicyId := CommonControlsId6_1
     Output := tests with input as object.union(BaseInput, {
-        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent"}],
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent", "groupKeys": []}],
         "inbound_sso_assignments": [
             {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"}
         ]
@@ -92,7 +92,7 @@ test_PrivilegedUser_ExplicitSsoOn_NonCompliant_V1 if {
 test_PrivilegedUser_InheritsParentSsoOn_NonCompliant_V1 if {
     PolicyId := CommonControlsId6_1
     Output := tests with input as object.union(BaseInput, {
-        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent/Child"}],
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent/Child", "groupKeys": []}],
         "inbound_sso_assignments": [
             {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"}
         ]
@@ -109,7 +109,7 @@ test_PrivilegedUser_InheritsParentSsoOn_NonCompliant_V1 if {
 test_PrivilegedUser_ChildOverrideToOff_Compliant_V1 if {
     PolicyId := CommonControlsId6_1
     Output := tests with input as object.union(BaseInput, {
-        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent/Child"}],
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent/Child", "groupKeys": []}],
         "inbound_sso_assignments": [
             {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"},
             {"targetOrgUnit": "orgUnits/child", "ssoMode": "SSO_OFF"}
@@ -125,7 +125,7 @@ test_PrivilegedUser_ChildOverrideToOff_Compliant_V1 if {
 test_PrivilegedUser_TopLevelPath_InheritsRoot_NonCompliant_V1 if {
     PolicyId := CommonControlsId6_1
     Output := tests with input as object.union(BaseInput, {
-        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": ""}],
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "", "groupKeys": []}],
         "inbound_sso_assignments": [
             {"targetOrgUnit": "orgUnits/top", "ssoMode": "OIDC_SSO"}
         ]
@@ -154,7 +154,7 @@ test_PrivilegedUsers_FetchError_NoSuchEvent_V1 if {
 test_SsoAssignments_FetchError_NoSuchEvent_V1 if {
     PolicyId := CommonControlsId6_1
     Output := tests with input as object.union(BaseInput, {
-        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent"}],
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent", "groupKeys": []}],
         "inbound_sso_assignments": [],
         "inbound_sso_assignments_error": "insufficient scope"
     })
@@ -163,6 +163,46 @@ test_SsoAssignments_FetchError_NoSuchEvent_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
+}
+
+test_PrivilegedUser_GroupTargetSsoOn_NonCompliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{
+            "primaryEmail": "admin@example.org",
+            "orgUnitPath": "Parent",
+            "groupKeys": ["security-admins@example.org"]
+        }],
+        "inbound_sso_assignments": [
+            {"targetGroup": "groups/security-admins@example.org", "ssoMode": "SAML_SSO"},
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SSO_OFF"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+}
+
+test_PrivilegedUser_GroupTargetSsoOff_OverridesOuOn_Compliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{
+            "primaryEmail": "admin@example.org",
+            "orgUnitPath": "Parent",
+            "groupKeys": ["security-admins@example.org"]
+        }],
+        "inbound_sso_assignments": [
+            {"targetGroup": "groups/security-admins@example.org", "ssoMode": "SSO_OFF"},
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
 }
 #--
 

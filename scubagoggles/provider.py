@@ -495,7 +495,8 @@ class Provider:
 
         Returns a dictionary with two keys:
           - ``privileged_users``: list of dictionaries, each with
-            ``primaryEmail`` and ``orgUnitPath``.
+            ``primaryEmail``, ``orgUnitPath``, and ``groupKeys`` (group ids
+            and email addresses for groups the user is a direct member of).
           - ``privileged_users_error``: ``None`` on success, otherwise a
             string describing the failure.
         """
@@ -649,8 +650,7 @@ class Provider:
             return self._get_list(users, 'users',
                                   customer = self._customer_id)
 
-    @staticmethod
-    def _build_privileged_user_records(users: list,
+    def _build_privileged_user_records(self, users: list,
                                        privileged_user_ids: set) -> list:
         """Helper: builds the list of {primaryEmail, orgUnitPath} dicts for
         the privileged users among the supplied directory users."""
@@ -667,9 +667,37 @@ class Provider:
             org_unit = user.get('orgUnitPath', '')
             if org_unit.startswith('/'):
                 org_unit = org_unit[1:]
+            group_keys = self._list_group_keys_for_user(email)
             records.append({'primaryEmail': email,
-                            'orgUnitPath': org_unit})
+                            'orgUnitPath': org_unit,
+                            'groupKeys': group_keys})
         return records
+
+    def _list_group_keys_for_user(self, user_email: str) -> list:
+        """
+        Helper: returns normalized group keys for a user.
+
+        Keys include both the group id and group email (lowercased), so
+        policy evaluation can match inbound SSO targetGroup values that use
+        either identifier.
+        """
+        if not user_email:
+            return []
+
+        directory = self._services['directory']
+        group_keys = set()
+        with directory.groups() as groups:
+            group_list = self._get_list(groups,
+                                        'groups',
+                                        userKey = user_email)
+        for group in group_list:
+            group_id = str(group.get('id', '')).strip().lower()
+            group_email = str(group.get('email', '')).strip().lower()
+            if group_id:
+                group_keys.add(group_id)
+            if group_email:
+                group_keys.add(group_email)
+        return sorted(group_keys)
 
     def get_ous(self) -> dict:
         """

@@ -942,23 +942,13 @@ CommonControlsId6_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.6.1")
 # CC 6.1 requires that all administrative (i.e. highly privileged) accounts
 # authenticate via Google Workspace and not via an external SSO/IdP.
 # This implementation is API/state-based (not log-based): for each privileged
-# user's OU path, evaluate the effective Inbound SSO assignment by walking up
-# the OU hierarchy (child -> parent -> top-level/root) and selecting the
-# nearest explicit assignment from input.inbound_sso_assignments.
-# If no assignment exists in ancestry, default to SSO_OFF.
-
-# OUs (as paths) in which at least one privileged user resides. Empty/root
-# paths are normalized to "/" (top-level/root OU path).
-PrivilegedAccountOuPaths contains OuPath if {
-    some user in input.privileged_users
-    user.orgUnitPath != ""
-    OuPath := utils.AddLeadingSlash(user.orgUnitPath)
-}
-
-PrivilegedAccountOuPaths contains "/" if {
-    some user in input.privileged_users
-    user.orgUnitPath == ""
-}
+# user, evaluate:
+#   - OU-targeted assignment: nearest explicit assignment in OU lineage
+#   - Group-targeted assignments: all assignments targeting any group the user
+#     belongs to
+# Precedence: group-targeted assignments override OU compliance (i.e., if any
+# applicable group assignment enables external SSO, the user is non-compliant).
+# If no assignment exists in either scope, default to SSO_OFF.
 
 DisplayNameByPath(OuPath) := Name if {
     OuPath == "/"
@@ -1016,6 +1006,18 @@ if {
     AssignmentPath != ""
 }
 
+AssignmentForGroup contains {
+    "GroupKey": lower(TargetGroupKey),
+    "Mode": upper(object.get(Assignment, "ssoMode", "SSO_MODE_UNSPECIFIED"))
+}
+if {
+    some Assignment in input.inbound_sso_assignments
+    TargetGroup := object.get(Assignment, "targetGroup", "")
+    TargetGroup != ""
+    TargetGroupKey := trim_prefix(TargetGroup, "groups/")
+    TargetGroupKey != ""
+}
+
 NearestSsoModeInOuLineage(OuPath) := Mode if {
     CandidatePaths := OuLineageCandidatePaths(OuPath)
     ApplicableAssignments := {Assignment |
@@ -1028,6 +1030,29 @@ NearestSsoModeInOuLineage(OuPath) := Mode if {
     PathDepth(Assignment.Path) == MaxDepth
     Mode := Assignment.Mode
 } else := "SSO_OFF"
+
+GroupSsoModesForUser(User) := Modes {
+    GroupKeys := {lower(k) |
+        some k in object.get(User, "groupKeys", [])
+        k != ""
+    }
+    Modes := {Assignment.Mode |
+        some Assignment in AssignmentForGroup
+        Assignment.GroupKey in GroupKeys
+    }
+}
+
+IsPrivilegedUserNonCompliant(User) if {
+    some Mode in GroupSsoModesForUser(User)
+    not SsoModeRepresentsGoogleAuthOnly(Mode)
+}
+
+IsPrivilegedUserNonCompliant(User) if {
+    count(GroupSsoModesForUser(User)) == 0
+    OuPath := utils.AddLeadingSlash(object.get(User, "orgUnitPath", ""))
+    Mode := NearestSsoModeInOuLineage(OuPath)
+    not SsoModeRepresentsGoogleAuthOnly(Mode)
+}
 
 SsoModeRepresentsGoogleAuthOnly(NewValue) if {
     Normalized := upper(NewValue)
@@ -1055,9 +1080,9 @@ NonCompliantOUs6_1 contains {
     "Value": NonComplianceMessage6_1
 }
 if {
-    some OuPath in PrivilegedAccountOuPaths
-    NewValue := NearestSsoModeInOuLineage(OuPath)
-    not SsoModeRepresentsGoogleAuthOnly(NewValue)
+    some user in input.privileged_users
+    IsPrivilegedUserNonCompliant(user)
+    OuPath := utils.AddLeadingSlash(object.get(user, "orgUnitPath", ""))
 }
 
 PrivilegedUsersError if {
