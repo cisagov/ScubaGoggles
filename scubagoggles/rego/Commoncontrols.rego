@@ -1031,7 +1031,7 @@ NearestSsoModeInOuLineage(OuPath) := Mode if {
     Mode := Assignment.Mode
 } else := "SSO_OFF"
 
-GroupSsoModesForUser(User) := Modes {
+GroupSsoModesForUser(User) := Modes if {
     GroupKeys := {lower(k) |
         some k in object.get(User, "groupKeys", [])
         k != ""
