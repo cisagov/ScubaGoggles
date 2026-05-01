@@ -538,14 +538,15 @@ class Provider:
         """
         api_call = ApiReference.LIST_INBOUND_SSO_ASSIGNMENTS.value
         base_url = 'https://cloudidentity.googleapis.com/v1/inboundSsoAssignments'
-        customer_parent = self._get_cloud_identity_customer_parent()
-        params = {
-            'filter': f'customer==\"{customer_parent}\"',
-            'pageSize': 100  # API max pageSize for this endpoint
-        }
-        session = auth_requests.AuthorizedSession(self._credentials)
+        session = None
 
         try:
+            customer_parent = self._get_cloud_identity_customer_parent()
+            params = {
+                'filter': f'customer==\"{customer_parent}\"',
+                'pageSize': 100  # API max pageSize for this endpoint
+            }
+            session = auth_requests.AuthorizedSession(self._credentials)
             assignments = []
             while True:
                 response = session.get(base_url, params=params, timeout=30)
@@ -570,7 +571,8 @@ class Provider:
             return {'inbound_sso_assignments': [],
                     'inbound_sso_assignments_error': str(exc)}
         finally:
-            session.close()
+            if session is not None:
+                session.close()
 
     def _get_cloud_identity_customer_parent(self) -> str:
         """

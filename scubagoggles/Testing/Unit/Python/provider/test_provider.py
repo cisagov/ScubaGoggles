@@ -970,3 +970,27 @@ class TestProvider:
         assert result["inbound_sso_assignments_error"] == "cloud identity denied"
         assert ApiReference.LIST_INBOUND_SSO_ASSIGNMENTS.value in provider._unsuccessful_calls
         session.close.assert_called_once()
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_inbound_sso_assignments_customer_parent_error_propagation(self, mocker):
+        """Verifies customer-parent resolution failures are handled gracefully."""
+        provider = self._provider(customer_id="my_customer")
+        mocker.patch.object(
+            provider,
+            "_get_cloud_identity_customer_parent",
+            side_effect=RuntimeError("Unable to resolve canonical customer id")
+        )
+        authorized_session = mocker.patch(
+            "scubagoggles.provider.auth_requests.AuthorizedSession"
+        )
+
+        with pytest.warns(
+            RuntimeWarning,
+            match="Exception thrown while getting inbound SSO assignments"
+        ):
+            result = provider.get_inbound_sso_assignments()
+
+        assert result["inbound_sso_assignments"] == []
+        assert result["inbound_sso_assignments_error"] == "Unable to resolve canonical customer id"
+        assert ApiReference.LIST_INBOUND_SSO_ASSIGNMENTS.value in provider._unsuccessful_calls
+        authorized_session.assert_not_called()
