@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from googleapiclient.discovery import build
 from google.auth.exceptions import RefreshError
+import google.auth.transport.requests as auth_requests
 from scubagoggles.auth import GwsAuth
 from scubagoggles.policy_api import PolicyAPI
 from scubagoggles.utils import create_subset_inverted_dict, \
@@ -524,6 +525,72 @@ class Provider:
             return {'privileged_users': [],
                     'privileged_users_error': str(exc)}
 
+    def get_inbound_sso_assignments(self) -> dict:
+        """
+        Gets Cloud Identity Inbound SSO assignments for the customer.
+
+        Returns:
+          - inbound_sso_assignments: list of assignment objects as returned by
+            Cloud Identity's inboundSsoAssignments.list endpoint.
+          - inbound_sso_assignments_error: None on success, otherwise the
+            error message string.
+        """
+        api_call = ApiReference.LIST_INBOUND_SSO_ASSIGNMENTS.value
+        base_url = 'https://cloudidentity.googleapis.com/v1/inboundSsoAssignments'
+        customer_parent = self._get_cloud_identity_customer_parent()
+        params = {
+            'filter': f'customer==\"{customer_parent}\"',
+            'pageSize': 100  # API max pageSize for this endpoint
+        }
+        session = auth_requests.AuthorizedSession(self._credentials)
+
+        try:
+            assignments = []
+            while True:
+                response = session.get(base_url, params=params, timeout=30)
+                response.raise_for_status()
+                payload = response.json()
+                assignments.extend(payload.get('inboundSsoAssignments', []))
+                page_token = payload.get('nextPageToken', '')
+                if not page_token:
+                    break
+                params['pageToken'] = page_token
+
+            self._successful_calls.add(api_call)
+            return {'inbound_sso_assignments': assignments,
+                    'inbound_sso_assignments_error': None}
+        except Exception as exc:
+            warnings.warn(
+                'Exception thrown while getting inbound SSO assignments; '
+                f'GWS.COMMONCONTROLS.6.1 cannot be evaluated: {exc}',
+                RuntimeWarning
+            )
+            self._unsuccessful_calls.add(api_call)
+            return {'inbound_sso_assignments': [],
+                    'inbound_sso_assignments_error': str(exc)}
+        finally:
+            session.close()
+
+    def _get_cloud_identity_customer_parent(self) -> str:
+        """
+        Returns the Cloud Identity API parent string for the current tenant.
+
+        Cloud Identity endpoints require `customers/{customer-id}` where
+        customer-id is the canonical ID (e.g. `C0123abc`).  Unlike Directory
+        APIs, aliases like `my_customer` are not accepted.
+        """
+        if self._customer_id != 'my_customer':
+            return f'customers/{self._customer_id}'
+
+        # Resolve alias -> canonical customer id using Directory API.
+        response = self._services['directory'].customers().get(
+            customerKey=self._customer_id
+        ).execute()
+        customer_id = response.get('id', '').strip()
+        if not customer_id:
+            raise RuntimeError('Unable to resolve canonical customer id for Cloud Identity API')
+        return f'customers/{customer_id}'
+
     def _collect_privileged_user_ids(self, users: list) -> set:
         """Helper: Returns the union of:
           - user ids of Super Admins (``isAdmin`` flag)
@@ -888,6 +955,8 @@ class Provider:
                 product_to_items.update(self.get_super_admins())
                 # add list of highly privileged users (CC 6.1)
                 product_to_items.update(self.get_privileged_users())
+                # add effective SSO assignment state (CC 6.1 API-based check)
+                product_to_items.update(self.get_inbound_sso_assignments())
 
             product_to_items.update(self.get_group_settings())
 

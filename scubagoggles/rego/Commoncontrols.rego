@@ -940,29 +940,108 @@ CommonControlsId6_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.6.1")
 
 # Reference: https://github.com/cisagov/ScubaGoggles/issues/589
 # CC 6.1 requires that all administrative (i.e. highly privileged) accounts
-# authenticate via Google Workspace and not via an external SSO/IdP.  The
-# provider supplies the list of privileged users (those holding admin roles
-# whose privileges include any of HIGHLY_PRIVILEGED_PRIVILEGES).  Each
-# privileged user's OU is then inspected to ensure SSO is disabled (i.e.
-# the most recent "Inbound SSO Settings SSO mode" event for that OU is
-# either "SSO off" or DELETE_APPLICATION_SETTING).  An OU with no SSO
-# events is assumed to inherit the default ("SSO off").
+# authenticate via Google Workspace and not via an external SSO/IdP.
+# This implementation is API/state-based (not log-based): for each privileged
+# user's OU path, evaluate the effective Inbound SSO assignment by walking up
+# the OU hierarchy (child -> parent -> top-level/root) and selecting the
+# nearest explicit assignment from input.inbound_sso_assignments.
+# If no assignment exists in ancestry, default to SSO_OFF.
 
-LogMessage6_1 := "Inbound SSO Settings SSO mode"
-
-# OUs in which at least one privileged user resides.  Empty/root paths are
-# treated as the top-level OU so the OU lookup against log events works
-# correctly (events are keyed by the OU name, not the path).
-PrivilegedAccountOUs contains OU if {
+# OUs (as paths) in which at least one privileged user resides. Empty/root
+# paths are normalized to "/" (top-level/root OU path).
+PrivilegedAccountOuPaths contains OuPath if {
     some user in input.privileged_users
     user.orgUnitPath != ""
-    OU := user.orgUnitPath
+    OuPath := utils.AddLeadingSlash(user.orgUnitPath)
 }
 
-PrivilegedAccountOUs contains utils.TopLevelOU if {
+PrivilegedAccountOuPaths contains "/" if {
     some user in input.privileged_users
     user.orgUnitPath == ""
-    utils.TopLevelOU != ""
+}
+
+DisplayNameByPath(OuPath) := Name if {
+    OuPath == "/"
+    Name := utils.TopLevelOU
+} else := Name if {
+    Name := trim_prefix(OuPath, "/")
+}
+
+PathDepth(Path) := 0 if {
+    Path == "/"
+} else := Depth if {
+    Path != "/"
+    Depth := count(split(trim_prefix(Path, "/"), "/"))
+}
+
+IsAncestorPath(AncestorPath, OuPath) if {
+    AncestorPath == "/"
+} else if {
+    OuPath == AncestorPath
+} else if {
+    startswith(OuPath, concat("", [AncestorPath, "/"]))
+}
+
+OrgUnitPathById := {trim_prefix(ou.orgUnitId, "id:"): ou.orgUnitPath |
+    some ou in input.organizational_units.organizationUnits
+}
+
+OuLineageCandidatePaths(OuPath) := CandidatePaths if {
+    OuPath == "/"
+    CandidatePaths := {"/"}
+} else := CandidatePaths if {
+    OuPath != "/"
+    Segments := split(trim_prefix(OuPath, "/"), "/")
+    ByPath := {
+        Path
+        | some Index
+          Segments[Index]
+          Index < count(Segments)
+          Prefix := array.slice(Segments, 0, Index + 1)
+          Path := concat("", ["/", concat("/", Prefix)])
+    }
+    CandidatePaths := union({ByPath, {"/"}})
+}
+
+AssignmentForPath contains {
+    "Path": AssignmentPath,
+    "Mode": upper(object.get(Assignment, "ssoMode", "SSO_MODE_UNSPECIFIED"))
+}
+if {
+    some Assignment in input.inbound_sso_assignments
+    TargetOrgUnit := object.get(Assignment, "targetOrgUnit", "")
+    TargetOrgUnit != ""
+    OrgUnitId := trim_prefix(TargetOrgUnit, "orgUnits/")
+    AssignmentPath := object.get(OrgUnitPathById, OrgUnitId, "")
+    AssignmentPath != ""
+}
+
+NearestSsoModeInOuLineage(OuPath) := Mode if {
+    CandidatePaths := OuLineageCandidatePaths(OuPath)
+    ApplicableAssignments := {Assignment |
+        some Assignment in AssignmentForPath
+        Assignment.Path in CandidatePaths
+        IsAncestorPath(Assignment.Path, OuPath)
+    }
+    MaxDepth := max({PathDepth(Assignment.Path) | some Assignment in ApplicableAssignments})
+    some Assignment in ApplicableAssignments
+    PathDepth(Assignment.Path) == MaxDepth
+    Mode := Assignment.Mode
+} else := "SSO_OFF"
+
+SsoModeRepresentsGoogleAuthOnly(NewValue) if {
+    Normalized := upper(NewValue)
+    Normalized == "SSO_OFF"
+}
+
+SsoModeRepresentsGoogleAuthOnly(NewValue) if {
+    Normalized := upper(NewValue)
+    Normalized == "SSO_MODE_UNSPECIFIED"
+}
+
+SsoModeRepresentsGoogleAuthOnly(NewValue) if {
+    Normalized := upper(NewValue)
+    Normalized == ""
 }
 
 NonComplianceMessage6_1 := concat(" ", [
@@ -972,26 +1051,31 @@ NonComplianceMessage6_1 := concat(" ", [
 ])
 
 NonCompliantOUs6_1 contains {
-    "Name": OU,
+    "Name": DisplayNameByPath(OuPath),
     "Value": NonComplianceMessage6_1
 }
 if {
-    some OU in PrivilegedAccountOUs
-    Events := utils.FilterEventsOU(LogEvents, LogMessage6_1, OU)
-    # If there are no events for this OU, assume it inherits the default
-    # ("SSO off") from its parent and treat it as compliant.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue != "SSO off"
-    LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
+    some OuPath in PrivilegedAccountOuPaths
+    NewValue := NearestSsoModeInOuLineage(OuPath)
+    not SsoModeRepresentsGoogleAuthOnly(NewValue)
 }
 
-# If the provider was unable to enumerate privileged users (e.g. missing
-# scope or API failure), report NoSuchEvent so the policy is treated as
-# manual rather than silently passing.
 PrivilegedUsersError if {
     input.privileged_users_error
     input.privileged_users_error != null
+}
+
+InboundSsoAssignmentsError if {
+    input.inbound_sso_assignments_error
+    input.inbound_sso_assignments_error != null
+}
+
+NoSuchEvent6_1 if {
+    PrivilegedUsersError
+}
+
+NoSuchEvent6_1 if {
+    InboundSsoAssignmentsError
 }
 
 tests contains {
@@ -1000,12 +1084,15 @@ tests contains {
         "directory/v1/roles/list",
         "directory/v1/roleAssignments/list",
         "directory/v1/users/list",
-        "reports/v1/activities/list"
+        "cloudidentity/v1/inboundSsoAssignments/list"
     ],
     "Criticality": "Shall",
     "ReportDetails": concat("", [
-        "Unable to determine privileged accounts: ",
+        "Unable to determine privileged account SSO state. ",
+        "privileged_users_error=",
         sprintf("%v", [input.privileged_users_error]),
+        "; inbound_sso_assignments_error=",
+        sprintf("%v", [input.inbound_sso_assignments_error]),
         ". Please manually verify that all administrative accounts use ",
         "Google Workspace authentication and not an external IdP."
     ]),
@@ -1014,7 +1101,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    PrivilegedUsersError
+    NoSuchEvent6_1
 }
 
 tests contains {
@@ -1023,7 +1110,7 @@ tests contains {
         "directory/v1/roles/list",
         "directory/v1/roleAssignments/list",
         "directory/v1/users/list",
-        "reports/v1/activities/list"
+        "cloudidentity/v1/inboundSsoAssignments/list"
     ],
     "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, []),
@@ -1033,6 +1120,7 @@ tests contains {
 }
 if {
     not PrivilegedUsersError
+    not InboundSsoAssignmentsError
     Status := count(NonCompliantOUs6_1) == 0
 }
 #--

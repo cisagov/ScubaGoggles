@@ -4,50 +4,52 @@ import future.keywords
 #
 # GWS.COMMONCONTROLS.6.1
 # Implementation reference: https://github.com/cisagov/ScubaGoggles/issues/589
-# - Determines OUs containing highly privileged accounts.
-# - Verifies the most recent "Inbound SSO Settings SSO mode" event for each
-#   such OU is "SSO off" or DELETE_APPLICATION_SETTING (i.e. SSO is disabled,
-#   so admin accounts authenticate against Google Workspace).
+# - API/state-based check using inbound_sso_assignments (Cloud Identity API).
+# - Evaluates effective inherited assignment from OU ancestry.
 #--
 
-# Helper for building an "Inbound SSO Settings SSO mode" change event for a
-# given OU/value at the given timestamp.
-SsoModeEvent(OrgUnit, NewValue, Time) := {
-    "id": {"time": Time},
-    "events": [{
-        "parameters": [
-            {"name": "ORG_UNIT_NAME", "value": OrgUnit},
-            {"name": "SETTING_NAME", "value": "Inbound SSO Settings SSO mode"},
-            {"name": "NEW_VALUE", "value": NewValue},
-            {"name": "APPLICATION_NAME", "value": "Security"}
-        ]
-    }]
+OrgUnits := {
+    "organizationUnits": [
+        {
+            "name": "Top OU",
+            "orgUnitPath": "/",
+            "orgUnitId": "id:top",
+            "parentOrgUnitPath": "/"
+        },
+        {
+            "name": "Parent",
+            "orgUnitPath": "/Parent",
+            "orgUnitId": "id:parent",
+            "parentOrgUnitPath": "/"
+        },
+        {
+            "name": "Child",
+            "orgUnitPath": "/Parent/Child",
+            "orgUnitId": "id:child",
+            "parentOrgUnitPath": "/Parent"
+        },
+        {
+            "name": "Sibling",
+            "orgUnitPath": "/Sibling",
+            "orgUnitId": "id:sibling",
+            "parentOrgUnitPath": "/"
+        }
+    ]
 }
 
-# Helper for building a DELETE_APPLICATION_SETTING event for the
-# "Inbound SSO Settings SSO mode" setting.  These events have no NEW_VALUE
-# and the synthetic NewValue defaults to "DELETE_APPLICATION_SETTING".
-SsoModeDeleteEvent(OrgUnit, Time) := {
-    "id": {"time": Time},
-    "events": [{
-        "name": "DELETE_APPLICATION_SETTING",
-        "parameters": [
-            {"name": "ORG_UNIT_NAME", "value": OrgUnit},
-            {"name": "SETTING_NAME", "value": "Inbound SSO Settings SSO mode"},
-            {"name": "APPLICATION_NAME", "value": "Security"}
-        ]
-    }]
+BaseInput := {
+    "organizational_units": OrgUnits,
+    "tenant_info": {"topLevelOU": "Top OU"},
+    "privileged_users_error": null,
+    "inbound_sso_assignments_error": null
 }
 
 test_NoPrivilegedUsers_Compliant_V1 if {
-    # No privileged users at all -> vacuously compliant.
     PolicyId := CommonControlsId6_1
-    Output := tests with input as {
+    Output := tests with input as object.union(BaseInput, {
         "privileged_users": [],
-        "privileged_users_error": null,
-        "commoncontrols_logs": {"items": []},
-        "tenant_info": {"topLevelOU": "Test Top-Level OU"}
-    }
+        "inbound_sso_assignments": []
+    })
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
@@ -56,156 +58,106 @@ test_NoPrivilegedUsers_Compliant_V1 if {
     count(RuleOutput[0].ActualValue.NonCompliantOUs) == 0
 }
 
-test_PrivilegedUser_SsoOff_Compliant_V1 if {
-    # Privileged user in an OU whose most recent SSO event is "SSO off".
+test_PrivilegedUser_ExplicitSsoOff_Compliant_V1 if {
     PolicyId := CommonControlsId6_1
-    Output := tests with input as {
-        "privileged_users": [{
-            "primaryEmail": "admin@example.org",
-            "orgUnitPath": "Admins"
-        }],
-        "privileged_users_error": null,
-        "commoncontrols_logs": {"items": [
-            SsoModeEvent("Admins", "SSO off", "2024-01-01T00:00:00Z")
-        ]},
-        "tenant_info": {"topLevelOU": "Test Top-Level OU"}
-    }
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent"}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SSO_OFF"}
+        ]
+    })
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    count(RuleOutput[0].ActualValue.NonCompliantOUs) == 0
 }
 
-test_PrivilegedUser_SsoDeleted_Compliant_V1 if {
-    # Privileged user in an OU whose most recent SSO event is a deletion of
-    # the SSO setting. This is also treated as SSO disabled (default).
+test_PrivilegedUser_ExplicitSsoOn_NonCompliant_V1 if {
     PolicyId := CommonControlsId6_1
-    Output := tests with input as {
-        "privileged_users": [{
-            "primaryEmail": "admin@example.org",
-            "orgUnitPath": "Admins"
-        }],
-        "privileged_users_error": null,
-        "commoncontrols_logs": {"items": [
-            SsoModeEvent("Admins", "OnTopOfDomainAuthentication", "2024-01-01T00:00:00Z"),
-            SsoModeDeleteEvent("Admins", "2024-06-01T00:00:00Z")
-        ]},
-        "tenant_info": {"topLevelOU": "Test Top-Level OU"}
-    }
-
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    count(RuleOutput[0].ActualValue.NonCompliantOUs) == 0
-}
-
-test_PrivilegedUser_NoSsoEvents_Compliant_V1 if {
-    # Privileged user in an OU but no SSO mode events for that OU.
-    # Per the inheritance default the OU is treated as compliant.
-    PolicyId := CommonControlsId6_1
-    Output := tests with input as {
-        "privileged_users": [{
-            "primaryEmail": "admin@example.org",
-            "orgUnitPath": "Admins"
-        }],
-        "privileged_users_error": null,
-        "commoncontrols_logs": {"items": []},
-        "tenant_info": {"topLevelOU": "Test Top-Level OU"}
-    }
-
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    count(RuleOutput[0].ActualValue.NonCompliantOUs) == 0
-}
-
-test_PrivilegedUser_SsoOn_NonCompliant_V1 if {
-    # Privileged user in an OU whose most recent SSO event enables SSO.
-    PolicyId := CommonControlsId6_1
-    Output := tests with input as {
-        "privileged_users": [{
-            "primaryEmail": "admin@example.org",
-            "orgUnitPath": "Admins"
-        }],
-        "privileged_users_error": null,
-        "commoncontrols_logs": {"items": [
-            SsoModeEvent("Admins", "SSO off", "2024-01-01T00:00:00Z"),
-            SsoModeEvent("Admins", "OnTopOfDomainAuthentication", "2024-06-01T00:00:00Z")
-        ]},
-        "tenant_info": {"topLevelOU": "Test Top-Level OU"}
-    }
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent"}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"}
+        ]
+    })
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     count(RuleOutput[0].ActualValue.NonCompliantOUs) == 1
+}
+
+test_PrivilegedUser_InheritsParentSsoOn_NonCompliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent/Child"}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
     SomeOU := RuleOutput[0].ActualValue.NonCompliantOUs[_]
-    SomeOU.Name == "Admins"
+    SomeOU.Name == "Parent/Child"
 }
 
-test_PrivilegedUser_MultipleOUs_PartiallyNonCompliant_V1 if {
-    # Two privileged user OUs, one compliant, one not.
+test_PrivilegedUser_ChildOverrideToOff_Compliant_V1 if {
     PolicyId := CommonControlsId6_1
-    Output := tests with input as {
-        "privileged_users": [
-            {"primaryEmail": "ok@example.org",  "orgUnitPath": "OkOU"},
-            {"primaryEmail": "bad@example.org", "orgUnitPath": "BadOU"}
-        ],
-        "privileged_users_error": null,
-        "commoncontrols_logs": {"items": [
-            SsoModeEvent("OkOU",  "SSO off",                       "2024-06-01T00:00:00Z"),
-            SsoModeEvent("BadOU", "OnTopOfDomainAuthentication",   "2024-06-01T00:00:00Z")
-        ]},
-        "tenant_info": {"topLevelOU": "Test Top-Level OU"}
-    }
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent/Child"}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"},
+            {"targetOrgUnit": "orgUnits/child", "ssoMode": "SSO_OFF"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+}
+
+test_PrivilegedUser_TopLevelPath_InheritsRoot_NonCompliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": ""}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/top", "ssoMode": "OIDC_SSO"}
+        ]
+    })
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    Names := {ou.Name | some ou in RuleOutput[0].ActualValue.NonCompliantOUs}
-    Names == {"BadOU"}
-}
-
-test_PrivilegedUser_TopLevelOU_NonCompliant_V1 if {
-    # Privileged user with empty orgUnitPath should map to the top-level OU.
-    PolicyId := CommonControlsId6_1
-    Output := tests with input as {
-        "privileged_users": [{
-            "primaryEmail": "admin@example.org",
-            "orgUnitPath": ""
-        }],
-        "privileged_users_error": null,
-        "commoncontrols_logs": {"items": [
-            SsoModeEvent("Test Top-Level OU", "OnTopOfDomainAuthentication",
-                         "2024-06-01T00:00:00Z")
-        ]},
-        "tenant_info": {"topLevelOU": "Test Top-Level OU"}
-    }
-
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    count(RuleOutput[0].ActualValue.NonCompliantOUs) == 1
 }
 
 test_PrivilegedUsers_FetchError_NoSuchEvent_V1 if {
-    # If the provider failed to retrieve privileged users, the policy is
-    # marked NoSuchEvent (manual review required) rather than silently
-    # passing.
     PolicyId := CommonControlsId6_1
-    Output := tests with input as {
+    Output := tests with input as object.union(BaseInput, {
         "privileged_users": [],
         "privileged_users_error": "Permission denied",
-        "commoncontrols_logs": {"items": []},
-        "tenant_info": {"topLevelOU": "Test Top-Level OU"}
-    }
+        "inbound_sso_assignments": []
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    RuleOutput[0].NoSuchEvent
+}
+
+test_SsoAssignments_FetchError_NoSuchEvent_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent"}],
+        "inbound_sso_assignments": [],
+        "inbound_sso_assignments_error": "insufficient scope"
+    })
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
