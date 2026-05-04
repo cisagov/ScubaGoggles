@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 """
 provider.py is where the GWS api calls are made.
 """

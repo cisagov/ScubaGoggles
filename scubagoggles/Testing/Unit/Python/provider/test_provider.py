@@ -34,6 +34,7 @@ from scubagoggles.Testing.Unit.Python.provider.get_list_cases import (
 
 # Disable "protected-access" because we test some internal methods
 # pylint: disable=protected-access
+# pylint: disable=too-many-public-methods
 
 class TestProvider:
     """Unit tests for the Provider class."""
@@ -891,7 +892,7 @@ class TestProvider:
         ):
             result = provider.get_privileged_users()
 
-        assert result["privileged_users"] == []
+        assert not result["privileged_users"]
         assert result["privileged_users_error"] == "roles unavailable"
         assert ApiReference.LIST_ROLES.value in provider._unsuccessful_calls
         assert ApiReference.LIST_ROLE_ASSIGNMENTS.value in provider._unsuccessful_calls
@@ -966,7 +967,7 @@ class TestProvider:
         ):
             result = provider.get_inbound_sso_assignments()
 
-        assert result["inbound_sso_assignments"] == []
+        assert not result["inbound_sso_assignments"]
         assert result["inbound_sso_assignments_error"] == "cloud identity denied"
         assert ApiReference.LIST_INBOUND_SSO_ASSIGNMENTS.value in provider._unsuccessful_calls
         session.close.assert_called_once()
@@ -990,7 +991,7 @@ class TestProvider:
         ):
             result = provider.get_inbound_sso_assignments()
 
-        assert result["inbound_sso_assignments"] == []
+        assert not result["inbound_sso_assignments"]
         assert result["inbound_sso_assignments_error"] == "Unable to resolve canonical customer id"
         assert ApiReference.LIST_INBOUND_SSO_ASSIGNMENTS.value in provider._unsuccessful_calls
         authorized_session.assert_not_called()
