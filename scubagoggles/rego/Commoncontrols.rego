@@ -972,8 +972,10 @@ IsAncestorPath(AncestorPath, OuPath) if {
     startswith(OuPath, concat("", [AncestorPath, "/"]))
 }
 
-OrgUnitPathById[trim_prefix(ou.orgUnitId, "id:")] := ou.orgUnitPath if {
+OrgUnitPathById[OrgUnitId] := OrgUnitPath if {
     some ou in input.organizational_units.organizationUnits
+    OrgUnitId := trim_prefix(ou.orgUnitId, "id:")
+    OrgUnitPath := ou.orgUnitPath
 }
 
 OuLineageCandidatePaths(OuPath) := CandidatePaths if {
