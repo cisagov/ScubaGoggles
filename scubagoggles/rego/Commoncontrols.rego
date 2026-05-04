@@ -972,7 +972,7 @@ IsAncestorPath(AncestorPath, OuPath) if {
     startswith(OuPath, concat("", [AncestorPath, "/"]))
 }
 
-OrgUnitPathById[OrgUnitId] := OrgUnitPath if {
+OrgUnitPathById(OrgUnitId) := OrgUnitPath if {
     some ou in input.organizational_units.organizationUnits
     OrgUnitId := trim_prefix(ou.orgUnitId, "id:")
     OrgUnitPath := ou.orgUnitPath
@@ -1002,8 +1002,7 @@ if {
     TargetOrgUnit := object.get(Assignment, "targetOrgUnit", "")
     TargetOrgUnit != ""
     OrgUnitId := trim_prefix(TargetOrgUnit, "orgUnits/")
-    AssignmentPath := object.get(OrgUnitPathById, OrgUnitId, "")
-    AssignmentPath != ""
+    AssignmentPath := OrgUnitPathById(OrgUnitId)
 }
 
 AssignmentForGroup contains {
