@@ -972,10 +972,10 @@ IsAncestorPath(AncestorPath, OuPath) if {
     startswith(OuPath, concat("", [AncestorPath, "/"]))
 }
 
-OrgUnitPathById(OrgUnitId) := OrgUnitPath if {
+OrgUnitPathById(ExpectedOrgUnitId) := OrgUnitPath if {
     some ou in input.organizational_units.organizationUnits
     CurrentOrgUnitId := trim_prefix(ou.orgUnitId, "id:")
-    OrgUnitId == CurrentOrgUnitId
+    ExpectedOrgUnitId == CurrentOrgUnitId
     OrgUnitPath := ou.orgUnitPath
 }
 
