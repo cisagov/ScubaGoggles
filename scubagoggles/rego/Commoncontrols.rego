@@ -974,7 +974,8 @@ IsAncestorPath(AncestorPath, OuPath) if {
 
 OrgUnitPathById(OrgUnitId) := OrgUnitPath if {
     some ou in input.organizational_units.organizationUnits
-    OrgUnitId := trim_prefix(ou.orgUnitId, "id:")
+    CurrentOrgUnitId := trim_prefix(ou.orgUnitId, "id:")
+    OrgUnitId == CurrentOrgUnitId
     OrgUnitPath := ou.orgUnitPath
 }
 
