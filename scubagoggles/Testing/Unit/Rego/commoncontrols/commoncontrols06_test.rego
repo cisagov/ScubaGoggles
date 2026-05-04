@@ -102,7 +102,7 @@ test_PrivilegedUser_InheritsParentSsoOn_NonCompliant_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    SomeOU := RuleOutput[0].ActualValue.NonCompliantOUs[_]
+    some SomeOU in RuleOutput[0].ActualValue.NonCompliantOUs
     SomeOU.Name == "Parent/Child"
 }
 

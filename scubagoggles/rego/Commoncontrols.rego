@@ -972,7 +972,7 @@ IsAncestorPath(AncestorPath, OuPath) if {
     startswith(OuPath, concat("", [AncestorPath, "/"]))
 }
 
-OrgUnitPathById := {trim_prefix(ou.orgUnitId, "id:"): ou.orgUnitPath |
+OrgUnitPathById[trim_prefix(ou.orgUnitId, "id:")] := ou.orgUnitPath if {
     some ou in input.organizational_units.organizationUnits
 }
 
@@ -984,9 +984,7 @@ OuLineageCandidatePaths(OuPath) := CandidatePaths if {
     Segments := split(trim_prefix(OuPath, "/"), "/")
     ByPath := {
         Path
-        | some Index
-          Segments[Index]
-          Index < count(Segments)
+        | some Index, _ in Segments
           Prefix := array.slice(Segments, 0, Index + 1)
           Path := concat("", ["/", concat("/", Prefix)])
     }
@@ -1086,12 +1084,10 @@ if {
 }
 
 PrivilegedUsersError if {
-    input.privileged_users_error
     input.privileged_users_error != null
 }
 
 InboundSsoAssignmentsError if {
-    input.inbound_sso_assignments_error
     input.inbound_sso_assignments_error != null
 }
 
