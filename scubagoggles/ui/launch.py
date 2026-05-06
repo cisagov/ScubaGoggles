@@ -91,7 +91,7 @@ def _build_streamlit_command(app_to_run: Path, force_dark : bool) -> list[str]:
     port = _find_free_port()
     # Build command as list of strings
     cmd = [
-        sys.executable, "-m", "streamlit", "run",
+        str(sys.executable), "-m", "streamlit", "run",
         str(app_to_run),
         "--server.address", "localhost",
         "--server.port", str(port),
