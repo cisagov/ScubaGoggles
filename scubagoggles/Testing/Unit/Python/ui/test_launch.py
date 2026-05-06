@@ -2,6 +2,7 @@
 test_launch.py tests the launch.py methods.
 """
 
+import os
 import sys
 import pytest
 from pathlib import Path
@@ -79,8 +80,6 @@ class TestLaunch:
         # avoid backslashes to bypass OS ambiguity Path to str conversion
         app_path = Path("home")
         command = launch._build_streamlit_command(app_path, force_dark=dark_mode)
-        if command:
-            command[0] = str(sys.executable)
         expected_cmd = [
             str(sys.executable), "-m", "streamlit", "run",
             "home",
@@ -171,3 +170,45 @@ class TestLaunch:
         else:
             # assert the additional call to _kill_process_tree
             assert mock_kill_ptree.call_count == 2
+
+    @pytest.mark.parametrize('dark_mode, windows',
+        [
+            (False, False),
+            (True, False),
+            (False, True),
+            (True, True)
+        ]
+    )
+    def test_main_method(self, mocker, monkeypatch, dark_mode, windows):
+        str_args = ["my_program.py"]
+        # expected build command 
+        expected_cmd = [
+            str(sys.executable), "-m", "streamlit", "run",
+            "home",
+            "--server.address", "localhost",
+            "--server.port", "1234",
+            "--server.headless", "false",
+            "--browser.gatherUsageStats", "false",
+        ]
+        if dark_mode:
+            str_args.append("--dark")
+            monkeypatch.setenv("SCUBAGOGGLES_UI_DARK", "80")
+            expected_cmd.extend(["--theme.base", "dark"])
+        mocker.patch("sys.argv", str_args)
+        # arbitrary return values for mocked functions      
+        mocker.patch.object(launch, "_find_free_port", return_value=1234)
+        mocker.patch.object(launch, "_get_app_to_run", return_value=Path("home"))
+        mocker.patch.object(launch, "_prevent_streamlit_promotion")
+        mock_run_server = mocker.patch.object(launch, "_run_server")
+        popen_kwargs = dict()
+        if not windows:
+            mocker.patch("sys.platform", "linux")
+            popen_kwargs["start_new_session"] = True
+
+        launch.main()    
+        # assertions
+        if dark_mode:
+            assert os.environ.get("SCUBAGOGGLES_UI_DARK") == "1"
+        else:
+            assert os.environ.get("SCUBAGOGGLES_UI_DARK") == None
+        mock_run_server.assert_called_once_with(expected_cmd, popen_kwargs)
