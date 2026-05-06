@@ -180,7 +180,11 @@ class TestLaunch:
         ]
     )
     def test_main_method(self, mocker, monkeypatch, dark_mode, windows):
-        str_args = ["my_program.py"]
+        """
+        Test the main() method in launch.py
+        """
+        # to mock command line arguments
+        str_args = ["launch.py"]
         # expected build command 
         expected_cmd = [
             str(sys.executable), "-m", "streamlit", "run",
