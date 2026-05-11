@@ -20,6 +20,7 @@ from collections.abc import Callable
 from datetime import datetime, timezone, date
 from pathlib import Path
 from operator import itemgetter
+from requests.exceptions import RequestException
 from tqdm import tqdm
 
 import requests
@@ -161,7 +162,7 @@ class Orchestrator:
             goggles_url_response = requests.get(SCUBAGOGGLES_PACKAGE_URL, timeout=10)
             goggles_url_response.raise_for_status()
             latest_version_on_pypi = goggles_url_response.json()["info"]["version"]
-        except URLError as err:
+        except (RequestException, URLError) as err:
             error_message = (
                 f"An unexpected error occurred in retrieving latest SCuBA Goggles"
                 f"version: {err}"
