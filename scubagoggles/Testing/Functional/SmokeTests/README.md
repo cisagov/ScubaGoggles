@@ -95,13 +95,13 @@ Go to the [run_smoke_test.yml workflow](https://github.com/cisagov/ScubaGoggles/
 
 The default values are the following:
 - ref branch: `main` but can be set to any branch
-- operating system: `['windows-latest', 'macos-latest']` ([list of supported GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories))
+- operating system: `['windows-2025-vs2026', 'macos-latest']` ([list of supported GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories))
 - python version: `['3.10']`
 - opa version: "0.60.0"
 
 ![Screenshot (226)](https://github.com/user-attachments/assets/6f25b7a9-3981-4866-a413-93df4bae1130)
 
-Feel free to play around with the inputs then click the "Run workflow" button when ready. The workflow will create a matrix strategy for each combination. For example, passing `['windows-latest', 'macos-latest']`, `['3.10', '3.11', 3.12']`, and OPA version `0.60.0` will create the following:
+Feel free to play around with the inputs then click the "Run workflow" button when ready. The workflow will create a matrix strategy for each combination. For example, passing `['windows-2025-vs2026', 'macos-latest']`, `['3.10', '3.11', 3.12']`, and OPA version `0.60.0` will create the following:
 
 ![Screenshot (218)](https://github.com/user-attachments/assets/212b4e4b-d552-4dc9-a3f6-7f0e29accc4b)
 
