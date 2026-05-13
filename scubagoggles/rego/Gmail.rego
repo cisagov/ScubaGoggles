@@ -173,9 +173,9 @@ MultiDmarcWarning := Warning if {
     Warning := concat("", [
         " ",
         format_int(count(DomainsWithMultipleDmarc), 10),
-        " domain(s) have multiple DMARC records: ",
+        " domain(s) have multiple DMARC records and will fail the policy check: ",
         concat(", ", DomainsWithMultipleDmarc),
-        ". "
+        ". DMARC records should only have one record according to RFC 7489. "
     ])
 }
 
@@ -277,8 +277,52 @@ GmailId4_4 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.4")
 DomainsWithAgencyContact contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
     some Rdata in DmarcRecord.rdata
-    count(split(Rdata, "@")) >= 3
     DmarcRecord.domain in DomainsWithDmarc
+
+    # splits the DMARC record into semicolon-separated tags
+    parts := [trim(part, " ") |
+        some part in split(Rdata, ";")
+        trim(part, " ") != ""
+    ]
+
+    # collects any DMARC record tag with "rua="
+    ruaParts := [part |
+        some part in parts
+        startswith(lower(part), "rua=")
+    ]
+
+    # collects any DMARC record tag with "ruf="
+    rufParts := [part |
+        some part in parts
+        startswith(lower(part), "ruf=")
+    ]
+
+    # requires exactly 1 rua and 1 ruf field per DMARC record
+    count(ruaParts) == 1
+    count(rufParts) == 1
+
+    # takes each "rua=" tag and splits them on each comma
+    # then only keeps a record that starts with "mailto:"
+    ruaAddrs := [addr |
+        some part in ruaParts
+        values := split(split(part, "=")[1], ",")
+        some addr in values
+        startswith(lower(trim(addr, " ")), "mailto:")
+    ]
+
+    # takes each "ruf=" tag and splits them on each comma
+    # then only keeps a record that starts with "mailto:"
+    rufAddrs := [addr |
+        some part in rufParts
+        values := split(split(part, "=")[1], ",")
+        some addr in values
+        startswith(lower(trim(addr, " ")), "mailto:")
+    ]
+
+    # requires >= 2 rua tags that are correctly formed
+    # requires >= 1 ruf tag that is correctly formed 
+    count(ruaAddrs) >= 2
+    count(rufAddrs) >= 1
 }
 
 tests contains {
@@ -1027,14 +1071,14 @@ PopEnabled contains OU if {
     popEnable == true
 }
 
-ImapExceptions contains OU if {
+ImapExclusions contains OU if {
     some OU in ImapEnabled
-    utils.ExceptionConfigured(OU, "imap_exceptions")
+    utils.ExceptionConfigured(OU, "imap_exclusions")
 }
 
-ImapExceptionsFormatted contains Message if {
-    some OU in ImapExceptions
-    Justification := utils.ExceptionJustification(OU, "imap_exceptions")
+ImapExclusionsFormatted contains Message if {
+    some OU in ImapExclusions
+    Justification := utils.ExceptionJustification(OU, "imap_exclusions")
     Message := sprintf("<li>%s. %s</li>", [OU, utils.FormatJustification(Justification)])
 }
 
@@ -1045,18 +1089,18 @@ NonCompliantOUs9_1 contains {
 if {
     some OU, settings in input.policies
     GmailEnabled(OU)
-    imapEnable := OU in (ImapEnabled - ImapExceptions)
+    imapEnable := OU in (ImapEnabled - ImapExclusions)
     popEnable := OU in PopEnabled
     true in {imapEnable, popEnable}
 }
 
 ImapExceptionMessage := "" if {
-    count(ImapExceptions) == 0
+    count(ImapExclusions) == 0
 } else := Message if {
     Message := concat("", [
         "<br>Note: IMAP is enabled in the following locations but ScubaGoggles was configured to ",
         "allow exceptions for them:<ul>",
-        concat("", ImapExceptionsFormatted),
+        concat("", ImapExclusionsFormatted),
         "</ul>"
     ])
 }

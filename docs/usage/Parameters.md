@@ -243,7 +243,7 @@ Here is an example using `--documentpath`:
 # Change the path to the directory containing the SCuBA baseline documents
 scubagoggles gws --documentpath C:\Users\johndoe\Downloads
 ```
-## Output Folder Name
+## Output folder name
 
 ** --outputfoldername** The name of the folder created in --outputpath where both the output JSON and the HTML report will be created. Defaults to GWSBaselineConformance. The client's local timestamp will be appended to this name.
 
@@ -260,7 +260,7 @@ Here is an example using `--outputfoldername`:
 # Change the name of the folder created in --outputpath where both the output JSON and the HTML report will be created
 scubagoggles gws  --outputfoldername testing
 ```
-## Output Folder Name
+## Output provider name
 
 **--outputproviderfilename** the name of the Provider output json in --outputpath. Defaults to ProviderSettingsExport.
 
