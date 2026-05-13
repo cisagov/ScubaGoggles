@@ -71,8 +71,8 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         choices=('true', 'false'),
                         help='Enable dark mode')
 
-    parser.add_argument('--reportredaction',
-                        '-rr',
+    parser.add_argument('--cicdtestingmode',
+                        '-ctm',
                         metavar='<report-redaction>',
                         choices=('true', 'false'),
                         help='Enable report redaction')

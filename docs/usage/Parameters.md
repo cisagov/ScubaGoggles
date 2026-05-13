@@ -92,7 +92,7 @@ Here is an example using `--baselines`:
 
 ```powershell
 # Assess two products
-scubagoggles gws --baselines chat, meet 
+scubagoggles gws --baselines chat, meet
 ```
 >**Note**: baselines are separated by commas.
 
@@ -190,7 +190,7 @@ Here is an example using `--customerid`:
 scubagoggles gws --customerid <customer-id>
 ```
 
-## OPA Path 
+## OPA Path
 
 **- --opapath** is the location of the folder that contains the Open Policy Agent (OPA) policy engine executable file. Defaults to ~/.scubagoggles/.
 
@@ -434,7 +434,7 @@ Here is an example using `--numberofuuidcharacterstotruncate`:
 # Truncate the UUID at the end of OutJsonFileName by 18 characters
 scubagoggles gws --numberofuuidcharacterstotruncate 18
 ```
-## Debug OPA 
+## Debug OPA
 
 **--debug** This switch is used to print debugging information for OPA.
 
@@ -464,9 +464,9 @@ scubagoggles gws --debug
 # View the HTML report in dark mode
 scubagoggles gws --darkmode
 ```
-## Report Redaction
+## Testing Mode
 
-**--reportredaction** enables identification information redaction styles for the report output.
+**--cicdtestingmode** enables identification information redaction styles for the report output.
 
 | Parameter   | Value    |
 |-------------|----------|
@@ -477,13 +477,13 @@ scubagoggles gws --darkmode
 
 ```powershell
 # Enable identification information redaction styles for the report output
-scubagoggles gws --reportredaction
+scubagoggles gws --cicdtestingmode
 ```
 ## Preferred DoH Servers
 
 **--preferreddohservers**  IP addresses or domain names of DoH servers that should be used to retrieve any TXT records, should the traditional DNS queries fail, required by specific SCuBA policies. See [PreferredDnsResolvers](#preferreddnsresolvers) for the list of applicable policies.
 
-Optional; If not provided, the DoH query will use a default list of DoH servers:"cloudflare-dns.com", "2606:4700:4700::1111", "1.1.1.1". 
+Optional; If not provided, the DoH query will use a default list of DoH servers:"cloudflare-dns.com", "2606:4700:4700::1111", "1.1.1.1".
 
 | Parameter   | Value                                               |
 |-------------|-----------------------------------------------------|
@@ -498,7 +498,7 @@ Here is an example using `--preferreddohservers`:
 scubagoggles gws --preferreddohservers 8.8.8.8 cloudfare-dns.com 2606:4700:4700::1111
 ```
 
-## Run cache mode 
+## Run cache mode
 
 **--runcached** switch when added will run the tool in "RunCached mode". When combined with --skipexport allows the user to skip authentication and provider export.
 
@@ -511,7 +511,7 @@ scubagoggles gws --preferreddohservers 8.8.8.8 cloudfare-dns.com 2606:4700:4700:
 
 ```powershell
 # run the tool in "RunCached mode"
-scubagoggles gws --runcached 
+scubagoggles gws --runcached
 ```
 ## Skip Export
 
