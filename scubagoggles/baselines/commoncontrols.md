@@ -558,7 +558,7 @@ Some examples of these privileged accounts include the following Pre-Built GWS A
 #### GWS.COMMONCONTROLS.6.1v1
 All administrative accounts SHALL be provisioned as cloud-only accounts separate from an agency's authoritative on-premises or other federated identity providers.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols61v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Cloud-only accounts leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. Enforcing this policy makes it more challenging for a threat actor to pivot from a compromised on-premises environment to the cloud with privileged access.
 - _Last modified:_ November 2025
