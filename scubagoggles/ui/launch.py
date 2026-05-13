@@ -35,7 +35,7 @@ def _prevent_streamlit_promotion() -> None:
 
     streamlit_dir = Path('~/.streamlit').expanduser()
 
-    streamlit_dir.mkdir(exist_ok = True)
+    streamlit_dir.mkdir(exist_ok=True, parents=True)
 
     streamlit_config = streamlit_dir / 'credentials.toml'
 
