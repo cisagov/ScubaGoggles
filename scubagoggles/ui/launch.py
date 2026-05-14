@@ -65,6 +65,7 @@ def _kill_process_tree(pid: int) -> None:
                 check=False,
             )
         else:
+            # pylint: disable-next=no-member
             os.killpg(os.getpgid(pid), signal.SIGKILL)
     except (ProcessLookupError, OSError):
         pass
@@ -150,7 +151,7 @@ def main() -> None:
     app_to_run = _get_app_to_run()
 
     cmd, port = _build_streamlit_command(app_to_run, force_dark)
-    
+
 
     _prevent_streamlit_promotion()
 
