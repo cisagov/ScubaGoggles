@@ -30,6 +30,13 @@ class TestScubaConfig:
 
         class MockImportVersion:
             number = "2.0.0"
+            
+            # ensure this is different from the 
+            # ImportError mocked class
+            # (initialize returns None in that case)
+            @classmethod
+            def initialize(cls):
+                return True
 
         # expected results without Exception
         pkg = types.ModuleType("scubagoggles")
@@ -63,8 +70,10 @@ class TestScubaConfig:
             assert user_conf().output_dir == "./"
             assert user_conf().credentials_file is None
             assert version.number == "1.0.0"
+            assert version.initialize() is None
         else:
             # without ImportError
             assert user_conf().output_dir == "home"
             assert user_conf().credentials_file == "tmp/creds"
             assert version.number == "2.0.0"
+            assert version.initialize() is True
