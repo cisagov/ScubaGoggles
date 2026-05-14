@@ -13,18 +13,6 @@ import subprocess
 class TestLaunch:
     """Unit tests for the ScubaGoggles UI Launcher Program"""
     
-    # Self-notes:
-    #test_find_free_port - Mock only
-    #test_prevent_streamlit_promotion - Mock only
-    #test_resolve_app_file - Mock only
-    #test_is_streamlit_installed - Mock only
-    #test_kill_process_tree - Mock only
-
-    #_get_app_to_run - Test
-    #_build_streamlit_command - Test
-    #_run_server - Test
-    # main
-
     @pytest.mark.parametrize('resolve_app, streamlit_installed', [
             (False, False),
             (True, False),
@@ -37,7 +25,7 @@ class TestLaunch:
         either a path to the streamlit UI application, or raises a System Exit
         error if either the path or the app is unavailible
         """
-        resolve_mock = None
+        resolve_app_mock = None
         # name variable reduces character count on lines of code
         name = "_resolve_app_file"
         if resolve_app:
