@@ -12,9 +12,11 @@ https://www.googleapis.com/auth/admin.directory.domain.readonly,
 https://www.googleapis.com/auth/admin.directory.group.readonly,
 https://www.googleapis.com/auth/admin.directory.orgunit.readonly,
 https://www.googleapis.com/auth/admin.directory.user.readonly,
+https://www.googleapis.com/auth/admin.directory.rolemanagement.readonly,
 https://www.googleapis.com/auth/admin.directory.customer.readonly,
 https://www.googleapis.com/auth/apps.groups.settings,
-https://www.googleapis.com/auth/cloud-identity.policies.readonly
+https://www.googleapis.com/auth/cloud-identity.policies.readonly,
+https://www.googleapis.com/auth/cloud-identity.inboundsso.readonly
 ```
 
 When running ScubaGoggles for the first time you will be prompted to consent to
