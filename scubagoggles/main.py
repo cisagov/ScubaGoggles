@@ -75,7 +75,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         '-ctm',
                         metavar='<testing-mode>',
                         choices=('true', 'false'),
-                        help='Enable testing mode for reports')
+                        help=argparse.SUPPRESS)
 
     help_msg = ('Access token string to be used in lieu of a credentials file. '
                 'If provided, will take precendence over the credentials file. '
