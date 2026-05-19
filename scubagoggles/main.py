@@ -459,6 +459,12 @@ def dive():
                         help='Level for message log '
                         f'(default: {default_log_level})')
 
+    parser.add_argument('--outputlog',
+                        '-o',
+                        metavar='<file>',
+                        type=path_parser,
+                        help='File for writing log messages')
+
     subparsers = parser.add_subparsers(description='valid subcommands:',
                                        help='<subcommand> -h for help')
 
@@ -494,7 +500,6 @@ def dive():
     get_version_args(setup_parser)
 
     scuba_parser = ScubaArgumentParser(parser)
-    args = scuba_parser.parse_args_with_config()
 
     # When trapping exceptions to suppress tracebacks (which users don't need
     # to see for obvious failures not related to the code), make sure the
@@ -503,6 +508,7 @@ def dive():
     error = False
 
     try:
+        args = scuba_parser.parse_args_with_config()
         args.dispatch(args)
     except NotADirectoryError as nad:
         print(f'\n{nad}')
