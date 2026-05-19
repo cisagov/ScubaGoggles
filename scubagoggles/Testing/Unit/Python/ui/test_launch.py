@@ -8,7 +8,6 @@ import pytest
 from pathlib import Path
 from scubagoggles.ui import launch
 import signal
-import subprocess
 
 class TestLaunch:
     """Unit tests for the ScubaGoggles UI Launcher Program"""
