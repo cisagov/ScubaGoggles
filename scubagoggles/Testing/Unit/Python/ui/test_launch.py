@@ -62,11 +62,11 @@ class TestLaunch:
         """
         name = "_find_free_port"
         #1000 is an arbitrary value
-        resolve_app_mock = mocker.patch.object(launch, name, return_value=1000)
+        mocker.patch.object(launch, name, return_value=1000)
         # home is an arbitrary directory
         # avoid backslashes to bypass OS ambiguity Path to str conversion
         app_path = Path("home")
-        command = launch._build_streamlit_command(app_path, force_dark=dark_mode)
+        command, port = launch._build_streamlit_command(app_path, force_dark=dark_mode)
         expected_cmd = [
             str(sys.executable), "-m", "streamlit", "run",
             "home",
@@ -75,6 +75,8 @@ class TestLaunch:
             "--server.headless", "false",
             "--browser.gatherUsageStats", "false",
         ]
+        # mock return
+        assert port == 1000
         if dark_mode:
             expected_cmd.extend(["--theme.base", "dark"])
         for index, c in enumerate(command):
@@ -190,6 +192,7 @@ class TestLaunch:
         mocker.patch.object(launch, "_find_free_port", return_value=1234)
         mocker.patch.object(launch, "_get_app_to_run", return_value=Path("home"))
         mocker.patch.object(launch, "_prevent_streamlit_promotion")
+        mock_print = mocker.patch("builtins.print")
         mock_run_server = mocker.patch.object(launch, "_run_server")
         popen_kwargs = dict()
         if not windows:
@@ -200,6 +203,16 @@ class TestLaunch:
         # assertions
         if dark_mode:
             assert os.environ.get("SCUBAGOGGLES_UI_DARK") == "1"
+            mock_print.assert_any_call(
+                "Starting ScubaGoggles Configuration UI "
+                f"(dark (forced) theme) ...",
+            )
         else:
             assert os.environ.get("SCUBAGOGGLES_UI_DARK") == None
+            mock_print.assert_any_call(
+                "Starting ScubaGoggles Configuration UI "
+                f"(auto theme) ...",
+            )
+        mock_print.assert_any_call("Opening http://localhost:1234 in your browser.")
+        mock_print.assert_any_call("Press Ctrl+C to stop the server.\n")
         mock_run_server.assert_called_once_with(expected_cmd, popen_kwargs)
