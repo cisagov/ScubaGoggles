@@ -464,21 +464,6 @@ scubagoggles gws --debug
 # View the HTML report in dark mode
 scubagoggles gws --darkmode
 ```
-## Testing Mode
-
-**--cicdtestingmode** enables identification information redaction styles for the report output.
-
-| Parameter   | Value    |
-|-------------|----------|
-| Optional    | Yes      |
-| Datatype    | Boolean  |
-| Default     | n/a      |
-| Config File | Yes      |
-
-```powershell
-# Enable identification information redaction styles for the report output
-scubagoggles gws --cicdtestingmode
-```
 ## Preferred DoH Servers
 
 **--preferreddohservers**  IP addresses or domain names of DoH servers that should be used to retrieve any TXT records, should the traditional DNS queries fail, required by specific SCuBA policies. See [PreferredDnsResolvers](#preferreddnsresolvers) for the list of applicable policies.
