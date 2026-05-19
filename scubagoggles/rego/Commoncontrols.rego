@@ -938,14 +938,213 @@ if {
 
 CommonControlsId6_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.6.1")
 
+# Reference: https://github.com/cisagov/ScubaGoggles/issues/589
+# CC 6.1 requires that all administrative (i.e. highly privileged) accounts
+# authenticate via Google Workspace and not via an external SSO/IdP.
+# This implementation is API/state-based (not log-based): for each privileged
+# user, evaluate:
+#   - OU-targeted assignment: nearest explicit assignment in OU lineage
+#   - Group-targeted assignments: all assignments targeting any group the user
+#     belongs to
+# Precedence: group-targeted assignments override OU compliance (i.e., if any
+# applicable group assignment enables external SSO, the user is non-compliant).
+# If no assignment exists in either scope, default to SSO_OFF.
+
+DisplayNameByPath(OuPath) := Name if {
+    OuPath == "/"
+    Name := utils.TopLevelOU
+} else := Name if {
+    Name := trim_prefix(OuPath, "/")
+}
+
+PathDepth(Path) := 0 if {
+    Path == "/"
+} else := Depth if {
+    Path != "/"
+    Depth := count(split(trim_prefix(Path, "/"), "/"))
+}
+
+IsAncestorPath(AncestorPath, OuPath) if {
+    AncestorPath == "/"
+} else if {
+    OuPath == AncestorPath
+} else if {
+    startswith(OuPath, concat("", [AncestorPath, "/"]))
+}
+
+OrgUnitPathById(ExpectedOrgUnitId) := OrgUnitPath if {
+    some ou in input.organizational_units.organizationUnits
+    CurrentOrgUnitId := trim_prefix(ou.orgUnitId, "id:")
+    ExpectedOrgUnitId == CurrentOrgUnitId
+    OrgUnitPath := ou.orgUnitPath
+}
+
+OuLineageCandidatePaths(OuPath) := CandidatePaths if {
+    OuPath == "/"
+    CandidatePaths := {"/"}
+} else := CandidatePaths if {
+    OuPath != "/"
+    Segments := split(trim_prefix(OuPath, "/"), "/")
+    ByPath := {
+        Path
+        | some Index, _ in Segments
+          Prefix := array.slice(Segments, 0, Index + 1)
+          Path := concat("", ["/", concat("/", Prefix)])
+    }
+    CandidatePaths := union({ByPath, {"/"}})
+}
+
+AssignmentForPath contains {
+    "Path": AssignmentPath,
+    "Mode": upper(object.get(Assignment, "ssoMode", "SSO_MODE_UNSPECIFIED"))
+}
+if {
+    some Assignment in input.inbound_sso_assignments
+    TargetOrgUnit := object.get(Assignment, "targetOrgUnit", "")
+    TargetOrgUnit != ""
+    OrgUnitId := trim_prefix(TargetOrgUnit, "orgUnits/")
+    AssignmentPath := OrgUnitPathById(OrgUnitId)
+}
+
+AssignmentForGroup contains {
+    "GroupKey": lower(TargetGroupKey),
+    "Mode": upper(object.get(Assignment, "ssoMode", "SSO_MODE_UNSPECIFIED"))
+}
+if {
+    some Assignment in input.inbound_sso_assignments
+    TargetGroup := object.get(Assignment, "targetGroup", "")
+    TargetGroup != ""
+    TargetGroupKey := trim_prefix(TargetGroup, "groups/")
+    TargetGroupKey != ""
+}
+
+NearestSsoModeInOuLineage(OuPath) := Mode if {
+    CandidatePaths := OuLineageCandidatePaths(OuPath)
+    ApplicableAssignments := {Assignment |
+        some Assignment in AssignmentForPath
+        Assignment.Path in CandidatePaths
+        IsAncestorPath(Assignment.Path, OuPath)
+    }
+    MaxDepth := max({PathDepth(Assignment.Path) | some Assignment in ApplicableAssignments})
+    some Assignment in ApplicableAssignments
+    PathDepth(Assignment.Path) == MaxDepth
+    Mode := Assignment.Mode
+} else := "SSO_OFF"
+
+GroupSsoModesForUser(User) := Modes if {
+    GroupKeys := {lower(k) |
+        some k in object.get(User, "groupKeys", [])
+        k != ""
+    }
+    Modes := {Assignment.Mode |
+        some Assignment in AssignmentForGroup
+        Assignment.GroupKey in GroupKeys
+    }
+}
+
+IsPrivilegedUserNonCompliant(User) if {
+    some Mode in GroupSsoModesForUser(User)
+    not SsoModeRepresentsGoogleAuthOnly(Mode)
+}
+
+IsPrivilegedUserNonCompliant(User) if {
+    count(GroupSsoModesForUser(User)) == 0
+    OuPath := utils.AddLeadingSlash(object.get(User, "orgUnitPath", ""))
+    Mode := NearestSsoModeInOuLineage(OuPath)
+    not SsoModeRepresentsGoogleAuthOnly(Mode)
+}
+
+SsoModeRepresentsGoogleAuthOnly(NewValue) if {
+    Normalized := upper(NewValue)
+    Normalized == "SSO_OFF"
+}
+
+SsoModeRepresentsGoogleAuthOnly(NewValue) if {
+    Normalized := upper(NewValue)
+    Normalized == "SSO_MODE_UNSPECIFIED"
+}
+
+SsoModeRepresentsGoogleAuthOnly(NewValue) if {
+    Normalized := upper(NewValue)
+    Normalized == ""
+}
+
+NonComplianceMessage6_1 := concat(" ", [
+    "SSO is enabled for an OU containing privileged accounts.",
+    "Privileged accounts must authenticate via Google Workspace,",
+    "not via an external identity provider."
+])
+
+NonCompliantOUs6_1 contains {
+    "Name": DisplayNameByPath(OuPath),
+    "Value": NonComplianceMessage6_1
+}
+if {
+    some user in input.privileged_users
+    IsPrivilegedUserNonCompliant(user)
+    OuPath := utils.AddLeadingSlash(object.get(user, "orgUnitPath", ""))
+}
+
+PrivilegedUsersError if {
+    input.privileged_users_error != null
+}
+
+InboundSsoAssignmentsError if {
+    input.inbound_sso_assignments_error != null
+}
+
+NoSuchEvent6_1 if {
+    PrivilegedUsersError
+}
+
+NoSuchEvent6_1 if {
+    InboundSsoAssignmentsError
+}
+
 tests contains {
     "PolicyId": CommonControlsId6_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
+    "Prerequisites": [
+        "directory/v1/roles/list",
+        "directory/v1/roleAssignments/list",
+        "directory/v1/users/list",
+        "cloudidentity/v1/inboundSsoAssignments/list"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": concat("", [
+        "Unable to determine privileged account SSO state. ",
+        "privileged_users_error=",
+        sprintf("%v", [input.privileged_users_error]),
+        "; inbound_sso_assignments_error=",
+        sprintf("%v", [input.inbound_sso_assignments_error]),
+        ". Please manually verify that all administrative accounts use ",
+        "Google Workspace authentication and not an external IdP."
+    ]),
+    "ActualValue": {"NonCompliantOUs": []},
     "RequirementMet": false,
     "NoSuchEvent": true
+}
+if {
+    NoSuchEvent6_1
+}
+
+tests contains {
+    "PolicyId": CommonControlsId6_1,
+    "Prerequisites": [
+        "directory/v1/roles/list",
+        "directory/v1/roleAssignments/list",
+        "directory/v1/users/list",
+        "cloudidentity/v1/inboundSsoAssignments/list"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    not PrivilegedUsersError
+    not InboundSsoAssignmentsError
+    Status := count(NonCompliantOUs6_1) == 0
 }
 #--
 

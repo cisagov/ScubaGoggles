@@ -1,25 +1,23 @@
-# This is a ScubaGoggles sample configuration file for compliance use.
-# In order to pass/omit certain policy checks made during a ScubaGoggles
-# assessment run, necessary action is required to provide specific values
-# unique to both your organization and GWS tenant in the fields below. Please
-# read and understand the full ScubaGoggles configuration file documentation
-# for both adding additional fields or modifying the fields below. The
-# documentation can be found here:
-# https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md
+description: |
+  This is a ScubaGoggles sample configuration file for compliance use.
+  In order to pass/omit certain policy checks made during a ScubaGoggles assessment run, necessary action
+  is required to provide specific values unique to both your organization and M365 tenant in the fields below.
+  Please read and understand the full ScubaGear configuration file documentation for both adding additional fields or modifying the fields below.
+  https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md
 
 # The list of GWS SCuBA baselines ScubaGoggles will assess.
 baselines: 
-- assuredcontrols
-- calendar
-- chat
-- classroom
-- commoncontrols
-- drive
-- gemini
-- gmail
-- groups
-- meet
-- sites
+  - assuredcontrols
+  - calendar
+  - chat
+  - classroom
+  - commoncontrols
+  - drive
+  - gemini
+  - gmail
+  - groups
+  - meet
+  - sites
 
 # Uncomment and fill in the following for automated submissions:
 # subjectemail: ""

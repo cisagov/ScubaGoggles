@@ -35,12 +35,13 @@ def _prevent_streamlit_promotion() -> None:
 
     streamlit_dir = Path('~/.streamlit').expanduser()
 
-    streamlit_dir.mkdir(exist_ok = True)
+    streamlit_dir.mkdir(exist_ok=True, parents=True)
 
     streamlit_config = streamlit_dir / 'credentials.toml'
 
     if not streamlit_config.exists():
-        streamlit_config.write_text('[general]\nemail = ""\n')
+        streamlit_config.write_text('[general]\nemail = ""\n',
+                                    encoding='utf-8')
 
 def _resolve_app_file() -> Path | None:
     """Return the path to the Streamlit app file."""
@@ -64,13 +65,14 @@ def _kill_process_tree(pid: int) -> None:
                 check=False,
             )
         else:
+            # pylint: disable-next=no-member
             os.killpg(os.getpgid(pid), signal.SIGKILL)
     except (ProcessLookupError, OSError):
         pass
 
 
 def _get_app_to_run() -> Path:
-    """Cheks if UI application path and streamlit module exist/is installed
+    """Checks if UI application path and streamlit module exist/is installed
     Returns Application path if so"""
     app_to_run = _resolve_app_file()
     if not app_to_run:
@@ -85,7 +87,9 @@ def _get_app_to_run() -> Path:
     return app_to_run
 
 
-def _build_streamlit_command(app_to_run: Path, force_dark : bool) -> list[str]:
+def _build_streamlit_command(app_to_run: Path,
+                             force_dark: bool) -> tuple[list[str], int]:
+
     """Builds the streamlit command needed to launch the UI"""
     # Find availible port
     port = _find_free_port()
@@ -101,9 +105,9 @@ def _build_streamlit_command(app_to_run: Path, force_dark : bool) -> list[str]:
     # add extra option if dark option specified on command line
     if force_dark:
         cmd += ["--theme.base", "dark"]
-    return cmd
+    return cmd, port
 
-def _run_server(cmd : list[str], popen_kwargs : dict):
+def _run_server(cmd: list[str], popen_kwargs: dict) -> None:
     """Runs the Streamlit server"""
     with subprocess.Popen(cmd, **popen_kwargs) as server_process:
         # Register cleanup so the Streamlit process tree is always killed —
@@ -146,7 +150,8 @@ def main() -> None:
     # check to see it exists and streamlit is installed
     app_to_run = _get_app_to_run()
 
-    cmd = _build_streamlit_command(app_to_run, force_dark)
+    cmd, port = _build_streamlit_command(app_to_run, force_dark)
+
 
     _prevent_streamlit_promotion()
 
@@ -162,8 +167,6 @@ def main() -> None:
         "Starting ScubaGoggles Configuration UI "
         f"({theme_label} theme) ...",
     )
-    # port number
-    port = cmd[cmd.index("--server.port") + 1]
     print(f"Opening http://localhost:{port} in your browser.")
     print("Press Ctrl+C to stop the server.\n")
 
