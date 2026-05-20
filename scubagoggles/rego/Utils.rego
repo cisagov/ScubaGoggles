@@ -46,28 +46,6 @@ NoSuchEventDetails(DefaultSafe, TopLevelOU) := Message if {
     ])
 }
 
-# ReportDetailsOUs(OUs) := "Requirement met in all OUs." if {
-#     count(OUs) == 0
-# }
-
-# ReportDetailsOUs(OUs) := Message if {
-#     count(OUs) > 0
-#     Message := concat("", ["Requirement failed in ", concat(", ", OUs), "."])
-# }
-
-# NoGroupsDetails(Groups) := "No groups found in Organization." if {
-#     count(Groups) == 0
-# }
-
-# ReportDetailsGroups(Groups) := "Requirement met in all groups." if {
-#     count(Groups) == 0
-# }
-
-# ReportDetailsGroups(Groups) := Message if {
-#     count(Groups) > 0
-#     Message := concat("", ["Requirement failed in ", concat(", ", Groups), "."])
-# }
-
 ReportDetailsBoolean(true) := "Requirement met."
 
 ReportDetailsBoolean(false) := "Requirement not met."
