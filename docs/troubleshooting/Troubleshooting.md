@@ -109,7 +109,7 @@ The output will resemble the following:
                         "Requirement": "Sites Service SHOULD be disabled for all users.",
                         "Result": "Pass",
                         "Criticality": "Should",
-                        "Details": "Requirement met in all OUs and groups."
+                        "Details": "Requirement met."
                     }
                 ]
             }

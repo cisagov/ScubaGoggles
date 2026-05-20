@@ -81,7 +81,7 @@ test_ImapPopEnable_Correct_2 if {
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "Requirement met in all OUs and groups.",
+        "Requirement met.",
         "<br>Note: IMAP is enabled in the following locations but ScubaGoggles was configured to ",
         "allow exceptions for them:<ul><li>nextOU. <i>Justification: perfectly valid reason</i></li></ul>"
     ])
