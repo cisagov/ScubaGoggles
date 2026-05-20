@@ -33,6 +33,10 @@ readme = "README.md"
 [project.scripts]
 scubagoggles = "scubagoggles.main:dive"
 
+[tool.pylint]
+# Maximum number of attributes for a class (see R0902).
+max-attributes=15
+
 [tool.setuptools.dynamic]
 version = {attr = "scubagoggles.__version__"}
 

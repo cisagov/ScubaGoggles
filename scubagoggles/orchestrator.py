@@ -9,6 +9,8 @@ import logging
 import os
 import platform
 import shutil
+import subprocess
+from urllib.error import URLError
 import uuid
 import webbrowser
 import glob
@@ -17,6 +19,8 @@ import csv
 from collections.abc import Callable
 from datetime import datetime, timezone, date
 from pathlib import Path
+from operator import itemgetter
+from requests.exceptions import RequestException
 from tqdm import tqdm
 
 import requests
@@ -129,9 +133,15 @@ class Orchestrator:
         """
 
         self._args = args
-        self._md_parser = MarkdownParser(args.documentpath)
 
-        md_products = set(args.baselines)
+        # Allows for "destructuring" via vars(args) dict creation
+        self.args_dict = vars(args)
+
+        documentpath, baselines = itemgetter("documentpath", "baselines")(self.args_dict)
+
+        self._md_parser = MarkdownParser(documentpath)
+
+        md_products = set(baselines)
         self._baseline_policies = self._md_parser.parse_baselines(md_products)
 
     @classmethod
@@ -144,17 +154,15 @@ class Orchestrator:
     def notify_user_if_new_release_is_available(self):
         """
         Compares the installed version of ScubaGoggles on the local machine
-        to the latest version avaialable on PyPI. 
+        to the latest version avaialable on PyPI.
         """
-
-        local_machine_version = Version.number
 
         # Error handling for retrieving latest Goggles version on PyPI
         try:
             goggles_url_response = requests.get(SCUBAGOGGLES_PACKAGE_URL, timeout=10)
             goggles_url_response.raise_for_status()
             latest_version_on_pypi = goggles_url_response.json()["info"]["version"]
-        except Exception as err:
+        except (RequestException, URLError) as err:
             error_message = (
                 f"An unexpected error occurred in retrieving latest SCuBA Goggles"
                 f"version: {err}"
@@ -162,7 +170,7 @@ class Orchestrator:
             log.error(error_message)
             return
 
-        local_machine_version = packageVersion.Version(local_machine_version)
+        local_machine_version = packageVersion.Version(Version.number)
         latest_version_on_pypi = packageVersion.Version(latest_version_on_pypi)
 
         if local_machine_version < latest_version_on_pypi:
@@ -173,48 +181,60 @@ class Orchestrator:
             )
             log.warning(local_goggles_install_is_behind)
 
+    def _dump_provider_files(self, provider_dict, out_jsonfile) -> None:
+        """ Convert provider data """
+        out_jsonfile = out_jsonfile.with_suffix('.json')
+        with out_jsonfile.open('w', encoding='utf-8') as out_stream:
+            json.dump(provider_dict, out_stream, indent=4)
+
     def _run_gws_providers(self):
         """
         Runs the provider scripts and outputs a json to path
         """
 
-        args = self._args
-        products = args.baselines
+        # pylint: disable=line-too-long
+        baselines, customerid, credentials, accesstoken, subjectemail, preferreddnsresolvers, skipdoh, quiet, breakglassaccounts, report_uuid, outputpath, outputproviderfilename, imapexclusions, sitesexclusions = itemgetter(
+            "baselines", "customerid", "credentials",
+            "accesstoken", "subjectemail",
+            "preferreddnsresolvers", "skipdoh",
+            "quiet","breakglassaccounts", "report_uuid",
+            "outputpath", "outputproviderfilename",
+            "imapexclusions", "sitesexclusions",
+            )(self.args_dict)
 
-        with Provider(args.customerid,
-                      args.credentials,
-                      access_token=args.accesstoken,
-                      svc_account_email=args.subjectemail,
-                      dns_resolvers=args.preferreddnsresolvers,
-                      doh_servers=args.preferreddohservers,
-                      skip_doh=args.skipdoh) as provider:
-            provider_dict = provider.call_gws_providers(products, args.quiet)
+        with Provider(customerid,
+                      credentials,
+                      access_token=accesstoken,
+                      svc_account_email=subjectemail,
+                      dns_resolvers=preferreddnsresolvers,
+                      doh_servers=self.args_dict['preferreddohservers'],
+                      skip_doh=skipdoh) as provider:
+            provider_dict = provider.call_gws_providers(baselines, quiet)
             provider_dict['successful_calls'] = list(provider.successful_calls)
             provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)
             provider_dict['missing_policies'] = list(provider.missing_policies)
 
-        provider_dict['baseline_suffix'] = self._md_parser.default_version
-        provider_dict['baseline_versions'] = self._md_parser.policy_version_map
-        provider_dict['break_glass_accounts'] = args.breakglassaccounts
-        provider_dict['imap_exceptions'] = args.imapexceptions
-        provider_dict['report_uuid'] = args.report_uuid
+        provider_dict.update({
+            'baseline_suffix': self._md_parser.default_version,
+            'baseline_versions': self._md_parser.policy_version_map,
+            'break_glass_accounts': breakglassaccounts,
+            'imap_exclusions': imapexclusions,
+            'sites_exclusions': sitesexclusions,
+            'report_uuid': report_uuid
+        })
 
         self._validate_ou_exceptions(provider_dict)
         self._validate_group_exceptions(provider_dict)
 
-        out_jsonfile = args.outputpath / args.outputproviderfilename
-        out_jsonfile = out_jsonfile.with_suffix('.json')
-        with out_jsonfile.open('w', encoding='utf-8') as out_stream:
-            json.dump(provider_dict, out_stream, indent=4)
+        self._dump_provider_files(provider_dict, out_jsonfile=outputpath / outputproviderfilename)
 
 
     def _validate_ou_exceptions(self, provider_dict: dict):
         '''Validate any configuration items that require the user to provide an org unit.'''
 
         args = self._args
-        # List of settings where the user has to input an OU. Currently there's only one, but more
-        # are planned.
-        settings = ['imapexceptions']
+        # List of settings where the user has to input an OU
+        settings = ['imapexclusions', 'sitesexclusions']
 
         all_ous = provider_dict['organizational_units']['organizationUnits']
         top_level_ou = provider_dict['tenant_info']['topLevelOU']
@@ -245,9 +265,8 @@ class Orchestrator:
         '''Validate any configuration items that require the user to provide a group.'''
 
         args = self._args
-        # List of settings where the user has to input a group. Currently there's only one, but more
-        # are planned.
-        settings = ['imapexceptions']
+        # List of settings where the user has to input a group
+        settings = ['imapexclusions', 'sitesexclusions']
 
         all_groups = provider_dict['group_settings']
         group_emails = {group['email'] for group in all_groups}
@@ -269,30 +288,35 @@ class Orchestrator:
         Executes the OPA executable with provider json input against
         specified rego files and outputs a json to path
         """
+        # pylint: disable=line-too-long
+        baselines, opapath, outputpath, regopath, outputregofilename, outputproviderfilename, debug, quiet = itemgetter(
+            'baselines', 'opapath', 'outputpath', 'regopath', 'outputregofilename',
+            'outputproviderfilename', 'debug', 'quiet'
+            )(self.args_dict)
 
-        args = self._args
-        products = args.baselines
-        products_bar = tqdm(products, leave=False, disable=args.quiet)
+        products_bar = tqdm(baselines, leave=False, disable=quiet)
         results = []
         for product in products_bar:
-            product_name = product
-            input_file = args.outputpath / f'{args.outputproviderfilename}.json'
-            opa_path = args.opapath
-            rego_path = args.regopath
+            input_file = outputpath / f'{outputproviderfilename}.json'
 
             products_bar.set_description(
                 f'Running Rego verification for {product}...')
-            product_tests = opa_eval(product_name,
+            product_tests = opa_eval(product,
                                      input_file,
-                                     opa_path,
-                                     rego_path,
-                                     args.debug)
+                                     opapath,
+                                     regopath,
+                                     debug)
             try:
                 results.extend(product_tests[0])
-            except Exception as exc:
-                raise Exception('run_rego error') from exc
+            except subprocess.CalledProcessError as exc:
+                log.error(exc)
+                error_message = (
+                    f"An unexpected run_rego error occurred: {exc}"
+                )
+                log.error(error_message)
+                raise RuntimeError('run_rego error') from exc
 
-        out_jsonfile = args.outputpath / args.outputregofilename
+        out_jsonfile = outputpath / outputregofilename
         out_jsonfile = out_jsonfile.with_suffix('.json')
         with out_jsonfile.open('w', encoding='utf-8') as out_stream:
             json.dump(results, out_stream, indent=4)
@@ -385,13 +409,21 @@ class Orchestrator:
         """
         Craft the html-formatted summary from the stats dictionary.
         """
-        n_success = stats['Passes']
-        n_warn = stats['Warnings']
-        n_fail = stats['Failures']
-        n_manual = stats['Manual']
-        n_error = stats['Errors']
-        n_omit = stats['Omit']
-        n_incorrect = stats['IncorrectResults']
+
+        stats.update({
+            'n_success': stats['Passes'],
+            'n_warn': stats['Warnings'],
+            'n_fail': stats['Failures'],
+            'n_manual': stats['Manual'],
+            'n_error': stats['Errors'],
+            'n_omit': stats['Omit'],
+            'n_incorrect': stats['IncorrectResults']
+        })
+
+        n_success, n_warn, n_fail, n_manual, n_error, n_omit, n_incorrect = itemgetter(
+            "n_success", "n_warn", "n_fail", "n_manual", "n_error", "n_omit", "n_incorrect"
+            )(stats)
+
 
         # The warnings, failures, and manuals are only shown if they are
         # greater than zero. Reserve the space for them here. They will
@@ -437,19 +469,7 @@ class Orchestrator:
         return (f'{pass_summary}{warning_summary}{failure_summary}'
                 f'{manual_summary}{omit_summary}{incorrect_summary}{error_summary}')
 
-    # pylint: disable=too-many-branches
-    def _run_reporter(self):
-        """
-        Creates the individual reports and the front page
-        """
-
-        # Make the report output folders
-        args = self._args
-        out_folder = args.outputpath
-        individual_reports_path = out_folder / 'IndividualReports'
-        reports_images_path = individual_reports_path / 'images'
-        reports_images_path.mkdir(parents=True, exist_ok=True)
-
+    def _copy_cisa_logo(self, reports_images_path) -> None:
         # Copy the CISA logo to the repo folder so that it can be accessed
         # from there
         images_dir = Path(__file__).parent / 'reporter' / 'images'
@@ -458,17 +478,69 @@ class Orchestrator:
         shutil.copy2(cisa_logo, reports_images_path)
         shutil.copy2(triangle_svg, reports_images_path)
 
-        # load the rego results json here
-        products = args.baselines
-        prod_to_fullname = args.fullnamesdict
-        test_results_json = out_folder / f'{args.outputregofilename}.json'
+    def _load_test_results_json(self, outputpath, outputregofilename) -> list:
+        """ Load the test results json """
+        test_results_json = outputpath / f'{outputregofilename}.json'
         with test_results_json.open(encoding='UTF-8') as file:
             test_results_data = json.load(file)
+            return test_results_data
 
-        # Get the successful/unsuccessful commands
-        settings_name = out_folder / f'{args.outputproviderfilename}.json'
+    def _get_commands_statuses(self, outputpath, outputproviderfilename) -> dict:
+        """ Return successful/unsuccessful call statuses """
+        settings_name = outputpath / f'{outputproviderfilename}.json'
         with settings_name.open(encoding='UTF-8') as file:
             settings_data = json.load(file)
+            return settings_data
+
+    def _load_scuba_results_file(self, outputpath, outputproviderfilename, args_dict) -> dict:
+        """ Convert the actual results json into a dict """
+        scuba_results_file = outputpath / f'{outputproviderfilename}.json'
+        with scuba_results_file.open(encoding='UTF-8') as file:
+            raw_data = json.load(file)
+
+            raw_data.update({'scuba_config': args_dict})
+        return raw_data
+
+    def _redact_lhci_reports(self, cicdtestingmode, outputpath) -> None:
+        """ Redact PII on the lighthouse ci reports """
+        if cicdtestingmode == 'true':
+            # Lighthouse Config
+            lighthouserc_json = Path(__file__).parent / 'lighthouserc.json'
+            shutil.copy(lighthouserc_json, outputpath)
+
+    def _dump_report_files(self, outputpath, out_jsonfile, total_output) -> None:
+        """ Convert report files data """
+        report_file = outputpath / f'{out_jsonfile}.json'
+        with report_file.open('w', encoding='utf-8') as results_file:
+            json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
+
+    # pylint: disable=too-many-branches
+    def _run_reporter(self):
+        """
+        Creates the individual reports and the front page
+        """
+
+        # pylint: disable=line-too-long
+        baselines,outputpath, fullnamesdict, outputregofilename, outputproviderfilename, darkmode, cicdtestingmode, quiet = itemgetter(
+            "baselines","outputpath","fullnamesdict","outputregofilename",
+            "outputproviderfilename", "darkmode", "cicdtestingmode", "quiet"
+            )(self.args_dict)
+
+        # Make the report output folders
+        args = self._args
+        individual_reports_path = outputpath / 'IndividualReports'
+        reports_images_path = individual_reports_path / 'images'
+        reports_images_path.mkdir(parents=True, exist_ok=True)
+
+        # Copy CISA logo
+        self._copy_cisa_logo(reports_images_path)
+
+        # load the rego results json here
+        prod_to_fullname = fullnamesdict
+        test_results_data = self._load_test_results_json(outputpath, outputregofilename)
+
+        # Get the successful/unsuccessful commands
+        settings_data = self._get_commands_statuses(outputpath, outputproviderfilename)
         tenant_info = settings_data['tenant_info']
         tenant_domain = tenant_info['domain']
         tenant_id = tenant_info['ID']
@@ -506,7 +578,7 @@ class Orchestrator:
         rules_table = {}
         stats_and_data = {}
 
-        products_assessed = [prod_to_fullname[product] for product in products
+        products_assessed = [prod_to_fullname[product] for product in baselines
                              if product in prod_to_fullname]
         product_abbreviation_mapping = {fullname: shortname for shortname,
                                         fullname in prod_to_fullname.items()}
@@ -529,14 +601,9 @@ class Orchestrator:
 
         total_output.update({'MetaData': report_metadata})
 
-        # Dark mode option for report
-        darkmode = args.darkmode
-
-        # Report redaction option for report
-        redaction = args.reportredaction
-
         main_report_name = args.outputreportfilename
-        products_bar = tqdm(products, leave=False, disable=args.quiet)
+        products = baselines
+        products_bar = tqdm(products, leave=False, disable=quiet)
         annotated_failed_policies = {}
         for product in products_bar:
             products_bar.set_description('Creating the HTML and JSON Report '
@@ -557,9 +624,9 @@ class Orchestrator:
                                 products_bar)
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
-                                                  out_folder,
+                                                  outputpath,
                                                   darkmode,
-                                                  redaction)
+                                                  cicdtestingmode)
             baseline_product_summary = {product: stats_and_data[product][0]}
             baseline_product_results_json = {
                 product: stats_and_data[product][1]}
@@ -571,13 +638,10 @@ class Orchestrator:
             if reporter.rules_table is not None:
                 rules_table = reporter.rules_table
 
-        args_dict = vars(args)
-
         # Create the ScubaResults files
-        scuba_results_file = out_folder / f'{args.outputproviderfilename}.json'
-        with scuba_results_file.open(encoding='UTF-8') as file:
-            raw_data = json.load(file)
-            raw_data.update({'scuba_config': args_dict})
+        scuba_results_file = outputpath / f'{outputproviderfilename}.json'
+        raw_data = self._load_scuba_results_file(outputpath, outputproviderfilename, args_dict=self.args_dict)
+
         total_output.update({'Raw': raw_data})
         total_output['Raw']['rules_table'] = rules_table
         total_output['AnnotatedFailedPolicies'] = annotated_failed_policies
@@ -599,22 +663,18 @@ class Orchestrator:
         # Generate action report file
         self.convert_to_result_csv(total_output)
 
-        report_file = out_folder / f'{out_jsonfile}.json'
-        with report_file.open('w', encoding='utf-8') as results_file:
-            json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
+        # Dump output files
+        self._dump_report_files(outputpath, out_jsonfile, total_output)
 
         # Check for Test Run
-        if args.reportredaction == 'true':
-            # Lighthouse Config
-            lighthouserc_json = Path(__file__).parent / 'lighthouserc.json'
-            shutil.copy(lighthouserc_json, out_folder)
+        self._redact_lhci_reports(cicdtestingmode, outputpath)
 
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
         scuba_results_file.unlink()
 
         # Make the report front page
-        report_path = out_folder / f'{args.outputreportfilename}.html'
+        report_path = outputpath / f'{args.outputreportfilename}.html'
 
         fragments = []
         table_data = []
@@ -629,17 +689,11 @@ class Orchestrator:
 
         fragments.append(Reporter.create_html_table(table_data))
 
-        # Dark mode option for report
-        darkmode = args.darkmode
-
-        # Report redaction option for report
-        redaction = args.reportredaction
-
         front_page_html = Reporter.build_front_page_html(fragments,
                                                          tenant_info,
                                                          report_uuid,
                                                          darkmode,
-                                                         redaction)
+                                                         cicdtestingmode)
         report_path.write_text(front_page_html, encoding='utf-8')
 
         # suppress opening the report in the browser

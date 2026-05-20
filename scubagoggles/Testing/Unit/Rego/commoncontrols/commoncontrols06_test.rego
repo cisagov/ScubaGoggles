@@ -3,24 +3,206 @@ import future.keywords
 
 #
 # GWS.COMMONCONTROLS.6.1
+# Implementation reference: https://github.com/cisagov/ScubaGoggles/issues/589
+# - API/state-based check using inbound_sso_assignments (Cloud Identity API).
+# - Evaluates effective inherited assignment from OU ancestry.
 #--
-test_Separate_Correct_V1 if {
-    # Test not implemented
-    PolicyId := CommonControlsId6_1
-    Output := tests with input as {
-        "commoncontrols_logs": {"items": [
 
-        ]},
-        "tenant_info": {
-            "topLevelOU": "Test Top-Level OU"
+OrgUnits := {
+    "organizationUnits": [
+        {
+            "name": "Top OU",
+            "orgUnitPath": "/",
+            "orgUnitId": "id:top",
+            "parentOrgUnitPath": "/"
+        },
+        {
+            "name": "Parent",
+            "orgUnitPath": "/Parent",
+            "orgUnitId": "id:parent",
+            "parentOrgUnitPath": "/"
+        },
+        {
+            "name": "Child",
+            "orgUnitPath": "/Parent/Child",
+            "orgUnitId": "id:child",
+            "parentOrgUnitPath": "/Parent"
+        },
+        {
+            "name": "Sibling",
+            "orgUnitPath": "/Sibling",
+            "orgUnitId": "id:sibling",
+            "parentOrgUnitPath": "/"
         }
-    }
+    ]
+}
+
+BaseInput := {
+    "organizational_units": OrgUnits,
+    "tenant_info": {"topLevelOU": "Top OU"},
+    "privileged_users_error": null,
+    "inbound_sso_assignments_error": null
+}
+
+test_NoPrivilegedUsers_Compliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [],
+        "inbound_sso_assignments": []
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    count(RuleOutput[0].ActualValue.NonCompliantOUs) == 0
+}
+
+test_PrivilegedUser_ExplicitSsoOff_Compliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent", "groupKeys": []}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SSO_OFF"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+}
+
+test_PrivilegedUser_ExplicitSsoOn_NonCompliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent", "groupKeys": []}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    count(RuleOutput[0].ActualValue.NonCompliantOUs) == 1
+}
+
+test_PrivilegedUser_InheritsParentSsoOn_NonCompliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent/Child", "groupKeys": []}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    some SomeOU in RuleOutput[0].ActualValue.NonCompliantOUs
+    SomeOU.Name == "Parent/Child"
+}
+
+test_PrivilegedUser_ChildOverrideToOff_Compliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent/Child", "groupKeys": []}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"},
+            {"targetOrgUnit": "orgUnits/child", "ssoMode": "SSO_OFF"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+}
+
+test_PrivilegedUser_TopLevelPath_InheritsRoot_NonCompliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "", "groupKeys": []}],
+        "inbound_sso_assignments": [
+            {"targetOrgUnit": "orgUnits/top", "ssoMode": "OIDC_SSO"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+}
+
+test_PrivilegedUsers_FetchError_NoSuchEvent_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [],
+        "privileged_users_error": "Permission denied",
+        "inbound_sso_assignments": []
+    })
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Currently not able to be tested automatically; please manually check."
+}
+
+test_SsoAssignments_FetchError_NoSuchEvent_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{"primaryEmail": "admin@example.org", "orgUnitPath": "Parent", "groupKeys": []}],
+        "inbound_sso_assignments": [],
+        "inbound_sso_assignments_error": "insufficient scope"
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    RuleOutput[0].NoSuchEvent
+}
+
+test_PrivilegedUser_GroupTargetSsoOn_NonCompliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{
+            "primaryEmail": "admin@example.org",
+            "orgUnitPath": "Parent",
+            "groupKeys": ["security-admins@example.org"]
+        }],
+        "inbound_sso_assignments": [
+            {"targetGroup": "groups/security-admins@example.org", "ssoMode": "SAML_SSO"},
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SSO_OFF"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+}
+
+test_PrivilegedUser_GroupTargetSsoOff_OverridesOuOn_Compliant_V1 if {
+    PolicyId := CommonControlsId6_1
+    Output := tests with input as object.union(BaseInput, {
+        "privileged_users": [{
+            "primaryEmail": "admin@example.org",
+            "orgUnitPath": "Parent",
+            "groupKeys": ["security-admins@example.org"]
+        }],
+        "inbound_sso_assignments": [
+            {"targetGroup": "groups/security-admins@example.org", "ssoMode": "SSO_OFF"},
+            {"targetOrgUnit": "orgUnits/parent", "ssoMode": "SAML_SSO"}
+        ]
+    })
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
 }
 #--
 

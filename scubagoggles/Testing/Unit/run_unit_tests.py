@@ -6,6 +6,9 @@ Currently runs non-verbosely
 import subprocess
 import argparse
 
+from scubagoggles.config import UserConfig
+from scubagoggles.run_rego import find_opa
+
 from pathlib import Path
 from sys import platform
 
@@ -49,9 +52,11 @@ parser.add_argument('-c', '--controls', type = str, nargs="+",
 default=[], help="Space-separated list of control group numbers to test within a specific baseline."
 "Can only be used when a single baseline is specified. By default all are run.")
 
-parser.add_argument('-o', '--opapath', type=str, default='../../..', metavar='',
+# obtain the default OPA executable location from UserSetup()
+opa_dir = UserConfig().opa_dir
+parser.add_argument('-o', '--opapath', type=str, default=opa_dir, metavar='',
 help='The relative path to the directory containing the OPA executable. ' +
-    'Defaults to "../../.." the current executing directory.')
+    'Defaults to the default location of the opa executable from UserConfig.')
 
 parser.add_argument('-v', action='store_true',
 help='Verbose flag, passed to opa, increases output.')
@@ -70,20 +75,7 @@ if args.v:
 
 #Get OPA Path from command line args
 opa_path = args.opapath
-OPA_EXE = ""
-command = []
-if platform == 'win32':
-    OPA_EXE = f'{opa_path}/opa_windows_amd64.exe'
-elif platform == 'darwin':
-    OPA_EXE = f'{opa_path}/opa_darwin_amd64'
-elif platform in ('linux', 'linux2'):
-    OPA_EXE = f'{opa_path}opa_linux_amd64_static'
-
-if not OPA_EXE or not Path(OPA_EXE).exists():
-    OPA_EXE = f'{opa_path}/opa'
-
-if not Path(OPA_EXE).exists():
-    raise FileNotFoundError(f'? {OPA_EXE}: OPA executable not found')
+OPA_EXE = find_opa(opa_path)
 
 for b in args.baselines:
     b = b.lower()
@@ -91,12 +83,30 @@ for b in args.baselines:
         for c in args.controls:
             print(f"\n==== Testing {b} control {c} ====")
             c = c.zfill(2)
-            command = (f'{OPA_EXE} test {rego_dir} '
-                       f'{test_dir}/Rego/{b}/{b}{c}_test.rego {V_FLAG}')
-            print(command)
-            subprocess.run(command.split(), check=False)
+            command = f'{OPA_EXE}\" test\" {rego_dir}\"'
+            command += f'{test_dir}/Rego/{b}/{b}{c}_test.rego'
+            # only append if V_FLAG is set
+            if V_FLAG:
+                command += f'\"{V_FLAG}'
+            command_list = [s.strip() for s in command.split("\"")]
+            
+            # for the sake of displaying the command
+            command_display = ""
+            for c in command_list: command_display += f'\"{c}\" '
+            print(command_display)
+
+            subprocess.run(command_list, check=False)
     else:
         print(f"\n==== Testing {b} ====")
-        command = f'{OPA_EXE} test {rego_dir} {test_dir}/Rego/{b} {V_FLAG}'
-        print(command)
-        subprocess.run(command.split(), check=False)
+        command = f'{OPA_EXE}\" test\" {rego_dir}\" {test_dir}/Rego/{b}'
+        # only append if V_FLAG is set
+        if V_FLAG:
+            command += f'\"{V_FLAG}'
+        command_list = [s.strip() for s in command.split("\"")]
+
+        # for the sake of displaying the command
+        command_display = ""
+        for c in command_list: command_display += f'\"{c}\" '
+        print(command_display)
+
+        subprocess.run(command_list, check=False)

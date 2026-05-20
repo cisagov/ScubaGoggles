@@ -15,7 +15,7 @@ GoodGmailApi09 := {
     "tenant_info": {
         "topLevelOU": "topOU"
     },
-    "imap_exceptions": []
+    "imap_exclusions": []
 }
 
 BadGmailApi09 := {
@@ -39,7 +39,7 @@ BadGmailApi09 := {
     "tenant_info": {
         "topLevelOU": "topOU"
     },
-    "imap_exceptions": []
+    "imap_exclusions": []
 }
 
 ImapExceptionsGmailApi09 := {
@@ -56,7 +56,7 @@ ImapExceptionsGmailApi09 := {
     "tenant_info": {
         "topLevelOU": "topOU"
     },
-    "imap_exceptions": [
+    "imap_exclusions": [
         {
             "ou": "nextOU",
             "group": "",
