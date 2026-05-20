@@ -303,7 +303,7 @@ const applyScopeAttributes = () => {
 
 /**
  * Apply redaction to identification information in reports
- * based on the --reportredaction (-rr) CLI arg
+ * based on the --cicdtestingmode (-ctm) CLI arg
  */
 function redaction() {
     const cliElement = document.getElementById("sgr_settings");
