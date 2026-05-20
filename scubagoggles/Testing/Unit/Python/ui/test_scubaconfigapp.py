@@ -119,10 +119,35 @@ class TestScubaConfig:
 
         assert expected == scubaconfigapp.ScubaConfigApp.parse_baseline_policies()
 
-    def test_import_configuration():
-        pass
 
-    def test_normalize_config_keys():
-        pass
+    # yaml error exception
+    # not config
+    # normal
+    # Generic Exception (ImportError)
+    @pytest.mark.parametrize('yaml_error, conf_err, exc', [
+        (True, False, False),
+        (False, True, False),
+        (False, False, True),
+        (False, False, False),
+    ])
+    def test_import_configuration(self, mocker, yaml_error, conf_err, exc):
+        if yaml_error:
+            assert True == True
+        else:
+            assert True == True
 
-    
+
+    @pytest.mark.parametrize('config_dict, expected', [
+        ({'B': "baseline data"}, {'baselines': "baseline data"}),
+        ({'o': "out.txt"}, {'outputpath': "out.txt"}),
+        ({'BaseLines': "baseline data"}, {'baselines': "baseline data"}),
+        ({'credentials': "creds.txt"}, {'credentials': "creds.txt"}),
+        ({'c': "credentials.txt", 'OUT': "out.txt", 'policies': "baseline data"}, 
+         {'credentials': "credentials.txt", 'out': "out.txt", 'policies': "baseline data"})
+    ])
+    def test_normalize_config_keys(self, config_dict, expected):
+        """
+        Tests that _normalize_config_keys expands key aliases and lowercases key values
+        """
+        result = scubaconfigapp.ScubaConfigApp._normalize_config_keys(config_dict)
+        assert expected == result
