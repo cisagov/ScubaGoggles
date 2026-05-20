@@ -7,6 +7,7 @@ import pytest
 from scubagoggles.ui import scubaconfigapp
 import types
 import sys
+from pathlib import Path
 
 class TestScubaConfig:
     """Unit tests for the ScubaGoggles Config Class"""
@@ -77,3 +78,51 @@ class TestScubaConfig:
             assert user_conf().credentials_file == "tmp/creds"
             assert version.number == "2.0.0"
             assert version.initialize() is True
+    
+    @pytest.mark.parametrize('prod_mds, os_err', [
+        ([Path('gmail.md'), Path('drive.md')], True),
+        ([Path('gmail.md'), Path('drive.md')], False),
+        ([], False),
+    ])
+    def test_parse_baseline_policies(self, mocker, prod_mds, os_err):
+        """
+        Verifies the parse_basline function returns the controls by
+        product for each baseline, or an empty dictionary if none are
+        specified or an exception is raised
+        """
+        mocker.patch.object(Path, "exists", return_value=True)
+        mocker.patch.object(Path, "glob", return_value=iter(prod_mds))
+
+        expected = {}
+
+        markdown_parser_mock = mocker.patch('scubagoggles.reporter.md_parser.MarkdownParser')
+        markdown_instance = markdown_parser_mock.return_value
+
+        if prod_mds:
+            parse_baseline_ret_val = {
+                "gmail": "gmail baselines",
+                "drive": "drive baselines",
+            }
+            markdown_instance.parse_baselines.return_value = parse_baseline_ret_val
+
+            controls_by_product_ret_val = {
+                'gmail': {"gmail control": "gmail control data"},
+                'drive': {"drive control": "drive control data"},
+            }
+            markdown_instance.controls_by_product.return_value = controls_by_product_ret_val
+            
+            expected = {}
+
+            if os_err:
+                markdown_instance.parse_baselines.side_effect = OSError("OS Error")
+                expected = {}
+
+        assert expected == scubaconfigapp.ScubaConfigApp.parse_baseline_policies()
+
+    def test_import_configuration():
+        pass
+
+    def test_normalize_config_keys():
+        pass
+
+    
