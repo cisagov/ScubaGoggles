@@ -11,6 +11,7 @@ import yaml
 
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.utils import path_parser
+from scubagoggles.scuba_constants import NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES
 
 
 log = logging.getLogger(__name__)
@@ -74,16 +75,16 @@ class ScubaArgumentParser:
         logging.basicConfig(format='(%(levelname)s): %(message)s',
                             level=log_level(args.log))
 
-        if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
+        if 'breakglassaccounts' not in vars(args) or args.breakglassaccounts is None:
             args.breakglassaccounts = []
 
-        if 'imapexclusions' not in args or args.imapexclusions is None:
+        if 'imapexclusions' not in vars(args) or args.imapexclusions is None:
             args.imapexclusions = []
 
-        if 'sitesexclusions' not in args or args.sitesexclusions is None:
+        if 'sitesexclusions' not in vars(args) or args.sitesexclusions is None:
             args.sitesexclusions = []
 
-        if not 'config' in args or not args.config:
+        if not 'config' in vars(args) or not args.config:
             return args
 
         # Create a mapping of the short param aliases to the long form
@@ -159,34 +160,49 @@ class ScubaArgumentParser:
                               'regopath')
 
         for option_name in path_value_options:
-            if option_name in args:
+            if option_name in vars(args):
                 option_value = getattr(args, option_name)
                 if not isinstance(option_value, Path) and option_value is not None:
                     setattr(args, option_name, path_parser(option_value))
 
-        if 'omitpolicy' in args:
+        if 'omitpolicy' in vars(args):
             ScubaArgumentParser.validate_omissions(args)
 
-        if 'annotatepolicy' in args:
+        if 'annotatepolicy' in vars(args):
             ScubaArgumentParser.validate_annotations(args)
 
-        if 'imapexclusions' in args:
+        if 'imapexclusions' in vars(args):
             ScubaArgumentParser.validate_imap_exclusions(args)
 
-        if 'sitesexclusions' in args:
+        if 'sitesexclusions' in vars(args):
             ScubaArgumentParser.validate_sites_exclusions(args)
 
         # We want OrgName to be in PascalCase for consistency with ScubaGear.
         # But as all other options for ScubaGoggles are all lowercase, make
         # ScubaGoggles accept either orgname or OrgName to make things more
         # user friendly
-        if 'orgname' in args:
+        if 'orgname' in vars(args):
             vars(args)['OrgName'] = args.orgname
             del vars(args)['orgname']
 
-        if 'orgunitname' in args:
+        if 'orgunitname' in vars(args):
             vars(args)['OrgUnitName'] = args.orgunitname
             del vars(args)['orgunitname']
+
+        if 'numberofuuidcharacterstotruncate' in vars(args):
+            value = args.numberofuuidcharacterstotruncate
+
+            if isinstance(value, str):
+                value = int(value)
+
+            if value not in NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES:
+                raise RuntimeError(
+                    'numberofuuidcharacterstotruncate must be one of '
+                    f'{NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES}'
+            )
+
+            args.numberofuuidcharacterstotruncate = value
+
 
     @staticmethod
     def validate_omissions(args : argparse.Namespace) -> None:
