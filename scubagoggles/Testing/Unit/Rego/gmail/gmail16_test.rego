@@ -29,7 +29,7 @@ test_SecuritySandbox_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    RuleOutput[0].ReportDetails == "Requirement met."
 }
 
 test_SecuritySandbox_Correct_V2 if {
@@ -67,7 +67,7 @@ test_SecuritySandbox_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    RuleOutput[0].ReportDetails == "Requirement met."
 }
 
 test_SecuritySandbox_Correct_V3 if {
@@ -105,7 +105,7 @@ test_SecuritySandbox_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    RuleOutput[0].ReportDetails == "Requirement met."
 }
 
     test_SecuritySandbox_Correct_V4 if {
@@ -143,7 +143,7 @@ test_SecuritySandbox_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    RuleOutput[0].ReportDetails == "Requirement met."
 }
 
 test_SecuritySandbox_Incorrect_V1 if {
