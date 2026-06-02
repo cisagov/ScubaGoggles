@@ -33,7 +33,7 @@ test_MPA_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    RuleOutput[0].ReportDetails == "Requirement met."
 }
 
 test_MPA_Incorrect_V1 if {

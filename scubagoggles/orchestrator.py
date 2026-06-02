@@ -501,9 +501,9 @@ class Orchestrator:
             raw_data.update({'scuba_config': args_dict})
         return raw_data
 
-    def _redact_lhci_reports(self, reportredaction, outputpath) -> None:
+    def _redact_lhci_reports(self, cicdtestingmode, outputpath) -> None:
         """ Redact PII on the lighthouse ci reports """
-        if reportredaction == 'true':
+        if cicdtestingmode == 'true':
             # Lighthouse Config
             lighthouserc_json = Path(__file__).parent / 'lighthouserc.json'
             shutil.copy(lighthouserc_json, outputpath)
@@ -521,9 +521,9 @@ class Orchestrator:
         """
 
         # pylint: disable=line-too-long
-        baselines,outputpath, fullnamesdict, outputregofilename, outputproviderfilename, darkmode, reportredaction, quiet = itemgetter(
+        baselines,outputpath, fullnamesdict, outputregofilename, outputproviderfilename, darkmode, cicdtestingmode, quiet = itemgetter(
             "baselines","outputpath","fullnamesdict","outputregofilename",
-            "outputproviderfilename", "darkmode", "reportredaction", "quiet"
+            "outputproviderfilename", "darkmode", "cicdtestingmode", "quiet"
             )(self.args_dict)
 
         # Make the report output folders
@@ -626,7 +626,7 @@ class Orchestrator:
                 reporter.rego_json_to_ind_reports(test_results_data,
                                                   outputpath,
                                                   darkmode,
-                                                  reportredaction)
+                                                  cicdtestingmode)
             baseline_product_summary = {product: stats_and_data[product][0]}
             baseline_product_results_json = {
                 product: stats_and_data[product][1]}
@@ -667,7 +667,7 @@ class Orchestrator:
         self._dump_report_files(outputpath, out_jsonfile, total_output)
 
         # Check for Test Run
-        self._redact_lhci_reports(reportredaction, outputpath)
+        self._redact_lhci_reports(cicdtestingmode, outputpath)
 
         # Delete the ProviderOutput file as it's now encapsulated in the
         # ScubaResults file
@@ -693,7 +693,7 @@ class Orchestrator:
                                                          tenant_info,
                                                          report_uuid,
                                                          darkmode,
-                                                         reportredaction)
+                                                         cicdtestingmode)
         report_path.write_text(front_page_html, encoding='utf-8')
 
         # suppress opening the report in the browser

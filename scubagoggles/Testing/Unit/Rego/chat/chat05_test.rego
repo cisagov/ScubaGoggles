@@ -59,7 +59,7 @@ test_Enable_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met in all OUs and groups.", Chat5Warning])
+    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met.", Chat5Warning])
 }
 
 test_Enable_Correct_V2 if {
@@ -157,7 +157,7 @@ test_Enable_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met in all OUs and groups.", Chat5Warning])
+    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met.", Chat5Warning])
 }
 
 test_Enable_Correct_V3 if {
@@ -255,7 +255,7 @@ test_Enable_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met in all OUs and groups.", Chat5Warning])
+    RuleOutput[0].ReportDetails == concat("<br>", ["Requirement met.", Chat5Warning])
 }
 
 test_Enable_Incorrect_V1 if {
@@ -576,7 +576,7 @@ test_Categories_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    RuleOutput[0].ReportDetails == "Requirement met."
 }
 
 test_Categories_Correct_V2 if {
@@ -630,7 +630,7 @@ test_Categories_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    RuleOutput[0].ReportDetails == "Requirement met."
 }
 
 test_Categories_Correct_V3 if {
@@ -676,7 +676,7 @@ test_Categories_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Requirement met in all OUs and groups."
+    RuleOutput[0].ReportDetails == "Requirement met."
 }
 
 test_Categories_Incorrect_V1 if {
