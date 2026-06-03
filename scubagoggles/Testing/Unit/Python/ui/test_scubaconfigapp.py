@@ -8,6 +8,7 @@ from scubagoggles.ui import scubaconfigapp
 import types
 import sys
 from pathlib import Path
+from yaml import YAMLError
 
 class TestScubaConfig:
     """Unit tests for the ScubaGoggles Config Class"""
@@ -79,6 +80,8 @@ class TestScubaConfig:
             assert version.number == "2.0.0"
             assert version.initialize() is True
     
+    # def test_generate_css()
+
     @pytest.mark.parametrize('prod_mds, os_err', [
         ([Path('gmail.md'), Path('drive.md')], True),
         ([Path('gmail.md'), Path('drive.md')], False),
@@ -119,11 +122,6 @@ class TestScubaConfig:
 
         assert expected == scubaconfigapp.ScubaConfigApp.parse_baseline_policies()
 
-
-    # yaml error exception
-    # not config
-    # normal
-    # Generic Exception (ImportError)
     @pytest.mark.parametrize('yaml_error, conf_err, exc', [
         (True, False, False),
         (False, True, False),
@@ -131,11 +129,47 @@ class TestScubaConfig:
         (False, False, False),
     ])
     def test_import_configuration(self, mocker, yaml_error, conf_err, exc):
+        """
+        Tests that the import_configuration method properly handles exceptions
+        and loads configurations properly
+        """
+        mock_file = mocker.Mock()
         if yaml_error:
-            assert True == True
+            mock_st_error = mocker.patch('streamlit.error')
+            mock_file.read.side_effect = YAMLError("Error")
+            sconf_app = scubaconfigapp.ScubaConfigApp()
+            sconf_app.import_configuration(mock_file)
+            mock_st_error.assert_called_once_with("❌ YAML parsing error: Error")
+        elif conf_err:
+            mock_st_error = mocker.patch('streamlit.error')
+            mock_file.read.return_value = b''
+            sconf_app = scubaconfigapp.ScubaConfigApp()
+            sconf_app.import_configuration(mock_file)
+            mock_st_error.assert_called_once_with("Invalid or empty YAML file")
+        elif exc:
+            mock_file.read.return_value = b'baselines: baseline data'
+            # name error Exception?
+            mock_import_org_fields = mocker.patch.object(scubaconfigapp.ScubaConfigApp, 
+                                                         '_import_org_fields')
+            # generic Exception
+            mock_import_org_fields.side_effect = NameError("streamlit Name Error")
+            st_err_mock = mocker.patch('streamlit.error')
+            sconf_app = scubaconfigapp.ScubaConfigApp()
+            sconf_app.import_configuration(mock_file)
+            st_err_mock.assert_called_once_with("❌ Import error: streamlit Name Error")
         else:
-            assert True == True
-
+            mock_file.read.return_value = b'baselines: baseline data'
+            mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_org_fields')
+            mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_auth_fields')
+            mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_baselines')
+            mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_output_settings')
+            mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_advanced_settings')
+            mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_policy_and_account_sections')
+            mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_show_import_summary')
+            st_rerun_mock = mocker.patch('streamlit.rerun')
+            sconf_app = scubaconfigapp.ScubaConfigApp()
+            sconf_app.import_configuration(mock_file)
+            st_rerun_mock.assert_called_once()
 
     @pytest.mark.parametrize('config_dict, expected', [
         ({'B': "baseline data"}, {'baselines': "baseline data"}),
@@ -151,3 +185,378 @@ class TestScubaConfig:
         """
         result = scubaconfigapp.ScubaConfigApp._normalize_config_keys(config_dict)
         assert expected == result
+
+    @pytest.mark.parametrize('config, expected', [
+        (
+            {'A':"1", 'B':"2"},
+            {}
+        ),
+        (
+            {'orgunitname': "OrgUnit"},
+            {'orgunitname': "OrgUnit"}
+        ),
+        (
+            {'orgunitname': "OrgUnit", 'description': "Desc", 'A':"1"},
+            {'orgunitname': "OrgUnit", 'description': "Desc"}
+        )
+    ])
+    def test_import_org_fields(self, mocker, config, expected):
+        """
+        Tests that organization-level fields are imported into session state
+        """
+
+        # class inheritance
+        class MockSessionState(dict):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.config_data = {}
+        
+        mock_session_state = MockSessionState({})
+
+        mocker.patch("streamlit.session_state", mock_session_state)
+        scubaconfigapp.ScubaConfigApp._import_org_fields(config)
+        
+        assert mock_session_state == expected
+
+
+    @pytest.mark.parametrize('config, baseline_info, ' \
+    'valid_baselines, invalid_baselines, msg', [
+            (
+                {"not baselines": "nb1"},
+                [], # shouldn't matter
+                [], # shouldn't matter
+                [], # shouldn't matter
+                ""
+            ),
+            (
+                {"baselines": "b1"},
+                 #doesn't need to be a dictionary, only care about mocking the return value
+                ["b1"],
+                ["b1"],
+                [],
+                ""
+            ),
+            (
+                {"baselines": "b1"},
+                [],
+                [],
+                ["b1"],
+                "⚠️ **Skipped unknown baselines:** b1"
+            ),
+            (
+                {"baselines": 1}, # not a string or list
+                [], # doesn't matter here
+                [],
+                [],
+                ""
+            ),
+            (
+                {"baselines": 1},
+                [1], # shouldn't matter
+                [],
+                [],
+                ""
+            ),
+            (
+                {"baselines": ["b1"]},
+                ["b2", "b3", "b4"],
+                [],
+                ["b1"],
+                "⚠️ **Skipped unknown baselines:** b1"
+            ),
+            (
+                {"baselines": ["b1", "b2", "b3", "b4"]},
+                ["b1", "b2", "b5"],
+                ["b1", "b2"],
+                ["b3", "b4"],
+                "⚠️ **Skipped unknown baselines:** b3, b4"
+            )
+        ]
+    )
+    def test_import_baselines(self, mocker, config, baseline_info, invalid_baselines, 
+                              valid_baselines, msg):
+        """
+        Tests that the import_baselines function and ensure 
+        correct validations are called/configured
+        """
+
+        mock_sync_baseline_checkboxes = mocker.patch.object(scubaconfigapp.ScubaConfigApp,
+                                                             '_sync_baseline_checkboxes')
+        mocker.patch("streamlit.session_state")
+        st_warning = mocker.patch("streamlit.warning")
+        get_baseline_info = mocker.patch.object(scubaconfigapp.ScubaConfigApp,
+                                                'get_baseline_info')
+        get_baseline_info.return_value = baseline_info
+        sconf_app = scubaconfigapp.ScubaConfigApp()
+        sconf_app._import_baselines(config)
+
+        if "baselines" in config:
+            mock_sync_baseline_checkboxes.assert_called_once_with(valid_baselines)
+            if msg:
+                st_warning.assert_called_once_with(msg)
+        else:
+            mock_sync_baseline_checkboxes.assert_not_called()
+            st_warning.assert_not_called()
+
+    @pytest.mark.parametrize('config, key, expected_value', [
+            (
+                {}, # empty dictionary
+                None,
+                None
+            ),
+            (
+                # keys not used by import output settings
+                {"random_key": "random_value"},
+                None,
+                None
+            ),
+            (
+                {"outputpath": "/tmp/path"},
+                "outputpath",
+                "/tmp/path"
+            ),
+            (
+                {"darkmode": "true"},
+                "darkmode",
+                True
+            ),
+            (
+                {"darkmode": "TrUe"},
+                "darkmode",
+                True
+            ),
+            (
+                {"darkmode": "abc123"},
+                "darkmode",
+                False
+            ),
+            (
+                {"darkmode": []},
+                "darkmode",
+                False
+            ),
+            (
+                {"darkmode": [1, 2, 3]},
+                "darkmode",
+                True
+            ),
+            (
+                {"quiet": "non-empty string"},
+                "quiet",
+                True
+            ),
+            (
+                {"quiet": ""},
+                "quiet",
+                False
+            ),
+            (
+                {"quiet": ""},
+                "quiet",
+                False
+            )
+        ]
+    )    
+    def test_import_output_settings(self, mocker, config, key, expected_value):
+        """
+        Tests the Import output-related settings from the *config* attribute
+        """
+        session_state_mock = mocker.patch("streamlit.session_state")
+        session_state_mock.config_data = {}
+        scubaconfigapp.ScubaConfigApp._import_output_settings(config)
+        if key is not None:
+            assert key in session_state_mock.config_data
+            assert session_state_mock.config_data[key] == expected_value
+        else:
+            # no dictionary modifications were made to config_data
+            assert session_state_mock.config_data == {}
+
+
+    @pytest.mark.parametrize('config, expected_data', [
+            (
+                # key not in list of specified keys (in method scope)
+                {"random_key": "random_value"},
+                {}
+            ),
+            (
+                {"outjsonfilename": "output.json"},
+                {"outjsonfilename": "output.json"}
+            ),
+            (
+                # convert to string example
+                {"accesstoken": 12345},
+                {"accesstoken": "12345"}
+            ),
+            (
+                {"numberofuuidcharacterstotruncate": "not an int"},
+                {}
+            ),
+            (
+                {"numberofuuidcharacterstotruncate": "4"},
+                {"numberofuuidcharacterstotruncate": 4}
+            ),
+            (
+                {"regopath": Path("/path/to/rego"), "random_key": "random_value", 
+                 "numberofuuidcharacterstotruncate": "not an int"},
+                {"regopath": str(Path("/path/to/rego"))}
+            )
+        ]
+    )
+    def test_import_advanced_settings(self, mocker, config, expected_data):
+        """
+        Test Advanced Import settings, and ensure they are configured properly
+        """
+        session_state_mock = mocker.patch("streamlit.session_state")
+        session_state_mock.config_data = {}
+        scubaconfigapp.ScubaConfigApp._import_advanced_settings(config)
+        assert session_state_mock.config_data == expected_data
+
+
+    @pytest.mark.parametrize('value, coerce, expected_return_value', [
+        (["b1"], None, ["b1"]),   # instance is list (non-empty)
+        ([], None, []),           # instance is list (empty)
+        ("123", None, ["123"]),   # truthy value, coerce default None
+        ("123", int, [123]),      # truthy value, coerce int, gets converted
+        (None, None, []),         # falsy value, coerce default None
+        ("", str, []),            # second falsy case, coerce str
+    ])
+    def test_normalize_to_list(self, value, coerce, expected_return_value):
+        """
+        Test the normalize_to_list function works as intended and test different 
+        edge cases.
+        """
+        assert scubaconfigapp.ScubaConfigApp._normalize_to_list(value, coerce) == expected_return_value
+
+
+    @pytest.mark.parametrize('config, expected_value', [
+        # individual cases
+        (
+            {}, 
+            {}
+        ),
+        (
+            {"omitpolicy": ["a", "b"]}, 
+            {}
+        ),
+        (
+            {"omitpolicy": {"a": "b"}}, 
+            {"omitpolicy": {"a": "b"}}
+        ),
+        (
+            {"breakglassaccounts": ["a", "b"]}, 
+            {"breakglassaccounts": ["a", "b"]}
+        ),
+        (
+            {"breakglassaccounts": 1}, 
+            {"breakglassaccounts": [1]}
+        ),
+        (
+            {"preferreddohservers": ('a', 'b')}, 
+            {"preferreddohservers": ["('a', 'b')"]}
+        ),
+        (
+            {"preferreddohservers": "string", "preferreddnsresolvers": [1, 2]},
+            {"preferreddohservers": ["string"], "preferreddnsresolvers": [1, 2]}
+        ),
+        (
+            {"skipdoh": ""},
+            {"skipdoh": False}
+        ),
+        (
+            {"skipdoh": "123"}, 
+            {"skipdoh": True}
+        ),
+        # mixed cases
+        # ignored keys
+        (
+            {"omitpolicy": {1: 2}, "preferreddohservers": 1, "ignored_key": "ignored_value"}, 
+            {"omitpolicy": {1: 2}, "preferreddohservers": ["1"]}
+        ),
+        # multiple specified keys
+        (
+            {"omitpolicy": "abcdef", "skipdoh": ""},
+            {"skipdoh": False}
+        )
+    ])
+    def test_import_policy_and_account_sections(self, mocker, config, expected_value):
+        """
+        Tests the import_policy_and_account_sections() function
+        This unit test handles different branching cases related to when the 
+        config attribute (streamlit session state) should be updated.
+        """
+        session_state_mock = mocker.patch("streamlit.session_state")
+        session_state_mock.config_data = {}
+
+        scubaconfigapp.ScubaConfigApp._import_policy_and_account_sections(config)
+
+        assert session_state_mock.config_data == expected_value
+
+        if "skipdoh" in config:
+            session_state_mock.__setitem__.assert_called_once_with(
+                "skipdoh_checkbox", bool(config["skipdoh"])
+            )
+        else:
+            session_state_mock.__setitem__.assert_not_called()
+
+
+    @pytest.mark.parametrize("uploaded", [
+            True,
+            False
+        ])
+    def test_show_import_dialog(self, mocker, uploaded):
+        """
+        Tests the _show_import_dialogue function
+        """
+        import_configuration_mock = mocker.patch.object(
+            scubaconfigapp.ScubaConfigApp, "import_configuration")
+
+        session_state_mock = mocker.patch("streamlit.session_state")
+        # example return value
+        session_state_mock.get.return_value = 0
+
+        uploaded_file = mocker.Mock()
+        # arbitrary name
+        uploaded_file.name = "config.yaml"
+
+        file_uploader_mock = mocker.patch(
+            "streamlit.file_uploader",
+            return_value=uploaded_file if uploaded else None,
+        )
+        success_mock = mocker.patch("streamlit.success")
+
+        scubaconfigapp.ScubaConfigApp._show_import_dialog.__wrapped__(
+            scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
+        )
+
+        file_uploader_mock.assert_called_once_with(
+            "Upload a YAML configuration file",
+            type=["yaml", "yml"],
+            key="config_file_uploader_0",
+        )
+        session_state_mock.get.assert_called_once_with("uploader_gen", 0)
+
+        if uploaded:
+            assert session_state_mock.uploader_gen == 1
+            success_mock.assert_called_once_with(
+                "✅ **config.yaml** loaded successfully — importing..."
+            )
+            import_configuration_mock.assert_called_once_with(uploaded_file)
+        else:
+            assert "uploader_gen" not in session_state_mock.__dict__
+            success_mock.assert_not_called()
+            import_configuration_mock.assert_not_called()
+
+    #@pytest.mark.parametrize("", [
+    #        True,
+    #        False
+    #    ])
+    #def test_show_reset_dialog(self, mocker, uploaded):
+    #
+
+    #@pytest.mark.parametrize("", [
+    #        True,
+    #        False
+    #    ])
+    #def test_validate_before_save(self, mocker, uploaded):
+    #
+
