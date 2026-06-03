@@ -236,6 +236,7 @@ class TestScubaConfig:
                 [],
                 ""
             ),
+            # no valid baselines
             (
                 {"baselines": "b1"},
                 [],
@@ -243,6 +244,7 @@ class TestScubaConfig:
                 ["b1"],
                 "⚠️ **Skipped unknown baselines:** b1"
             ),
+            # baslines value not string or dict
             (
                 {"baselines": 1}, # not a string or list
                 [], # doesn't matter here
@@ -250,6 +252,7 @@ class TestScubaConfig:
                 [],
                 ""
             ),
+            # baslines value not string or dict
             (
                 {"baselines": 1},
                 [1], # shouldn't matter
@@ -257,6 +260,7 @@ class TestScubaConfig:
                 [],
                 ""
             ),
+            # no valid baselines
             (
                 {"baselines": ["b1"]},
                 ["b2", "b3", "b4"],
@@ -264,6 +268,7 @@ class TestScubaConfig:
                 ["b1"],
                 "⚠️ **Skipped unknown baselines:** b1"
             ),
+            # valid baselines are b1 and b2
             (
                 {"baselines": ["b1", "b2", "b3", "b4"]},
                 ["b1", "b2", "b5"],
@@ -299,6 +304,7 @@ class TestScubaConfig:
             st_warning.assert_not_called()
 
     @pytest.mark.parametrize('config, key, expected_value', [
+            # no recognized keys
             (
                 {}, # empty dictionary
                 None,
@@ -310,11 +316,13 @@ class TestScubaConfig:
                 None,
                 None
             ),
+            # outputpath option
             (
                 {"outputpath": "/tmp/path"},
                 "outputpath",
                 "/tmp/path"
             ),
+            # darkmode options
             (
                 {"darkmode": "true"},
                 "darkmode",
@@ -340,6 +348,7 @@ class TestScubaConfig:
                 "darkmode",
                 True
             ),
+            # quiet options
             (
                 {"quiet": "non-empty string"},
                 "quiet",
@@ -359,7 +368,8 @@ class TestScubaConfig:
     )    
     def test_import_output_settings(self, mocker, config, key, expected_value):
         """
-        Tests the Import output-related settings from the *config* attribute
+        Tests the Import output-related settings from the *config* attribute, 
+        with various configurations
         """
         session_state_mock = mocker.patch("streamlit.session_state")
         session_state_mock.config_data = {}
@@ -387,6 +397,7 @@ class TestScubaConfig:
                 {"accesstoken": 12345},
                 {"accesstoken": "12345"}
             ),
+            # numberofuuidcharacterstotruncate in config
             (
                 {"numberofuuidcharacterstotruncate": "not an int"},
                 {}
@@ -434,6 +445,7 @@ class TestScubaConfig:
             {}, 
             {}
         ),
+        # omitpolicy is present
         (
             {"omitpolicy": ["a", "b"]}, 
             {}
@@ -442,6 +454,7 @@ class TestScubaConfig:
             {"omitpolicy": {"a": "b"}}, 
             {"omitpolicy": {"a": "b"}}
         ),
+        # breakglassaccounts in config
         (
             {"breakglassaccounts": ["a", "b"]}, 
             {"breakglassaccounts": ["a", "b"]}
@@ -450,6 +463,7 @@ class TestScubaConfig:
             {"breakglassaccounts": 1}, 
             {"breakglassaccounts": [1]}
         ),
+        # preferreddohservers/preferreddnsresolvers in config
         (
             {"preferreddohservers": ('a', 'b')}, 
             {"preferreddohservers": ["('a', 'b')"]}
