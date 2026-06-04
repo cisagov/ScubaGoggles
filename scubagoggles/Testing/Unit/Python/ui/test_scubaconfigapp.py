@@ -560,17 +560,225 @@ class TestScubaConfig:
             success_mock.assert_not_called()
             import_configuration_mock.assert_not_called()
 
-    #@pytest.mark.parametrize("", [
-    #        True,
-    #        False
-    #    ])
-    #def test_show_reset_dialog(self, mocker, uploaded):
-    #
+    @pytest.mark.parametrize(
+        "yes_clicked,cancel_clicked,initial_state",
+        [
+            (True, False, {}),
+            (True, False, {"alpha": "1", "beta": "2"}),
+            (False, True, {}),
+        ],
+    )
+    def test_show_reset_dialog(self, mocker, yes_clicked, cancel_clicked, initial_state):
+        """Tests the reset confirmation dialog paths."""
+        mock_warning = mocker.patch("streamlit.warning")
+        mock_columns = mocker.patch("streamlit.columns")
+        mock_button = mocker.patch(
+            "streamlit.button",
+            side_effect=[yes_clicked, cancel_clicked],
+        )
+        mock_rerun = mocker.patch("streamlit.rerun")
 
-    #@pytest.mark.parametrize("", [
-    #        True,
-    #        False
-    #    ])
-    #def test_validate_before_save(self, mocker, uploaded):
-    #
+        session_state_mock = dict(initial_state)
+        mocker.patch("streamlit.session_state", session_state_mock)
 
+        col1 = mocker.MagicMock()
+        col1.__enter__.return_value = col1
+        col1.__exit__.return_value = False
+
+        col2 = mocker.MagicMock()
+        col2.__enter__.return_value = col2
+        col2.__exit__.return_value = False
+
+        mock_columns.return_value = [col1, col2]
+
+        scubaconfigapp.ScubaConfigApp._show_reset_dialog.__wrapped__(
+            scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
+        )
+
+        mock_warning.assert_called_once_with(
+            "Are you sure you want to reset all fields to their defaults?\n\n"
+            "All unsaved changes will be lost."
+        )
+        mock_columns.assert_called_once_with(2)
+        mock_button.assert_any_call(
+            "Yes, Reset", type="primary", key="confirm_reset_yes"
+        )
+        mock_button.assert_any_call("Cancel", key="confirm_reset_cancel")
+        mock_rerun.assert_called_once()
+
+        if yes_clicked:
+            assert session_state_mock == {}
+        else:
+            assert session_state_mock == initial_state
+
+    
+
+    @pytest.mark.parametrize(
+        "config_data,valid,err,expected_errors",
+        [
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "", "breakglassaccounts": [], 
+              "subjectemail": ""}, True, "", []),
+            
+            ({"orgname": "",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "", "breakglassaccounts": [], 
+              "subjectemail": ""}, True, "",
+                ["Organization Name is required."]),
+           
+            ({"orgname": "",
+              "baselines": [],
+              "credentials": "", "outputpath": "", "breakglassaccounts": [], 
+              "subjectemail": ""}, True, "", 
+              ["Organization Name is required.", 
+               "At least 1 product must be selected for the configuration to be valid."]),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": {}, "outputpath": "", "breakglassaccounts": [], 
+              "subjectemail": ""}, True, "", 
+              []),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "/tmp/creds.json",
+              "outputpath": "", "breakglassaccounts": [], "subjectemail": ""}, False, 
+              "Invalid credentials file", ["Invalid credentials file"]),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "/tmp/creds.json",
+              "outputpath": "", "breakglassaccounts": [], 
+              "subjectemail": ""}, 
+              True, "", []),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": {}, "breakglassaccounts": [], 
+              "subjectemail": ""}, 
+              True, "", []),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "./", "breakglassaccounts": [],
+              "subjectemail": ""},
+                True, "", []),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "/tmp/out", "breakglassaccounts": [], 
+              "subjectemail": ""}, 
+              False, "Invalid output path", ["Invalid output path"]),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "/tmp/out", "breakglassaccounts": [], 
+              "subjectemail": ""}, 
+              True, "", []),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "", "breakglassaccounts": {}, 
+              "subjectemail": ""}, 
+              True, "", []),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "", "breakglassaccounts": ["admin@example.com"], 
+              "subjectemail": ""}, 
+              False, "Invalid break glass accounts", ["Invalid break glass accounts"]),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "", "breakglassaccounts": [], 
+              "subjectemail": ""}, 
+              True, "", []),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "", "breakglassaccounts": [], 
+              "subjectemail": "person@example.com"}, 
+              True, "", []),
+            
+            ({"orgname": "Org",
+              "baselines": ["gmail"],
+              "credentials": "", "outputpath": "", "breakglassaccounts": [], 
+              "subjectemail": "not-an-email"}, 
+              False, "", ["Subject email has an invalid format."]),
+        ],
+    )
+    def test_validate_before_save(self, mocker, config_data, valid, err, expected_errors):
+        """
+        Tests the _validate_before_save method.
+        Ensures required configuration fields are validated and that each
+        optional save-time validator branch is exercised independently.
+        """
+        session_state_mock = mocker.Mock()
+        session_state_mock.config_data = config_data
+        mocker.patch("streamlit.session_state", session_state_mock)
+
+        mock_creds = mocker.patch.object(
+            scubaconfigapp.ConfigValidator,
+            "validate_credentials_file",
+            return_value=(valid, err),
+        )
+        mock_output = mocker.patch.object(
+            scubaconfigapp.ConfigValidator,
+            "validate_output_path",
+            return_value=(valid, err),
+        )
+        mock_break_glass = mocker.patch.object(
+            scubaconfigapp.ConfigValidator,
+            "validate_break_glass_accounts",
+            return_value=(valid, err),
+        )
+        mock_email = mocker.patch.object(
+            scubaconfigapp.ConfigValidator,
+            "validate_email",
+            return_value=valid,
+        )
+
+        app = scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
+        errors = app._validate_before_save()
+
+        assert errors == expected_errors
+
+        if config_data.get("credentials", ""):
+            mock_creds.assert_called_once_with(config_data["credentials"])
+        else:
+            mock_creds.assert_not_called()
+
+        if config_data.get("outputpath", "") and config_data["outputpath"] != "./":
+            mock_output.assert_called_once_with(config_data["outputpath"])
+        else:
+            mock_output.assert_not_called()
+
+        if config_data.get("breakglassaccounts", []):
+            mock_break_glass.assert_called_once_with(config_data["breakglassaccounts"])
+        else:
+            mock_break_glass.assert_not_called()
+
+        if config_data.get("subjectemail", ""):
+            mock_email.assert_called_once_with(config_data["subjectemail"])
+        else:
+            mock_email.assert_not_called()
+
+
+    # Test case Ideas:
+    # params: 
+    # config (for st.session_state.config) [dict]
+    # availible_policies (for self.available_policies) [dict]
+    # 
+    # 
+    # 
+    def _get_selected_baseline_policies(self) -> Dict[str, Dict[str, str]]:
+        """Map selected baselines to their available policies."""
+        selected_baselines = st.session_state.config_data.get('baselines', [])
+        result: Dict[str, Dict[str, str]] = {}
+        if selected_baselines and self.available_policies:
+            for baseline in selected_baselines:
+                key = baseline.lower()
+                if key in self.available_policies:
+                    result[baseline.title()] = self.available_policies[key]
+        return result
