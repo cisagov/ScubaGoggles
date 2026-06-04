@@ -765,20 +765,141 @@ class TestScubaConfig:
             mock_email.assert_not_called()
 
 
-    # Test case Ideas:
-    # params: 
-    # config (for st.session_state.config) [dict]
-    # availible_policies (for self.available_policies) [dict]
-    # 
-    # 
-    # 
-    def _get_selected_baseline_policies(self) -> Dict[str, Dict[str, str]]:
-        """Map selected baselines to their available policies."""
-        selected_baselines = st.session_state.config_data.get('baselines', [])
-        result: Dict[str, Dict[str, str]] = {}
-        if selected_baselines and self.available_policies:
-            for baseline in selected_baselines:
-                key = baseline.lower()
-                if key in self.available_policies:
-                    result[baseline.title()] = self.available_policies[key]
-        return result
+    @pytest.mark.parametrize(
+        "config_data,available_policies,expected_return_value",
+        [
+            (
+                {"baselines": ["gmail"]},
+                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                {"Gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+            ),
+            (
+                {"baselines": ["gmail", "drive"]},
+                {
+                    "gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"},
+                    "drive": {"GWS.DRIVE.1.1": "Restrict external sharing"},
+                },
+                {
+                    "Gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"},
+                    "Drive": {"GWS.DRIVE.1.1": "Restrict external sharing"},
+                },
+            ),
+            (
+                {"baselines": ["gMaIl"]},
+                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                {"Gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+            ),
+            (
+                {"baselines": []},
+                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                {},
+            ),
+            (
+                {"baselines": None},
+                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                {},
+            ),
+            (
+                {"baselines": ["gmail"]},
+                {},
+                {},
+            ),
+            (
+                {"baselines": ["gmail"]},
+                None,
+                {},
+            ),
+            (
+                {"baselines": ["calendar"]},
+                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                {},
+            ),
+            (
+                {"baselines": ["gmail", "calendar", "drive"]},
+                {
+                    "gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"},
+                    "drive": {"GWS.DRIVE.1.1": "Restrict external sharing"},
+                },
+                {
+                    "Gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"},
+                    "Drive": {"GWS.DRIVE.1.1": "Restrict external sharing"},
+                },
+            ),
+            (
+                {"baselines": ["Drive docs"]},
+                {
+                    "drive docs": {"GWS.DRIVE.1.1": "Restrict external sharing"},
+                },
+                {
+                    "Drive Docs": {"GWS.DRIVE.1.1": "Restrict external sharing"},
+                },
+            ),
+        ],
+    )
+    def test_get_selected_baseline_policies(
+            self, mocker, config_data, available_policies, expected_return_value):
+        """This function tests selected baselines to ensure they map to their available policies."""
+        session_state_mock = mocker.Mock()
+        session_state_mock.config_data = config_data
+        mocker.patch("streamlit.session_state", session_state_mock)
+
+        app = scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
+        mocker.patch.object(app, "available_policies", available_policies, create=True)
+
+        assert app._get_selected_baseline_policies() == expected_return_value
+
+
+    @pytest.mark.parametrize(
+        "session_data,key,type_error_on_parse,expected_session_state",
+        [
+            (
+                {},
+                "auditdate",
+                False,
+                {},
+            ),
+            (
+                {"auditdate": 20260604},
+                "auditdate",
+                False,
+                {"auditdate": 20260604},
+            ),
+            (
+                {"auditdate": ["2026-06-04"]},
+                "auditdate",
+                False,
+                {"auditdate": ["2026-06-04"]},
+            ),
+            (
+                {"auditdate": "2026-06-04"},
+                "auditdate",
+                False,
+                {"auditdate": scubaconfigapp.date(2026, 6, 4)},
+            ),
+            (
+                {"auditdate": "not-a-date"},
+                "auditdate",
+                False,
+                {},
+            ),
+            (
+                {"auditdate": "2026-06-04"},
+                "auditdate",
+                True,
+                {},
+            )
+        ],
+    )
+    def test_normalize_session_date(
+            self, mocker, session_data, key, type_error_on_parse, expected_session_state):
+        """Tests session date normalization for missing, invalid, and valid date values."""
+        session_state_mock = dict(session_data)
+        mocker.patch("streamlit.session_state", session_state_mock)
+
+        if type_error_on_parse:
+            datetime_mock = mocker.patch("scubagoggles.ui.scubaconfigapp.datetime")
+            datetime_mock.strptime.side_effect = TypeError("Invalid date type")
+
+        scubaconfigapp.ScubaConfigApp._normalize_session_date(key)
+
+        assert session_state_mock == expected_session_state
