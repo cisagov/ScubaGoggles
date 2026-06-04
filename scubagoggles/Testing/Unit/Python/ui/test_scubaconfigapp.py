@@ -903,3 +903,73 @@ class TestScubaConfig:
         scubaconfigapp.ScubaConfigApp._normalize_session_date(key)
 
         assert session_state_mock == expected_session_state
+
+
+    @pytest.mark.parametrize(
+        "existing_data,config_key,session_key,before_session_state,expected_session_state",
+        [
+            # config_key missing; no session value exists to remove.
+            (
+                {},
+                "auditdate",
+                "session_auditdate",
+                {},
+                {},
+            ),
+            # config_key missing; stale session value is removed by else pop.
+            (
+                {},
+                "auditdate",
+                "session_auditdate",
+                {"session_auditdate": scubaconfigapp.date(2026, 6, 4)},
+                {},
+            ),
+            # config_key present with valid date string; session value is parsed.
+            (
+                {"auditdate": "2026-06-04"},
+                "auditdate",
+                "session_auditdate",
+                {},
+                {"session_auditdate": scubaconfigapp.date(2026, 6, 4)},
+            ),
+            # config_key present with invalid date string; ValueError removes stale value.
+            (
+                {"auditdate": "not-a-date"},
+                "auditdate",
+                "session_auditdate",
+                {"session_auditdate": scubaconfigapp.date(2026, 6, 4)},
+                {},
+            ),
+            # config_key present with wrong value type; TypeError removes stale value.
+            (
+                {"auditdate": ["2026-06-04"]},
+                "auditdate",
+                "session_auditdate",
+                {"session_auditdate": scubaconfigapp.date(2026, 6, 4)},
+                {},
+            ),
+            # existing_data has another key; requested config_key still follows else pop.
+            (
+                {"expiration": "2026-06-04"},
+                "auditdate",
+                "session_auditdate",
+                {"session_auditdate": scubaconfigapp.date(2026, 6, 4)},
+                {},
+            ),
+        ],
+    )
+    def test_load_existing_date(
+            self, mocker, existing_data, config_key, session_key,
+            before_session_state, expected_session_state):
+        """Tests existing config date loading into session state."""
+        session_state_mock = dict(before_session_state)
+        mocker.patch("streamlit.session_state", session_state_mock)
+
+        scubaconfigapp.ScubaConfigApp._load_existing_date(
+            existing_data,
+            config_key,
+            session_key,
+        )
+
+        assert session_state_mock == expected_session_state
+
