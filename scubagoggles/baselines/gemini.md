@@ -11,7 +11,9 @@ For non-federal users, the information in this document is being provided "as is
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Gemini for Google Workspace](https://support.google.com/a/topic/13853688?hl=en&ref_topic=9197&sjid=1480967616439197109-NA) and addresses the following:
 
 -   [Gemini App Access](#1-gemini-app-access)
--   [Alpha Gemini features](#2-alpha-gemini-features)
+-   [Gemini Alpha features](#2-gemini-alpha-features)
+-   [Gemini Conversation History](#3-gemini-conversation-history)
+-   [Gemini Conversation Sharing](#4-gemini-conversation-sharing)
 
 ## Assumptions
 
