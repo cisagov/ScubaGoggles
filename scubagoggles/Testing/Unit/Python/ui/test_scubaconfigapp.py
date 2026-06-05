@@ -973,3 +973,41 @@ class TestScubaConfig:
 
         assert session_state_mock == expected_session_state
 
+
+    @pytest.mark.parametrize(
+        "existing_data,config_key,expected_value",
+        [
+            # config_key present with valid date string; parsed date is returned.
+            (
+                {"auditdate": "2026-06-04"},
+                "auditdate",
+                scubaconfigapp.date(2026, 6, 4),
+            ),
+            # config_key present with invalid date string; ValueError returns None.
+            (
+                {"auditdate": "not-a-date"},
+                "auditdate",
+                None,
+            ),
+            # config_key present with wrong value type; TypeError returns None.
+            (
+                {"auditdate": ["2026-06-04"]},
+                "auditdate",
+                None,
+            ),
+            # config_key missing from empty existing_data; None is returned.
+            (
+                {},
+                "auditdate",
+                None,
+            ),
+        ],
+    )
+    def test_parse_config_date(self, existing_data, config_key, expected_value):
+        """Tests parsing config date strings into date values."""
+        result = scubaconfigapp.ScubaConfigApp._parse_config_date(
+            existing_data,
+            config_key,
+        )
+        assert result == expected_value
+
