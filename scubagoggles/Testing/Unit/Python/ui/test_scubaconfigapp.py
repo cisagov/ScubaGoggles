@@ -1011,3 +1011,31 @@ class TestScubaConfig:
         )
         assert result == expected_value
 
+
+    @pytest.mark.parametrize(
+        "yaml_str,key,expected_flow",
+        [
+            # Empty key with non-list YAML does not change the string.
+            ("orgname: Test Org\n", "", "orgname: Test Org\n"),
+            # Empty YAML string has nothing to convert.
+            ("", "baselines", ""),
+            # Single-item block list converts to flow style.
+            (
+                "baselines:\n- gmail\n", "baselines", "baselines: [gmail]\n",
+            ),
+            # Multi-item block list converts to flow style.
+            (
+                "baselines:\n- gmail\n- drive\n- calendar\n",
+                "baselines",
+                "baselines: [gmail, drive, calendar]\n",
+            ),
+        ],
+    )
+    def test_yaml_array_to_flow(self, yaml_str, key, expected_flow):
+        """Tests YAML block list conversion to flow style."""
+        result = scubaconfigapp.ScubaConfigApp._yaml_array_to_flow(
+            yaml_str,
+            key,
+        )
+        assert result == expected_flow
+
