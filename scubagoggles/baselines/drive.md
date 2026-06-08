@@ -14,8 +14,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Shared Drive Creation](#2-shared-drive-creation)
 -   [Security Updates for Files](#3-security-updates-for-files)
 -   [Drive SDK](#4-drive-sdk)
--   [User Installation of Drive and Docs Add-Ons](#5-user-installation-of-drive-and-docs-add-ons)
--   [Drive for Desktop](#6-drive-for-desktop)
+-   [Drive for Desktop](#5-drive-for-desktop)
 
 Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
