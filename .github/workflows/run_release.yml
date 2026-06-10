@@ -51,6 +51,15 @@ jobs:
           [[ "$reqv" == "$sgv" ]] \
             || (echo "version mismatch - current: $sgv" && exit 1)
           ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
+      - name: Generate OSCAL baseline artifacts
+        shell: bash
+        run: |
+          python3 scubagoggles/utils/generate_oscal_baselines.py \
+            --input-dir scubagoggles/baselines \
+            --output-dir dist/oscal-baselines \
+            --release-version "$RELEASE_VERSION"
+          cd dist
+          zip -r "scubagoggles-oscal-baselines-v${RELEASE_VERSION}.zip" oscal-baselines
       - name: release
         uses: softprops/action-gh-release@v1
         id: create_release
@@ -63,5 +72,6 @@ jobs:
             scubagoggles-*-py3-none-any.whl
             scubagoggles-*.tar.gz
             scubagoggles-*.zip
+            dist/scubagoggles-oscal-baselines-v${{ inputs.version }}.zip
           generate_release_notes: true
           fail_on_unmatched_files: true
