@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - main
+      - feature/oscal-baseline-release-artifacts
     paths:
       - "scubagoggles/baselines/**/*.md"
       - "scubagoggles/utils/generate_oscal_baselines.py"
