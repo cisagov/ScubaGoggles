@@ -1,0 +1,52 @@
+name: Generate OSCAL Baselines
+
+on:
+  pull_request:
+    paths:
+      - "scubagoggles/baselines/**/*.md"
+      - "scubagoggles/utils/generate_oscal_baselines.py"
+      - ".github/workflows/generate_oscal_baselines.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "scubagoggles/baselines/**/*.md"
+      - "scubagoggles/utils/generate_oscal_baselines.py"
+      - ".github/workflows/generate_oscal_baselines.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate-oscal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Generate OSCAL baseline files
+        run: |
+          python3 scubagoggles/utils/generate_oscal_baselines.py \
+            --input-dir scubagoggles/baselines \
+            --output-dir dist/oscal-baselines
+      - name: Validate generated JSON parses
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          files = sorted(Path("dist/oscal-baselines").glob("*-oscal-component-definition.json"))
+          if not files:
+              raise SystemExit("No OSCAL files generated")
+          for file_path in files:
+              json.loads(file_path.read_text(encoding="utf-8"))
+          print(f"Validated {len(files)} OSCAL JSON files")
+          PY
+      - name: Upload generated OSCAL files
+        uses: actions/upload-artifact@v4
+        with:
+          name: oscal-baselines
+          path: dist/oscal-baselines/

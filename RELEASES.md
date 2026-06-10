@@ -36,6 +36,7 @@ The checklist below is used by the development team when it prepares a new relea
 - [ ] Update the ScubaGoggles and SCB version in the [README.md](https://github.com/cisagov/ScubaGoggles/blob/main/README.md) badge image links.
 - [ ] Update and redact the sample report using the redaction tool and manual review
 - [ ] Check README for any necessary changes and documentation updates as needed
+- [ ] Verify OSCAL baseline generation passes for all Markdown baselines.
 - [ ] Build initial release candidate by manually triggering [`Build Draft Release`](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_release.yml) workflow with expected release name (vX.Y.Z) and release version (X.Y.Z) based on semantic versioning
 - [ ] Conduct release testing of each baseline
 - [ ] Fix critical defects deemed release blocking
@@ -55,5 +56,6 @@ After running the `Build Draft Release` workflow, a draft release will be visibl
   - Click **Publish Release**
 - [ ] Verify the new release is shown as latest on GitHub repository main page
 - [ ] Verify that the GitHub release contains both the scubagoggles-X.Y.Z.tar.gz and scubagoggles-X.Y.Z-py3-none-any.whl files
+- [ ] Verify that the GitHub release contains scubagoggles-oscal-baselines-vX.Y.Z.zip
 - [ ] Verify the [`Publish ScubaGoggles to PyPI`](https://github.com/cisagov/ScubaGoggles/actions/workflows/publish_to_pypi.yml) workflow is triggered after publishing the GitHub release
 - [ ] Verify the release is displayed on the cisagov [pypi.org](https://pypi.org/user/cisagov/) page
