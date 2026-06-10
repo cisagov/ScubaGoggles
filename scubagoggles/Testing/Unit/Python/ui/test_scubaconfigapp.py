@@ -1101,19 +1101,19 @@ class TestScubaConfig:
         render_form = mocker.Mock()
         render_summary = mocker.Mock()
         pre_render = mocker.Mock() if pre_render_function else None
-        policies = {"GWS.TEST.1.1": {"rationale": "Already configured"}}
+        _POLICIES = {"GWS.TEST.1.1": {"rationale": "Already configured"}}
 
         session_state_mock = mocker.Mock()
         session_state_mock.config_data = {
             "baselines": selected_baselines,
-            argument_dictionary["config_key"]: policies,
+            argument_dictionary["config_key"]: _POLICIES,
         }
         mocker.patch("streamlit.session_state", session_state_mock)
 
         expander_mock = mocker.MagicMock()
         mocker.patch("streamlit.expander", return_value=expander_mock)
         mocker.patch("streamlit.markdown")
-        mocker.patch("streamlit.divider")
+        st_divider = mocker.patch("streamlit.divider")
         st_warning = mocker.patch("streamlit.warning")
         st_info = mocker.patch("streamlit.info")
 
@@ -1151,27 +1151,45 @@ class TestScubaConfig:
             container_mock.warning.assert_called_once()
             st_warning.assert_not_called()
             st_info.assert_not_called()
+            st_divider.assert_not_called()
         elif not available_policies:
             st_warning.assert_called_once()
             container_mock.warning.assert_not_called()
             st_info.assert_not_called()
+            st_divider.assert_not_called()
         elif not selected_baseline_policies:
             st_info.assert_called_once_with(
                 "\u2139\ufe0f No policies available for selected products",
             )
             container_mock.warning.assert_not_called()
             st_warning.assert_not_called()
+            st_divider.assert_not_called()
         else:
-            st_tabs.assert_called_once_with(list(selected_baseline_policies.keys()))
-            assert render_policy_list.call_count == num_baseline_baseline_tabs
+            if num_baseline_baseline_tabs == 1:
+                st_tabs.assert_called_once_with(["Gmail"])
+            elif num_baseline_baseline_tabs == 2:
+                st_tabs.assert_called_once_with(["Gmail", "Drive"])
+            
             p_list_args = {"config_key", "prefix", "configured_label", "add_button_label",
-                           "config_noun", "field_map", "date_fields", "render_form"}
-
-            for baseline_name, baseline_policies in selected_baseline_policies.items():
+                           "config_noun", "field_map", "date_fields"}
+            if num_baseline_baseline_tabs > 0:
                 render_policy_list_args_ = {k: v for k, v in argument_dictionary.items() if k in p_list_args}
-                render_policy_list_args_["baseline_name"] = baseline_name
-                render_policy_list_args_["baseline_policies"] = baseline_policies
-                render_policy_list_args_["policies"] = policies
-                render_policy_list.assert_any_call(**render_policy_list_args_)
-            #forgot st.divider() check
-        render_summary.assert_called_once_with(policies)
+                render_policy_list_args_["render_form"] = render_form
+                render_policy_list.assert_any_call(
+                    "Gmail",
+                    {"GWS.GMAIL.1.1": "Disable POP and IMAP access"},
+                    _POLICIES,
+                    **render_policy_list_args_,
+                )
+            if num_baseline_baseline_tabs == 2:
+                render_policy_list_args_ = {k: v for k, v in argument_dictionary.items() if k in p_list_args}
+                render_policy_list_args_["render_form"] = render_form
+                render_policy_list.assert_any_call(
+                    "Drive",
+                    {"GWS.DRIVE.1.1": "Restrict external sharing"},
+                    _POLICIES,
+                    **render_policy_list_args_,
+                )
+            assert render_policy_list.call_count == num_baseline_baseline_tabs
+            st_divider.assert_called_once_with()
+        render_summary.assert_called_once_with(_POLICIES)
