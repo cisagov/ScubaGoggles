@@ -996,9 +996,7 @@ class TestScubaConfig:
             ),
             # config_key missing from empty existing_data; None is returned.
             (
-                {},
-                "auditdate",
-                None,
+                {}, "auditdate", None
             ),
         ],
     )
@@ -1019,9 +1017,7 @@ class TestScubaConfig:
             # Empty YAML string has nothing to convert.
             ("", "baselines", ""),
             # Single-item block list converts to flow style.
-            (
-                "baselines:\n- gmail\n", "baselines", "baselines: [gmail]\n",
-            ),
+            ("baselines:\n- gmail\n", "baselines", "baselines: [gmail]\n"),
             # Multi-item block list converts to flow style.
             (
                 "baselines:\n- gmail\n- drive\n- calendar\n",
@@ -1045,42 +1041,30 @@ class TestScubaConfig:
         [
             # No baselines selected; no policy tabs are rendered.
             (
-                False,
-                {},
-                [],
+                False, {}, [],
                 {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
                 0,
             ),
             # Pre-render runs independently before the no-baselines branch.
             (
-                True,
-                {},
-                [],
+                True, {}, [],
                 {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
                 0,
             ),
             # Baselines selected, but baseline policy data is unavailable.
             (
-                False,
-                {},
-                ["gmail"],
-                {},
-                0,
+                False, {}, ["gmail"], {}, 0,
             ),
             # Baselines and policy data exist, but selected baselines have no policies.
             (
-                False,
-                {},
-                ["gmail"],
+                False, {}, ["gmail"],
                 {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
                 0,
             ),
             # One selected baseline with policies renders one baseline tab.
             (
-                False,
-                {"Gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
-                ["gmail"],
-                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                False, {"Gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                ["gmail"], {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}}, 
                 1,
             ),
             # Multiple selected baselines render matching tabs without pre-render.
@@ -1103,16 +1087,16 @@ class TestScubaConfig:
             self, mocker, pre_render_function, selected_baseline_policies,
             selected_baselines, available_policies, num_baseline_baseline_tabs):
         """Tests policy config tab branch rendering."""
-        config_key = "omitpolicy"
-        prefix = "omit"
-        title = "Omit Policies"
-        help_content = "Help content"
-        description = "Description"
-        configured_label = "Omitted"
-        add_button_label = "Add Omission"
-        config_noun = "Omission"
-        field_map = {"rationale": "rationale", "expiration": "expiration"}
-        date_fields = {"expiration"}
+        argument_dictionary = {'config_key': "omitpolicy",
+        'prefix': "omit",
+        'title': "Omit Policies",
+        'help_content': "Help content",
+        'description': "Description",
+        'configured_label': "Omitted",
+        'add_button_label': "Add Omission",
+        'config_noun': "Omission",
+        'field_map': {"rationale": "rationale", "expiration": "expiration"},
+        'date_fields': {"expiration"}}
 
         render_form = mocker.Mock()
         render_summary = mocker.Mock()
@@ -1122,7 +1106,7 @@ class TestScubaConfig:
         session_state_mock = mocker.Mock()
         session_state_mock.config_data = {
             "baselines": selected_baselines,
-            config_key: policies,
+            argument_dictionary["config_key"]: policies,
         }
         mocker.patch("streamlit.session_state", session_state_mock)
 
@@ -1148,20 +1132,13 @@ class TestScubaConfig:
         )
         render_policy_list = mocker.patch.object(app, "_render_baseline_policy_list")
 
+        # render policy arguments
+        render_policy_list_arguments = argument_dictionary.copy()
+        render_policy_list_arguments["render_form"] = render_form
+        render_policy_list_arguments["render_summary"] = render_summary
+        render_policy_list_arguments["pre_render"] = pre_render
         app._render_policy_config_tab(
-            config_key=config_key,
-            prefix=prefix,
-            title=title,
-            help_content=help_content,
-            description=description,
-            configured_label=configured_label,
-            add_button_label=add_button_label,
-            config_noun=config_noun,
-            field_map=field_map,
-            date_fields=date_fields,
-            render_form=render_form,
-            render_summary=render_summary,
-            pre_render=pre_render,
+            **render_policy_list_arguments
         )
 
         if pre_render_function:
@@ -1187,20 +1164,14 @@ class TestScubaConfig:
         else:
             st_tabs.assert_called_once_with(list(selected_baseline_policies.keys()))
             assert render_policy_list.call_count == num_baseline_baseline_tabs
-            for baseline_name, baseline_policies in selected_baseline_policies.items():
-                render_policy_list.assert_any_call(
-                    baseline_name,
-                    baseline_policies,
-                    policies,
-                    config_key=config_key,
-                    prefix=prefix,
-                    configured_label=configured_label,
-                    add_button_label=add_button_label,
-                    config_noun=config_noun,
-                    field_map=field_map,
-                    date_fields=date_fields,
-                    render_form=render_form,
-                )
-            #forgot st.divider() check
+            p_list_args = {"config_key", "prefix", "configured_label", "add_button_label",
+                           "config_noun", "field_map", "date_fields", "render_form"}
 
+            for baseline_name, baseline_policies in selected_baseline_policies.items():
+                render_policy_list_args_ = {k: v for k, v in argument_dictionary.items() if k in p_list_args}
+                render_policy_list_args_["baseline_name"] = baseline_name
+                render_policy_list_args_["baseline_policies"] = baseline_policies
+                render_policy_list_args_["policies"] = policies
+                render_policy_list.assert_any_call(**render_policy_list_args_)
+            #forgot st.divider() check
         render_summary.assert_called_once_with(policies)
