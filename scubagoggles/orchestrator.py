@@ -549,7 +549,7 @@ class Orchestrator:
         unsuccessful_calls = set(settings_data['unsuccessful_calls'])
         missing_policies = set(settings_data['missing_policies'])
         report_uuid = settings_data['report_uuid']
-        
+
         # Extract OrgName and OrgUnitName from args
         org_name = self.args_dict.get('OrgName')
         org_unit_name = self.args_dict.get('OrgUnitName')
