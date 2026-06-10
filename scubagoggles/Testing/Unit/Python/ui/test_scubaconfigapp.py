@@ -848,7 +848,6 @@ class TestScubaConfig:
 
         assert app._get_selected_baseline_policies() == expected_return_value
 
-
     @pytest.mark.parametrize(
         "session_data,key,type_error_on_parse,expected_session_state",
         [
@@ -1039,3 +1038,169 @@ class TestScubaConfig:
         )
         assert result == expected_flow
 
+
+    @pytest.mark.parametrize(
+        "pre_render_function,selected_baseline_policies,selected_baselines,"
+        "available_policies,num_baseline_baseline_tabs",
+        [
+            # No baselines selected; no policy tabs are rendered.
+            (
+                False,
+                {},
+                [],
+                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                0,
+            ),
+            # Pre-render runs independently before the no-baselines branch.
+            (
+                True,
+                {},
+                [],
+                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                0,
+            ),
+            # Baselines selected, but baseline policy data is unavailable.
+            (
+                False,
+                {},
+                ["gmail"],
+                {},
+                0,
+            ),
+            # Baselines and policy data exist, but selected baselines have no policies.
+            (
+                False,
+                {},
+                ["gmail"],
+                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                0,
+            ),
+            # One selected baseline with policies renders one baseline tab.
+            (
+                False,
+                {"Gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                ["gmail"],
+                {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
+                1,
+            ),
+            # Multiple selected baselines render matching tabs without pre-render.
+            (
+                False,
+                {
+                    "Gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"},
+                    "Drive": {"GWS.DRIVE.1.1": "Restrict external sharing"},
+                },
+                ["gmail", "drive"],
+                {
+                    "gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"},
+                    "drive": {"GWS.DRIVE.1.1": "Restrict external sharing"},
+                },
+                2,
+            ),
+        ],
+    )
+    def test_render_policy_config_tab(
+            self, mocker, pre_render_function, selected_baseline_policies,
+            selected_baselines, available_policies, num_baseline_baseline_tabs):
+        """Tests policy config tab branch rendering."""
+        config_key = "omitpolicy"
+        prefix = "omit"
+        title = "Omit Policies"
+        help_content = "Help content"
+        description = "Description"
+        configured_label = "Omitted"
+        add_button_label = "Add Omission"
+        config_noun = "Omission"
+        field_map = {"rationale": "rationale", "expiration": "expiration"}
+        date_fields = {"expiration"}
+
+        render_form = mocker.Mock()
+        render_summary = mocker.Mock()
+        pre_render = mocker.Mock() if pre_render_function else None
+        policies = {"GWS.TEST.1.1": {"rationale": "Already configured"}}
+
+        session_state_mock = mocker.Mock()
+        session_state_mock.config_data = {
+            "baselines": selected_baselines,
+            config_key: policies,
+        }
+        mocker.patch("streamlit.session_state", session_state_mock)
+
+        expander_mock = mocker.MagicMock()
+        mocker.patch("streamlit.expander", return_value=expander_mock)
+        mocker.patch("streamlit.markdown")
+        mocker.patch("streamlit.divider")
+        st_warning = mocker.patch("streamlit.warning")
+        st_info = mocker.patch("streamlit.info")
+
+        container_mock = mocker.Mock()
+        st_container = mocker.patch("streamlit.container", return_value=container_mock)
+
+        tab_mocks = [mocker.MagicMock() for _ in range(num_baseline_baseline_tabs)]
+        st_tabs = mocker.patch("streamlit.tabs", return_value=tab_mocks)
+
+        app = scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
+        app.available_policies = available_policies
+        mocker.patch.object(
+            app,
+            "_get_selected_baseline_policies",
+            return_value=selected_baseline_policies,
+        )
+        render_policy_list = mocker.patch.object(app, "_render_baseline_policy_list")
+
+        app._render_policy_config_tab(
+            config_key=config_key,
+            prefix=prefix,
+            title=title,
+            help_content=help_content,
+            description=description,
+            configured_label=configured_label,
+            add_button_label=add_button_label,
+            config_noun=config_noun,
+            field_map=field_map,
+            date_fields=date_fields,
+            render_form=render_form,
+            render_summary=render_summary,
+            pre_render=pre_render,
+        )
+
+        if pre_render_function:
+            pre_render.assert_called_once_with()
+        else:
+            assert pre_render is None
+
+        if not selected_baselines:
+            st_container.assert_called_once_with(border=True)
+            container_mock.warning.assert_called_once()
+            st_warning.assert_not_called()
+            st_info.assert_not_called()
+        elif not available_policies:
+            st_warning.assert_called_once()
+            container_mock.warning.assert_not_called()
+            st_info.assert_not_called()
+        elif not selected_baseline_policies:
+            st_info.assert_called_once_with(
+                "\u2139\ufe0f No policies available for selected products",
+            )
+            container_mock.warning.assert_not_called()
+            st_warning.assert_not_called()
+        else:
+            st_tabs.assert_called_once_with(list(selected_baseline_policies.keys()))
+            assert render_policy_list.call_count == num_baseline_baseline_tabs
+            for baseline_name, baseline_policies in selected_baseline_policies.items():
+                render_policy_list.assert_any_call(
+                    baseline_name,
+                    baseline_policies,
+                    policies,
+                    config_key=config_key,
+                    prefix=prefix,
+                    configured_label=configured_label,
+                    add_button_label=add_button_label,
+                    config_noun=config_noun,
+                    field_map=field_map,
+                    date_fields=date_fields,
+                    render_form=render_form,
+                )
+            #forgot st.divider() check
+
+        render_summary.assert_called_once_with(policies)
