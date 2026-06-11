@@ -241,6 +241,22 @@ class TestScubaConfig:
         
         assert mock_session_state == expected
 
+    @pytest.mark.parametrize('config_dict, expected', [
+        (
+            {'customerid': 'User123', 'other_information': 'not imported'},
+            {'customerid': 'User123'},
+        ),
+        (
+            {'username': 'user123', 'other_information': 'not imported'},
+            {},
+        ),
+    ])
+    def test_import_auth_fields(self, mocker, config_dict, expected):
+        """Tests that only (all) authentication fields are imported into config_data."""
+        session_state_mock = mocker.patch("streamlit.session_state")
+        session_state_mock.config_data = {}
+        scubaconfigapp.ScubaConfigApp._import_auth_fields(config_dict)
+        assert session_state_mock.config_data == expected
 
     @pytest.mark.parametrize('config, baseline_info, ' \
     'valid_baselines, invalid_baselines, msg', [
