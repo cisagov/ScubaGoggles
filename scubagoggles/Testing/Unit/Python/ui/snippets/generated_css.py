@@ -805,8 +805,3 @@ header {display: none !important;}
 }
 </style>
 """
-
-EXPECTED_CSS = {
-    True: FORCED_DARK_CSS,
-    False: AUTO_DARK_CSS,
-}

@@ -125,20 +125,19 @@ class TestScubaConfig:
         """Fixture providing path to generated CSS expected output."""
         return Path(__file__).parent / 'snippets' / 'generated_css.py'
 
-    @pytest.mark.parametrize('dark, env', [
-        (True, "1"),
-        (False, ""),
+    @pytest.mark.parametrize('dark, env, css_name', [
+        (True, "1", "FORCED_DARK_CSS"),
+        (False, "", "AUTO_DARK_CSS"),
     ])
-    def test_generate_css(self, monkeypatch, generate_css_py, dark, env):
+    def test_generate_css(self, monkeypatch, generate_css_py, dark, env, css_name):
         """
         Tests that _generate_css either forces dark CSS or wraps it in the
         browser dark-mode media query, depending on the environment.
         """
         monkeypatch.setenv("SCUBAGOGGLES_UI_DARK", env)
 
-        namespace = {}
-        exec(generate_css_py.read_text(encoding="utf-8"), namespace)
-        expected_css = namespace["EXPECTED_CSS"][dark]
+        expected_css = generate_css_py.read_text(encoding="utf-8").split(
+            f'{css_name} = """',1,)[1].split('"""', 1)[0]
 
         app = scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
         css = app._generate_css()
