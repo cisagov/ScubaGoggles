@@ -1047,6 +1047,56 @@ class TestScubaConfig:
         )
         assert result == expected_value
 
+    @pytest.mark.parametrize('baselines,get_baseline_info_mock,expected_state',
+        [
+            # baselines == get_baseline_info_mock
+            (
+                ['chat', 'calendar'],
+                ['chat', 'calendar'],
+                {'baseline_chat': True, 'baseline_calendar': True},
+            ),
+            # baselines is a proper subset of get_baseline_info_mock
+            (
+                ['chat'],
+                ['chat', 'calendar'],
+                {'baseline_chat': True, 'baseline_calendar': False},
+            ),
+            # get_baseline_info_mock is a proper subset of baselines
+            (
+                ['chat', 'calendar', 'groups'],
+                ['chat', 'calendar'],
+                {'baseline_chat': True, 'baseline_calendar': True},
+            ),
+            # intersection is non-empty, but neither is a subset of the other
+            (
+                ['chat', 'groups'],
+                ['chat', 'calendar'],
+                {'baseline_chat': True, 'baseline_calendar': False},
+            ),
+            # intersection is empty
+            (
+                ['groups', 'drive'],
+                ['chat', 'calendar'],
+                {'baseline_chat': False, 'baseline_calendar': False},
+            ),
+        ]
+    )
+    def test_sync_baseline_checkboxes(
+            self, mocker, baselines, get_baseline_info_mock, expected_state):
+        """Tests selected baselines are synchronized to checkbox session keys."""
+        session_state_mock = {}
+        mocker.patch("streamlit.session_state", session_state_mock)
+
+        app = scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
+        mocker.patch.object(
+            app,
+            "get_baseline_info",
+            return_value=get_baseline_info_mock,
+        )
+
+        app._sync_baseline_checkboxes(baselines)
+
+        assert session_state_mock == expected_state
 
     @pytest.mark.parametrize(
         "yaml_str,key,expected_flow",
@@ -1232,3 +1282,140 @@ class TestScubaConfig:
             assert render_policy_list.call_count == num_baseline_baseline_tabs
             st_divider.assert_called_once_with()
         render_summary.assert_called_once_with(_POLICIES)
+
+
+    @pytest.mark.parametrize('clean_config, errors', [
+        ({'baselines': ['gmail']}, ["Organization Name is required."]),
+        ({'baselines': ['gmail']}, []),
+        ({}, []),
+    ])
+    def test_render_preview_tab(self, mocker, clean_config, errors):
+        """Tests preview rendering with errors, without errors, and with no config."""
+        st_code = mocker.patch("streamlit.code")
+        mocker.patch("streamlit.markdown")
+        mocker.patch("streamlit.subheader")
+        st_warning = mocker.patch("streamlit.warning")
+
+        app = scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
+        mocker.patch.object(app, "generate_clean_config", return_value=clean_config)
+        render_yaml = mocker.patch.object(app, "_render_yaml", return_value="yaml_config")
+        yaml_array_to_flow = mocker.patch.object(
+            app,
+            "_yaml_array_to_flow",
+            side_effect=lambda yaml_config, _key: yaml_config,
+        )
+        validate_before_save = mocker.patch.object(
+            app,
+            "_validate_before_save",
+            return_value=errors,
+        )
+        show_validation_errors = mocker.patch.object(app, "_show_validation_errors")
+        render_save_button = mocker.patch.object(app, "_render_save_button")
+
+        app.render_preview_tab()
+
+        if clean_config:
+            render_yaml.assert_called_once_with(clean_config)
+            assert yaml_array_to_flow.call_count == 4
+            st_code.assert_called_once_with("yaml_config", language='yaml')
+            validate_before_save.assert_called_once_with()
+            st_warning.assert_not_called()
+            if errors:
+                show_validation_errors.assert_called_once_with(errors)
+                render_save_button.assert_not_called()
+            else:
+                show_validation_errors.assert_not_called()
+                render_save_button.assert_called_once_with("yaml_config")
+        else:
+            render_yaml.assert_not_called()
+            yaml_array_to_flow.assert_not_called()
+            st_code.assert_not_called()
+            validate_before_save.assert_not_called()
+            show_validation_errors.assert_not_called()
+            render_save_button.assert_not_called()
+            st_warning.assert_called_once_with(
+                "Please fill in required fields in the Main tab"
+            )
+
+    @pytest.mark.parametrize('st_config_data, expected_clean_config', [
+        (
+            {'miscellaneous': 'misc_value', 'unknownsetting': 'unknown'},
+            {},
+        ),
+        (
+            {
+                'subjectemail': 'auditor@scubagoggles.example',
+                'baselines': {'chat', 'drive'},
+            },
+            {
+                'subjectemail': 'auditor@scubagoggles.example',
+                'baselines': {'chat', 'drive'},
+            },
+        ),
+        (
+            {'outputpath': './'},
+            {},
+        ),
+        (
+            {'outputpath': 'C:/ScubaGoggles/output'},
+            {'outputpath': 'C:/ScubaGoggles/output'},
+        ),
+        (
+            {'darkmode': "abc"},
+            {'darkmode': True},
+        ),
+        (
+            {'darkmode': ""},
+            {},
+        ),
+        # skipdoh is not tested independently because it has the same
+        # truthy/falsy output behavior as darkmode.
+        (
+            {
+                'outjsonfilename': 'ScubaResults',
+                'accesstoken': "Access123",
+            },
+            {
+                'outjsonfilename': 'ScubaResults',
+                'accesstoken': "Access123",
+            },
+        ),
+        (
+            {'numberofuuidcharacterstotruncate': 18},
+            {},
+        ),
+        (
+            {'numberofuuidcharacterstotruncate': 17},
+            {'numberofuuidcharacterstotruncate': 17},
+        ),
+        (
+            {
+                'miscellaneous': 'misc_value',
+                'description': "(Description)",
+                'skipdoh': "okay",
+                'outputpath': './',
+            },
+            {
+                'description': "(Description)",
+                'skipdoh': True,
+            },
+        ),
+        (
+            {
+                'numberofuuidcharacterstotruncate': 10,
+                'outputpath': 'C:/ScubaGoggles/output',
+                'regopath': 'C:/ScubaGoggles/rego',
+            },
+            {
+                'numberofuuidcharacterstotruncate': 10,
+                'outputpath': 'C:/ScubaGoggles/output',
+                'regopath': 'C:/ScubaGoggles/rego',
+            },
+        ),
+    ])
+    def test_generate_clean_config(self, mocker, st_config_data, expected_clean_config):
+        """Tests that generate_clean_config emits only meaningful config values."""
+        session_state_mock = mocker.patch("streamlit.session_state")
+        session_state_mock.config_data = st_config_data
+        app = scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
+        assert app.generate_clean_config() == expected_clean_config
