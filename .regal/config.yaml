@@ -19,6 +19,10 @@ rules:
           targets:
             - package
   idiomatic:
+    directory-package-mismatch:
+      # The project uses a flat Rego/ directory regardless of package name.
+      # Restructuring to mirror packages would be a large breaking change.
+      level: ignore
     no-defined-entrypoint:
       # This is a good practice for documentation, and
       # compilation to Wasm/IR, but not a requirement.
