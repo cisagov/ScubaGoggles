@@ -550,6 +550,10 @@ class Orchestrator:
         missing_policies = set(settings_data['missing_policies'])
         report_uuid = settings_data['report_uuid']
 
+        # Extract OrgName and OrgUnitName from args
+        org_name = self.args_dict.get('OrgName')
+        org_unit_name = self.args_dict.get('OrgUnitName')
+
         # Get the DNS data, if applicable
         dns_logs = {}
         dns_logs['spf'] = settings_data.get('spf_records')
@@ -596,7 +600,9 @@ class Orchestrator:
             'Tool':  'ScubaGoggles',
             'ToolVersion':  Version.number,
             'TimestampZulu': timestamp_zulu,
-            'ReportUUID': report_uuid
+            'ReportUUID': report_uuid,
+            'OrgName': org_name,
+            'OrgUnitName': org_unit_name
         }
 
         total_output.update({'MetaData': report_metadata})
