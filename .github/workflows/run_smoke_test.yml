@@ -22,7 +22,7 @@ on:
         description: "Choose operating system(s), format must be an array of strings:"
         required: true
         type: string
-        default: "['windows-latest', 'macos-latest', 'ubuntu-latest']"
+        default: "['windows-2025-vs2026', 'macos-latest', 'ubuntu-latest']"
       python-version:
         description: "Choose python version(s), format must be an array of strings:"
         required: true
@@ -52,7 +52,7 @@ jobs:
             opaversion_val="${{ inputs.opa-version }}"
           # Default values for other events
           else
-            operatingsystem_val="['windows-latest', 'macos-latest', 'ubuntu-latest']"
+            operatingsystem_val="['windows-2025-vs2026', 'macos-latest', 'ubuntu-latest']"
             pythonversion_val="['3.10', '3.14']"
             opaversion_val="latest"
           fi
@@ -91,8 +91,8 @@ jobs:
           name: "credentials.json"
           json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
 
-      - name: Setup Dependencies (windows-latest)
-        if: ${{ matrix.operating-system == 'windows-latest' }}
+      - name: Setup Dependencies (windows-2025-vs2026)
+        if: ${{ matrix.operating-system == 'windows-2025-vs2026' }}
         uses: ./.github/actions/setup-dependencies-windows
         with:
           operating-system: "windows"
@@ -132,8 +132,8 @@ jobs:
           path: /Users/runner/scubagoggles
           key: ${{ runner.os }}-baseline-${{ steps.mac-path.outputs.cachepath }}
 
-      - name: Run ScubaGoggles and check for correct output (windows-latest)
-        if: ${{ matrix.operating-system == 'windows-latest' }}
+      - name: Run ScubaGoggles and check for correct output (windows-2025-vs2026)
+        if: ${{ matrix.operating-system == 'windows-2025-vs2026' }}
         id: windows-path
         run: |
           & ${{ env.SCUBAGOGGLES_ACTIVATE_VENV }}
@@ -142,8 +142,8 @@ jobs:
           $FOUNDWINDOWS
           echo "cachepath=$FOUNDWINDOWS" >> $env:GITHUB_OUTPUT
 
-      - name: Cache the output directory (windows-latest)
-        if: ${{ matrix.operating-system == 'windows-latest' }}
+      - name: Cache the output directory (windows-2025-vs2026)
+        if: ${{ matrix.operating-system == 'windows-2025-vs2026' }}
         uses: actions/cache@v5
         with:
           path: C:\Users\runneradmin\scubagoggles
