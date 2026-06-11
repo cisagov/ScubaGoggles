@@ -39,7 +39,13 @@ class TestMarkdownParser:
 
         id_pattern = re.compile(r"^GWS\.GMAIL\.\d+\.\d+v\d+(?:\.\d+)*$")
         color_pattern = re.compile(r"^#[0-9A-F]{6}$")
-        valid_indicator_names = set(MarkdownParser._normalized_indicators.values())
+        valid_indicator_names = {
+            "Automated Check",
+            "BOD 25-01 Requirement",
+            "Configurable",
+            "Log-Based Check",
+            "Manual",
+        }
 
         found_bod_indicator = False
 
