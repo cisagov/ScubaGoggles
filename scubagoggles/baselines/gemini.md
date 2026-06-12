@@ -184,12 +184,12 @@ This section covers the Gemini conversation sharing.
 ### Policies
 
 #### GWS.GEMINI.4.1v1
-Conversation sharing SHALL be Disabled.
+Conversation sharing SHALL be disabled.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini41v1-instructions)
 
 - _Rationale:_ Users engaged in Gemini conversations may inadvertently share sensitive or private information. Disabling conversation sharing may prevent sensitive data from being shared with unauthorized individuals.
-- _Last modified:_ April 2026
+- _Last modified:_ June 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)a
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
