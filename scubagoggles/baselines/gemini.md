@@ -184,12 +184,12 @@ This section covers the Gemini conversation sharing.
 ### Policies
 
 #### GWS.GEMINI.4.1v1
-Conversation sharing SHALL be set to OFF.
+Conversation sharing SHALL be disabled.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini41v1-instructions)
 
 - _Rationale:_ Users engaged in Gemini conversations may inadvertently share sensitive or private information. Disabling conversation sharing may prevent sensitive data from being shared with unauthorized individuals.
-- _Last modified:_ April 2026
+- _Last modified:_ June 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)a
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -207,7 +207,8 @@ Conversation sharing SHALL be set to OFF.
 #### GWS.GEMINI.4.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini App**.
-3.  Select **Sharing**
-4.  Ensure **Allow conversation sharing via link** is set to OFF.
-5.  Select **Save**.
+3.  Select **Sharing**.
+4.  Select **Conversation Sharing**
+5.  Select **Disable conversation sharing**.
+6.  Select **Save**.
 
