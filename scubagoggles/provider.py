@@ -115,18 +115,30 @@ SELECTORS = ['google', 'selector1', 'selector2']
 # Source: https://developers.google.com/workspace/admin/licensing/v1/how-tos/products
 KNOWN_SKUS = [
     # Core Google Workspace editions
-    {'product_id': 'Google-Apps', 'sku_id': '1010020027', 'name': 'Google Workspace Business Starter'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020028', 'name': 'Google Workspace Business Standard'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020025', 'name': 'Google Workspace Business Plus'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020029', 'name': 'Google Workspace Enterprise Starter'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020026', 'name': 'Google Workspace Enterprise Standard'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020020', 'name': 'Google Workspace Enterprise Plus'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010060001', 'name': 'Google Workspace Essentials'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010060003', 'name': 'Google Workspace Enterprise Essentials'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010060005', 'name': 'Google Workspace Enterprise Essentials Plus'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020030', 'name': 'Google Workspace Frontline Starter'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020031', 'name': 'Google Workspace Frontline Standard'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020034', 'name': 'Google Workspace Frontline Plus'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020027',
+     'name': 'Google Workspace Business Starter'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020028',
+     'name': 'Google Workspace Business Standard'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020025',
+     'name': 'Google Workspace Business Plus'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020029',
+     'name': 'Google Workspace Enterprise Starter'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020026',
+     'name': 'Google Workspace Enterprise Standard'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020020',
+     'name': 'Google Workspace Enterprise Plus'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010060001',
+     'name': 'Google Workspace Essentials'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010060003',
+     'name': 'Google Workspace Enterprise Essentials'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010060005',
+     'name': 'Google Workspace Enterprise Essentials Plus'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020030',
+     'name': 'Google Workspace Frontline Starter'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020031',
+     'name': 'Google Workspace Frontline Standard'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020034',
+     'name': 'Google Workspace Frontline Plus'},
     # Gemini add-ons
     {'product_id': '101047', 'sku_id': '1010470001', 'name': 'Gemini Enterprise'},
     {'product_id': '101047', 'sku_id': '1010470002', 'name': 'Gemini Labs'},
@@ -986,10 +998,12 @@ class Provider:
                         }
                         if page_token:
                             kwargs['pageToken'] = page_token
-                        response = (licensing_service
-                                    .licenseAssignments()
-                                    .listForProductAndSku(**kwargs)
-                                    .execute())
+                        response = (
+                            licensing_service  # pylint: disable=no-member
+                            .licenseAssignments()
+                            .listForProductAndSku(**kwargs)
+                            .execute()
+                        )
                         count += len(response.get('items', []))
                         page_token = response.get('nextPageToken')
                         if not page_token:
