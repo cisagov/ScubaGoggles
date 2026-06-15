@@ -111,6 +111,44 @@ EVENTS = {
 
 SELECTORS = ['google', 'selector1', 'selector2']
 
+# All known Google Workspace product/SKU combinations queried by get_license_data().
+# Source: https://developers.google.com/workspace/admin/licensing/v1/how-tos/products
+KNOWN_SKUS = [
+    # Core Google Workspace editions
+    {'product_id': 'Google-Apps', 'sku_id': '1010020027', 'name': 'Google Workspace Business Starter'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020028', 'name': 'Google Workspace Business Standard'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020025', 'name': 'Google Workspace Business Plus'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020029', 'name': 'Google Workspace Enterprise Starter'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020026', 'name': 'Google Workspace Enterprise Standard'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020020', 'name': 'Google Workspace Enterprise Plus'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010060001', 'name': 'Google Workspace Essentials'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010060003', 'name': 'Google Workspace Enterprise Essentials'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010060005', 'name': 'Google Workspace Enterprise Essentials Plus'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020030', 'name': 'Google Workspace Frontline Starter'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020031', 'name': 'Google Workspace Frontline Standard'},
+    {'product_id': 'Google-Apps', 'sku_id': '1010020034', 'name': 'Google Workspace Frontline Plus'},
+    # Gemini add-ons
+    {'product_id': '101047', 'sku_id': '1010470001', 'name': 'Gemini Enterprise'},
+    {'product_id': '101047', 'sku_id': '1010470002', 'name': 'Gemini Labs'},
+    {'product_id': '101047', 'sku_id': '1010470003', 'name': 'Gemini Business'},
+    {'product_id': '101047', 'sku_id': '1010470006', 'name': 'Gemini Security'},
+    {'product_id': '101047', 'sku_id': '1010470007', 'name': 'Gemini Meet'},
+    # Cloud Identity
+    {'product_id': '101001', 'sku_id': '1010010001', 'name': 'Cloud Identity Free'},
+    {'product_id': '101005', 'sku_id': '1010050001', 'name': 'Cloud Identity Premium'},
+    # Assured Controls
+    {'product_id': '101039', 'sku_id': '1010390001', 'name': 'Assured Controls'},
+    {'product_id': '101039', 'sku_id': '1010390002', 'name': 'Assured Controls Plus'},
+    # Google Vault
+    {'product_id': 'Google-Vault', 'sku_id': 'Google-Vault', 'name': 'Google Vault'},
+    # Google Voice
+    {'product_id': '101033', 'sku_id': '1010330003', 'name': 'Google Voice Starter'},
+    {'product_id': '101033', 'sku_id': '1010330004', 'name': 'Google Voice Standard'},
+    {'product_id': '101033', 'sku_id': '1010330002', 'name': 'Google Voice Premier'},
+    # Chrome Enterprise
+    {'product_id': '101040', 'sku_id': '1010400001', 'name': 'Chrome Enterprise Premium'},
+]
+
 # Privilege names (the values of role.rolePrivileges[*].privilegeName
 # returned by directory/v1/roles/list) that indicate a "highly privileged"
 # admin role for the purposes of GWS.COMMONCONTROLS.6.  Any custom role
@@ -904,6 +942,86 @@ class Provider:
             self._unsuccessful_calls.add(ApiReference.GET_GROUP.value)
             return {'group_settings': []}
 
+    def get_license_data(self) -> dict:
+        """
+        Gets license assignment counts for each known Google Workspace SKU
+        using the Enterprise License Manager API (free, no reseller access required).
+
+        Scope required: https://www.googleapis.com/auth/apps.licensing
+
+        Returns a dict with key 'license_data' containing a list of subscription
+        records, one per active SKU (i.e., SKUs with at least one assigned user).
+        Each record has: product_name, sku_id, product_id, status, assigned.
+
+        Note: Total seat counts and expiration dates are only available via the
+        Google Reseller API and are not included here.
+        """
+        api_call = ApiReference.LIST_LICENSE_ASSIGNMENTS.value
+        subscriptions = []
+
+        primary_domain = None
+        for domain in self.list_domains():
+            if domain.get('isPrimary'):
+                primary_domain = domain['domainName']
+                break
+        if not primary_domain:
+            primary_domain = self._customer_id
+
+        try:
+            licensing_service = build('licensing', 'v1',
+                                      cache_discovery=False,
+                                      credentials=self._credentials)
+
+            any_success = False
+            for sku in KNOWN_SKUS:
+                try:
+                    count = 0
+                    page_token = None
+                    while True:
+                        kwargs = {
+                            'productId': sku['product_id'],
+                            'skuId': sku['sku_id'],
+                            'customerId': primary_domain,
+                            'maxResults': 1000,
+                        }
+                        if page_token:
+                            kwargs['pageToken'] = page_token
+                        response = (licensing_service
+                                    .licenseAssignments()
+                                    .listForProductAndSku(**kwargs)
+                                    .execute())
+                        count += len(response.get('items', []))
+                        page_token = response.get('nextPageToken')
+                        if not page_token:
+                            break
+
+                    any_success = True
+                    if count > 0:
+                        subscriptions.append({
+                            'product_name': sku['name'],
+                            'sku_id': sku['sku_id'],
+                            'product_id': sku['product_id'],
+                            'status': 'Active',
+                            'assigned': count,
+                        })
+                except Exception:
+                    pass
+
+            if any_success:
+                self._successful_calls.add(api_call)
+            else:
+                self._unsuccessful_calls.add(api_call)
+
+        except Exception as exc:
+            warnings.warn(
+                f'Exception thrown while getting license data; '
+                f'subscription table will be omitted: {exc}',
+                RuntimeWarning
+            )
+            self._unsuccessful_calls.add(api_call)
+
+        return {'license_data': subscriptions}
+
     def call_gws_providers(self, products: list, quiet) -> dict:
         """
         Calls the relevant GWS APIs to get the data we need for the baselines.
@@ -988,6 +1106,8 @@ class Provider:
                 product_to_items.update(self.get_privileged_users())
                 # add effective SSO assignment state (CC 6.1 API-based check)
                 product_to_items.update(self.get_inbound_sso_assignments())
+                # add license/subscription data for common controls report
+                product_to_items.update(self.get_license_data())
 
             product_to_items.update(self.get_group_settings())
 

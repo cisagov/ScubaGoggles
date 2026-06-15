@@ -229,7 +229,8 @@ def build_individual_report_html(*,
                                  main_report_name: str,
                                  tenant_name: str,
                                  tenant_domain: str,
-                                 tenant_id: str) -> tuple[str, list | None]:
+                                 tenant_id: str,
+                                 license_data: list | None = None) -> tuple[str, list | None]:
 
     """Build an individual baseline report HTML page and optional rules
     table data.
@@ -275,6 +276,9 @@ def build_individual_report_html(*,
     html = html.replace('{{METADATA}}', meta)
     html = html.replace('{{TABLES}}', ''.join(fragments))
 
+    license_table = _build_license_table(license_data)
+    html = html.replace('{{LICENSES}}', license_table)
+
     rules_table = _build_rules_table(rules_data)
     html = html.replace('{{RULES}}', rules_table)
 
@@ -313,6 +317,39 @@ def build_individual_report_html(*,
 
     html = html.replace('{{DNS_LOGS}}', log_html)
     return html, rules_table
+
+
+def _build_license_table(license_data: list | None) -> str:
+
+    """Build an HTML subscriptions table from the license data collected by
+    the Enterprise License Manager API.
+
+    :param list license_data: list of subscription dicts, each containing
+        product_name, status, and assigned.  None or empty list → returns ''.
+
+    :return: HTML fragment with the subscriptions table, or empty string.
+    :rtype: str
+    """
+
+    if not license_data:
+        return ''
+
+    rows = [
+        {
+            'Product Name': sub['product_name'],
+            'Status': sub['status'],
+            'Assigned Licenses': sub['assigned'],
+        }
+        for sub in license_data
+    ]
+
+    html_table = create_html_table(rows)
+    return (
+        '\n<hr>\n'
+        '<h2 id="subscriptions">Tenant Licensing Information</h2>\n'
+        + html_table
+        + '\n'
+    )
 
 
 def _build_rules_table(rules: dict) -> str:

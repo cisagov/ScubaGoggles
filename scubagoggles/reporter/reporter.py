@@ -47,7 +47,8 @@ class Reporter:
                  omissions: dict,
                  annotations: dict,
                  omit_ou: dict | None = None,
-                 progress_bar=None):
+                 progress_bar=None,
+                 license_data: list | None = None):
 
         """Reporter class initialization
         """
@@ -81,6 +82,7 @@ class Reporter:
         self.progress_bar = progress_bar
         self.rules_table = None
         self.annotated_failed_policies = {}
+        self._license_data = license_data or []
 
     @staticmethod
     def _get_test_result(test: dict) -> str:
@@ -712,6 +714,7 @@ class Reporter:
             tenant_name=self._tenant_name,
             tenant_domain=self._tenant_domain,
             tenant_id=self._tenant_id,
+            license_data=self._license_data if self._product == 'commoncontrols' else None,
         )
         self.rules_table = rules_table
         return html

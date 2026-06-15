@@ -547,6 +547,7 @@ class Orchestrator:
         tenant_name = tenant_info['topLevelOU']
         successful_calls = set(settings_data['successful_calls'])
         unsuccessful_calls = set(settings_data['unsuccessful_calls'])
+        license_data = settings_data.get('license_data', [])
         missing_policies = set(settings_data['missing_policies'])
         report_uuid = settings_data['report_uuid']
 
@@ -621,7 +622,8 @@ class Orchestrator:
                                 dns_logs,
                                 omissions,
                                 annotations,
-                                products_bar)
+                                products_bar,
+                                license_data=license_data)
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
                                                   outputpath,
