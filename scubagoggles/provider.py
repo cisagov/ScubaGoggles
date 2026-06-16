@@ -111,54 +111,21 @@ EVENTS = {
 
 SELECTORS = ['google', 'selector1', 'selector2']
 
-# All known Google Workspace product/SKU combinations queried by get_license_data().
+# Top-level Google Workspace product IDs queried by get_license_data().
+# The API returns skuId and skuName per user, so individual SKUs never need
+# to be listed here.  New SKUs within these products are discovered automatically.
 # Source: https://developers.google.com/workspace/admin/licensing/v1/how-tos/products
-KNOWN_SKUS = [
-    # Core Google Workspace editions
-    {'product_id': 'Google-Apps', 'sku_id': '1010020027',
-     'name': 'Google Workspace Business Starter'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020028',
-     'name': 'Google Workspace Business Standard'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020025',
-     'name': 'Google Workspace Business Plus'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020029',
-     'name': 'Google Workspace Enterprise Starter'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020026',
-     'name': 'Google Workspace Enterprise Standard'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020020',
-     'name': 'Google Workspace Enterprise Plus'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010060001',
-     'name': 'Google Workspace Essentials'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010060003',
-     'name': 'Google Workspace Enterprise Essentials'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010060005',
-     'name': 'Google Workspace Enterprise Essentials Plus'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020030',
-     'name': 'Google Workspace Frontline Starter'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020031',
-     'name': 'Google Workspace Frontline Standard'},
-    {'product_id': 'Google-Apps', 'sku_id': '1010020034',
-     'name': 'Google Workspace Frontline Plus'},
-    # Gemini add-ons
-    {'product_id': '101047', 'sku_id': '1010470001', 'name': 'Gemini Enterprise'},
-    {'product_id': '101047', 'sku_id': '1010470002', 'name': 'Gemini Labs'},
-    {'product_id': '101047', 'sku_id': '1010470003', 'name': 'Gemini Business'},
-    {'product_id': '101047', 'sku_id': '1010470006', 'name': 'Gemini Security'},
-    {'product_id': '101047', 'sku_id': '1010470007', 'name': 'Gemini Meet'},
-    # Cloud Identity
-    {'product_id': '101001', 'sku_id': '1010010001', 'name': 'Cloud Identity Free'},
-    {'product_id': '101005', 'sku_id': '1010050001', 'name': 'Cloud Identity Premium'},
-    # Assured Controls
-    {'product_id': '101039', 'sku_id': '1010390001', 'name': 'Assured Controls'},
-    {'product_id': '101039', 'sku_id': '1010390002', 'name': 'Assured Controls Plus'},
-    # Google Vault
-    {'product_id': 'Google-Vault', 'sku_id': 'Google-Vault', 'name': 'Google Vault'},
-    # Google Voice
-    {'product_id': '101033', 'sku_id': '1010330003', 'name': 'Google Voice Starter'},
-    {'product_id': '101033', 'sku_id': '1010330004', 'name': 'Google Voice Standard'},
-    {'product_id': '101033', 'sku_id': '1010330002', 'name': 'Google Voice Premier'},
-    # Chrome Enterprise
-    {'product_id': '101040', 'sku_id': '1010400001', 'name': 'Chrome Enterprise Premium'},
+KNOWN_PRODUCT_IDS = [
+    'Google-Apps',   # Core Workspace editions (Business, Enterprise, Frontline…)
+    '101047',        # Gemini add-ons
+    '101001',        # Cloud Identity Free
+    '101005',        # Cloud Identity Premium
+    '101039',        # Assured Controls / Assured Controls Plus
+    'Google-Vault',  # Google Vault
+    '101033',        # Google Voice
+    '101040',        # Chrome Enterprise Premium
+    '101038',        # AppSheet
+    '101035',        # Cloud Search
 ]
 
 # Privilege names (the values of role.rolePrivileges[*].privilegeName
@@ -954,19 +921,20 @@ class Provider:
             self._unsuccessful_calls.add(ApiReference.GET_GROUP.value)
             return {'group_settings': []}
 
-    def get_license_data(self) -> dict:
+    def get_license_data(self) -> dict:  # pylint: disable=too-many-branches
         """
-        Gets license assignment counts for each known Google Workspace SKU
-        using the Enterprise License Manager API (free, no reseller access required).
+        Gets license assignment counts per SKU using the Enterprise License
+        Manager API.
+
+        Calls listForProduct once per product ID in KNOWN_PRODUCT_IDS.  Each
+        response item already contains skuId and skuName, so no hardcoded SKU
+        mapping is needed — new SKUs are discovered automatically.
 
         Scope required: https://www.googleapis.com/auth/apps.licensing
 
-        Returns a dict with key 'license_data' containing a list of subscription
-        records, one per active SKU (i.e., SKUs with at least one assigned user).
-        Each record has: product_name, sku_id, product_id, status, assigned.
-
-        Note: Total seat counts and expiration dates are only available via the
-        Google Reseller API and are not included here.
+        Returns a dict with key 'license_data': a list of subscription records,
+        one per active SKU, each with: product_name, sku_id, product_id,
+        status, assigned.
         """
         api_call = ApiReference.LIST_LICENSE_ASSIGNMENTS.value
         subscriptions = []
@@ -985,14 +953,13 @@ class Provider:
                                       credentials=self._credentials)
 
             any_success = False
-            for sku in KNOWN_SKUS:
+            for product_id in KNOWN_PRODUCT_IDS:
                 try:
-                    count = 0
+                    sku_counts: dict[str, dict] = {}
                     page_token = None
                     while True:
                         kwargs = {
-                            'productId': sku['product_id'],
-                            'skuId': sku['sku_id'],
+                            'productId': product_id,
                             'customerId': primary_domain,
                             'maxResults': 1000,
                         }
@@ -1001,23 +968,31 @@ class Provider:
                         response = (
                             licensing_service  # pylint: disable=no-member
                             .licenseAssignments()
-                            .listForProductAndSku(**kwargs)
+                            .listForProduct(**kwargs)
                             .execute()
                         )
-                        count += len(response.get('items', []))
+                        for item in response.get('items', []):
+                            sku_id = item.get('skuId', '')
+                            if sku_id not in sku_counts:
+                                sku_counts[sku_id] = {
+                                    'name': item.get('skuName', sku_id),
+                                    'count': 0,
+                                }
+                            sku_counts[sku_id]['count'] += 1
                         page_token = response.get('nextPageToken')
                         if not page_token:
                             break
 
                     any_success = True
-                    if count > 0:
-                        subscriptions.append({
-                            'product_name': sku['name'],
-                            'sku_id': sku['sku_id'],
-                            'product_id': sku['product_id'],
-                            'status': 'Active',
-                            'assigned': count,
-                        })
+                    for sku_id, info in sku_counts.items():
+                        if info['count'] > 0:
+                            subscriptions.append({
+                                'product_name': info['name'],
+                                'sku_id': sku_id,
+                                'product_id': product_id,
+                                'status': 'Active',
+                                'assigned': info['count'],
+                            })
                 except Exception:
                     pass
 
