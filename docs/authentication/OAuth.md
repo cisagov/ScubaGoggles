@@ -56,6 +56,12 @@ If you've limited application access to Google's APIs in your organization, the 
 10. Under **Scope**, select your root organization as the domain. Click **Continue**
 11. Under **Access to Google Data**, select **Trusted**. Click **Continue**
 12. Click **Finish**
+13. To add the Groups Reader role to your service account, navigate to **Account** -> **Admin Roles**
+14. Locate the Groups Reader role, click on **Actions** -> **Assign Admin**
+15. Click on **Assign members**
+16. Search for and select your account using its associated email
+17. Under Set Conditions, ensure that **Access to all groups** is selected and click **ADD**
+18. Click **ASSIGN ROLE**
 
 ## Navigation
 
