@@ -2,7 +2,7 @@
 Only complete this section if not authenticating via [OAuth](OAuth.md). See [Authentication Methods](AuthenticationMethods.md) for more details.
 
 > [!Important]
-> ScubaGoggles requires the service account to have [domain-wide delegation of authority](https://support.google.com/a/answer/162106?hl=en) to function.
+> ScubaGoggles requires the service account to have [domain-wide delegation of authority](https://support.google.com/a/answer/162106?hl=en) to function. 
 
 1. Login to https://console.cloud.google.com and navigate to your GCP project.
 1. From the hamburger menu, select **IAM & Admin** -> **Service Accounts**
@@ -17,6 +17,10 @@ Only complete this section if not authenticating via [OAuth](OAuth.md). See [Aut
 1. Enter the `client_id` from the downloaded credentials (also visible after clicking on the created Service account under Details -> Unique ID)
 1. Enter each OAuth scope as listed in [Permissions](../prerequisites/Prerequisites.md#permissions)
 1. Select **AUTHORIZE**
+
+> [!NOTE]
+> The Groups Settings API does not natively support a read-only API scope out-of-the-box. To achieve least privilege and to resolve risk concerns around `update` operations available through the Group Settings API, we use the Groups Reader role with Delegated Admin Service Account (DASA) authorization. 
+
 1. To add the Groups Reader role to your service account, navigate to **Account** -> **Admin Roles**
 1. Locate the Groups Reader role, click on **Actions** -> **Assign Admin**
 1. Click on **Assign service accounts**
