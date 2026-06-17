@@ -9,6 +9,7 @@ from pathlib import Path
 
 import yaml
 
+from scubagoggles.orchestrator import UserRuntimeError
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.utils import path_parser
 
@@ -71,8 +72,7 @@ class ScubaArgumentParser:
         """
         args = self.parse_args()
 
-        logging.basicConfig(format='(%(levelname)s): %(message)s',
-                            level=log_level(args.log))
+        self._start_logging(args)
 
         if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
             args.breakglassaccounts = []
@@ -286,3 +286,55 @@ class ScubaArgumentParser:
                 continue
             validated_exclusions.append(validated_exclusion)
         args.sitesexclusions = validated_exclusions
+
+    @staticmethod
+    def _start_logging(args: argparse.Namespace) -> None:
+
+        """Initializes the logging for ScubaGoggles.  There are two command
+        line arguments that apply to logging: the minimum severity level for
+        logged messages and an optional output file.
+
+        Messages are always written to the standard output stream, and
+        optionally to a log file.  Users can suppress messages to standard
+        output either by specifying the appropriate severity or by
+        redirecting standard output.
+
+        :param argparse.Namespace args: command line arguments.
+        """
+
+        console_handler = logging.StreamHandler()
+
+        formatter = logging.Formatter('{levelname:8s} {message}', style='{')
+
+        console_handler.setFormatter(formatter)
+
+        log_handlers = [console_handler]
+
+        if args.outputlog:
+
+            # Log messages will be written to the given file.  Messages
+            # written to the file contain a bit more information about
+            # where they originated for debugging.
+
+            try:
+                if args.outputlog.is_dir():
+                    raise UserRuntimeError(f'? {args.outputlog} - '
+                                           'is a directory')
+
+                file_handler = logging.FileHandler(args.outputlog,
+                                                   mode='w',
+                                                   encoding='utf-8')
+            except PermissionError as pe:
+                raise UserRuntimeError(f'? {args.outputlog} - cannot create log'
+                                       ' file due to permission error') from pe
+
+            file_format = ('{levelname} [{module}:{funcName}:{lineno}] '
+                           '{message}')
+
+            formatter = logging.Formatter(file_format, style='{')
+
+            file_handler.setFormatter(formatter)
+
+            log_handlers.append(file_handler)
+
+        logging.basicConfig(level=log_level(args.log), handlers=log_handlers)
