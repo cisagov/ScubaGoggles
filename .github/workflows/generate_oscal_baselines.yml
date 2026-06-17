@@ -1,14 +1,7 @@
 name: Generate OSCAL Baselines
 
 on:
-  pull_request:
-    paths:
-      - "scubagoggles/baselines/**/*.md"
-      - "scubagoggles/utils/generate_oscal_baselines.py"
-      - ".github/workflows/generate_oscal_baselines.yml"
   push:
-    branches:
-      - main
     paths:
       - "scubagoggles/baselines/**/*.md"
       - "scubagoggles/utils/generate_oscal_baselines.py"
