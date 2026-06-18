@@ -21,7 +21,19 @@ https://www.googleapis.com/auth/apps.licensing
 ```
 
 When running ScubaGoggles for the first time you will be prompted to consent to
-these API scopes. 
+these API scopes.
+
+## Google Cloud APIs
+
+In addition to consenting to the scopes above, the following APIs must be
+enabled in your Google Cloud project (see [Using OAuth](../authentication/OAuth.md)
+or [Using a Service Account](../authentication/ServiceAccount.md) for steps):
+
+- **Admin SDK API**
+- **Groups Settings API**
+- **Cloud Identity API**
+- **Enterprise License Manager API** (required for license and subscription data
+  in the Common Controls report)
 
 ## Create a Project
 1. If you already have a Google Cloud Project that you want to utilize skip to [Authentication Methods](../authentication/AuthenticationMethods.md)

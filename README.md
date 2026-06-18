@@ -35,6 +35,7 @@ We use a three-step process:
 ### Prerequisites
 
 - [Permissions](https://github.com/cisagov/ScubaGoggles/blob/main/docs/prerequisites/Prerequisites.md#permissions)
+- [Google Cloud APIs](https://github.com/cisagov/ScubaGoggles/blob/main/docs/prerequisites/Prerequisites.md#google-cloud-apis)
 - [Create a Project](https://github.com/cisagov/ScubaGoggles/blob/main/docs/prerequisites/Prerequisites.md#create-a-project)
 
 ### Authentication
