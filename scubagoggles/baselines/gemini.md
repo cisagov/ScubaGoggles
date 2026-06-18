@@ -184,7 +184,7 @@ This section covers the Gemini conversation sharing.
 ### Policies
 
 #### GWS.GEMINI.4.1v1
-Conversation sharing SHALL be disabled.
+Conversation sharing SHALL NOT select share via link.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini41v1-instructions)
 
@@ -209,6 +209,6 @@ Conversation sharing SHALL be disabled.
 2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **Sharing**.
 4.  Select **Conversation Sharing**
-5.  Select **Disable conversation sharing**.
+5.  Select **Disable conversation sharing** OR Select **Allow conversation sharing via Drive**.
 6.  Select **Save**.
 
