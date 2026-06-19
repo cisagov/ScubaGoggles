@@ -57,16 +57,6 @@ If you've limited application access to Google's APIs in your organization, the 
 11. Under **Access to Google Data**, select **Trusted**. Click **Continue**
 12. Click **Finish**
 
-> [!NOTE]
-> The Groups Settings API does not natively support a read-only API scope out-of-the-box. To achieve least privilege and to resolve risk concerns around `update` operations available through the Group Settings API, we use the Groups Reader role with Delegated Admin Service Account (DASA) authorization. 
-
-13. To add the Groups Reader role to your service account, navigate to **Account** -> **Admin Roles**
-14. Locate the Groups Reader role, click on **Actions** -> **Assign Admin**
-15. Click on **Assign members**
-16. Search for and select your account using its associated email
-17. Under Set Conditions, ensure that **Access to all groups** is selected and click **ADD**
-18. Click **ASSIGN ROLE**
-
 ## Navigation
 
 - Continue to [Usage: Parameters](../usage/Parameters.md)
