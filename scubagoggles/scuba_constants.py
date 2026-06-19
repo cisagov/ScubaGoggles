@@ -74,15 +74,15 @@ BASE_AUTH_URL = 'https://www.googleapis.com/auth'
 # Single source of truth for all API scopes.
 # Each entry maps a scope URL to the auth flow(s) that require it.
 API_SCOPES = {
-    f'{BASE_AUTH_URL}/admin.reports.audit.readonly':            AuthFlow.DWD | AuthFlow.OAUTH,
-    f'{BASE_AUTH_URL}/admin.directory.domain.readonly':         AuthFlow.DWD | AuthFlow.OAUTH,
-    f'{BASE_AUTH_URL}/admin.directory.orgunit.readonly':        AuthFlow.DWD | AuthFlow.OAUTH,
-    f'{BASE_AUTH_URL}/admin.directory.user.readonly':           AuthFlow.DWD | AuthFlow.OAUTH,
-    f'{BASE_AUTH_URL}/admin.directory.rolemanagement.readonly': AuthFlow.DWD | AuthFlow.OAUTH,
-    f'{BASE_AUTH_URL}/admin.directory.group.readonly':          AuthFlow.DWD | AuthFlow.OAUTH,
-    f'{BASE_AUTH_URL}/admin.directory.customer.readonly':       AuthFlow.DWD | AuthFlow.OAUTH,
-    f'{BASE_AUTH_URL}/cloud-identity.policies.readonly':        AuthFlow.DWD | AuthFlow.OAUTH,
-    f'{BASE_AUTH_URL}/cloud-identity.inboundsso.readonly':      AuthFlow.DWD | AuthFlow.OAUTH,
+    f'{BASE_AUTH_URL}/admin.reports.audit.readonly':            AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.domain.readonly':         AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.orgunit.readonly':        AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.user.readonly':           AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.rolemanagement.readonly': AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.group.readonly':          AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.customer.readonly':       AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/cloud-identity.policies.readonly':        AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/cloud-identity.inboundsso.readonly':      AuthFlow.OAUTH | AuthFlow.DWD,
     f'{BASE_AUTH_URL}/apps.groups.settings':                    AuthFlow.OAUTH | AuthFlow.DASA,
 }
 
