@@ -1349,7 +1349,7 @@ RequiredScopeToServiceMapping := {
     "MEET": "Meet"
 }
 
-RequiredScopes := {Scope | RequiredScopeToServiceMapping[Scope]}
+RequiredScopes := object.keys(RequiredScopeToServiceMapping)
 
 # Only services that are restricted are shown in api_controls_google_services, so we know that if
 # any of the scopes listed above are missing, its corresponding service is unrestricted
