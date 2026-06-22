@@ -29,6 +29,7 @@ import packaging.version as packageVersion
 from scubagoggles.provider import Provider
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.reporter.reporter import Reporter
+from scubagoggles.reporter.reporter_html import create_html_table
 from scubagoggles.run_rego import opa_eval, find_opa
 from scubagoggles.version import Version
 from scubagoggles.scuba_constants import SCUBAGOGGLES_PACKAGE_URL
@@ -192,15 +193,33 @@ class Orchestrator:
         Runs the provider scripts and outputs a json to path
         """
 
-        # pylint: disable=line-too-long
-        baselines, customerid, credentials, accesstoken, subjectemail, preferreddnsresolvers, skipdoh, quiet, breakglassaccounts, report_uuid, outputpath, outputproviderfilename, imapexclusions, sitesexclusions = itemgetter(
-            "baselines", "customerid", "credentials",
-            "accesstoken", "subjectemail",
-            "preferreddnsresolvers", "skipdoh",
-            "quiet","breakglassaccounts", "report_uuid",
-            "outputpath", "outputproviderfilename",
-            "imapexclusions", "sitesexclusions",
-            )(self.args_dict)
+        (baselines,
+         customerid,
+         credentials,
+         accesstoken,
+         subjectemail,
+         preferreddnsresolvers,
+         skipdoh,
+         quiet,
+         breakglassaccounts,
+         report_uuid,
+         outputpath,
+         outputproviderfilename,
+         imapexclusions,
+         sitesexclusions) = itemgetter('baselines',
+                                       'customerid',
+                                       'credentials',
+                                       'accesstoken',
+                                       'subjectemail',
+                                       'preferreddnsresolvers',
+                                       'skipdoh',
+                                       'quiet',
+                                       'breakglassaccounts',
+                                       'report_uuid',
+                                       'outputpath',
+                                       'outputproviderfilename',
+                                       'imapexclusions',
+                                       'sitesexclusions')(self.args_dict)
 
         with Provider(customerid,
                       credentials,
@@ -288,11 +307,21 @@ class Orchestrator:
         Executes the OPA executable with provider json input against
         specified rego files and outputs a json to path
         """
-        # pylint: disable=line-too-long
-        baselines, opapath, outputpath, regopath, outputregofilename, outputproviderfilename, debug, quiet = itemgetter(
-            'baselines', 'opapath', 'outputpath', 'regopath', 'outputregofilename',
-            'outputproviderfilename', 'debug', 'quiet'
-            )(self.args_dict)
+        (baselines,
+         opapath,
+         outputpath,
+         regopath,
+         outputregofilename,
+         outputproviderfilename,
+         debug,
+         quiet) = itemgetter('baselines',
+                             'opapath',
+                             'outputpath',
+                             'regopath',
+                             'outputregofilename',
+                             'outputproviderfilename',
+                             'debug',
+                             'quiet')(self.args_dict)
 
         products_bar = tqdm(baselines, leave=False, disable=quiet)
         results = []
@@ -621,11 +650,21 @@ class Orchestrator:
         Creates the individual reports and the front page
         """
 
-        # pylint: disable=line-too-long
-        baselines,outputpath, fullnamesdict, outputregofilename, outputproviderfilename, darkmode, cicdtestingmode, quiet = itemgetter(
-            "baselines","outputpath","fullnamesdict","outputregofilename",
-            "outputproviderfilename", "darkmode", "cicdtestingmode", "quiet"
-            )(self.args_dict)
+        (baselines,
+         outputpath,
+         fullnamesdict,
+         outputregofilename,
+         outputproviderfilename,
+         darkmode,
+         cicdtestingmode,
+         quiet) = itemgetter('baselines',
+                             'outputpath',
+                             'fullnamesdict',
+                             'outputregofilename',
+                             'outputproviderfilename',
+                             'darkmode',
+                             'cicdtestingmode',
+                             'quiet')(self.args_dict)
 
         # Make the report output folders
         args = self._args
@@ -635,6 +674,10 @@ class Orchestrator:
 
         # Copy CISA logo
         self._copy_cisa_logo(reports_images_path)
+
+        # Provide CSS, Javascript files
+
+        Reporter.provide_static_assets(outputpath)
 
         # load the rego results json here
         prod_to_fullname = fullnamesdict
@@ -747,7 +790,9 @@ class Orchestrator:
 
         # Create the ScubaResults files
         scuba_results_file = outputpath / f'{outputproviderfilename}.json'
-        raw_data = self._load_scuba_results_file(outputpath, outputproviderfilename, args_dict=self.args_dict)
+        raw_data = self._load_scuba_results_file(outputpath,
+                                                 outputproviderfilename,
+                                                 args_dict=self.args_dict)
 
         total_output.update({'Raw': raw_data})
         total_output['Raw']['rules_table'] = rules_table
@@ -797,7 +842,7 @@ class Orchestrator:
             table_data.append({'Baseline Conformance Reports': link,
                                'Details': self._generate_summary(stats[0])})
 
-        fragments.append(Reporter.create_html_table(table_data))
+        fragments.append(create_html_table(table_data))
 
         front_page_html = Reporter.build_front_page_html(fragments,
                                                          tenant_info,

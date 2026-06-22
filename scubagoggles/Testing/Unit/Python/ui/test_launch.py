@@ -2,6 +2,7 @@
 test_launch.py tests the launch.py methods.
 """
 
+import builtins
 import signal
 import os
 import sys
@@ -192,12 +193,15 @@ class TestLaunch:
         mocker.patch.object(launch, '_find_free_port', return_value=1234)
         mocker.patch.object(launch, '_get_app_to_run', return_value=Path('home'))
         mocker.patch.object(launch, '_prevent_streamlit_promotion')
-        mock_print = mocker.patch('builtins.print')
+        real_print = builtins.print
+        mock_print = mocker.patch('builtins.print', side_effect=real_print)
         mock_run_server = mocker.patch.object(launch, '_run_server')
         popen_kwargs = {}
         if not windows:
             mocker.patch('sys.platform', 'linux')
             popen_kwargs['start_new_session'] = True
+        else:
+            mocker.patch('sys.platform', 'win32')
 
         launch.main()
         # assertions
