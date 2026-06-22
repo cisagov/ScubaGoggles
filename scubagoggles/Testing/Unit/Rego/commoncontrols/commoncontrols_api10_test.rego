@@ -4,37 +4,123 @@ import future.keywords
 import data.utils.FailTestOUNonCompliant
 import data.utils.PassTestResult
 
+BaseInputCommonControls10 := {
+    "policies": {
+        "topOU": {
+            "api_controls_google_services": {
+                "services": [
+                    {
+                        "scopesGroup": "DRIVE_ALL",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "GMAIL_ALL",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "CLASSROOM_ALL",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "CHAT",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "MEET",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "CALENDAR_ALL",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "CONTACTS_ALL",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "GSUITE_ADMIN_ALL",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "VAULT_ALL",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "CLOUD_PLATFORM",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "CLOUD_BILLING",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "CLOUD_ML",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "APPS_SCRIPT_RUNTIME",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "APPS_SCRIPT_API",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "TASKS",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "GROUPS",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "CLOUD_SEARCH",
+                        "isEnabled": false
+                    },
+                    {
+                        "scopesGroup": "SIGN_IN",
+                        "isEnabled": false
+                    }
+                ]
+            }
+        }
+    },
+    "tenant_info": {
+        "topLevelOU": "topOU"
+    }
+}
+
 #
 # GWS.COMMONCONTROLS.10.1
 #--
 
-test_AccessControl_Correct_V1 if {
-    # Test not implemented
+test_ThirdParty_Correct_1 if {
     PolicyId := CommonControlsId10_1
-    Output := tests with input as {
-        "policies": {
-            "topOU": {
-                "api_controls_google_services": {
-                    "services": [
-                        {
-                            "scopesGroup": "DRIVE_ALL",
-                            "isEnabled": false
-                        }
-                    ]
-                }
-            }
+    Output := tests with input as BaseInputCommonControls10
+    PassTestResult(PolicyId, Output)
+}
+
+test_ThirdParty_Incorrect_1 if {
+    PolicyId := CommonControlsId10_1
+    Input := json.patch(BaseInputCommonControls10, [
+        {
+            "op": "remove",
+            "path": "/policies/topOU/api_controls_google_services/services/0"
         },
-        "tenant_info": {
-            "topLevelOU": "Test Top-Level OU"
+        {
+            "op": "remove",
+            "path": "/policies/topOU/api_controls_google_services/services/0"
         }
-    }
+    ])
+    Output := tests with input as Input
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
-    RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == "Currently not able to be tested automatically; please manually check."
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == "The following services allow access: Drive, Gmail."
 }
+#--
+
 
 #
 # GWS.COMMONCONTROLS.10.2
@@ -42,92 +128,8 @@ test_AccessControl_Correct_V1 if {
 
 test_HighRiskServices_Correct_1 if {
     PolicyId := CommonControlsId10_2
-    Output := tests with input as {
-        "policies": {
-            "topOU": {
-                "api_controls_google_services": {
-                    "services": [
-                        {
-                            "scopesGroup": "DRIVE_ALL",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "GMAIL_ALL",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "CLASSROOM_ALL",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "CHAT_ALL",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "MEET",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "CALENDAR_ALL",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "CONTACTS_ALL",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "GSUITE_ADMIN_ALL",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "VAULT_ALL",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "CLOUD_PLATFORM",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "CLOUD_BILLING",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "CLOUD_ML",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "APPS_SCRIPT_RUNTIME",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "APPS_SCRIPT_API",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "TASKS",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "GROUPS",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "CLOUD_SEARCH",
-                            "isEnabled": false
-                        },
-                        {
-                            "scopesGroup": "SIGN_IN",
-                            "isEnabled": false
-                        }
-                    ]
-                }
-            }
-        },
-        "tenant_info": {
-            "topLevelOU": "topOU"
-        }
-    }
-    
+    Output := tests with input as BaseInputCommonControls10
+
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
@@ -528,7 +530,7 @@ test_TrustInternalApps_Correct_1 if {
         }
     }
 
-    PassTestResult(PolicyId, Output)    
+    PassTestResult(PolicyId, Output)
 }
 
 test_TrustInternalApps_Incorrect_1 if {
@@ -569,7 +571,7 @@ test_ThirdPartyApps_Correct_1 if {
         }
     }
 
-    PassTestResult(PolicyId, Output)    
+    PassTestResult(PolicyId, Output)
 }
 
 test_ThirdPartyApps_Incorrect_1 if {
@@ -589,7 +591,7 @@ test_ThirdPartyApps_Incorrect_1 if {
     }
 
     failedOU := [{"Name": "topOU",
-                  "Value": concat("", ["Unconfigured third-party app access is set to:", 
+                  "Value": concat("", ["Unconfigured third-party app access is set to:",
                   " Allow users to access any third-party apps."])}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

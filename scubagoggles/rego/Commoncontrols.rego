@@ -1330,37 +1330,57 @@ tests contains {
 
 CommonControlsId10_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.1")
 
+RequiredScopeToServiceMapping := {
+    "DRIVE_ALL": "Drive",
+    "GMAIL_ALL": "Gmail",
+    "CALENDAR_ALL": "Calendar",
+    "CONTACTS_ALL": "Contacts",
+    "GSUITE_ADMIN_ALL": "Google Workspace Admin",
+    "VAULT_ALL": "Vault",
+    "CLOUD_PLATFORM": "Cloud Platform",
+    "CLOUD_BILLING": "Cloud Billing",
+    "CLOUD_ML": "Cloud Machine Learning",
+    "APPS_SCRIPT_RUNTIME": "Apps Script Runtime",
+    "CLASSROOM_ALL": "Classroom",
+    "TASKS": "Tasks",
+    "GROUPS": "Groups",
+    "CHAT": "Chat",
+    "SIGN_IN": "Google Sign-in",
+    "MEET": "Meet"
+}
+
+RequiredScopes := {Scope | RequiredScopeToServiceMapping[Scope]}
+
+# Only services that are restricted are shown in api_controls_google_services, so we know that if
+# any of the scopes listed above are missing, its corresponding service is unrestricted
+UnrestrictedServices10_1 contains UnrestrictedService if {
+    some OU, settings in input.policies
+    EnabledScopes := {Service.scopesGroup | some Service in settings.api_controls_google_services.services}
+    MissingScopes := RequiredScopes - EnabledScopes
+    some MissingScope in MissingScopes
+    UnrestrictedService := RequiredScopeToServiceMapping[MissingScope]
+}
+
 # NOTE: App access cannot be controlled at the group/OU level
 
-NonComplianceMessage10_1(value) := sprintf("%s services are unrestricted.",
-                                          [value])
+ReportDetails10_1(true) := "Requirement met."
 
-NonCompliantOUs10_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage10_1(count(unrestrictedScopesGroup))
-}
-if {
-    some OU, settings in input.policies
-    some service in settings.api_controls_google_services.services
-    service.isEnabled = true
-    unrestrictedScopesGroup := service.scopesGroup
-
-    count(unrestrictedScopesGroup) > 0
-}
-
-# This policy does not have API support currently
-# Only services that are restricted are shown in api_controls_google_services
-# We are unable to determine whether there exists services that are unrestricted
-# Hence updating to be manually checked
+ReportDetails10_1(false) := concat("", [
+    "The following services allow access: ",
+    concat(", ", UnrestrictedServices10_1), "."
+])
 
 tests contains {
     "PolicyId": CommonControlsId10_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "Prerequisites": ["policy/api_controls_google_services.services"],
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetails10_1(Status),
     "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(UnrestrictedServices10_1) == 0
 }
 
 #
