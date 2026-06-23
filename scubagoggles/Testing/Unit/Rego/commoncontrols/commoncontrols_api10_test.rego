@@ -100,6 +100,24 @@ test_ThirdParty_Correct_1 if {
     PassTestResult(PolicyId, Output)
 }
 
+test_ThirdParty_Correct_2 if {
+    PolicyId := CommonControlsId10_1
+    Input := json.patch(BaseInputCommonControls10, [
+        {
+            # Replace the "DRIVE" scope with the "DRIVE_HIGH_RISK" scope, services with a high risk
+            # scope are restricted if either of their scopes is present
+            "op": "replace",
+            "path": "/policies/topOU/api_controls_google_services/services/0",
+            "value": {
+                "scopesGroup": "DRIVE_HIGH_RISK",
+                "isEnabled": false
+            }
+        }
+    ])
+    Output := tests with input as Input
+    PassTestResult(PolicyId, Output)
+}
+
 test_ThirdParty_Incorrect_1 if {
     PolicyId := CommonControlsId10_1
     Input := json.patch(BaseInputCommonControls10, [

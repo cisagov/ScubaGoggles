@@ -1330,26 +1330,24 @@ tests contains {
 
 CommonControlsId10_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.1")
 
-RequiredScopeToServiceMapping := {
-    "DRIVE_ALL": "Drive",
-    "GMAIL_ALL": "Gmail",
-    "CALENDAR_ALL": "Calendar",
-    "CONTACTS_ALL": "Contacts",
-    "GSUITE_ADMIN_ALL": "Google Workspace Admin",
-    "VAULT_ALL": "Vault",
-    "CLOUD_PLATFORM": "Cloud Platform",
-    "CLOUD_BILLING": "Cloud Billing",
-    "CLOUD_ML": "Cloud Machine Learning",
-    "APPS_SCRIPT_RUNTIME": "Apps Script Runtime",
-    "CLASSROOM_ALL": "Classroom",
-    "TASKS": "Tasks",
-    "GROUPS": "Groups",
-    "CHAT": "Chat",
-    "SIGN_IN": "Google Sign-in",
-    "MEET": "Meet"
+ServiceToScopeMapping := {
+    "Drive": {"DRIVE_ALL", "DRIVE_HIGH_RISK"},
+    "Gmail": {"GMAIL_ALL", "GMAIL_HIGH_RISK"},
+    "Calendar": {"CALENDAR_ALL"},
+    "Contacts": {"CONTACTS_ALL"},
+    "Google Workspace Admin": {"GSUITE_ADMIN_ALL"},
+    "Vault": {"VAULT_ALL"},
+    "Cloud Platform": {"CLOUD_PLATFORM"},
+    "Cloud Billing": {"CLOUD_BILLING"},
+    "Cloud Machine Learning": {"CLOUD_ML"},
+    "Apps Script Runtime": {"APPS_SCRIPT_RUNTIME"},
+    "Classroom": {"CLASSROOM_ALL", "CLASSROOM_HIGH_RISK"},
+    "Tasks": {"TASKS"},
+    "Groups": {"GROUPS"},
+    "Chat": {"CHAT", "CHAT_HIGH_RISK"},
+    "Google Sign-in": {"SIGN_IN"},
+    "Meet": {"MEET"}
 }
-
-RequiredScopes := object.keys(RequiredScopeToServiceMapping)
 
 EnabledScopes contains Scope if {
     some OU, settings in input.policies
@@ -1357,13 +1355,13 @@ EnabledScopes contains Scope if {
     Scope := Service.scopesGroup
 }
 
-MissingScopes := RequiredScopes - EnabledScopes
-
 # Only services that are restricted are shown in api_controls_google_services, so we know that if
-# any of the scopes listed above are missing, its corresponding service is unrestricted
-UnrestrictedServices10_1 contains UnrestrictedService if {
-    some MissingScope in MissingScopes
-    UnrestrictedService := RequiredScopeToServiceMapping[MissingScope]
+# any of the scopes listed above are missing, its corresponding service is unrestricted. For
+# services that have multiple scopes (e.g., Drive), only one of the scopes needs to be present for
+# it to be restricted.
+UnrestrictedServices10_1 contains Service if {
+    some Service in object.keys(ServiceToScopeMapping)
+    count(intersection({ServiceToScopeMapping[Service], EnabledScopes})) == 0
 }
 
 # NOTE: App access cannot be controlled at the group/OU level
