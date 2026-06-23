@@ -14,7 +14,7 @@ class RobustDNSClient:
 
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
-        :param doh_servers: (optional) list of DoH servers that should be used 
+        :param doh_servers: (optional) list of DoH servers that should be used
             for DoH queries.
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.
@@ -117,7 +117,7 @@ class RobustDNSClient:
                 log_entries.append({
                     "query_name": qname,
                     "query_method": "traditional",
-                    "query_result": "Query returned NXDOMAIN",
+                    "query_result": "Domain does not exist",# "Query returned NXDOMAIN",
                     "query_answers": []
                 })
                 nxdomain = True
@@ -128,7 +128,7 @@ class RobustDNSClient:
                 log_entries.append({
                     "query_name": qname,
                     "query_method": "traditional",
-                    "query_result": f"Query resulted in exception {exception}",
+                    "query_result":  f"Exceptions other than NXDOMAIN returned {exception}", # f"Query resulted in exception {exception}",
                     "query_answers": []
                 })
                 errors.append(str(exception))
@@ -250,7 +250,7 @@ class RobustDNSClient:
                     log_entries.append({
                         "query_name": qname,
                         "query_method": "DoH",
-                        "query_result": "Query returned NXDomain",
+                        "query_result":  "Domain does not exist", #"Query returned NXDomain",
                         "query_answers": []
                     })
                     break
@@ -272,7 +272,7 @@ class RobustDNSClient:
                 log_entries.append({
                     "query_name": qname,
                     "query_method": "DoH",
-                    "query_result": f"Query resulted in exception {exception}",
+                    "query_result": f"Exceptions other than NXDOMAIN returned {exception}", # f"Query resulted in exception {exception}",
                     "query_answers": []
                 })
                 errors.append(str(exception))
