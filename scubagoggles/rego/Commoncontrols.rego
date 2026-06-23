@@ -1351,12 +1351,17 @@ RequiredScopeToServiceMapping := {
 
 RequiredScopes := object.keys(RequiredScopeToServiceMapping)
 
+EnabledScopes contains Scope if {
+    some OU, settings in input.policies
+    some Service in settings.api_controls_google_services.services
+    Scope := Service.scopesGroup
+}
+
+MissingScopes := RequiredScopes - EnabledScopes
+
 # Only services that are restricted are shown in api_controls_google_services, so we know that if
 # any of the scopes listed above are missing, its corresponding service is unrestricted
 UnrestrictedServices10_1 contains UnrestrictedService if {
-    some OU, settings in input.policies
-    EnabledScopes := {Service.scopesGroup | some Service in settings.api_controls_google_services.services}
-    MissingScopes := RequiredScopes - EnabledScopes
     some MissingScope in MissingScopes
     UnrestrictedService := RequiredScopeToServiceMapping[MissingScope]
 }
