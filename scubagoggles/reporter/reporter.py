@@ -82,7 +82,7 @@ class Reporter:
         self.progress_bar = progress_bar
         self.rules_table = None
         self.annotated_failed_policies = {}
-        self._license_data = license_data or []
+        self._license_data = license_data if license_data is not None else []
 
     @staticmethod
     def _get_test_result(test: dict) -> str:
@@ -703,6 +703,8 @@ class Reporter:
                                                 product=self._product)
         if legend_html:
             fragments = [legend_html] + fragments
+        license_api = ApiReference.LIST_LICENSE_ASSIGNMENTS.value
+        include_licenses = self._product == 'commoncontrols'
         html, rules_table = rh.build_individual_report_html(
             fragments=fragments,
             rules_data=rules_data,
@@ -714,7 +716,13 @@ class Reporter:
             tenant_name=self._tenant_name,
             tenant_domain=self._tenant_domain,
             tenant_id=self._tenant_id,
-            license_data=self._license_data if self._product == 'commoncontrols' else None,
+            include_licenses=include_licenses,
+            license_data=self._license_data,
+            license_collection_failed=(
+                license_api in self._unsuccessful_calls
+                if include_licenses
+                else False
+            ),
         )
         self.rules_table = rules_table
         return html

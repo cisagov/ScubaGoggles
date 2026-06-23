@@ -31,6 +31,9 @@ from scubagoggles.Testing.Unit.Python.provider.group_cases import (
 from scubagoggles.Testing.Unit.Python.provider.get_list_cases import (
     GET_LIST_CASES,
 )
+from scubagoggles.Testing.Unit.Python.provider.license_cases import (
+    GET_LICENSE_DATA_CASES,
+)
 
 # Disable "protected-access" because we test some internal methods
 # pylint: disable=protected-access
@@ -751,6 +754,105 @@ class TestProvider:
             "groups",
             customer="test_customer"
         )
+
+    @staticmethod
+    def _setup_license_data_mock(mocker, provider, cases):
+        """
+        Configure licensing API mocks for get_license_data() tests.
+
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param provider: Provider instance under test.
+        :param cases: Parametrized test case metadata.
+        """
+        mocker.patch.object(provider, "list_domains", return_value=cases["domains"])
+        mocker.patch(
+            "scubagoggles.provider.KNOWN_PRODUCT_IDS",
+            cases["product_ids"],
+        )
+
+        license_assignments = mocker.Mock(name="license_assignments")
+        licensing_service = mocker.Mock(name="licensing_service")
+        licensing_service.licenseAssignments.return_value = license_assignments
+
+        product_pages = cases.get("product_responses", {})
+
+        def list_for_product(**kwargs):
+            product_id = kwargs["productId"]
+            pages = product_pages[product_id]
+            if pages == "raises":
+                raise Exception(f"{product_id} unavailable")
+
+            if kwargs.get("pageToken"):
+                page = pages[1]
+            else:
+                page = pages[0]
+
+            request = mocker.Mock(name=f"license_request_{product_id}")
+            request.execute.return_value = page
+            return request
+
+        license_assignments.listForProduct.side_effect = list_for_product
+
+        if cases.get("build_raises") is not None:
+            mocker.patch(
+                "scubagoggles.provider.build",
+                side_effect=cases["build_raises"],
+            )
+        else:
+            def build_side_effect(service_name, version, **_kwargs):
+                if service_name == "licensing" and version == "v1":
+                    return licensing_service
+                return mocker.Mock(name=f"{service_name}_{version}")
+
+            mocker.patch("scubagoggles.provider.build", side_effect=build_side_effect)
+
+        return license_assignments
+
+    @pytest.mark.parametrize(
+        "cases",
+        GET_LICENSE_DATA_CASES
+    )
+    @pytest.mark.usefixtures("mock_build")
+    def test_get_license_data(self, mocker, cases):
+        """
+        Verifies Provider.get_license_data() aggregates license assignments
+        per SKU, handles pagination and partial product failures, and records
+        successful/unsuccessful ApiReference calls.
+
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param cases: Parametrized test cases containing license API metadata.
+        """
+        provider = self._provider()
+        provider._successful_calls.clear()
+        provider._unsuccessful_calls.clear()
+
+        license_assignments = self._setup_license_data_mock(mocker, provider, cases)
+
+        if cases["expect_warning"]:
+            with pytest.warns(
+                RuntimeWarning,
+                match="Exception thrown while getting license data"
+            ):
+                result = provider.get_license_data()
+        else:
+            result = provider.get_license_data()
+
+        assert result == cases["expected"]
+
+        api_call = ApiReference.LIST_LICENSE_ASSIGNMENTS.value
+        if cases["expect_success_call"]:
+            assert api_call in provider._successful_calls
+            assert api_call not in provider._unsuccessful_calls
+        else:
+            assert api_call not in provider._successful_calls
+            assert api_call in provider._unsuccessful_calls
+
+        if cases.get("build_raises") is None and cases["product_responses"]:
+            license_assignments.listForProduct.assert_any_call(
+                productId=cases["product_ids"][0],
+                customerId=cases["expected_customer_id"],
+                maxResults=1000,
+            )
 
     @pytest.mark.parametrize(
         "cases",

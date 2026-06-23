@@ -230,7 +230,9 @@ def build_individual_report_html(*,
                                  tenant_name: str,
                                  tenant_domain: str,
                                  tenant_id: str,
-                                 license_data: list | None = None) -> tuple[str, list | None]:
+                                 include_licenses: bool = False,
+                                 license_data: list | None = None,
+                                 license_collection_failed: bool = False) -> tuple[str, list | None]:
 
     """Build an individual baseline report HTML page and optional rules
     table data.
@@ -276,7 +278,13 @@ def build_individual_report_html(*,
     html = html.replace('{{METADATA}}', meta)
     html = html.replace('{{TABLES}}', ''.join(fragments))
 
-    license_table = _build_license_table(license_data)
+    if include_licenses:
+        license_table = _build_license_table(
+            license_data or [],
+            license_collection_failed=license_collection_failed,
+        )
+    else:
+        license_table = ''
     html = html.replace('{{LICENSES}}', license_table)
 
     rules_table = _build_rules_table(rules_data)
@@ -319,20 +327,31 @@ def build_individual_report_html(*,
     return html, rules_table
 
 
-def _build_license_table(license_data: list | None) -> str:
+def _build_license_table(license_data: list, *,
+                         license_collection_failed: bool = False) -> str:
 
     """Build an HTML subscriptions table from the license data collected by
     the Enterprise License Manager API.
 
     :param list license_data: list of subscription dicts, each containing
-        product_name, status, and assigned.  None or empty list → returns ''.
+        product_name, status, and assigned.
+    :param bool license_collection_failed: True when the license API call did
+        not complete successfully.
 
-    :return: HTML fragment with the subscriptions table, or empty string.
+    :return: HTML fragment with the subscriptions table.
     :rtype: str
     """
 
     if not license_data:
-        return ''
+        if license_collection_failed:
+            message = 'An error occurred when collecting license information.'
+        else:
+            message = 'No licenses found.'
+        return (
+            '\n<hr>\n'
+            '<h2 id="subscriptions">Tenant Licensing Information</h2>\n'
+            f'<p>{message}</p>\n'
+        )
 
     rows = [
         {
