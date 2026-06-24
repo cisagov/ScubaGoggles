@@ -150,7 +150,6 @@ Users SHOULD NOT be allowed to upload or move content to shared drives owned by 
 #### GWS.DRIVEDOCS.1.9v1
 Out-of-Domain file-level warnings SHALL be enabled.
 
-[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Implementing Out-of-Domain file-level warnings, can help users identify potentially risky files and avoid phishing scams when working with files shared from external entities.
