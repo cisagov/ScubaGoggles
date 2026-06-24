@@ -29,7 +29,7 @@ class TestRobustDNSClient:
     def test_get_doh_server(self, mock_resolver, mock_dns_query_https, subtest, expected):
         """
         Test DOH Server Retrieval
-        This method tests the 'doh_server' method, and simulates 
+        This method tests the 'doh_server' method, and simulates
         (using Mocks), three test cases where:
         The first DOH server is availible,
         The first DOH server is not availible, but the second is
@@ -77,12 +77,12 @@ class TestRobustDNSClient:
     def test_doh_query(self, mocker, mock_resolver, mock_dns_query_https, subtest, max_tries): # pylint: disable=too-many-positional-arguments
         """
         Test DOH Query
-        This method tests the 'doh_query' method and provides extensive unit 
+        This method tests the 'doh_query' method and provides extensive unit
         testing coverage of different branching cases, conditionals,
         and logical behavior of the doh_query method.
         Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
         subtest : The specific unit test case covering a unique logical/branching scenario
-        max_tries : Used for looping behavior; Number of max_tries to run the 
+        max_tries : Used for looping behavior; Number of max_tries to run the
         DOH query passed into the doh_query method parameter 'max_tries'
         """
         robust_dns_client = RobustDNSClient()
@@ -158,7 +158,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": "Query returned NXDomain",
+                    "query_result": "Domain does not exist",
                     "query_answers": []
                 })
             # Case where there is a valid server and the
@@ -206,7 +206,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": "Query returned NXDomain",
+                    "query_result": "Domain does not exist",
                     "query_answers": []
                 })
             # Exception case (from requests.get)
@@ -217,7 +217,7 @@ class TestRobustDNSClient:
                     log_entries.append({
                         "query_name": query,
                         "query_method": "DoH",
-                        "query_result": "Query resulted in exception time out",
+                        "query_result": "Exceptions other than NXDOMAIN returned time out",
                         "query_answers": []
                     })
                     errors.append("time out")
@@ -236,7 +236,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": "Query resulted in exception time out",
+                    "query_result": "Exceptions other than NXDOMAIN returned time out",
                     "query_answers": []
                 })
                 errors.append("time out")
@@ -245,7 +245,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": "Query returned NXDomain",
+                    "query_result": "Domain does not exist",
                     "query_answers": []
                 })
         # Expected return value of doh_query()
@@ -275,11 +275,11 @@ class TestRobustDNSClient:
         """
         Test Traditional Query
         This method tests the 'traditional_query' method and provides extensive unit
-        testing coverage of different branching cases, conditionals, 
+        testing coverage of different branching cases, conditionals,
         and logical behavior of the traditional_query method.
         Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
         subtest : The specific unit test case covering a unique logical/branching scenario
-        max_tries : Used for looping behavior; Number of max_tries to run the 
+        max_tries : Used for looping behavior; Number of max_tries to run the
         DOH query passed into the traditional_query method parameter 'max_tries'
         """
         robust_dns_client = RobustDNSClient()
@@ -326,7 +326,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "traditional",
-                    "query_result": "Query returned NXDOMAIN",
+                    "query_result": "Domain does not exist",
                     "query_answers": []
                 })
                 nxdomain = True
@@ -340,7 +340,7 @@ class TestRobustDNSClient:
                     log_entries.append({
                         "query_name": query,
                         "query_method": "traditional",
-                        "query_result": "Query resulted in exception Timeout",
+                        "query_result": "Exceptions other than NXDOMAIN returned Timeout",
                         "query_answers": []
                     })
                     errors.append("Timeout")
@@ -354,7 +354,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "traditional",
-                    "query_result": "Query resulted in exception Timeout",
+                    "query_result": "Exceptions other than NXDOMAIN returned Timeout",
                     "query_answers": []
                 })
                 errors.append("Timeout")
@@ -391,8 +391,8 @@ class TestRobustDNSClient:
           testing coverage of different branching cases, conditionals,
         and logical behavior of the query method.
         The query method invokes the traditional_query method and doh_query method.
-        There is little branching or logical behavior to capture, 
-        and the traditional_query and doh_query methods are mocked. 
+        There is little branching or logical behavior to capture,
+        and the traditional_query and doh_query methods are mocked.
 
         Unit Tests are constructed by cases (listed in the pytest.mark.parameterize decorator)
         subtest : The specific unit test case covering a unique logical/branching scenario
