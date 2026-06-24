@@ -14,13 +14,15 @@ https://www.googleapis.com/auth/admin.directory.orgunit.readonly,
 https://www.googleapis.com/auth/admin.directory.user.readonly,
 https://www.googleapis.com/auth/admin.directory.rolemanagement.readonly,
 https://www.googleapis.com/auth/admin.directory.customer.readonly,
-https://www.googleapis.com/auth/apps.groups.settings,
 https://www.googleapis.com/auth/cloud-identity.policies.readonly,
-https://www.googleapis.com/auth/cloud-identity.inboundsso.readonly
+https://www.googleapis.com/auth/cloud-identity.inboundsso.readonly,
+https://www.googleapis.com/auth/apps.groups.settings
 ```
 
 When running ScubaGoggles for the first time you will be prompted to consent to
 these API scopes. 
+
+Additionally, because the Groups Settings API does not natively support a read-only API scope, we use the Groups Reader role with Delegated Admin Service Account (DASA) authorization to achieve least privilege and address the risks associated with the update operations available through the Groups Settings API.
 
 ## Create a Project
 1. If you already have a Google Cloud Project that you want to utilize skip to [Authentication Methods](../authentication/AuthenticationMethods.md)
