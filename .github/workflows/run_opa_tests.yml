@@ -5,6 +5,9 @@ on:
   workflow_call:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   Run-OPA-Tests:
     runs-on: ubuntu-latest
