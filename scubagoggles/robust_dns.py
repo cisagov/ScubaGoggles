@@ -117,7 +117,7 @@ class RobustDNSClient:
                 log_entries.append({
                     "query_name": qname,
                     "query_method": "traditional",
-                    "query_result": "Domain does not exist",# "Query returned NXDOMAIN",
+                    "query_result": "Domain does not exist",
                     "query_answers": []
                 })
                 nxdomain = True
@@ -250,7 +250,7 @@ class RobustDNSClient:
                     log_entries.append({
                         "query_name": qname,
                         "query_method": "DoH",
-                        "query_result":  "Domain does not exist", #"Query returned NXDomain",
+                        "query_result":  "Domain does not exist",
                         "query_answers": []
                     })
                     break
