@@ -22,7 +22,7 @@ Only complete this section if not authenticating via [OAuth](OAuth.md). See [Aut
 > The Groups Settings API does not natively support a read-only API scope out-of-the-box. To achieve least privilege and to resolve risk concerns around `update` operations available through the Group Settings API, we use the Groups Reader role with Delegated Admin Service Account (DASA) authorization. 
 
 1. To add the Groups Reader role to your service account, navigate to **Account** -> **Admin Roles** in the Workspace Admin Console.
-1. Locate the Groups Reader role, click on **Actions** -> **Assign Admin**
+1. Locate and click the Groups Reader role, and then expand the **Admins** section.
 1. Click on **Assign service accounts**
 1. Search for your service account using its associated email and click **ADD**
 1. Under Set Conditions, ensure that **Access to all groups** is selected and click **ASSIGN ROLE**
