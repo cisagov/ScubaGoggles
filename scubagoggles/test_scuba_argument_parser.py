@@ -1,7 +1,8 @@
+"""Unit tests for the ScubaArgumentParser class."""
+
 from __future__ import annotations
 
 import argparse
-import logging
 from pathlib import Path
 
 import pytest
@@ -9,33 +10,51 @@ import pytest
 import scubagoggles.scuba_argument_parser as scap
 from scubagoggles.scuba_argument_parser import ScubaArgumentParser
 
-
+# pylint: disable=too-few-public-methods
 class NamespaceWithContains(argparse.Namespace):
     """argparse.Namespace with membership checks for ScubaArgumentParser."""
 
+    credentials: str | Path | None = None
+    documentpath: str | Path | None = None
+    opapath: str | Path | None = None
+    outputpath: str | Path | None = None
+    regopath: str | Path | None = None
+    OrgName: str | None = None
+    OrgUnitName: str | None = None
+    baselines: list[str] | None = None
+    omitpolicy: list[str] | None = None
+    annotatepolicy: list[str] | None = None
+    imapexclusions: list[dict] | None = None
+    sitesexclusions: list[dict] | None = None
+
     def __contains__(self, item: object) -> bool:
+        """Return True when the namespace has the requested attribute."""
         return hasattr(self, str(item))
 
-
+# pylint: disable=too-few-public-methods
 class FakeParser:
     """Small parser stub used to drive ScubaArgumentParser.parse_args()."""
 
     def __init__(self, parsed_args: argparse.Namespace) -> None:
+        """Store the parsed args and initialize the call counter."""
         self.parsed_args = parsed_args
         self.parse_args_calls = 0
 
     def parse_args(self) -> argparse.Namespace:
+        """Return the stored namespace and count how many times it was used."""
         self.parse_args_calls += 1
         return self.parsed_args
 
-
+# pylint: disable=too-few-public-methods
 class FakeMarkdownParser:
     """Stub Markdown parser used by validate_omissions/annotations tests."""
 
     def __init__(self, baseline_policies: dict[str, list[dict]]) -> None:
+        """Store the baseline policies for later lookup."""
         self._baseline_policies = baseline_policies
 
     def parse_baselines(self, md_products: set[str]) -> dict[str, list[dict]]:
+        """Return only the requested baseline policies."""
         return {
             product: groups
             for product, groups in self._baseline_policies.items()
@@ -47,6 +66,7 @@ class TestScubaArgumentParser:
     """Unit tests for ScubaArgumentParser."""
 
     def test_parse_args(self) -> None:
+        """Verify parse_args returns the parser's namespace unchanged."""
         expected = argparse.Namespace(alpha="beta")
         parser = ScubaArgumentParser(FakeParser(expected))
 
@@ -54,7 +74,8 @@ class TestScubaArgumentParser:
 
         assert result is expected
 
-    def test_parse_args_with_config(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    def test_parse_args_with_config(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path,) -> None:
+        """Verify config values merge with CLI overrides as expected."""
         monkeypatch.chdir(tmp_path)
 
         config_file = tmp_path / "config.yaml"
@@ -72,6 +93,7 @@ class TestScubaArgumentParser:
 
         args = NamespaceWithContains(
             log="INFO",
+            outputlog=None,
             config=str(config_file),
             baselines=["cli-baseline"],
             outputpath=None,
@@ -79,20 +101,27 @@ class TestScubaArgumentParser:
             breakglassaccounts=None,
             imapexclusions=None,
             sitesexclusions=None,
+            documentpath=None,
+            opapath=None,
+            regopath=None,
+            omitpolicy=None,
+            annotatepolicy=None,
             orgname=None,
             orgunitname=None,
         )
 
         parser = ScubaArgumentParser(FakeParser(args))
 
-        monkeypatch.setattr(scap, "log_level", lambda _value: logging.INFO)
-        monkeypatch.setattr(scap.logging, "basicConfig", lambda **_kwargs: None)
         monkeypatch.setattr(ScubaArgumentParser, "_start_logging", lambda *_: None)
         monkeypatch.setattr(
             ScubaArgumentParser,
             "_get_explicit_cli_args",
             classmethod(lambda _cls, _args: {"baselines", "credentials"}),
         )
+        monkeypatch.setattr(ScubaArgumentParser, "validate_omissions", lambda *_: None)
+        monkeypatch.setattr(ScubaArgumentParser, "validate_annotations", lambda *_: None)
+        monkeypatch.setattr(ScubaArgumentParser, "validate_imap_exclusions", lambda *_: None)
+        monkeypatch.setattr(ScubaArgumentParser, "validate_sites_exclusions", lambda *_: None)
 
         result = parser.parse_args_with_config()
 
@@ -100,19 +129,25 @@ class TestScubaArgumentParser:
         assert result.credentials.name == "cli-creds.json"
         assert result.outputpath.name == "config-output"
 
-    def test__get_explicit_cli_args(self, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test__get_explicit_cli_args(self, monkeypatch: pytest.MonkeyPatch, ) -> None:
+        """Verify explicit CLI arguments are detected correctly."""
         created_parsers: list["FakeArgumentParser"] = []
 
         class FakeArgumentParser:
+            """Stub argparse.ArgumentParser used by the helper test."""
+
             def __init__(self, argument_default: object = None) -> None:
+                """Store the default and record the created parser."""
                 self.argument_default = argument_default
                 self.added_arguments: list[tuple[tuple[str, ...], dict[str, object]]] = []
                 created_parsers.append(self)
 
             def add_argument(self, *dests: str, **kwargs: object) -> None:
+                """Record every added argument."""
                 self.added_arguments.append((dests, kwargs))
 
             def parse_known_args(self) -> tuple[argparse.Namespace, list[str]]:
+                """Return a namespace that marks a couple of arguments as explicit."""
                 return argparse.Namespace(baselines="from-cli", verbose=False), []
 
         monkeypatch.setattr(scap.argparse, "ArgumentParser", FakeArgumentParser)
@@ -125,7 +160,7 @@ class TestScubaArgumentParser:
             retries=3,
         )
 
-        result = ScubaArgumentParser._get_explicit_cli_args(args)
+        result = ScubaArgumentParser._get_explicit_cli_args(args)  # pylint: disable=protected-access
 
         assert result.baselines == "from-cli"
         assert result.verbose is False
@@ -140,6 +175,7 @@ class TestScubaArgumentParser:
         assert (("--retries",), {}) in added
 
     def test_validate_config(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify validation converts paths and normalizes org fields."""
         args = NamespaceWithContains(
             credentials="creds.json",
             documentpath="docs/baselines",
@@ -161,6 +197,7 @@ class TestScubaArgumentParser:
         converted: list[Path] = []
 
         def fake_path_parser(value: str) -> Path:
+            """Record path conversion input and return a predictable path."""
             converted.append(Path(value))
             return Path(f"/converted/{Path(value).name}")
 
@@ -211,6 +248,7 @@ class TestScubaArgumentParser:
         ]
 
     def test_validate_omissions(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify invalid omissions generate a warning."""
         warnings: list[str] = []
         baseline_policies = {
             "gmail": [
@@ -246,6 +284,7 @@ class TestScubaArgumentParser:
         assert "gmail.9" in warnings[0]
 
     def test_validate_annotations(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Verify invalid annotations generate a warning."""
         warnings: list[str] = []
         baseline_policies = {
             "groups": [
