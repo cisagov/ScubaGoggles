@@ -251,8 +251,7 @@ class Provider:
     def _initialize_services(self):
 
         service_list = (('reports', 'admin', 'reports_v1'),
-                        ('directory', 'admin', 'directory_v1'),
-                        ('groups', 'groupssettings', 'v1'))
+                        ('directory', 'admin', 'directory_v1'))
 
         for service_data in service_list:
 
@@ -262,6 +261,15 @@ class Provider:
                                          version,
                                          cache_discovery = False,
                                          credentials = self._credentials)
+
+        # The Groups Settings API is called using DASA credentials: the
+        # service account authenticates as itself (no DwD subject), relying
+        # on the Groups Reader admin role being assigned directly to the
+        # service account email in the Admin Console.
+        self._services['groups'] = build('groupssettings',
+                                         'v1',
+                                         cache_discovery = False,
+                                         credentials = self._gws_auth.groups_credentials)
 
     def _cached_list(
         self,
