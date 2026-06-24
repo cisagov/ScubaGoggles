@@ -354,6 +354,7 @@ class Provider:
 
             for spf_record in result['answers']:
                 if '~all' in spf_record:
+                    # pylint: disable=line-too-long
                     local_message = "SPF record found, but it does not fail (either hard or soft fail) or redirect to one that does."
 
                 if '-all' in spf_record:
