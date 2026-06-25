@@ -1299,7 +1299,7 @@ class TestScubaConfig:
             p_list_args = {"config_key", "prefix", "configured_label", "add_button_label",
                            "config_noun", "field_map", "date_fields"}
             if num_baseline_baseline_tabs > 0:
-                render_policy_list_args_ = {k: v 
+                render_policy_list_args_ = {k: v
                     for k, v in argument_dictionary.items() if k in p_list_args}
                 render_policy_list_args_["render_form"] = render_form
                 render_policy_list.assert_any_call(
@@ -1309,7 +1309,7 @@ class TestScubaConfig:
                     **render_policy_list_args_,
                 )
             if num_baseline_baseline_tabs == 2:
-                render_policy_list_args_ = {k: v 
+                render_policy_list_args_ = {k: v
                     for k, v in argument_dictionary.items() if k in p_list_args}
                 render_policy_list_args_["render_form"] = render_form
                 render_policy_list.assert_any_call(
