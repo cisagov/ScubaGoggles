@@ -1188,14 +1188,28 @@ if {
 
 CommonControlsId7_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.7.1")
 
+NonComplianceMessage7_1 := "Conflicting account management is not configured to replace conflicting unmanaged accounts with managed ones."
+
+NonCompliantOUs7_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage7_1
+}
+if {
+    some OU, settings in input.policies
+    settings.provisioning_conflicting_accounts_management.conflictingAccountsManagement != "REPLACE_CONFLICTING_ACCOUNTS"
+}
+
 tests contains {
     "PolicyId": CommonControlsId7_1,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "Prerequisites": ["policy/provisioning_conflicting_accounts_management.conflictingAccountsManagement"],
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs7_1) == 0
 }
 #--
 
@@ -1936,40 +1950,20 @@ CommonControlsId17_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.17.1")
 
 # NOTE: This setting cannot be controlled at the group level
 
+NonComplianceMessage17_1 := "Require multi party approval for sensitive admin actions is disabled."
+
 NonCompliantOUs17_1 contains {
     "Name": OU,
-    "Value": "Require multi party approval for sensitive admin actions is DISABLED"
+    "Value": NonComplianceMessage17_1
 }
 if {
-    some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, "Multi Party Approval (MPA) Control Multi Party Approval Control", OU)
-    # Ignore OUs without any events. We're already asserting that the
-    # top-level OU has at least one event; for all other OUs we assume
-    # they inherit from a parent OU if they have no events.
-    count(Events) > 0
-    LastEvent := utils.GetLastEvent(Events)
-    LastEvent.NewValue == "disabled"
+    some OU, settings in input.policies
+    settings.multi_party_approval_require_approvals.multiPartyApprovalState != "ENABLED"
 }
 
 tests contains {
     "PolicyId": CommonControlsId17_1,
-    "Prerequisites": ["reports/v1/activities/list"],
-    "Criticality": "Should",
-    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
-    "ActualValue": "No relevant event for the top-level OU in the current logs",
-    "RequirementMet": DefaultSafe,
-    "NoSuchEvent": true
-}
-if {
-    DefaultSafe := false
-    SettingName := "Multi Party Approval (MPA) Control Multi Party Approval Control"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) == 0
-}
-
-tests contains {
-    "PolicyId": CommonControlsId17_1,
-    "Prerequisites": ["reports/v1/activities/list"],
+    "Prerequisites": ["policy/multi_party_approval_require_approvals.multiPartyApprovalState"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs17_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs17_1},
@@ -1977,9 +1971,6 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    SettingName := "Multi Party Approval (MPA) Control Multi Party Approval Control"
-    Events := utils.FilterEventsOU(LogEvents, SettingName, utils.TopLevelOU)
-    count(Events) > 0
     Status := count(NonCompliantOUs17_1) == 0
 }
 #--
