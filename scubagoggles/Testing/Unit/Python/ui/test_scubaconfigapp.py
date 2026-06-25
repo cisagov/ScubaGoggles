@@ -22,7 +22,7 @@ class TestScubaConfig:
         Verifies the _load_scubagoggles_backend loads the correct version,
         or the fallback if the backend is not installed
         """
-        
+
         # mocked classes in (success) case where no ImportError is Raised
         # can be anything (should be different from ImportError case)
         class MockImportUserConfig:
@@ -32,13 +32,13 @@ class TestScubaConfig:
 
         class MockImportVersion:
             number = "2.0.0"
-            # ensure this is different from the 
+            # ensure this is different from the
             # ImportError mocked class
             # (initialize returns None in that case)
             @classmethod
             def initialize(cls):
                 return True
-        
+
         # expected results without Exception
         pkg = types.ModuleType("scubagoggles")
         pkg.__path__ = []
@@ -66,7 +66,7 @@ class TestScubaConfig:
         success, user_conf, version = scubaconfigapp.ScubaConfigApp._load_scubagoggles_backend()
 
         assert (raiseImportError == success) is False
-        
+
         if raiseImportError:
             assert user_conf().output_dir == "./"
             assert user_conf().credentials_file is None
@@ -78,7 +78,7 @@ class TestScubaConfig:
             assert user_conf().credentials_file == "tmp/creds"
             assert version.number == "2.0.0"
             assert version.initialize() is True
-    
+
 
     @pytest.mark.parametrize(
         "prod_mds, os_err, expected",
@@ -165,7 +165,7 @@ class TestScubaConfig:
         """Fixture providing path to generated CSS expected output."""
         return Path(__file__).parent / 'snippets' / 'generated_css.py'
 
-    
+
     @pytest.mark.parametrize('dark, env, css_name', [
         (True, "1", "FORCED_DARK_CSS"),
         (False, "", "AUTO_DARK_CSS"),
@@ -213,7 +213,7 @@ class TestScubaConfig:
         elif exc:
             mock_file.read.return_value = b'baselines: baseline data'
             # name error Exception?
-            mock_import_org_fields = mocker.patch.object(scubaconfigapp.ScubaConfigApp, 
+            mock_import_org_fields = mocker.patch.object(scubaconfigapp.ScubaConfigApp,
                                                          '_import_org_fields')
             # generic Exception
             mock_import_org_fields.side_effect = NameError("streamlit Name Error")
@@ -240,7 +240,7 @@ class TestScubaConfig:
         ({'o': "out.txt"}, {'outputpath': "out.txt"}),
         ({'BaseLines': "baseline data"}, {'baselines': "baseline data"}),
         ({'credentials': "creds.txt"}, {'credentials': "creds.txt"}),
-        ({'c': "credentials.txt", 'OUT': "out.txt", 'policies': "baseline data"}, 
+        ({'c': "credentials.txt", 'OUT': "out.txt", 'policies': "baseline data"},
          {'credentials': "credentials.txt", 'out': "out.txt", 'policies': "baseline data"})
     ])
     def test_normalize_config_keys(self, config_dict, expected):
@@ -274,12 +274,12 @@ class TestScubaConfig:
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
                 self.config_data = {}
-        
+
         mock_session_state = MockSessionState({})
 
         mocker.patch("streamlit.session_state", mock_session_state)
         scubaconfigapp.ScubaConfigApp._import_org_fields(config)
-        
+
         assert mock_session_state == expected
 
     @pytest.mark.parametrize('config_dict, expected', [
@@ -358,7 +358,7 @@ class TestScubaConfig:
             )
         ]
     )
-    def test_import_baselines(self, mocker, config, baseline_info, invalid_baselines, 
+    def test_import_baselines(self, mocker, config, baseline_info, 
                               valid_baselines, msg):
         """
         Tests that the import_baselines function and ensure 
@@ -440,7 +440,7 @@ class TestScubaConfig:
                 False
             )
         ]
-    )    
+    )
     def test_import_output_settings(self, mocker, config, key, expected_value):
         """
         Tests the Import output-related settings from the *config* attribute, 
@@ -482,7 +482,7 @@ class TestScubaConfig:
                 {"numberofuuidcharacterstotruncate": 4}
             ),
             (
-                {"regopath": Path("/path/to/rego"), "random_key": "random_value", 
+                {"regopath": Path("/path/to/rego"), "random_key": "random_value",
                  "numberofuuidcharacterstotruncate": "not an int"},
                 {"regopath": str(Path("/path/to/rego"))}
             )
@@ -517,30 +517,30 @@ class TestScubaConfig:
     @pytest.mark.parametrize('config, expected_value', [
         # individual cases
         (
-            {}, 
+            {},
             {}
         ),
         # omitpolicy is present
         (
-            {"omitpolicy": ["a", "b"]}, 
+            {"omitpolicy": ["a", "b"]},
             {}
         ),
         (
-            {"omitpolicy": {"a": "b"}}, 
+            {"omitpolicy": {"a": "b"}},
             {"omitpolicy": {"a": "b"}}
         ),
         # breakglassaccounts in config
         (
-            {"breakglassaccounts": ["a", "b"]}, 
+            {"breakglassaccounts": ["a", "b"]},
             {"breakglassaccounts": ["a", "b"]}
         ),
         (
-            {"breakglassaccounts": 1}, 
+            {"breakglassaccounts": 1},
             {"breakglassaccounts": [1]}
         ),
         # preferreddohservers/preferreddnsresolvers in config
         (
-            {"preferreddohservers": ('a', 'b')}, 
+            {"preferreddohservers": ('a', 'b')},
             {"preferreddohservers": ["('a', 'b')"]}
         ),
         (
@@ -552,13 +552,13 @@ class TestScubaConfig:
             {"skipdoh": False}
         ),
         (
-            {"skipdoh": "123"}, 
+            {"skipdoh": "123"},
             {"skipdoh": True}
         ),
         # mixed cases
         # ignored keys
         (
-            {"omitpolicy": {1: 2}, "preferreddohservers": 1, "ignored_key": "ignored_value"}, 
+            {"omitpolicy": {1: 2}, "preferreddohservers": 1, "ignored_key": "ignored_value"},
             {"omitpolicy": {1: 2}, "preferreddohservers": ["1"]}
         ),
         # multiple specified keys
@@ -686,7 +686,7 @@ class TestScubaConfig:
         else:
             assert session_state_mock == initial_state
 
-    
+
 
     @pytest.mark.parametrize(
         "config_data,valid,err,expected_errors",
@@ -695,69 +695,69 @@ class TestScubaConfig:
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "", "breakglassaccounts": [], 
               "subjectemail": ""}, True, "", []),
-            
+
             ({"orgname": "",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "", "breakglassaccounts": [], 
               "subjectemail": ""}, True, "",
                 ["Organization Name is required."]),
-           
+
             ({"orgname": "",
               "baselines": [],
               "credentials": "", "outputpath": "", "breakglassaccounts": [], 
               "subjectemail": ""}, True, "", 
               ["Organization Name is required.", 
                "At least 1 product must be selected for the configuration to be valid."]),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": {}, "outputpath": "", "breakglassaccounts": [], 
               "subjectemail": ""}, True, "", 
               []),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "/tmp/creds.json",
               "outputpath": "", "breakglassaccounts": [], "subjectemail": ""}, False, 
               "Invalid credentials file", ["Invalid credentials file"]),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "/tmp/creds.json",
               "outputpath": "", "breakglassaccounts": [], 
-              "subjectemail": ""}, 
+              "subjectemail": ""},
               True, "", []),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": {}, "breakglassaccounts": [], 
-              "subjectemail": ""}, 
+              "subjectemail": ""},
               True, "", []),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "./", "breakglassaccounts": [],
               "subjectemail": ""},
                 True, "", []),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "/tmp/out", "breakglassaccounts": [], 
-              "subjectemail": ""}, 
+              "subjectemail": ""},
               False, "Invalid output path", ["Invalid output path"]),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "/tmp/out", "breakglassaccounts": [], 
-              "subjectemail": ""}, 
+              "subjectemail": ""},
               True, "", []),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "", "breakglassaccounts": {}, 
-              "subjectemail": ""}, 
+              "subjectemail": ""},
               True, "", []),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "", "breakglassaccounts": ["admin@example.com"], 
