@@ -3,6 +3,7 @@ test_provider tests the Provider class.
 """
 import pytest
 from google.auth.exceptions import RefreshError
+from googleapiclient.errors import HttpError
 from scubagoggles.provider import Provider
 from scubagoggles.scuba_constants import ApiReference
 
@@ -781,6 +782,14 @@ class TestProvider:
             pages = product_pages[product_id]
             if pages == "raises":
                 raise Exception(f"{product_id} unavailable")
+            if pages == "raises_global":
+                response = mocker.Mock()
+                response.status = 403
+                response.reason = (
+                    'Enterprise License Manager API has not been used in project '
+                    '123 before or it is disabled.'
+                )
+                raise HttpError(response, b'accessNotConfigured')
 
             if kwargs.get("pageToken"):
                 page = pages[1]
@@ -828,14 +837,21 @@ class TestProvider:
 
         license_assignments = self._setup_license_data_mock(mocker, provider, cases)
 
-        if cases["expect_warning"]:
+        if cases.get("expect_warning"):
             with pytest.warns(
                 RuntimeWarning,
-                match="Exception thrown while getting license data"
+                match="Exception thrown while getting license data; "
+                      "subscription table will be omitted"
             ):
-                result = provider.get_license_data()
+                result = provider.get_license_data(quiet=True)
+        elif cases.get("expect_product_warning"):
+            with pytest.warns(
+                RuntimeWarning,
+                match="Exception thrown while getting license data for "
+            ):
+                result = provider.get_license_data(quiet=True)
         else:
-            result = provider.get_license_data()
+            result = provider.get_license_data(quiet=True)
 
         assert result == cases["expected"]
 
@@ -853,6 +869,34 @@ class TestProvider:
                 customerId=cases["expected_customer_id"],
                 maxResults=1000,
             )
+            if "expected_api_calls" in cases:
+                assert (
+                    license_assignments.listForProduct.call_count
+                    == cases["expected_api_calls"]
+                )
+
+    @pytest.mark.usefixtures("mock_build")
+    def test_is_global_license_failure(self, mocker):
+        """Verifies systemic license API failures are detected for fail-fast."""
+        response = mocker.Mock()
+        response.status = 403
+        response.reason = 'Forbidden'
+        content = (
+            b'{"error":{"errors":[{"reason":"accessNotConfigured"}],'
+            b'"message":"Enable licensing.googleapis.com"}}'
+        )
+        assert Provider._is_global_license_failure(HttpError(response, content))
+
+        response.reason = (
+            'Enterprise License Manager API has not been used in project '
+            '123 before or it is disabled.'
+        )
+        assert Provider._is_global_license_failure(HttpError(response, b''))
+
+        response.status = 404
+        assert not Provider._is_global_license_failure(
+            HttpError(response, b'Not Found')
+        )
 
     @pytest.mark.parametrize(
         "cases",

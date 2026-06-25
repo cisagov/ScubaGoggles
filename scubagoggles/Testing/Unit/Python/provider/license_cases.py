@@ -144,6 +144,7 @@ GET_LICENSE_DATA_CASES = [
         "expected_customer_id": "example.com",
         "expect_success_call": True,
         "expect_warning": False,
+        "expect_product_warning": True,
     },
     # All product calls fail.
     {
@@ -157,6 +158,7 @@ GET_LICENSE_DATA_CASES = [
         "expected_customer_id": "example.com",
         "expect_success_call": False,
         "expect_warning": False,
+        "expect_product_warning": True,
     },
     # Licensing service build fails.
     {
@@ -168,5 +170,19 @@ GET_LICENSE_DATA_CASES = [
         "expected_customer_id": "example.com",
         "expect_success_call": False,
         "expect_warning": True,
+    },
+    # Global API failure stops after the first request.
+    {
+        "product_ids": ["Google-Apps", "101047", "101001"],
+        "domains": [{"domainName": "example.com", "isPrimary": True}],
+        "product_responses": {
+            "Google-Apps": "raises_global",
+        },
+        "expected": {"license_data": []},
+        "expected_customer_id": "example.com",
+        "expect_success_call": False,
+        "expect_warning": False,
+        "expect_product_warning": True,
+        "expected_api_calls": 1,
     },
 ]

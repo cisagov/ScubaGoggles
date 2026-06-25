@@ -12,20 +12,6 @@ Ensure that you consented to the following API scopes as a user with the proper
 [permissions to consent](../prerequisites/Prerequisites.md#permissions) and have
 enabled the required [APIs and Services](../prerequisites/Prerequisites.md#google-cloud-apis).
 
-## 403 Forbidden: accessNotConfigured (License Data)
-
-If you see a `403 Forbidden` error with reason `accessNotConfigured` while
-pulling license data, the **Enterprise License Manager API** is not enabled in
-your Google Cloud project. Adding the
-`https://www.googleapis.com/auth/apps.licensing` scope is not sufficient on its
-own; enable the API under **APIs & Services** -> **Library** in the same project
-as your credentials file.
-
-For service account authentication, also verify that
-`https://www.googleapis.com/auth/apps.licensing` is listed in **Manage Domain
-Wide Delegation** for your service account's Client ID in the Google Admin
-console.
-
 ## macOS: Certificate Verification Error
 
 If you are installing ScubaGoggles on a system running macOS, you may
