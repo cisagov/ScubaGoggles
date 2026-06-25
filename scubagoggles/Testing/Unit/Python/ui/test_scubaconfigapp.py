@@ -397,11 +397,6 @@ class TestScubaConfig:
                 {"quiet": ""},
                 "quiet",
                 False
-            ),
-            (
-                {"quiet": ""},
-                "quiet",
-                False
             )
         ]
     )    
