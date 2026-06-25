@@ -215,7 +215,7 @@ This section covers Google Meet video settings such as automatic video recording
 #### GWS.MEET.5.1v1
 Automatic recordings for Google Meet SHALL be disabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet61v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Automatic recordings could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024
@@ -229,7 +229,7 @@ Automatic recordings for Google Meet SHALL be disabled.
 #### GWS.MEET.5.2v1
 Automatic transcripts for Google Meet SHALL be disabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet62v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024
