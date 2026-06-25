@@ -2,12 +2,12 @@
 test_launch.py tests the launch.py methods.
 """
 
+import signal
 import os
 import sys
-import pytest
 from pathlib import Path
+import pytest
 from scubagoggles.ui import launch
-import signal
 
 class TestLaunch:
     """Unit tests for the ScubaGoggles UI Launcher Program"""
@@ -24,7 +24,7 @@ class TestLaunch:
         either a path to the streamlit UI application, or raises a System Exit
         error if either the path or the app is unavailible
         """
-        
+
         # name variable reduces character count on lines of code
         name = "_resolve_app_file"
         if resolve_app:
@@ -33,7 +33,6 @@ class TestLaunch:
         else:
             mocker.patch.object(launch, name, return_value=None)
 
-        
         name = "_is_streamlit_installed"
         if streamlit_installed:
             mocker.patch.object(launch, name, return_value=True)
@@ -118,13 +117,12 @@ class TestLaunch:
             # side effect causes Exception to be raised/caught
             mock_server_proc.wait.side_effect = KeyboardInterrupt
 
-        mock_sys_platform = None
         mock_signal = None
         if not windows:
             mock_sys_platform = mocker.patch("sys.platform", "linux")
             mock_signal = mocker.patch("signal.signal")
 
-        launch._run_server(cmd, popen_kwargs)
+        launch._run_server(cmd, popen_kwargs) # pylint: disable=protected-access
         mock_atexit.assert_called_once_with(mock_kill_ptree, mock_server_proc.pid)
         if not windows:
             mock_signal.assert_called_once()
@@ -194,7 +192,7 @@ class TestLaunch:
         mocker.patch.object(launch, "_prevent_streamlit_promotion")
         mock_print = mocker.patch("builtins.print")
         mock_run_server = mocker.patch.object(launch, "_run_server")
-        popen_kwargs = dict()
+        popen_kwargs = {}
         if not windows:
             mocker.patch("sys.platform", "linux")
             popen_kwargs["start_new_session"] = True
@@ -207,7 +205,7 @@ class TestLaunch:
                 "Starting ScubaGoggles Configuration UI (dark (forced) theme) ...",
             )
         else:
-            assert os.environ.get("SCUBAGOGGLES_UI_DARK") == None
+            assert os.environ.get('SCUBAGOGGLES_UI_DARK') is None
             mock_print.assert_any_call(
                 "Starting ScubaGoggles Configuration UI (auto theme) ...",
             )
