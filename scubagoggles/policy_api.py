@@ -171,6 +171,8 @@ class PolicyAPI:
         'drive_and_docs_drive_sdk': {'reducer': _merge_reducer,
                                      'settings': {
                                          'enableDriveSdkApiAccess': isBool}},
+        'drive_and_docs_external_file_warning': {'settings': {
+            'highlightingEnabled': isBool}},
         'drive_and_docs_external_sharing': {'settings': {
             'accessCheckerSuggestions': isEnum,
             'allowNonGoogleInvites': isBool,
