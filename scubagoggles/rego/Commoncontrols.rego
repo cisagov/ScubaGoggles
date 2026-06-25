@@ -1340,6 +1340,7 @@ ServiceToScopeMapping := {
     "Cloud Platform": {"CLOUD_PLATFORM"},
     "Cloud Billing": {"CLOUD_BILLING"},
     "Cloud Machine Learning": {"CLOUD_ML"},
+    "Apps Script API": {"APPS_SCRIPT_API"},
     "Apps Script Runtime": {"APPS_SCRIPT_RUNTIME"},
     "Classroom": {"CLASSROOM_ALL", "CLASSROOM_HIGH_RISK"},
     "Tasks": {"TASKS"},
