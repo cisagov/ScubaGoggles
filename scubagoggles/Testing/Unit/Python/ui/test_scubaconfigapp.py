@@ -12,7 +12,6 @@ from yaml import YAMLError
 
 class TestScubaConfig:
     """Unit tests for the ScubaGoggles Config Class"""
-
     @pytest.mark.parametrize('raiseImportError', [
             (True),
             (False)
@@ -32,14 +31,12 @@ class TestScubaConfig:
 
         class MockImportVersion:
             number = "2.0.0"
-            
             # ensure this is different from the 
             # ImportError mocked class
             # (initialize returns None in that case)
             @classmethod
             def initialize(cls):
                 return True
-
         # expected results without Exception
         pkg = types.ModuleType("scubagoggles")
         pkg.__path__ = []
