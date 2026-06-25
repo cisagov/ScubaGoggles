@@ -228,7 +228,7 @@ class TestScubaConfig:
             mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_baselines')
             mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_output_settings')
             mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_advanced_settings')
-            mocker.patch.object(scubaconfigapp.ScubaConfigApp, 
+            mocker.patch.object(scubaconfigapp.ScubaConfigApp,
                                 '_import_policy_and_account_sections')
             mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_show_import_summary')
             st_rerun_mock = mocker.patch('streamlit.rerun')
@@ -359,7 +359,7 @@ class TestScubaConfig:
             )
         ]
     )
-    def test_import_baselines(self, mocker, config, baseline_info, 
+    def test_import_baselines(self, mocker, config, baseline_info,
                               valid_baselines, msg):
         """
         Tests that the import_baselines function and ensure 
@@ -776,7 +776,7 @@ class TestScubaConfig:
               "credentials": "", "outputpath": "", "breakglassaccounts": [], 
               "subjectemail": "person@example.com"}, 
               True, "", []),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "", "breakglassaccounts": [], 
@@ -1299,7 +1299,8 @@ class TestScubaConfig:
             p_list_args = {"config_key", "prefix", "configured_label", "add_button_label",
                            "config_noun", "field_map", "date_fields"}
             if num_baseline_baseline_tabs > 0:
-                render_policy_list_args_ = {k: v for k, v in argument_dictionary.items() if k in p_list_args}
+                render_policy_list_args_ = {k: v 
+                    for k, v in argument_dictionary.items() if k in p_list_args}
                 render_policy_list_args_["render_form"] = render_form
                 render_policy_list.assert_any_call(
                     "Gmail",
@@ -1308,7 +1309,8 @@ class TestScubaConfig:
                     **render_policy_list_args_,
                 )
             if num_baseline_baseline_tabs == 2:
-                render_policy_list_args_ = {k: v for k, v in argument_dictionary.items() if k in p_list_args}
+                render_policy_list_args_ = {k: v 
+                    for k, v in argument_dictionary.items() if k in p_list_args}
                 render_policy_list_args_["render_form"] = render_form
                 render_policy_list.assert_any_call(
                     "Drive",
