@@ -25,7 +25,7 @@ class TestScubaConfig:
         
         # mocked classes in (success) case where no ImportError is Raised
         # can be anything (should be different from ImportError case)
-        class MockImportUserConfig: 
+        class MockImportUserConfig:
             def __init__(self):
                 self.output_dir = "home"
                 self.credentials_file = "tmp/creds"

@@ -119,7 +119,7 @@ class TestLaunch:
 
         mock_signal = None
         if not windows:
-            mock_sys_platform = mocker.patch("sys.platform", "linux")
+            mocker.patch("sys.platform", "linux")
             mock_signal = mocker.patch("signal.signal")
 
         launch._run_server(cmd, popen_kwargs) # pylint: disable=protected-access
