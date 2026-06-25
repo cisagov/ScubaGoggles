@@ -22,6 +22,7 @@ class TestScubaConfig:
         Verifies the _load_scubagoggles_backend loads the correct version,
         or the fallback if the backend is not installed
         """
+        
         # mocked classes in (success) case where no ImportError is Raised
         # can be anything (should be different from ImportError case)
         class MockImportUserConfig: 
@@ -37,6 +38,7 @@ class TestScubaConfig:
             @classmethod
             def initialize(cls):
                 return True
+        
         # expected results without Exception
         pkg = types.ModuleType("scubagoggles")
         pkg.__path__ = []

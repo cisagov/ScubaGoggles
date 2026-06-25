@@ -11,7 +11,7 @@ import signal
 
 class TestLaunch:
     """Unit tests for the ScubaGoggles UI Launcher Program"""
-    
+
     @pytest.mark.parametrize('resolve_app, streamlit_installed', [
             (False, False),
             (True, False),
@@ -32,14 +32,14 @@ class TestLaunch:
             resolve_app_mock = mocker.patch.object(launch, name, return_value=Path("/home"))
         else:
             resolve_app_mock = mocker.patch.object(launch, name, return_value=None)
-        
+
         streamlit_installed_mock = None
         name = "_is_streamlit_installed"
         if streamlit_installed:
             streamlit_installed_mock = mocker.patch.object(launch, name, return_value=True)
         else:
             streamlit_installed_mock = mocker.patch.object(launch, name, return_value=False)
-        
+
         # cases where path is returned successfully
         if resolve_app and streamlit_installed:
             assert launch._get_app_to_run() == Path("/home")
@@ -48,7 +48,7 @@ class TestLaunch:
             with pytest.raises(SystemExit) as ex:
                 launch._get_app_to_run()
             assert ex.value.code == 1
-    
+
     @pytest.mark.parametrize('dark_mode', [
             (True),
             (False)
@@ -88,7 +88,7 @@ class TestLaunch:
             (False, True),
             (True, True)
         ]
-    )    
+    )
     def test_run_server(self, mocker, exception, windows):
         """
         Tests the run server (the function that launches the UI)
@@ -116,14 +116,14 @@ class TestLaunch:
         if exception:
             mock_print = mocker.patch("builtins.print")
             # side effect causes Exception to be raised/caught
-            mock_server_proc.wait.side_effect = KeyboardInterrupt        
-        
+            mock_server_proc.wait.side_effect = KeyboardInterrupt
+
         mock_sys_platform = None
         mock_signal = None
         if not windows:
             mock_sys_platform = mocker.patch("sys.platform", "linux")
             mock_signal = mocker.patch("signal.signal")
-        
+
         launch._run_server(cmd, popen_kwargs)
         mock_atexit.assert_called_once_with(mock_kill_ptree, mock_server_proc.pid)
         if not windows:
@@ -138,7 +138,7 @@ class TestLaunch:
             # (in real-world scenarios)
             with pytest.raises(SystemExit) as exit_info:
                 registered_lambda(None, None)
-            
+
             # Note:
             # we already invoke mock_kill_ptree.assert_called_once_with(mock_server_proc.pid)
             # at the end of the script
@@ -146,13 +146,13 @@ class TestLaunch:
 
             # See we exited with exit code zero
             assert exit_info.value.code == 0
-        
+
         # try block
         mock_server_proc.wait.assert_called_once()
         if exception:
             # assert print statement in Exception block
             mock_print.assert_called_once_with("\nScubaGoggles UI stopped by user")
-        
+
         # finally
         if windows:
             mock_kill_ptree.assert_called_once_with(mock_server_proc.pid)
@@ -174,7 +174,7 @@ class TestLaunch:
         """
         # to mock command line arguments
         str_args = ["launch.py"]
-        # expected build command 
+        # expected build command
         expected_cmd = [
             str(sys.executable), "-m", "streamlit", "run",
             "home",
@@ -188,7 +188,7 @@ class TestLaunch:
             monkeypatch.setenv("SCUBAGOGGLES_UI_DARK", "80")
             expected_cmd.extend(["--theme.base", "dark"])
         mocker.patch("sys.argv", str_args)
-        # arbitrary return values for mocked functions      
+        # arbitrary return values for mocked functions
         mocker.patch.object(launch, "_find_free_port", return_value=1234)
         mocker.patch.object(launch, "_get_app_to_run", return_value=Path("home"))
         mocker.patch.object(launch, "_prevent_streamlit_promotion")
@@ -199,7 +199,7 @@ class TestLaunch:
             mocker.patch("sys.platform", "linux")
             popen_kwargs["start_new_session"] = True
 
-        launch.main()    
+        launch.main()
         # assertions
         if dark_mode:
             assert os.environ.get("SCUBAGOGGLES_UI_DARK") == "1"
