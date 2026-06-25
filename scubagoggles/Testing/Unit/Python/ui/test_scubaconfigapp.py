@@ -80,51 +80,93 @@ class TestScubaConfig:
             assert version.number == "2.0.0"
             assert version.initialize() is True
     
-    @pytest.mark.parametrize('prod_mds, os_err', [
-        ([Path('gmail.md'), Path('drive.md')], True),
-        ([Path('gmail.md'), Path('drive.md')], False),
-        ([], False),
-    ])
-    def test_parse_baseline_policies(self, mocker, prod_mds, os_err):
+
+    @pytest.mark.parametrize(
+        "prod_mds, os_err, expected",
+        [
+            (
+                [Path("gmail.md"), Path("drive.md")],
+                False,
+                {
+                    "gmail": "gmail controls by product",
+                    "drive": "drive controls by product",
+                },
+            ),
+            (
+                [Path("gmail.md"), Path("drive.md")],
+                True,
+                {},
+            ),
+            (
+                [Path("README.md")],
+                False,
+                {},
+            ),
+            (
+                [Path("README.md")],
+                True,
+                {},
+            ),
+            (
+                [],
+                False,
+                {},
+            ),
+        ],
+    )
+    def test_parse_baseline_policies(self, mocker, prod_mds, os_err, expected):
         """
-        Verifies the parse_basline function returns the controls by
-        product for each baseline, or an empty dictionary if none are
-        specified or an exception is raised
+        Verifies parse_baseline_policies returns controls by product for each
+        baseline, or an empty dictionary if none are specified or an exception
+        is raised.
         """
         mocker.patch.object(Path, "exists", return_value=True)
         mocker.patch.object(Path, "glob", return_value=iter(prod_mds))
 
-        expected = {}
+        mocker.patch.object(
+            scubaconfigapp.MarkdownParser,
+            "__init__",
+            return_value=None,
+        )
 
-        markdown_parser_mock = mocker.patch('scubagoggles.reporter.md_parser.MarkdownParser')
-        markdown_instance = markdown_parser_mock.return_value
-
-        if prod_mds:
-            parse_baseline_ret_val = {
-                "gmail": "gmail baselines",
-                "drive": "drive baselines",
-            }
-            markdown_instance.parse_baselines.return_value = parse_baseline_ret_val
-
-            controls_by_product_ret_val = {
-                'gmail': {"gmail control": "gmail control data"},
-                'drive': {"drive control": "drive control data"},
-            }
-            markdown_instance.controls_by_product.return_value = controls_by_product_ret_val
-            
-            expected = {}
-
+        # subsitute replacement for parse_baselines
+        def parse_baselines_sub(self, products):
             if os_err:
-                markdown_instance.parse_baselines.side_effect = OSError("OS Error")
-                expected = {}
+                raise OSError("OS Error")
+            parsed_baselines = {}
+            for p in products:
+                parsed_baselines[p] = str(p) + " baselines"
+            return parsed_baselines
 
-        assert expected == scubaconfigapp.ScubaConfigApp.parse_baseline_policies()
+        # subsitute replacement for controls_by_product
+        def controls_by_product_sub(baselines, normalize=False):
+            controls_by_product_dict = {}
+            for b in baselines.keys():
+                controls_by_product_dict[b] = str(b) + " controls by product"
+            return controls_by_product_dict
+
+        mocker.patch.object(
+            scubaconfigapp.MarkdownParser,
+            "parse_baselines",
+            new=parse_baselines_sub,
+        )
+
+        mocker.patch.object(
+            scubaconfigapp.MarkdownParser,
+            "controls_by_product",
+            new=staticmethod(controls_by_product_sub),
+        )
+
+        result = scubaconfigapp.ScubaConfigApp.parse_baseline_policies()
+        assert result == expected
+
 
     @pytest.fixture
     def generate_css_py(self):
         """Fixture providing path to generated CSS expected output."""
         return Path(__file__).parent / 'snippets' / 'generated_css.py'
 
+    
     @pytest.mark.parametrize('dark, env, css_name', [
         (True, "1", "FORCED_DARK_CSS"),
         (False, "", "AUTO_DARK_CSS"),
