@@ -228,7 +228,8 @@ class TestScubaConfig:
             mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_baselines')
             mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_output_settings')
             mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_advanced_settings')
-            mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_import_policy_and_account_sections')
+            mocker.patch.object(scubaconfigapp.ScubaConfigApp, 
+                                '_import_policy_and_account_sections')
             mocker.patch.object(scubaconfigapp.ScubaConfigApp, '_show_import_summary')
             st_rerun_mock = mocker.patch('streamlit.rerun')
             sconf_app = scubaconfigapp.ScubaConfigApp()
@@ -498,7 +499,7 @@ class TestScubaConfig:
         assert session_state_mock.config_data == expected_data
 
 
-    @pytest.mark.parametrize('value, coerce, expected_return_value', [
+    @pytest.mark.parametrize('value, coerce, expected_ret_value', [
         (["b1"], None, ["b1"]),   # instance is list (non-empty)
         ([], None, []),           # instance is list (empty)
         ("123", None, ["123"]),   # truthy value, coerce default None
@@ -506,12 +507,12 @@ class TestScubaConfig:
         (None, None, []),         # falsy value, coerce default None
         ("", str, []),            # second falsy case, coerce str
     ])
-    def test_normalize_to_list(self, value, coerce, expected_return_value):
+    def test_normalize_to_list(self, value, coerce, expected_value):
         """
         Test the normalize_to_list function works as intended and test different 
         edge cases.
         """
-        assert scubaconfigapp.ScubaConfigApp._normalize_to_list(value, coerce) == expected_return_value
+        assert scubaconfigapp.ScubaConfigApp._normalize_to_list(value, coerce) == expected_value
 
 
     @pytest.mark.parametrize('config, expected_value', [
@@ -706,7 +707,7 @@ class TestScubaConfig:
               "baselines": [],
               "credentials": "", "outputpath": "", "breakglassaccounts": [], 
               "subjectemail": ""}, True, "", 
-              ["Organization Name is required.", 
+              ["Organization Name is required.",
                "At least 1 product must be selected for the configuration to be valid."]),
 
             ({"orgname": "Org",
@@ -761,15 +762,15 @@ class TestScubaConfig:
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "", "breakglassaccounts": ["admin@example.com"], 
-              "subjectemail": ""}, 
+              "subjectemail": ""},
               False, "Invalid break glass accounts", ["Invalid break glass accounts"]),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "", "breakglassaccounts": [], 
-              "subjectemail": ""}, 
+              "subjectemail": ""},
               True, "", []),
-            
+
             ({"orgname": "Org",
               "baselines": ["gmail"],
               "credentials": "", "outputpath": "", "breakglassaccounts": [], 
@@ -1189,7 +1190,7 @@ class TestScubaConfig:
             # One selected baseline with policies renders one baseline tab.
             (
                 False, {"Gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
-                ["gmail"], {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}}, 
+                ["gmail"], {"gmail": {"GWS.GMAIL.1.1": "Disable POP and IMAP access"}},
                 1,
             ),
             # Multiple selected baselines render matching tabs without pre-render.
@@ -1294,7 +1295,7 @@ class TestScubaConfig:
                 st_tabs.assert_called_once_with(["Gmail"])
             elif num_baseline_baseline_tabs == 2:
                 st_tabs.assert_called_once_with(["Gmail", "Drive"])
-            
+
             p_list_args = {"config_key", "prefix", "configured_label", "add_button_label",
                            "config_noun", "field_map", "date_fields"}
             if num_baseline_baseline_tabs > 0:
