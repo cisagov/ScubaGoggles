@@ -24,29 +24,29 @@ class TestLaunch:
         either a path to the streamlit UI application, or raises a System Exit
         error if either the path or the app is unavailible
         """
-        resolve_app_mock = None
+        
         # name variable reduces character count on lines of code
         name = "_resolve_app_file"
         if resolve_app:
             # the Path directory can be arbitrary, doesn't matter for testing
-            resolve_app_mock = mocker.patch.object(launch, name, return_value=Path("/home"))
+            mocker.patch.object(launch, name, return_value=Path("/home"))
         else:
-            resolve_app_mock = mocker.patch.object(launch, name, return_value=None)
+            mocker.patch.object(launch, name, return_value=None)
 
-        streamlit_installed_mock = None
+        
         name = "_is_streamlit_installed"
         if streamlit_installed:
-            streamlit_installed_mock = mocker.patch.object(launch, name, return_value=True)
+            mocker.patch.object(launch, name, return_value=True)
         else:
-            streamlit_installed_mock = mocker.patch.object(launch, name, return_value=False)
+            mocker.patch.object(launch, name, return_value=False)
 
         # cases where path is returned successfully
         if resolve_app and streamlit_installed:
-            assert launch._get_app_to_run() == Path("/home")
+            assert launch._get_app_to_run() == Path("/home") # pylint: disable=protected-access
         # either app path was not resolved or streamlit wasn't installed (same behavior)
         else:
             with pytest.raises(SystemExit) as ex:
-                launch._get_app_to_run()
+                launch._get_app_to_run() # pylint: disable=protected-access
             assert ex.value.code == 1
 
     @pytest.mark.parametrize('dark_mode', [
@@ -66,7 +66,7 @@ class TestLaunch:
         # home is an arbitrary directory
         # avoid backslashes to bypass OS ambiguity Path to str conversion
         app_path = Path("home")
-        command, port = launch._build_streamlit_command(app_path, force_dark=dark_mode)
+        command, port = launch._build_streamlit_command(app_path, force_dark=dark_mode) # pylint: disable=protected-access
         expected_cmd = [
             str(sys.executable), "-m", "streamlit", "run",
             "home",
@@ -97,7 +97,7 @@ class TestLaunch:
         # Empty list, we just need something here as an argument
         cmd = list[str]
         # same thing with an empty dictionary
-        popen_kwargs = dict()
+        popen_kwargs = {}
 
         mock_server_proc = mocker.MagicMock()
         # other attributes
@@ -204,14 +204,12 @@ class TestLaunch:
         if dark_mode:
             assert os.environ.get("SCUBAGOGGLES_UI_DARK") == "1"
             mock_print.assert_any_call(
-                "Starting ScubaGoggles Configuration UI "
-                f"(dark (forced) theme) ...",
+                "Starting ScubaGoggles Configuration UI (dark (forced) theme) ...",
             )
         else:
             assert os.environ.get("SCUBAGOGGLES_UI_DARK") == None
             mock_print.assert_any_call(
-                "Starting ScubaGoggles Configuration UI "
-                f"(auto theme) ...",
+                "Starting ScubaGoggles Configuration UI (auto theme) ...",
             )
         mock_print.assert_any_call("Opening http://localhost:1234 in your browser.")
         mock_print.assert_any_call("Press Ctrl+C to stop the server.\n")
