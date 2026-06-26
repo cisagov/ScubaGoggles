@@ -2,6 +2,7 @@
 test_scubaconfigapp.py tests the scubaconfigapp.py methods,
 which are the methods of the ScubaConfigApp class
 """
+#pylint: disable=too-many-lines
 
 import pytest
 from scubagoggles.ui import scubaconfigapp
