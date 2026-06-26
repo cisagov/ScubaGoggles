@@ -18,7 +18,7 @@ class TestScubaConfig:
             (False)
         ]
     )
-    def test_load_scubagoggles_backend(self, mocker, raiseImportError):
+    def test_load_scubagoggles_backend(self, mocker, raiseImportError): # pylint: disable=invalid-name
         """
         Verifies the _load_scubagoggles_backend loads the correct version,
         or the fallback if the backend is not installed
@@ -26,12 +26,18 @@ class TestScubaConfig:
 
         # mocked classes in (success) case where no ImportError is Raised
         # can be anything (should be different from ImportError case)
-        class MockImportUserConfig:
+        class MockImportUserConfig:  # pylint: disable=too-few-public-methods
+            """
+            Mock Import User Config
+            """
             def __init__(self):
                 self.output_dir = "home"
                 self.credentials_file = "tmp/creds"
 
         class MockImportVersion:
+            """
+            Mock Import Version
+            """
             number = "2.0.0"
             # ensure this is different from the
             # ImportError mocked class
