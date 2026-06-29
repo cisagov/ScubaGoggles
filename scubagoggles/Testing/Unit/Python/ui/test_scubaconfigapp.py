@@ -2,16 +2,18 @@
 test_scubaconfigapp.py tests the scubaconfigapp.py methods,
 which are the methods of the ScubaConfigApp class
 """
-#pylint: disable=too-many-lines
+#pylint: disable=protected-access,too-many-positional-arguments
+
+import sys
+import types
+from pathlib import Path
 
 import pytest
-from scubagoggles.ui import scubaconfigapp
-import types
-import sys
-from pathlib import Path
 from yaml import YAMLError
 
-class TestScubaConfig:
+from scubagoggles.ui import scubaconfigapp
+
+class TestScubaConfig: # pylint: disable=too-many-public-methods
     """Unit tests for the ScubaGoggles Config Class"""
     @pytest.mark.parametrize('raiseImportError', [
             (True),
@@ -34,7 +36,7 @@ class TestScubaConfig:
                 self.output_dir = "home"
                 self.credentials_file = "tmp/creds"
 
-        class MockImportVersion:
+        class MockImportVersion: # pylint: disable=too-few-public-methods
             """
             Mock Import Version
             """
@@ -44,6 +46,9 @@ class TestScubaConfig:
             # (initialize returns None in that case)
             @classmethod
             def initialize(cls):
+                """
+                Class method init
+                """
                 return True
 
         # expected results without Exception
@@ -136,7 +141,7 @@ class TestScubaConfig:
         )
 
         # subsitute replacement for parse_baselines
-        def parse_baselines_sub(self, products):
+        def parse_baselines_sub(_self, products):
             if os_err:
                 raise OSError("OS Error")
             parsed_baselines = {}
@@ -145,7 +150,7 @@ class TestScubaConfig:
             return parsed_baselines
 
         # subsitute replacement for controls_by_product
-        def controls_by_product_sub(baselines, normalize=False):
+        def controls_by_product_sub(baselines, _normalize=False):
             controls_by_product_dict = {}
             for b in baselines.keys():
                 controls_by_product_dict[b] = str(b) + " controls by product"
@@ -173,11 +178,11 @@ class TestScubaConfig:
         return Path(__file__).parent / 'snippets' / 'generated_css.py'
 
 
-    @pytest.mark.parametrize('dark, env, css_name', [
+    @pytest.mark.parametrize('_dark, env, css_name', [
         (True, "1", "FORCED_DARK_CSS"),
         (False, "", "AUTO_DARK_CSS"),
     ])
-    def test_generate_css(self, monkeypatch, generate_css_py, dark, env, css_name):
+    def test_generate_css(self, monkeypatch, generate_css_py, _dark, env, css_name):
         """
         Tests that _generate_css either forces dark CSS or wraps it in the
         browser dark-mode media query, depending on the environment.
@@ -308,10 +313,9 @@ class TestScubaConfig:
         assert session_state_mock.config_data == expected
 
     @pytest.mark.parametrize('config, baseline_info, ' \
-    'valid_baselines, invalid_baselines, msg', [
+    'valid_baselines, msg', [
             (
                 {"not baselines": "nb1"},
-                [], # shouldn't matter
                 [], # shouldn't matter
                 [], # shouldn't matter
                 ""
@@ -321,7 +325,6 @@ class TestScubaConfig:
                  #doesn't need to be a dictionary, only care about mocking the return value
                 ["b1"],
                 ["b1"],
-                [],
                 ""
             ),
             # no valid baselines
@@ -329,14 +332,12 @@ class TestScubaConfig:
                 {"baselines": "b1"},
                 [],
                 [],
-                ["b1"],
                 "⚠️ **Skipped unknown baselines:** b1"
             ),
             # baslines value not string or dict
             (
                 {"baselines": 1}, # not a string or list
                 [], # doesn't matter here
-                [],
                 [],
                 ""
             ),
@@ -345,7 +346,6 @@ class TestScubaConfig:
                 {"baselines": 1},
                 [1], # shouldn't matter
                 [],
-                [],
                 ""
             ),
             # no valid baselines
@@ -353,7 +353,6 @@ class TestScubaConfig:
                 {"baselines": ["b1"]},
                 ["b2", "b3", "b4"],
                 [],
-                ["b1"],
                 "⚠️ **Skipped unknown baselines:** b1"
             ),
             # valid baselines are b1 and b2
@@ -361,12 +360,11 @@ class TestScubaConfig:
                 {"baselines": ["b1", "b2", "b3", "b4"]},
                 ["b1", "b2", "b5"],
                 ["b1", "b2"],
-                ["b3", "b4"],
                 "⚠️ **Skipped unknown baselines:** b3, b4"
             )
         ]
     )
-    def test_import_baselines(self, mocker, config, baseline_info,
+    def test_import_baselines(self, mocker, config, baseline_info, 
                               valid_baselines, msg):
         """
         Tests that the import_baselines function and ensure 
@@ -506,7 +504,7 @@ class TestScubaConfig:
         assert session_state_mock.config_data == expected_data
 
 
-    @pytest.mark.parametrize('value, coerce, expected_ret_value', [
+    @pytest.mark.parametrize('value, coerce, expected_value', [
         (["b1"], None, ["b1"]),   # instance is list (non-empty)
         ([], None, []),           # instance is list (empty)
         ("123", None, ["123"]),   # truthy value, coerce default None
@@ -690,7 +688,7 @@ class TestScubaConfig:
         mock_rerun.assert_called_once()
 
         if yes_clicked:
-            assert session_state_mock == {}
+            assert not session_state_mock
         else:
             assert session_state_mock == initial_state
 
@@ -1234,12 +1232,12 @@ class TestScubaConfig:
         render_form = mocker.Mock()
         render_summary = mocker.Mock()
         pre_render = mocker.Mock() if pre_render_function else None
-        _POLICIES = {"GWS.TEST.1.1": {"rationale": "Already configured"}}
+        policies = {"GWS.TEST.1.1": {"rationale": "Already configured"}}
 
         session_state_mock = mocker.Mock()
         session_state_mock.config_data = {
             "baselines": selected_baselines,
-            argument_dictionary["config_key"]: _POLICIES,
+            argument_dictionary["config_key"]: policies,
         }
         mocker.patch("streamlit.session_state", session_state_mock)
 
@@ -1270,6 +1268,7 @@ class TestScubaConfig:
         render_policy_list_arguments["render_form"] = render_form
         render_policy_list_arguments["render_summary"] = render_summary
         render_policy_list_arguments["pre_render"] = pre_render
+        # pylint: disable-next=missing-kwoa
         app._render_policy_config_tab(
             **render_policy_list_arguments
         )
@@ -1312,7 +1311,7 @@ class TestScubaConfig:
                 render_policy_list.assert_any_call(
                     "Gmail",
                     {"GWS.GMAIL.1.1": "Disable POP and IMAP access"},
-                    _POLICIES,
+                    policies,
                     **render_policy_list_args_,
                 )
             if num_baseline_baseline_tabs == 2:
@@ -1322,12 +1321,12 @@ class TestScubaConfig:
                 render_policy_list.assert_any_call(
                     "Drive",
                     {"GWS.DRIVE.1.1": "Restrict external sharing"},
-                    _POLICIES,
+                    policies,
                     **render_policy_list_args_,
                 )
             assert render_policy_list.call_count == num_baseline_baseline_tabs
             st_divider.assert_called_once_with()
-        render_summary.assert_called_once_with(_POLICIES)
+        render_summary.assert_called_once_with(policies)
 
 
     @pytest.mark.parametrize('clean_config, errors', [
