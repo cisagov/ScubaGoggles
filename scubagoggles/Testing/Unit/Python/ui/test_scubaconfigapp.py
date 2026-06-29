@@ -2,7 +2,7 @@
 test_scubaconfigapp.py tests the scubaconfigapp.py methods,
 which are the methods of the ScubaConfigApp class
 """
-#pylint: disable=protected-access,too-many-positional-arguments
+#pylint: disable=protected-access,too-many-positional-arguments,too-many-lines
 
 import sys
 import types
@@ -284,6 +284,9 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
 
         # class inheritance
         class MockSessionState(dict):
+            """
+            Mocked session state class
+            """
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
                 self.config_data = {}
@@ -364,7 +367,7 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
             )
         ]
     )
-    def test_import_baselines(self, mocker, config, baseline_info, 
+    def test_import_baselines(self, mocker, config, baseline_info,
                               valid_baselines, msg):
         """
         Tests that the import_baselines function and ensure 
@@ -619,7 +622,7 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
         )
         success_mock = mocker.patch("streamlit.success")
 
-        scubaconfigapp.ScubaConfigApp._show_import_dialog.__wrapped__(
+        getattr(scubaconfigapp.ScubaConfigApp._show_import_dialog, "__wrapped__")(
             scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
         )
 
@@ -672,7 +675,7 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
 
         mock_columns.return_value = [col1, col2]
 
-        scubaconfigapp.ScubaConfigApp._show_reset_dialog.__wrapped__(
+        getattr(scubaconfigapp.ScubaConfigApp._show_reset_dialog, "__wrapped__")(
             scubaconfigapp.ScubaConfigApp.__new__(scubaconfigapp.ScubaConfigApp)
         )
 
