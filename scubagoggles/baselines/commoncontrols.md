@@ -827,7 +827,7 @@ Agencies need to have a process in place to manage and control application acces
 #### GWS.COMMONCONTROLS.10.1v1
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party applications.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols101v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Third-party applications may include malicious content. Restricting application access to only applications trusted by the agency reduces the risk of allowing malicious applications to connect to GWS.
 - _Last modified:_ July 2023
