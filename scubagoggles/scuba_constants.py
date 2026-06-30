@@ -3,7 +3,7 @@ scuba_constants.py is where short-hand references and full URLs to the GWS api c
 Also used to centralize other constant values.
 """
 
-from enum import Enum
+from enum import Enum, Flag, auto
 
 BASE_URL_ADMINSDK = 'https://developers.google.com/admin-sdk'
 BASE_URL_WS_ADMIN = 'https://developers.google.com/workspace/admin'
@@ -57,14 +57,39 @@ NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES = (
     0, 13, 18, 36
 )
 
+class AuthFlow(Flag):
+    """Indicates which authentication flow(s) a scope applies to.
+
+    DWD   - service account with domain-wide delegation (subject=admin_email)
+    OAUTH - OAuth browser flow or access-token passthrough
+    DASA  - service account acting as itself for the Groups Settings API
+            (Groups Reader admin role assigned directly; no DwD subject)
+    """
+    DWD = auto()
+    OAUTH = auto()
+    DASA = auto()
+
 BASE_AUTH_URL = 'https://www.googleapis.com/auth'
-API_SCOPES = (f'{BASE_AUTH_URL}/admin.reports.audit.readonly',
-              f'{BASE_AUTH_URL}/admin.directory.domain.readonly',
-              f'{BASE_AUTH_URL}/admin.directory.orgunit.readonly',
-              f'{BASE_AUTH_URL}/admin.directory.user.readonly',
-              f'{BASE_AUTH_URL}/admin.directory.rolemanagement.readonly',
-              f'{BASE_AUTH_URL}/admin.directory.group.readonly',
-              f'{BASE_AUTH_URL}/admin.directory.customer.readonly',
-              f'{BASE_AUTH_URL}/apps.groups.settings',
-              f'{BASE_AUTH_URL}/cloud-identity.policies.readonly',
-              f'{BASE_AUTH_URL}/cloud-identity.inboundsso.readonly')
+
+# Single source of truth for all API scopes.
+# Each entry maps a scope URL to the auth flow(s) that require it.
+API_SCOPES = {
+    f'{BASE_AUTH_URL}/admin.reports.audit.readonly':            AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.domain.readonly':         AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.orgunit.readonly':        AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.user.readonly':           AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.rolemanagement.readonly': AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.group.readonly':          AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/admin.directory.customer.readonly':       AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/cloud-identity.policies.readonly':        AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/cloud-identity.inboundsso.readonly':      AuthFlow.OAUTH | AuthFlow.DWD,
+    f'{BASE_AUTH_URL}/apps.groups.settings':                    AuthFlow.OAUTH | AuthFlow.DASA,
+}
+
+def scopes_for(flow: AuthFlow) -> tuple:
+    """Returns a tuple of scope URLs applicable to the given authentication flow."""
+    return tuple(scope for scope, allowed in API_SCOPES.items() if allowed & flow)
+
+DWD_SCOPES = scopes_for(AuthFlow.DWD)
+OAUTH_SCOPES = scopes_for(AuthFlow.OAUTH)
+DASA_SCOPES = scopes_for(AuthFlow.DASA)
