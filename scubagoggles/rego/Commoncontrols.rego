@@ -1347,7 +1347,8 @@ ServiceToScopeMapping := {
     "Groups": {"GROUPS"},
     "Chat": {"CHAT", "CHAT_HIGH_RISK"},
     "Google Sign-in": {"SIGN_IN"},
-    "Meet": {"MEET"}
+    "Meet": {"MEET"},
+    "Cloud Search": {"CLOUD_SEARCH"}
 }
 
 EnabledScopes contains Scope if {
