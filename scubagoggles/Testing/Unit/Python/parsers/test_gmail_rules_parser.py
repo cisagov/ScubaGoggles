@@ -6,7 +6,28 @@ from pathlib import Path
 from scubagoggles.parsers.gmail_rules_parser import GmailRulesParser
 from scubagoggles.Testing.Unit.Python.test_policy_api import CommonMethods
 
-# pylint: disable=too-few-public-methods
+
+def _spam_override_section(enabled: bool):
+
+    """Builds a minimal spam override section with one "hide warning banner"
+    allow list that contains a domain.  The enable flag is set per the
+    argument so both the disabled and enabled cases can be exercised.
+    """
+
+    return {
+        'spamOverride': [
+            {
+                'description': 'TestList',
+                'hideWarningBannerFromSelectedSenders': enabled,
+                'hideWarningBannerSenderAllowlist': [
+                    {
+                        'name': 'MyAllowList',
+                        'list': ['evil.example.com']
+                    }
+                ]
+            }
+        ]
+    }
 
 
 class TestGmailRulesParser:
@@ -37,3 +58,32 @@ class TestGmailRulesParser:
                 policies = test_data['policies']
                 gmail_parser = GmailRulesParser(policy_api, policies)
                 assert gmail_parser._address_lists == test_data['results']
+
+    def test_gmail_domain_addr_disabled_allow_list(self):
+
+        """A disabled spam override allow list must be skipped, even when it
+        contains a domain, so no "domains found" marker is emitted.
+        """
+
+        # Bypass __init__, which needs a live Policy API; only the
+        # _gmail_domain_addr method is under test here.
+        parser = object.__new__(GmailRulesParser)
+        section = _spam_override_section(enabled = False)
+
+        parser._gmail_domain_addr(section)
+
+        assert 'warningDomainsFound' not in section
+
+    def test_gmail_domain_addr_enabled_allow_list(self):
+
+        """An enabled allow list with a domain still emits the marker, so the
+        disabled-list fix doesn't suppress real findings.
+        """
+
+        parser = object.__new__(GmailRulesParser)
+        section = _spam_override_section(enabled = True)
+
+        parser._gmail_domain_addr(section)
+
+        assert section['warningDomainsFound'] == \
+            '{TestList: [MyAllowList: (evil.example.com)]}'
