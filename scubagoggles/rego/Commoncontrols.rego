@@ -1330,37 +1330,62 @@ tests contains {
 
 CommonControlsId10_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.1")
 
+ServiceToScopeMapping := {
+    "Drive": {"DRIVE_ALL", "DRIVE_HIGH_RISK"},
+    "Gmail": {"GMAIL_ALL", "GMAIL_HIGH_RISK"},
+    "Calendar": {"CALENDAR_ALL"},
+    "Contacts": {"CONTACTS_ALL"},
+    "Google Workspace Admin": {"GSUITE_ADMIN_ALL"},
+    "Vault": {"VAULT_ALL"},
+    "Cloud Platform": {"CLOUD_PLATFORM"},
+    "Cloud Billing": {"CLOUD_BILLING"},
+    "Cloud Machine Learning": {"CLOUD_ML"},
+    "Apps Script API": {"APPS_SCRIPT_API"},
+    "Apps Script Runtime": {"APPS_SCRIPT_RUNTIME"},
+    "Classroom": {"CLASSROOM_ALL", "CLASSROOM_HIGH_RISK"},
+    "Tasks": {"TASKS"},
+    "Groups": {"GROUPS"},
+    "Chat": {"CHAT", "CHAT_HIGH_RISK"},
+    "Google Sign-in": {"SIGN_IN"},
+    "Meet": {"MEET"},
+    "Cloud Search": {"CLOUD_SEARCH"}
+}
+
+EnabledScopes contains Scope if {
+    some OU, settings in input.policies
+    some Service in settings.api_controls_google_services.services
+    Scope := Service.scopesGroup
+}
+
+# Only services that are restricted are shown in api_controls_google_services, so we know that if
+# any of the scopes listed above are missing, its corresponding service is unrestricted. For
+# services that have multiple scopes (e.g., Drive), only one of the scopes needs to be present for
+# it to be restricted.
+UnrestrictedServices10_1 contains Service if {
+    some Service in object.keys(ServiceToScopeMapping)
+    count(intersection({ServiceToScopeMapping[Service], EnabledScopes})) == 0
+}
+
 # NOTE: App access cannot be controlled at the group/OU level
 
-NonComplianceMessage10_1(value) := sprintf("%s services are unrestricted.",
-                                          [value])
+ReportDetails10_1(true) := "Requirement met."
 
-NonCompliantOUs10_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage10_1(count(unrestrictedScopesGroup))
-}
-if {
-    some OU, settings in input.policies
-    some service in settings.api_controls_google_services.services
-    service.isEnabled = true
-    unrestrictedScopesGroup := service.scopesGroup
-
-    count(unrestrictedScopesGroup) > 0
-}
-
-# This policy does not have API support currently
-# Only services that are restricted are shown in api_controls_google_services
-# We are unable to determine whether there exists services that are unrestricted
-# Hence updating to be manually checked
+ReportDetails10_1(false) := concat("", [
+    "The following services allow access: ",
+    concat(", ", UnrestrictedServices10_1), "."
+])
 
 tests contains {
     "PolicyId": CommonControlsId10_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "Prerequisites": ["policy/api_controls_google_services.services"],
+    "Criticality": "Shall",
+    "ReportDetails": ReportDetails10_1(Status),
     "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(UnrestrictedServices10_1) == 0
 }
 
 #
