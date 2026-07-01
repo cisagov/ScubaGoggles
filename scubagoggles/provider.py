@@ -190,8 +190,8 @@ class Provider:
             account.
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
-        :param doh_servers: (optional) list of DoH servers that should be used 
-            for DoH queries.           
+        :param doh_servers: (optional) list of DoH servers that should be used
+            for DoH queries.
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.
         """
@@ -345,11 +345,32 @@ class Provider:
         """
         results = []
         for domain in domains:
+            compliant = False
+            local_message = ''
             result = self._dns_client.query(domain)
+
+            if len(result['answers']) == 0:
+                local_message = "Domain exists but no answers returned."
+
+            for spf_record in result['answers']:
+                if '~all' in spf_record:
+                    # pylint: disable=line-too-long
+                    local_message = "SPF record found, but it does not fail (either hard or soft fail) or redirect to one that does."
+
+                if '-all' in spf_record:
+                    local_message = "SPF record found."
+                    compliant = True
+
+            for query in result['log_entries']:
+                if 'NXDOMAIN' in query['query_result'].upper():
+                    local_message = "Domain does not exist."
+
             results.append({
                 'domain': domain,
+                'compliant': compliant,
+                'message': local_message,
                 'rdata': result['answers'],
-                'log': result['log_entries']
+                'log': result['log_entries'],
             })
         return results
 
