@@ -275,10 +275,14 @@ class PolicyAPI:
         'meet_service_status': {'settings': {'serviceState': isState}},
         'meet_video_recording': {'settings': {'enableRecording': isBool}},
         'migrate_service_status': {'settings': {'serviceState': isState}},
+        'multi_party_approval_require_approvals': {'settings': {
+            'multiPartyApprovalState': isEnum}},
         'pay_user_takeout': {'settings': {'takeoutStatus': isEnum}},
         'photos_user_takeout': {'settings': {'takeoutStatus': isEnum}},
         'play_console_user_takeout': {'settings': {'takeoutStatus': isEnum}},
         'play_user_takeout': {'settings': {'takeoutStatus': isEnum}},
+        'provisioning_conflicting_accounts_management': {'settings': {
+            'conflictingAccountsManagement': isEnum}},
         'rule_dlp': {'parser': DlpRulesParser,
                      'reducer': _list_reducer,
                      'settings': {
