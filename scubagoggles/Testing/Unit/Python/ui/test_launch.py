@@ -9,6 +9,8 @@ from pathlib import Path
 import pytest
 from scubagoggles.ui import launch
 
+# pylint: disable=protected-access
+
 class TestLaunch:
     """Unit tests for the ScubaGoggles UI Launcher Program"""
 
@@ -26,14 +28,14 @@ class TestLaunch:
         """
 
         # name variable reduces character count on lines of code
-        name = "_resolve_app_file"
+        name = '_resolve_app_file'
         if resolve_app:
             # the Path directory can be arbitrary, doesn't matter for testing
-            mocker.patch.object(launch, name, return_value=Path("/home"))
+            mocker.patch.object(launch, name, return_value=Path('/home'))
         else:
             mocker.patch.object(launch, name, return_value=None)
 
-        name = "_is_streamlit_installed"
+        name = '_is_streamlit_installed'
         if streamlit_installed:
             mocker.patch.object(launch, name, return_value=True)
         else:
@@ -41,11 +43,11 @@ class TestLaunch:
 
         # cases where path is returned successfully
         if resolve_app and streamlit_installed:
-            assert launch._get_app_to_run() == Path("/home") # pylint: disable=protected-access
+            assert launch._get_app_to_run() == Path('/home')
         # either app path was not resolved or streamlit wasn't installed (same behavior)
         else:
             with pytest.raises(SystemExit) as ex:
-                launch._get_app_to_run() # pylint: disable=protected-access
+                launch._get_app_to_run()
             assert ex.value.code == 1
 
     @pytest.mark.parametrize('dark_mode', [
@@ -59,25 +61,25 @@ class TestLaunch:
         Tests whether the command method builds the appropriate
         command given the app_path name (fixed) and the dark_mode toggle
         """
-        name = "_find_free_port"
+        name = '_find_free_port'
         #1000 is an arbitrary value
         mocker.patch.object(launch, name, return_value=1000)
         # home is an arbitrary directory
         # avoid backslashes to bypass OS ambiguity Path to str conversion
-        app_path = Path("home")
-        command, port = launch._build_streamlit_command(app_path, force_dark=dark_mode) # pylint: disable=protected-access
+        app_path = Path('home')
+        command, port = launch._build_streamlit_command(app_path, force_dark=dark_mode)
         expected_cmd = [
-            str(sys.executable), "-m", "streamlit", "run",
-            "home",
-            "--server.address", "localhost",
-            "--server.port", "1000",
-            "--server.headless", "false",
-            "--browser.gatherUsageStats", "false",
+            str(sys.executable), '-m', 'streamlit', 'run',
+            'home',
+            '--server.address', 'localhost',
+            '--server.port', '1000',
+            '--server.headless', 'false',
+            '--browser.gatherUsageStats', 'false',
         ]
         # mock return
         assert port == 1000
         if dark_mode:
-            expected_cmd.extend(["--theme.base", "dark"])
+            expected_cmd.extend(['--theme.base', 'dark'])
         for index, c in enumerate(command):
             assert c == expected_cmd[index]
 
@@ -104,25 +106,25 @@ class TestLaunch:
         mock_server_proc.pid = 1234
 
         # patch the Popen command and mock the return value (process)
-        mock_popen = mocker.patch("subprocess.Popen")
+        mock_popen = mocker.patch('subprocess.Popen')
         mock_popen.return_value.__enter__.return_value = mock_server_proc
 
         # patch other things inside the context manager
-        mock_atexit = mocker.patch("atexit.register")
-        mock_kill_ptree = mocker.patch.object(launch, "_kill_process_tree")
+        mock_atexit = mocker.patch('atexit.register')
+        mock_kill_ptree = mocker.patch.object(launch, '_kill_process_tree')
 
         mock_print = None
         if exception:
-            mock_print = mocker.patch("builtins.print")
+            mock_print = mocker.patch('builtins.print')
             # side effect causes Exception to be raised/caught
             mock_server_proc.wait.side_effect = KeyboardInterrupt
 
         mock_signal = None
         if not windows:
-            mocker.patch("sys.platform", "linux")
-            mock_signal = mocker.patch("signal.signal")
+            mocker.patch('sys.platform', 'linux')
+            mock_signal = mocker.patch('signal.signal')
 
-        launch._run_server(cmd, popen_kwargs) # pylint: disable=protected-access
+        launch._run_server(cmd, popen_kwargs)
         mock_atexit.assert_called_once_with(mock_kill_ptree, mock_server_proc.pid)
         if not windows:
             mock_signal.assert_called_once()
@@ -149,7 +151,7 @@ class TestLaunch:
         mock_server_proc.wait.assert_called_once()
         if exception:
             # assert print statement in Exception block
-            mock_print.assert_called_once_with("\nScubaGoggles UI stopped by user")
+            mock_print.assert_called_once_with('\nScubaGoggles UI stopped by user')
 
         # finally
         if windows:
@@ -171,44 +173,44 @@ class TestLaunch:
         Test the main() method in launch.py
         """
         # to mock command line arguments
-        str_args = ["launch.py"]
+        str_args = ['launch.py']
         # expected build command
         expected_cmd = [
-            str(sys.executable), "-m", "streamlit", "run",
-            "home",
-            "--server.address", "localhost",
-            "--server.port", "1234",
-            "--server.headless", "false",
-            "--browser.gatherUsageStats", "false",
+            str(sys.executable), '-m', 'streamlit', 'run',
+            'home',
+            '--server.address', 'localhost',
+            '--server.port', '1234',
+            '--server.headless', 'false',
+            '--browser.gatherUsageStats', 'false',
         ]
         if dark_mode:
-            str_args.append("--dark")
-            monkeypatch.setenv("SCUBAGOGGLES_UI_DARK", "80")
-            expected_cmd.extend(["--theme.base", "dark"])
-        mocker.patch("sys.argv", str_args)
+            str_args.append('--dark')
+            monkeypatch.setenv('SCUBAGOGGLES_UI_DARK', '80')
+            expected_cmd.extend(['--theme.base', 'dark'])
+        mocker.patch('sys.argv', str_args)
         # arbitrary return values for mocked functions
-        mocker.patch.object(launch, "_find_free_port", return_value=1234)
-        mocker.patch.object(launch, "_get_app_to_run", return_value=Path("home"))
-        mocker.patch.object(launch, "_prevent_streamlit_promotion")
-        mock_print = mocker.patch("builtins.print")
-        mock_run_server = mocker.patch.object(launch, "_run_server")
+        mocker.patch.object(launch, '_find_free_port', return_value=1234)
+        mocker.patch.object(launch, '_get_app_to_run', return_value=Path('home'))
+        mocker.patch.object(launch, '_prevent_streamlit_promotion')
+        mock_print = mocker.patch('builtins.print')
+        mock_run_server = mocker.patch.object(launch, '_run_server')
         popen_kwargs = {}
         if not windows:
-            mocker.patch("sys.platform", "linux")
-            popen_kwargs["start_new_session"] = True
+            mocker.patch('sys.platform', 'linux')
+            popen_kwargs['start_new_session'] = True
 
         launch.main()
         # assertions
         if dark_mode:
-            assert os.environ.get("SCUBAGOGGLES_UI_DARK") == "1"
+            assert os.environ.get('SCUBAGOGGLES_UI_DARK') == '1'
             mock_print.assert_any_call(
-                "Starting ScubaGoggles Configuration UI (dark (forced) theme) ...",
+                'Starting ScubaGoggles Configuration UI (dark (forced) theme) ...',
             )
         else:
             assert os.environ.get('SCUBAGOGGLES_UI_DARK') is None
             mock_print.assert_any_call(
-                "Starting ScubaGoggles Configuration UI (auto theme) ...",
+                'Starting ScubaGoggles Configuration UI (auto theme) ...',
             )
-        mock_print.assert_any_call("Opening http://localhost:1234 in your browser.")
-        mock_print.assert_any_call("Press Ctrl+C to stop the server.\n")
+        mock_print.assert_any_call('Opening http://localhost:1234 in your browser.')
+        mock_print.assert_any_call('Press Ctrl+C to stop the server.\n')
         mock_run_server.assert_called_once_with(expected_cmd, popen_kwargs)
