@@ -5,11 +5,13 @@ provider.py is where the GWS api calls are made.
 
 import logging
 import warnings
+import json
 from typing import Callable, ContextManager, Mapping, Optional, Protocol
 from pathlib import Path
 from tqdm import tqdm
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from google.auth.exceptions import RefreshError
 import google.auth.transport.requests as auth_requests
 from scubagoggles.auth import GwsAuth
@@ -110,6 +112,23 @@ EVENTS = {
 
 
 SELECTORS = ['google', 'selector1', 'selector2']
+
+# Top-level Google Workspace product IDs queried by get_license_data().
+# The API returns skuId and skuName per user, so individual SKUs never need
+# to be listed here.  New SKUs within these products are discovered automatically.
+# Source: https://developers.google.com/workspace/admin/licensing/v1/how-tos/products
+KNOWN_PRODUCT_IDS = [
+    'Google-Apps',   # Core Workspace editions (Business, Enterprise, Frontline…)
+    '101047',        # Gemini add-ons
+    '101001',        # Cloud Identity Free
+    '101005',        # Cloud Identity Premium
+    '101039',        # Assured Controls / Assured Controls Plus
+    'Google-Vault',  # Google Vault
+    '101033',        # Google Voice
+    '101040',        # Chrome Enterprise Premium
+    '101038',        # AppSheet
+    '101035',        # Cloud Search
+]
 
 # Privilege names (the values of role.rolePrivileges[*].privilegeName
 # returned by directory/v1/roles/list) that indicate a "highly privileged"
@@ -912,6 +931,195 @@ class Provider:
             self._unsuccessful_calls.add(ApiReference.GET_GROUP.value)
             return {'group_settings': []}
 
+    @staticmethod
+    def _get_license_error_cause(exc: Exception) -> str:
+        if isinstance(exc, HttpError):
+            return f'HTTP {exc.status_code}: {exc.reason}'
+        return str(exc)
+
+    @staticmethod
+    def _is_global_license_failure(exc: Exception) -> bool:
+        """Return True when a license API error will affect every product query."""
+        if not isinstance(exc, HttpError):
+            return False
+        if exc.status_code == 401:
+            return True
+        if exc.status_code != 403:
+            return False
+
+        error_text = f'{exc.reason} {exc.content}'.lower()
+        if 'accessnotconfigured' in error_text:
+            return True
+        if 'has not been used in project' in error_text and 'disabled' in error_text:
+            return True
+        if 'licensing.googleapis.com' in error_text:
+            return True
+
+        try:
+            content = (
+                exc.content.decode()
+                if isinstance(exc.content, bytes)
+                else str(exc.content)
+            )
+            payload = json.loads(content)
+            for error in payload.get('error', {}).get('errors', []):
+                if error.get('reason', '').lower() == 'accessnotconfigured':
+                    return True
+        except (ValueError, AttributeError, TypeError):
+            pass
+
+        return False
+
+    def get_license_data(self, quiet: bool = False, status_bar=None) -> dict:  # pylint: disable=too-many-branches
+        """
+        Gets license assignment counts per SKU using the Enterprise License
+        Manager API.
+
+        Calls listForProduct once per product ID in KNOWN_PRODUCT_IDS.  Each
+        response item already contains skuId and skuName, so no hardcoded SKU
+        mapping is needed — new SKUs are discovered automatically.
+
+        Scope required: https://www.googleapis.com/auth/apps.licensing
+
+        Returns a dict with key 'license_data': a list of subscription records,
+        one per active SKU, each with: product_name, sku_id, product_id,
+        status, assigned.
+        """
+        api_call = ApiReference.LIST_LICENSE_ASSIGNMENTS.value
+        subscriptions = []
+        self._deferred_license_warning = None
+
+        primary_domain = None
+        for domain in self.list_domains():
+            if domain.get('isPrimary'):
+                primary_domain = domain['domainName']
+                break
+        if not primary_domain:
+            primary_domain = self._customer_id
+
+        # googleapiclient logs every non-2xx response as a WARNING via the
+        # standard logging module regardless of how we handle the error, so
+        # silence it here since we already report failures via our own
+        # consolidated warning below.
+        http_logger = logging.getLogger('googleapiclient.http')
+        previous_log_level = http_logger.level
+        http_logger.setLevel(logging.ERROR)
+        try:
+            licensing_service = build('licensing', 'v1',
+                                      cache_discovery=False,
+                                      credentials=self._credentials,
+                                      num_retries=0)
+
+            any_success = False
+            failed_products: dict[str, list[str]] = {}
+            use_inner_bar = status_bar is None
+            products_bar = tqdm(
+                list(enumerate(KNOWN_PRODUCT_IDS)),
+                total=len(KNOWN_PRODUCT_IDS),
+                leave=False,
+                disable=quiet or not use_inner_bar,
+            )
+            for index, product_id in products_bar:
+                description = (
+                    'Running Provider: Exporting license data for '
+                    f'{product_id} (commoncontrols)...'
+                )
+                if status_bar is not None:
+                    status_bar.set_description(description)
+                else:
+                    products_bar.set_description(description)
+                try:
+                    sku_counts: dict[str, dict] = {}
+                    page_token = None
+                    while True:
+                        kwargs = {
+                            'productId': product_id,
+                            'customerId': primary_domain,
+                            'maxResults': 1000,
+                        }
+                        if page_token:
+                            kwargs['pageToken'] = page_token
+                        response = (
+                            licensing_service  # pylint: disable=no-member
+                            .licenseAssignments()
+                            .listForProduct(**kwargs)
+                            .execute()
+                        )
+                        for item in response.get('items', []):
+                            sku_id = item.get('skuId', '')
+                            if sku_id not in sku_counts:
+                                sku_counts[sku_id] = {
+                                    'name': item.get('skuName', sku_id),
+                                    'count': 0,
+                                }
+                            sku_counts[sku_id]['count'] += 1
+                        page_token = response.get('nextPageToken')
+                        if not page_token:
+                            break
+
+                    any_success = True
+                    for sku_id, info in sku_counts.items():
+                        if info['count'] > 0:
+                            subscriptions.append({
+                                'product_name': info['name'],
+                                'sku_id': sku_id,
+                                'product_id': product_id,
+                                'status': 'Active',
+                                'assigned': info['count'],
+                            })
+                except Exception as exc:
+                    cause = self._get_license_error_cause(exc)
+                    failed_products.setdefault(cause, []).append(product_id)
+                    if self._is_global_license_failure(exc):
+                        failed_products[cause].extend(
+                            KNOWN_PRODUCT_IDS[index + 1:]
+                        )
+                        skip_description = (
+                            'Running Provider: License API unavailable; '
+                            'skipping remaining products (commoncontrols)...'
+                        )
+                        if status_bar is not None:
+                            status_bar.set_description(skip_description)
+                        else:
+                            products_bar.set_description(skip_description)
+                        break
+
+            if failed_products:
+                causes = '; '.join(
+                    f'{cause} (products: {", ".join(products)})'
+                    for cause, products in failed_products.items()
+                )
+                message = (
+                    'Exception thrown while getting license data for '
+                    f'{sum(len(products) for products in failed_products.values())} '
+                    'product(s); these will be omitted from the '
+                    f'subscription table: {causes}'
+                )
+                if status_bar is None:
+                    warnings.warn(message, RuntimeWarning)
+                else:
+                    self._deferred_license_warning = message
+
+            if any_success:
+                self._successful_calls.add(api_call)
+            else:
+                self._unsuccessful_calls.add(api_call)
+
+        except Exception as exc:
+            message = (
+                f'Exception thrown while getting license data; '
+                f'subscription table will be omitted: {exc}'
+            )
+            if status_bar is None:
+                warnings.warn(message, RuntimeWarning)
+            else:
+                self._deferred_license_warning = message
+            self._unsuccessful_calls.add(api_call)
+        finally:
+            http_logger.setLevel(previous_log_level)
+
+        return {'license_data': subscriptions}
+
     def call_gws_providers(self, products: list, quiet) -> dict:
         """
         Calls the relevant GWS APIs to get the data we need for the baselines.
@@ -990,12 +1198,32 @@ class Provider:
                 product_to_items.update(self.get_dnsinfo())
 
             if 'commoncontrols' in product_to_logs:
-                # add list of super admins if CC is being run
-                product_to_items.update(self.get_super_admins())
-                # add list of highly privileged users (CC 6.1)
-                product_to_items.update(self.get_privileged_users())
-                # add effective SSO assignment state (CC 6.1 API-based check)
-                product_to_items.update(self.get_inbound_sso_assignments())
+                commoncontrols_steps = (
+                    ('super admin users', self.get_super_admins),
+                    ('privileged users', self.get_privileged_users),
+                    ('inbound SSO assignments', self.get_inbound_sso_assignments),
+                    ('license data', None),
+                )
+                cc_bar = tqdm(total=len(commoncontrols_steps),
+                              leave=False,
+                              disable=quiet)
+                for step_name, step_func in commoncontrols_steps:
+                    cc_bar.set_description(
+                        'Running Provider: Exporting '
+                        f'{step_name} for commoncontrols...'
+                    )
+                    if step_name == 'license data':
+                        product_to_items.update(
+                            self.get_license_data(quiet=quiet, status_bar=cc_bar)
+                        )
+                    else:
+                        product_to_items.update(step_func())
+                    cc_bar.update(1)
+
+                cc_bar.close()
+                if self._deferred_license_warning is not None:
+                    warnings.warn(self._deferred_license_warning, RuntimeWarning)
+                    self._deferred_license_warning = None
 
             product_to_items.update(self.get_group_settings())
 
