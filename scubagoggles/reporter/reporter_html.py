@@ -4,7 +4,10 @@ reporter_html.py - report html page - html specific
 # Must remove pylint disable too many lines when fixing this file.
 # pylint: disable=too-many-arguments, too-many-locals, too-many-positional-arguments
 import io
+import re
 import time
+
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 
@@ -67,10 +70,26 @@ def _inject_meta_tag(html: str) -> str:
     return html.replace('{{META_TAG}}', meta_tag)
 
 
-
-def create_html_table(table_data: list) -> str:
+def create_html_table(table_data: list,
+                      row_class_func: Callable[[dict], str] = None,
+                      col_class_func: Callable[[list], str] = None) -> str:
 
     """Generate an HTML table string from a list of row dictionaries.
+
+    :param list table_data: list of dictionaries, such that the keys
+        correspond for each dictionary in the list.
+    :param func row_class_func: [optional] function, if specified, that is
+        invoked for each dictionary in the given table, and returns a CSS
+        class name if a class is to be applied to the table row, or ''
+        (or None) if the row has no class associated with it.
+    :param func col_class_func: [optional] function, if specified, that is
+        invoked for the headings (dictionary keys), and returns list (the
+        same size as the number of headings) with a class name or ''
+        corresponding to each heading.  The class will be applied to each
+        data element for each row in the table.
+
+    :return: HTML table.
+    :rtype: str
     """
 
     table_html = ''
@@ -78,8 +97,10 @@ def create_html_table(table_data: list) -> str:
         return table_html
 
     headings = table_data[0].keys()
+    data_classes = (col_class_func(headings) if col_class_func
+                    else [''] * len(headings))
     with io.StringIO() as outstream:
-        outstream.write('<table>\n')
+        outstream.write('\n<table>\n')
         outstream.write('  <thead>\n')
         outstream.write('    <tr>\n')
         for heading in headings:
@@ -89,9 +110,14 @@ def create_html_table(table_data: list) -> str:
 
         outstream.write('  <tbody>\n')
         for record in table_data:
-            outstream.write('    <tr>\n')
-            for heading in headings:
-                outstream.write(f'      <td>{record[heading]}</td>\n')
+            class_name = row_class_func(record) if row_class_func else ''
+            class_attr = f' class="{class_name}"' if class_name else ''
+            outstream.write(f'    <tr{class_attr}>\n')
+            for index, heading in enumerate(headings):
+                class_attr = (f' class="{data_classes[index]}"'
+                              if data_classes[index] else '')
+                outstream.write(f'      <td{class_attr}>{record[heading]}'
+                                '</td>\n')
             outstream.write('    </tr>\n')
         outstream.write('  </tbody>\n')
         outstream.write('</table>')
@@ -112,15 +138,6 @@ def build_front_page_html(fragments: list, tenant_info: dict, report_uuid: str,
     table = ''.join(fragments)
     html = _inject_meta_tag(html)
 
-    main_css_file = REPORTER_PATH / 'styles/main.css'
-    main_js_file = REPORTER_PATH / 'scripts/main.js'
-    html = html.replace(
-        '{{MAIN_CSS}}',
-        f"<style>{main_css_file.read_text(encoding='utf-8')}</style>")
-    html = html.replace(
-        '{{MAIN_JS}}',
-        f"<script>{main_js_file.read_text(encoding='utf-8')}</script>")
-
     dark_toggle = (
         REPORTER_PATH / 'templates/DarkModeToggleTemplate.html'
     ).read_text(encoding='utf-8')
@@ -129,24 +146,14 @@ def build_front_page_html(fragments: list, tenant_info: dict, report_uuid: str,
     '{{SGR_SETTINGS}}',
     f'<span id="sgr_settings" data-darkmode="{darkmode}" data-redaction="{redaction}"></span>',
 )
-    front_css_file = REPORTER_PATH / 'styles/FrontPageStyle.css'
-    html = html.replace(
-        '{{FRONT_CSS}}',
-        f"<style>{front_css_file.read_text(encoding='utf-8')}</style>")
 
     html = html.replace('{{report_uuid}}', report_uuid)
     html = html.replace('{{TABLE}}', table)
 
-    now = datetime.now()
-    report_date = now.strftime('%m/%d/%Y %H:%M:%S') + ' ' + time.tzname[time.daylight]
-    meta = (
-        '<table style = "text-align:center;">'
-        '<tr>'
-        '<th>Customer Name</th><th>Customer Domain</th>'
-        '<th>Customer ID</th><th>Report Date</th></tr>'
-        f'<tr><td>{tenant_info["topLevelOU"]}</td><td>{tenant_info["domain"]}</td>'
-        f'<td>{tenant_info["ID"]}</td><td>{report_date}</td></tr></table>'
-    )
+    meta = _create_meta_table(tenant_info['topLevelOU'],
+                              tenant_info['domain'],
+                              tenant_info['ID'])
+
     html = html.replace('{{TENANT_DETAILS}}', meta)
     html = html.replace('{{VERSION}}', Version.current)
 
@@ -196,26 +203,25 @@ def insert_classroom_warning(html: str, full_name: str) -> str:
     control name.
     """
 
-    classroom_note = (
-        '<h4>Note: Google Classroom is not available by default in GWS but as an additional '
-        'Google Service.</h4>'
-    )
-    assuredcontrols_note = ('<h4>Note: Assured Controls and Assured '
-                                'Controls Plus are paid add-ons with Google '
-                                'Workspace. This baseline is intended as '
-                                'guidance for agencies that already have '
-                                'these add-ons. Users that choose to implement '
-                                'this baseline should carefully consider the '
-                                'tradeoffs involved, including the potential '
-                                'security benefits, usability impacts, and '
-                                'increased licensing fees for the add-on '
-                                'licenses.</h4>')
-    if full_name == 'Google Classroom':
-        html = html.replace('{{WARNING_NOTIFICATION}}', classroom_note)
-    elif full_name == 'Assured Controls':
-        html = html.replace('{{WARNING_NOTIFICATION}}', assuredcontrols_note)
-    else:
-        html = html.replace('{{WARNING_NOTIFICATION}}', '')
+    classroom_note = '''Google Classroom is not available by default in GWS
+        but as an additional Google Service.'''
+
+    assuredcontrols_note = '''Assured Controls and Assured Controls Plus
+        are paid add-ons with Google Workspace. This baseline is intended as
+        guidance for agencies that already have these add-ons. Users that
+        choose to implement this baseline should carefully consider the
+        tradeoffs involved, including the potential security benefits,
+        usability impacts, and increased licensing fees for the add-on
+        licenses.'''
+
+    notes = {'Assured Controls': assuredcontrols_note,
+             'Google Classroom': classroom_note}
+
+    note = re.sub(r'\n\s+', ' ', notes.get(full_name, ''))
+
+    html = html.replace('{{WARNING_NOTIFICATION}}',
+                        f'<p class="note">{note}</p>' if note else '')
+
     return html
 
 
@@ -239,14 +245,6 @@ def build_individual_report_html(*,
     html = template_file.read_text(encoding='utf-8')
     html = _inject_meta_tag(html)
 
-    main_css_file = REPORTER_PATH / 'styles/main.css'
-    main_js_file = REPORTER_PATH / 'scripts/main.js'
-    html = html.replace(
-        '{{MAIN_CSS}}',
-        f"<style>{main_css_file.read_text(encoding='utf-8')}</style>")
-    html = html.replace(
-        '{{MAIN_JS}}', f"<script>{main_js_file.read_text(encoding='utf-8')}</script>")
-
     html = html.replace('{{TITLE}}', full_name + ' Baseline Report')
 
     dark_toggle = (REPORTER_PATH / 'templates/DarkModeToggleTemplate.html'
@@ -260,18 +258,8 @@ def build_individual_report_html(*,
 
     html = html.replace('{{HOMELINK}}', f'../{main_report_name}.html')
 
-    now = datetime.now()
-    baseline_version = f'{Version.major}.{Version.minor}' if Version.major == 0 else Version.major
-    report_date = now.strftime('%m/%d/%Y %H:%M:%S') + ' ' + time.tzname[time.daylight]
-    meta = (
-        '<table style = "text-align:center;">'
-        '<tr><th>Customer Name</th>'
-            '<th>Customer Domain</th><th>Customer ID</th><th>Report Date</th>'
-        '<th>Baseline Version</th><th>Tool Version</th></tr>'
-        f'<tr><td>{tenant_name}</td>'
-            f'<td>{tenant_domain}</td><td>{tenant_id}</td><td>{report_date}</td>'
-        f'<td>{baseline_version}</td><td>{Version.current}</td></tr></table>'
-    )
+    meta = _create_meta_table(tenant_name, tenant_domain, tenant_id, True)
+
     html = html.replace('{{METADATA}}', meta)
     html = html.replace('{{TABLES}}', ''.join(fragments))
 
@@ -315,6 +303,53 @@ def build_individual_report_html(*,
     return html, rules_table
 
 
+def _create_meta_table(name: str,
+                       domain: str,
+                       ident: str,
+                       include_versions: bool = False) -> str:
+
+    """Generates the "metadata" HTML table for the reports.  The table shows
+    the tenant name, domain, and customer ID, and optionally the baseline and
+    tool versions.
+
+    :param str name: tenant name.
+    :param str domain: tenant domain.
+    :param str ident: Google customer ID.
+    :param bool include_versions: if True, the table will include the baseline
+        and tool version numbers.
+
+    :return: HTML table.
+    :rtype: str
+    """
+
+    now = datetime.now()
+
+    # The timezone name (or abbreviation) depends on whether Daylight Savings
+    # is in effect.
+
+    tz_index = 1 if time.localtime().tm_isdst > 0 else 0
+
+    date = now.strftime('%m/%d/%Y %H:%M:%S') + f' {time.tzname[tz_index]}'
+
+    data = [('Customer Name', name),
+            ('Customer Domain', domain),
+            ('Customer ID', ident),
+            ('Report Date', date)]
+
+    if include_versions:
+        data += [('Baseline Version', Version.major),
+                 ('Tool Version', Version.current)]
+
+    meta = ('<table class = "meta-table">\n'
+            + '  <tr>\n'
+            + '\n'.join(f'    <th>{h}</th>' for h, _ in data)
+            + '\n  </tr>\n  <tr>\n'
+            + '\n'.join(f'    <td>{d}</td>' for _, d in data)
+            + '\n  </tr>\n</table>\n')
+
+    return meta
+
+
 def _build_rules_table(rules: dict) -> str:
 
     """Given the rules dictionary from the Rego evaluation, an HTML
@@ -346,9 +381,32 @@ def _build_rules_table(rules: dict) -> str:
                    for name, description in SYSTEM_RULES.items()]
 
     html_table = ('\n<hr>\n<h2 id="alerts">System Defined Alerts</h2>\n'
-                  + create_html_table(rules_table)) + '\n'
+                  + create_html_table(rules_table, _alerts_status_class)) + '\n'
 
     return html_table
+
+
+def _alerts_status_class(rules_row: dict) -> str:
+
+    """Given the dictionary containing data from a row in the system alerts
+    table, this method returns the CSS class associated with the row.  The
+    class selected is based on the alert status.  This method is used as a
+    callback for create_html_table().
+    """
+
+    css_class = 'unknown-alerts'
+
+    match rules_row['Status'].lower():
+
+        case 'disabled':
+
+            css_class = 'disabled-alerts'
+
+        case 'enabled':
+
+            css_class = 'enabled-alerts'
+
+    return css_class
 
 
 def _indicator_text_color(bg_color: str) -> str:
@@ -401,16 +459,9 @@ def render_indicator_badge(indicator: dict, *, product: str | None = None,
     link_url = _normalize_indicator_link(
         indicator.get('link'), product=product, github_url=github_url)
 
-    badge_style = (
-        f'background-color: {color}; color: {text_color}; '
-        'padding: 2px 8px; border-radius: 3px; '
-        'font-size: 0.85em; margin-right: 5px; '
-        'display: inline-block; white-space: nowrap; '
-        'font-weight: 500;'
-    )
+    badge_style = f'background-color: {color}; color: {text_color};'
 
-    if link_url:
-        badge_style += ' text-decoration: none;'
+    if link_url and 'shields.io' not in link_url:
         return (
             f'<a href="{link_url}" target="_blank" class="indicator-badge" '
             f'style="{badge_style}" title="{description}">{indicator_name}</a>'
@@ -436,7 +487,7 @@ def render_indicators(indicators: list,
     badges = [b for b in badges if b]
     if not badges:
         return ''
-    return '<div style="margin-top: 5px;">' + ''.join(badges) + '</div>'
+    return '<div class="badges">\n' + '\n'.join(badges) + '</div>\n'
 
 def _collect_all_indicators(product_policies: list) -> dict:
 
@@ -473,13 +524,9 @@ def build_indicator_legend(product_policies: list,
     if not all_indicators:
         return ''
 
-    legend_html = (
-        '<div class="indicator-legend" '
-            'style="margin: 20px 0; margin-left: 50px; font-size: 0.9em;">'
-        '<h3 style="margin: 0 0 10px 0; color: var(--header-color); font-weight: bold; '
-        'font-size: 0.95em; text-align: left;">Policy Indicators:</h3>'
-        '<ul style="list-style: none; padding-left: 0; margin: 0;">'
-    )
+    legend_html = ('<div id="indicator-legend">\n'
+        '  <div id="indicator-legend-label">Policy Indicators:</div>\n'
+        '  <ul id="indicator-legend-list">\n')
 
     for name in sorted(all_indicators.keys()):
         info = all_indicators[name]
@@ -490,13 +537,10 @@ def build_indicator_legend(product_policies: list,
             indicator_dict['link'] = '#key-terminology'
 
         badge = render_indicator_badge(indicator_dict, product=product, github_url=github_url)
-        legend_html += (
-            '<li style="display: flex; align-items: center; gap: 8px; '
-                'margin-bottom: 8px; font-size: 0.85em;">'
+        legend_html += ('    <li class="indicator-legend-item">'
             f'{badge}'
             f'<span style="color: var(--text-color);">{info["description"]}</span>'
-            '</li>'
-        )
+            '</li>\n')
 
-    legend_html += '</ul></div>'
+    legend_html += '</ul>\n</div>\n'
     return legend_html
