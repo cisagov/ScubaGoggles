@@ -127,20 +127,11 @@ def _run_server(cmd: list[str], popen_kwargs: dict) -> None:
             _kill_process_tree(server_process.pid)
 
 
-def main() -> None:
+def main(darkmode = False) -> None:
     """Launch the ScubaGoggles UI in the default web browser."""
 
-    parser = argparse.ArgumentParser(
-        description="ScubaGoggles Configuration UI (Streamlit)",
-    )
-    parser.add_argument(
-        "--dark",
-        action="store_true",
-        help="Force dark theme (overrides browser preference)",
-    )
-    args = parser.parse_args()
-    if args.dark:
-        os.environ["SCUBAGOGGLES_UI_DARK"] = "1"
+    if darkmode:
+            os.environ["SCUBAGOGGLES_UI_DARK"] = "1"
 
     force_dark = os.environ.get(
         "SCUBAGOGGLES_UI_DARK", "",
@@ -173,4 +164,15 @@ def main() -> None:
     _run_server(cmd, popen_kwargs)
 
 if __name__ == "__main__":
-    main()
+
+    parser = argparse.ArgumentParser(
+        description="ScubaGoggles Configuration UI (Streamlit)",
+    )
+    parser.add_argument(
+        "--dark",
+        action="store_true",
+        help="Force dark theme (overrides browser preference)",
+    )
+
+    args = parser.parse_args()
+    main(darkmode = args.dark)
