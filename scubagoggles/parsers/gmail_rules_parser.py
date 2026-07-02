@@ -205,7 +205,7 @@ class GmailRulesParser:
 
             for override in spam_override_section['spamOverride']:
 
-                if not enable:
+                if not override.get(enable):
                     continue
 
                 domains_list = []
