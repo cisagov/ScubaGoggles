@@ -25,6 +25,7 @@ class ApiReference(Enum):
     LIST_CUSTOMERS = 'directory/v1/customer/get'
     LIST_ACTIVITIES = 'reports/v1/activities/list'
     GET_GROUP = 'groups-settings/v1/groups/get'
+    LIST_LICENSE_ASSIGNMENTS = 'licensing/v1/product/{productId}/sku/{skuId}/users/list'
 
 
 class ApiUrl(Enum):
@@ -43,6 +44,10 @@ class ApiUrl(Enum):
     LIST_CUSTOMERS = f'{BASE_URL_ADMINSDK}/directory/v1/customer/get'
     LIST_ACTIVITIES = f'{BASE_URL_ADMINSDK}/reports/reference/rest/v1/activities/list'
     GET_GROUP = f'{BASE_URL_ADMINSDK}/groups-settings/v1/reference/groups/get'
+    LIST_LICENSE_ASSIGNMENTS = (
+        'https://developers.google.com/workspace/admin/licensing/reference/rest/v1/'
+        'licenseAssignments/listForProductAndSku'
+    )
 
 
 # Dictionary mapping short-hand reference to <a> tags linking to the documentation
@@ -84,6 +89,7 @@ API_SCOPES = {
     f'{BASE_AUTH_URL}/cloud-identity.policies.readonly':        AuthFlow.OAUTH | AuthFlow.DWD,
     f'{BASE_AUTH_URL}/cloud-identity.inboundsso.readonly':      AuthFlow.OAUTH | AuthFlow.DWD,
     f'{BASE_AUTH_URL}/apps.groups.settings':                    AuthFlow.OAUTH | AuthFlow.DASA,
+    f'{BASE_AUTH_URL}/apps.licensing':                          AuthFlow.OAUTH | AuthFlow.DASA,
 }
 
 def scopes_for(flow: AuthFlow) -> tuple:
