@@ -410,11 +410,11 @@ def verify_indicators_and_legend(browser):
 
     # Check if the legend exists
     try:
-        legend = browser.find_element(By.CLASS_NAME, 'indicator-legend')
+        legend = browser.find_element(By.ID, 'indicator-legend')
         assert legend is not None, 'Indicator legend not found'
 
         # Check if legend has the title "Policy Indicators:"
-        legend_title = legend.find_element(By.TAG_NAME, 'h3')
+        legend_title = legend.find_element(By.ID, 'indicator-legend-label')
         assert legend_title.text == 'Policy Indicators:', \
             'Legend title should be "Policy Indicators:"'
 

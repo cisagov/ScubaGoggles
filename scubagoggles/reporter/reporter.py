@@ -6,6 +6,8 @@ reporter.py creates the report html page - main
 
 import logging
 import re
+import shutil
+
 from datetime import date, datetime
 from html import escape
 from pathlib import Path
@@ -115,14 +117,6 @@ class Reporter:
 
         return result
 
-    @staticmethod
-    def create_html_table(table_data: list) -> str:
-
-        """Compatibility wrapper; implementation lives in _reporter_html.py.
-        """
-
-        return rh.create_html_table(table_data)
-
     @classmethod
     def build_front_page_html(cls,
                               fragments: list,
@@ -139,6 +133,24 @@ class Reporter:
                                         report_uuid,
                                         darkmode,
                                         redaction)
+
+    @classmethod
+    def provide_static_assets(cls, outputpath: Path) -> None:
+
+        """Copies the CSS and Javascript files from the source location to
+        the output directory.
+        """
+
+        asset_dir = outputpath / 'assets'
+
+        asset_dir.mkdir(exist_ok = True)
+
+        for dir_name in ('styles', 'scripts'):
+
+            source_dir = cls._reporter_path / dir_name
+
+            for source_file in source_dir.glob('*'):
+                shutil.copy2(source_file, asset_dir)
 
     def _is_control_omitted(self, control_id: str) -> bool:
 
@@ -679,7 +691,9 @@ class Reporter:
             {k: v for k, v in row.items() if k not in json_only}
             for row in table_data
         ]
-        fragments.append(self.create_html_table(filtered_table_data))
+        fragments.append(rh.create_html_table(filtered_table_data,
+                                              self._report_status_class,
+                                              self._report_col_classes))
 
         results_data: dict = {}
         results_data.update({'GroupName': baseline_group['GroupName']})
@@ -688,6 +702,73 @@ class Reporter:
         results_data.update({'Controls': self._sanitize_details(table_data)})
 
         return fragments, results_data
+
+    @staticmethod
+    def _report_status_class(result_dict: dict) -> str:
+
+        """Given the dictionary containing the result of a test which will be
+        used in creating the HTML baseline report, this method returns the
+        CSS class associated with the outcome of the test.  The classes are
+        used for altering the background colors in the HTML reports.  This
+        method is used as a callback for create_html_table().
+        """
+
+        if result_dict['Requirement'].lower() == '[deleted]':
+            return 'reqmt-deleted'
+
+        css_class = ''
+
+        match (status := result_dict['Result'].lower()):
+
+            case 'fail':
+
+                css_class = 'fail-status'
+
+            case 'incorrect result':
+
+                css_class =  ('incorrect-shall-status'
+                    if result_dict['Criticality'].lower() == 'shall'
+                    else 'incorrect-should-status'
+                    if result_dict['Criticality'].lower() == 'should'
+                    else '')
+
+            case 'no events found' | 'omitted':
+
+                css_class = 'other-status'
+
+            case 'pass':
+
+                css_class = 'pass-status'
+
+            case 'warning':
+
+                css_class = 'warning-status'
+
+            case _ if 'error' in status:
+
+                css_class = 'error-status'
+
+        if not css_class and any(w in result_dict['Criticality'].lower()
+                                 for w in ('not-implemented', '3rd party')):
+            css_class = 'other-status'
+
+        return css_class
+
+    @staticmethod
+    def _report_col_classes(headings: list) -> list:
+
+        """Given the list of headings contained in an HTML baseline report,
+        this method returns the corresponding CSS classes associated with the
+        data columns under the headings in the table.  The only class returned
+        in the list is used for altering the colors of the result column in
+        the event of an error.  This method is used as a callback for
+        create_html_table().
+        """
+
+        data_classes = ['report-status' if h == 'Result' else ''
+                        for h in headings]
+
+        return data_classes
 
     def _build_report_html(self,
                            fragments: list,

@@ -266,6 +266,8 @@ class PolicyAPI:
         'location_history_user_takeout': {'settings': {
             'takeoutStatus': isEnum}},
         'maps_user_takeout': {'settings': {'takeoutStatus': isEnum}},
+        'meet_automatic_transcription': {'settings': {'enabled': isBool}},
+        'meet_automatic_recording': {'settings': {'enabled': isBool}},
         'meet_safety_access': {'settings': {'meetingsAllowedToJoin': isEnum}},
         'meet_meet_joining': {'settings': {'allowedAudience': isEnum}},
         'meet_safety_external_participants': {'settings': {
