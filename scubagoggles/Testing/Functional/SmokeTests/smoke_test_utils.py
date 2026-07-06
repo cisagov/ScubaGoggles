@@ -491,10 +491,10 @@ def verify_tenant_licensing_table(browser):
     license_table_found = False
 
     for table in main.find_elements(By.TAG_NAME, 'table'):
-        headers = (
-            table.find_element(By.TAG_NAME, 'thead')
-            .find_elements(By.TAG_NAME, 'th')
-        )
+        theads = table.find_elements(By.TAG_NAME, 'thead')
+        if not theads:
+            continue
+        headers = theads[0].find_elements(By.TAG_NAME, 'th')
         header_text = [header.text.strip() for header in headers]
         if header_text == ['Product Name', 'Status', 'Assigned Licenses']:
             license_table_found = True
