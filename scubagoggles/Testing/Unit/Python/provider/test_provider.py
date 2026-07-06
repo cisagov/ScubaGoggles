@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 """
 test_provider tests the Provider class.
 """

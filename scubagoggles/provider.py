@@ -222,6 +222,7 @@ class Provider:
         self._successful_calls = set()
         self._unsuccessful_calls = set()
         self._missing_policies = set()
+        self._deferred_license_warning = None
         self._dns_client = RobustDNSClient(dns_resolvers, doh_servers, skip_doh)
         self._domains = []
         self._alias_domains = []
@@ -940,35 +941,38 @@ class Provider:
     @staticmethod
     def _is_global_license_failure(exc: Exception) -> bool:
         """Return True when a license API error will affect every product query."""
-        if not isinstance(exc, HttpError):
-            return False
-        if exc.status_code == 401:
-            return True
-        if exc.status_code != 403:
-            return False
+        is_global_failure = False
 
-        error_text = f'{exc.reason} {exc.content}'.lower()
-        if 'accessnotconfigured' in error_text:
-            return True
-        if 'has not been used in project' in error_text and 'disabled' in error_text:
-            return True
-        if 'licensing.googleapis.com' in error_text:
-            return True
+        if isinstance(exc, HttpError):
+            if exc.status_code == 401:
+                is_global_failure = True
+            elif exc.status_code == 403:
+                error_text = f'{exc.reason} {exc.content}'.lower()
+                is_global_failure = (
+                    'accessnotconfigured' in error_text
+                    or (
+                        'has not been used in project' in error_text
+                        and 'disabled' in error_text
+                    )
+                    or 'licensing.googleapis.com' in error_text
+                )
 
-        try:
-            content = (
-                exc.content.decode()
-                if isinstance(exc.content, bytes)
-                else str(exc.content)
-            )
-            payload = json.loads(content)
-            for error in payload.get('error', {}).get('errors', []):
-                if error.get('reason', '').lower() == 'accessnotconfigured':
-                    return True
-        except (ValueError, AttributeError, TypeError):
-            pass
+                if not is_global_failure:
+                    try:
+                        content = (
+                            exc.content.decode()
+                            if isinstance(exc.content, bytes)
+                            else str(exc.content)
+                        )
+                        payload = json.loads(content)
+                        is_global_failure = any(
+                            error.get('reason', '').lower() == 'accessnotconfigured'
+                            for error in payload.get('error', {}).get('errors', [])
+                        )
+                    except (ValueError, AttributeError, TypeError):
+                        pass
 
-        return False
+        return is_global_failure
 
     def get_license_data(self, quiet: bool = False, status_bar=None) -> dict:  # pylint: disable=too-many-branches
         """

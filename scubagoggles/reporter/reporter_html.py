@@ -238,7 +238,8 @@ def build_individual_report_html(*,
                                  tenant_id: str,
                                  include_licenses: bool = False,
                                  license_data: list | None = None,
-                                 license_collection_failed: bool = False) -> tuple[str, list | None]:
+                                 license_collection_failed: bool = False,
+                                 ) -> tuple[str, list | None]:
 
     """Build an individual baseline report HTML page and optional rules
     table data.

@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 """
 orchestrator.py is the main module that starts and handles the output of the
 provider, rego, and report modules of the SCuBA tool
