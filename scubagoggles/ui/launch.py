@@ -160,8 +160,8 @@ def main(darkmode = False) -> None:
     )
     print(f"Opening http://localhost:{port} in your browser.")
     print("Press Ctrl+C to stop the server.\n")
-
     _run_server(cmd, popen_kwargs)
+
 
 if __name__ == "__main__":
 
