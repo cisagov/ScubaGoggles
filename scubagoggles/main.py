@@ -67,9 +67,8 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
 
     parser.add_argument('--darkmode',
                         '-dm',
-                        metavar='<dark-mode>',
                         action='store_true',
-                        help='Enable dark mode')
+                        help='Enable dark mode (defualt not enabled)')
 
     parser.add_argument('--cicdtestingmode',
                         '-ctm',
