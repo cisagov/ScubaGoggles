@@ -127,7 +127,7 @@ def _run_server(cmd: list[str], popen_kwargs: dict) -> None:
             _kill_process_tree(server_process.pid)
 
 
-def main(darkmode = False) -> None:
+def launch_main(darkmode = False) -> None:
     """Launch the ScubaGoggles UI in the default web browser."""
 
     if darkmode:
@@ -175,4 +175,4 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    main(darkmode = args.dark)
+    launch_main(darkmode = args.dark)
