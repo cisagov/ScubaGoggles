@@ -990,7 +990,7 @@ class Orchestrator:
 
 
         if args.scubauserinterface:
-            self._run_ui(darkmoode = args.darkmode)
+            self._run_ui(darkmode = args.darkmode)
         else:
             if not args.runcached:
                 # create a timestamped output folder
