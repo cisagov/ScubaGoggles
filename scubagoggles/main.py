@@ -281,12 +281,6 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                        action='store_true',
                        help=help_msg)
 
-    help_msg = ('If true, run and display results in the SCuBA UI. The --darkmode '
-    'switch is used as a toggle (true or false) to determine whether dark mode should '
-    'be enabled in the UI')
-    parser.add_argument('--scubauserinterface',
-                       action='store_true',
-                       help=help_msg)
 
 def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     """Adds the arguments for the "get OPA" parser.

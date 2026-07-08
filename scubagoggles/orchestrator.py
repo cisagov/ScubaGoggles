@@ -999,25 +999,20 @@ class Orchestrator:
                        'scubagoggles with --runcached as well')
             raise UserRuntimeError(message)
 
+        if not args.runcached:
+            # create a timestamped output folder
+            now = datetime.now()
+            folder_time = now.strftime('%Y_%m_%d_%H_%M_%S')
+            timestamped_folder = f'{args.outputfoldername}_{folder_time}'
+            if not args.outputpath.exists():
+                log.warning('%s - parent directory for output subdirectories '
+                            'will be created',
+                            args.outputpath)
+            args.outputpath = (args.outputpath / timestamped_folder).resolve()
+            args.outputpath.mkdir(parents=True, exist_ok=True)
 
-        if args.scubauserinterface:
-            self._run_ui(darkmode = args.darkmode)
+            self._run_gws_providers()
+            self._rego_eval()
+            self._run_reporter()
         else:
-            if not args.runcached:
-                # create a timestamped output folder
-                now = datetime.now()
-                folder_time = now.strftime('%Y_%m_%d_%H_%M_%S')
-                timestamped_folder = f'{args.outputfoldername}_{folder_time}'
-                if not args.outputpath.exists():
-                    log.warning('%s - parent directory for output subdirectories '
-                                'will be created',
-                                args.outputpath)
-                args.outputpath = (args.outputpath / timestamped_folder).resolve()
-                args.outputpath.mkdir(parents=True, exist_ok=True)
-
-                self._run_gws_providers()
-                self._rego_eval()
-                self._run_reporter()
-            else:
-                self._run_cached()
-            
+            self._run_cached()
