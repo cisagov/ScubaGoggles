@@ -112,7 +112,8 @@ class GmailRulesParser:
         if section == spam_override_lists:
             self._gmail_domain_addr(section_data)
 
-    def _gmail_domain_addr(self, spam_override_section: dict):
+    @staticmethod
+    def _gmail_domain_addr(spam_override_section: dict):
 
         """This method parses spam override lists to find any domains
         specified in email address lists.  There are rules that dictate that
