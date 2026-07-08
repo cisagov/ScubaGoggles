@@ -494,6 +494,12 @@ def dive():
                                        help=help_msg)
     get_gws_args(gws_parser, user_config)
 
+    help_msg = ('SCuBA automated UI')
+    gws_parser = subparsers.add_parser('ui',
+                                       description=help_msg,
+                                       help=help_msg)
+    get_ui_args(gws_parser, user_config)
+
     help_msg = 'Download OPA executable'
     getopa_parser = subparsers.add_parser('getopa',
                                           description=help_msg,
