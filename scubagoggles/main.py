@@ -84,6 +84,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                 '"iam.serviceAccountTokenCreator" role in addition to other ScubaGoggles roles. '
                 'Advanced option; using a credentials file is recommended.')
     parser.add_argument('--usemetadataserverauth',
+                        '-msa',
                         action='store_true',
                         help=help_msg)
 
@@ -258,6 +259,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                 'Valid values are 0, 13, 18, 36. '
                 f'Defaults to {default_uuid_chars_to_truncate}.')
     parser.add_argument('--numberofuuidcharacterstotruncate',
+                        '-ut',
                         default=default_uuid_chars_to_truncate,
                         choices=NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES,
                         type=int,
