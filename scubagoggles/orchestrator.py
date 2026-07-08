@@ -28,7 +28,6 @@ import requests
 import packaging.version as packageVersion
 
 from scubagoggles.provider import Provider
-from scubagoggles.ui.launch import launch_main
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.reporter.reporter import Reporter
 from scubagoggles.reporter.reporter_html import create_html_table
@@ -1008,11 +1007,3 @@ class Orchestrator:
             self._run_reporter()
         else:
             self._run_cached()
-
-    def launch_ui(self):
-        """
-        Runs the Scuba Goggles UI. 
-        The darkmode parameter is optional and by default is False
-        """
-        args = self._args
-        launch_main(darkmode = args.darkmode)
