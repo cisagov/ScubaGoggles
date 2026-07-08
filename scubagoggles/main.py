@@ -68,7 +68,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     parser.add_argument('--darkmode',
                         '-dm',
                         action='store_true',
-                        help='Enable dark mode (defualt not enabled)')
+                        help='Enable dark mode (not enabled by default)')
 
     parser.add_argument('--cicdtestingmode',
                         '-ctm',
@@ -280,6 +280,25 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     group.add_argument('--skipexport',
                        action='store_true',
                        help=help_msg)
+
+def get_ui_args(parser: argparse.ArgumentParser, user_config: UserConfig):
+    """Adds the arguments for the UI parser
+
+    :param argparse.ArgumentParser parser: argparse object
+    :param UserConfig user_config: user configuration object
+    """
+
+    def ui_dispatch(args):
+        Orchestrator(args).launch_ui()
+
+    parser.set_defaults(dispatch=ui_dispatch)
+
+    parser.add_argument('--darkmode',
+                        '-dm',
+                        action='store_true',
+                        help='Enable dark mode (not enabled by default)')
+
+
 
 
 def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):

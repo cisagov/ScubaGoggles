@@ -646,14 +646,6 @@ class Orchestrator:
 
         log.info("Wrote %d fully automated checks to %s", len(rows), csv_path)
 
-
-    def _run_ui(self, darkmode = False):
-        """
-        Runs the Scuba Goggles UI. 
-        The darkmode parameter is optional and by default is False
-        """
-        launch_main(darkmode = darkmode)
-
     # pylint: disable=too-many-branches
     def _run_reporter(self):
         """
@@ -1016,3 +1008,11 @@ class Orchestrator:
             self._run_reporter()
         else:
             self._run_cached()
+
+    def launch_ui(self):
+        """
+        Runs the Scuba Goggles UI. 
+        The darkmode parameter is optional and by default is False
+        """
+        args = self._args
+        launch_main(darkmode = args.darkmode)
