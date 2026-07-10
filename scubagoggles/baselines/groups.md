@@ -46,6 +46,7 @@ These settings are addressed in the following policies.
 #### GWS.GROUPS.1.1v1
 Group access from outside the organization SHALL be disabled unless explicitly granted by the group owner.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Groups may contain private or sensitive information. Restricting group access reduces the risk of data loss.
@@ -209,6 +210,7 @@ This section covers whether or not the owner of a group can hide the group from 
 #### GWS.GROUPS.4.1v1
 The ability for groups to be hidden from the directory SHALL be disabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Hidden groups are not visible, even to admins, in the list of groups found at groups.google.com, though they are still visible on the directory page on admin.google.com. As such, allowing for hidden groups increases the risk of groups being created without admin oversight.

@@ -72,6 +72,7 @@ Please note there is a distinction between Google 2 Step Verification (2SV) and 
 #### GWS.COMMONCONTROLS.1.1v1
 Phishing-Resistant MFA SHALL be required for all users.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 
@@ -104,6 +105,7 @@ Phishing-Resistant MFA SHALL be required for all users.
 #### GWS.COMMONCONTROLS.1.2v1
 If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL be enforced for all users.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ This is a stopgap security policy to help protect the tenant if phishing-resistant MFA has not been enforced. This policy requires MFA enforcement, thus reducing single-form authentication risk.
@@ -123,6 +125,7 @@ If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL
 #### GWS.COMMONCONTROLS.1.3v1
 SMS or Voice as the MFA method SHALL NOT be used.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Weaker forms of MFA do not protect against more sophisticated phishing attacks. Enforcing methods resistant to phishing reduces those risks. Additionally, OMB M-22-09 requires phishing-resistant MFA for agency staff, contractors, and partners.
@@ -142,6 +145,7 @@ SMS or Voice as the MFA method SHALL NOT be used.
 #### GWS.COMMONCONTROLS.1.4v1
 Google 2-Step Verification (2SV) new user enrollment period SHALL be set to at least 1 day or at most 1 week.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Enrollment must be enforced within a reasonable timeframe. One week balances the need for allowing new personnel time to set up their authentication methods and reducing the risks inherent to not enforcing MFA immediately.
@@ -161,6 +165,7 @@ Google 2-Step Verification (2SV) new user enrollment period SHALL be set to at l
 #### GWS.COMMONCONTROLS.1.5v1
 Allow users to trust the device SHALL be disabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Trusting the device allows users to bypass 2-Step Verification for future logins on that device. Disabling device trusting makes it possible for future logins on the same device to be protected by MFA.
@@ -381,6 +386,7 @@ Note: If using a third-party IdP, and agency-set web session lengths for its use
 #### GWS.COMMONCONTROLS.4.1v1
 Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing sessions to persist indefinitely allows users to bypass 2-Step Verification (2SV) for future activity on that device. Limiting sessions to 12 hours may reduce the impact of session hijacking attacks and prevent users from inadvertently remaining logged in on unattended devices.
@@ -420,6 +426,7 @@ Per NIST 800-63 and OMB M-22-09, ensure that user passwords do not expire and th
 #### GWS.COMMONCONTROLS.5.1v1
 User password strength SHALL be enforced.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Weak passwords increase the risk of account compromise. Enforcing password strength adds an additional layer of defense, reducing the risk of account compromise.
@@ -435,6 +442,7 @@ User password strength SHALL be enforced.
 #### GWS.COMMONCONTROLS.5.2v1
 User password length SHALL be at least 12 characters.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST) published guidance indicating that password length is a primary factor in characterizing password strength (NIST SP 800-63B). Longer passwords tend to be more resistant to brute force and dictionary-based attacks.
@@ -463,6 +471,7 @@ User password length SHOULD be at least 15 characters.
 #### GWS.COMMONCONTROLS.5.4v1
 Password policy SHALL be enforced at next sign-in.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Unless the password policy is enforced at next login, a user could potentially operate indefinitely using a weak password. Enforcing the policy at next login helps ensure that all active user passwords meet current requirements.
@@ -477,6 +486,7 @@ Password policy SHALL be enforced at next sign-in.
 #### GWS.COMMONCONTROLS.5.5v1
 User passwords SHALL NOT be reused.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Password reuse represents a significant security risk. When possible, preventing password reuse limits the scope of a compromised password.
@@ -491,6 +501,7 @@ User passwords SHALL NOT be reused.
 #### GWS.COMMONCONTROLS.5.6v1
 User passwords SHALL NOT expire.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ The National Institute of Standards and Technology (NIST), OMB, and Microsoft have published guidance indicating mandated periodic password changes make user accounts less secure. For example, OMB M-22-09 states, "Password policies must not require use of special characters or regular rotation."
@@ -558,6 +569,7 @@ Some examples of these privileged accounts include the following Pre-Built GWS A
 #### GWS.COMMONCONTROLS.6.1v1
 All administrative accounts SHALL be provisioned as cloud-only accounts separate from an agency's authoritative on-premises or other federated identity providers.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Cloud-only accounts leveraging Google Account authentication with phishing resistant MFA for highly privileged accounts reduces the risks associated with a compromise of on-premises federation infrastructure. Enforcing this policy makes it more challenging for a threat actor to pivot from a compromised on-premises environment to the cloud with privileged access.
@@ -574,6 +586,7 @@ All administrative accounts SHALL be provisioned as cloud-only accounts separate
 #### GWS.COMMONCONTROLS.6.2v1
 A minimum of **two** and maximum of **eight** separate and distinct super admin users SHALL be configured.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)
 
@@ -679,6 +692,7 @@ This section addresses the GWS account self-recovery feature. When enabled, this
 #### GWS.COMMONCONTROLS.8.1v1
 Account self-recovery for super admins SHALL be disabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ If enabled, a threat actor could attempt to gain access to a super admin account through the account recovery method. Disabling this feature forces super admins to contact another super admin to recover their account, making it more difficult for a potential threat actor to compromise their account.
@@ -691,6 +705,7 @@ Account self-recovery for super admins SHALL be disabled.
 #### GWS.COMMONCONTROLS.8.2v1
 Account self-recovery for users and non-super admins SHALL be disabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ If enabled, a user could add a personal email or phone number for account recovery. Disabling this feature makes account recovery go through official channels, making it more difficult for a potential threat actor to compromise an account.
@@ -827,6 +842,7 @@ Agencies need to have a process in place to manage and control application acces
 #### GWS.COMMONCONTROLS.10.1v1
 Agencies SHALL use GWS application access control policies to restrict access to all GWS services by third party applications.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Third-party applications may include malicious content. Restricting application access to only applications trusted by the agency reduces the risk of allowing malicious applications to connect to GWS.
@@ -843,6 +859,7 @@ Agencies SHALL use GWS application access control policies to restrict access to
 #### GWS.COMMONCONTROLS.10.2v1
 Agencies SHALL NOT allow users to grant consent for access to low-risk scopes.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing users to grant access to OAuth scopes not classified as high-risk could enable untrusted apps to gain access without non-administrative approval being allowlisted, violating policy 10.1.
@@ -859,6 +876,7 @@ Agencies SHALL NOT allow users to grant consent for access to low-risk scopes.
 #### GWS.COMMONCONTROLS.10.3v1
 Agencies SHALL NOT trust unconfigured internal apps.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Internal apps may contain vulnerabilities or even malicious content created by compromised user accounts. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to GWS.
@@ -875,6 +893,7 @@ Agencies SHALL NOT trust unconfigured internal apps.
 #### GWS.COMMONCONTROLS.10.4v1
 Agencies SHALL NOT allow users to access unconfigured third-party apps.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ External apps may contain vulnerabilities and malicious content. Restricting access to these apps reduces the risk of allowing unsafe apps to connect to the workspace.
@@ -891,6 +910,7 @@ Agencies SHALL NOT allow users to access unconfigured third-party apps.
 #### GWS.COMMONCONTROLS.10.5v1
 Access to GWS applications by less secure apps that do not meet security standards for authentication SHALL be prevented.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Antiquated authentication methods introduce additional risk into the GWS environment. Only allowing apps that use modern authentication standards helps reduce the risk of credential compromise.
@@ -970,6 +990,7 @@ Some older versions of common software may break when this control is implemente
 #### GWS.COMMONCONTROLS.11.1v1
 Only approved Google Workspace (GWS) Marketplace applications SHALL be allowed for installation.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Marketplace apps may include malicious content. Restricting app access to only apps trusted by the organization reduces the risk of allowing malicious apps to connect to GWS.
@@ -1014,6 +1035,7 @@ This section prevents users from downloading a copy of the Google Takeout servic
 #### GWS.COMMONCONTROLS.12.1v1
 Google Takeout services SHALL be disabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Google Takeout is a service that allows users to download a copy of their data stored within 40+ Google products and services, including data from Gmail, Drive, Photos, and Calendar. While there may be a valid use case for users to back up their data in non-enterprise settings, this feature represents considerable attack surface as a mass data exfiltration mechanism, particularly in enterprise settings where other backup mechanisms are likely in use.
@@ -1082,6 +1104,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 #### GWS.COMMONCONTROLS.13.1v1
 Required system-defined alerting rules, as listed in the Policy group description, SHALL be enabled with alerts.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Potentially malicious or service-impacting events may go undetected. Setting up a mechanism to alert administrators to the required system-defined events draws attention to these events while minimizing any impact to users and the organization.
@@ -1198,6 +1221,7 @@ At the time of writing, data region policies cannot be applied to data types not
 #### GWS.COMMONCONTROLS.15.1v1
 The data storage region SHALL be set to be the United States for all users in the agency's GWS environment.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale_: Without this policy, data could be stored in various regions, potentially exposing it to unauthorized entities. Implementing this policy keeps most data in the U.S., making it harder for potential threat actors to compromise data.
@@ -1212,6 +1236,7 @@ The data storage region SHALL be set to be the United States for all users in th
 #### GWS.COMMONCONTROLS.15.2v1
 Data SHALL be processed in the region selected for data at rest.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it to unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.

@@ -28,6 +28,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology) (**Automated Check**): This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)(**Configurable**): This indicator means that the policy can be customized via config file.
@@ -47,6 +48,7 @@ This section covers chat history retention for users within the organization and
 #### GWS.CHAT.1.1v1
 Chat history SHALL be enabled for information traceability.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users engaged in Google Chat may inadvertently share sensitive or private information during conversations and details discussed in chats may be crucial for future reference or dispute resolution. Enabling chat history for Google Chat may mitigate these risks by providing a traceable record of all conversations, enhancing information accountability and security.
@@ -59,6 +61,7 @@ Chat history SHALL be enabled for information traceability.
 #### GWS.CHAT.1.2v1
 Users SHALL NOT be allowed to change their history setting.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Altering the history settings in Google Chat can potentially allow users to obfuscate the sharing of sensitive information via Chat. This policy ensures that all Google chat histories are preserved, enhancing data security and promoting accountability among users.
@@ -103,6 +106,7 @@ This section covers what types of files users are allowed to share external to t
 #### GWS.CHAT.2.1v1
 External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Enabling external file sharing in Google Chat opens an additional avenue for data loss, one that may not be as rigorously monitored or protected as traditional collaboration channels, such as email. This policy limits the potential for unauthorized or accidental sharing.
@@ -177,6 +181,7 @@ This section permits users to send Chat messages outside of their organization, 
 #### GWS.CHAT.4.1v1
 External chat messaging SHALL be restricted to allowlisted domains only.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing external chat messaging in Google Chat to unrestricted domains opens additional avenues for data exfiltration, increasing the risk of data leakage. Restricting external chat messaging to only allowlisted domains helps minimize the risk of sensitive information being shared outside the organization without explicit consent and approval.

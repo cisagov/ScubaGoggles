@@ -42,6 +42,7 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology) (**Automated Check**): This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)(**Configurable**): This indicator means that the policy can be customized via config file.
@@ -151,6 +152,7 @@ The Sender Policy Framework (SPF) is a mechanism that allows administrators to s
 #### GWS.GMAIL.3.1v1
 An SPF policy SHALL be published for each domain that fails all non-approved senders.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
@@ -205,6 +207,7 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) works wi
 #### GWS.GMAIL.4.1v1
 A DMARC policy SHALL be published at the full domain or the second-level domain for all Google Workspace domains, including user alias domains.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
@@ -222,6 +225,7 @@ A DMARC policy SHALL be published at the full domain or the second-level domain 
 #### GWS.GMAIL.4.2v1
 The DMARC message rejection option SHALL be p=reject.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
@@ -240,6 +244,7 @@ The DMARC message rejection option SHALL be p=reject.
 #### GWS.GMAIL.4.3v1
 The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#dns-configuration)
 
@@ -309,6 +314,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.5.1v1
 "Protect against encrypted attachments from untrusted senders" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Attachments from untrusted senders, especially encrypted ones, may contain malicious content that poses a security risk. By enabling protection against encrypted attachments from untrusted senders, this risk can be reduced, enhancing the safety and integrity of user data and systems.
@@ -327,6 +333,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.5.2v1
 "Protect against attachments with scripts from untrusted senders" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Attachments with scripts from untrusted senders may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of user data and systems.
@@ -345,6 +352,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.5.3v1
 "Protect against anomalous attachment types in emails" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Anomalous attachment types in emails may contain malicious content that poses a security risk. By enabling protection against such attachments, this risk can be reduced, enhancing the safety and integrity of the user data and systems.
@@ -374,6 +382,7 @@ Google SHOULD be allowed to automatically apply future recommended settings for 
 #### GWS.GMAIL.5.5v1
 Emails flagged by SCuBA policies GWS.GMAIL.5.1 through GWS.GMAIL.5.3 SHALL NOT be kept in inbox.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Keeping emails flagged by attachment protection controls in the inbox could potentially expose users to malicious content. Removing these emails from the inbox enhances the safety and integrity of user data and systems.
@@ -437,6 +446,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.6.1v1
 "Identify links behind shortened URLs" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Shortened URLs can hide malicious links, posing a security risk. This risk can be reduced by identifying links behind shortened URLs, enhancing the safety and integrity of user data and systems.
@@ -452,6 +462,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.6.2v1
 "Scan linked images" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Linked images in emails can contain malicious content, posing a security risk. By enabling the scanning of linked images, this risk can be reduced, enhancing the safety and integrity of user data and systems.
@@ -467,6 +478,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.6.3v1
 "Show warning prompt for any click on links to untrusted domains" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Clicking on links to unfamiliar domains can expose users to malicious content, posing a security risk. This risk can be reduced by enabling a warning prompt for any click on such links, enhancing the safety and integrity of user data and systems.
@@ -482,6 +494,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.6.4v1
 Google SHALL be allowed to automatically apply future recommended settings for links and external images.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
@@ -537,6 +550,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.7.1v1
 "Protect against domain spoofing based on similar domain names" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Emails sent from domains that look similar to the user's domain can deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
@@ -551,6 +565,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.7.2v1
 "Protect against spoofing of employee names" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Spoofing of employee identities (e.g., CEO and IT staff) can deceive users into interacting with malicious content, posing a security risk. Enabling protection against such spoofing can reduce this risk, enhancing the safety and integrity of user data and systems.
@@ -565,6 +580,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.7.3v1
 "Protect against inbound emails spoofing your domain" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Inbound emails appearing to come from the user's domain can deceive users into interacting with malicious content, posing a security risk. This risk can be reduced by enabling protection against such spoofing, enhancing the safety and integrity of user data and systems.
@@ -579,6 +595,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.7.4v1
 "Protect against any unauthenticated emails" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Unauthenticated emails can contain malicious content, posing a security risk. This risk can be reduced by enabling protection against such emails, enhancing the safety and integrity of user data and systems.
@@ -593,6 +610,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.7.5v1
 "Protect your Groups from inbound emails spoofing your domain" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Inbound emails spoofing the user's domain can deceive users into interacting with malicious content, posing a security risk. This risk can be reduced by enabling protection against such spoofing, enhancing the safety and integrity of user data and systems.
@@ -607,6 +625,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.7.6v1
 Emails flagged by SCuBA policies GWS.GMAIL.7.1 through GWS.GMAIL.7.5 SHALL NOT be kept in inbox.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Keeping emails flagged by spoofing and authentication controls in the inbox could potentially expose users to malicious content. Moving emails out of the inbox can reduce this risk, enhancing the safety and integrity of the user's data and systems.
@@ -623,6 +642,7 @@ Emails flagged by SCuBA policies GWS.GMAIL.7.1 through GWS.GMAIL.7.5 SHALL NOT b
 #### GWS.GMAIL.7.7v1
 Google SHALL be allowed to automatically apply future recommended settings for spoofing and authentication.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ By enabling this feature, the system can automatically stay updated with the latest recommended security measures from Google, reducing the risk of security breaches and enhancing the safety and integrity of user data and systems.
@@ -684,6 +704,7 @@ This section addresses a feature that enables users to import their email and co
 #### GWS.GMAIL.8.1v1
 User email uploads SHALL be disabled to protect against unauthorized files being introduced into the secured environment.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing user email uploads could potentially introduce unauthorized or malicious files into the secured environment, posing a security risk. By disabling user email uploads, this risk can be reduced, enhancing the safety and integrity of user data and systems.
@@ -726,6 +747,7 @@ This section determines whether users have POP3 and IMAP access. Doing so allows
 #### GWS.GMAIL.9.1v1
 POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#imap-exclusions)
 
@@ -847,6 +869,7 @@ This section determines whether outgoing mail is delivered only through the Goog
 #### GWS.GMAIL.12.1v1
 Using a per-user outbound gateway that is a mail server other than the Google Workspace (GWS) mail servers SHALL be disabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Using a per-user outbound gateway that is a mail server other than the GWS mail servers could potentially expose sensitive agency or organization emails to unauthorized access or loss, posing a security risk. This risk can be reduced by disabling this feature, enhancing the safety and integrity of user data and systems.
@@ -975,6 +998,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
 #### GWS.GMAIL.15.1v1
 Enhanced pre-delivery message scanning SHALL be enabled to prevent phishing.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Without enhanced pre-delivery message scanning, users may be exposed to phishing attempts, posing a security risk. By enabling this feature, potential phishing emails can be identified and blocked before reaching the user, reducing this risk and enhancing the safety and integrity of user data and systems.
@@ -1101,6 +1125,7 @@ This section covers the settings relating to bypassing spam filters.
 #### GWS.GMAIL.18.1v1
 Domains SHALL NOT be added to lists that bypass spam filters.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 
@@ -1117,6 +1142,7 @@ Domains SHALL NOT be added to lists that bypass spam filters.
 #### GWS.GMAIL.18.2v1
 Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Spam protections may incorrectly filter legitimate emails. Adding allowed senders is an acceptable method of combating these false positives. Allowing an entire domain, especially a common domain like office.com, could enable numerous unknown users to bypass spam protections.
@@ -1131,6 +1157,7 @@ Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.
 #### GWS.GMAIL.18.3v1
 "Bypass spam filters" and "hide warnings for all messages from internal and external senders" SHALL NOT be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 

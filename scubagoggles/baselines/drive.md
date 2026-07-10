@@ -48,6 +48,7 @@ This section covers whether users can share files outside of the organization, w
 #### GWS.DRIVEDOCS.1.1v1
 External sharing SHALL be restricted to allowlisted domains.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Documents may contain PII or sensitive information. Disabling external sharing reduces the risk of inadvertent data leakage.
@@ -77,6 +78,7 @@ Receiving files from outside of allowlisted domains SHOULD be disabled.
 #### GWS.DRIVEDOCS.1.3v1
 Warnings SHALL be enabled when a user is attempting to share with someone not in allowlisted domains.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users may not always be aware a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
@@ -115,6 +117,7 @@ Any OUs that do allow external sharing SHOULD disable making content available t
 #### GWS.DRIVEDOCS.1.6v1
 Agencies SHALL set access checking to "recipients only."
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ The Access Checker feature can be configured to allow users to grant open access if a recipient is missing access, creating the potential for data leakage. This control mitigates this by only allowing access to be granted to recipients.
@@ -139,6 +142,7 @@ Users SHOULD NOT be allowed to upload or move content to shared drives owned by 
 #### GWS.DRIVEDOCS.1.8v1
 "Private to owner" SHALL be the default access level for newly created items.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ By implementing least privilege and setting the default to be private, the organization is able to prevent overly broad accidental sharing of information.
@@ -152,6 +156,7 @@ Users SHOULD NOT be allowed to upload or move content to shared drives owned by 
 #### GWS.DRIVEDOCS.1.9v1
 Out-of-Domain file-level warnings SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Implementing Out-of-Domain file-level warnings, can help users identify potentially risky files and avoid phishing scams when working with files shared from external entities.
@@ -275,6 +280,7 @@ Agencies SHOULD NOT allow members with manager access to override shared Google 
 #### GWS.DRIVEDOCS.2.2v1
 Agencies SHALL allow users who are not shared Google Drive members to be added to files.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Prohibiting non-members from being added to a file necessitates their addition as Google Drive members, potentially exposing all Google Drive files and increasing the risk of sensitive content exposure. Disallowing the sharing of these individual files reduces the risk of internal documents from being distributed outside the organization without explicit consent and approval.
@@ -318,6 +324,7 @@ This section covers whether a security update issued by Google will be applied t
 #### GWS.DRIVEDOCS.3.1v1
 Agencies SHALL enable the security update for Google Drive files.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Failure to enable the resource key security update may result in unauthorized access to files. Enabling this update reduces the risk of unauthorized access and potential data spillage by enhancing control for files in Google Drive.
@@ -393,6 +400,7 @@ This section addresses Drive for Desktop, a feature that enables users to intera
 #### GWS.DRIVEDOCS.5.1v1
 Google Drive for Desktop SHALL be enabled only for authorized devices.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Some users may attempt to use Google Drive for Desktop to connect unapproved devices (e.g., a personal computer), to the agency's Google Drive. Even if unintentional, this poses a security risk as the agency lacks the ability to audit or secure these computers. Implementing this policy helps reduce these risks.

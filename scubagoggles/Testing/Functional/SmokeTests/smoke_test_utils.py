@@ -403,6 +403,7 @@ def verify_indicators_and_legend(browser):
     # Expected indicator names that might appear
     expected_indicators = [
         'Automated Check',
+        'BOD 25-01 Requirement',
         'Log-Based Check',
         'Manual',
         'Configurable'

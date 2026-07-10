@@ -46,6 +46,7 @@ This section determines what information is shared from calendars with external 
 #### GWS.CALENDAR.1.1v1
 External Sharing Options for Primary Calendars SHALL be configured to "Only free/busy information (hide event details)."
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to "only free/busy information" helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
@@ -57,6 +58,7 @@ External Sharing Options for Primary Calendars SHALL be configured to "Only free
 #### GWS.CALENDAR.1.2v1
 External sharing options for secondary calendars SHALL be configured to "Only free/busy information (hide event details)."
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Calendars can contain private or otherwise sensitive information. Restricting calendar details to "only free/busy information" helps prevent data leakage by restricting the amount of information that is externally viewable when a user shares their calendar with someone external to the organization.
@@ -104,6 +106,7 @@ This section determines whether users are warned when inviting one or more guest
 #### GWS.CALENDAR.2.1v1
 External invitations warnings SHALL be enabled to prompt users before sending invitations.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users may inadvertently include external guests in calendar event invitations, potentially resulting in data leakage. Warning users when external participants are included can help reduce this risk.
