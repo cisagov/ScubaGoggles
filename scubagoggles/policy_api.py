@@ -171,6 +171,8 @@ class PolicyAPI:
         'drive_and_docs_drive_sdk': {'reducer': _merge_reducer,
                                      'settings': {
                                          'enableDriveSdkApiAccess': isBool}},
+        'drive_and_docs_external_file_warning': {'settings': {
+            'highlightingEnabled': isBool}},
         'drive_and_docs_external_sharing': {'settings': {
             'accessCheckerSuggestions': isEnum,
             'allowNonGoogleInvites': isBool,
@@ -264,6 +266,8 @@ class PolicyAPI:
         'location_history_user_takeout': {'settings': {
             'takeoutStatus': isEnum}},
         'maps_user_takeout': {'settings': {'takeoutStatus': isEnum}},
+        'meet_automatic_transcription': {'settings': {'enabled': isBool}},
+        'meet_automatic_recording': {'settings': {'enabled': isBool}},
         'meet_safety_access': {'settings': {'meetingsAllowedToJoin': isEnum}},
         'meet_meet_joining': {'settings': {'allowedAudience': isEnum}},
         'meet_safety_external_participants': {'settings': {
