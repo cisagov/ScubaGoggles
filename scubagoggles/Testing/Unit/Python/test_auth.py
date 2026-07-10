@@ -15,7 +15,7 @@ from google.oauth2.service_account import Credentials as SvcCredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 from scubagoggles.auth import GwsAuth
-from scubagoggles.scuba_constants import API_SCOPES
+from scubagoggles.scuba_constants import DWD_SCOPES, OAUTH_SCOPES
 
 
 class TestGwsAuth:
@@ -54,7 +54,7 @@ class TestGwsAuth:
         token_data = {
             "token": "test_access_token",
             "refresh_token": "test_refresh_token",
-            "scopes": list(API_SCOPES),
+            "scopes": list(OAUTH_SCOPES),
             "client_id": "test_client_id",
             "client_secret": "test_client_secret"
         }
@@ -71,7 +71,7 @@ class TestGwsAuth:
         mock_creds.token_state = TokenState.FRESH
         mock_creds.to_json.return_value = json.dumps({
             "token": "test_token",
-            "scopes": list(API_SCOPES)
+            "scopes": list(OAUTH_SCOPES)
         })
         return mock_creds
 
@@ -105,7 +105,7 @@ class TestGwsAuth:
 
         mock_from_svc.assert_called_once_with(
             str(credentials_file),
-            scopes=API_SCOPES,
+            scopes=DWD_SCOPES,
             subject=svc_email
         )
         assert auth.credentials is mock_svc_creds
@@ -129,7 +129,7 @@ class TestGwsAuth:
         auth = GwsAuth(credentials_file)
 
         InstalledAppFlow.from_client_secrets_file.assert_called_once_with(
-            str(credentials_file), API_SCOPES
+            str(credentials_file), OAUTH_SCOPES
         )
         mock_flow.run_local_server.assert_called_once_with(
             timeout_seconds=300, prompt='consent'
@@ -153,7 +153,7 @@ class TestGwsAuth:
         auth = GwsAuth(credentials_file)
 
         Credentials.from_authorized_user_file.assert_called_once_with(
-            str(token_file), API_SCOPES
+            str(token_file), OAUTH_SCOPES
         )
         assert auth.credentials is mock_fresh_credentials
 

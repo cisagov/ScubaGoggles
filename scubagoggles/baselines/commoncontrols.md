@@ -1173,12 +1173,12 @@ The following critical logs SHALL be sent to the agency's centralized SIEM.
     - [T1562:008: Impair Defenses: Disable Cloud Logs](https://attack.mitre.org/techniques/T1562/008/)
 
 #### GWS.COMMONCONTROLS.14.2v1
-Audit logs SHALL be maintained for at least 6 months in active storage and an additional 18 months in cold storage.
+Audit logs SHALL be retained and searchable for a minimum of 3 months and retrievable for a minimum of 12 months.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols142v06-instructions)
 
-- _Rationale:_ Audit logs should be retained for a sufficient duration to ensure availability when needed. Extending log retention provides an agency with the necessary visibility to investigate incidents that occurred in the past. Additionally, the Office of Management and Budget (OMB) Memorandum M-21-31, "Improving the Federal Government’s Investigative and Remediation Capabilities Related to Cybersecurity Incidents", requires audit logs be maintained for at least 6 months in active storage and an additional 18 months in cold storage.
-- _Last modified:_ April 2025
+- _Rationale:_ Audit logs should be retained for a sufficient duration to ensure availability when needed. Extending log retention provides an agency with the necessary visibility to investigate incidents that occurred in the past. Additionally, the Office of Management and Budget (OMB) Memorandum M-26-14, "Ensuring Effective and Efficient Agency Logging and Network Visibility to Defend Against Evolving Cyber Threats", establishes data retention times that are dependent on the "maturity level" and targets for when those maturity levels should be reached, contingent on CISA publishing a logging reference architecture (LRA).
+- _Last modified:_ June 2026
 - _Note:_ Google offers the ability to export certain logs to Google BiqQuery or Google Cloud log buckets for an additional cost. Though these tools could be used to satisfy this baseline requirement, agencies may use the tool that best fits their individual circumstances.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-11
 - MITRE ATT&CK TTP Mapping
@@ -1196,7 +1196,7 @@ Audit logs SHALL be maintained for at least 6 months in active storage and an ad
 -   [GWS Admin Help \| Set up service log exports to BigQuery](https://support.google.com/a/answer/9079365)
 -   [GWS Admin Help \| Export your organization’s Drive inventory](https://support.google.com/a/answer/15141054)
 -   [Google Cloud Operations Suite \| Configure and Manage sinks – Google Cloud](https://cloud.google.com/logging/docs/export/configure_export_v2)
--   [OMB M-21-31 \| Office of Management and Budget](https://bidenwhitehouse.archives.gov/wp-content/uploads/2021/08/M-21-31-Improving-the-Federal-Governments-Investigative-and-Remediation-Capabilities-Related-to-Cybersecurity-Incidents.pdf)
+- [OMB M-26-14, Ensuring Effective and Efficient Agency Logging and Network Visibility to Defend Against Evolving Cyber Threats \| Office of Management and  Budget](https://www.whitehouse.gov/wp-content/uploads/2026/05/M-26-14-Ensuring-Effective-and-Efficient-Agency-Logging-and-Network-Visibility-to-Defend-Against-Evolving-Cyber-Threats.pdf)
 
 ### Prerequisites
 

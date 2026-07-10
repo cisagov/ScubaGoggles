@@ -13,7 +13,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google.oauth2.service_account import Credentials as SvcCredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-from scubagoggles.scuba_constants import API_SCOPES
+from scubagoggles.scuba_constants import DWD_SCOPES, OAUTH_SCOPES, DASA_SCOPES
 
 # The class is worth it just for the encapsulation.  It allows the potential
 # of credential refresh multiple times, which may be beneficial during a
@@ -45,7 +45,7 @@ class GwsAuth:
         self._svc_account_email = svc_account_email
 
         if access_token is not None:
-            self._token = Credentials(token=access_token, scopes=API_SCOPES)
+            self._token = Credentials(token=access_token, scopes=OAUTH_SCOPES)
             return
 
         credentials_path = Path(credentials_path)
@@ -59,7 +59,7 @@ class GwsAuth:
         if svc_account_email:
             get_credentials = SvcCredentials.from_service_account_file
             self._token = get_credentials(str(credentials_path),
-                                          scopes=API_SCOPES,
+                                          scopes=DWD_SCOPES,
                                           subject=svc_account_email)
             return
 
@@ -77,7 +77,7 @@ class GwsAuth:
         # have worked when no browser was available).
         credentials_file = str(self._credentials_path)
         flow = InstalledAppFlow.from_client_secrets_file(credentials_file,
-                                                         API_SCOPES)
+                                                         OAUTH_SCOPES)
 
         try:
             self._token = flow.run_local_server(
@@ -100,6 +100,23 @@ class GwsAuth:
 
         return self._token
 
+    @property
+    def groups_credentials(self):
+        """Returns credentials for the Groups Settings API.
+
+        When using a service account, returns credentials where the service
+        account acts as itself (no DwD subject), relying on the Groups Reader
+        admin role being assigned directly to the service account (DASA).
+
+        For OAuth and access-token flows, returns the standard credentials.
+        """
+        if self._svc_account_email and hasattr(self, '_credentials_path'):
+            return SvcCredentials.from_service_account_file(
+                str(self._credentials_path),
+                scopes=DASA_SCOPES
+            )
+        return self._token
+
     def _check_scopes(self):
         """Compares the list of scopes in the token file with those defined
         in this class.  If there is a mismatch, the token file is deleted.
@@ -114,7 +131,7 @@ class GwsAuth:
             token = json.load(in_stream)
 
         token_scopes = frozenset(token['scopes'])
-        valid_scopes = frozenset(API_SCOPES)
+        valid_scopes = frozenset(OAUTH_SCOPES)
 
         # Delete the token file if its scopes don't match those defined in
         # this class.  The token file will be recreated in the constructor
@@ -143,7 +160,7 @@ class GwsAuth:
         # refresh the token if it has expired.
         token_file = str(self._token_path)
         self._token = Credentials.from_authorized_user_file(token_file,
-                                                            API_SCOPES)
+                                                            OAUTH_SCOPES)
 
         try:
             self._refresh_token()

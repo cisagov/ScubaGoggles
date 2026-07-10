@@ -469,14 +469,28 @@ if {
 
 DriveId1_9 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.9")
 
+NonCompliantOUs1_9 contains {
+    "Name": OU,
+    "Value": "Highlight external files is disabled."
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    HighlightEnabled := settings.drive_and_docs_external_file_warning.highlightingEnabled
+    HighlightEnabled != true
+}
+
 tests contains {
     "PolicyId": DriveId1_9,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Prerequisites": ["policy/drive_and_docs_external_file_warning.highlightingEnabled"],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_9, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_9},
+    "RequirementMet": Status,
     "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs1_9) == 0
 }
 #--
 

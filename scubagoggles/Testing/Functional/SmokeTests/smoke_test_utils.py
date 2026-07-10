@@ -246,6 +246,11 @@ def run_selenium(browser, customerdomain):
             # Verify indicators and legend are present
             verify_indicators_and_legend(browser)
 
+            if product == 'Common Controls':
+                verify_tenant_licensing_table(browser)
+            else:
+                verify_tenant_licensing_table_absent(browser)
+
             policy_tables = browser.find_elements(By.CSS_SELECTOR, "table:not(.dns-logs table)")
             for table in policy_tables[1:]:
 
@@ -406,11 +411,11 @@ def verify_indicators_and_legend(browser):
 
     # Check if the legend exists
     try:
-        legend = browser.find_element(By.CLASS_NAME, 'indicator-legend')
+        legend = browser.find_element(By.ID, 'indicator-legend')
         assert legend is not None, 'Indicator legend not found'
 
         # Check if legend has the title "Policy Indicators:"
-        legend_title = legend.find_element(By.TAG_NAME, 'h3')
+        legend_title = legend.find_element(By.ID, 'indicator-legend-label')
         assert legend_title.text == 'Policy Indicators:', \
             'Legend title should be "Policy Indicators:"'
 
@@ -468,3 +473,58 @@ def verify_indicators_and_legend(browser):
     except Exception as e:
         raise AssertionError(
             f'Indicator verification in requirements failed: {e}') from e
+
+
+def verify_tenant_licensing_table(browser):
+    """
+    Verify the Common Controls report includes the tenant licensing section.
+
+    The section should contain either a populated license table or a message
+    indicating that no licenses were found or that collection failed.
+
+    Args:
+        browser: A Selenium WebDriver instance
+    """
+    heading = browser.find_element(By.ID, 'subscriptions')
+    assert heading.text == 'Tenant Licensing Information'
+
+    main = browser.find_element(By.TAG_NAME, 'main')
+    license_table_found = False
+
+    for table in main.find_elements(By.TAG_NAME, 'table'):
+        theads = table.find_elements(By.TAG_NAME, 'thead')
+        if not theads:
+            continue
+        headers = theads[0].find_elements(By.TAG_NAME, 'th')
+        header_text = [header.text.strip() for header in headers]
+        if header_text == ['Product Name', 'Status', 'Assigned Licenses']:
+            license_table_found = True
+            tbody = table.find_element(By.TAG_NAME, 'tbody')
+            rows = tbody.find_elements(By.TAG_NAME, 'tr')
+            assert len(rows) > 0, 'License table should contain at least one row'
+            break
+
+    status_messages = main.find_elements(
+        By.XPATH,
+        (
+            "//p[contains(., 'No licenses found.') or "
+            "contains(., 'An error occurred when collecting license information.')]"
+        ),
+    )
+
+    assert license_table_found or status_messages, (
+        'Tenant licensing section should include a license table or status message'
+    )
+
+
+def verify_tenant_licensing_table_absent(browser):
+    """
+    Verify non-Common Controls reports do not include the tenant licensing section.
+
+    Args:
+        browser: A Selenium WebDriver instance
+    """
+    headings = browser.find_elements(By.ID, 'subscriptions')
+    assert not headings, (
+        'Tenant licensing section should only appear on the Common Controls report'
+    )
