@@ -1,7 +1,6 @@
 version: 2
 
 updates:
-  # GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -11,7 +10,6 @@ updates:
         patterns:
           - "*"
 
-  # Python dependencies
   - package-ecosystem: "pip"
     directories:
       - "/"
