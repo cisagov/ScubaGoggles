@@ -1,0 +1,77 @@
+﻿
+Dependency list printed from repo:
+C:/Users/PVANDERVEEN/OneDrive - The MITRE Corporation/Test/ScubaGoggles
+
+
+Ecosystem      Directory Dependency                                            Version    Kind                               File                                                         
+---------      --------- ----------                                            -------    ----                               ----                                                         
+github-actions /         actions/checkout                                      v6         github-action-or-reusable-workflow ./.github/workflows/get_opa_hash.yml                         
+github-actions /         actions/download-artifact                             v4         github-action-or-reusable-workflow ./.github/workflows/publish_to_pypi.yml                      
+github-actions /         actions/setup-python                                  v6         github-action-or-reusable-workflow ./.github/workflows/publish_to_pypi.yml                      
+github-actions /         actions/upload-artifact                               v4         github-action-or-reusable-workflow ./.github/workflows/publish_to_pypi.yml                      
+github-actions /         pypa/gh-action-pypi-publish                           release/v1 github-action-or-reusable-workflow ./.github/workflows/publish_to_pypi.yml                      
+github-actions /         actions/setup-python                                  v6         github-action-or-reusable-workflow ./.github/workflows/pylint.yml                               
+github-actions /         actions/checkout                                      v6         github-action-or-reusable-workflow ./.github/workflows/run_opa_tests.yml                        
+github-actions /         open-policy-agent/setup-opa                           v2         github-action-or-reusable-workflow ./.github/workflows/run_opa_tests.yml                        
+github-actions /         StyraInc/setup-regal                                  v1         github-action-or-reusable-workflow ./.github/workflows/run_opa_tests.yml                        
+github-actions /         ./.github/workflows/pylint.yml                                   local-action-or-workflow           ./.github/workflows/run_pipeline.yml                         
+github-actions /         ./.github/workflows/run_link_checker_for_md_edits.yml            local-action-or-workflow           ./.github/workflows/run_pipeline.yml                         
+github-actions /         ./.github/workflows/run_opa_tests.yml                            local-action-or-workflow           ./.github/workflows/run_pipeline.yml                         
+github-actions /         ./.github/workflows/run_pytest_coverage.yml                      local-action-or-workflow           ./.github/workflows/run_pipeline.yml                         
+github-actions /         actions/setup-python                                  v6         github-action-or-reusable-workflow ./.github/workflows/run_pytest_coverage.yml                  
+github-actions /         actions/checkout                                      v6         github-action-or-reusable-workflow ./.github/workflows/run_release.yml                          
+github-actions /         actions/setup-python                                  v6         github-action-or-reusable-workflow ./.github/workflows/run_release.yml                          
+github-actions /         softprops/action-gh-release                           v1         github-action-or-reusable-workflow ./.github/workflows/run_release.yml                          
+github-actions /         ./.github/actions/setup-dependencies-macos                       local-action-or-workflow           ./.github/workflows/run_smoke_test.yml                       
+github-actions /         ./.github/actions/setup-dependencies-windows                     local-action-or-workflow           ./.github/workflows/run_smoke_test.yml                       
+github-actions /         actions/cache                                         v5         github-action-or-reusable-workflow ./.github/workflows/run_smoke_test.yml                       
+github-actions /         actions/cache/restore                                 v5         github-action-or-reusable-workflow ./.github/workflows/run_smoke_test.yml                       
+github-actions /         actions/checkout                                      v6         github-action-or-reusable-workflow ./.github/workflows/run_smoke_test.yml                       
+github-actions /         actions/setup-node                                    v3         github-action-or-reusable-workflow ./.github/workflows/run_smoke_test.yml                       
+github-actions /         actions/setup-python                                  v6         github-action-or-reusable-workflow ./.github/workflows/run_smoke_test.yml                       
+github-actions /         jsdaniell/create-json                                 v1.2.3     github-action-or-reusable-workflow ./.github/workflows/run_smoke_test.yml                       
+github-actions /         pypa/gh-action-pip-audit                              v1.1.0     github-action-or-reusable-workflow ./.github/workflows/run_smoke_test.yml                       
+github-actions /         actions/checkout                                      v6         github-action-or-reusable-workflow ./.github/workflows/run_update_opa.yml                       
+github-actions /         actions/setup-python                                  v6         github-action-or-reusable-workflow ./.github/workflows/run_update_opa.yml                       
+github-actions /         open-policy-agent/setup-opa                           v2         github-action-or-reusable-workflow ./.github/workflows/run_update_opa.yml                       
+pip            /         authors                                               =[{name =  manifest                           ./pyproject.toml                                             
+pip            /         dnspython[doh]                                        >=2.6.1    manifest                           ./pyproject.toml                                             
+pip            /         dynamic                                               =[         manifest                           ./pyproject.toml                                             
+pip            /         google-api-python-client                              >=2.142.0  manifest                           ./pyproject.toml                                             
+pip            /         google-auth-httplib2                                  >=0.2.0    manifest                           ./pyproject.toml                                             
+pip            /         google-auth-oauthlib                                  >=1.2.1    manifest                           ./pyproject.toml                                             
+pip            /         license-files                                         =[         manifest                           ./pyproject.toml                                             
+pip            /         MarkupSafe                                            >=2.1.5    manifest                           ./pyproject.toml                                             
+pip            /         packaging                                             >=26.0     manifest                           ./pyproject.toml                                             
+pip            /         pyyaml                                                >=6.0.2    manifest                           ./pyproject.toml                                             
+pip            /         requests                                              >=2.32.3   manifest                           ./pyproject.toml                                             
+pip            /         tqdm                                                  >=4.66.5   manifest                           ./pyproject.toml                                             
+pip            /         build                                                            manifest                           ./requirements.txt                                           
+pip            /         dnspython                                             >=2.6.1    manifest                           ./requirements.txt                                           
+pip            /         dnspython[doh]                                        >=2.6.1    manifest                           ./requirements.txt                                           
+pip            /         google-api-python-client                              >=2.142.0  manifest                           ./requirements.txt                                           
+pip            /         google-auth-httplib2                                  >=0.2.0    manifest                           ./requirements.txt                                           
+pip            /         google-auth-oauthlib                                  >=1.2.1    manifest                           ./requirements.txt                                           
+pip            /         MarkupSafe                                            >=2.1.5    manifest                           ./requirements.txt                                           
+pip            /         packaging                                             >=26.0     manifest                           ./requirements.txt                                           
+pip            /         pytest                                                >=9        manifest                           ./requirements.txt                                           
+pip            /         pytest-mock                                                      manifest                           ./requirements.txt                                           
+pip            /         pyyaml                                                >=6.0.2    manifest                           ./requirements.txt                                           
+pip            /         requests                                              >=2.32.3   manifest                           ./requirements.txt                                           
+pip            /         streamlit                                             >=1.35.0   manifest                           ./requirements.txt                                           
+pip            /         tqdm                                                  >=4.66.5   manifest                           ./requirements.txt                                           
+pip            /         pytest                                                           manifest                           ./scubagoggles/Testing/Functional/SmokeTests/requirements.txt
+pip            /         selenium                                                         manifest                           ./scubagoggles/Testing/Functional/SmokeTests/requirements.txt
+
+
+
+
+Summary by ecosystem:
+
+Name           Count
+----           -----
+github-actions    29
+pip               28
+
+
+
