@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: scubagoggles-access-token
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: scubagoggles-access-token
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: scubagoggles
+          image: us-docker.pkg.dev/PROJECT/REPOSITORY/scubagoggles-access-token:TAG
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SCUBAGOGGLES_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: scubagoggles-access-token
+                  key: access-token
+            - name: SCUBAGOGGLES_CUSTOMER_ID
+              value: my_customer
+            - name: SCUBAGOGGLES_OUTPUT_PATH
+              value: /output
+            - name: SCUBAGOGGLES_QUIET
+              value: "true"
+          volumeMounts:
+            - name: output
+              mountPath: /output
+            - name: runtime-tmp
+              mountPath: /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      volumes:
+        - name: runtime-tmp
+          emptyDir: {}
+        - name: output
+          persistentVolumeClaim:
+            claimName: scubagoggles-output
