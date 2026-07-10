@@ -9,3 +9,17 @@ updates:
       github-actions:
         patterns:
           - "*"
+
+version: 2
+updates:
+  # GitHub Actions dependencies
+  - package-ecosystem: "pip"
+    directories: 
+    - "/"
+    - "/scubagoggles/Testing/Functional/SmokeTests"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
