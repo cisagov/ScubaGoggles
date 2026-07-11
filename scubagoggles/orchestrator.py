@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 """
 orchestrator.py is the main module that starts and handles the output of the
 provider, rego, and report modules of the SCuBA tool
@@ -29,6 +30,7 @@ import packaging.version as packageVersion
 from scubagoggles.provider import Provider
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.reporter.reporter import Reporter
+from scubagoggles.reporter.reporter_html import create_html_table
 from scubagoggles.run_rego import opa_eval, find_opa
 from scubagoggles.version import Version
 from scubagoggles.scuba_constants import SCUBAGOGGLES_PACKAGE_URL
@@ -192,15 +194,33 @@ class Orchestrator:
         Runs the provider scripts and outputs a json to path
         """
 
-        # pylint: disable=line-too-long
-        baselines, customerid, credentials, accesstoken, subjectemail, preferreddnsresolvers, skipdoh, quiet, breakglassaccounts, report_uuid, outputpath, outputproviderfilename, imapexclusions, sitesexclusions = itemgetter(
-            "baselines", "customerid", "credentials",
-            "accesstoken", "subjectemail",
-            "preferreddnsresolvers", "skipdoh",
-            "quiet","breakglassaccounts", "report_uuid",
-            "outputpath", "outputproviderfilename",
-            "imapexclusions", "sitesexclusions",
-            )(self.args_dict)
+        (baselines,
+         customerid,
+         credentials,
+         accesstoken,
+         subjectemail,
+         preferreddnsresolvers,
+         skipdoh,
+         quiet,
+         breakglassaccounts,
+         report_uuid,
+         outputpath,
+         outputproviderfilename,
+         imapexclusions,
+         sitesexclusions) = itemgetter('baselines',
+                                       'customerid',
+                                       'credentials',
+                                       'accesstoken',
+                                       'subjectemail',
+                                       'preferreddnsresolvers',
+                                       'skipdoh',
+                                       'quiet',
+                                       'breakglassaccounts',
+                                       'report_uuid',
+                                       'outputpath',
+                                       'outputproviderfilename',
+                                       'imapexclusions',
+                                       'sitesexclusions')(self.args_dict)
 
         with Provider(customerid,
                       credentials,
@@ -288,11 +308,21 @@ class Orchestrator:
         Executes the OPA executable with provider json input against
         specified rego files and outputs a json to path
         """
-        # pylint: disable=line-too-long
-        baselines, opapath, outputpath, regopath, outputregofilename, outputproviderfilename, debug, quiet = itemgetter(
-            'baselines', 'opapath', 'outputpath', 'regopath', 'outputregofilename',
-            'outputproviderfilename', 'debug', 'quiet'
-            )(self.args_dict)
+        (baselines,
+         opapath,
+         outputpath,
+         regopath,
+         outputregofilename,
+         outputproviderfilename,
+         debug,
+         quiet) = itemgetter('baselines',
+                             'opapath',
+                             'outputpath',
+                             'regopath',
+                             'outputregofilename',
+                             'outputproviderfilename',
+                             'debug',
+                             'quiet')(self.args_dict)
 
         products_bar = tqdm(baselines, leave=False, disable=quiet)
         results = []
@@ -514,17 +544,128 @@ class Orchestrator:
         with report_file.open('w', encoding='utf-8') as results_file:
             json.dump(total_output, results_file, indent=4, cls=ArgumentsEncoder)
 
+    def _build_control_lookup(self) -> dict[str, dict]:
+        """Flatten baseline metadata for fast control-ID lookups."""
+        lookup: dict[str, dict] = {}
+
+        for product, groups in self._baseline_policies.items():
+            for group in groups:
+                for control in group.get("Controls", []):
+                    lookup[control["Id"]] = {
+                        "Product": product,
+                        "GroupNumber": group["GroupNumber"],
+                        "GroupName": group["GroupName"],
+                        "Requirement": control["Value"].strip(),
+                    }
+
+        return lookup
+
+    def convert_to_fully_automated_checks_csv(self, test_results: list[dict]) -> None:
+        """
+        Write a CSV of controls whose checks are fully automated.
+
+        Criteria:
+          - Criticality is SHALL
+          - Criticality is not not-implemented
+          - No prerequisite mentions the reports API
+        """
+        reports_api_prereq = "reports/v1/activities/list"
+        control_lookup = self._build_control_lookup()
+
+        grouped_tests: dict[str, list[dict]] = {}
+        for test in test_results:
+            grouped_tests.setdefault(test["PolicyId"], []).append(test)
+
+        rows: list[dict] = []
+
+        for policy_id in sorted(grouped_tests):
+            tests = grouped_tests[policy_id]
+
+            criticalities = {
+                str(test.get("Criticality", "")).strip().lower()
+                for test in tests
+            }
+
+            if "not-implemented" in criticalities:
+                continue
+
+            if criticalities != {"shall"}:
+                continue
+
+            if any(
+                    reports_api_prereq in str(prereq)
+                    for test in tests
+                    for prereq in test.get("Prerequisites", [])
+                    if prereq
+            ):
+                continue
+
+            meta = control_lookup.get(policy_id)
+            if meta is None:
+                log.debug("Skipping %s because no baseline metadata was found", policy_id)
+                continue
+
+            prerequisites = sorted({
+                str(prereq)
+                for test in tests
+                for prereq in test.get("Prerequisites", [])
+                if prereq and reports_api_prereq not in str(prereq)
+            })
+
+            rows.append(
+                {
+                    "Product": meta["Product"],
+                    "GroupNumber": meta["GroupNumber"],
+                    "GroupName": meta["GroupName"],
+                    "ControlID": policy_id,
+                    "Requirement": meta["Requirement"],
+                    "Criticality": "SHALL",
+                    "Prerequisites": "; ".join(prerequisites),
+                }
+            )
+
+        args = self._args
+        csv_name = getattr(args, "outputautomatedchecksfilename", "FullyAutomatedChecks")
+        csv_path = args.outputpath / f"{csv_name}.csv"
+
+        fieldnames = [
+            "Product",
+            "GroupNumber",
+            "GroupName",
+            "ControlID",
+            "Requirement",
+            "Criticality",
+            "Prerequisites",
+        ]
+
+        with open(csv_path, mode="w", newline="", encoding="UTF-8") as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+
+        log.info("Wrote %d fully automated checks to %s", len(rows), csv_path)
+
     # pylint: disable=too-many-branches
     def _run_reporter(self):
         """
         Creates the individual reports and the front page
         """
 
-        # pylint: disable=line-too-long
-        baselines,outputpath, fullnamesdict, outputregofilename, outputproviderfilename, darkmode, cicdtestingmode, quiet = itemgetter(
-            "baselines","outputpath","fullnamesdict","outputregofilename",
-            "outputproviderfilename", "darkmode", "cicdtestingmode", "quiet"
-            )(self.args_dict)
+        (baselines,
+         outputpath,
+         fullnamesdict,
+         outputregofilename,
+         outputproviderfilename,
+         darkmode,
+         cicdtestingmode,
+         quiet) = itemgetter('baselines',
+                             'outputpath',
+                             'fullnamesdict',
+                             'outputregofilename',
+                             'outputproviderfilename',
+                             'darkmode',
+                             'cicdtestingmode',
+                             'quiet')(self.args_dict)
 
         # Make the report output folders
         args = self._args
@@ -534,6 +675,10 @@ class Orchestrator:
 
         # Copy CISA logo
         self._copy_cisa_logo(reports_images_path)
+
+        # Provide CSS, Javascript files
+
+        Reporter.provide_static_assets(outputpath)
 
         # load the rego results json here
         prod_to_fullname = fullnamesdict
@@ -547,8 +692,17 @@ class Orchestrator:
         tenant_name = tenant_info['topLevelOU']
         successful_calls = set(settings_data['successful_calls'])
         unsuccessful_calls = set(settings_data['unsuccessful_calls'])
+        cc_license_data = (
+            settings_data.get('license_data', [])
+            if 'commoncontrols' in baselines
+            else None
+        )
         missing_policies = set(settings_data['missing_policies'])
         report_uuid = settings_data['report_uuid']
+
+        # Extract OrgName and OrgUnitName from args
+        org_name = self.args_dict.get('OrgName')
+        org_unit_name = self.args_dict.get('OrgUnitName')
 
         # Get the DNS data, if applicable
         dns_logs = {}
@@ -596,7 +750,9 @@ class Orchestrator:
             'Tool':  'ScubaGoggles',
             'ToolVersion':  Version.number,
             'TimestampZulu': timestamp_zulu,
-            'ReportUUID': report_uuid
+            'ReportUUID': report_uuid,
+            'OrgName': org_name,
+            'OrgUnitName': org_unit_name
         }
 
         total_output.update({'MetaData': report_metadata})
@@ -621,7 +777,12 @@ class Orchestrator:
                                 dns_logs,
                                 omissions,
                                 annotations,
-                                products_bar)
+                                products_bar,
+                                license_data=(
+                                    cc_license_data
+                                    if product == 'commoncontrols'
+                                    else None
+                                ))
             stats_and_data[product] = \
                 reporter.rego_json_to_ind_reports(test_results_data,
                                                   outputpath,
@@ -640,7 +801,9 @@ class Orchestrator:
 
         # Create the ScubaResults files
         scuba_results_file = outputpath / f'{outputproviderfilename}.json'
-        raw_data = self._load_scuba_results_file(outputpath, outputproviderfilename, args_dict=self.args_dict)
+        raw_data = self._load_scuba_results_file(outputpath,
+                                                 outputproviderfilename,
+                                                 args_dict=self.args_dict)
 
         total_output.update({'Raw': raw_data})
         total_output['Raw']['rules_table'] = rules_table
@@ -662,6 +825,9 @@ class Orchestrator:
 
         # Generate action report file
         self.convert_to_result_csv(total_output)
+
+        # Generate automated checks file
+        self.convert_to_fully_automated_checks_csv(test_results_data)
 
         # Dump output files
         self._dump_report_files(outputpath, out_jsonfile, total_output)
@@ -687,7 +853,7 @@ class Orchestrator:
             table_data.append({'Baseline Conformance Reports': link,
                                'Details': self._generate_summary(stats[0])})
 
-        fragments.append(Reporter.create_html_table(table_data))
+        fragments.append(create_html_table(table_data))
 
         front_page_html = Reporter.build_front_page_html(fragments,
                                                          tenant_info,

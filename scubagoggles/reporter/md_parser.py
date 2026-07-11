@@ -44,6 +44,7 @@ class MarkdownParser:
     _indicator_re = re.compile(r'\[!\[(?P<name>[^\]]+)\]\((?P<url>[^)]+)\)\]')
 
     _valid_indicators = {'Automated Check',
+                         'BOD 25-01 Requirement',
                          'Configurable',
                          'Log-Based Check',
                          'Manual'}

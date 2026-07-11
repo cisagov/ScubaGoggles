@@ -30,6 +30,8 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
+**BOD 25-01 Requirement**: This indicator means that the policy is required under CISA BOD 25-01.
+
 **Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
 **Log-Based Check**: This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
@@ -47,6 +49,7 @@ This control limits external users not explicitly invited to the meeting from jo
 #### GWS.MEET.1.1v1
 External users who were not explicitly invited SHALL be required to ask to join.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Allowing users not within the organization or those not on the invite list to join meetings without asking diminishes host control of meeting participation, reduces user accountability, and invites potential data breach. This policy reduces that risk by requiring users outside the organization or without an invitation to require organizer permission to join.
@@ -88,6 +91,7 @@ This control determines which meetings users within the agency's organization ca
 #### GWS.MEET.2.1v1
 Meeting access SHALL be disabled for meetings created by users who are not members of any Google Workspace (GWS) tenant or organization.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Contact with unmanaged users can pose the risk of data leakage and other security threats. This policy reduces such contact by not allowing agency users to join meetings created by users' personal accounts.
@@ -130,6 +134,7 @@ Note: When this feature is not enabled, any attendee that is a member of the hos
 #### GWS.MEET.3.1v1
 Host Management meeting features SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ With host management disabled, any internal participant can take control of meetings, performing actions such as recording the meeting, disabling or enabling the chat, and ending the meeting. When enabled, these options are only available to meeting hosts.
@@ -172,6 +177,7 @@ This control provides a warning label for any participating a meeting who is not
 #### GWS.MEET.4.1v1
 "Warn for external participants" SHALL be enabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users may inadvertently include external users or not be aware that external users are present. When enabled, external or unidentified participants in a meeting are given a label. This increases situational awareness amongst meeting participants and can help prevent inadvertent data leakage.
@@ -215,7 +221,8 @@ This section covers Google Meet video settings such as automatic video recording
 #### GWS.MEET.5.1v1
 Automatic recordings for Google Meet SHALL be disabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet61v06-instructions)
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Automatic recordings could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024
@@ -229,7 +236,8 @@ Automatic recordings for Google Meet SHALL be disabled.
 #### GWS.MEET.5.2v1
 Automatic transcripts for Google Meet SHALL be disabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsmeet62v06-instructions)
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
 - _Last modified:_ January 2024

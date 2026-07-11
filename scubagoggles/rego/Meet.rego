@@ -196,14 +196,30 @@ if {
 
 MeetId5_1 := utils.PolicyIdWithSuffix("GWS.MEET.5.1")
 
+NonCompliantOUs5_1 contains {
+    "Name": OU,
+    "Value": "Automatic recording is enabled."
+} if {
+    some OU, settings in input.policies
+    MeetEnabled(OU)
+    AutoRecord := settings.meet_automatic_recording.enabled
+    AutoRecord == true
+}
+
 tests contains {
     "PolicyId": MeetId5_1,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "Prerequisites": [
+        "policy/meet_automatic_recording.enabled",
+        "policy/meet_service_status.serviceState"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs5_1) == 0
 }
 #--
 
@@ -213,14 +229,30 @@ tests contains {
 
 MeetId5_2 := utils.PolicyIdWithSuffix("GWS.MEET.5.2")
 
+NonCompliantOUs5_2 contains {
+    "Name": OU,
+    "Value": "Automatic transcription is enabled."
+} if {
+    some OU, settings in input.policies
+    MeetEnabled(OU)
+    AutoRecord := settings.meet_automatic_transcription.enabled
+    AutoRecord == true
+}
+
 tests contains {
     "PolicyId": MeetId5_2,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": true
+    "Prerequisites": [
+        "policy/meet_automatic_transcription.enabled",
+        "policy/meet_service_status.serviceState"
+    ],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_2, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_2},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs5_2) == 0
 }
 #--
 
