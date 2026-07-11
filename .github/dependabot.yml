@@ -13,7 +13,7 @@ updates:
   - package-ecosystem: "pip"
     directories:
       - "/"
-      - "/Testing/Functional/SmokeTests"
+      - "/scubagoggles/Testing/Functional/SmokeTests"
     schedule:
       interval: "weekly"
     groups:
