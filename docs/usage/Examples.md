@@ -36,8 +36,10 @@ scubagoggles gws -h
 
 ## Example 6: Run with a config file
 ```
-scubagoggles gws --config sample-config-files/basic_config.yaml
+scubagoggles gws --config scubagoggles/sample-config-files/basic_config.yaml
 ```
+
+Other sample configs are available in [`scubagoggles/sample-config-files/`](../scubagoggles/sample-config-files/README.md), including templates for omit policies and custom output paths. You can also build a config file with the [Configuration UI](../scubagoggles/ui/README.md) and pass the downloaded YAML to `--config`.
 
 > [!NOTE]
 > In all the above examples, the html report should open automatically. If not, navigate to the output folder and open the `*.html` file using a browser of your choice. The json output will also be located in this folder.
