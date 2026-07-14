@@ -77,14 +77,13 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         choices=('true', 'false'),
                         help=argparse.SUPPRESS)
 
-    help_msg = ('Access token string to be used in lieu of a credentials file. '
-                'If provided, will take precendence over the credentials file. '
-                'Advanced option; using a credentials file is the recommended '
-                'authentication method.')
-    parser.add_argument('--accesstoken',
-                        metavar='<access-token>',
-                        type=str,
-                        default=None,
+    help_msg = ('If set, will use the Metadata Server provided in Google Compute Engine '
+                '(GCE) environments for authentication. '
+                'The service account associated with the GCE service must have the '
+                '"iam.serviceAccountTokenCreator" role in addition to other ScubaGoggles roles. '
+                'Advanced option; using a credentials file is recommended.')
+    parser.add_argument('--usemetadataserverauth',
+                        action='store_true',
                         help=help_msg)
 
     help_msg = ('A list of one or more abbreviated GWS baseline names that the '

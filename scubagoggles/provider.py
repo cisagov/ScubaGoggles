@@ -192,7 +192,7 @@ class Provider:
                  customer_id: str,
                  credentials_file: Path,
                  *, # everything after this is keyword-only
-                 access_token: str = None,
+                 metadata_auth: bool = False,
                  svc_account_email: str = None,
                  dns_resolvers: list = None,
                  doh_servers: list = None,
@@ -203,8 +203,8 @@ class Provider:
         :param customer_id: the ID of the customer to run against.
         :param credentials_file: file specification of Google JSON-format
             credentials.
-        :param access_token: (optional) access token string that will be used
-            instead of the credentials file.
+        :param metadata_auth: (optional) if set will use GCE metadata server
+            for authentication
         :param svc_account_email: (optional) email address for the service
             account.
         :param dns_resolvers: (optional) list of DNS resolvers that should be
@@ -215,7 +215,7 @@ class Provider:
             retried over DoH.
         """
 
-        self._gws_auth = GwsAuth(credentials_file, access_token, svc_account_email)
+        self._gws_auth = GwsAuth(credentials_file, metadata_auth, svc_account_email)
         self._credentials = self._gws_auth.credentials
         self._services = {}
         self._customer_id = customer_id
