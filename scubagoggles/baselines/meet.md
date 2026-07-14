@@ -28,13 +28,13 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
 [![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services) (**BOD 25-01 Requirement**): This indicator means that the policy is required under CISA BOD 25-01.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology) (**Automated Check**): This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
 
-[![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)(**Configurable**): This indicator means that the policy can be customized via config file.
+[![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)(**Configurable**): This indicator means that the policy can be customized via a configuration file.
 
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)(**Log-Based Check**): This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
 
@@ -227,7 +227,7 @@ Automatic recordings for Google Meet SHALL be disabled.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Automatic recordings could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
-- _Last modified:_ January 2024
+- _Last modified:_ April 2026
 - _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
@@ -242,7 +242,7 @@ Automatic transcripts for Google Meet SHALL be disabled.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Automatic transcripts could record sensitive information. By selecting this setting, it potentially mitigates unauthorized data leakage.
-- _Last modified:_ January 2024
+- _Last modified:_ April 2026
 - _Note:_ The meeting owner retains the ability to modify this setting for their own meetings.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
