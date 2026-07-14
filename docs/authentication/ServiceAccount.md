@@ -15,7 +15,7 @@ Only complete this section if not authenticating via [OAuth](OAuth.md). See [Aut
 1. Select **MANAGE DOMAIN WIDE DELEGATION**
 1. Select **Add new**
 1. Enter the `client_id` from the downloaded credentials (also visible after clicking on the created Service account under Details -> Unique ID)
-1. Enter each OAuth scope as listed in [Permissions](../prerequisites/Prerequisites.md#permissions)
+1. Enter each Domain-wide delegation scope as listed in [Permissions](../prerequisites/Prerequisites.md#domain-wide-delegation-scopes) in the OAuth scopes field. (Tip: you can copy and paste the entire block into the field.)
 1. Select **AUTHORIZE**
 1. To add the Groups Reader role to your service account, navigate to **Account** -> **Admin Roles** in the Workspace Admin Console.
 1. Locate and click the Groups Reader role, and then expand the **Admins** section.
