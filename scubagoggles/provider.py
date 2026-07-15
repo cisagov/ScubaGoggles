@@ -289,7 +289,7 @@ class Provider:
         self._services['groups'] = build('groupssettings',
                                          'v1',
                                          cache_discovery = False,
-                                         credentials = self._gws_auth.groups_credentials)
+                                         credentials = self._gws_auth.dasa_credentials)
 
     def _cached_list(
         self,
@@ -1011,7 +1011,7 @@ class Provider:
         try:
             licensing_service = build('licensing', 'v1',
                                       cache_discovery=False,
-                                      credentials=self._credentials,
+                                      credentials=self._gws_auth.dasa_credentials,
                                       num_retries=0)
 
             any_success = False

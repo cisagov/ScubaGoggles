@@ -121,7 +121,7 @@ class GwsAuth:
         return self._token
 
     @property
-    def groups_credentials(self):
+    def dasa_credentials(self):
         """Returns credentials for the Groups Settings API.
 
         When using a service account, returns credentials where the service
