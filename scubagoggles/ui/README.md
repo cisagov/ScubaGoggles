@@ -53,14 +53,27 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Method 1: Direct Launch (Recommended)
+### Method 1: Direct Launch via scubagoggles application (Recommended)
 
 ```bash
 # From the ScubaGoggles root directory
-python -m scubagoggles.ui.launch
+scubagoggles ui 
 ```
 
-This will start the Streamlit server and open the app in your default web browser. Dark mode is automatically detected from your browser's preferred color scheme via CSS media queries.
+This will start the Streamlit server and open the app in your default web browser. Dark mode is automatically detected from your browser's preferred color scheme via CSS media queries. It can additionally be specified from the command line by running:
+
+```bash
+scubagoggles ui --darkmode
+```
+
+or
+
+```bash
+scubagoggles ui -dm
+```
+
+The darkmode switch is optional, and by default (if no switch argument is provided), darkmode is disabled.
+
 
 ### Forcing dark mode
 
