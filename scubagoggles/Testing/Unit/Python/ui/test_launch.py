@@ -173,9 +173,9 @@ class TestLaunch:
         """
         Test the main() method in launch.py
         """
+        # ensure no leaked env var from another test/run
         monkeypatch.delenv('SCUBAGOGGLES_UI_DARK', raising=False)
-        # to mock command line arguments
-        #str_args = ['launch.py']
+
         # expected build command
         expected_cmd = [
             str(sys.executable), '-m', 'streamlit', 'run',
@@ -186,10 +186,7 @@ class TestLaunch:
             '--browser.gatherUsageStats', 'false',
         ]
         if dark_mode:
-            #str_args.append('--dark')
-            #monkeypatch.setenv('SCUBAGOGGLES_UI_DARK', '80')
             expected_cmd.extend(['--theme.base', 'dark'])
-        #mocker.patch('sys.argv', str_args)
         # arbitrary return values for mocked functions
         mocker.patch.object(launch, '_find_free_port', return_value=1234)
         mocker.patch.object(launch, '_get_app_to_run', return_value=Path('home'))
@@ -204,7 +201,7 @@ class TestLaunch:
         else:
             mocker.patch('sys.platform', 'win32')
 
-        launch.launch_main(darkmode=dark_mode)
+        launch.launch_main(darkmode = dark_mode)
         # assertions
         if dark_mode:
             assert os.environ.get('SCUBAGOGGLES_UI_DARK') == '1'

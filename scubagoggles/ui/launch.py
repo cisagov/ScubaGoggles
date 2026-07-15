@@ -163,6 +163,14 @@ def launch_main(darkmode = False) -> None:
     _run_server(cmd, popen_kwargs)
 
 
+def launch_from_ui_command(args: argparse.Namespace) -> None:
+    """
+    Process the scuba ui commands
+    """
+    # currently --darkmode is the only ui subcommand
+    launch_main(darkmode = args.darkmode)
+    
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
