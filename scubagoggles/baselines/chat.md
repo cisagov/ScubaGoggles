@@ -211,7 +211,7 @@ To enable external chat for allowlisted domains only:
 1. Sign in to the [Google Admin Console](https://admin.google.com).
 2. Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3. Select **External chat settings** -\> **Chat externally**.
-4. Select **on**
+4. Select **ON**.
 5. Select **Only allow this for allowlisted domains**.
 6. To add allowlisted domains select **Manage allowlisted domains**.
 7. Select **Save**.
