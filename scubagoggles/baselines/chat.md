@@ -88,7 +88,7 @@ To configure the settings for Google Chat history:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3.  Select **History for chats**.
-4.  For **History**, select **on**.
+4.  Select **History is ON**.
 5.  Select **Save**
 
 #### GWS.CHAT.1.2v1 Instructions
