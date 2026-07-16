@@ -1089,7 +1089,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 -   Mobile settings changed
 -   Malware message detected post-delivery
 -   Leaked password
--   Google operations
+-   Google Operations
 -   Gmail potential employee spoofing
 -   Email settings changed
 -   Drive settings changed
