@@ -1077,7 +1077,7 @@ GWS includes system-defined alerting rules that provide situational awareness in
 -   User suspended for spamming
 -   User suspended due to suspicious activity
 -   User suspended (Google identity alert)
--   User granted administrator privilege
+-   User granted Admin privilege
 -   Suspicious programmatic login
 -   Suspicious message reported
 -   Suspicious login
