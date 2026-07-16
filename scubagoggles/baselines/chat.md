@@ -265,7 +265,7 @@ All reporting message categories SHOULD be selected.
 #### GWS.CHAT.5.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Chat**.
-3.  Click **Content reporting**.
+3.  Click **Manage content reporting** then **Content reporting**.
 4.  Ensure **Allow users to report content in Chat** is enabled.
 5.  Ensure all conversation type checkboxes are selected.
 6.  Click **Save**.
