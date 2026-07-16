@@ -220,7 +220,7 @@ Alternatively, to disable external chat entirely:
 1. Sign in to the [Google Admin Console](https://admin.google.com).
 2. Select **Apps** -\> **Google Workspace** -\> **Google Chat**.
 3. Select **External chat settings** -\> **Chat externally**.
-4. Select **off**
+4. Select **OFF**.
 5. Select **Save**.
 
 
