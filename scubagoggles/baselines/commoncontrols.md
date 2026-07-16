@@ -1017,7 +1017,7 @@ Only approved Google Workspace (GWS) Marketplace applications SHALL be allowed f
 1.  Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
 2.  Select **Apps** -\> **Google Workspace Marketplace apps** -\> **Settings.**
 3.  Select **Allow users to install and run allowlisted apps from the Marketplace.**
-4.  Ensure that the **Allow exception for internal apps – U.S. users can install and run any internal app, even if it is not allowlisted** checkbox is unchecked.
+4.  Ensure that the **Allow exception for internal apps. Users can install and run any internal app, even if it's not allowlisted** checkbox is unchecked.
 5.  Click **Save.**
 
 To add an application to the allowlist:
