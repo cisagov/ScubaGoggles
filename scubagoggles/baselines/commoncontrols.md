@@ -233,7 +233,7 @@ Device-based context-aware access provides access control policies based on devi
 Device-based context-aware access can be used in several ways depending on agency business requirements. The following options are all acceptable approaches:
 
 -   Properties of the device as reported by Google (encryption, screen lock, OS version, etc.)
--   Device inventory status (corporate-issued versus bring your own device (BYOD)
+-   Device inventory status (corporate-issued versus bring your own device)
 -   Use of managed Chrome browser
 -   Data based on integration with certain third-party device management tools
 
