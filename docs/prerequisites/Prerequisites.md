@@ -2,9 +2,10 @@
 
 ## Permissions
 
-ScubaGoggles requires the users to have Super Admin role to successfully run the tool.
+### OAuth scopes
 
-The tool uses the following OAUTH API scopes:
+ScubaGoggles requires the user to have Super Admin role to successfully run the tool.
+When authenticating interactively via OAuth, you will be prompted to consent to the following scopes:
 
 ```
 https://www.googleapis.com/auth/admin.reports.audit.readonly,
@@ -20,8 +21,21 @@ https://www.googleapis.com/auth/apps.licensing
 https://www.googleapis.com/auth/apps.groups.settings
 ```
 
-When running ScubaGoggles for the first time you will be prompted to consent to
-these API scopes.
+### Domain-wide delegation scopes
+
+When authenticating via a service account, authorize the following scopes under domain-wide delegation:
+
+```
+https://www.googleapis.com/auth/admin.reports.audit.readonly,
+https://www.googleapis.com/auth/admin.directory.domain.readonly,
+https://www.googleapis.com/auth/admin.directory.group.readonly,
+https://www.googleapis.com/auth/admin.directory.orgunit.readonly,
+https://www.googleapis.com/auth/admin.directory.user.readonly,
+https://www.googleapis.com/auth/admin.directory.rolemanagement.readonly,
+https://www.googleapis.com/auth/admin.directory.customer.readonly,
+https://www.googleapis.com/auth/cloud-identity.policies.readonly,
+https://www.googleapis.com/auth/cloud-identity.inboundsso.readonly
+```
 
 ## Google Cloud APIs
 
