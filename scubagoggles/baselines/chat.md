@@ -65,7 +65,7 @@ Users SHALL NOT be allowed to change their history setting.
 [![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Altering the Google Chat history settings can potentially allow users to obfuscate the sharing of sensitive information via Chat. This policy helps all Google Chat histories be preserved, enhancing data security and promoting accountability among users.
+- _Rationale:_ Altering the Google Chat history settings can potentially allow users to obfuscate the sharing of sensitive information via Chat. This policy helps preserve all Google Chat histories, enhancing data security and promoting accountability among users.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AU-9
 - MITRE ATT&CK TTP Mapping
