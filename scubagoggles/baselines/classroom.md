@@ -164,7 +164,7 @@ To configure the settings for Roster Import:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Additional Google Service** -\> **Classroom**.
 3.  Select **Roster import**.
-4.  Select **off**.
+4.  Select **OFF**.
 5.  Select **Save**.
 
 ## 4. Student Unenrollment
