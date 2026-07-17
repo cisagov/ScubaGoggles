@@ -168,7 +168,7 @@ Microsoft 365 (Graph API) SHALL be used instead of basic authentication to estab
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscalendar32v06-instructions)
 
-- _Rationale:_ Basic authentication is a deprecated and risk-prone authentication method. Microsoft 365 (Graph API) helps reduce the risk of credential compromise.
+- _Rationale:_ Basic authentication is a deprecated and risk-prone authentication method. The Microsoft 365 (Graph API) helps reduce the risk of credential compromise.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-2(1), IA-2(2)
 - MITRE ATT&CK TTP Mapping
