@@ -1419,9 +1419,10 @@ Require multi-party approval for sensitive admin actions SHOULD be enabled.
 #### GWS.COMMONCONTROLS.17.1v1 Instructions
 To configure additional services per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Security** -> **Authentication** -> **Multi-party approval settings**.
-3.	Ensure **Require multi party approval for sensitive admin actions** is checked.
-4.	Click **Save**.
+2.	Navigate to **Security**.
+3.	Click the **Multi-party approval settings** card.
+4.	Ensure **Require multi party approval for sensitive admin actions** is checked.
+5.	Click **Save**.
 
 ## 18. Data Loss Prevention
 

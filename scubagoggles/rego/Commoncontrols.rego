@@ -1188,29 +1188,39 @@ if {
 
 CommonControlsId7_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.7.1")
 
-NonComplianceMessage7_1 := "Conflicting account management is not configured to replace conflicting unmanaged accounts with managed ones."
+GetFriendlyConflictMethod(Value) :=
+    "automatically inviting users to transfer unmanaged accounts to managed ones" if {
+    Value == "AUTOMATICALLY_SEND_INVITATIONS"
+} else := "preserving the conflicting account" if {
+    Value == "PRESERVE_CONFLICTING_ACCOUNT"
+} else := Value
+
+NonComplianceMessage7_1(value) := sprintf("Conflicting accounts are managed by %s.",
+                                          [value])
 
 NonCompliantOUs7_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_1
+    "Value": NonComplianceMessage7_1(GetFriendlyConflictMethod(conflictAcctMgmt))
 }
 if {
     some OU, settings in input.policies
-    settings.provisioning_conflicting_accounts_management.conflictingAccountsManagement != "REPLACE_CONFLICTING_ACCOUNTS"
+    section := settings.provisioning_conflicting_accounts_management
+    conflictAcctMgmt := section.option
+    conflictAcctMgmt != "REPLACE_CONFLICTING_ACCOUNT"
 }
 
 tests contains {
     "PolicyId": CommonControlsId7_1,
-    "Prerequisites": ["policy/provisioning_conflicting_accounts_management.conflictingAccountsManagement"],
+    "Prerequisites": ["policy/provisioning_conflicting_accounts_management.option"],
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
+    "RequirementMet": Status
 }
 if {
     Status := count(NonCompliantOUs7_1) == 0
 }
+
 #--
 
 ########################
@@ -1975,7 +1985,7 @@ CommonControlsId17_1 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.17.1")
 
 # NOTE: This setting cannot be controlled at the group level
 
-NonComplianceMessage17_1 := "Require multi party approval for sensitive admin actions is disabled."
+NonComplianceMessage17_1 := "Multi-party approval is not required for sensitive admin actions."
 
 NonCompliantOUs17_1 contains {
     "Name": OU,
@@ -1983,7 +1993,9 @@ NonCompliantOUs17_1 contains {
 }
 if {
     some OU, settings in input.policies
-    settings.multi_party_approval_require_approvals.multiPartyApprovalState != "ENABLED"
+    section := settings.multi_party_approval_require_approvals
+    multiPartyApprovals := section.multiPartyApprovalState
+    multiPartyApprovals != "ENABLED"
 }
 
 tests contains {
@@ -1992,12 +2004,12 @@ tests contains {
     "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs17_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs17_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
+    "RequirementMet": Status
 }
 if {
     Status := count(NonCompliantOUs17_1) == 0
 }
+
 #--
 
 #########################

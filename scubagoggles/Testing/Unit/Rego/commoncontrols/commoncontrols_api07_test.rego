@@ -8,7 +8,7 @@ GoodCaseInputApi07 := {
     "policies": {
         "topOU": {
             "provisioning_conflicting_accounts_management": {
-                "conflictingAccountsManagement": "REPLACE_CONFLICTING_ACCOUNTS"}
+                "option": "REPLACE_CONFLICTING_ACCOUNT"}
         }
     },
     "tenant_info": {
@@ -20,7 +20,7 @@ BadCaseInputApi07 := {
     "policies": {
         "topOU": {
             "provisioning_conflicting_accounts_management": {
-                "conflictingAccountsManagement": "INVITE_CONFLICTING_ACCOUNTS"}
+                "option": "AUTOMATICALLY_SEND_INVITATIONS"}
         }
     },
     "tenant_info": {
@@ -32,12 +32,8 @@ BadCaseInputApi07a := {
     "policies": {
         "topOU": {
             "provisioning_conflicting_accounts_management": {
-                "conflictingAccountsManagement": "REPLACE_CONFLICTING_ACCOUNTS"}
-        },
-        "nextOU": {
-            "provisioning_conflicting_accounts_management": {
-                "conflictingAccountsManagement": "INVITE_CONFLICTING_ACCOUNTS"}
-        },
+                "option": "PRESERVE_CONFLICTING_ACCOUNT"}
+        }
     },
     "tenant_info": {
         "topLevelOU": "topOU"
@@ -55,8 +51,9 @@ test_ConflictingAccounts_Incorrect_1 if {
     PolicyId := CommonControlsId7_1
     Output := tests with input as BadCaseInputApi07
 
+    message := NonComplianceMessage7_1(GetFriendlyConflictMethod("AUTOMATICALLY_SEND_INVITATIONS"))
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage7_1}]
+                 "Value": message}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -64,7 +61,8 @@ test_ConflictingAccounts_Incorrect_2 if {
     PolicyId := CommonControlsId7_1
     Output := tests with input as BadCaseInputApi07a
 
-    failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage7_1}]
+    message := NonComplianceMessage7_1(GetFriendlyConflictMethod("PRESERVE_CONFLICTING_ACCOUNT"))
+    failedOU := [{"Name": "topOU",
+                 "Value": message}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
