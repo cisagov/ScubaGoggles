@@ -99,3 +99,5 @@ def scopes_for(flow: AuthFlow) -> tuple:
 DWD_SCOPES = scopes_for(AuthFlow.DWD)
 OAUTH_SCOPES = scopes_for(AuthFlow.OAUTH)
 DASA_SCOPES = scopes_for(AuthFlow.DASA)
+# Matches DASA plus one scope to allow creating new tokens
+METADATA_AUTH_SCOPES = (*scopes_for(AuthFlow.DASA), f'{BASE_AUTH_URL}/cloud-platform')
