@@ -385,7 +385,7 @@ class TestMain:
 
         main_module = patched_main
 
-        dispatch_calls = {name: [] for name in ["getopa", "gws", "gws_ui", 
+        dispatch_calls = {name: [] for name in ["getopa", "gws", "gws_ui",
                                                 "purge", "setup", "version"]}
 
         def make_dispatch(name):
