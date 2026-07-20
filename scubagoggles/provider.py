@@ -209,8 +209,8 @@ class Provider:
             account.
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
-        :param doh_servers: (optional) list of DoH servers that should be used 
-            for DoH queries.           
+        :param doh_servers: (optional) list of DoH servers that should be used
+            for DoH queries.
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.
         """
@@ -401,6 +401,115 @@ class Provider:
 
         return results
 
+    def parse_dmarc_record(self, answers: list) -> dict:
+        """
+        Parse the given answer set for DMARC record values. Return an empty dict if no valid DMARC
+        record is found.
+
+        :param answers: List of strings containing the answers returned to a DNS query.
+        """
+        dmarc_fields = {}
+        answers = [a for a in answers if a.startswith("v=DMARC1;")]
+        if len(answers) != 1:
+            # If there is not exactly 1 DMARC record returned for a given domain, the entire answer
+            # set is discarded.
+            return {}
+        tags = answers[0].split(';')
+        for tag in tags:
+            tag = tag.strip()
+            if not tag.count('=') == 1:
+                # malformed DMARC record, discard it
+                return {}
+            tag_name, tag_value = tag.split('=')
+            if tag_name in dmarc_fields:
+                # There's a duplicate tag, discard the entire answer
+                return {}
+            dmarc_fields[tag_name] = tag_value
+
+    def get_dmarc_record(self, domain: str) -> dict:
+        """
+        Find the DMARC record for a given domain.
+        """
+        log_entries = []
+        tree_walk_results = []
+        qname = f'_dmarc.{domain}'
+        result = self._dns_client.query(qname)
+        log_entries.extend(result['log_entries'])
+        tree_walk_results.append({
+            'qname': qname,
+            'result': result
+        })
+        dmarc_record = self.parse_dmarc_record(result['answers'])
+        if len(dmarc_record) != 0:
+            # We found the DMARC record at the author level, no need to make further queries
+            return {
+                'domain': domain,
+                'rdata': result['answers'],
+                'log': log_entries
+            }
+
+        # The domain does not exist at the author level. Time to "walk" the DNS tree per RFC 9989
+        # section 4.10.
+        labels = domain.split('.')
+        # If there are 8 or more labels, skip to the final 7 labels. Otherwise, just remove 1 label
+        if len(labels) >= 8:
+            labels = labels[-7:]
+        else:
+            labels = labels[1:]
+
+        while len(labels) > 0:
+            qname = '_dmarc.' + '.'.join(labels)
+            result = self._dns_client.query(qname)
+            log_entries.extend(result['log_entries'])
+            tree_walk_results.append({
+                'qname': qname,
+                'result': result
+            })
+            dmarc_record = self.parse_dns_record(result['answers'])
+            if dmarc_record.get('psd') == 'n':
+                # We found the organizational domain, return its DMARC record
+                return {
+                    'domain': domain,
+                    'rdata': result['answers'],
+                    'log': log_entries
+                }
+            if dmarc_record.get('psd') == 'y':
+                # This is the PSD (public suffix domain).
+                # As no domain so far advertised itself as the organizational domain (psd=n),
+                # the organizational domain is one layer below it.
+                org_domain_result = self.parse_dns_record(tree_walk_results[-2]['result']['answers'])
+                if len(org_domain_result) != 0:
+                    # Mission accomplished, we found organizational domain's DMARC record
+                    return {
+                        'domain': domain,
+                        'rdata': tree_walk_results[-2]['result']['answers'],
+                        'log': log_entries
+                    }
+                # The organizational domain didn't publish a DMARC record, but we found the PSD, so
+                # break out of the loop
+                break
+
+            # If we didn't find the org domain or the PSD, strip away one more label and try again
+            labels = labels[1:]
+
+        for result in reversed(tree_walk_results):
+            # We didn't find the organizational domain. In this case, select the DMARC record for
+            # the domain with the fewest labels (hence the "reversed()" above)
+            dmarc_record = self.parse_dns_record(result['result']['answers'])
+            if len(dmarc_record != 0):
+                return {
+                    'domain': domain,
+                    'rdata': result['result']['answers'],
+                    'log': log_entries
+                }
+
+        # We didn't find any valid DMARC records
+        return {
+            'domain': domain,
+            'rdata': [],
+            'log': log_entries
+        }
+
     def get_dmarc_records(self, domains: set) -> list:
         """
         Gets the DMARC records for each domain in domains.
@@ -409,22 +518,7 @@ class Provider:
         """
         results = []
         for domain in domains:
-            log_entries = []
-            qname = f'_dmarc.{domain}'
-            result = self._dns_client.query(qname)
-            log_entries.extend(result['log_entries'])
-            if len(result['answers']) == 0:
-                # The domain does not exist. If the record is not available at the full domain
-                # level, we need to check at the organizational domain level.
-                labels = domain.split('.')
-                org_domain = f'{labels[-2]}.{labels[-1]}'
-                result = self._dns_client.query(f'_dmarc.{org_domain}')
-                log_entries.extend(result['log_entries'])
-            results.append({
-                'domain': domain,
-                'rdata': result['answers'],
-                'log': log_entries
-            })
+            results.append(self.get_dmarc_record(domain))
         return results
 
     def get_dnsinfo(self):
