@@ -478,8 +478,8 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
             ),
             (
                 # convert to string example
-                {"accesstoken": 12345},
-                {"accesstoken": "12345"}
+                {"usemetadataserverauth": True},
+                {"usemetadataserverauth": "True"}
             ),
             # numberofuuidcharacterstotruncate in config
             (
@@ -1421,11 +1421,11 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
         (
             {
                 'outjsonfilename': 'ScubaResults',
-                'accesstoken': "Access123",
+                'usemetadataserverauth': True,
             },
             {
                 'outjsonfilename': 'ScubaResults',
-                'accesstoken': "Access123",
+                'usemetadataserverauth': True,
             },
         ),
         (

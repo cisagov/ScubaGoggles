@@ -2232,7 +2232,7 @@ class ScubaConfigApp:
 
         st.divider()
 
-        # --- Access token ---
+        # --- Metadata server auth ---
         st.markdown("### Authentication")
 
         data["usemetadataserverauth"] = st.checkbox(
