@@ -131,7 +131,7 @@ def launch_main(darkmode = False) -> None:
     """Launch the ScubaGoggles UI in the default web browser."""
 
     if darkmode:
-            os.environ["SCUBAGOGGLES_UI_DARK"] = "1"
+        os.environ["SCUBAGOGGLES_UI_DARK"] = "1"
 
     force_dark = os.environ.get(
         "SCUBAGOGGLES_UI_DARK", "",
@@ -163,13 +163,13 @@ def launch_main(darkmode = False) -> None:
     _run_server(cmd, popen_kwargs)
 
 
-def launch_from_ui_command(args: argparse.Namespace) -> None:
+def launch_from_ui_command(cli_args: argparse.Namespace) -> None:
     """
     Process the scuba ui commands
     """
     # currently --darkmode is the only ui subcommand
-    launch_main(darkmode = args.darkmode)
-    
+    launch_main(darkmode = cli_args.darkmode)
+
 
 if __name__ == "__main__":
 

@@ -283,7 +283,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                        action='store_true',
                        help=help_msg)
 
-def get_gws_ui_args(parser: argparse.ArgumentParser, user_config: UserConfig):
+def get_gws_ui_args(parser: argparse.ArgumentParser, user_config: UserConfig): # pylint: disable=unused-argument
     """Adds the arguments for the UI parser
 
     :param argparse.ArgumentParser parser: argparse object
@@ -489,7 +489,7 @@ def dive():
                                        help=help_msg)
     get_gws_args(gws_parser, user_config)
 
-    help_msg = ('SCuBA automated UI')
+    help_msg = 'SCuBA automated UI tool'
     gws_parser = subparsers.add_parser('gws_ui',
                                        description=help_msg,
                                        help=help_msg)
