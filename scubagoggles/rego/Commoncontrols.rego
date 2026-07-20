@@ -804,7 +804,7 @@ if {
 
 CommonControlsId5_3 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.5.3")
 
-SuggestedPasswordLength := 15
+SuggestedPasswordLength := 16
 
 FormatMessage5_3 := "Minimum password length: %d, recommended is at least %d"
 NonComplianceMessage5_3(Value) := sprintf(FormatMessage5_3,
