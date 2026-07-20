@@ -1904,9 +1904,9 @@
                         "Requirement": "Domains SHALL NOT be added to lists that bypass spam filters and hide warnings.<div class=\"badges\">\n<span class=\"indicator-badge\" style=\"background-color: #C41230; color: white;\" title=\"Required by CISA BOD 25-01\">BOD 25-01 Requirement</span>\n<span class=\"indicator-badge\" style=\"background-color: #5E9732; color: black;\" title=\"Automatically verified by ScubaGoggles\">Automated Check</span></div>",
                         "Result": "Fail",
                         "Criticality": "Shall",
-                        "Details": "The following OUs are non-compliant: \n- Cool Example Org: Warnings and spam filters are bypassed for one or more domains: {Scuba: [Scuba: (bradshaw-lee.com, example.org), Example: (bbc.co.uk, npr.org), RoyTestList: (test.com)]}, {Second Rule: [RoyTestList: (test.com)]}",
+                        "Details": "The following OUs are non-compliant: \n- Cool Example Org: Warnings and spam filters are bypassed for one or more domains: {Scuba: [Scuba: (bradshaw-lee.com, example.org), Example: (bbc.co.uk, npr.org), ExampleList: (test.com)]}, {Second Rule: [ExampleList: (test.com)]}",
                         "OriginalResult": "Fail",
-                        "OriginalDetails": "The following OUs are non-compliant: \n- Cool Example Org: Warnings and spam filters are bypassed for one or more domains: {Scuba: [Scuba: (bradshaw-lee.com, example.org), Example: (bbc.co.uk, npr.org), RoyTestList: (test.com)]}, {Second Rule: [RoyTestList: (test.com)]}",
+                        "OriginalDetails": "The following OUs are non-compliant: \n- Cool Example Org: Warnings and spam filters are bypassed for one or more domains: {Scuba: [Scuba: (bradshaw-lee.com, example.org), Example: (bbc.co.uk, npr.org), ExampleList: (test.com)]}, {Second Rule: [ExampleList: (test.com)]}",
                         "Comments": [],
                         "ResolutionDate": null
                     },
@@ -3408,7 +3408,7 @@
                         },
                         {
                             "id": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1",
-                            "name": "RoyTestList",
+                            "name": "ExampleList",
                             "addressList": {
                                 "address": [
                                     {
@@ -3826,7 +3826,7 @@
                                     ]
                                 },
                                 {
-                                    "name": "RoyTestList",
+                                    "name": "ExampleList",
                                     "list": [
                                         "test.com"
                                     ]
@@ -3844,7 +3844,7 @@
                             "hideWarningBannerFromSelectedSenders": true,
                             "hideWarningBannerSenderAllowlist": [
                                 {
-                                    "name": "RoyTestList",
+                                    "name": "ExampleList",
                                     "list": [
                                         "test.com"
                                     ]
@@ -3853,7 +3853,7 @@
                             "ruleId": "4f41d-02rvqlb32nzzmh1:00gjdgxs46r0co2"
                         }
                     ],
-                    "warningDomainsFound": "{Scuba: [Scuba: (cook.com, example.org), Example: (bbc.co.uk, npr.org), RoyTestList: (test.com)]}, {Second Rule: [RoyTestList: (test.com)]}",
+                    "warningDomainsFound": "{Scuba: [Scuba: (cook.com, example.org), Example: (bbc.co.uk, npr.org), ExampleList: (test.com)]}, {Second Rule: [ExampleList: (test.com)]}",
                     "senderDomainsFound": "{Scuba: [Scuba: (cook.com, example.org)]}"
                 },
                 "gmail_blocked_sender_lists": {
@@ -66063,9 +66063,9 @@
             {
                 "domain": "levine-williams.biz",
                 "rdata": [
-                    "mscid=d/1e071KOhkmP8Aanr5sNgUqyTBrvrMx5nKSswPxu5ZsqL0bdAgVo3m7f5VYu+inbKA5YviUPzz/SxNS0ploJQ==",
+                    "mscid=d/WP18JOKLKGXYFY53LYB3DK4I9F0ILLD1C9K2B27LIRAUH80K14+inbKA5YviUPzz/SxNS0ploJQ==",
                     "v=spf1 include:spf.protection.outlook.com -all",
-                    "google-site-verification=JaXOIPULi5gGaD3czrMvC6-U87Tby4qYE4x3OgLGTKk"
+                    "google-site-verification=Y4D1S8LHADHFCF-7VR0N6BIWEK6497R"
                 ],
                 "log": [
                     {
@@ -66073,9 +66073,9 @@
                         "query_method": "traditional",
                         "query_result": "Query returned 3 txt records",
                         "query_answers": [
-                            "mscid=d/1e071KOhkmP8Aanr5sNgUqyTBrvrMx5nKSswPxu5ZsqL0bdAgVo3m7f5VYu+inbKA5YviUPzz/SxNS0ploJQ==",
+                            "mscid=d/WP18JOKLKGXYFY53LYB3DK4I9F0ILLD1C9K2B27LIRAUH80K14+inbKA5YviUPzz/SxNS0ploJQ==",
                             "v=spf1 include:spf.protection.outlook.com -all",
-                            "google-site-verification=JaXOIPULi5gGaD3czrMvC6-U87Tby4qYE4x3OgLGTKk"
+                            "google-site-verification=Y4D1S8LHADHFCF-7VR0N6BIWEK6497R"
                         ]
                     }
                 ]
@@ -66085,7 +66085,7 @@
             {
                 "domain": "williams.info",
                 "rdata": [
-                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA393DgvoAHByhn2JdvMIDnCbHKxlTCf5jZjYSwdu7LjxAgyEu5Lf0Luks32fb+Bfb7/8+W0NF30KTmiFRNIElLZUfMmJJeAI7Uzn82t5nbpL0wrZ1P5CT0OE+LZ6XqZS8BfHcFVSb9f/kQ5Hoe+rGpRRcwjBjcUT1TINKI8+32NEOpoGyYI0w9e0apjxvUe1aB\" \"RtxjcC0w7wIevPmOIFOzDPnOxmGTeto3MWY9IGSMz8EeeawqApNaFx9bD1dCZueJWx7PndtJ6JXZhm1QK34ZXfifY1wN84sC0ypaIzIBqrjCRmlao+7VhDl16aYJHYjPVKLsJCYhSoGvYf/9w4IeQIDAQAB"
+                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA393DgvoAHByhn2JdvMIDnCbHKxlTCf5jZjYSwdu7LjxAgyEu5Lf0Luks32fb+Bfb7/8+W0NF30KTmiFRNIElLZUfMmJJeAI7Uzn82t5nbpL0wrZ1P5CT0OE+LZ6XqZS8BfHcFVSb9f/kQ5Hoe+rGpRRcwjBjcUT1TINKI8+32NEOpoGyYI0w9e0apjxvUe1aB\" \"RtxjcC0w7wIevPmOIFOzDPnOxmGTeto3MWY9IGSMz8EeeawqApNaFx9bD1dCZueJWx7PndtJ6JXZhm1QK34ZXfifY1wN84sC0ypaIzIBqrjCRmlao+7VhDl16aYJHYjPVKLsJCYhSoGvYf/V0II1Z8XOW"
                 ],
                 "log": [
                     {
@@ -66093,7 +66093,7 @@
                         "query_method": "traditional",
                         "query_result": "Query returned 1 txt records",
                         "query_answers": [
-                            "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA393DgvoAHByhn2JdvMIDnCbHKxlTCf5jZjYSwdu7LjxAgyEu5Lf0Luks32fb+Bfb7/8+W0NF30KTmiFRNIElLZUfMmJJeAI7Uzn82t5nbpL0wrZ1P5CT0OE+LZ6XqZS8BfHcFVSb9f/kQ5Hoe+rGpRRcwjBjcUT1TINKI8+32NEOpoGyYI0w9e0apjxvUe1aB\" \"RtxjcC0w7wIevPmOIFOzDPnOxmGTeto3MWY9IGSMz8EeeawqApNaFx9bD1dCZueJWx7PndtJ6JXZhm1QK34ZXfifY1wN84sC0ypaIzIBqrjCRmlao+7VhDl16aYJHYjPVKLsJCYhSoGvYf/9w4IeQIDAQAB"
+                            "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA393DgvoAHByhn2JdvMIDnCbHKxlTCf5jZjYSwdu7LjxAgyEu5Lf0Luks32fb+Bfb7/8+W0NF30KTmiFRNIElLZUfMmJJeAI7Uzn82t5nbpL0wrZ1P5CT0OE+LZ6XqZS8BfHcFVSb9f/kQ5Hoe+rGpRRcwjBjcUT1TINKI8+32NEOpoGyYI0w9e0apjxvUe1aB\" \"RtxjcC0w7wIevPmOIFOzDPnOxmGTeto3MWY9IGSMz8EeeawqApNaFx9bD1dCZueJWx7PndtJ6JXZhm1QK34ZXfifY1wN84sC0ypaIzIBqrjCRmlao+7VhDl16aYJHYjPVKLsJCYhSoGvYf/V0II1Z8XOW"
                         ]
                     }
                 ]
@@ -66574,28 +66574,28 @@
                 "sku_id": "1010020020",
                 "product_id": "Google-Apps",
                 "status": "Active",
-                "assigned": 37
+                "assigned": 101
             },
             {
                 "product_name": "Gemini Enterprise - Legacy",
                 "sku_id": "1010470001",
                 "product_id": "101047",
                 "status": "Active",
-                "assigned": 1
+                "assigned": 50
             },
             {
                 "product_name": "Cloud Identity Free",
                 "sku_id": "1010010001",
                 "product_id": "101001",
                 "status": "Active",
-                "assigned": 37
+                "assigned": 101
             },
             {
                 "product_name": "Google Workspace Assured Controls Plus",
                 "sku_id": "1010390002",
                 "product_id": "101039",
                 "status": "Active",
-                "assigned": 4
+                "assigned": 50
             }
         ],
         "group_settings": [
