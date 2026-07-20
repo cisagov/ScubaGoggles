@@ -9,7 +9,6 @@ import pytest
 from scubagoggles import main
 from scubagoggles.main import (
     get_gws_args,
-    get_gws_ui_args,
     get_opa_args,
     get_setup_args,
     get_purge_args,
@@ -386,7 +385,8 @@ class TestMain:
 
         main_module = patched_main
 
-        dispatch_calls = {name: [] for name in ["getopa", "gws", "gws_ui", "purge", "setup", "version"]}
+        dispatch_calls = {name: [] for name in ["getopa", "gws", "gws_ui", 
+                                                "purge", "setup", "version"]}
 
         def make_dispatch(name):
             def _dispatch(*args, **kwargs):
