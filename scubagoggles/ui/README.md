@@ -2,6 +2,19 @@
 
 This directory contains a professional Streamlit-based configuration interface for ScubaGoggles, inspired by ScubaGear's ScubaConfigApp but built with Python and web technologies.
 
+## Who is this for?
+
+The Configuration UI is designed for users who want to build or edit ScubaGoggles YAML config files without hand-editing every field:
+
+| Audience | How the UI helps |
+|----------|------------------|
+| **New ScubaGoggles users** | Guided forms, baseline selection, and validation before export |
+| **Google Workspace administrators** | Browse policies by product and configure assessment scope visually |
+| **Security and compliance teams** | Document omit policies and annotations with rationale, expiration, and remediation dates |
+| **Assessors updating existing configs** | Import YAML with **Open**, modify settings, and re-export from **Preview** |
+
+If you already have a working config file and only need to change one or two CLI flags, editing YAML or using command-line parameters may be faster. For omit policies, annotations, and organizational documentation, the UI is usually the easiest path. See [Which config path should I use?](../../docs/usage/Config.md#which-config-path-should-i-use) in the config file documentation.
+
 ## Overview
 
 The ScubaGoggles Configuration UI provides a comprehensive web interface for creating ScubaGoggles configuration files to manage policy exclusions, annotations, and baseline control settings. The interface features:
@@ -119,6 +132,76 @@ streamlit run scubagoggles/ui/scubaconfigapp.py
 - **Status Indicators**: Green dots indicate configured items, orange dots show items being edited
 - **Context Help**: Expandable help sections in each tab with guidelines and best practices
 - **Validation**: Real-time validation ensures required fields are completed before export
+
+## Screenshots
+
+The images below walk through the most common Configuration UI workflows.
+
+### Main tab — organization and baseline selection
+
+![Configuration UI Main tab showing organization fields and baseline selection](../../docs/images/config-ui/main-tab.png)
+
+Enter your organization name (required), optional unit name, and select which Google Workspace baselines to assess.
+
+### Omit Policies tab
+
+![Configuration UI Omit Policies tab](../../docs/images/config-ui/omit-policies-tab.png)
+
+Browse policies by product, omit controls that do not apply, and provide a rationale for each omission. Green dots indicate configured omissions; orange dots indicate a policy currently being edited.
+
+### Preview and export
+
+![Configuration UI Preview tab with YAML download](../../docs/images/config-ui/preview-export.png)
+
+Review the generated YAML on the **Preview** tab and download `scubagoggles_config.yaml` for use with `scubagoggles gws --config`.
+
+## Omitting policies
+
+Omit policies exclude specific controls from the assessment. Omitted policies appear as **Omitted** (gray) in the HTML report. All omissions should be approved through your organization's risk management process.
+
+For YAML field definitions and examples, see [Omit Policies](../../docs/usage/Config.md#omit-policies) in the config file documentation. A ready-to-use sample is available at [`omit_policy_example.yaml`](../sample-config-files/omit_policy_example.yaml).
+
+### Step-by-step: omit a policy in the UI
+
+1. **Launch the UI**
+   ```bash
+   python -m scubagoggles.ui.launch
+   ```
+
+2. **Select baselines on the Main tab** — the Omit Policies tab only lists policies from baselines you have selected.
+
+3. **Open the Omit Policies tab** — policies are grouped by product. Use the search box to find a policy by ID (for example, `GWS.GMAIL.1.1v1`).
+
+4. **Click Omit on a policy** — the form expands with:
+   - **Rationale** (required for good practice; ScubaGoggles warns if it is missing at runtime)
+   - **Expiration** (optional; `yyyy-mm-dd` — after this date the policy is no longer omitted)
+
+5. **Save the omission** — a green status dot appears next to configured policies.
+
+6. **Preview and export** — open the **Preview** tab, confirm the `omitpolicy` block in the YAML, and download the file.
+
+7. **Run ScubaGoggles**
+   ```bash
+   scubagoggles gws --config scubagoggles_config.yaml
+   ```
+
+### Importing an existing omit policy config
+
+To start from a sample or existing file:
+
+1. Click **Open** in the header toolbar
+2. Select a YAML file (for example, [`omit_policy_example.yaml`](../sample-config-files/omit_policy_example.yaml))
+3. Review entries on the **Omit Policies** tab
+4. Export an updated file from **Preview**
+
+Example YAML produced by the UI (equivalent to the sample file):
+
+```yaml
+omitpolicy:
+  GWS.GMAIL.1.1v1:
+    rationale: "Accepting risk for now; will reevaluate at a later date."
+    expiration: "2030-12-31"
+```
 
 ## Configuration Workflow
 

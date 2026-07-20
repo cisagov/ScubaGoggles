@@ -1,20 +1,20 @@
 # CISA Google Workspace Secure Configuration Baseline for Google Sites
 
-Google Sites is a collaborative tool in Google Workspace that supports the creation of websites (i.e., internal project hubs, team sites, and public-facing websites) without the need of a designer, programmer, or IT help. Sites allow administrators to control and manage their files and documents. Google Drive manages sharing and publishing settings for new Sites. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Sites security.
+Google Sites is a collaborative tool in Google Workspace (GWS) that supports the creation of websites (i.e., internal project hubs, team sites, and public-facing websites) without the need for a designer, programmer, or IT help. Google Sites allows administrators to control and manage their files and documents. Google Drive manages sharing and publishing settings for new Sites. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Sites security.
 
-The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
+The Cybersecurity and Infrastructure Security Agency's (CISA) Secure Cloud Business Applications (SCuBA) project provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
-The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
+The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the federal government may also find these baselines as useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products. CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Sites](https://support.google.com/sites/?sjid=11348526400392778786-NA#topic=7184580) and addresses the following:
 
 -   [Sites Service Status](#1-sites-service-status)
 
-Google is currently transitioning from classic Sites to new Sites, [Google Workspace Admin Help: Transition from classic Sites to new Sites](https://support.google.com/a/answer/9958187?hl=en&ref_topic=25684#zippy=%2Cstarting-july-previously-january-classic-sites-transition%2Cstarting-june-previously-december-editing-of-remaining-classic-sites-will-be-disabled). Starting December 1, 2022, classic Sites will no longer be editable. And starting January 1, 2023, classic Sites will no longer be viewable unless converted to new Google Sites. All remaining classic Sites will be automatically archived as HTML files, saved to the site owner's Google Drive, and replaced with a draft in new Sites to be reviewed and published.
+Google is currently transitioning from classic Sites to new Sites. For more information, view [Google Workspace Admin Help: Transition from classic Sites to new Sites](https://support.google.com/a/answer/9958187?hl=en&ref_topic=25684#zippy=%2Cstarting-july-previously-january-classic-sites-transition%2Cstarting-june-previously-december-editing-of-remaining-classic-sites-will-be-disabled). Starting December 1, 2022, classic Sites will no longer be editable. Starting January 1, 2023, classic Sites will no longer be viewable unless converted to new Google Sites. All remaining classic Sites will be automatically archived as HTML files, saved to the site owner's Google Drive, and replaced with a draft in new Sites to be reviewed and published.
 
-Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
+Settings can be assigned to certain users within Google Workspace (GWS) through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
 ## Assumptions
 
@@ -24,15 +24,23 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services) (**BOD 25-01 Requirement**): This indicator means that the policy is required under CISA BOD 25-01.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology) (**Automated Check**): This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
+
+[![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)(**Configurable**): This indicator means that the policy can be customized via a configuration file.
+
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)(**Log-Based Check**): This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols83v06-instructions)(**Manual**): This indicator means that the policy requires manual verification of configuration settings.
 
 # Baseline Policies
 
 ## 1. Sites Service Status
 
-This section covers whether users are able to access Google Sites.
+This section covers whether users can access Google Sites.
 
 ### Policies
 
@@ -42,9 +50,9 @@ Sites Service SHOULD be disabled for all users.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#sites-exclusions)
 
-- _Rationale:_ Google Sites can increase the attack surface of Google Workspace (GWS). Disabling this feature unless it is needed conforms to the principle of least functionality.
+- _Rationale:_ Google Sites can increase the attack surface of Google Workspace (GWS). Disabling the "Sites Service" feature, unless it is needed, conforms to the principle of least functionality.
 - _Last modified:_ December 2025
-- _Note:_ Sites MAY be enabled on a per-group and per-OU basis.
+- _Note:_ Google Sites MAY be enabled on a per-group and per-Organizational Unit (OU) basis.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
   - [T1526: Cloud Service Discovery](https://attack.mitre.org/techniques/T1526/)
@@ -61,7 +69,7 @@ Sites Service SHOULD be disabled for all users.
 
 ### Implementation
 
-To configure the settings for Site creation and editing:
+To configure the settings for Google Sites creation and editing:
 
 #### GWS.SITES.1.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).

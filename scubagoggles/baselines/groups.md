@@ -1,12 +1,12 @@
 # CISA Google Workspace Secure Configuration Baseline for Groups for Business
 
-Groups for Business is a Google Workspace collaboration tool that supports storage, access, and sharing of files, document management, and email. Groups for Business allows administrators to control and manage collaboration efforts among groups within their organizations. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Groups security.
+Groups for Business is a Google Workspace (GWS) collaboration tool that supports the storage, access, and sharing of files, document management, and email. Groups for Business allows administrators to control and manage collaboration efforts among groups within their organizations. This Secure Configuration Baseline (SCB) provides specific policies to strengthen Groups for Business security.
 
-The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
+The Cybersecurity and Infrastructure Security Agency's (CISA) Secure Cloud Business Applications (SCuBA) project provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
-The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
+The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the federal government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products. CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Set up and manage Groups for Business](https://support.google.com/a/topic/9400092?hl=en&ref_topic=25838) and addresses the following:
 
@@ -15,7 +15,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Default Permissions for Viewing Conversations](#3-default-permissions-for-viewing-conversations)
 -   [Ability to Hide Groups from the Directory](#4-ability-to-hide-groups-from-the-directory)
 
-Settings can be assigned to certain users within Google Workspace through organizational units, configuration groups, or individually. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
+Settings can be assigned to certain GWS users individually, through organizational units, or through configuration groups. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
 ## Assumptions
 
@@ -25,16 +25,22 @@ This document does not address, ensure compliance with, or supersede any law, re
 
 ## Key Terminology
 
-The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
-**BOD 25-01 Requirement**: This indicator means that the policy is required under CISA BOD 25-01.
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services) (**BOD 25-01 Requirement**): This indicator means that the policy is required under CISA BOD 25-01.
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology) (**Automated Check**): This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
+
+[![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)(**Configurable**): This indicator means that the policy can be customized via a configuration file.
+
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)(**Log-Based Check**): This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols83v06-instructions)(**Manual**): This indicator means that the policy requires manual verification of configuration settings.
 
 # Baseline Policies
 
 ## 1. External Group Access
-Google Workspace provides several options for managing access to internal groups from people outside your organization.
+GWS provides several options for managing internal group access by people external to the organization.
 These settings are addressed in the following policies.
 
 ### Policies
@@ -66,11 +72,11 @@ Group owners' ability to add external members to groups SHOULD be disabled unles
     - [T1048:002: Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol](https://attack.mitre.org/techniques/T1048/002/)
 
 #### GWS.GROUPS.1.3v1
-Group owners' ability to allow posting to a group by an external, non-group member SHOULD be disabled unless necessary for agency mission fulfillment.
+Group owners' ability to allow external, non-group members to post in the group SHOULD be disabled unless necessary for agency mission fulfillment.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Allowing external users to post opens the door for phishing or other malicious activity to be shared via Groups. Restricting posting by non-group members reduces this risk.
+- _Rationale:_ Allowing external users to post in a group allows for potential phishing or other malicious activity to be shared via groups. Restricting posting by external, non-group members reduces this risk.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7, AC-6(10)
 - MITRE ATT&CK TTP Mapping
@@ -119,16 +125,16 @@ To configure the settings for sharing options:
 
 ## 2. Group Creation
 
-This section covers who has the ability to create a new group within the organization.
+This section covers who can create a new group within the organization.
 
 ### Policies
 
 #### GWS.GROUPS.2.1v1
-Group creation SHOULD be restricted to admins within the organization unless necessary for agency mission fulfillment.
+Group creation SHOULD be restricted to administrators within the organization unless alternative creators are necessary for agency mission fulfillment.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Many settings for Google Workspace products can be set at the Group level. Allowing unrestricted group creation complicates setting management and opens channels of unmanaged communication.
+- _Rationale:_ Many Google Workspace product settings can be set at the "Group" level. However, allowing unrestricted group creation can complicate setting management and open channels of unmanaged communication. Restricting group creation to organization administrators helps reduce this risk.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6(10)
 - MITRE ATT&CK TTP Mapping
@@ -163,7 +169,7 @@ This section covers the default permissions assigned to the viewing of conversat
 ### Policies
 
 #### GWS.GROUPS.3.1v1
-The default permission to view conversations SHOULD be set to "All Group Members."
+The default permission to view conversations SHOULD be set to "All group members."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -199,7 +205,7 @@ To configure the settings for Sharing options:
 
 ## 4. Ability to Hide Groups from the Directory
 
-This section covers whether or not the owner of a group can hide the group from the directory.
+This section covers whether the owner of a group can hide the group from the directory.
 
 ### Policies
 
@@ -209,7 +215,7 @@ The ability for groups to be hidden from the directory SHALL be disabled.
 [![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Hidden groups are not visible, even to admins, in the list of groups found at groups.google.com, though they are still visible on the directory page on admin.google.com. As such, allowing for hidden groups increases the risk of groups being created without admin oversight.
+- _Rationale:_ Hidden groups are not visible, even to administrators, in the list of groups found at groups.google.com, though they are still visible on the directory page at admin.google.com. Allowing for hidden groups increases the risk of groups being created without administrator oversight.
 - _Last modified:_ July 2023
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
 - MITRE ATT&CK TTP Mapping
