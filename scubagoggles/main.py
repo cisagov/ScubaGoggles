@@ -283,7 +283,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                        action='store_true',
                        help=help_msg)
 
-def get_ui_args(parser: argparse.ArgumentParser, user_config: UserConfig):
+def get_gws_ui_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     """Adds the arguments for the UI parser
 
     :param argparse.ArgumentParser parser: argparse object
@@ -490,10 +490,10 @@ def dive():
     get_gws_args(gws_parser, user_config)
 
     help_msg = ('SCuBA automated UI')
-    gws_parser = subparsers.add_parser('ui',
+    gws_parser = subparsers.add_parser('gws_ui',
                                        description=help_msg,
                                        help=help_msg)
-    get_ui_args(gws_parser, user_config)
+    get_gws_ui_args(gws_parser, user_config)
 
     help_msg = 'Download OPA executable'
     getopa_parser = subparsers.add_parser('getopa',
