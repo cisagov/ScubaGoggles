@@ -6,7 +6,8 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      github-actions:
+      python-dependencies:
+        group-by: dependency-name
         patterns:
           - "*"
 
@@ -16,7 +17,9 @@ updates:
       - "/scubagoggles/Testing/Functional/SmokeTests"
     schedule:
       interval: "weekly"
+    versioning-strategy: "increase-if-necessary"
     groups:
       python-dependencies:
+        group-by: dependency-name
         patterns:
           - "*"
