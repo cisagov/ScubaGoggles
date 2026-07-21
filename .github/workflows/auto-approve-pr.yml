@@ -18,7 +18,8 @@ on:
         description: "Private key for the auto-reviewer GitHub App"
         required: true
 
-permissions: read-all
+permissions:
+  pull-requests: write
 
 jobs:
   approve:
