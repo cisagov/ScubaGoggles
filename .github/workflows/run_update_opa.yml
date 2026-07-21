@@ -145,6 +145,8 @@ jobs:
   auto-approve:
     name: Auto-approve PR
     needs: update-opa
+    permissions:
+      pull-requests: write
     uses: ./.github/workflows/auto-approve-pr.yml
     with:
       pr-url: ${{ needs.update-opa.outputs.pr_url }}
