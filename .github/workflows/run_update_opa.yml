@@ -151,5 +151,5 @@ jobs:
     with:
       pr-url: ${{ needs.update-opa.outputs.pr_url }}
     secrets:
-      client_id: ${{ secrets['SCUBA-AUTO-REVIEWER-CLIENTID'] }}
-      private_key: ${{ secrets['SCUBA-AUTO-REVIEWER-PRIVATE-KEY'] }}
+      client_id: ${{ secrets.SCUBA_AUTO_REVIEWER_CLIENT_ID }}
+      private_key: ${{ secrets.SCUBA_AUTO_REVIEWER_PRIVATE_KEY }}
