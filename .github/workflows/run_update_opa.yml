@@ -142,9 +142,6 @@ jobs:
             --ref "$BRANCH_NAME" \
             -f "opa-version=$LATEST_VERSION"
 
-  # Token must be a different identity than the PR author (currently
-  # github-actions[bot] via GITHUB_TOKEN). Swap to a dedicated App/PAT
-  # secret (e.g. AUTO_APPROVE_TOKEN) when available.
   auto-approve:
     name: Auto-approve PR
     needs: update-opa
@@ -152,4 +149,5 @@ jobs:
     with:
       pr-url: ${{ needs.update-opa.outputs.pr_url }}
     secrets:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
+      client_id: ${{ secrets['SCUBA-AUTO-REVIEWER-CLIENTID'] }}
+      private_key: ${{ secrets['SCUBA-AUTO-REVIEWER-PRIVATE-KEY'] }}
