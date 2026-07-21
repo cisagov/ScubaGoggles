@@ -261,10 +261,18 @@ def run_selenium(browser, customerdomain):
                     .find_elements(By.TAG_NAME, 'th')
                 )
                 if len(headers) == 3:
-                    # Is this the rules table?
-                    assert headers[0].text == 'Alert Name'
-                    assert headers[1].text == 'Description'
-                    assert headers[2].text == 'Status'
+                    if (
+                        headers[0].text == 'Product Name'
+                        and headers[1].text == 'Status'
+                        and headers[2].text == 'Assigned Licenses'
+                    ):
+                        # Tenant licensing table
+                        pass
+                    else:
+                        # Is this the rules table?
+                        assert headers[0].text == 'Alert Name'
+                        assert headers[1].text == 'Description'
+                        assert headers[2].text == 'Status'
                 else:
                     # If not, this has to be a generic result table
                     assert len(headers) == 5

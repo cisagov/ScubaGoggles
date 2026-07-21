@@ -1,578 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google
+Workspace (GWS) organization's configuration conforms to the policies
+described in the Secure Configuration Baselines (SCBs)"/>
+
+
+
         <title>Google Drive and Docs Baseline Report</title>
-        <style>:root {
-    --background-primary: white;
-    --background-secondary: #b9bec2;
-    --test-pass: #d5ebd5;
-    --test-fail: #deb8b8;
-    --test-warning: #fff7d6;
-    --test-other: #ebebf2;
-    --test-deleted-bg: #b2beb5;
-    --test-deleted-color: #6f7478;
-    --cap-even: #0052882d;
-    --cap-hover: #00528850;
-    --header-color: #005288;
-    --note-color: #ee4e04;
-    --header-bottom: black;
-    --link-color: #85B065;
-    --text-color: black;
-    --border-color: black;
-    --toggle-height: 25px;
-    --toggle-width: 46px;
-    --toggle-radius: 18px;
-    --unvisited-link-color: #0000EE;
-    --uuid-color: #424242;
-}
-
-html[data-theme='dark'] {
-    --background-primary: #10171D;
-    --background-secondary: #121212;
-    --test-pass: #1C361C;
-    --test-fail: #381919;
-    --test-warning: #524100;
-    --test-other: #414141;
-    --cap-even: #0052882d;
-    --cap-hover: #007ccf50;
-    --test-error-color: #FD885D;
-    --header-color: #b7c8d2;
-    --note-color: #ee4e04;
-    --header-bottom: rgb(221, 221, 221);
-    --link-color: #9bc2a3;
-    --unvisited-link-color: #4da6d1;
-    --text-color: #bdbdbd;
-    --uuid-color: #999999;
-    --border-color: #7b7b7b;
-}
-
-body {
-    background-color: var(--background-secondary);
-    -webkit-print-color-adjust:exact !important;
-    print-color-adjust:exact !important;
-    color: var(--text-color)
-}
-
-.alternating tr:nth-child(even) {
-    background-color: var(--cap-even);
-}
-
-.show-more {
-    text-align: left;
-    margin-left: 50px;
-    margin-top: 5px;
-}
-
-button.show-more {
-  background: none!important;
-  border: none;
-  padding: 0!important;
-  color: var(--unvisited-link-color);
-  text-decoration: underline;
-  cursor: pointer;
-  margin-left: 0;
-}
-
-table {
-    margin: auto;
-    font-size: 12px;
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 1000px;
-}
-
-.comment-heading {
-    display: block;
-    font-style: italic;
-    margin-top: 10px;
-}
-
-h3 {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--header-color);
-}
-
-h4 {
-    text-align: center;
-    justify-content: start;
-    font-size: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--note-color);
-    margin-left:20%;
-    margin-right: 20%;
-    margin-bottom:5px;
-}
-
-
-.links {
-    display: flex;
-}
-
-header {
-    width: 1000px;
-    margin: auto;
-    border-bottom: 1px solid var(--header-bottom);
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    padding: 5px;
-}
-
-header h3 {
-    padding: 10px;
-    text-align: center;
-    border-bottom: 5px solid rgba(0, 0, 0, 0);
-    color: var(--header-color);
-    display: table-cell;
-    vertical-align: bottom;
-}
-
-header a {
-    text-decoration: none;
-}
-
-header h3:hover {
-    border-bottom: 5px solid var(--header-color);   
-}
-
-td {
-    padding: 4px;
-    margin: 0px;
-    overflow-wrap: break-word;
-}
-
-td a {
-    color: var(--header-color)
-}
-
-table, th, td {
-    border: 1px solid;
-    border-color: var(--border-color);
-}
-
-main {
-    background-color: var(--background-primary);
-    width: 1100px;
-    margin: auto;
-    position: relative;
-    padding-bottom: 50px;
-}
-
-h1 {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--header-color);
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
-
-h2 {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--header-color);
-    font-size: 16px;
-    margin-top: 50px;
-}
-
-img {
-    width: 100px;
-}
-
-.setting {
-    font-style: italic;
-    color: rgba(0, 0, 0, 0.8);
-}
-
-a.control_group:link {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--unvisited-link-color);
-    text-decoration: underline;
-}
-
-a.control_group:visited {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--link-color);
-}
-
-a.control_group:hover {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--link-color);
-    text-decoration: none;
-}
-
-a.control_group:active {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--link-color);
-    text-decoration: none;
-}
-
-hr {
-    margin: 0.5em;
-    margin-top: 3em;
-}
-
-p {
-    font-family: Arial, Helvetica, sans-serif;
-    max-width: 50%;
-    text-align: center;
-    margin: auto;
-    font-size: 12px;
-    padding-bottom: 1.5em;
-}
-
-#toggle-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-#toggle-text {
-    color: #7b7b7b;
-    margin: 0.313em 3.125em;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.875em;
-    padding-bottom: 2px;
-}
-
-/* The switch - the box around the slider */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: var(--toggle-width);
-    height: var(--toggle-height);
-    left: 3.125em;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.switch input:focus,
-.switch input:focus:active,
-.switch input:focus + .slider {
-    outline: 0.125em solid var(--text-color);
-    border-radius: var(--toggle-height);
-}
-
-/* The slider */
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #b9bec2;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: var(--toggle-radius);
-    width: var(--toggle-radius);
-    left: 0.25em;
-    bottom: 0.219em;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-input:checked + .slider {
-    background-color: #005288ad;
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 0.063em #005288ad;
-}
-
-input:checked + .slider:before {
-    -webkit-transform: translateX(var(--toggle-radius));
-    -ms-transform: translateX(var(--toggle-radius));
-    transform: translateX(var(--toggle-radius));
-}
-
-.slider.round {
-    border-radius: var(--toggle-height);
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
-</style>
-        <script>/**
- * Adds the red, green, yellow, and gray coloring to the individual report pages.
- */
-const colorRows = () => {
-    let rows = document.querySelectorAll('tr');
-    // consts for the generic results rows
-    const requirementCol = 1;
-    const statusCol = 2;
-    const criticalityCol = 3;
-
-    // const for the alerts rows
-    const alertStatusCol = 2;
-
-    for (let i = 0; i < rows.length; i++) {
-        try {
-            if (rows[i].children.length == 3) {
-                // This row is in the Alerts table
-                if (rows[i].children[alertStatusCol]?.innerHTML === "Enabled") {
-                    rows[i].style.background = "var(--test-pass)";
-                }
-                else if (rows[i].children[alertStatusCol]?.innerHTML === "Disabled") {
-                    rows[i].style.background = "var(--test-fail)";
-                }
-                else if (rows[i].children[alertStatusCol]?.innerHTML === "Unknown") {
-                    rows[i].style.background = "var(--test-other)";
-                }
-            }
-            else {
-                // This row is in one of the generic results rows
-                if (rows[i].children[requirementCol]?.innerHTML.startsWith("[DELETED]")) {
-                    rows[i].style.color = "var(--test-deleted-color)";
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[statusCol]?.innerHTML === "Fail") {
-                    rows[i].style.background = "var(--test-fail)";
-                }
-                else if (rows[i].children[statusCol]?.innerHTML.includes("No events found")) {
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[statusCol]?.innerHTML === "Warning") {
-                    rows[i].style.background = "var(--test-warning)";
-                }
-                else if (rows[i].children[statusCol]?.innerHTML === "Pass") {
-                    rows[i].style.background = "var(--test-pass)";
-                }
-                else if (rows[i].children[statusCol]?.innerHTML === "Omitted") {
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[statusCol]?.innerHTML === "Incorrect result") {
-                    if (rows[i].children[criticalityCol]?.innerHTML === "Shall") {
-                        rows[i].style.background = "linear-gradient(to right, var(--test-fail), var(--test-pass))";
-                    }
-                    else if (rows[i].children[criticalityCol]?.innerHTML === "Should") {
-                        rows[i].style.background = "linear-gradient(to right, var(--test-warning), var(--test-pass))";
-                    }
-                    else {
-                        // This should never happen
-                        console.log(`Unexpected criticality for incorrect result, ${rows[i].children[criticalityCol]?.innerHTML}.`);
-                    }
-                }
-                else if (rows[i].children[criticalityCol]?.innerHTML.includes("Not-Implemented")) {
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[criticalityCol]?.innerHTML.includes("3rd Party")) {
-                    rows[i].style.background = "var(--test-other)";
-                }
-                else if (rows[i].children[statusCol]?.innerHTML.includes("Error")) {
-                    rows[i].style.background = "var(--test-fail)";
-                    rows[i].querySelectorAll('td')[statusCol].style.borderColor = "var(--border-color)";
-                    rows[i].querySelectorAll('td')[statusCol].style.color = "#d10000";
-                }
-            }
-        }
-        catch (error) {
-            console.error(`Error in colorRows, i = ${i}`);
-            console.error(error);
-        }
-    }
-}
-
-/**
- * Toggles light and dark mode.
- */
-const toggleDarkMode = () => {
-    const inputToggle = document.getElementById("toggle");
-    if (inputToggle.checked === true) {
-        setDarkMode("true");
-        return;
-    }
-    setDarkMode("false");
-}
-
-/**
- * Returns the value for the given setting from session storage. Returns
- * undefined if it does not exist.
- * @param {string} setting sgr_settings option to read
- */
-const getSetting = (setting) => {
-    if (!setting) {
-        return undefined;
-    }
-    let reportSettings = sessionStorage.getItem("sgr_settings");
-    if (reportSettings === null || reportSettings === undefined) {
-        return undefined;
-    }
-    return JSON.parse(reportSettings)[setting];
-}
-
-/**
- * Updates the report settings object in session storage.
- * @param {string} option sgr_settings option to update
- * @param {string} value update value for sgr_settings option
- */
-const updateSettings = (option, value) => {
-    let settings = {};
-    if ("sgr_settings" in sessionStorage) {
-        settings = JSON.parse(sessionStorage.getItem("sgr_settings"));
-    }
-    settings[option] = value;
-    sessionStorage.setItem("sgr_settings", JSON.stringify(settings));
-}
-
-/**
- * Set the report CSS to light mode or dark mode.
- * @param {string} state true for Dark Mode or false for Light Mode
- */
-const setDarkMode = (state) => {
-    const darkModeToggle = document.getElementById("toggle");
-
-    if (state === "true") {
-        document.querySelectorAll("html")[0].dataset.theme = "dark";
-        document.querySelector("#toggle-text").innerHTML = "Dark Mode";
-        updateSettings("darkMode", "true");
-        darkModeToggle.checked = true;
-        return;
-    }
-
-    document.querySelectorAll("html")[0].dataset.theme = "light";
-    document.querySelector("#toggle-text").innerHTML = "Light Mode";
-    updateSettings("darkMode", "false");
-    darkModeToggle.checked = false;
-}
-
-/**
- * Sets the dark mode according to the setting stored in session storage, the
- * --darkmode CLI arg, and the system preference (in that order of precedence)
- */
-const mountDarkMode = () => {
-    // First, check session storage to see if dark mode has already been
-    // enabled or disabled. If it has, this is what should take precedence.
-    // "darkMode" setting will either be "true", "false", or undefined
-    const darkModeSessionVariable = getSetting("darkMode");
-    if (
-        darkModeSessionVariable !== null &&
-        darkModeSessionVariable !== undefined
-    ) {
-        setDarkMode(darkModeSessionVariable);
-        return;
-    }
-
-    // Next, check to see if the user specified the dark mode via the --darkmode
-    // CLI argument. The Python code dynamically inserts the value of that arg
-    // as the "data-darkmode" attribute of the #sgr_settings element. The value
-    // will be a string, either "true" (dark mode is enabled), "false" (disabled),
-    // or "None" (not specified).
-    const cliElement = document.getElementById("sgr_settings");
-    const cliElementValue = cliElement.getAttribute("data-darkmode");
-    if (cliElementValue !== "None") {
-        setDarkMode(cliElementValue);
-        return;
-    }
-
-    // Finally, if the dark mode setting is not found in session storage nor
-    // provided the --darkmode CLI argument, set the dark mode according to the
-    // system preference
-    const mediaQuery = "(prefers-color-scheme: dark)";
-    const systemPrefersDark = window.matchMedia(mediaQuery).matches;
-    setDarkMode(String(systemPrefersDark));
-};
-
-/**
- * Media Query for browser darkMode
- */
-const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
-
-/**
- * Event listener for broswer darkMode Media Query changes.
- * Sets the report CSS to light mode or dark mode.
- */
-darkModePreference.addEventListener("change", () =>  {
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        setDarkMode("true");
-    } else {
-        setDarkMode("false");
-    }
-});
-
-/**
- * Truncates the specified DNS table to the specified number of rows.
- * @param {number} logIndex The index of the table in the list of DNS tables.
- * @param {number} maxRows The number of rows to truncate the table to.
- */
-const truncateDNSTable = (logIndex, maxRows) => {
-    try {
-        const ROW_INCREMENT = 10;
-        let dnsLog = document.querySelectorAll('.dns-logs')[logIndex];
-        let rows = dnsLog.querySelector('table').querySelectorAll('tr');
-        for (let i = 0; i < rows.length; i++) {
-            if (i > maxRows) {
-                rows[i].style.display = 'none';
-            }
-            else {
-                rows[i].style.display = 'table-row';
-            }
-        }
-        dnsLog.querySelectorAll('.show-more').forEach(e => e.remove());
-        if (rows.length > maxRows) {
-            let showMoreMessage = document.createElement('p');
-            showMoreMessage.classList.add('show-more');
-            showMoreMessage.innerHTML = `${rows.length-maxRows} rows hidden. `;
-            showMore = document.createElement('button');
-            showMore.innerHTML = "Show more.";
-            showMore.setAttribute('type', 'button');
-            showMore.classList.add('show-more');
-            showMore.onclick = () => {truncateDNSTable(logIndex, maxRows+ROW_INCREMENT);};
-            showMoreMessage.appendChild(showMore);
-            dnsLog.appendChild(showMoreMessage);
-        }
-    }
-    catch (error) {
-        console.error(`Error in truncateDNSTable`, error);
-    }
-}
-
-/**
- * Truncates any DNS table that has more than maxRows rows.
- * @param {number} maxRows The number of rows to truncate the tables to.
- */
-const truncateDNSTables = (maxRows) => {
-    try {
-        let dnsLogs = document.querySelectorAll('.dns-logs');
-        for (let i = 0; i < dnsLogs.length; i++) {
-            truncateDNSTable(i, maxRows);
-        }
-    }
-    catch (error) {
-        console.error(`Error in truncateDNSTables`, error);
-    }
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-    const MAX_DNS_ENTRIES = 20;
-    colorRows();
-    mountDarkMode();
-    truncateDNSTables(MAX_DNS_ENTRIES);
-});
-</script>
+        <link href="../assets/main.css" rel="stylesheet" />
+        <script src="../assets/main.js" defer></script>
     </head>
     <body>
         <main>
             <header>
-                <a href="../BaselineReports.html"><img src="images/cisa_logo.png" alt="Return to the report summary" title="Return to the report summary"></a>
+                <a href="../BaselineReports.html"><img src="images/cisa_logo.png" height="100" width="100" alt="Cybersecurity and Infrastructure Security Agency Logo"></a>
                 <div class="links">
-                    <a href="https://www.cisa.gov/scuba" target="_blank"><h3 style="width: 210px;">Secure Cloud Business Applications (SCuBA)</h3></a>
-                    <div style="width:10px;"></div>
-                    <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank"><h3 style="width: 100px;">Baseline Documents</h3></a>
+                    <a href="https://www.cisa.gov/scuba" target="_blank"><h3 id="SCUBA">Secure Cloud Business Applications (SCuBA)</h3></a>
+                    <div style="width: .625rem;"></div>
+                    <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank">
+                        <h3 id="baseline-docs">Baseline Documents</h3>
+                    </a>
                 </div>
             </header>
             <div id="toggle-container">
@@ -584,8 +33,35 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
             <h1>Google Drive and Docs Baseline Report</h1>
             
-            <table style = "text-align:center;"><tr><th>Customer Name</th><th>Customer Domain</th><th>Customer ID</th><th>Report Date</th><th>Baseline Version</th><th>Tool Version</th></tr><tr><td>Cool Example Org</td><td>example.org</td><td>ABCDEFG</td><td>10/10/2025 13:08:58 Pacific Daylight Time</td><td>0.6</td><td>v0.6.0</td></tr></table>
-            <h2>DRIVEDOCS-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/drive.md#1-sharing-outside-the-organization" target="_blank">Sharing Outside the Organization</a></h2><table>
+            <table class = "meta-table">
+  <tr>
+    <th>Customer Name</th>
+    <th>Customer Domain</th>
+    <th>Customer ID</th>
+    <th>Report Date</th>
+    <th>Baseline Version</th>
+    <th>Tool Version</th>
+  </tr>
+  <tr>
+    <td>Cool Example Org</td>
+    <td>example.org</td>
+    <td>ABCDEFG</td>
+    <td>07/20/2026 12:43:08 PDT</td>
+    <td>1</td>
+    <td>v1.0.0</td>
+  </tr>
+</table>
+
+            <div id="indicator-legend">
+  <div id="indicator-legend-label">Policy Indicators:</div>
+  <ul id="indicator-legend-list">
+    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/drive.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</a><span style="color: var(--text-color);">Automatically verified by ScubaGoggles</span></li>
+    <li class="indicator-legend-item"><span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span><span style="color: var(--text-color);">Required by CISA BOD 25-01</span></li>
+    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/drive.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</a><span style="color: var(--text-color);">Requires manual verification</span></li>
+</ul>
+</div>
+<h2>DRIVEDOCS-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/drive.md#1-sharing-outside-the-organization" target="_blank">Sharing Outside the Organization</a></h2>
+<table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -596,85 +72,113 @@ window.addEventListener('DOMContentLoaded', () => {
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.1v0.6</td>
-      <td>External sharing SHALL be restricted to allowlisted domains.</td>
-      <td>Warning</td>
+    <tr class="warning-status">
+      <td>GWS.DRIVEDOCS.1.1v1</td>
+      <td>External sharing SHALL be restricted to allowlisted domains.<div class="badges">
+<span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Anita Short's OU: Files owned by users or shared drives can be shared outside of the organization</li><li>Cool Example Org: Files owned by users or shared drives can be shared with Google accounts in compatible allowlisted domains</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Christopher Thompson's OU: Files owned by users or shared drives can be shared with Google accounts in compatible allowlisted domains</li><li>Cool Example Org: Files owned by users or shared drives can be shared with Google accounts in compatible allowlisted domains</li></ul></td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.2v0.6</td>
-      <td>Receiving files from outside of allowlisted domains SHOULD be disabled.</td>
-      <td>Warning</td>
+    <tr class="warning-status">
+      <td>GWS.DRIVEDOCS.1.2v1</td>
+      <td>Receiving files from non-allowlisted domains SHOULD be disabled.<div class="badges">
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: File sharing with allowlisted domains, receiving files permitted.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Christopher Thompson's OU: File sharing with allowlisted domains, receiving files permitted.</li><li>Cool Example Org: File sharing with allowlisted domains, receiving files permitted.</li></ul></td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.3v0.6</td>
-      <td>Warnings SHALL be enabled when a user is attempting to share with someone not in allowlisted domains.</td>
-      <td>Pass</td>
+    <tr class="pass-status">
+      <td>GWS.DRIVEDOCS.1.3v1</td>
+      <td>Warnings SHALL be enabled when a user is attempting to share with someone in a non-allowlisted domain.<div class="badges">
+<span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>Requirement met.</td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.4v0.6</td>
-      <td>If sharing outside of the organization, then agencies SHOULD disable sharing of files with individuals who are not using a Google account.</td>
-      <td>Fail</td>
+    <tr class="fail-status">
+      <td>GWS.DRIVEDOCS.1.4v1</td>
+      <td>If sharing outside of the organization, agencies SHOULD disable sharing of files with individuals who are not using a Google account.<div class="badges">
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: File sharing with allowlisted domains, with non-Google users.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Christopher Thompson's OU: File sharing with allowlisted domains, with non-Google users.</li><li>Cool Example Org: File sharing with allowlisted domains, with non-Google users.</li></ul></td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.5v0.6</td>
-      <td>Any OUs that do allow external sharing SHOULD disable making content available to anyone with the link.</td>
-      <td>Fail</td>
+    <tr class="fail-status">
+      <td>GWS.DRIVEDOCS.1.5v1</td>
+      <td>Any Organizational Units that allow external sharing SHOULD disable content availability to &quot;anyone with the link.&quot;<div class="badges">
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Published web content can be made visible to anyone with a link</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Christopher Thompson's OU: Published web content can be made visible to anyone with a link</li><li>Cool Example Org: Published web content can be made visible to anyone with a link</li></ul></td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.6v0.6</td>
-      <td>Agencies SHALL set access checking to recipients only.</td>
-      <td>Fail</td>
+    <tr class="fail-status">
+      <td>GWS.DRIVEDOCS.1.6v1</td>
+      <td>Agencies SHALL set access checking to &quot;recipients only.&quot;<div class="badges">
+<span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Jonathan Edwards's OU: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li><li>Cool Example Org: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Jeffrey Rodriguez's OU: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li><li>Cool Example Org: Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</li></ul></td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.7v0.6</td>
-      <td>Users SHOULD NOT be allowed to upload or move content to shared drives owned by another organization.</td>
-      <td>Pass</td>
+    <tr class="fail-status">
+      <td>GWS.DRIVEDOCS.1.7v1</td>
+      <td>Users SHOULD NOT be allowed to upload or move content to shared drives owned by another organization.<div class="badges">
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>The following OUs are non-compliant:<ul><li>Christopher Thompson's OU: Anyone can distribute content outside of the organization</li></ul></td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.8v0.6</td>
-      <td>Private to owner SHALL be the default access level for newly created items.</td>
-      <td>Fail</td>
+    <tr class="fail-status">
+      <td>GWS.DRIVEDOCS.1.8v1</td>
+      <td>&quot;Private to owner&quot; SHALL be the default access level for newly created items.<div class="badges">
+<span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Jonathan Edwards's OU: When users create items, the default access is set to: the primary target audience can search and find the item.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Jeffrey Rodriguez's OU: When users create items, the default access is set to: the primary target audience can search and find the item.</li></ul></td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.9v0.6</td>
-      <td>Out-of-Domain file-level warnings SHALL be enabled.</td>
-      <td>N/A</td>
-      <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+    <tr class="pass-status">
+      <td>GWS.DRIVEDOCS.1.9v1</td>
+      <td>Out-of-Domain file-level warnings SHALL be enabled.<div class="badges">
+<span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Pass</td>
+      <td>Shall</td>
+      <td>Requirement met.</td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.10v0.6</td>
-      <td>If external sharing isn&#x27;t allowed, then forms owned by users within your organization SHOULD NOT be able to accept responses from anyone with the link outside the organization.</td>
-      <td>N/A</td>
+    <tr class="other-status">
+      <td>GWS.DRIVEDOCS.1.10v1</td>
+      <td>If external sharing is not allowed, then forms owned by users within the organization SHOULD NOT be able to accept responses from anyone accessing the link from outside the organization.<div class="badges">
+<span class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</span></div>
+</td>
+      <td class="report-status">N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.1.11v0.6</td>
-      <td>If receiving external files isn’t allowed, then users in your organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of your organization.</td>
-      <td>N/A</td>
+    <tr class="other-status">
+      <td>GWS.DRIVEDOCS.1.11v1</td>
+      <td>If receiving external files is not allowed, then users in the organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of the organization.<div class="badges">
+<span class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</span></div>
+</td>
+      <td class="report-status">N/A</td>
       <td>Should/Not-Implemented</td>
       <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/drive.md#2-shared-drive-creation" target="_blank">Shared Drive Creation</a></h2><table>
+</table><h2>DRIVEDOCS-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/drive.md#2-shared-drive-creation" target="_blank">Shared Drive Creation</a></h2>
+<table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -685,22 +189,28 @@ window.addEventListener('DOMContentLoaded', () => {
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>GWS.DRIVEDOCS.2.1v0.6</td>
-      <td>Agencies SHOULD NOT allow members with manager access to override shared drive creation settings.</td>
-      <td>Warning</td>
+    <tr class="warning-status">
+      <td>GWS.DRIVEDOCS.2.1v1</td>
+      <td>Agencies SHOULD NOT allow members with manager access to override shared Google Drive creation settings.<div class="badges">
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Anita Short's OU: Members with manager access can override shared drive settings.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Christopher Thompson's OU: Members with manager access can override shared drive settings.</li></ul></td>
     </tr>
-    <tr>
-      <td>GWS.DRIVEDOCS.2.2v0.6</td>
-      <td>Agencies SHALL allow users who are not shared drive members to be added to files.</td>
-      <td>Fail</td>
+    <tr class="fail-status">
+      <td>GWS.DRIVEDOCS.2.2v1</td>
+      <td>Agencies SHALL allow users who are not members of a shared Google Drive to be added to files.<div class="badges">
+<span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Anita Short's OU: Users who aren't shared drive members are not allowed to be added to files.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Christopher Thompson's OU: Users who aren't shared drive members are not allowed to be added to files.</li></ul></td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/drive.md#3-security-updates-for-files" target="_blank">Security Updates for Files</a></h2><table>
+</table><h2>DRIVEDOCS-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/drive.md#3-security-updates-for-files" target="_blank">Security Updates for Files</a></h2>
+<table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -711,15 +221,19 @@ window.addEventListener('DOMContentLoaded', () => {
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>GWS.DRIVEDOCS.3.1v0.6</td>
-      <td>Agencies SHALL enable the security update for Drive files.</td>
-      <td>Fail</td>
+    <tr class="fail-status">
+      <td>GWS.DRIVEDOCS.3.1v1</td>
+      <td>Agencies SHALL enable the security update for Google Drive files.<div class="badges">
+<span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Fail</td>
       <td>Shall</td>
       <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Users are allowed to remove/apply the security update for files they own or manage.</li></ul></td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/drive.md#4-drive-sdk" target="_blank">Drive SDK</a></h2><table>
+</table><h2>DRIVEDOCS-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/drive.md#4-drive-sdk" target="_blank">Drive SDK</a></h2>
+<table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -730,15 +244,18 @@ window.addEventListener('DOMContentLoaded', () => {
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>GWS.DRIVEDOCS.4.1v0.6</td>
-      <td>Agencies SHOULD disable Drive SDK access.</td>
-      <td>Pass</td>
+    <tr class="pass-status">
+      <td>GWS.DRIVEDOCS.4.1v1</td>
+      <td>Agencies SHOULD disable Google Drive SDK access.<div class="badges">
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Pass</td>
       <td>Should</td>
-      <td>Requirement met in all OUs and groups.</td>
+      <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-5 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/drive.md#5-user-installation-of-drive-and-docs-add-ons" target="_blank">User Installation of Drive and Docs Add-Ons</a></h2><table>
+</table><h2>DRIVEDOCS-5 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/drive.md#5-drive-for-desktop" target="_blank">Drive for Desktop</a></h2>
+<table>
   <thead>
     <tr>
       <th>Control ID</th>
@@ -749,37 +266,31 @@ window.addEventListener('DOMContentLoaded', () => {
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>GWS.DRIVEDOCS.5.1v0.6</td>
-      <td>Agencies SHALL disable Add-Ons.</td>
-      <td>Pass</td>
-      <td>Shall</td>
-      <td>Requirement met in all OUs and groups.<br><br><span style="display: block;"><object data="./images/triangle-exclamation-solid.svg" alt="Warning icon." title="Warning" width="13" height="13"></object>&nbsp;Log-based check. See <a href="https://github.com/cisagov/scubagoggles/blob/main/docs/usage/Limitations.md">limitations</a>.</span></td>
-    </tr>
-  </tbody>
-</table><h2>DRIVEDOCS-6 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v0.6.0/scubagoggles/baselines/drive.md#6-drive-for-desktop" target="_blank">Drive for Desktop</a></h2><table>
-  <thead>
-    <tr>
-      <th>Control ID</th>
-      <th>Requirement</th>
-      <th>Result</th>
-      <th>Criticality</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GWS.DRIVEDOCS.6.1v0.6</td>
-      <td>Google Drive for Desktop SHALL be enabled only for authorized devices.</td>
-      <td>Warning</td>
+    <tr class="warning-status">
+      <td>GWS.DRIVEDOCS.5.1v1</td>
+      <td>Google Drive for Desktop SHALL be enabled for authorized devices only.<div class="badges">
+<span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org (group "Kathryn Brooks's group"): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group "Alyssa Tate's group"): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group "Mrs. Kristina Boyle's group"): Drive for Desktop is enabled and can be used on any device.</li></ul></td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org (group salinassean@example.org): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group salinassean@example.org): Drive for Desktop is enabled and can be used on any device.</li><li>Cool Example Org (group salinassean@example.org): Drive for Desktop is enabled and can be used on any device.</li></ul></td>
+    </tr>
+    <tr class="other-status">
+      <td>GWS.DRIVEDOCS.5.2v1</td>
+      <td>Monitoring for potential ransomware corruption SHALL be enabled.<div class="badges">
+<span class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</span></div>
+</td>
+      <td class="report-status">N/A</td>
+      <td>Shall/Not-Implemented</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
 </table>
             
             
+            
         </main>
-        <span id="sgr_settings" data-darkmode="None"></span>
+        <span id="sgr_settings" data-darkmode="None" data-redaction="None"></span>
     </body>
 </html>
