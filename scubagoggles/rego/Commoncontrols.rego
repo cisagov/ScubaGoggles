@@ -1466,7 +1466,7 @@ NonCompliantOUs10_3 contains {
 }
 if {
     some OU, settings in input.policies
-    settings.api_controls_internal_apps.trustInternalApps = true
+    settings.api_controls_internal_apps.trustInternalApps == true
 }
 
 tests contains {
