@@ -20,6 +20,23 @@ We have a `Bug Report` and `Idea` Template.
 
 If you choose to submit a pull request, it will be required to pass various linters and sanity checks in our continuous integration (CI) pipeline, before we merge it. Your pull request may fail these checks, and that's OK. If you want you can stop there and wait for us to make the necessary corrections to ensure your code passes the CI checks, you're more than within your rights; however, it helps our team greatly if you fix the issues found by our CI pipeline.
 
+### PR assignee responsibilities
+
+If you are assigned to a PR, whether you are an external contributor or a member of the core team, you are responsible for moving that PR through the review process.
+
+PR assignees should:
+
+1. Provide a clear and complete PR description that explains what changed and links the issue(s) the PR resolves, preferably with [closing keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword).
+2. Include testing instructions reviewers can follow. Examples include:
+   - How to run Rego unit tests locally or in GitHub Actions for a new baseline implementation.
+   - What Python unit or functional tests were added for provider logic or key module changes, and how to run them locally or in GitHub Actions.
+   - What configuration changes reviewers should make in a test tenant when validating different policy states.
+   - A link to a recent workflow run when the PR changes CI, smoke tests, or other automation.
+3. Assign the appropriate reviewers for the PR.
+4. Collaborate with reviewers to resolve questions, requested changes, and outstanding comments.
+5. Ensure all pre-approval, pre-merge, and post-merge checklist items in the PR template are completed.
+6. After approval from two reviewers, merge your own PR when the repository workflow allows it.
+
 ### Quality assurance and code reviews
 
 All PRs will be tested, vetted, and reviewed by our team before being merged to the main branch. Please stand by to address questions, concerns, or improvement suggestions we may have about your PR.
