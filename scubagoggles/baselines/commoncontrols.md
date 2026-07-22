@@ -650,7 +650,7 @@ By changing the email address to a managed account, the user resolves the confli
 #### GWS.COMMONCONTROLS.7.1v1
 Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed accounts.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols71v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Unmanaged user accounts cannot be controlled or monitored by GWS administrators. By resolving conflicting accounts, organizations can ensure all users have managed user accounts.
 - _Last modified:_ April 2025
@@ -1400,7 +1400,6 @@ This section covers whether multiple super admins need to approve changes to spe
 Require multi-party approval for sensitive admin actions SHOULD be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale_: Changes to sensitive admin settings, such as disabling 2-step verification (2SV), could introduce serious vulnerabilities to the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates this risk.
 - _Last modified:_ August 2025
@@ -1420,9 +1419,10 @@ Require multi-party approval for sensitive admin actions SHOULD be enabled.
 #### GWS.COMMONCONTROLS.17.1v1 Instructions
 To configure additional services per the policy:
 1.	Sign in to the [Google Admin console](https://admin.google.com) as an administrator.
-2.	Navigate to **Security** -> **Authentication** -> **Multi-party approval settings**.
-3.	Ensure **Require multi party approval for sensitive admin actions** is checked.
-4.	Click **Save**.
+2.	Navigate to **Security**.
+3.	Click the **Multi-party approval settings** card.
+4.	Ensure **Require multi party approval for sensitive admin actions** is checked.
+5.	Click **Save**.
 
 ## 18. Data Loss Prevention
 
