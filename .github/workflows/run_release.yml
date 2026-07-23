@@ -171,19 +171,13 @@ jobs:
               ]);
               return (
                 dependencyAuthors.has(pr.user.login) ||
-                /^Bump /i.test(pr.title) ||
-                pr.labels.some((label) => label.name === "dependencies") ||
-                pr.labels.some((label) => label.name === "version bump")
+                /^Bump /i.test(pr.title)
               );
             }
 
-            function categorize(pr) {
-              const names = pr.labels.map((label) => label.name);
+            function sectionFromLabelNames(names) {
               if (names.some((name) => excludedLabels.has(name))) {
                 return null;
-              }
-              if (isDependencyPullRequest(pr)) {
-                return "Dependencies";
               }
               if (names.includes("baseline-document")) {
                 return "Baselines";
@@ -197,7 +191,69 @@ jobs:
               if (names.includes("enhancement")) {
                 return "Major Changes";
               }
-              return "Dependencies";
+              return null;
+            }
+
+            async function getClosingIssueLabelNames(prNumber) {
+              const query = `
+                query ($owner: String!, $repo: String!, $number: Int!) {
+                  repository(owner: $owner, name: $repo) {
+                    pullRequest(number: $number) {
+                      closingIssuesReferences(first: 20) {
+                        nodes {
+                          number
+                          labels(first: 20) {
+                            nodes { name }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+              const result = await github.graphql(query, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                number: prNumber
+              });
+              const issues =
+                result.repository.pullRequest.closingIssuesReferences.nodes;
+              const names = new Set();
+              for (const issue of issues) {
+                for (const label of issue.labels.nodes) {
+                  names.add(label.name);
+                }
+              }
+              return {
+                issueNumbers: issues.map((issue) => issue.number),
+                labelNames: [...names]
+              };
+            }
+
+            async function categorize(pr) {
+              if (isDependencyPullRequest(pr)) {
+                return "Dependencies";
+              }
+
+              const { issueNumbers, labelNames } =
+                await getClosingIssueLabelNames(pr.number);
+              if (issueNumbers.length === 0) {
+                core.warning(
+                  `PR #${pr.number} has no linked closing issues; skipping categorization.`
+                );
+                return null;
+              }
+
+              const section = sectionFromLabelNames(labelNames);
+              if (!section) {
+                core.warning(
+                  `PR #${pr.number} closing issues (${issueNumbers.join(", ")}) ` +
+                    `have no categorizing labels (${labelNames.join(", ") || "none"}); skipping.`
+                );
+                return null;
+              }
+
+              return section;
             }
 
             function formatPullRequest(pr) {
@@ -398,10 +454,15 @@ jobs:
               sectionOrder.map((title) => [title, []])
             );
 
+            let categorizedCount = 0;
+            let skippedCount = 0;
             for (const pr of pullRequestsByNumber.values()) {
-              const section = categorize(pr);
+              const section = await categorize(pr);
               if (section) {
                 grouped[section].push(formatPullRequest(pr));
+                categorizedCount += 1;
+              } else if (!isDependencyPullRequest(pr)) {
+                skippedCount += 1;
               }
             }
 
@@ -429,7 +490,8 @@ jobs:
 
             const dependencyCount = grouped.Dependencies.length;
             core.info(
-              `Release notes include ${pullRequestsByNumber.size} pull requests (${dependencyCount} in Dependencies).`
+              `Release notes include ${categorizedCount} categorized pull requests ` +
+                `(${dependencyCount} in Dependencies); skipped ${skippedCount} without usable issue labels.`
             );
             if (dependencyCount === 0) {
               core.warning(
