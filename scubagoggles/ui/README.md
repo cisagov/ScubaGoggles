@@ -66,21 +66,34 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Method 1: Direct Launch (Recommended)
+### Method 1: Direct Launch via scubagoggles application (Recommended)
 
 ```bash
 # From the ScubaGoggles root directory
-python -m scubagoggles.ui.launch
+scubagoggles ui 
 ```
 
-This will start the Streamlit server and open the app in your default web browser. Dark mode is automatically detected from your browser's preferred color scheme via CSS media queries.
+This will start the Streamlit server and open the app in your default web browser. Dark mode is automatically detected from your browser's preferred color scheme via CSS media queries. It can additionally be specified from the command line by running:
+
+```bash
+scubagoggles ui --darkmode
+```
+
+or
+
+```bash
+scubagoggles ui -dm
+```
+
+The darkmode switch is optional, and by default (if no switch argument is provided), darkmode is disabled.
+
 
 ### Forcing dark mode
 
 To force dark mode regardless of browser settings, use the `--dark` flag:
 
 ```bash
-python -m scubagoggles.ui.launch --dark
+scubagoggles ui --dark
 ```
 
 Alternatively, set the `SCUBAGOGGLES_UI_DARK` environment variable. Truthy values: `1`, `true`, `yes`, `on` (case-insensitive):
@@ -88,11 +101,11 @@ Alternatively, set the `SCUBAGOGGLES_UI_DARK` environment variable. Truthy value
 ```bash
 # Linux / macOS
 export SCUBAGOGGLES_UI_DARK=1
-python -m scubagoggles.ui.launch
+scubagoggles ui
 
 # Windows (PowerShell)
 $env:SCUBAGOGGLES_UI_DARK = "1"
-python -m scubagoggles.ui.launch
+scubagoggles ui
 ```
 
 If you use **Method 2** (Streamlit only) and want to force dark mode, set the environment variable and pass the Streamlit theme flag:

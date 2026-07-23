@@ -21,6 +21,7 @@ from scubagoggles.scuba_argument_parser import ScubaArgumentParser
 from scubagoggles.user_setup import default_file_names, user_setup
 from scubagoggles.utils import path_parser
 from scubagoggles.version import Version
+from scubagoggles.ui import launch
 from scubagoggles.scuba_constants import NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES, OPA_VERSION
 
 EXIT_FAILURE = 1
@@ -281,6 +282,19 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                        action='store_true',
                        help=help_msg)
 
+def get_gws_ui_args(parser: argparse.ArgumentParser, user_config: UserConfig): # pylint: disable=unused-argument
+    """Adds the arguments for the UI parser
+
+    :param argparse.ArgumentParser parser: argparse object
+    :param UserConfig user_config: user configuration object
+    """
+
+    parser.set_defaults(dispatch=launch.launch_from_ui_command)
+
+    parser.add_argument('--darkmode',
+                        '-dm',
+                        action='store_true',
+                        help='Enable dark mode (not enabled by default)')
 
 def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     """Adds the arguments for the "get OPA" parser.
@@ -473,6 +487,12 @@ def dive():
                                        description=help_msg,
                                        help=help_msg)
     get_gws_args(gws_parser, user_config)
+
+    help_msg = 'SCuBA automated UI tool'
+    gws_parser = subparsers.add_parser('ui',
+                                       description=help_msg,
+                                       help=help_msg)
+    get_gws_ui_args(gws_parser, user_config)
 
     help_msg = 'Download OPA executable'
     getopa_parser = subparsers.add_parser('getopa',
