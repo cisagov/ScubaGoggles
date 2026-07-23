@@ -80,7 +80,7 @@ The darkmode switch is optional, and by default (if no switch argument is provid
 To force dark mode regardless of browser settings, use the `--dark` flag:
 
 ```bash
-python -m scubagoggles.ui.launch --dark
+scubagoggles ui --dark
 ```
 
 Alternatively, set the `SCUBAGOGGLES_UI_DARK` environment variable. Truthy values: `1`, `true`, `yes`, `on` (case-insensitive):
@@ -88,11 +88,11 @@ Alternatively, set the `SCUBAGOGGLES_UI_DARK` environment variable. Truthy value
 ```bash
 # Linux / macOS
 export SCUBAGOGGLES_UI_DARK=1
-python -m scubagoggles.ui.launch
+scubagoggles ui
 
 # Windows (PowerShell)
 $env:SCUBAGOGGLES_UI_DARK = "1"
-python -m scubagoggles.ui.launch
+scubagoggles ui
 ```
 
 If you use **Method 2** (Streamlit only) and want to force dark mode, set the environment variable and pass the Streamlit theme flag:
