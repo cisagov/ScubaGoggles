@@ -45,22 +45,22 @@ Here is an example using `-c or --credentials`:
 scubagoggles gws --credentials C:\users\johndoe\Documents\scuba\credentials.json
 ```
 
-## Access Token
+## Metadata Server Authentication
 
-**--accesstoken** string to be used in lieu of a credentials file. If provided, will take precendence over the credentials file. Advanced option; using a credentials file is the recommended authentication method.
+**--usemetadataserverauth** If set, will use the Metadata Server provided in Google Compute Engine (GCE) environments for authentication. The service account associated with the GCE service must have the "iam.serviceAccountTokenCreator" role in addition to other ScubaGoggles roles. Advanced option; using a credentials file is the recommended authentication method.
 
-| Parameter   | Value  |
-|-------------|--------|
-| Optional    | Yes    |
-| Datatype    | String |
-| Default     | n/a    |
-| Config File | Yes    |
+| Parameter   | Value   |
+|-------------|---------|
+| Optional    | Yes     |
+| Datatype    | Boolean |
+| Default     | False  |
+| Config File | Yes     |
 
-Here is an example using `--accesstoken`:
+Here is an example using `--usemetadataserverauth`:
 
 ```powershell
 # identify access token to be used in lieu of a credentials file
-scubagoggles gws --accesstoken <access-token>
+scubagoggles gws ----usemetadataserverauth
 ```
 
 ## Baselines
@@ -401,7 +401,7 @@ for the list of applicable policies.
 |-------------|---------|
 | Optional    | Yes     |
 | Datatype    | Boolean |
-| Default     | $false  |
+| Default     | False  |
 | Config File | Yes     |
 
 Here is an example using `--skipdoh`:

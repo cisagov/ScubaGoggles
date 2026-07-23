@@ -406,7 +406,7 @@ class ScubaConfigApp:
                 'outputregofilename': '',
                 'outputreportfilename': '',
                 'numberofuuidcharacterstotruncate': 18,
-                'accesstoken': '',
+                'usemetadataserverauth': False,
             }
 
         if 'ui_show_help' not in st.session_state:
@@ -687,7 +687,7 @@ class ScubaConfigApp:
             'outjsonfilename', 'regopath', 'documentpath',
             'outputproviderfilename', 'outputactionplanfilename',
             'outputregofilename', 'outputreportfilename',
-            'accesstoken',
+            'usemetadataserverauth',
         ):
             if key in config:
                 data[key] = str(config[key])
@@ -1985,7 +1985,6 @@ class ScubaConfigApp:
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-
     def _render_sites_exclusions_section(self):
         """Render Sites exclusions section within the Exclusions tab."""
         st.markdown('<div class="section-container">', unsafe_allow_html=True)
@@ -2089,7 +2088,6 @@ class ScubaConfigApp:
             st.info("ℹ️ No Sites exclusion configured")
 
         st.markdown('</div>', unsafe_allow_html=True)
-
 
     @staticmethod
     def _on_advanced_field_change():
@@ -2234,21 +2232,17 @@ class ScubaConfigApp:
 
         st.divider()
 
-        # --- Access token ---
+        # --- Metadata server auth ---
         st.markdown("### Authentication")
 
-        data['accesstoken'] = st.text_input(
-            "Access Token",
-            value=data.get('accesstoken', ''),
-            placeholder="(optional — credentials file is recommended)",
-            help=(
-                "OAuth access token to use instead of a credentials file. "
-                "If provided, takes precedence over the credentials file. "
-                "Using a credentials file is the recommended authentication method."
-            ),
-            type="password",
-            key="adv_accesstoken",
-            on_change=_on_change,
+        data["usemetadataserverauth"] = st.checkbox(
+            "Metadata Server Authentication",
+            value=data.get("usemetadataserverauth", False),
+            help="If set, will use the Metadata Server provided in Google Compute Engine (GCE) environments for "
+            "authentication. The service account associated with the GCE service must have the "
+            "\"iam.serviceAccountTokenCreator\" role in addition to other ScubaGoggles roles. "
+            "Advanced option; using a credentials file is the recommended authentication method.",
+            key="usemetadataserverauth",
         )
 
         st.markdown('</div>', unsafe_allow_html=True)
@@ -2323,7 +2317,7 @@ class ScubaConfigApp:
             'outjsonfilename', 'regopath', 'documentpath',
             'outputproviderfilename', 'outputactionplanfilename',
             'outputregofilename', 'outputreportfilename',
-            'accesstoken',
+            'usemetadataserverauth',
         ):
             if data.get(key):
                 config[key] = data[key]

@@ -56,7 +56,7 @@ API_LINKS = {
 }
 
 
-OPA_VERSION = 'v1.18.1'
+OPA_VERSION = 'v1.18.2'
 
 NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES = (
     0, 13, 18, 36
@@ -99,3 +99,5 @@ def scopes_for(flow: AuthFlow) -> tuple:
 DWD_SCOPES = scopes_for(AuthFlow.DWD)
 OAUTH_SCOPES = scopes_for(AuthFlow.OAUTH)
 DASA_SCOPES = scopes_for(AuthFlow.DASA)
+# Matches DASA plus one scope to allow creating new tokens
+METADATA_AUTH_SCOPES = (*scopes_for(AuthFlow.DASA), f'{BASE_AUTH_URL}/cloud-platform')
