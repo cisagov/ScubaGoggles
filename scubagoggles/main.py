@@ -490,7 +490,7 @@ def dive():
     get_gws_args(gws_parser, user_config)
 
     help_msg = 'SCuBA automated UI tool'
-    gws_parser = subparsers.add_parser('gws_ui',
+    gws_parser = subparsers.add_parser('ui',
                                        description=help_msg,
                                        help=help_msg)
     get_gws_ui_args(gws_parser, user_config)

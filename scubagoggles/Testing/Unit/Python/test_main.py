@@ -379,13 +379,13 @@ class TestMain:
 
         return main_module
 
-    @pytest.mark.parametrize("subcommand", ["getopa", "gws", "gws_ui", "purge", "setup", "version"])
+    @pytest.mark.parametrize("subcommand", ["getopa", "gws", "ui", "purge", "setup", "version"])
     def test_dive_dispatches_to_each_subcommand(self, monkeypatch, patched_main, subcommand):
         """ Test dive dispatches to each subcommand """
 
         main_module = patched_main
 
-        dispatch_calls = {name: [] for name in ["getopa", "gws", "gws_ui",
+        dispatch_calls = {name: [] for name in ["getopa", "gws", "ui",
                                                 "purge", "setup", "version"]}
 
         def make_dispatch(name):
@@ -398,7 +398,7 @@ class TestMain:
             parser.set_defaults(dispatch=make_dispatch("gws"))
 
         def fake_get_gws_ui_args(parser, _user_config):
-            parser.set_defaults(dispatch=make_dispatch("gws_ui"))
+            parser.set_defaults(dispatch=make_dispatch("ui"))
 
         def fake_get_opa_args(parser, _user_config):
             parser.set_defaults(dispatch=make_dispatch("getopa"))
