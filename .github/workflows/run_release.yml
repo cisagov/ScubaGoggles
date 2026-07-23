@@ -438,6 +438,12 @@ jobs:
               );
             }
 
+      - name: Show release notes
+        run: |
+          echo "::group::Generated release notes"
+          cat release-body.md
+          echo "::endgroup::"
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         id: create_release
