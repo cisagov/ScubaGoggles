@@ -57,7 +57,7 @@ tests contains {
         "policy/drive_and_docs_external_sharing.externalSharingMode",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
