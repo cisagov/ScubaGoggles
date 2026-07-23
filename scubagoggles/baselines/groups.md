@@ -112,7 +112,7 @@ To configure the settings for sharing options:
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Groups for Business**.
 3.  Select **Sharing settings** -\> **Sharing options**.
-4.  **Uncheck** the **Group owners can allow external members** checkbox.
+4.  **Uncheck** the **Allow group owners to add external members** checkbox.
 5.  Select **Save**.
 
 #### GWS.GROUPS.1.3v1 Instructions

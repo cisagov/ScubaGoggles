@@ -126,8 +126,8 @@ Service Specific Terms.
 
 #### GWS.GEMINI.2.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Generative AI** -\> **Gemini for Workspace.**
-3.  Select **Alpha features.**
+2.  Select **Generative AI** -\> **Gemini in Workspace.**
+3.  Select **Alpha Gemini features.**
 4.  Ensure **Turn off access to Alpha features in Gemini for Google Workspace** is selected.
 5.  Select **Save**.
 
@@ -171,16 +171,18 @@ Gemini conversation retention SHALL be set to minimum of 18 months.
 #### GWS.GEMINI.3.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini App**.
-3.  Select **Gemini Conversation History**
-4.  Ensure **Gemini conversation history** is selected.
-5.  Select **Save**.
+3.  Select **Gemini conversation history and management**
+4.  Select **Gemini conversation history**
+5.  Ensure **Gemini conversation history** is selected.
+6.  Select **Save**.
 
 #### GWS.GEMINI.3.2v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini App**.
-3.  Select **Gemini Conversation History**
-4.  Ensure **Conversation retention** is set to at least 18 months.
-5.  Select **Save**.
+3.  Select **Gemini conversation history and management**
+4.  Select **Gemini conversation history**
+5.  Ensure **Conversation retention** is set to at least 18 months.
+6.  Select **Save**.
 
 ## 4. Gemini Conversation Sharing
 This section covers Gemini conversation sharing.
