@@ -173,7 +173,7 @@ Gemini conversation retention SHALL be set to minimum of 18 months.
 2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **Gemini conversation history and management**
 4.  Select **Gemini conversation history**
-5.  Ensure **Gemini conversation history** is selected.
+5.  Ensure **Gemini conversation history** is checked.
 6.  Select **Save**.
 
 #### GWS.GEMINI.3.2v1 Instructions
