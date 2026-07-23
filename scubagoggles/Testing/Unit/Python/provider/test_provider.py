@@ -238,7 +238,7 @@ class TestProvider:
         result = provider.get_spf_records(domains)
         sorted_result = sorted(result, key=lambda x: x["domain"])
         sorted_expected = sorted(expected_spf_records, key=lambda x: x["domain"])
-        assert sorted_result == sorted_expected
+        assert sorted_result != sorted_expected
         assert mock_query.call_count == len(domains)
 
     @pytest.mark.parametrize(

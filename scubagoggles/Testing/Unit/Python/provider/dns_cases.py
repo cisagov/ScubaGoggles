@@ -6,7 +6,7 @@ e.g., SPF, DKIM, DMARC
 from scubagoggles.provider import SELECTORS
 
 GET_SPF_RECORDS_CASES = [
-    # Multiple domains with SPF records returned
+    # Multiple domains with soft fail SPF records returned
     (
         { "example.com" },
         {
@@ -33,6 +33,38 @@ GET_SPF_RECORDS_CASES = [
                         "query_method": "traditional",
                         "query_result": "Query returned 1 txt records",
                         "query_answers": ["v=spf1 include:_spf.google.com ~all"],
+                    }
+                ],
+            }
+        ]
+    ),
+        # Multiple domains with hard fail SPF records returned
+    (
+        { "example.com" },
+        {
+            "example.com": {
+                "answers": ["v=spf1 include:_spf.google.com -all"],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=spf1 include:_spf.google.com -all"],
+                    }
+                ],
+            }
+        },
+        [
+            {
+                "domain": "example.com",
+                "rdata": ["v=spf1 include:_spf.google.com -all"],
+                "log": [
+                    {
+                        "query_name": "example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=spf1 include:_spf.google.com -all"],
                     }
                 ],
             }
