@@ -1,0 +1,41 @@
+# Purpose: Approve a pull request. The token identity must differ from the
+# PR author for the approval to count toward branch protection.
+
+name: Auto-approve PR
+
+on:
+  workflow_call:
+    inputs:
+      pr-url:
+        description: "URL of the PR to approve"
+        required: true
+        type: string
+    secrets:
+      client_id:
+        description: "Client ID for the auto-reviewer GitHub App"
+        required: true
+      private_key:
+        description: "Private key for the auto-reviewer GitHub App"
+        required: true
+
+permissions:
+  pull-requests: write
+
+jobs:
+  approve:
+    name: Approve PR
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Generate auto-reviewer token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.client_id }}
+          private-key: ${{ secrets.private_key }}
+
+      - name: Approve PR
+        run: gh pr review --approve "${{ inputs.pr-url }}"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
