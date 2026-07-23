@@ -7,7 +7,7 @@ The scubagoggles gws cmdlet has several command-line parameters, which are descr
 Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS,
 all commands will be under the `gws` "subcommand".
 
-> **Note**: The ScubaGoggles User Interface (UI) tool is a different scubagoggles command than gws. It is not a subcommand of gws. The UI tool can be run with the `scubagoggles ui` command line. The command line usage and documentation for the ui command can be found in the [UI README file](https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/ui/README.md).
+> **Note**: The ScubaGoggles User Interface (UI) tool is a different scubagoggles command than gws. It is not a subcommand of gws. The UI tool can be run with the `scubagoggles ui` command line. The command line usage and documentation for the ui command can be found in the [ui README file](https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/ui/README.md).
 
 ## Help
 
