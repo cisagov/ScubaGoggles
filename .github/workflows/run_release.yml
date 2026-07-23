@@ -342,7 +342,7 @@ jobs:
 
             function formatDependenciesSection(items) {
               const dependencyIssuesUrl = buildIssuesUrl(
-                "is:pr is:merged (author:app/github-actions OR author:dependabot) sort:updated-desc"
+                'is:pr is:merged label:"version bump"'
               );
               const lines = ["## Dependencies", ""];
               if (items.length > 0) {
