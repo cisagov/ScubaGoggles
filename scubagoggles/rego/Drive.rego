@@ -263,7 +263,7 @@ tests contains {
         "policy/drive_and_docs_external_sharing.allowNonGoogleInvitesInAllowlistedDomains",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4},
     "RequirementMet": Status,
@@ -309,7 +309,7 @@ tests contains {
         "policy/drive_and_docs_external_sharing.allowPublishingFiles",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_5},
     "RequirementMet": Status,
@@ -407,7 +407,7 @@ tests contains {
         "policy/drive_and_docs_external_sharing.allowedPartiesForDistributingContent",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_7, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_7},
     "RequirementMet": Status,
@@ -747,7 +747,7 @@ tests contains {
         "policy/drive_and_docs_drive_for_desktop.restrictToAuthorizedDevices",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue" : {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,

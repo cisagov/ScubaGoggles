@@ -1861,7 +1861,7 @@ tests contains {
     "PolicyId": CommonControlsId15_2,
     "Prerequisites": [
         "policy/data_regions_data_processing_region.limitToStorageRegion"],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs15_2, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs15_2},
     "RequirementMet": Status,
@@ -1952,7 +1952,7 @@ CommonControlsId16_3:= utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.16.3")
 tests contains {
     "PolicyId": CommonControlsId16_3,
     "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
+    "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
@@ -1969,7 +1969,7 @@ CommonControlsId16_4:= utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.16.4")
 tests contains {
     "PolicyId": CommonControlsId16_4,
     "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
+    "Criticality": "Should/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
