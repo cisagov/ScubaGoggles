@@ -1320,7 +1320,7 @@ User access to Early Access applications SHOULD be disabled.
 #### GWS.COMMONCONTROLS.16.3v1
 Looker Studio Sharing outside org SHOULD be set to OFF.
 
-[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols163v1-instructions)
 
 - _Rationale_: Disabling Looker Studio asset sharing outside of the organization helps keep sensitive data, reports, and dashboards within the organization's control. This policy helps mitigate the risk of unauthorized access, data leakage, or exposure of proprietary information to external entities. By restricting sharing, the organization can maintain compliance with data governance standards, protect intellectual property, and safeguard customer or business-critical data. Additionally, this approach reduces the likelihood of accidental sharing or misuse of information, enhancing overall security and operational integrity.
 - _Last modified:_ February 2026
@@ -1338,7 +1338,7 @@ Looker Studio Sharing outside org SHOULD be set to OFF.
 #### GWS.COMMONCONTROLS.16.4v1
 Pinpoint access to drive SHOULD be set to OFF.
 
-[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols164v1-instructions)
 
 - _Rationale_: Disabling Pinpoint access to Google Drive helps protect sensitive files and data stored within the organization's Drive from inadvertent access, analysis, or sharing through Pinpoint. This policy helps protect organizational data confidentiality and integrity by preventing unauthorized or unintended interactions between Pinpoint and Drive. By restricting access, the organization can reduce the risk of data breaches, maintain compliance with data privacy regulations, and uphold strict data governance practices. This approach also reduces potential misuse or exposure of sensitive information, enhancing overall security and operational control.
 - _Last modified:_ February 2026
