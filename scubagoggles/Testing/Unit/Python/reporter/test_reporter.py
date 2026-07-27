@@ -7,6 +7,7 @@ import pytest
 
 import scubagoggles as scubagoggles_pkg
 from scubagoggles.reporter.reporter import Reporter
+from scubagoggles.reporter.reporter_html import create_html_table
 from scubagoggles.version import Version
 
 class TestReporter:
@@ -74,20 +75,20 @@ class TestReporter:
         ],
     )
     def test_create_html_table(self, table_data):
-        """
-        Tests Reporter.create_html_table() for these cases:
+
+        """Tests Reporter.create_html_table() for these cases:
             - empty list to indicate no table
             - tenant info table
             - control info table
         """
-        reporter = self._reporter()
-        html = reporter.create_html_table(table_data)
+
+        html = create_html_table(table_data)
 
         if not table_data:
             assert html == ""
             return
 
-        assert html.startswith("<table")
+        assert html.lstrip().startswith("<table")
         assert "<thead>" in html and "<tbody>" in html
 
         expected_headers = list(table_data[0].keys())
@@ -110,8 +111,6 @@ class TestReporter:
         """
         tmp = tmp_path
         (tmp / "FrontPageReport").mkdir(parents=True)
-        (tmp / "styles").mkdir(parents=True)
-        (tmp / "scripts").mkdir(parents=True)
         (tmp / "templates").mkdir(parents=True)
 
         pkg_root = Path(scubagoggles_pkg.__file__).resolve().parent
@@ -135,9 +134,6 @@ class TestReporter:
         (tmp / "templates" / "MetaTagTemplate.html").write_text(
             meta_tag_html, encoding="utf-8"
         )
-
-        (tmp / "styles" / "FrontPageStyle.css").write_text("main {}\n footer {}", encoding="utf-8")
-        (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
 
         # Patch the actual Reporter class attribute for _reporter_path,
         # otherwise the local instance returned by _reporter() won't use the temp files.
@@ -166,10 +162,8 @@ class TestReporter:
         assert Version.current in html
 
         assert "{{" not in html and "}}" not in html
-        assert "<style>" in html and "</style>" in html
-        assert "main {" in html and "footer {" in html
-        assert ":root {" in html
-        assert "<script>" in html and "</script>" in html
+        assert 'rel="stylesheet"' in html
+        assert "<script" in html and "</script>" in html
 
         assert "sgr_settings" in html and "data-darkmode=\"true\"" in html
         assert "sgr_settings" in html and "data-redaction=\"true\"" in html
@@ -408,8 +402,6 @@ class TestReporter:
         """
         tmp = tmp_path
         (tmp / "IndividualReport").mkdir(parents=True)
-        (tmp / "styles").mkdir(parents=True)
-        (tmp / "scripts").mkdir(parents=True)
         (tmp / "templates").mkdir(parents=True)
 
         pkg_root = Path(scubagoggles_pkg.__file__).resolve().parent
@@ -434,7 +426,6 @@ class TestReporter:
             meta_tag_template, encoding="utf-8"
         )
 
-        (tmp / "styles" / "main.css").write_text(":root {}", encoding="utf-8")
         # Patch the actual Reporter class attribute for _reporter_path,
         # otherwise the local instance returned by _reporter() won't use the temp files.
         monkeypatch.setattr(Reporter, "_reporter_path", tmp, raising=True)

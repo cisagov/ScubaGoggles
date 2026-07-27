@@ -683,3 +683,12 @@ GetFriendlyDuration(Seconds) := "180 days" if {
 } else := "20 hours" if {
     Seconds == 72000
 } else := sprintf("%d seconds", [Seconds])
+
+# This is a convenience function that will return true if both arguments
+# are true.  It can be helpful in a situation where the boolean logic is
+# a bit more complex (e.g., see Groups 4.1).
+
+AreBothTrue(first, second) := true if {
+    first == true
+    second == true
+} else := false

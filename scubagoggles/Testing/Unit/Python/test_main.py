@@ -379,13 +379,14 @@ class TestMain:
 
         return main_module
 
-    @pytest.mark.parametrize("subcommand", ["getopa", "gws", "purge", "setup", "version"])
+    @pytest.mark.parametrize("subcommand", ["getopa", "gws", "ui", "purge", "setup", "version"])
     def test_dive_dispatches_to_each_subcommand(self, monkeypatch, patched_main, subcommand):
         """ Test dive dispatches to each subcommand """
 
         main_module = patched_main
 
-        dispatch_calls = {name: [] for name in ["getopa", "gws", "purge", "setup", "version"]}
+        dispatch_calls = {name: [] for name in ["getopa", "gws", "ui",
+                                                "purge", "setup", "version"]}
 
         def make_dispatch(name):
             def _dispatch(*args, **kwargs):
@@ -395,6 +396,9 @@ class TestMain:
 
         def fake_get_gws_args(parser, _user_config):
             parser.set_defaults(dispatch=make_dispatch("gws"))
+
+        def fake_get_gws_ui_args(parser, _user_config):
+            parser.set_defaults(dispatch=make_dispatch("ui"))
 
         def fake_get_opa_args(parser, _user_config):
             parser.set_defaults(dispatch=make_dispatch("getopa"))
@@ -409,6 +413,7 @@ class TestMain:
             parser.set_defaults(dispatch=make_dispatch("version"))
 
         monkeypatch.setattr(main_module, "get_gws_args", fake_get_gws_args)
+        monkeypatch.setattr(main_module, "get_gws_ui_args", fake_get_gws_ui_args)
         monkeypatch.setattr(main_module, "get_opa_args", fake_get_opa_args)
         monkeypatch.setattr(main_module, "get_purge_args", fake_get_purge_args)
         monkeypatch.setattr(main_module, "get_setup_args", fake_get_setup_args)

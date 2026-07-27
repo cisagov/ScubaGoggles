@@ -41,7 +41,7 @@ def getopa(arguments: argparse.Namespace):
     if not opa_dir.is_dir():
         opa_dir.mkdir(exist_ok = True)
 
-    if arguments.opa_directory and not config.opa_dir:
+    if arguments.opa_directory and not config.file_exists:
         config.opa_dir = arguments.opa_directory
         config.write()
 

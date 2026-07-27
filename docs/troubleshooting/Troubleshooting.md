@@ -10,7 +10,7 @@ RuntimeWarning: An exception was thrown trying to get the tenant data:
 ```
 Ensure that you consented to the following API scopes as a user with the proper
 [permissions to consent](../prerequisites/Prerequisites.md#permissions) and have
-enabled the required [APIs and Services](../authentication/OAuth.md).
+enabled the required [APIs and Services](../prerequisites/Prerequisites.md#google-cloud-apis).
 
 ## macOS: Certificate Verification Error
 

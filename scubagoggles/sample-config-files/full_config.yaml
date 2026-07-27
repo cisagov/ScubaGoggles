@@ -32,10 +32,10 @@ baselines:
 # Required unless the credentials path has been saved using the ScubaGoggles setup utility or an access token is provided.
 # credentials: C:\users\johndoe\Documents\scuba\credentials.json
 
-# Access Token: This field is used to authenticate via access token string to be used in lieu of a credentials file. 
-# If provided, will take precendence over the credentials file. 
+# Metadata Server Authentication: If set, will use the Metadata Server provided in Google Compute Engine (GCE) environments for authentication. 
+# The service account associated with the GCE service must have the "iam.serviceAccountTokenCreator" role in addition to other ScubaGoggles roles. 
 # Advanced option; using a credentials file is the recommended authentication method.
-# accesstoken: <access-token>
+# usemetadataserverauth: false
 
 # Output Path: -o or --outputpath is the folder path where both the output JSON & HTML report will be created. 
 # The folder will be created if it does not exist.

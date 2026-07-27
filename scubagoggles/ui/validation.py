@@ -56,23 +56,6 @@ class ConfigValidator:
         return error is None, error
 
     @staticmethod
-    def validate_access_token(token: str) -> Tuple[bool, Optional[str]]:
-        """Validate access token format"""
-        if not token:
-            return False, "Access token is required"
-
-        # Basic token format validation.
-        # Google tokens are typically long alphanumeric strings.
-        if len(token) < 50:
-            return False, "Access token appears to be too short"
-
-        # Check for common token patterns
-        if not re.match(r"^[A-Za-z0-9._-]+$", token):
-            return False, "Access token contains invalid characters"
-
-        return True, None
-
-    @staticmethod
     def validate_output_path(output_path: str) -> Tuple[bool, Optional[str]]:
         """Validate output directory path"""
         if not output_path:
@@ -205,18 +188,14 @@ class ConfigValidator:
     ):
         """Validate authentication fields and append any errors."""
         has_creds = config_dict.get("credentials")
-        has_token = config_dict.get("accesstoken")
+        metadata_auth = config_dict.get("usemetadataserverauth")
 
-        if not has_creds and not has_token:
-            errors.append("Either credentials file or access token is required")
+        if not has_creds and not metadata_auth:
+            errors.append("Either credentials file or metadata auth flag is required")
         elif has_creds:
             is_valid, error = ConfigValidator.validate_credentials_file(has_creds)
             if not is_valid:
                 errors.append(f"Credentials validation: {error}")
-        elif has_token:
-            is_valid, error = ConfigValidator.validate_access_token(has_token)
-            if not is_valid:
-                errors.append(f"Access token validation: {error}")
 
     @staticmethod
     def validate_complete_config(

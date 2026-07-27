@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google
+Workspace (GWS) organization's configuration conforms to the policies
+described in the Secure Configuration Baselines (SCBs)"/>
+
+
+
+        <title>Assured Controls Baseline Report</title>
+        <link href="../assets/main.css" rel="stylesheet" />
+        <script src="../assets/main.js" defer></script>
+    </head>
+    <body>
+        <main>
+            <header>
+                <a href="../BaselineReports.html"><img src="images/cisa_logo.png" height="100" width="100" alt="Cybersecurity and Infrastructure Security Agency Logo"></a>
+                <div class="links">
+                    <a href="https://www.cisa.gov/scuba" target="_blank"><h3 id="SCUBA">Secure Cloud Business Applications (SCuBA)</h3></a>
+                    <div style="width: .625rem;"></div>
+                    <a href="https://github.com/cisagov/ScubaGoggles/tree/main/baselines" target="_blank">
+                        <h3 id="baseline-docs">Baseline Documents</h3>
+                    </a>
+                </div>
+            </header>
+            <div id="toggle-container">
+    <p id="toggle-text">Light mode</p>
+    <label class="switch">
+        <input id="toggle" type="checkbox" autocomplete="off" onclick="toggleDarkMode()" aria-labelledby="toggle-text">
+        <span class="slider round"></span>
+    </label>
+</div>
+            <h1>Assured Controls Baseline Report</h1>
+            <p class="note">Assured Controls and Assured Controls Plus are paid add-ons with Google Workspace. This baseline is intended as guidance for agencies that already have these add-ons. Users that choose to implement this baseline should carefully consider the tradeoffs involved, including the potential security benefits, usability impacts, and increased licensing fees for the add-on licenses.</p>
+            <table class = "meta-table">
+  <tr>
+    <th>Customer Name</th>
+    <th>Customer Domain</th>
+    <th>Customer ID</th>
+    <th>Report Date</th>
+    <th>Baseline Version</th>
+    <th>Tool Version</th>
+  </tr>
+  <tr>
+    <td>Cool Example Org</td>
+    <td>example.org</td>
+    <td>ABCDEFG</td>
+    <td>07/20/2026 12:43:08 PDT</td>
+    <td>1</td>
+    <td>v1.0.0</td>
+  </tr>
+</table>
+
+            <div id="indicator-legend">
+  <div id="indicator-legend-label">Policy Indicators:</div>
+  <ul id="indicator-legend-list">
+    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/assuredcontrols.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</a><span style="color: var(--text-color);">Automatically verified by ScubaGoggles</span></li>
+    <li class="indicator-legend-item"><span class="indicator-badge" style="background-color: #F6E8E5; color: black;" title="Requires log-based verification">Log-Based Check</span><span style="color: var(--text-color);">Requires log-based verification</span></li>
+</ul>
+</div>
+<h2>ASSUREDCONTROLS-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/assuredcontrols.md#1-google-support-staff-data-access" target="_blank">Google Support Staff Data Access</a></h2>
+<table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="other-status">
+      <td>GWS.ASSUREDCONTROLS.1.1v1</td>
+      <td>Access Approvals SHOULD be enabled.<div class="badges">
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span>
+<span class="indicator-badge" style="background-color: #F6E8E5; color: black;" title="Requires log-based verification">Log-Based Check</span></div>
+</td>
+      <td class="report-status">No events found</td>
+      <td>Should</td>
+      <td>No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br></td>
+    </tr>
+    <tr class="warning-status">
+      <td>GWS.ASSUREDCONTROLS.1.2v1</td>
+      <td>Agencies SHOULD restrict support access to U.S.-based Google staff only.<div class="badges">
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+</td>
+      <td class="report-status">Warning</td>
+      <td>Should</td>
+      <td>The following OUs are non-compliant:<ul><li>Cool Example Org (group katherinelopez@example.org): Access management policy is set to No preference</li><li>Jose Roberts's OU (in Kristen Williams's OU): Access management policy is set to Access by EU Google staff or via EU virtual desktop</li></ul></td>
+    </tr>
+  </tbody>
+</table><h2>ASSUREDCONTROLS-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/assuredcontrols.md#2-data-regions-advanced-settings" target="_blank">Data Regions Advanced Settings</a></h2>
+<table>
+  <thead>
+    <tr>
+      <th>Control ID</th>
+      <th>Requirement</th>
+      <th>Result</th>
+      <th>Criticality</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="other-status">
+      <td>GWS.ASSUREDCONTROLS.2.1v1</td>
+      <td>Data processing across multiple regions SHOULD be disabled for all Google Workspace products.<div class="badges">
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span>
+<span class="indicator-badge" style="background-color: #F6E8E5; color: black;" title="Requires log-based verification">Log-Based Check</span></div>
+</td>
+      <td class="report-status">No events found</td>
+      <td>Should</td>
+      <td>No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br></td>
+    </tr>
+  </tbody>
+</table>
+            
+            
+            
+        </main>
+        <span id="sgr_settings" data-darkmode="None" data-redaction="None"></span>
+    </body>
+</html>

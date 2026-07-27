@@ -693,7 +693,7 @@ tests contains {
         "policy/gmail_links_and_external_images.applyFutureSettingsAutomatically",
         "policy/gmail_service_status.serviceState"
     ],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_4},
     "RequirementMet": Status,
@@ -973,7 +973,7 @@ tests contains {
         "policy/gmail_spoofing_and_authentication.applyFutureSettingsAutomatically",
         "policy/gmail_service_status.serviceState"
     ],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_7, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_7},
     "RequirementMet": Status,
@@ -1151,7 +1151,7 @@ tests contains {
         "policy/gmail_workspace_sync_for_outlook.enableGoogleWorkspaceSyncForMicrosoftOutlook",
         "policy/gmail_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_1},
     "RequirementMet": Status,
@@ -1192,7 +1192,7 @@ tests contains {
         "policy/gmail_auto_forwarding.enableAutoForwarding",
         "policy/gmail_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs11_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1},
     "RequirementMet": Status,

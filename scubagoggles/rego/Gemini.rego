@@ -158,7 +158,7 @@ GeminiId3_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.1")
 tests contains {
     "PolicyId": GeminiId3_1,
     "Prerequisites": [],
-    "Criticality": "Shall",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
@@ -175,7 +175,7 @@ GeminiId3_2 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.2")
 tests contains {
     "PolicyId": GeminiId3_2,
     "Prerequisites": [],
-    "Criticality": "Shall",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,
@@ -196,7 +196,7 @@ GeminiId4_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.4.1")
 tests contains {
     "PolicyId": GeminiId4_1,
     "Prerequisites": [],
-    "Criticality": "Shall",
+    "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
     "ActualValue": "",
     "RequirementMet": false,

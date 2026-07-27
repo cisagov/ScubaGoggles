@@ -9,7 +9,7 @@ GoodCaseInputApi05 := {
         "topOU": {
             "security_password": {
                 "allowedStrength": "STRONG",
-                "minimumLength": 15,
+                "minimumLength": 16,
                 "maximumLength": 100,
                 "enforceRequirementsAtLogin": true,
                 "allowReuse": false,
@@ -45,7 +45,7 @@ BadCaseInputApi05a := {
         "topOU": {
             "security_password": {
                 "allowedStrength": "STRONG",
-                "minimumLength": 15,
+                "minimumLength": 16,
                 "maximumLength": 100,
                 "enforceRequirementsAtLogin": true,
                 "allowReuse": false,
