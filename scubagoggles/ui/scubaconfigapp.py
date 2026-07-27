@@ -2314,7 +2314,7 @@ class ScubaConfigApp:
         if data.get('outputpath') and data['outputpath'] != './':
             config['outputpath'] = data['outputpath']
         if data.get('darkmode'):
-            config['darkmode'] = True
+            config['darkmode'] = 'true'
         if data.get('skipdoh'):
             config['skipdoh'] = True
 

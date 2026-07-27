@@ -68,7 +68,6 @@ customerid: my_customer
 # Recommended to leave these as the default values unless there is a specific reason to change them.
 outputfoldername: GWSBaselineConformance
 outputproviderfilename: ProviderSettingsExport
-outputactionplanfilename: ActionPlan
 outputregofilename: TestResults
 outputreportfilename: BaselineReports
 
@@ -86,7 +85,7 @@ numberofuuidcharacterstotruncate: 18
 debug: false
 
 # Dark Mode: This field is used to enable dark mode styles for the report output.
-# darkmode: true
+# darkmode: "true"
 
 # Run cache mode:  when added will run the tool in "RunCached mode".
 # When combined with --skipexport allows the user to skip authentication and provider export.
@@ -258,7 +257,6 @@ skipdoh: false
 # https://yaml.org/spec/1.2.2/#692-node-anchors for more details. In this case, the
 # anchor allows you to configure multiple omissions that share the same rationale
 # without repeating yourself.
-
 
 
 
