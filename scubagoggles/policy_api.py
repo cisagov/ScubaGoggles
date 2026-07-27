@@ -204,6 +204,8 @@ class PolicyAPI:
         'gmail_auto_forwarding': {'settings': {'enableAutoForwarding': isBool}},
         'gmail_blocked_sender_lists': {'parser': GmailRulesParser,
             'settings': {'blockedSenders': isListDict}},
+        'gmail_comprehensive_mail_storage': {'parser': GmailRulesParser,
+            'settings': {'ruleId': isString}},
         'gmail_email_address_lists': {'key': 'id',
                                       'reducer': _max_map_reducer,
                                       'settings': {'emailAddressList':
