@@ -1089,7 +1089,7 @@ This section allows for email messages sent through other Google Workspace appli
 #### GWS.GMAIL.17.1v1
 Comprehensive mail storage SHOULD be enabled to allow information traceability across applications.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgmail171v06-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ The absence of comprehensive mail storage could compromise the ability for information traceability across applications, posing a security risk. Enabling comprehensive mail storage can reduce this risk, enhancing the safety and integrity of user data and systems.
 - _Last modified:_ November 2023

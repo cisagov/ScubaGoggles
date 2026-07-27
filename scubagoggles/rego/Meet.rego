@@ -297,7 +297,7 @@ tests contains {
     "Prerequisites": [
         "reports/v1/activities/list"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
     "ActualValue": "No relevant event in the current logs",
     "RequirementMet": DefaultSafe,
@@ -314,7 +314,7 @@ tests contains {
     "Prerequisites": [
         "reports/v1/activities/list"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_1, NonCompliantGroups6_1),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_1, "NonCompliantGroups": NonCompliantGroups6_1},
     "RequirementMet": Status,
