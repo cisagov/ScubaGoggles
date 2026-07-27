@@ -75,7 +75,7 @@ jobs:
       windows-path: ${{ steps.windows-path.outputs.cachepath }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Python v${{ matrix.python-version }}
         uses: actions/setup-python@v6
