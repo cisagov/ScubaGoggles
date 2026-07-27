@@ -1410,7 +1410,7 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
         ),
         (
             {'darkmode': "abc"},
-            {'darkmode': True},
+            {'darkmode': 'true'},
         ),
         (
             {'darkmode': ""},

@@ -16,6 +16,7 @@ from scubagoggles.scuba_argument_parser import ScubaArgumentParser
 
 
 BOOLEAN_ARGUMENTS = (
+    'usemetadataserverauth',
     'quiet',
     'silencebodwarnings',
     'skipdoh',
@@ -39,7 +40,6 @@ PATH_ARGUMENTS = (
 )
 
 STRING_ARGUMENTS = (
-    'accesstoken',
     'outjsonfilename',
     'subjectemail',
     'customerid',
@@ -403,7 +403,7 @@ class TestScubaArgumentParser:
             'credentials': 'credentials.json',
             'darkmode': 'true',
             'cicdtestingmode': 'false',
-            'accesstoken': 'access-token',
+            'usemetadataserverauth': True,
             'baselines': ['calendar', 'chat'],
             'outputpath': 'reports',
             'outjsonfilename': 'results.json',
