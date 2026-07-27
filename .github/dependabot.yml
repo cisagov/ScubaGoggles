@@ -16,7 +16,7 @@ updates:
       - "/"
       - "/scubagoggles/Testing/Functional/SmokeTests"
     schedule:
-      interval: "weekly"
+      interval: "quarterly"
     versioning-strategy: "increase-if-necessary"
     groups:
       python-dependencies:
