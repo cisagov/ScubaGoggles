@@ -68,6 +68,7 @@ customerid: my_customer
 # Recommended to leave these as the default values unless there is a specific reason to change them.
 outputfoldername: GWSBaselineConformance
 outputproviderfilename: ProviderSettingsExport
+outputactionplanfilename: ActionPlan
 outputregofilename: TestResults
 outputreportfilename: BaselineReports
 
