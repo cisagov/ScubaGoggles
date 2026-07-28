@@ -119,7 +119,7 @@ DKIM SHOULD be enabled for all domains.
 
 ### Resources
 
--   [Binding Operational Directive 18-01 - Enhance Email and Web Security \| DHS](https://cyber.dhs.gov/bod/18-01/)
+-   [Binding Operational Directive 18-01 - Enhance Email and Web Security \| DHS](https://www.cisa.gov/news-events/directives/bod-18-01-enhance-email-and-web-security)
 -   [Trustworthy Email \| NIST 800-177 Rev. 1](https://csrc.nist.gov/publications/detail/sp/800-177/rev-1/final)
 -   [Google Workspace Admin Help: Help prevent spoofing and spam with DKIM](https://support.google.com/a/answer/174124)
 -   [CIS Google Workspace Foundations Benchmark](https://www.cisecurity.org/benchmark/google_workspace)
@@ -176,7 +176,7 @@ An SPF policy SHALL be published for each domain that fails all non-approved sen
 
 ### Resources
 
--   [Binding Operational Directive 18-01 - Enhance Email and Web Security \| DHS](https://cyber.dhs.gov/bod/18-01/)
+-   [Binding Operational Directive 18-01 - Enhance Email and Web Security \| DHS](https://www.cisa.gov/news-events/directives/bod-18-01-enhance-email-and-web-security)
 -   [Trustworthy Email \| NIST 800-177 Rev. 1](https://csrc.nist.gov/publications/detail/sp/800-177/rev-1/final)
 -   [Google Workspace Admin Help: Help prevent spoofing and spam with SPF](https://support.google.com/a/answer/33786#to-do)
 
@@ -270,7 +270,7 @@ An agency point of contact SHOULD be included for aggregate and failure reports.
 
 ### Resources
 
--   [Binding Operational Directive 18-01 - Enhance Email and Web Security \| DHS](https://cyber.dhs.gov/bod/18-01/)
+-   [Binding Operational Directive 18-01 - Enhance Email and Web Security \| DHS](https://www.cisa.gov/news-events/directives/bod-18-01-enhance-email-and-web-security)
 -   [Trustworthy Email \| NIST 800-177 Rev. 1](https://csrc.nist.gov/publications/detail/sp/800-177/rev-1/final)
 -   [Domain-based Message Authentication, Reporting, and Conformance (DMARC) \| RFC 7489](https://datatracker.ietf.org/doc/html/rfc7489)
 -   [Google Workspace Admin Help: Help prevent spoofing and spam with DMARC](https://support.google.com/a/answer/2466580)
