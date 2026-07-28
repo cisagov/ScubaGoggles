@@ -397,7 +397,7 @@ class TestMain:
         def fake_get_gws_args(parser, _user_config):
             parser.set_defaults(dispatch=make_dispatch("gws"))
 
-        def fake_get_gws_ui_args(parser, _user_config):
+        def fake_get_ui_args(parser):
             parser.set_defaults(dispatch=make_dispatch("ui"))
 
         def fake_get_opa_args(parser, _user_config):
@@ -413,7 +413,7 @@ class TestMain:
             parser.set_defaults(dispatch=make_dispatch("version"))
 
         monkeypatch.setattr(main_module, "get_gws_args", fake_get_gws_args)
-        monkeypatch.setattr(main_module, "get_gws_ui_args", fake_get_gws_ui_args)
+        monkeypatch.setattr(main_module, "get_ui_args", fake_get_ui_args)
         monkeypatch.setattr(main_module, "get_opa_args", fake_get_opa_args)
         monkeypatch.setattr(main_module, "get_purge_args", fake_get_purge_args)
         monkeypatch.setattr(main_module, "get_setup_args", fake_get_setup_args)
