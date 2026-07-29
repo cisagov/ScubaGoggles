@@ -21,7 +21,7 @@ test_SPF_Correct_V1 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met. ", DNSLink])
 }
 
 test_SPF_Correct_V2 if {
@@ -45,7 +45,7 @@ test_SPF_Correct_V2 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met. ", DNSLink])
 }
 
 test_SPF_Correct_V3 if {
@@ -65,7 +65,7 @@ test_SPF_Correct_V3 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met. ", DNSLink])
 }
 
 test_SPF_Correct_V4 if {
@@ -85,7 +85,7 @@ test_SPF_Correct_V4 if {
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met. ", DNSLink])
 }
 
 test_SPF_Incorrect_V1 if {
@@ -109,7 +109,7 @@ test_SPF_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["1 of 2 agency domain(s) found in violation: test2.name.", DNSLink])
+    RuleOutput[0].ReportDetails == concat(" ", ["1 failing domain(s): <ul id=\"spf-domains\"><li>test2.name: Domain exists but no answers returned.</li></ul>", DNSLink])
 }
 
 test_SPF_Incorrect_V2 if {
@@ -129,7 +129,7 @@ test_SPF_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+    RuleOutput[0].ReportDetails == concat(" ", ["1 failing domain(s): <ul id=\"spf-domains\"><li>test.name: Domain exists but no answers returned.</li></ul>", DNSLink])
 }
 #--
 
@@ -150,7 +150,7 @@ test_SPF_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+    RuleOutput[0].ReportDetails == concat(" ", ["1 failing domain(s): <ul id=\"spf-domains\"><li>test.name: SPF record found, but it does not hardfail (`\"-all`\") or redirect to one that does.</li></ul>", DNSLink])
 }
 
 test_SPF_Incorrect_V4 if {
@@ -170,6 +170,6 @@ test_SPF_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+    RuleOutput[0].ReportDetails == concat(" ", ["1 failing domain(s): <ul id=\"spf-domains\"><li>test.name: More than one record found</li></ul>", DNSLink])
 }
 #--

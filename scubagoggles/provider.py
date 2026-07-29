@@ -465,11 +465,13 @@ class Provider:
             d['domainName']
             for d in self.list_domains() if d.get('verified', True)
         }
+
         # Get domain aliases
         alias_domains = {
             d['domainAliasName']
             for d in self.list_alias_domains() if d.get('verified', True)
         }
+
         all_domains = base_domains.union(alias_domains)
 
         if len(all_domains) == 0:
