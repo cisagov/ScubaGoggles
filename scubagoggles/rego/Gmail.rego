@@ -110,7 +110,6 @@ if {
 #
 # Baseline GWS.GMAIL.3.1
 #--
-
 GmailId3_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.3.1")
 
 # Not applicable at OU or Group level
@@ -128,20 +127,58 @@ DomainsWithSpf contains SpfRecord.domain if {
     ]
 }
 
+#SpfStatusDetails
+# Domain does not exist. -
+# Domain exists but no answers returned. -
+# SPF record found, but it does not fail (either hard or soft fail) or redirect to one that does. -
+# Multiple SPF records are found -
+# Domain name exists but no SPF records returned.
+# Exceptions other than NXDOMAIN returned.
+
+
+SpfStatusDetails(Messaging) := "Domain exists but no answer returned"  if {
+    matches := regex.find_all_string_submatch_n(`[0]`, "user_id_847", -1)
+} else := Messaging
+
+# Loop through domains and save the details for domains without proper SPF records
+DomainsWithoutSpf contains Details if {
+    some DNSResponse in input.spf_records
+    count(DNSResponse.rdata) == 0 # 0 answers returned
+    some log_item in DNSResponse.log
+    Details := concat("", [
+        "<li>",
+        log_item.query_name,
+        ": ",
+        # log_item.query_result,
+        SpfStatusDetails(log_item.query_result),
+        "</li>"
+    ])
+}
+
+# SPF Status Message
+SpfStatusMessage := Message if {
+    count(DomainsWithoutSpf) == 0
+    Message := "Requirement met. "
+} else := concat("", [
+    format_int(count(DomainsWithoutSpf), 10),
+    " failing domain(s): ",
+    "<ul id=\"spf-domains\">",
+    concat("", DomainsWithoutSpf),
+    "</ul>"
+])
+
 tests contains {
     "PolicyId": GmailId3_1,
     "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutSpf, BaseDomains), DNSLink]),
+    "ReportDetails": concat(" ", [SpfStatusMessage, DNSLink]),
     "ActualValue": DomainsWithoutSpf,
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    DomainsWithoutSpf := BaseDomains - DomainsWithSpf
     Status := count(DomainsWithoutSpf) == 0
 }
-#--
 
 
 ###############
