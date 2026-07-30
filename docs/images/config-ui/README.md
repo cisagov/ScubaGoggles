@@ -1,6 +1,6 @@
 # Configuration UI screenshots
 
-Screenshots for the [Configuration UI README](../../scubagoggles/ui/README.md).
+Screenshots for the [Configuration UI README](../../../scubagoggles/ui/README.md).
 
 | Filename | Description |
 |----------|-------------|

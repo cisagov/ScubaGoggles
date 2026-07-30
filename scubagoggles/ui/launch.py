@@ -25,23 +25,6 @@ def _find_free_port() -> int:
         s.bind(("localhost", 0))
         return s.getsockname()[1]
 
-def _prevent_streamlit_promotion() -> None:
-
-    """Streamlit self-promotes upon initial invocation, which is not
-    appropriate particularly for this application.  It can be avoided by
-    creating its "credentials" file with an empty email address.  This is
-    only done if the file doesn't already exist.
-    """
-
-    streamlit_dir = Path('~/.streamlit').expanduser()
-
-    streamlit_dir.mkdir(exist_ok=True, parents=True)
-
-    streamlit_config = streamlit_dir / 'credentials.toml'
-
-    if not streamlit_config.exists():
-        streamlit_config.write_text('[general]\nemail = ""\n',
-                                    encoding='utf-8')
 
 def _resolve_app_file() -> Path | None:
     """Return the path to the Streamlit app file."""
@@ -80,9 +63,9 @@ def _get_app_to_run() -> Path:
         print("Please ensure the UI modules are properly installed.")
         raise SystemExit(1)
     if not _is_streamlit_installed():
-        print("Streamlit is not installed!")
-        print("Please install requirements:")
-        print("  pip install -r requirements.txt")
+        print("Streamlit is required for the graphical user interface.")
+        print("Please install using this command (see documentation):")
+        print("  pip install scubagoggles[ui]")
         raise SystemExit(1)
     return app_to_run
 
@@ -101,6 +84,8 @@ def _build_streamlit_command(app_to_run: Path,
         "--server.port", str(port),
         "--server.headless", "false",
         "--browser.gatherUsageStats", "false",
+        "--server.showEmailPrompt", "false",
+        "--logger.hideWelcomeMessage", "true"
     ]
     # add extra option if dark option specified on command line
     if force_dark:
@@ -142,9 +127,6 @@ def launch_main(darkmode = False) -> None:
     app_to_run = _get_app_to_run()
 
     cmd, port = _build_streamlit_command(app_to_run, force_dark)
-
-
-    _prevent_streamlit_promotion()
 
     popen_kwargs: dict = {}
     if sys.platform != "win32":
