@@ -112,6 +112,8 @@ class PolicyAPI:
     # whether a reducer is needed.
 
     _expectedPolicySettings = {
+        'access_approval_axa_user_scoping': {'settings': {
+            'requiresCustomerApproval': isBool}},
         'access_management_user_scoping': {'settings': {
             'accessManagementRegime': isEnum}},
         'analytics_service_status': {'settings': {'serviceState': isState}},
