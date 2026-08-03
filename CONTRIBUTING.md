@@ -36,6 +36,7 @@ PR assignees should:
 4. Collaborate with reviewers to resolve questions, requested changes, and outstanding comments.
 5. Ensure all pre-approval, pre-merge, and post-merge checklist items in the PR template are completed.
 6. After approval from two reviewers, merge your own PR when the repository workflow allows it.
+    - If you are an external contributor, @mention one of the reviewers to merge your PR.
 
 ### Quality assurance and code reviews
 
