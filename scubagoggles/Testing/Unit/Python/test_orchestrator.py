@@ -3,7 +3,6 @@
 import csv
 import logging
 from datetime import datetime
-from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
 
@@ -426,7 +425,7 @@ class TestOrchestrator:
             'Remediation Completion Date',
             'Justification',
         ]
-        assert remaining == []
+        assert not remaining
         assert 'No action required' in caplog.text
 
     def test_get_full_out_jsonfile_name_truncates_uuid(self, orchestrator):
