@@ -86,7 +86,7 @@ GeminiId2_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.2.1")
 
 NonComplianceSetting2_1 := "GenAiAlphaSettingsProto alpha_enabled"
 
-NonComplianceMessage2_1 := "Alpha Gemini features are enabled."
+NonComplianceMessage2_1 := "Gemini Beta features are enabled."
 
 NonCompliantOUs2_1 contains {
     "Name": OU,

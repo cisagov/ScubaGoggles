@@ -857,7 +857,11 @@ class Provider:
             ],
             'drive': ['Drive and Docs'],
             'gmail': ['Gmail'],
-            'gemini': ['Gemini app', 'Gemini in Workspace apps'],
+            'gemini': [
+                'Gemini app',
+                'Gemini in Workspace',
+                'Gemini in Workspace apps'
+            ],
             'groups': ['Groups for Business'],
             'meet': ['Google Meet', 'Google Meet GenAI'],
             'sites': ['Sites'],

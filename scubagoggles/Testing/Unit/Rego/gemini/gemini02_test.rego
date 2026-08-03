@@ -103,7 +103,7 @@ test_2_1_Correct_V2 if {
 
 
 test_2_1_Incorrect_V1 if {
-    # Alpha Gemini features enabled
+    # Gemini Beta features enabled
     PolicyId := GeminiId2_1
     Output := tests with input as {
         "gemini_logs": {"items": [
@@ -137,7 +137,7 @@ test_2_1_Incorrect_V1 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
         "The following OUs are non-compliant:<ul>",
-        "<li>topOU: Alpha Gemini features are enabled.</li></ul>"
+        "<li>topOU: Gemini Beta features are enabled.</li></ul>"
     ])
 }
 
@@ -190,12 +190,12 @@ test_2_1_Incorrect_V2 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
         "The following groups are non-compliant:<ul>",
-        "<li>group1: Alpha Gemini features are enabled.</li></ul>"
+        "<li>group1: Gemini Beta features are enabled.</li></ul>"
     ])
 }
 
 test_2_1_Incorrect_V3 if {
-    # Alpha Gemini features enabled but Gemini disabled for OU
+    # Gemini Beta features enabled but Gemini disabled for OU
     PolicyId := GeminiId2_1
     Output := tests with input as {
         "gemini_logs": {"items": [
@@ -229,7 +229,7 @@ test_2_1_Incorrect_V3 if {
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
         "The following OUs are non-compliant:<ul>",
-        "<li>topOU: Alpha Gemini features are enabled.</li></ul>"
+        "<li>topOU: Gemini Beta features are enabled.</li></ul>"
     ])
 }
 #--

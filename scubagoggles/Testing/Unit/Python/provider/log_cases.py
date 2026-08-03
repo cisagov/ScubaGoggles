@@ -126,6 +126,92 @@ GET_GWS_LOGS_CASES = [
         },
         "expect_warning": False,
     },
+    # Gemini Beta features use APPLICATION_NAME "Gemini in Workspace"
+    {
+        "products": ["gemini", "gmail"],
+        "event": "CHANGE_APPLICATION_SETTING",
+        "reports": [
+            {
+                "id": "gemini-beta",
+                "events": [
+                    {
+                        "parameters": [
+                            {
+                                "name": "APPLICATION_NAME",
+                                "value": "Gemini in Workspace",
+                            },
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "gemini-legacy",
+                "events": [
+                    {
+                        "parameters": [
+                            {
+                                "name": "APPLICATION_NAME",
+                                "value": "Gemini in Workspace apps",
+                            },
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "gmail",
+                "events": [
+                    {
+                        "parameters": [
+                            {"name": "APPLICATION_NAME", "value": "Gmail"},
+                        ]
+                    }
+                ]
+            },
+        ],
+        "expected": {
+            "gmail": [
+                {
+                    "id": "gmail",
+                    "events": [
+                        {
+                            "parameters": [
+                                {"name": "APPLICATION_NAME", "value": "Gmail"},
+                            ],
+                        },
+                    ],
+                },
+            ],
+            "gemini": [
+                {
+                    "id": "gemini-beta",
+                    "events": [
+                        {
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gemini in Workspace",
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "id": "gemini-legacy",
+                    "events": [
+                        {
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gemini in Workspace apps",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+        "expect_warning": False,
+    },
     # Exception thrown when trying to retrieve logs
     {
         "products": ["gmail", "drive"],
