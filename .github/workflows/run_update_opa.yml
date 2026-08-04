@@ -46,6 +46,8 @@ jobs:
       contents: write
       pull-requests: write
       actions: write
+    outputs:
+      pr_url: ${{ steps.create-pr.outputs.pr_url }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CURRENT_VERSION: ${{ needs.check-opa-update.outputs.current_version }}
@@ -81,6 +83,7 @@ jobs:
         run: python utils/workflow/update_opa.py test
 
       - name: Create branch, commit, and open PR
+        id: create-pr
         run: |
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
@@ -125,15 +128,28 @@ jobs:
           - [x] Tests have been added and/or modified to cover the changes in this PR.
           - [x] All new and existing tests pass."
 
-          gh pr create \
+          PR_URL=$(gh pr create \
             --base main \
             --head "$BRANCH_NAME" \
             --title "Bump OPA version from v${CURRENT_VERSION} to v${LATEST_VERSION}" \
             --body "$PR_BODY" \
-            --label "version bump"
+            --label "version bump")
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
 
       - name: Trigger smoke test workflow
         run: |
           gh workflow run run_smoke_test.yml \
             --ref "$BRANCH_NAME" \
             -f "opa-version=$LATEST_VERSION"
+
+  auto-approve:
+    name: Auto-approve PR
+    needs: update-opa
+    permissions:
+      pull-requests: write
+    uses: ./.github/workflows/auto-approve-pr.yml
+    with:
+      pr-url: ${{ needs.update-opa.outputs.pr_url }}
+    secrets:
+      client_id: ${{ secrets.SCUBA_AUTO_REVIEWER_CLIENT_ID }}
+      private_key: ${{ secrets.SCUBA_AUTO_REVIEWER_PRIVATE_KEY }}
