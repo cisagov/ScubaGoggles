@@ -115,7 +115,7 @@ Service Specific Terms.
 
 ### Resources
 
--   [Turn access to Google Workspace with Gemini Alpha on or off](https://support.google.com/a/answer/14170809)
+-   [Turn access to Google Workspace with Gemini Beta on or off](https://knowledge.workspace.google.com/admin/generative-ai/workspace-with-gemini/turn-access-to-google-workspace-with-gemini-beta-on-or-off)
 -   [Google Workspace Service Specific Terms](https://workspace.google.com/terms/service-terms/index.html)
 
 ### Prerequisites

@@ -5,6 +5,9 @@ updates:
     directory: "/"
     schedule:
       interval: "quarterly"
+    labels:
+      - "dependencies"
+      - "version bump"
     groups:
       python-dependencies:
         group-by: dependency-name
@@ -18,6 +21,9 @@ updates:
     schedule:
       interval: "quarterly"
     versioning-strategy: "increase-if-necessary"
+    labels:
+      - "dependencies"
+      - "version bump"
     groups:
       python-dependencies:
         group-by: dependency-name
