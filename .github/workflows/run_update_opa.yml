@@ -26,7 +26,7 @@ jobs:
       branch_name: ${{ steps.check.outputs.branch_name }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -55,7 +55,7 @@ jobs:
       BRANCH_NAME: ${{ needs.check-opa-update.outputs.branch_name }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Python
         uses: actions/setup-python@v6
