@@ -16,10 +16,11 @@ jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: tcort/github-action-markdown-link-check@v1
       with:
         base-branch: 'main'
+        config-file: 'mlc_config.json'
         use-quiet-mode: 'yes'
         use-verbose-mode: 'yes'
 
@@ -33,9 +34,9 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install Python dependencies
@@ -52,7 +53,7 @@ jobs:
             || (echo "version mismatch - current: $sgv" && exit 1)
           ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
       - name: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         id: create_release
         with:
           draft: true
