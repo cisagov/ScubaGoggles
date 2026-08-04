@@ -52,7 +52,7 @@ jobs:
             || (echo "version mismatch - current: $sgv" && exit 1)
           ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
       - name: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         id: create_release
         with:
           draft: true
