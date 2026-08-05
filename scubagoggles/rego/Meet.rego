@@ -396,3 +396,21 @@ if {
     Status := (false in Conditions) == false
 }
 #--
+
+#
+# Baseline GWS.MEET.6.3
+#--
+
+MeetId6_3:= utils.PolicyIdWithSuffix("GWS.MEET.6.3")
+
+tests contains {
+    "PolicyId": MeetId6_3,
+    "Prerequisites": [],
+    "Criticality": "Shall/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": false
+}
+
+#--
