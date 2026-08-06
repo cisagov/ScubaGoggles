@@ -1,15 +1,19 @@
-name: Generate OSCAL Baselines
+name: Generate OSCAL Baseline Catalog
 
 on:
   push:
     paths:
       - "scubagoggles/baselines/**/*.md"
+      - "scubagoggles/scuba_constants.py"
       - "scubagoggles/utils/generate_oscal_baselines.py"
       - ".github/workflows/generate_oscal_baselines.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
+
+env:
+  OSCAL_CLI_IMAGE: ghcr.io/metaschema-framework/oscal-cli:latest
 
 jobs:
   generate-oscal:
@@ -20,26 +24,42 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Generate OSCAL baseline files
+      - name: Generate OSCAL baseline catalog
         run: |
           python3 scubagoggles/utils/generate_oscal_baselines.py \
             --input-dir scubagoggles/baselines \
-            --output-dir dist/oscal-baselines
+            --output-dir dist/oscal-baseline-catalog
       - name: Validate generated JSON parses
         run: |
           python3 - <<'PY'
           import json
           from pathlib import Path
 
-          files = sorted(Path("dist/oscal-baselines").glob("*-oscal-component-definition.json"))
-          if not files:
-              raise SystemExit("No OSCAL files generated")
-          for file_path in files:
-              json.loads(file_path.read_text(encoding="utf-8"))
-          print(f"Validated {len(files)} OSCAL JSON files")
+          from scubagoggles.scuba_constants import DEFAULT_OSCAL_VERSION
+
+          output_dir = Path("dist/oscal-baseline-catalog")
+          summary = json.loads((output_dir / "generation-summary.json").read_text(encoding="utf-8"))
+          file_path = output_dir / summary["output"]
+          if not file_path.exists():
+              raise SystemExit("No OSCAL catalog generated")
+          catalog = json.loads(file_path.read_text(encoding="utf-8"))["catalog"]
+          if catalog["metadata"]["oscal-version"] != DEFAULT_OSCAL_VERSION:
+              raise SystemExit(
+                  f"Generated OSCAL catalog does not use OSCAL {DEFAULT_OSCAL_VERSION}"
+              )
+          if DEFAULT_OSCAL_VERSION not in file_path.name:
+              raise SystemExit("Generated OSCAL catalog filename does not include the OSCAL version")
+          print(f"Validated OSCAL catalog JSON: {file_path}")
           PY
-      - name: Upload generated OSCAL files
+      - name: Validate OSCAL catalog schema
+        run: |
+          CATALOG_FILE="$(python3 -c "import json, pathlib; print(json.loads(pathlib.Path('dist/oscal-baseline-catalog/generation-summary.json').read_text(encoding='utf-8'))['output'])")"
+          docker run --rm \
+            -v "$PWD:/workspace" \
+            "$OSCAL_CLI_IMAGE" \
+            validate "/workspace/dist/oscal-baseline-catalog/${CATALOG_FILE}"
+      - name: Upload generated OSCAL catalog
         uses: actions/upload-artifact@v4
         with:
-          name: oscal-baselines
-          path: dist/oscal-baselines/
+          name: oscal-baseline-catalog
+          path: dist/oscal-baseline-catalog/

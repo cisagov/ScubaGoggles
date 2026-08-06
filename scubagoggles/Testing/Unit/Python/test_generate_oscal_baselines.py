@@ -1,9 +1,11 @@
-"""Unit tests for OSCAL baseline generation."""
+"""Unit tests for OSCAL baseline catalog generation."""
 
 import importlib.util
 import json
 import re
 from pathlib import Path
+
+from scubagoggles.scuba_constants import DEFAULT_OSCAL_VERSION
 
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
@@ -44,64 +46,164 @@ def source_mapping_count(path):
     return sum(len(line.split(",")) for line in mapping_lines)
 
 
-class GenerateOscalBaselinesTest:
-    """Tests for converting Markdown baselines to OSCAL component definitions."""
+def catalog_controls(catalog):
+    """Yield every control from the generated catalog."""
 
-    def test_statement_level_mapping_helpers(self):
-        """Statement-letter mappings should not become fake control IDs."""
+    for baseline_group in catalog["groups"]:
+        for section_group in baseline_group.get("groups", []):
+            yield from section_group.get("controls", [])
+
+
+def prop_values(props, name):
+    """Return all values for a property name."""
+
+    return [prop["value"] for prop in props if prop["name"] == name]
+
+
+def part_values(parts, name):
+    """Return all prose values for a part name."""
+
+    return [part["prose"] for part in parts if part["name"] == name]
+
+
+class GenerateOscalBaselinesTest:
+    """Tests for converting Markdown baselines to one OSCAL catalog."""
+
+    def test_policy_ids_become_catalog_control_ids(self):
+        """SCuBA policy IDs should become stable catalog control IDs."""
 
         generator = load_generator()
 
-        assert generator.normalize_control_id("IA-2(1)") == "ia-2.1"
-        assert generator.statement_id("IA-2(1)", "ia-2.1") == "ia-2.1_smt"
+        assert (
+            generator.control_id_from_policy("GWS.COMMONCONTROLS.1.1v1")
+            == "gws.commoncontrols.1.1v1"
+        )
 
-        assert generator.normalize_control_id("IA-5c") == "ia-5"
-        assert generator.statement_id("IA-5c", "ia-5") == "ia-5_smt.c"
+    def test_catalog_filename_includes_relevant_versions(self):
+        """Release catalog filenames should show source and OSCAL versions."""
 
-        assert generator.normalize_control_id("SC-7(10)(a)") == "sc-7.10"
-        assert generator.statement_id("SC-7(10)(a)", "sc-7.10") == "sc-7.10_smt.a"
+        generator = load_generator()
+        expected_default = (
+            f"scubagoggles-oscal-catalog-oscal-{generator.DEFAULT_OSCAL_VERSION}.json"
+        )
+        expected_release = (
+            f"scubagoggles-v1.0.0-oscal-catalog-oscal-"
+            f"{generator.DEFAULT_OSCAL_VERSION}.json"
+        )
 
-        assert generator.normalize_control_id("SC-7(10)a") == "sc-7.10"
-        assert generator.statement_id("SC-7(10)a", "sc-7.10") == "sc-7.10_smt.a"
+        assert generator.catalog_file_name() == expected_default
+        assert generator.catalog_file_name("1.0.0") == expected_release
+        assert generator.catalog_file_name("v1.0.0") == expected_release
 
     def test_generation_covers_readme_baselines(self, tmp_path):
-        """Every README-listed baseline should produce valid OSCAL JSON."""
+        """Every README-listed baseline should be represented in one catalog."""
 
         generator = load_generator()
         input_dir = REPO_ROOT / "scubagoggles" / "baselines"
-        output_dir = tmp_path / "oscal-baselines"
+        output_dir = tmp_path / "oscal-baseline-catalog"
+        release_version = "0.0.0-test"
+        expected_catalog_file = generator.catalog_file_name(release_version)
 
-        summary = generator.generate_baselines(input_dir, output_dir, "0.0.0-test")
+        summary = generator.generate_baselines(input_dir, output_dir, release_version)
         discovered = generator.parse_baselines_readme(input_dir)
+        catalog_path = output_dir / expected_catalog_file
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))["catalog"]
+        controls = list(catalog_controls(catalog))
 
-        assert len(summary) == len(discovered)
+        assert generator.DEFAULT_OSCAL_VERSION == DEFAULT_OSCAL_VERSION
+        assert summary["output"] == expected_catalog_file
+        assert f"v{release_version}" in catalog_path.name
+        assert generator.DEFAULT_OSCAL_VERSION in catalog_path.name
+        assert summary["baselines"] == len(discovered)
+        assert summary["source_policies"] == sum(
+            source_policy_count(input_dir / file_name) for _, file_name in discovered
+        )
+        assert summary["source_mappings"] == sum(
+            source_mapping_count(input_dir / file_name) for _, file_name in discovered
+        )
         assert (output_dir / "generation-summary.json").exists()
+        assert not list(output_dir.glob("*-oscal-component-definition.json"))
 
-        for item in summary:
-            source_path = input_dir / item["source"]
-            output_path = output_dir / item["output"]
-            doc = json.loads(output_path.read_text(encoding="utf-8"))
-            component_definition = doc["component-definition"]
-            requirements = component_definition["components"][0][
-                "control-implementations"
-            ][0]["implemented-requirements"]
+        assert catalog["metadata"]["oscal-version"] == generator.DEFAULT_OSCAL_VERSION
+        assert catalog["metadata"]["version"] == release_version
+        assert len(catalog["groups"]) == len(discovered)
+        assert len(controls) == summary["source_policies"]
 
-            assert item["source_policies"] == source_policy_count(source_path)
-            assert item["implemented_requirements"] == source_mapping_count(source_path)
-            assert len(requirements) == item["implemented_requirements"]
-            assert component_definition["metadata"]["oscal-version"] == "1.1.2"
+        for baseline_group in catalog["groups"]:
+            source_baseline = prop_values(baseline_group["props"], "source-baseline")[0]
+            group_controls = [
+                control
+                for section_group in baseline_group.get("groups", [])
+                for control in section_group.get("controls", [])
+            ]
+            assert len(group_controls) == source_policy_count(input_dir / source_baseline)
 
-            for requirement in requirements:
-                mapping_props = [
-                    prop
-                    for prop in requirement["props"]
-                    if prop["name"] == "source-control-mapping"
-                ]
-                policy_props = [
-                    prop
-                    for prop in requirement["props"]
-                    if prop["name"] == "source-policy-id"
-                ]
-                assert requirement["control-id"] != "unknown"
-                assert len(mapping_props) == 1
-                assert len(policy_props) == 1
+        assured_controls = next(
+            group
+            for group in catalog["groups"]
+            if prop_values(group["props"], "source-baseline") == ["assuredcontrols.md"]
+        )
+        common_controls = next(
+            group
+            for group in catalog["groups"]
+            if prop_values(group["props"], "source-baseline") == ["commoncontrols.md"]
+        )
+        mfa_section = next(
+            section
+            for section in common_controls["groups"]
+            if prop_values(section["props"], "source-section") == ["1"]
+        )
+        assert "Assured Controls Plus add-on" in part_values(
+            assured_controls["parts"],
+            "assumptions",
+        )[0]
+        assert 'The key words "MUST,"' in part_values(
+            assured_controls["parts"],
+            "key-terminology",
+        )[0]
+        assert part_values(mfa_section["parts"], "overview")
+        assert "FIDO2-compliant security keys" in part_values(
+            mfa_section["parts"],
+            "prerequisites",
+        )[0]
+        assert "Policy 1 Common Instructions" in part_values(
+            mfa_section["parts"],
+            "implementation",
+        )[0]
+
+        for control in controls:
+            policy_ids = prop_values(control["props"], "source-policy-id")
+            mappings = prop_values(
+                control["props"],
+                "nist-sp800-53-rev5-fedramp-high-mapping",
+            )
+            assert len(policy_ids) == 1
+            assert control["id"] == generator.control_id_from_policy(policy_ids[0])
+            assert len(mappings) == 1
+            assert any(part["name"] == "statement" for part in control["parts"])
+            assert not {
+                "section-prerequisites",
+                "source-note",
+                "source-policy-detail",
+                "source-section-overview",
+            }.intersection(prop["name"] for prop in control["props"])
+
+        phishing_resistant_mfa = next(
+            control
+            for control in controls
+            if prop_values(control["props"], "source-policy-id")
+            == ["GWS.COMMONCONTROLS.1.1v1"]
+        )
+        assert part_values(phishing_resistant_mfa["parts"], "statement") == [
+            "Phishing-Resistant MFA SHALL be required for all users."
+        ]
+        phishing_implementation = part_values(
+            phishing_resistant_mfa["parts"],
+            "implementation",
+        )[0]
+        assert "Under Authentication" in phishing_implementation
+        assert "Sign in to" not in phishing_implementation
+        assert "FIDO2 Security Key" in part_values(
+            phishing_resistant_mfa["parts"],
+            "policy-detail",
+        )[0]

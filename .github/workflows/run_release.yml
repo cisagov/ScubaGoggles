@@ -29,6 +29,7 @@ jobs:
     env:
       PYTHON_VERSION: "3.12"
       RELEASE_VERSION: ${{ inputs.version }}
+      OSCAL_CLI_IMAGE: ghcr.io/metaschema-framework/oscal-cli:latest
     permissions:
       contents: write
     steps:
@@ -51,15 +52,23 @@ jobs:
           [[ "$reqv" == "$sgv" ]] \
             || (echo "version mismatch - current: $sgv" && exit 1)
           ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
-      - name: Generate OSCAL baseline artifacts
+      - name: Generate OSCAL baseline catalog artifact
         shell: bash
         run: |
           python3 scubagoggles/utils/generate_oscal_baselines.py \
             --input-dir scubagoggles/baselines \
-            --output-dir dist/oscal-baselines \
+            --output-dir dist/oscal-baseline-catalog \
             --release-version "$RELEASE_VERSION"
+          CATALOG_FILE="$(python3 -c "import json, pathlib; print(json.loads(pathlib.Path('dist/oscal-baseline-catalog/generation-summary.json').read_text(encoding='utf-8'))['output'])")"
+          expected_prefix="scubagoggles-v${RELEASE_VERSION}-oscal-catalog-oscal-"
+          [[ "$CATALOG_FILE" == "${expected_prefix}"*.json ]] \
+            || (echo "invalid OSCAL catalog filename: $CATALOG_FILE" && exit 1)
+          docker run --rm \
+            -v "$PWD:/workspace" \
+            "$OSCAL_CLI_IMAGE" \
+            validate "/workspace/dist/oscal-baseline-catalog/${CATALOG_FILE}"
           cd dist
-          zip -r "scubagoggles-oscal-baselines-v${RELEASE_VERSION}.zip" oscal-baselines
+          zip -r "scubagoggles-oscal-baseline-catalog-v${RELEASE_VERSION}.zip" oscal-baseline-catalog
       - name: release
         uses: softprops/action-gh-release@v1
         id: create_release
@@ -72,6 +81,6 @@ jobs:
             scubagoggles-*-py3-none-any.whl
             scubagoggles-*.tar.gz
             scubagoggles-*.zip
-            dist/scubagoggles-oscal-baselines-v${{ inputs.version }}.zip
+            dist/scubagoggles-oscal-baseline-catalog-v${{ inputs.version }}.zip
           generate_release_notes: true
           fail_on_unmatched_files: true
