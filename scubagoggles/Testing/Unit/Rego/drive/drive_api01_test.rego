@@ -7,6 +7,9 @@ import data.utils.PassTestResult
 GoodDriveApi01 := {
     "policies": {
         "topOU": {
+            "drive_and_docs_external_file_warning": {
+                "highlightingEnabled": true
+            },
             "drive_and_docs_external_sharing": {
                 "accessCheckerSuggestions": "RECIPIENTS_ONLY",
                 "allowNonGoogleInvites": false,
@@ -40,6 +43,9 @@ GoodDriveApi01 := {
 BadDriveApi01 := {
     "policies": {
         "topOU": {
+            "drive_and_docs_external_file_warning": {
+                "highlightingEnabled": false
+            },
             "drive_and_docs_external_sharing": {
                 "accessCheckerSuggestions": "RECIPIENTS_OR_AUDIENCE_OR_PUBLIC",
                 "allowNonGoogleInvites": true,
@@ -320,5 +326,21 @@ test_DefaultAccess_Incorrect_2 if {
     value := "PRIMARY_AUDIENCE_WITH_LINK_OR_SEARCH"
     failedOU := [{"Name": "nextOU",
                  "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(value))}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_HighlightExternal_Correct_1 if {
+    PolicyId := DriveId1_9
+    Output := tests with input as GoodDriveApi01
+
+    PassTestResult(PolicyId, Output)
+}
+
+test_HighlightExternal_Incorrect_1 if {
+    PolicyId := DriveId1_9
+    Output := tests with input as BadDriveApi01
+
+    failedOU := [{"Name": "topOU",
+                 "Value": "Highlight external files is disabled."}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

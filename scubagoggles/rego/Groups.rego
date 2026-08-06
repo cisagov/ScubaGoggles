@@ -231,31 +231,48 @@ if {
 #
 # Baseline GWS.GROUPS.4.1
 #--
+
 GroupsId4_1 := utils.PolicyIdWithSuffix("GWS.GROUPS.4.1")
 
-NonComplianceMessage4_1(value) := sprintf("Group may be hidden: %s", [value])
+NonComplianceMessage4_1(canHideGroups, newGroupsHidden) := concat("; ", msgs) if {
+    msgs := array.concat(["Group owners can hide groups" | canHideGroups != false],
+                         ["New groups may be hidden" | newGroupsHidden != false])
+}
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage4_1(GetFriendlyYesNoBoolean(canHideGroups))
+    "Value": NonComplianceMessage4_1(canHideGroups, newGroupsHidden)
 } if {
     some OU, settings in input.policies
     GroupsEnabled(OU)
-    canHideGroups := settings.groups_for_business_groups_sharing.ownersCanHideGroups
-    canHideGroups != false
+
+    section := "groups_for_business_groups_sharing"
+    ownerSetting := "ownersCanHideGroups"
+    newGroupsSetting := "newGroupsAreHidden"
+
+    ownerHide := utils.GetApiSettingValue(section, ownerSetting, OU)
+    newGroups := utils.GetApiSettingValue(section, newGroupsSetting, OU)
+
+    ownerHideSet := utils.ApiSettingExists(section, ownerSetting, OU)
+    newGroupsSet := utils.ApiSettingExists(section, newGroupsSetting, OU)
+
+    canHideGroups := utils.AreBothTrue(ownerHide, ownerHideSet)
+    newGroupsHidden := utils.AreBothTrue(newGroups, newGroupsSet)
+
+    true in [canHideGroups, newGroupsHidden]
 }
 
 tests contains {
     "PolicyId": GroupsId4_1,
     "Prerequisites": [
         "policy/groups_for_business_service_status.serviceState",
-        "policy/groups_for_business_groups_sharing.ownersCanHideGroups"
+        "policy/groups_for_business_groups_sharing.ownersCanHideGroups",
+        "policy/groups_for_business_groups_sharing.newGroupsAreHidden"
     ],
     "Criticality": "Shall",
     "ReportDetails":utils.ReportDetails(NonCompliantOUs4_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs4_1},
-    "RequirementMet": Status,
-    "NoSuchEvent": false
+    "RequirementMet": Status
 }
 if {
     Status := count(NonCompliantOUs4_1) == 0

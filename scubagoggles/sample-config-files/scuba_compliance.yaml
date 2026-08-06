@@ -1,8 +1,9 @@
 description: |
-  This is a ScubaGoggles sample configuration file for compliance use.
-  In order to pass/omit certain policy checks made during a ScubaGoggles assessment run, necessary action
-  is required to provide specific values unique to both your organization and M365 tenant in the fields below.
-  Please read and understand the full ScubaGear configuration file documentation for both adding additional fields or modifying the fields below.
+  This is a ScubaGoggles sample configuration file for SCuBA compliance use.
+  In order to pass or omit certain policy checks made during a ScubaGoggles
+  assessment run, you must provide values unique to your organization and GWS
+  tenant in the fields below. Read the full configuration documentation before
+  adding or modifying fields:
   https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md
 
 # The list of GWS SCuBA baselines ScubaGoggles will assess.

@@ -320,7 +320,7 @@ DomainsWithAgencyContact contains DmarcRecord.domain if {
     ]
 
     # requires >= 2 rua tags that are correctly formed
-    # requires >= 1 ruf tag that is correctly formed 
+    # requires >= 1 ruf tag that is correctly formed
     count(ruaAddrs) >= 2
     count(rufAddrs) >= 1
 }
@@ -693,7 +693,7 @@ tests contains {
         "policy/gmail_links_and_external_images.applyFutureSettingsAutomatically",
         "policy/gmail_service_status.serviceState"
     ],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs6_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs6_4},
     "RequirementMet": Status,
@@ -973,7 +973,7 @@ tests contains {
         "policy/gmail_spoofing_and_authentication.applyFutureSettingsAutomatically",
         "policy/gmail_service_status.serviceState"
     ],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs7_7, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_7},
     "RequirementMet": Status,
@@ -1151,7 +1151,7 @@ tests contains {
         "policy/gmail_workspace_sync_for_outlook.enableGoogleWorkspaceSyncForMicrosoftOutlook",
         "policy/gmail_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs10_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs10_1},
     "RequirementMet": Status,
@@ -1192,7 +1192,7 @@ tests contains {
         "policy/gmail_auto_forwarding.enableAutoForwarding",
         "policy/gmail_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs11_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs11_1},
     "RequirementMet": Status,
@@ -1460,17 +1460,34 @@ if {
 
 GmailId17_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.17.1")
 
-# At this time we are unable to test because settings are configured in the GWS Admin Console
-# and not available within the generated logs
+NonComplianceMessage17_1 := "Comprehensive mail storage is disabled"
+
+NonCompliantOUs17_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage17_1
+}
+if {
+    some OU, settings in input.policies
+    GmailEnabled(OU)
+    mailStorage := settings.gmail_comprehensive_mail_storage.enabled
+    mailStorage != true
+}
+
 tests contains {
     "PolicyId": GmailId17_1,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
-    "NoSuchEvent": false
+    "Prerequisites": [
+        "policy/gmail_comprehensive_mail_storage.enabled",
+        "policy/gmail_service_status.serviceState"
+    ],
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs17_1, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs17_1},
+    "RequirementMet": Status
 }
+if {
+    Status := count(NonCompliantOUs17_1) == 0
+}
+
 #--
 
 ################

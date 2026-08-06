@@ -1,0 +1,25 @@
+description: |
+  Example ScubaGoggles configuration for customizing where assessment
+  reports are written and how output files are named. See
+  https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md#output-path-example
+
+orgname: Department of Example
+orgunitname: Subdepartment of Example
+
+baselines:
+  - commoncontrols
+  - gmail
+
+# Parent directory for all run output. Created automatically if it does not exist.
+# Can be absolute or relative to where you invoke scubagoggles.
+outputpath: ./scubagoggles-output
+
+# Name of the timestamped subfolder created under outputpath.
+outputfoldername: GWSBaselineConformance
+
+# Customize individual output file names (omit any key to use the default).
+outjsonfilename: ScubaResults
+outputproviderfilename: ProviderSettingsExport
+outputactionplanfilename: ActionPlan
+outputregofilename: TestResults
+outputreportfilename: BaselineReports

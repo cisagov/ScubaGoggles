@@ -57,7 +57,7 @@ tests contains {
         "policy/drive_and_docs_external_sharing.externalSharingMode",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_1, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_1},
     "RequirementMet": Status,
@@ -263,7 +263,7 @@ tests contains {
         "policy/drive_and_docs_external_sharing.allowNonGoogleInvitesInAllowlistedDomains",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_4, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_4},
     "RequirementMet": Status,
@@ -309,7 +309,7 @@ tests contains {
         "policy/drive_and_docs_external_sharing.allowPublishingFiles",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_5, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_5},
     "RequirementMet": Status,
@@ -407,7 +407,7 @@ tests contains {
         "policy/drive_and_docs_external_sharing.allowedPartiesForDistributingContent",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Shall",
+    "Criticality": "Should",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs1_7, []),
     "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_7},
     "RequirementMet": Status,
@@ -469,14 +469,28 @@ if {
 
 DriveId1_9 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.9")
 
+NonCompliantOUs1_9 contains {
+    "Name": OU,
+    "Value": "Highlight external files is disabled."
+}
+if {
+    some OU, settings in input.policies
+    DriveEnabled(OU)
+    HighlightEnabled := settings.drive_and_docs_external_file_warning.highlightingEnabled
+    HighlightEnabled != true
+}
+
 tests contains {
     "PolicyId": DriveId1_9,
-    "Prerequisites": [],
-    "Criticality": "Shall/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Prerequisites": ["policy/drive_and_docs_external_file_warning.highlightingEnabled"],
+    "Criticality": "Shall",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs1_9, []),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs1_9},
+    "RequirementMet": Status,
     "NoSuchEvent": false
+}
+if {
+    Status := count(NonCompliantOUs1_9) == 0
 }
 #--
 
@@ -733,7 +747,7 @@ tests contains {
         "policy/drive_and_docs_drive_for_desktop.restrictToAuthorizedDevices",
         "policy/drive_and_docs_service_status.serviceState"
     ],
-    "Criticality": "Should",
+    "Criticality": "Shall",
     "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, []),
     "ActualValue" : {"NonCompliantOUs": NonCompliantOUs5_1},
     "RequirementMet": Status,

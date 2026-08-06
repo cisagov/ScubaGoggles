@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: Setup OPA
       uses: open-policy-agent/setup-opa@v2
@@ -27,7 +27,7 @@ jobs:
       run: opa test scubagoggles/rego/*.rego scubagoggles/Testing/Unit/Rego/**/*.rego -v
 
     - name: Setup Regal
-      uses: StyraInc/setup-regal@v1
+      uses: open-policy-agent/setup-regal@v1
       with:
         version: 0.27.0
 

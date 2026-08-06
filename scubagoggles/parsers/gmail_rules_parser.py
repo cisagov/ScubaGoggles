@@ -31,7 +31,42 @@ class GmailRulesParser:
         PolicyAPI instance.
         """
 
-        self.gmail_rules(orgunit, section)
+        match section:
+
+            case 'gmail_blocked_sender_lists' | 'gmail_spam_override_lists':
+
+                self.gmail_rules(orgunit, section)
+
+            case 'gmail_comprehensive_mail_storage':
+
+                self.mail_storage(orgunit, section)
+
+    def mail_storage(self, orgunit: str, section: str):
+
+        """This is the custom parser for the GMail "comprehensive mail storage"
+        policy.
+
+        :param str orgunit: name of the orgunit being parsed.
+        :param str section: name of the policy section, which should be
+            "gmail_comprehensive_mail_storage".
+        """
+
+        ou_policies = self._policies[orgunit]
+
+        section_data = ou_policies.get(section)
+
+        if not section_data:
+            return
+
+        # The "comprehensive mail storage" enable state is stored in a rule
+        # referenced by a rule ID.  The enable state is added to the section
+        # to eliminate the indirection.
+
+        enabled_rules = self._enabled_rules(ou_policies)
+
+        section_data['enabled'] = section_data['ruleId'] in enabled_rules
+
+        return
 
     def gmail_rules(self, orgunit: str, section: str):
 
@@ -112,7 +147,8 @@ class GmailRulesParser:
         if section == spam_override_lists:
             self._gmail_domain_addr(section_data)
 
-    def _gmail_domain_addr(self, spam_override_section: dict):
+    @staticmethod
+    def _gmail_domain_addr(spam_override_section: dict):
 
         """This method parses spam override lists to find any domains
         specified in email address lists.  There are rules that dictate that
@@ -170,7 +206,7 @@ class GmailRulesParser:
 
             for override in spam_override_section['spamOverride']:
 
-                if not enable:
+                if not override.get(enable):
                     continue
 
                 domains_list = []

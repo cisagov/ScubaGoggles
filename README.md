@@ -15,9 +15,6 @@ Baseline [documents](https://github.com/cisagov/ScubaGoggles/blob/main/scubagogg
 
 For the Microsoft 365 (M365) rendition of this tool, see [ScubaGear](https://github.com/cisagov/ScubaGear).
 
-> [!WARNING]
-> This tool is in an alpha state and in active development. At this time, outputs could be incorrect and should be reviewed carefully.
-
 ## Overview
 We use a three-step process:
 1. **Export**. In this step, we primarily use the Google Admin SDK API to export and serialize all the relevant logs and settings into json. ScubaGoggles also uses various other Google APIs to grab organization metadata, user privileges etc.
@@ -35,6 +32,7 @@ We use a three-step process:
 ### Prerequisites
 
 - [Permissions](https://github.com/cisagov/ScubaGoggles/blob/main/docs/prerequisites/Prerequisites.md#permissions)
+- [Google Cloud APIs](https://github.com/cisagov/ScubaGoggles/blob/main/docs/prerequisites/Prerequisites.md#google-cloud-apis)
 - [Create a Project](https://github.com/cisagov/ScubaGoggles/blob/main/docs/prerequisites/Prerequisites.md#create-a-project)
 
 ### Authentication
@@ -53,10 +51,14 @@ We use a three-step process:
 
 ### Troubleshooting
 - [Not Authorized to Access This Resource](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#not-authorized-to-access-this-resource)
-- [macOS: Certificate Verification Error](https://github.com/cisagov/ScubaGoggles/blob/rl-getopa-macos-certs/docs/troubleshooting/Troubleshooting.md#macOS-certificate-verification-error)
+- [macOS: Certificate Verification Error](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#macOS-certificate-verification-error)
 - [WinError 10013 Permission Error](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#windows--winerror-10013-permission-error)
 - [Unable to view HTML report due to environment limitations](https://github.com/cisagov/ScubaGoggles/blob/main/docs/troubleshooting/Troubleshooting.md#unable-to-view-html-report-due-to-environment-limitations)
 - [ScubaGoggles lists failures for the SPF, DKIM, and DMARC policies (GWS.GMAIL.2 through GWS.GMAIL.4) even though you have published the applicable DNS records](/docs/troubleshooting/Troubleshooting.md#scubagoggles-lists-failures-for-the-spf-dkim-and-dmarc-policies-gwsgmail2-through-gwsgmail4-even-though-you-have-published-the-applicable-dns-records)
+
+### Automation
+
+- [ScubaConnect](https://github.com/cisagov/ScubaConnect) - ScubaConnect is cloud-native infrastructure, developed by CISA, that automates the execution of assessment tools ScubaGear and ScubaGoggles.
 
 ### Misc
 - [Mappings](docs/misc/mappings.md)

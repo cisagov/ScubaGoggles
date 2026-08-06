@@ -8,7 +8,8 @@ GoodGroupsApi04 := {
     "policies": {
         "topOU": {
             "groups_for_business_groups_sharing": {
-                "ownersCanHideGroups": false
+                "ownersCanHideGroups": false,
+                "newGroupsAreHidden": false
             },
             "groups_for_business_service_status": {"serviceState": "ENABLED"}
         }
@@ -22,9 +23,41 @@ BadGroupsApi04 := {
     "policies": {
         "topOU": {
             "groups_for_business_groups_sharing": {
-                "ownersCanHideGroups": true
+                "ownersCanHideGroups": true,
+                "newGroupsAreHidden": false
             },
             "groups_for_business_service_status": {"serviceState": "ENABLED"}
+        },
+        "nextOU": {
+            "groups_for_business_groups_sharing": {
+                "newGroupsAreHidden": true
+            }
+        },
+        "thirdOU": {
+            "groups_for_business_groups_sharing": {
+                "ownersCanHideGroups": false,
+                "newGroupsAreHidden": false
+            }
+        }
+    },
+    "tenant_info": {
+        "topLevelOU": "topOU"
+    }
+}
+
+BadGroupsApi04a := {
+    "policies": {
+        "topOU": {
+            "groups_for_business_groups_sharing": {
+                "ownersCanHideGroups": false,
+                "newGroupsAreHidden": true
+            },
+            "groups_for_business_service_status": {"serviceState": "ENABLED"}
+        },
+        "nextOU": {
+            "groups_for_business_groups_sharing": {
+                "ownersCanHideGroups": true
+            }
         }
     },
     "tenant_info": {
@@ -43,7 +76,20 @@ test_GroupsAPI_HiddenGroups_Incorrect_1 if {
     PolicyId := GroupsId4_1
     Output := tests with input as BadGroupsApi04
 
-    failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage4_1("Yes")}]
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage4_1(false, true)},
+                 {"Name": "topOU",
+                 "Value": NonComplianceMessage4_1(true, false)}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_GroupsAPI_HiddenGroups_Incorrect_2 if {
+    PolicyId := GroupsId4_1
+    Output := tests with input as BadGroupsApi04a
+
+    failedOU := [{"Name": "nextOU",
+                 "Value": NonComplianceMessage4_1(true, false)},
+                 {"Name": "topOU",
+                 "Value": NonComplianceMessage4_1(false, true)}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

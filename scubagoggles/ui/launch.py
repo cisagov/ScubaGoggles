@@ -25,23 +25,6 @@ def _find_free_port() -> int:
         s.bind(("localhost", 0))
         return s.getsockname()[1]
 
-def _prevent_streamlit_promotion() -> None:
-
-    """Streamlit self-promotes upon initial invocation, which is not
-    appropriate particularly for this application.  It can be avoided by
-    creating its "credentials" file with an empty email address.  This is
-    only done if the file doesn't already exist.
-    """
-
-    streamlit_dir = Path('~/.streamlit').expanduser()
-
-    streamlit_dir.mkdir(exist_ok=True, parents=True)
-
-    streamlit_config = streamlit_dir / 'credentials.toml'
-
-    if not streamlit_config.exists():
-        streamlit_config.write_text('[general]\nemail = ""\n',
-                                    encoding='utf-8')
 
 def _resolve_app_file() -> Path | None:
     """Return the path to the Streamlit app file."""
@@ -80,9 +63,9 @@ def _get_app_to_run() -> Path:
         print("Please ensure the UI modules are properly installed.")
         raise SystemExit(1)
     if not _is_streamlit_installed():
-        print("Streamlit is not installed!")
-        print("Please install requirements:")
-        print("  pip install -r requirements.txt")
+        print("Streamlit is required for the graphical user interface.")
+        print("Please install using this command (see documentation):")
+        print("  pip install scubagoggles[ui]")
         raise SystemExit(1)
     return app_to_run
 
@@ -101,6 +84,8 @@ def _build_streamlit_command(app_to_run: Path,
         "--server.port", str(port),
         "--server.headless", "false",
         "--browser.gatherUsageStats", "false",
+        "--server.showEmailPrompt", "false",
+        "--logger.hideWelcomeMessage", "true"
     ]
     # add extra option if dark option specified on command line
     if force_dark:
@@ -127,19 +112,10 @@ def _run_server(cmd: list[str], popen_kwargs: dict) -> None:
             _kill_process_tree(server_process.pid)
 
 
-def main() -> None:
+def launch_main(darkmode = False) -> None:
     """Launch the ScubaGoggles UI in the default web browser."""
 
-    parser = argparse.ArgumentParser(
-        description="ScubaGoggles Configuration UI (Streamlit)",
-    )
-    parser.add_argument(
-        "--dark",
-        action="store_true",
-        help="Force dark theme (overrides browser preference)",
-    )
-    args = parser.parse_args()
-    if args.dark:
+    if darkmode:
         os.environ["SCUBAGOGGLES_UI_DARK"] = "1"
 
     force_dark = os.environ.get(
@@ -151,9 +127,6 @@ def main() -> None:
     app_to_run = _get_app_to_run()
 
     cmd, port = _build_streamlit_command(app_to_run, force_dark)
-
-
-    _prevent_streamlit_promotion()
 
     popen_kwargs: dict = {}
     if sys.platform != "win32":
@@ -169,8 +142,27 @@ def main() -> None:
     )
     print(f"Opening http://localhost:{port} in your browser.")
     print("Press Ctrl+C to stop the server.\n")
-
     _run_server(cmd, popen_kwargs)
 
+
+def launch_from_ui_command(cli_args: argparse.Namespace) -> None:
+    """
+    Process the scuba ui commands
+    """
+    # currently --darkmode is the only ui subcommand
+    launch_main(darkmode = cli_args.darkmode)
+
+
 if __name__ == "__main__":
-    main()
+
+    parser = argparse.ArgumentParser(
+        description="ScubaGoggles Configuration UI (Streamlit)",
+    )
+    parser.add_argument(
+        "--dark",
+        action="store_true",
+        help="Force dark theme (overrides browser preference)",
+    )
+
+    args = parser.parse_args()
+    launch_main(darkmode = args.dark)
