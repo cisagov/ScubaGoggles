@@ -10,6 +10,17 @@ from scubagoggles.scuba_constants import DEFAULT_OSCAL_VERSION
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 GENERATOR_PATH = REPO_ROOT / "scubagoggles" / "utils" / "generate_oscal_baselines.py"
+OSCAL_GROUP_PART_NAMES = {"instruction", "overview"}
+OSCAL_CONTROL_PART_NAMES = {
+    "assessment",
+    "assessment-method",
+    "assessment-objective",
+    "example",
+    "guidance",
+    "objective",
+    "overview",
+    "statement",
+}
 
 
 def load_generator():
@@ -60,10 +71,14 @@ def prop_values(props, name):
     return [prop["value"] for prop in props if prop["name"] == name]
 
 
-def part_values(parts, name):
+def part_values(parts, name, title=None):
     """Return all prose values for a part name."""
 
-    return [part["prose"] for part in parts if part["name"] == name]
+    return [
+        part["prose"]
+        for part in parts
+        if part["name"] == name and (title is None or part.get("title") == title)
+    ]
 
 
 class GenerateOscalBaselinesTest:
@@ -130,6 +145,10 @@ class GenerateOscalBaselinesTest:
         assert len(controls) == summary["source_policies"]
 
         for baseline_group in catalog["groups"]:
+            assert all(
+                part["name"] in OSCAL_GROUP_PART_NAMES
+                for part in baseline_group.get("parts", [])
+            )
             source_baseline = prop_values(baseline_group["props"], "source-baseline")[0]
             group_controls = [
                 control
@@ -137,6 +156,11 @@ class GenerateOscalBaselinesTest:
                 for control in section_group.get("controls", [])
             ]
             assert len(group_controls) == source_policy_count(input_dir / source_baseline)
+            for section_group in baseline_group.get("groups", []):
+                assert all(
+                    part["name"] in OSCAL_GROUP_PART_NAMES
+                    for part in section_group.get("parts", [])
+                )
 
         assured_controls = next(
             group
@@ -155,20 +179,24 @@ class GenerateOscalBaselinesTest:
         )
         assert "Assured Controls Plus add-on" in part_values(
             assured_controls["parts"],
-            "assumptions",
+            "overview",
+            "Assumptions",
         )[0]
         assert 'The key words "MUST,"' in part_values(
             assured_controls["parts"],
-            "key-terminology",
+            "overview",
+            "Key Terminology",
         )[0]
         assert part_values(mfa_section["parts"], "overview")
         assert "FIDO2-compliant security keys" in part_values(
             mfa_section["parts"],
-            "prerequisites",
+            "instruction",
+            "Prerequisites",
         )[0]
         assert "Policy 1 Common Instructions" in part_values(
             mfa_section["parts"],
-            "implementation",
+            "instruction",
+            "Implementation",
         )[0]
 
         for control in controls:
@@ -181,6 +209,14 @@ class GenerateOscalBaselinesTest:
             assert control["id"] == generator.control_id_from_policy(policy_ids[0])
             assert len(mappings) == 1
             assert any(part["name"] == "statement" for part in control["parts"])
+            assert all(
+                part["name"] in OSCAL_CONTROL_PART_NAMES
+                for part in control.get("parts", [])
+            )
+            link_keys = [
+                (link["rel"], link["href"]) for link in control.get("links", [])
+            ]
+            assert len(link_keys) == len(set(link_keys))
             assert not {
                 "section-prerequisites",
                 "source-note",
@@ -199,11 +235,13 @@ class GenerateOscalBaselinesTest:
         ]
         phishing_implementation = part_values(
             phishing_resistant_mfa["parts"],
-            "implementation",
+            "guidance",
+            "Implementation",
         )[0]
         assert "Under Authentication" in phishing_implementation
         assert "Sign in to" not in phishing_implementation
         assert "FIDO2 Security Key" in part_values(
             phishing_resistant_mfa["parts"],
-            "policy-detail",
+            "guidance",
+            "Policy Detail",
         )[0]

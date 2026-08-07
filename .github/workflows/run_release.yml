@@ -30,7 +30,7 @@ jobs:
     env:
       PYTHON_VERSION: "3.12"
       RELEASE_VERSION: ${{ inputs.version }}
-      OSCAL_CLI_IMAGE: ghcr.io/metaschema-framework/oscal-cli:latest
+      OSCAL_CLI_VERSION: "3.2.0"
     permissions:
       contents: write
     steps:
@@ -40,6 +40,19 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+      - name: Set up Java
+        uses: actions/setup-java@v7
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install OSCAL CLI
+        shell: bash
+        run: |
+          OSCAL_CLI_ZIP="$RUNNER_TEMP/oscal-cli.zip"
+          curl --fail --location --retry 3 --output "$OSCAL_CLI_ZIP" \
+            "https://repo1.maven.org/maven2/dev/metaschema/oscal/oscal-cli-enhanced/${OSCAL_CLI_VERSION}/oscal-cli-enhanced-${OSCAL_CLI_VERSION}-oscal-cli.zip"
+          unzip -q "$OSCAL_CLI_ZIP" -d "$RUNNER_TEMP/oscal-cli"
+          echo "$RUNNER_TEMP/oscal-cli/bin" >> "$GITHUB_PATH"
       - name: Install Python dependencies
         run: pip install -r requirements.txt
       - name: Package Repo for release
@@ -64,10 +77,8 @@ jobs:
           expected_prefix="scubagoggles-v${RELEASE_VERSION}-oscal-catalog-oscal-"
           [[ "$CATALOG_FILE" == "${expected_prefix}"*.json ]] \
             || (echo "invalid OSCAL catalog filename: $CATALOG_FILE" && exit 1)
-          docker run --rm \
-            -v "$PWD:/workspace" \
-            "$OSCAL_CLI_IMAGE" \
-            validate "/workspace/dist/oscal-baseline-catalog/${CATALOG_FILE}"
+          oscal-cli --version
+          oscal-cli validate "dist/oscal-baseline-catalog/${CATALOG_FILE}"
           cd dist
           zip -r "scubagoggles-oscal-baseline-catalog-v${RELEASE_VERSION}.zip" oscal-baseline-catalog
       - name: release

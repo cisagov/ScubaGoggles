@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 env:
-  OSCAL_CLI_IMAGE: ghcr.io/metaschema-framework/oscal-cli:latest
+  OSCAL_CLI_VERSION: "3.2.0"
 
 jobs:
   generate-oscal:
@@ -24,6 +24,19 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+      - name: Set up Java
+        uses: actions/setup-java@v7
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install OSCAL CLI
+        shell: bash
+        run: |
+          OSCAL_CLI_ZIP="$RUNNER_TEMP/oscal-cli.zip"
+          curl --fail --location --retry 3 --output "$OSCAL_CLI_ZIP" \
+            "https://repo1.maven.org/maven2/dev/metaschema/oscal/oscal-cli-enhanced/${OSCAL_CLI_VERSION}/oscal-cli-enhanced-${OSCAL_CLI_VERSION}-oscal-cli.zip"
+          unzip -q "$OSCAL_CLI_ZIP" -d "$RUNNER_TEMP/oscal-cli"
+          echo "$RUNNER_TEMP/oscal-cli/bin" >> "$GITHUB_PATH"
       - name: Generate OSCAL baseline catalog
         run: |
           python3 scubagoggles/utils/generate_oscal_baselines.py \
@@ -54,10 +67,8 @@ jobs:
       - name: Validate OSCAL catalog schema
         run: |
           CATALOG_FILE="$(python3 -c "import json, pathlib; print(json.loads(pathlib.Path('dist/oscal-baseline-catalog/generation-summary.json').read_text(encoding='utf-8'))['output'])")"
-          docker run --rm \
-            -v "$PWD:/workspace" \
-            "$OSCAL_CLI_IMAGE" \
-            validate "/workspace/dist/oscal-baseline-catalog/${CATALOG_FILE}"
+          oscal-cli --version
+          oscal-cli validate "dist/oscal-baseline-catalog/${CATALOG_FILE}"
       - name: Upload generated OSCAL catalog
         uses: actions/upload-artifact@v4
         with:

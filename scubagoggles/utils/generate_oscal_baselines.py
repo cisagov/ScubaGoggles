@@ -248,7 +248,7 @@ def baseline_preamble_parts(preamble: str, baseline_id: str) -> list[JsonObject]
             part_name = slug(heading_title)
             parts.append(
                 make_part(
-                    part_name,
+                    "overview",
                     prose,
                     f"{baseline_id}_{part_name}",
                     heading_title,
@@ -709,11 +709,21 @@ def build_section_group(
         parts.append(make_part("overview", overview, f"{group_id}_overview"))
     if prerequisites:
         parts.append(
-            make_part("prerequisites", prerequisites, f"{group_id}_prerequisites")
+            make_part(
+                "instruction",
+                prerequisites,
+                f"{group_id}_prerequisites",
+                "Prerequisites",
+            )
         )
     if common_instructions:
         parts.append(
-            make_part("implementation", common_instructions, f"{group_id}_implementation")
+            make_part(
+                "instruction",
+                common_instructions,
+                f"{group_id}_implementation",
+                "Implementation",
+            )
         )
     if parts:
         section_group["parts"] = parts
@@ -751,6 +761,20 @@ def build_section_resource_links(
         )
         links.append({"href": "#" + resource_uuid, "rel": "reference", "text": link_title})
     return links
+
+
+def unique_links(links: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Return links with duplicate rel and href pairs removed."""
+
+    unique = []
+    seen: set[tuple[str, str]] = set()
+    for link in links:
+        key = (link["rel"], link["href"])
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(link)
+    return unique
 
 
 def build_policy_control(
@@ -807,20 +831,36 @@ def build_policy_control(
 
     parts = [make_part("statement", title_line, f"{control_id}_statement")]
     if policy_detail:
-        parts.append(make_part("policy-detail", policy_detail, f"{control_id}_policy_detail"))
+        parts.append(
+            make_part(
+                "guidance",
+                policy_detail,
+                f"{control_id}_policy_detail",
+                "Policy Detail",
+            )
+        )
     if rationale:
-        parts.append(make_part("rationale", rationale, f"{control_id}_rationale"))
+        parts.append(
+            make_part("guidance", rationale, f"{control_id}_rationale", "Rationale")
+        )
     if instructions:
-        parts.append(make_part("implementation", instructions, f"{control_id}_implementation"))
+        parts.append(
+            make_part(
+                "guidance",
+                instructions,
+                f"{control_id}_implementation",
+                "Implementation",
+            )
+        )
     if note:
-        parts.append(make_part("note", note, f"{control_id}_note"))
+        parts.append(make_part("guidance", note, f"{control_id}_note", "Note"))
 
     control = {
         "id": control_id,
         "class": "scuba-policy",
         "title": title_line,
         "props": props,
-        "links": threat_links(policy_block) + section_resource_links,
+        "links": unique_links(threat_links(policy_block) + section_resource_links),
         "parts": parts,
     }
     return control, len(mappings)
