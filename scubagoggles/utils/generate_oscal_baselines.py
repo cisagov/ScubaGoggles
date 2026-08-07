@@ -284,7 +284,7 @@ def parse_instructions(implementation: str) -> tuple[dict[str, str], str]:
 def make_prop(name: str, value: JsonValue, ns: str = SCUBA_NS) -> dict[str, str]:
     """Create an OSCAL property object."""
 
-    return {"name": name, "ns": ns, "value": str(value)}
+    return {"name": name, "value": str(value), "ns": ns}
 
 
 def make_part(

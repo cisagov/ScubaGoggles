@@ -71,6 +71,13 @@ def prop_values(props, name):
     return [prop["value"] for prop in props if prop["name"] == name]
 
 
+def assert_prop_order(props):
+    """Assert generated properties read as name, value, then namespace."""
+
+    for prop in props:
+        assert list(prop) == ["name", "value", "ns"]
+
+
 def part_values(parts, name, title=None):
     """Return all prose values for a part name."""
 
@@ -141,10 +148,12 @@ class GenerateOscalBaselinesTest:
 
         assert catalog["metadata"]["oscal-version"] == generator.DEFAULT_OSCAL_VERSION
         assert catalog["metadata"]["version"] == release_version
+        assert_prop_order(catalog["metadata"]["props"])
         assert len(catalog["groups"]) == len(discovered)
         assert len(controls) == summary["source_policies"]
 
         for baseline_group in catalog["groups"]:
+            assert_prop_order(baseline_group["props"])
             assert all(
                 part["name"] in OSCAL_GROUP_PART_NAMES
                 for part in baseline_group.get("parts", [])
@@ -157,6 +166,7 @@ class GenerateOscalBaselinesTest:
             ]
             assert len(group_controls) == source_policy_count(input_dir / source_baseline)
             for section_group in baseline_group.get("groups", []):
+                assert_prop_order(section_group["props"])
                 assert all(
                     part["name"] in OSCAL_GROUP_PART_NAMES
                     for part in section_group.get("parts", [])
@@ -200,6 +210,7 @@ class GenerateOscalBaselinesTest:
         )[0]
 
         for control in controls:
+            assert_prop_order(control["props"])
             policy_ids = prop_values(control["props"], "source-policy-id")
             mappings = prop_values(
                 control["props"],

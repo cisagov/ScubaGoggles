@@ -29,6 +29,10 @@ Generated OSCAL part objects are ordered for readability as `name`, optional
 meaning, but this order helps reviewers scan the OSCAL bucket, source Markdown
 label, stable identifier, and content in sequence.
 
+Generated SCuBA property objects are ordered as `name`, `value`, and then
+`ns`, so readers see the property label and value before the namespace that
+defines that label.
+
 ## Part Name Mapping
 
 The generator uses the following OSCAL part-name assumptions.
