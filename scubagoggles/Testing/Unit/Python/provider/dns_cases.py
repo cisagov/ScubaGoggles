@@ -17,7 +17,7 @@ GET_SPF_RECORDS_CASES = [
                     {
                         "query_name": "example.com",
                         "query_method": "traditional",
-                        "query_result": "Query returned 1 txt records",
+                        "query_result": "Query returned 1 SPF record",
                         "query_answers": ["v=spf1 include:_spf.google.com ~all"],
                     }
                 ],
@@ -31,7 +31,7 @@ GET_SPF_RECORDS_CASES = [
                     {
                         "query_name": "example.com",
                         "query_method": "traditional",
-                        "query_result": "Query returned 1 txt records",
+                        "query_result": "Query returned 1 SPF record",
                         "query_answers": ["v=spf1 include:_spf.google.com ~all"],
                     }
                 ],

@@ -358,40 +358,59 @@ class Provider:
         )
 
     def get_spf_records(self, domains: set) -> list:
-        """
-        Gets the SPF records for each domain in domains.
+
+        """Gets the SPF records for each domain in domains.
+
+        SPF records are specialized TXT records that begin with "v=spf1".
+        Only 1 SPF record is valid, although the query may return more
+        than one for a domain.
 
         :param domains: The list of domain names (strings).
         """
+
         results = []
-        for domain in domains:
-            compliant = False
-            local_message = ''
+
+        # Domains are sorted to have a consistent view in reporting.
+
+        for domain in sorted(domains):
+
             result = self._dns_client.query(domain)
 
-            if len(result['answers']) == 0:
-                local_message = "Domain exists but no answers returned."
+            # Extract only the SPF records from the result.  The other TXT
+            # records have nothing to do with SPF.
 
-            for spf_record in result['answers']:
-                if '~all' in spf_record:
-                    # pylint: disable=line-too-long
-                    local_message = "SPF record found, but it does not fail (either hard or soft fail) or redirect to one that does."
+            spf = [t for t in result['answers'] if t.startswith('v=spf1')]
 
-                if '-all' in spf_record:
-                    local_message = "SPF record found."
-                    compliant = True
+            # We're going to modify the log entry returned to make it specific
+            # to SPF.  If one query failed, there will be more than 1 log entry,
+            # but it's always the last (or only) one we're interested in
+            # modifying.
 
-            for query in result['log_entries']:
-                if 'NXDOMAIN' in query['query_result'].upper():
-                    local_message = "Domain does not exist."
+            log_entry = result['log_entries'][-1]
+            log_entry['query_answers'] = spf
 
-            results.append({
-                'domain': domain,
-                'compliant': compliant,
-                'message': local_message,
-                'rdata': result['answers'],
-                'log': result['log_entries'],
-            })
+            spf_count = len(spf)
+
+            if spf_count != 0:
+
+                log = (f'Query returned {spf_count} SPF record'
+                    f'{"s" if spf_count > 1 else ""}')
+
+                log_entry['query_result'] = log
+
+            elif (len(result['answers']) > 0
+                  or '0 txt' in log_entry['query_result'].lower()):
+
+                # This is the case where either the domain has no TXT records
+                # or this is no SPF record.  The query was successful in this
+                # case.
+
+                log_entry['query_result'] = 'Query returned no SPF records'
+
+            results.append({'domain': domain,
+                            'rdata': spf,
+                            'log': result['log_entries']})
+
         return results
 
     def get_dkim_records(self, domains: set) -> list:
