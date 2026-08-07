@@ -233,11 +233,24 @@ class GenerateOscalBaselinesTest:
         assert part_values(phishing_resistant_mfa["parts"], "statement") == [
             "Phishing-Resistant MFA SHALL be required for all users."
         ]
+        statement_part = next(
+            part
+            for part in phishing_resistant_mfa["parts"]
+            if part["name"] == "statement"
+        )
+        assert list(statement_part) == ["name", "id", "prose"]
         phishing_implementation = part_values(
             phishing_resistant_mfa["parts"],
             "guidance",
             "Implementation",
         )[0]
+        implementation_part = next(
+            part
+            for part in phishing_resistant_mfa["parts"]
+            if part["name"] == "guidance"
+            and part.get("title") == "Implementation"
+        )
+        assert list(implementation_part) == ["name", "title", "id", "prose"]
         assert "Under Authentication" in phishing_implementation
         assert "Sign in to" not in phishing_implementation
         assert "FIDO2 Security Key" in part_values(

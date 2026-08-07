@@ -295,11 +295,12 @@ def make_part(
 ) -> JsonObject:
     """Create an OSCAL part object when prose is available."""
 
-    part = {"name": name, "prose": prose}
-    if part_id:
-        part["id"] = part_id
+    part = {"name": name}
     if title:
         part["title"] = title
+    if part_id:
+        part["id"] = part_id
+    part["prose"] = prose
     return part
 
 

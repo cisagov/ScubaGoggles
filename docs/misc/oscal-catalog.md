@@ -24,6 +24,11 @@ names such as `overview`, `instruction`, `guidance`, and `statement`, then
 preserves the source Markdown heading in `part.title` and a stable source-based
 identifier in `part.id`.
 
+Generated OSCAL part objects are ordered for readability as `name`, optional
+`title`, `id`, and then `prose`. JSON object order does not change the OSCAL
+meaning, but this order helps reviewers scan the OSCAL bucket, source Markdown
+label, stable identifier, and content in sequence.
+
 ## Part Name Mapping
 
 The generator uses the following OSCAL part-name assumptions.
