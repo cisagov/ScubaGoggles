@@ -76,14 +76,27 @@ running ScubaGoggles.
 > [!NOTE]
 > If you are interested in contributing to ScubaGoggles or for any reason need to install the latest development code, please see the [Development Guide](../development/DEVELOPMENTGUIDE.md) for instructions on setting up ScubaGoggles for development. Otherwise, continue with the instructions below.
 >
->pip is not installed by default on LinuxOS. If pip is not installed in your environment, please visit [pip website](https://pip.pypa.io/en/stable/installation/) for instructions on how to download and install pip.
+>pip may not be installed by default on LinuxOS. If pip is not installed in your environment, please visit [pip website](https://pip.pypa.io/en/stable/installation/) for instructions on how to download and install pip.
 
 To install ScubaGoggles:
 1. If you are using a virtual environment, ensure your environment is activated by running the appropriate command from the previous section.
-2. Next, run the following command. Depending on your system, you may also need to substitute `pip` with `pip3`.
-```
-pip install scubagoggles
-```
+2. Next, run the following command. Depending on your system, you may
+   also need to substitute `pip` with `pip3`.
+
+   ```
+   pip install scubagoggles
+   ```
+3. If you want to run the Configuration UI (user interface), use the following
+   command instead of, or in addition to, the command above to install the
+   additional packages required by the UI.
+
+   ```
+   pip install scubagoggles[ui]
+   ```
+
+   *NOTE: if you are installing ScubaGoggles using a downloaded "wheel" file,
+   add the "[ui]" at the end of the file specification:
+   `pip install scubagoggles-1.0.0-py3-none-any.whl[ui]`*
 
 At this point, ScubaGoggles will be installed, but additional setup
 steps are necessary before it can be used. Continue to [Download the OPA executable](OPA.md)

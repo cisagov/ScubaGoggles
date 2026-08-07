@@ -74,16 +74,16 @@ class ScubaArgumentParser:
 
         self._start_logging(args)
 
-        if 'breakglassaccounts' not in args or args.breakglassaccounts is None:
+        if 'breakglassaccounts' not in vars(args) or args.breakglassaccounts is None:
             args.breakglassaccounts = []
 
-        if 'imapexclusions' not in args or args.imapexclusions is None:
+        if 'imapexclusions' not in vars(args) or args.imapexclusions is None:
             args.imapexclusions = []
 
-        if 'sitesexclusions' not in args or args.sitesexclusions is None:
+        if 'sitesexclusions' not in vars(args) or args.sitesexclusions is None:
             args.sitesexclusions = []
 
-        if not 'config' in args or not args.config:
+        if not 'config' in vars(args) or not args.config:
             return args
 
         # Create a mapping of the short param aliases to the long form
@@ -108,13 +108,88 @@ class ScubaArgumentParser:
             # command-line arg takes precedence
             if param in cli_args:
                 continue
-            vars(args)[param] = config[param]
+            vars(args)[param] = self._validate_argument(param, config[param])
 
         # Check for logical errors in the resulting configuration
         self.validate_config(args)
 
         # Return the args (argparse.Namespace)
         return args
+
+    def _validate_argument(self, param, value):
+        """Validate a config value using its argparse action, if it has one."""
+        action = self._find_action(self.parser, param)
+        if action is None:
+            # Config files also support settings that are not CLI arguments.
+            return value
+
+        values = value
+        takes_list = action.nargs == '+'
+        if takes_list:
+            if not isinstance(value, list):
+                raise RuntimeError(
+                    f'Config file parameter "{param}" must be a list'
+                )
+            if action.nargs == '+' and not value:
+                raise RuntimeError(
+                    f'Config file parameter "{param}" must contain at least '
+                    'one value'
+                )
+        else:
+            values = [value]
+
+        validated_values = []
+        for item in values:
+            validated_value = self._validate_argument_value(param, item, action)
+            validated_values.append(validated_value)
+
+        if takes_list:
+            return validated_values
+        return validated_values[0]
+
+    @classmethod
+    def _find_action(cls, parser, param):
+        """Find an argparse action by destination, including subparsers."""
+        for action in parser._actions:  # pylint: disable=protected-access
+            if action.dest == param:
+                return action
+            if isinstance(action, argparse._SubParsersAction):  # pylint: disable=protected-access
+                for subparser in action.choices.values():
+                    match = cls._find_action(subparser, param)
+                    if match is not None:
+                        return match
+        return None
+
+    @staticmethod
+    def _validate_argument_value(param, value, action):
+        """Validate and convert one config value using an argparse action."""
+        if isinstance(action, (argparse._StoreTrueAction,  # pylint: disable=protected-access
+                               argparse._StoreFalseAction)):  # pylint: disable=protected-access
+            expected_type = bool
+        elif action.type is path_parser:
+            if not isinstance(value, (str, Path)):
+                raise RuntimeError(
+                    f'Config file parameter "{param}" must be a path string'
+                )
+            return path_parser(value)
+        else:
+            expected_type = action.type or str
+
+        if (not isinstance(value, expected_type)
+                or (expected_type is int and isinstance(value, bool))):
+            raise RuntimeError(
+                f'Config file parameter "{param}" must be of type '
+                f'{expected_type.__name__}'
+            )
+
+        if action.choices is not None and value not in action.choices:
+            choices = ', '.join(repr(choice) for choice in action.choices)
+            raise RuntimeError(
+                f'Invalid choice for config file parameter "{param}": '
+                f'{value!r} (choose from {choices})'
+            )
+
+        return value
 
     @classmethod
     def _get_explicit_cli_args(cls, args : argparse.Namespace) -> dict:
@@ -159,32 +234,32 @@ class ScubaArgumentParser:
                               'regopath')
 
         for option_name in path_value_options:
-            if option_name in args:
+            if option_name in vars(args):
                 option_value = getattr(args, option_name)
                 if not isinstance(option_value, Path) and option_value is not None:
                     setattr(args, option_name, path_parser(option_value))
 
-        if 'omitpolicy' in args:
+        if 'omitpolicy' in vars(args):
             ScubaArgumentParser.validate_omissions(args)
 
-        if 'annotatepolicy' in args:
+        if 'annotatepolicy' in vars(args):
             ScubaArgumentParser.validate_annotations(args)
 
-        if 'imapexclusions' in args:
+        if 'imapexclusions' in vars(args):
             ScubaArgumentParser.validate_imap_exclusions(args)
 
-        if 'sitesexclusions' in args:
+        if 'sitesexclusions' in vars(args):
             ScubaArgumentParser.validate_sites_exclusions(args)
 
         # We want OrgName to be in PascalCase for consistency with ScubaGear.
         # But as all other options for ScubaGoggles are all lowercase, make
         # ScubaGoggles accept either orgname or OrgName to make things more
         # user friendly
-        if 'orgname' in args:
+        if 'orgname' in vars(args):
             vars(args)['OrgName'] = args.orgname
             del vars(args)['orgname']
 
-        if 'orgunitname' in args:
+        if 'orgunitname' in vars(args):
             vars(args)['OrgUnitName'] = args.orgunitname
             del vars(args)['orgunitname']
 

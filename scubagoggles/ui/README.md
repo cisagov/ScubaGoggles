@@ -60,8 +60,8 @@ The application consolidates all configuration capabilities into a single, profe
 ### Install Dependencies
 
 ```bash
-# Install all requirements including UI dependencies (from the ScubaGoggles directory)
-pip install -r requirements.txt
+# Install the additional UI dependencies
+pip install scubagoggles[ui]
 ```
 
 ## Usage
@@ -70,7 +70,7 @@ pip install -r requirements.txt
 
 ```bash
 # From the ScubaGoggles root directory
-scubagoggles ui 
+scubagoggles ui
 ```
 
 This will start the Streamlit server and open the app in your default web browser. Dark mode is automatically detected from your browser's preferred color scheme via CSS media queries. It can additionally be specified from the command line by running:

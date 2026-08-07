@@ -19,5 +19,18 @@
       "pattern": "^/",
       "replacement": "{{BASEURL}}/"
     }
-  ]
+  ],
+  "httpHeaders": [
+    {
+      "urls": ["https://support.google.com"],
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Accept-Encoding": "gzip, deflate, br"
+      }
+    }
+  ],
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "15s",
+  "timeout": "20s"
 }

@@ -1,0 +1,50 @@
+# Purpose: Approve a pull request. The token identity must differ from the
+# PR author for the approval to count toward branch protection.
+# Can be called by other workflows or run manually via workflow_dispatch
+# with a PR URL (useful for existing Dependabot/OPA PRs).
+
+name: Auto-approve PR
+
+on:
+  workflow_call:
+    inputs:
+      pr-url:
+        description: "URL of the PR to approve"
+        required: true
+        type: string
+    secrets:
+      client_id:
+        description: "Client ID for the auto-reviewer GitHub App"
+        required: true
+      private_key:
+        description: "Private key for the auto-reviewer GitHub App"
+        required: true
+  workflow_dispatch:
+    inputs:
+      pr-url:
+        description: "URL of the PR to approve"
+        required: true
+        type: string
+
+permissions:
+  pull-requests: write
+
+jobs:
+  approve:
+    name: Approve PR
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Generate auto-reviewer token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          # workflow_call passes mapped secrets; workflow_dispatch uses repo secrets
+          client-id: ${{ secrets.client_id || secrets.SCUBA_AUTO_REVIEWER_CLIENT_ID }}
+          private-key: ${{ secrets.private_key || secrets.SCUBA_AUTO_REVIEWER_PRIVATE_KEY }}
+
+      - name: Approve PR
+        run: gh pr review --approve "${{ inputs.pr-url }}"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
