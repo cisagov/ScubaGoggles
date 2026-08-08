@@ -196,7 +196,8 @@ class Provider:
                  svc_account_email: str = None,
                  dns_resolvers: list = None,
                  doh_servers: list = None,
-                 skip_doh: bool = False):
+                 skip_doh: bool = False,
+                 oauth_bind_addr: str = None):
 
         """Initialize the Provider.
 
@@ -213,9 +214,11 @@ class Provider:
             for DoH queries.           
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.
+        :param oauth_bind_addr: (optional) the bind address to use for oauth 
+            authentication.
         """
 
-        self._gws_auth = GwsAuth(credentials_file, metadata_auth, svc_account_email)
+        self._gws_auth = GwsAuth(credentials_file, metadata_auth, svc_account_email, oauth_bind_addr)
         self._credentials = self._gws_auth.credentials
         self._services = {}
         self._customer_id = customer_id
