@@ -1,39 +1,48 @@
 # syntax=docker/dockerfile:1
 
-ARG PYTHON_VERSION=3.12
 
-FROM python:${PYTHON_VERSION}-slim AS runtime
+# TODO: This used pinned SHAs. Renovate or similar can be added right after this so version bumps
+# are tracked automatically. 
+ARG PYTHON_REF=3.12-slim@sha256:dd4fe98ab39f91e936f8e7e7a65a3ce59ecfb11e32f9a125b3132779920ba7f7
+ARG OPA_REF=1.17.1-static@sha256:c29f8ee8dbe66608a1c04e9be84b04efc46877625e6b0877e559954565209efc
+
+FROM openpolicyagent/opa:${OPA_REF} AS opa
+
+FROM python:${PYTHON_REF} AS builder
+
+WORKDIR /src
+
+COPY pyproject.toml ./
+
+COPY . .
+
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip wheel --no-deps --wheel-dir /wheels .
+
+FROM python:${PYTHON_REF} AS runtime
+
+COPY --from=opa --chown=root:root --chmod=0755 /opa /usr/local/bin/opa
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1 \
-    SCUBAGOGGLES_OPA_DIR=/opt/opa \
-    SCUBAGOGGLES_OUTPUT_PATH=/output
+    PIP_NO_CACHE_DIR=1 
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-COPY scubagoggles-src /tmp/scubagoggles-src
-COPY opa-bin/opa /tmp/opa
+COPY --from=builder /wheels/*.whl /tmp/
+RUN pip install --no-cache-dir /tmp/*.whl
 
-RUN python -m pip install --upgrade pip setuptools wheel \
-    && python -m pip install /tmp/scubagoggles-src \
-    && mkdir -p /opt/opa /output \
-    && install -m 0755 /tmp/opa /opt/opa/opa \
-    && /opt/opa/opa version \
-    && rm -rf /tmp/scubagoggles-src /tmp/opa
-
-COPY entrypoint.sh /usr/local/bin/scubagoggles-access-token-entrypoint
-
-RUN chmod 0755 /usr/local/bin/scubagoggles-access-token-entrypoint \
-    && groupadd --system scuba \
+RUN groupadd --system scuba \
     && useradd --system --gid scuba --home-dir /home/scuba --create-home scuba \
-    && chown -R scuba:scuba /home/scuba /opt/opa /output
+    && mkdir /output \
+    && chown -R scuba:scuba /home/scuba /output
 
 USER scuba
 WORKDIR /output
+
 VOLUME ["/output"]
 
-ENTRYPOINT ["scubagoggles-access-token-entrypoint"]
+ENTRYPOINT ["scubagoggles"]
 CMD []
