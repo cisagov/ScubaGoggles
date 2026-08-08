@@ -70,7 +70,7 @@ jobs:
           oscal-cli --version
           oscal-cli validate "dist/oscal-baseline-catalog/${CATALOG_FILE}"
       - name: Upload generated OSCAL catalog
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: oscal-baseline-catalog
           path: dist/oscal-baseline-catalog/
