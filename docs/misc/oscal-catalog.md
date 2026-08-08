@@ -53,55 +53,138 @@ The generator uses the following OSCAL part-name assumptions.
 
 ## Markdown to OSCAL Cross-Walk
 
-The table below summarizes how source Markdown content is represented in the
-generated OSCAL catalog.
+The tables below summarize how source Markdown content is represented in the
+generated OSCAL catalog. They are split by catalog layer so the documentation
+stays readable in GitHub's Markdown view.
 
-| Markdown source | OSCAL object/path | Notes |
-| --- | --- | --- |
-| `scubagoggles/baselines/README.md` baseline list | `catalog.groups[]` | The README controls which baseline files are included and the order of the top-level catalog groups. |
-| Generated release version | `catalog.metadata.version` and generated filename | Release workflows pass the ScubaGoggles version into the catalog metadata and filename. |
-| OSCAL version constant | `catalog.metadata.oscal-version` and generated filename | The OSCAL version is defined by `DEFAULT_OSCAL_VERSION` in `scubagoggles/scuba_constants.py`. |
-| Baseline title and file name | `catalog.groups[].title`, `catalog.groups[].props[name=source-baseline]`, `catalog.groups[].links[rel=source]` | Each README-listed baseline becomes one top-level catalog group. |
-| Baseline introduction before `## Assumptions` | `catalog.groups[].parts[name=overview]` | Preserves introductory baseline context that is not part of a numbered policy section. |
-| Baseline preamble sections, such as `## Assumptions` and `## Key Terminology` | `catalog.groups[].parts[name=overview,title=Assumptions]`, `catalog.groups[].parts[name=overview,title=Key Terminology]` | Preserves baseline-level sections as titled OSCAL overview parts for downstream human-readable rendering. |
-| Numbered Markdown section, such as `## 1. Phishing-Resistant Multifactor Authentication` | `catalog.groups[].groups[]` | Each numbered baseline section becomes a nested catalog group. |
-| Section overview text before `### Policies` | `catalog.groups[].groups[].parts[name=overview]` | The section-level overview is stored once on the section group. Child controls inherit that context through the catalog hierarchy. |
-| `### Policies` block | `catalog.groups[].groups[].controls[]` | Each SCuBA policy in the section becomes one OSCAL control. |
-| Policy heading, such as `#### GWS.COMMONCONTROLS.1.1v1` | `control.props[name=source-policy-id]` and derived `control.id` | The original SCuBA policy ID is preserved as a property. The OSCAL control ID is a normalized form, such as `gws.commoncontrols.1.1v1`. |
-| First non-badge line after the policy heading | `control.title` and `control.parts[name=statement]` | The main policy statement is stored as the authoritative statement part to support future OSCAL-to-Markdown conversion. |
-| Additional policy detail before `_Rationale:_` | `control.parts[name=guidance,title=Policy Detail]` | Extra explanatory policy content is kept separate from the main policy statement. |
-| Automated, manual, log-based, or configurable badge | `control.props[name=automated-check]`, `control.props[name=manual-check]`, `control.props[name=log-based-check]`, `control.props[name=configurable]` | Badge state is converted to boolean-like string properties. |
-| `_Rationale:_` | `control.parts[name=guidance,title=Rationale]` | Preserves the rationale as human-readable OSCAL prose. |
-| `_Last modified:_` | `control.props[name=last-modified]` | Preserves the Markdown policy modification date. |
-| `_Note:_` | `control.parts[name=guidance,title=Note]` | Notes are represented as readable prose on the policy control. |
-| `_NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_` | `control.props[name=nist-sp800-53-rev5-fedramp-high-mapping]` | Multiple source mappings remain attached to the same SCuBA policy control. |
-| Multiple NIST/FedRAMP mappings for one policy | `control.props[name=source-control-mapping-count]` | Records the number of mappings when the policy maps to more than one NIST SP 800-53 control or statement. |
-| MITRE ATT&CK links | `control.links[rel=threat-mapping]` | ATT&CK technique links stay attached to the relevant policy control. |
-| `### Resources` links and section overview links | `catalog.back-matter.resources[]` and `control.links[rel=reference]` | Shared references are de-duplicated in back matter and linked from applicable controls. |
-| Embedded baseline images, such as `<img src="images/MFA.PNG">` | `catalog.back-matter.resources[]` and `control.links[rel=reference]` | Embedded source images are preserved as reference resources. |
-| `### Prerequisites` | `catalog.groups[].groups[].parts[name=instruction,title=Prerequisites]` | Section prerequisites are represented once on the section group. Child controls inherit that context through the catalog hierarchy. |
-| Common implementation instructions | `catalog.groups[].groups[].parts[name=instruction,title=Implementation]` | Common instructions are stored once at section level. Policy controls only store policy-specific implementation guidance. |
-| Policy-specific implementation instructions | `control.parts[name=guidance,title=Implementation]` | Policy implementation guidance is stored as readable OSCAL prose on the policy control. |
+### Catalog Inputs
+
+| Markdown or input | OSCAL representation |
+| --- | --- |
+| Baseline README list | Creates ordered top-level `catalog.groups[]`. |
+| Generated release version | Stored in `catalog.metadata.version` and the generated filename. |
+| OSCAL version constant | Stored in `catalog.metadata.oscal-version` and the generated filename. |
+
+The baseline list comes from `scubagoggles/baselines/README.md`.
+The OSCAL version is defined by `DEFAULT_OSCAL_VERSION` in
+`scubagoggles/scuba_constants.py`.
+
+### Baseline Groups
+
+| Markdown source | OSCAL representation |
+| --- | --- |
+| Baseline title and file name | Each README-listed baseline becomes one top-level group. |
+| Baseline title | Stored in `catalog.groups[].title`. |
+| Source Markdown filename | Stored in a `source-baseline` property. |
+| Source Markdown file | Linked from the baseline group with `rel=source`. |
+| Baseline introduction | Stored as an `overview` part on the baseline group. |
+| Baseline preamble sections | Stored as titled `overview` parts on the baseline group. |
+
+Examples of baseline preamble sections include `## Assumptions` and
+`## Key Terminology`.
+
+### Section Groups
+
+| Markdown source | OSCAL representation |
+| --- | --- |
+| Numbered Markdown section | Becomes a nested group under the baseline group. |
+| Section heading | Stored in the section group's `title`. |
+| Section overview text | Stored once as an `overview` part on the section group. |
+| `### Prerequisites` | Stored once as an `instruction` part titled `Prerequisites`. |
+| Common implementation instructions | Stored once as an `Implementation` instruction. |
+
+Section-level overview, prerequisites, and common implementation guidance are
+not repeated on every child control. OSCAL consumers should read them from the
+containing section group.
+
+For example, `## 1. Phishing-Resistant Multifactor Authentication` becomes a
+nested section group.
+
+### Policy Controls
+
+| Markdown source | OSCAL representation |
+| --- | --- |
+| `### Policies` block | Each SCuBA policy becomes one OSCAL control. |
+| Policy heading | The normalized value becomes `control.id`. |
+| Original SCuBA policy ID | Preserved in a `source-policy-id` property. |
+| Main policy sentence | Stored in `control.title` and a `statement` part. |
+| Additional policy detail | Stored as a `guidance` part titled `Policy Detail`. |
+| `_Rationale:_` | Stored as a `guidance` part titled `Rationale`. |
+| `_Note:_` | Stored as a `guidance` part titled `Note`. |
+| Policy-specific implementation | Stored as a `guidance` part titled `Implementation`. |
+
+The main policy statement is stored in both `control.title` and
+`control.parts[name=statement]`. The statement part is the authoritative copy for
+future OSCAL-to-Markdown conversion.
+
+### Policy Properties and Links
+
+| Markdown source | OSCAL representation |
+| --- | --- |
+| Policy badges | Converted to boolean-like string properties. |
+| `_Last modified:_` | Stored in a `last-modified` property. |
+| FedRAMP/NIST mapping line | Stored in a FedRAMP High mapping property. |
+| Multiple NIST/FedRAMP mappings | Counted in a source mapping count property. |
+| MITRE ATT&CK links | Stored as `threat-mapping` links on the control. |
+| Resource links | Stored in back matter and linked as references. |
+| Embedded baseline images | Preserved as back-matter resources and reference links. |
+
+Shared references are de-duplicated in back matter and linked from applicable
+controls.
+This includes `### Resources` links, section overview links, and embedded
+source images such as `<img src="images/MFA.PNG">`.
+
+The FedRAMP High mapping property name is
+`nist-sp800-53-rev5-fedramp-high-mapping`.
 
 ## Policy Example
 
-The table below shows a concrete mapping for
+The example below shows a concrete mapping for
 `GWS.ASSUREDCONTROLS.1.1v1` from `assuredcontrols.md`.
 
-| Field | Markdown | OSCAL example |
-| --- | --- | --- |
-| Baseline | `assuredcontrols.md` | `catalog.groups[id=gws-assuredcontrols].title = "Google Workspace Assured Controls Baseline"` |
-| Section | `## 1. Google Support Staff Data Access` | `catalog.groups[].groups[id=gws-assuredcontrols-section-1].title = "1. Google Support Staff Data Access"` |
-| Section overview | Text before `### Policies` describing Google support staff data access mechanisms | `catalog.groups[].groups[].parts[name=overview].prose` contains that section overview once on the section group |
-| Section prerequisites | `### Prerequisites` lists the Assured Controls and Access Management licensing assumptions | `catalog.groups[].groups[].parts[name=instruction,title=Prerequisites].prose` stores those prerequisites once on the section group |
-| Policy ID | `#### GWS.ASSUREDCONTROLS.1.1v1` | `control.id = "gws.assuredcontrols.1.1v1"` and `control.props[name=source-policy-id].value = "GWS.ASSUREDCONTROLS.1.1v1"` |
-| Statement | `Access Approvals SHOULD be enabled.` | `control.title = "Access Approvals SHOULD be enabled."` and `control.parts[name=statement].prose = "Access Approvals SHOULD be enabled."` |
-| Rationale | `_Rationale:_ Unauthorized access to data increases the risk of exposing sensitive data to untrusted entities...` | `control.parts[name=guidance,title=Rationale].prose` contains the full rationale |
-| Last modified | `_Last modified:_ November 2025` | `control.props[name=last-modified].value = "November 2025"` |
-| NIST mapping | `_NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)` | `control.props[name=nist-sp800-53-rev5-fedramp-high-mapping].value = "SC-7(10)(a)"` |
-| MITRE ATT&CK mappings | `T1530`, `T1537`, and `T1589` links in the policy mapping list | `control.links[rel=threat-mapping]` contains links for `MITRE ATT&CK T1530`, `T1537`, and `T1589` |
-| Check badges | Automated Check and Log-Based Check badges | `control.props[name=automated-check].value = "true"` and `control.props[name=log-based-check].value = "true"` |
-| Implementation | `#### GWS.ASSUREDCONTROLS.1.1v1 Instructions` with the Access Approvals steps | `control.parts[name=guidance,title=Implementation].prose` contains the policy-specific implementation steps |
+### Example Identity
+
+| Field | Example |
+| --- | --- |
+| Baseline Markdown | `assuredcontrols.md` |
+| Baseline group title | `Google Workspace Assured Controls Baseline` |
+| Section Markdown | `## 1. Google Support Staff Data Access` |
+| Section group title | `1. Google Support Staff Data Access` |
+| Policy Markdown | `#### GWS.ASSUREDCONTROLS.1.1v1` |
+| OSCAL control ID | `gws.assuredcontrols.1.1v1` |
+
+The original policy ID is also preserved in a `source-policy-id` property with
+the value `GWS.ASSUREDCONTROLS.1.1v1`.
+
+### Example Inherited Context
+
+| Markdown content | OSCAL representation |
+| --- | --- |
+| Section overview text | Stored once in the section group's `overview` part. |
+| `### Prerequisites` | Stored once in an `instruction` part titled `Prerequisites`. |
+
+In this example, the section overview describes Google support staff data access
+mechanisms, and the prerequisites describe licensing assumptions.
+
+### Example Policy Content
+
+| Markdown content | OSCAL representation |
+| --- | --- |
+| `Access Approvals SHOULD be enabled.` | Stored in `control.title` and the `statement` part. |
+| `_Rationale:_ Unauthorized access to data increases...` | Stored in `guidance` titled `Rationale`. |
+| Policy implementation instructions | Stored in `guidance` titled `Implementation`. |
+
+### Example Policy Metadata
+
+| Markdown content | OSCAL representation |
+| --- | --- |
+| `_Last modified:_ November 2025` | `last-modified = "November 2025"` |
+| FedRAMP High mapping | `SC-7(10)(a)` |
+| MITRE ATT&CK links | Stored as `threat-mapping` links on the control. |
+| Automated Check badge | `automated-check = "true"` |
+| Log-Based Check badge | `log-based-check = "true"` |
+
+The example MITRE ATT&CK links are `T1530`, `T1537`, and `T1589`.
 
 ## Hierarchy and Flattening
 
