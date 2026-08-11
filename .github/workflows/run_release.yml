@@ -16,7 +16,7 @@ on:
         required: true
         type: string
       compareHeadRef:
-        description: "Compare head ref (branch or tag) for release notes, e.g. main or release/1.0.0. Defaults to the branch selected when running the workflow."
+        description: "Compare head ref (branch, tag, or SHA) for release notes, e.g. main or release/1.0.0. Defaults to the commit SHA of the workflow run."
         required: false
         type: string
         default: ""
@@ -395,9 +395,9 @@ jobs:
 
               core.info(
                 `Tag ${currentTag} does not exist yet (expected before publish). ` +
-                  `Using branch ${context.ref_name} as the compare head.`
+                  `Using commit ${context.sha} as the compare head.`
               );
-              return context.ref_name;
+              return context.sha;
             }
 
             async function listMergedPullRequests(previousTag, currentTag, compareHeadRefInput) {
