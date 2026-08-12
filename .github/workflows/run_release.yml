@@ -41,6 +41,8 @@ jobs:
     env:
       PYTHON_VERSION: "3.12"
       RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_NAME: ${{ inputs.releaseName }}
+      COMPARE_HEAD_REF: ${{ inputs.compareHeadRef }}
     permissions:
       contents: write
     steps:
@@ -57,7 +59,7 @@ jobs:
       - name: Package Repo for release
         shell: bash
         run: |
-          reqv="${{ inputs.version }}"
+          reqv="${RELEASE_VERSION}"
           reqv="${reqv//[[:space:]]/}"
           [[ ! "$reqv" =~ ^[0-9]{1,2}(\.[0-9]{1,2}){2}$ ]] \
             && echo "invalid request version: $reqv" && exit 1
@@ -69,6 +71,8 @@ jobs:
       - name: Get previous release tag
         id: previous-release
         uses: actions/github-script@v8
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
         with:
           script: |
             function parseVersion(tagName) {
@@ -105,7 +109,7 @@ jobs:
               }
             );
 
-            const currentTag = `v${{ inputs.version }}`;
+            const currentTag = `v${process.env.RELEASE_VERSION}`;
             const currentVersion = parseVersion(currentTag);
             if (!currentVersion) {
               core.setFailed(`Unable to parse release version from tag ${currentTag}.`);
@@ -143,6 +147,10 @@ jobs:
 
       - name: Generate release notes
         uses: actions/github-script@v8
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+          COMPARE_HEAD_REF: ${{ inputs.compareHeadRef }}
+          PREVIOUS_RELEASE_TAG: ${{ steps.previous-release.outputs.tag }}
         with:
           script: |
             const fs = require("fs");
@@ -161,7 +169,8 @@ jobs:
               "Bugs Fixed",
               "Baselines",
               "Documentation",
-              "Dependencies"
+              "Dependencies",
+              "Uncategorized changes"
             ];
 
             function isDependencyPullRequest(pr) {
@@ -175,10 +184,15 @@ jobs:
               );
             }
 
+            function hasExcludedLabel(names) {
+              return names.some((name) => excludedLabels.has(name));
+            }
+
+            function getPullRequestLabelNames(pr) {
+              return (pr.labels || []).map((label) => label.name);
+            }
+
             function sectionFromLabelNames(names) {
-              if (names.some((name) => excludedLabels.has(name))) {
-                return null;
-              }
               if (names.includes("baseline-document")) {
                 return "Baselines";
               }
@@ -231,26 +245,66 @@ jobs:
             }
 
             async function categorize(pr) {
+              const { issueNumbers, labelNames: issueLabelNames } =
+                await getClosingIssueLabelNames(pr.number);
+              const prLabelNames = getPullRequestLabelNames(pr);
+
+              let labelNames = issueLabelNames;
+              let labelSource = "closing issues";
+
+              if (issueNumbers.length === 0) {
+                if (prLabelNames.length === 0) {
+                  core.warning(
+                    `PR #${pr.number} has no closing issues or PR labels; ` +
+                      "including in Uncategorized changes."
+                  );
+                  return "Uncategorized changes";
+                }
+
+                labelNames = prLabelNames;
+                labelSource = "pull request";
+                core.info(
+                  `PR #${pr.number} has no closing issues; using PR labels ` +
+                    `(${labelNames.join(", ")}).`
+                );
+              }
+
+              if (hasExcludedLabel(labelNames)) {
+                core.info(
+                  `PR #${pr.number} excluded via ${labelSource} labels ` +
+                    `(${labelNames.join(", ")}).`
+                );
+                return null;
+              }
+
               if (isDependencyPullRequest(pr)) {
                 return "Dependencies";
               }
 
-              const { issueNumbers, labelNames } =
-                await getClosingIssueLabelNames(pr.number);
-              if (issueNumbers.length === 0) {
-                core.warning(
-                  `PR #${pr.number} has no linked closing issues; skipping categorization.`
-                );
-                return null;
+              let section = sectionFromLabelNames(labelNames);
+
+              if (
+                !section &&
+                issueNumbers.length > 0 &&
+                prLabelNames.length > 0 &&
+                !hasExcludedLabel(prLabelNames)
+              ) {
+                section = sectionFromLabelNames(prLabelNames);
+                if (section) {
+                  core.info(
+                    `PR #${pr.number} categorized from PR labels after closing ` +
+                      "issues lacked categorizing labels."
+                  );
+                }
               }
 
-              const section = sectionFromLabelNames(labelNames);
               if (!section) {
                 core.warning(
-                  `PR #${pr.number} closing issues (${issueNumbers.join(", ")}) ` +
-                    `have no categorizing labels (${labelNames.join(", ") || "none"}); skipping.`
+                  `PR #${pr.number} could not be categorized from ${labelSource} ` +
+                    `labels (${labelNames.join(", ") || "none"}); including in ` +
+                    "Uncategorized changes."
                 );
-                return null;
+                return "Uncategorized changes";
               }
 
               return section;
@@ -356,6 +410,68 @@ jobs:
               return `${lines.join("\r\n")}\r\n`;
             }
 
+            function formatUncategorizedSection(items) {
+              const lines = [
+                "## Uncategorized changes",
+                "",
+                "The following merged pull requests could not be categorized " +
+                  "automatically. Review and move them to the appropriate section " +
+                  "before publishing.",
+                "",
+                ...items
+              ];
+              return `${lines.join("\r\n")}\r\n`;
+            }
+
+            async function listComparisonCommits(basehead) {
+              const commits = [];
+              let page = 1;
+              const perPage = 100;
+              let totalCommits = null;
+              let status = null;
+
+              while (true) {
+                const { data: comparison } =
+                  await github.rest.repos.compareCommitsWithBasehead({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    basehead,
+                    per_page: perPage,
+                    page
+                  });
+
+                if (page === 1) {
+                  totalCommits = comparison.total_commits;
+                  status = comparison.status;
+                  core.info(
+                    `Comparing ${basehead}: ${totalCommits} total commits ` +
+                      `(status: ${status}).`
+                  );
+                }
+
+                commits.push(...comparison.commits);
+
+                if (comparison.commits.length < perPage) {
+                  break;
+                }
+                page += 1;
+              }
+
+              if (totalCommits !== null && commits.length < totalCommits) {
+                core.setFailed(
+                  `Comparison pagination collected ${commits.length} of ` +
+                    `${totalCommits} commits for ${basehead}; release notes would ` +
+                    "be incomplete."
+                );
+              }
+
+              core.info(
+                `Collected ${commits.length} commits across ${page} comparison page(s).`
+              );
+
+              return commits;
+            }
+
             async function resolveTagCommitSha(tagName) {
               const { data: ref } = await github.rest.git.getRef({
                 owner: context.repo.owner,
@@ -408,18 +524,9 @@ jobs:
               const basehead = `${previousTag}...${headRef}`;
               const pullRequestsByNumber = new Map();
 
-              const { data: comparison } =
-                await github.rest.repos.compareCommitsWithBasehead({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  basehead
-                });
+              const commits = await listComparisonCommits(basehead);
 
-              core.info(
-                `Comparing ${basehead}: ${comparison.commits.length} commits (status: ${comparison.status}).`
-              );
-
-              for (const commit of comparison.commits) {
+              for (const commit of commits) {
                 const { data: pulls } =
                   await github.rest.repos.listPullRequestsAssociatedWithCommit({
                     owner: context.repo.owner,
@@ -441,9 +548,9 @@ jobs:
               return { pullRequestsByNumber, headRef, basehead };
             }
 
-            const tagName = `v${{ inputs.version }}`;
-            const previousTag = "${{ steps.previous-release.outputs.tag }}";
-            const compareHeadRefInput = "${{ inputs.compareHeadRef }}".trim();
+            const tagName = `v${process.env.RELEASE_VERSION}`;
+            const previousTag = process.env.PREVIOUS_RELEASE_TAG;
+            const compareHeadRefInput = (process.env.COMPARE_HEAD_REF || "").trim();
             const { pullRequestsByNumber, headRef, basehead } =
               await listMergedPullRequests(
                 previousTag,
@@ -455,14 +562,14 @@ jobs:
             );
 
             let categorizedCount = 0;
-            let skippedCount = 0;
+            let excludedCount = 0;
             for (const pr of pullRequestsByNumber.values()) {
               const section = await categorize(pr);
               if (section) {
                 grouped[section].push(formatPullRequest(pr));
                 categorizedCount += 1;
-              } else if (!isDependencyPullRequest(pr)) {
-                skippedCount += 1;
+              } else {
+                excludedCount += 1;
               }
             }
 
@@ -480,6 +587,9 @@ jobs:
                 if (title === "Dependencies") {
                   return formatDependenciesSection(grouped.Dependencies);
                 }
+                if (title === "Uncategorized changes") {
+                  return formatUncategorizedSection(grouped["Uncategorized changes"]);
+                }
                 return formatSection(title, grouped[title]);
               });
 
@@ -489,10 +599,18 @@ jobs:
             fs.writeFileSync(path.join(process.cwd(), "release-body.md"), body, "utf8");
 
             const dependencyCount = grouped.Dependencies.length;
+            const uncategorizedCount = grouped["Uncategorized changes"].length;
             core.info(
               `Release notes include ${categorizedCount} categorized pull requests ` +
-                `(${dependencyCount} in Dependencies); skipped ${skippedCount} without usable issue labels.`
+                `(${dependencyCount} in Dependencies, ${uncategorizedCount} uncategorized, ` +
+                `${excludedCount} excluded).`
             );
+            if (uncategorizedCount > 0) {
+              core.warning(
+                `${uncategorizedCount} pull request(s) were placed in Uncategorized ` +
+                  "changes; review and move them before publishing."
+              );
+            }
             if (dependencyCount === 0) {
               core.warning(
                 `No dependency pull requests were linked to commits in ${basehead}. ` +
