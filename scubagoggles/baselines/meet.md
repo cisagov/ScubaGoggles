@@ -333,7 +333,7 @@ Screenshots of presented content SHALL only captured in notes when recording is 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Gemini Settings**.
-4.  Click **Google AI notes sharing**.
+4.  Click **Gemini notes sharing**.
 5.  Ensure **Allow hosts to change who notes are shared to** is unselected.
 6.  Click **Save**.
 
@@ -341,8 +341,8 @@ Screenshots of presented content SHALL only captured in notes when recording is 
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Gemini Settings**.
-4.  Click **Google AI notes sharing**.
-5.  Ensure **Default sharing setting for Google AI notes** is set to "The hosts and co-hosts" or "Invited Guests in your Organization".
+4.  Click **Gemini notes sharing**.
+5.  Ensure **Default sharing setting for Gemini notes** is set to "The hosts and co-hosts" or "Invited guests in your organization".
 6.  Click **Save**.
 
 #### GWS.MEET.6.3v1 Instructions
