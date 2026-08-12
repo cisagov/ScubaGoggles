@@ -69,14 +69,8 @@ class TestLaunch:
         # avoid backslashes to bypass OS ambiguity Path to str conversion
         app_path = Path('home')
         command, port = launch._build_streamlit_command(app_path, force_dark=dark_mode)
-        expected_cmd = [
-            str(sys.executable), '-m', 'streamlit', 'run',
-            'home',
-            '--server.address', 'localhost',
-            '--server.port', '1000',
-            '--server.headless', 'false',
-            '--browser.gatherUsageStats', 'false',
-        ]
+        expected_cmd = self._streamlit_command('1000')
+
         # mock return
         assert port == 1000
         if dark_mode:
@@ -169,30 +163,21 @@ class TestLaunch:
             (True, True)
         ]
     )
-    def test_main_method(self, mocker, monkeypatch, dark_mode, windows):
+    def test_launch_main_method(self, mocker, monkeypatch, dark_mode, windows):
         """
         Test the main() method in launch.py
         """
-        # to mock command line arguments
-        str_args = ['launch.py']
+        # ensure no leaked env var from another test/run
+        monkeypatch.delenv('SCUBAGOGGLES_UI_DARK', raising=False)
+
         # expected build command
-        expected_cmd = [
-            str(sys.executable), '-m', 'streamlit', 'run',
-            'home',
-            '--server.address', 'localhost',
-            '--server.port', '1234',
-            '--server.headless', 'false',
-            '--browser.gatherUsageStats', 'false',
-        ]
+        expected_cmd = self._streamlit_command('1234')
+
         if dark_mode:
-            str_args.append('--dark')
-            monkeypatch.setenv('SCUBAGOGGLES_UI_DARK', '80')
             expected_cmd.extend(['--theme.base', 'dark'])
-        mocker.patch('sys.argv', str_args)
         # arbitrary return values for mocked functions
         mocker.patch.object(launch, '_find_free_port', return_value=1234)
         mocker.patch.object(launch, '_get_app_to_run', return_value=Path('home'))
-        mocker.patch.object(launch, '_prevent_streamlit_promotion')
         real_print = builtins.print
         mock_print = mocker.patch('builtins.print', side_effect=real_print)
         mock_run_server = mocker.patch.object(launch, '_run_server')
@@ -203,7 +188,7 @@ class TestLaunch:
         else:
             mocker.patch('sys.platform', 'win32')
 
-        launch.main()
+        launch.launch_main(darkmode = dark_mode)
         # assertions
         if dark_mode:
             assert os.environ.get('SCUBAGOGGLES_UI_DARK') == '1'
@@ -218,3 +203,21 @@ class TestLaunch:
         mock_print.assert_any_call('Opening http://localhost:1234 in your browser.')
         mock_print.assert_any_call('Press Ctrl+C to stop the server.\n')
         mock_run_server.assert_called_once_with(expected_cmd, popen_kwargs)
+
+    @staticmethod
+    def _streamlit_command(port: str) -> str:
+
+        """Builds the list of command arguments for the expected streamlit
+        command using the given port number.
+        """
+
+        command = [sys.executable, '-m', 'streamlit', 'run',
+                   'home',
+                   '--server.address', 'localhost',
+                   '--server.port', port,
+                   '--server.headless', 'false',
+                   '--browser.gatherUsageStats', 'false',
+                   '--server.showEmailPrompt', 'false',
+                   '--logger.hideWelcomeMessage', 'true']
+
+        return command

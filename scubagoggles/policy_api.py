@@ -204,6 +204,8 @@ class PolicyAPI:
         'gmail_auto_forwarding': {'settings': {'enableAutoForwarding': isBool}},
         'gmail_blocked_sender_lists': {'parser': GmailRulesParser,
             'settings': {'blockedSenders': isListDict}},
+        'gmail_comprehensive_mail_storage': {'parser': GmailRulesParser,
+            'settings': {'ruleId': isString}},
         'gmail_email_address_lists': {'key': 'id',
                                       'reducer': _max_map_reducer,
                                       'settings': {'emailAddressList':
@@ -277,10 +279,14 @@ class PolicyAPI:
         'meet_service_status': {'settings': {'serviceState': isState}},
         'meet_video_recording': {'settings': {'enableRecording': isBool}},
         'migrate_service_status': {'settings': {'serviceState': isState}},
+        'multi_party_approval_require_approvals': {'settings': {
+            'multiPartyApprovalState': isEnum}},
         'pay_user_takeout': {'settings': {'takeoutStatus': isEnum}},
         'photos_user_takeout': {'settings': {'takeoutStatus': isEnum}},
         'play_console_user_takeout': {'settings': {'takeoutStatus': isEnum}},
         'play_user_takeout': {'settings': {'takeoutStatus': isEnum}},
+        'provisioning_conflicting_accounts_management': {'settings': {
+            'conflictingAccountsManagement': isEnum}},
         'rule_dlp': {'parser': DlpRulesParser,
                      'reducer': _list_reducer,
                      'settings': {

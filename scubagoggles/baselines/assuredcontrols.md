@@ -1,15 +1,15 @@
 # CISA Google Workspace Secure Configuration Baseline for Assured Controls and Assured Controls Plus
 
-Assured Controls and Assured Controls Plus are paid add-ons within Google Workspace relating to compliance and security.
-The Secure Configuration Baseline (SCB) for Assured Controls provides specific policies to strengthen an organization's data security.
+Assured Controls and Assured Controls Plus are paid add-ons within Google Workspace (GWS) relating to compliance and security.
+This Secure Configuration Baseline (SCB) for Assured Controls provides specific policies to strengthen an organization's data security.
 This baseline is intended as guidance for agencies that already have Assured Controls or Assured Controls Plus licenses.
-Users that choose to implement this baseline should carefully consider the tradeoffs involved, including the potential security benefits, usability impacts, and increased licensing fees for the add-on licenses.
+Users who choose to implement this baseline should carefully consider the tradeoffs involved, including the potential security benefits, usability impacts, and possible increased fees for additional licenses.
 
-The Secure Cloud Business Applications (SCuBA) project, run by the Cybersecurity and Infrastructure Security Agency (CISA), provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
+The Cybersecurity and Infrastructure Security Agency's (CISA) Secure Cloud Business Applications (SCuBA) project, provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.
 
-The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the Federal Government may also find these baselines to be useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
+The CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the federal government may also find these baselines useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.
 
-For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products; CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
+For non-federal users, the information in this document is being provided "as is" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products. CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.
 
 This baseline is based on Google documentation and addresses the following:
 - [Google Support Staff Data Access](#1-google-support-staff-data-access)
@@ -22,20 +22,26 @@ This document assumes the organization is using both GWS Enterprise Plus and the
 
 ## Key Terminology
 
-The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST," "MUST NOT," "REQUIRED," "SHALL," "SHALL NOT," "SHOULD," "SHOULD NOT," "RECOMMENDED," "MAY," and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
-**Automated Check**: This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services) (**BOD 25-01 Requirement**): This indicator means that the policy is required under CISA BOD 25-01.
 
-**Log-Based Check**: This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology) (**Automated Check**): This indicator means that the policy can be automatically checked via ScubaGoggles. See [our documentation](../../README.md) for help getting started.
+
+[![Configurable](https://img.shields.io/badge/Configurable-005288)](../../docs/usage/Config.md#break-glass-accounts)(**Configurable**): This indicator means that the policy can be customized via a configuration file.
+
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)(**Log-Based Check**): This indicator means that ScubaGoggles will check the policy by reviewing admin audit logs. See [Limitations](../../docs/usage/Limitations.md#log-based-policy-checks).
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols83v06-instructions)(**Manual**): This indicator means that the policy requires manual verification of configuration settings.
 
 # Baseline Policies
 
 ## 1. Google Support Staff Data Access
 
-Google Workspace includes a few mechanisms to control how Google support staff access your organization's data.
-Access Approvals requires Google support staff to request approval before viewing your organization's data.
-Access can also be restricted to specific demographics, such as access by U.S. Google staff only.
-However, these features require additional licensing and are not available by default with Enterprise Plus.
+Google Workspace (GWS) includes several mechanisms to control how Google support staff access an organization's data.
+Access Approvals requires Google support staff to request approval before viewing an organization's data.
+Access can also be restricted to specific demographics, such as access by U.S.-based Google staff only.
+However, these features require additional licensing and are not available by default with GWS Enterprise Plus.
 
 ### Policies
 
@@ -45,7 +51,7 @@ Access Approvals SHOULD be enabled.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
-- _Rationale:_ Unauthorized access to data increases the risk of exposing sensitive data to untrusted entities. Requiring the approval of a Google staff's request to access an organization's data may reduce unauthorized access and actions to an organization's data.
+- _Rationale:_ Unauthorized data access increases the risk of exposing sensitive data to untrusted entities. Unauthorized access and actions to an organization's data may be reduced by requiring approval of Google staff requests to access organizations' data.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -54,11 +60,11 @@ Access Approvals SHOULD be enabled.
     - [T1589: Gather Victim Identity Information](https://attack.mitre.org/techniques/T1589/)
 
 #### GWS.ASSUREDCONTROLS.1.2v1
-Agencies SHOULD restrict support access to U.S. Google staff only.
+Agencies SHOULD restrict support access to U.S.-based Google staff only.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Without this policy, data could be processed by Google personnel not physically located in the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
+- _Rationale:_ This policy prevents data processing by Google personnel located outside of the U.S., reducing potential exposure to unauthorized entities. Implementation of this policy accounts for organizational data sovereignty.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -75,8 +81,8 @@ Agencies SHOULD restrict support access to U.S. Google staff only.
 
 
 ### Prerequisites
-- Access Approvals requires either Assured Controls or Assured Controls Plus add-ons.
-- Access Management requires the Assured Controls Plus add-on. However, customers who purchased Assured Controls and the Assured Support add-on prior to June 17, 2024 also have access to Access Management.
+- Access Approvals requires either the Assured Controls or the Assured Controls Plus add-ons.
+- Access Management requires the Assured Controls Plus add-on. However, customers who purchased the Assured Controls and the Assured Support add-on prior to June 17, 2024, also have access to Access Management.
 
 ### Implementation
 
@@ -105,7 +111,7 @@ Data processing across multiple regions SHOULD be disabled for all Google Worksp
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
--  _Rationale:_ Without this policy, data could be processed in a region other than the United States, potentially exposing it unauthorized entities. Implementing this policy accounts for sovereignty over organizational data.
+-  _Rationale:_ This policy prevents data processing in a region other than the United States, reducing potential exposure to unauthorized entities. Implementation of this policy helps prevent agency data from being subject to the laws of other nations.
 - _Last modified:_ November 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
@@ -118,16 +124,16 @@ Data processing across multiple regions SHOULD be disabled for all Google Worksp
 - [GWS Admin Help \| Set up advanced settings for data regions](https://support.google.com/a/answer/14310030)
 
 ### Prerequisites
-- Organizations with Enterprise Plus or Data Regions add-on subscriptions are able to modify the advanced data regions settings. However, these settings only apply to users with both Enterprise Plus and Assured Controls Plus licenses.
+- Organizations with the Enterprise Plus or the Data Regions add-on subscriptions are able to modify the advanced data regions settings. However, these settings only apply to users with both the Enterprise Plus and the Assured Controls Plus licenses.
 
 ### Implementation
 
 #### GWS.ASSUREDCONTROLS.2.1v1 Instructions
 1. Sign in to the [Google Admin Console](https://admin.google.com/) as an administrator.
 2. Navigate to **Data** -\> **Compliance** -\> **Data Regions** -\> **Advanced Settings**.
-3. Select **Calendar**, choose **Disable features that may process data across multiple regions**, then click **SAVE**.
-4. Select **Drive Docs**, choose **Disable features that may process data across multiple regions**, then click **SAVE**.
-5. Select **Gmail**, choose **Disable features that may process data across multiple regions**, then click **SAVE**.
-6. Select **Google Chat and classic Hangouts**, choose **Disable features that may process data across multiple regions**, then click **SAVE**.
-8. Select **Google Meet**, choose **Disable features that may process data across multiple regions**, then click **SAVE**.
-9. Select **Gemini app and Gemini in Google Workspace apps**, choose **Disable features that may process data across multiple regions**, then click **SAVE**.
+3. Select **Calendar** and choose **Disable features that may process data across multiple regions**, then click **SAVE**.
+4. Select **Drive Docs** and choose **Disable features that may process data across multiple regions**, then click **SAVE**.
+5. Select **Gmail** and choose **Disable features that may process data across multiple regions**, then click **SAVE**.
+6. Select **Google Chat and classic Hangouts**, choose **Disable features that may process data across multiple regions**, and click **SAVE**.
+7. Select **Google Meet** and choose **Disable features that may process data across multiple regions**, then click **SAVE**.
+8. Select **Gemini app and Gemini in Google Workspace apps**, choose **Disable features that may process data across multiple regions**, and click **SAVE**.

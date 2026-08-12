@@ -7,6 +7,8 @@ The scubagoggles gws cmdlet has several command-line parameters, which are descr
 Execute the ScubaGoggles tool using the `scubagoggles` command. For GWS,
 all commands will be under the `gws` "subcommand".
 
+> **Note**: The ScubaGoggles User Interface (UI) tool is a different scubagoggles command than gws. It is not a subcommand of gws. The UI tool can be run with the `scubagoggles ui` command line. The command line usage and documentation for the ui command can be found in the [ui README file](https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/ui/README.md).
+
 ## Help
 
 **-h or --help** is the help function to pull up additional information on all of the commands available for scubagoggles gws
@@ -43,22 +45,22 @@ Here is an example using `-c or --credentials`:
 scubagoggles gws --credentials C:\users\johndoe\Documents\scuba\credentials.json
 ```
 
-## Access Token
+## Metadata Server Authentication
 
-**--accesstoken** string to be used in lieu of a credentials file. If provided, will take precendence over the credentials file. Advanced option; using a credentials file is the recommended authentication method.
+**--usemetadataserverauth** If set, will use the Metadata Server provided in Google Compute Engine (GCE) environments for authentication. The service account associated with the GCE service must have the "iam.serviceAccountTokenCreator" role in addition to other ScubaGoggles roles. Advanced option; using a credentials file is the recommended authentication method.
 
-| Parameter   | Value  |
-|-------------|--------|
-| Optional    | Yes    |
-| Datatype    | String |
-| Default     | n/a    |
-| Config File | Yes    |
+| Parameter   | Value   |
+|-------------|---------|
+| Optional    | Yes     |
+| Datatype    | Boolean |
+| Default     | False  |
+| Config File | Yes     |
 
-Here is an example using `--accesstoken`:
+Here is an example using `--usemetadataserverauth`:
 
 ```powershell
 # identify access token to be used in lieu of a credentials file
-scubagoggles gws --accesstoken <access-token>
+scubagoggles gws ----usemetadataserverauth
 ```
 
 ## Baselines
@@ -399,7 +401,7 @@ for the list of applicable policies.
 |-------------|---------|
 | Optional    | Yes     |
 | Datatype    | Boolean |
-| Default     | $false  |
+| Default     | False  |
 | Config File | Yes     |
 
 Here is an example using `--skipdoh`:

@@ -94,7 +94,7 @@ class TestProvider:
         defaults = {
             "customer_id": "test_customer",
             "credentials_file": "credentials.json",
-            "access_token": "token",
+            "metadata_auth": False,
             "svc_account_email": "svc@test.com",
         }
         params = {**defaults, **overrides}

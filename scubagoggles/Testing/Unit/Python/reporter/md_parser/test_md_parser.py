@@ -38,6 +38,16 @@ class TestMarkdownParser:
         assert len(groups) >= 1
 
         id_pattern = re.compile(r"^GWS\.GMAIL\.\d+\.\d+v\d+(?:\.\d+)*$")
+        color_pattern = re.compile(r"^#[0-9A-F]{6}$")
+        valid_indicator_names = {
+            "Automated Check",
+            "BOD 25-01 Requirement",
+            "Configurable",
+            "Log-Based Check",
+            "Manual",
+        }
+
+        found_bod_indicator = False
 
         for group in groups:
             assert { "GroupNumber", "GroupName", "Controls" }.issubset(group.keys())
@@ -49,7 +59,7 @@ class TestMarkdownParser:
             assert len(controls) >= 1
 
             for control in controls:
-                assert { "Id", "Value"}.issubset(control.keys())
+                assert { "Id", "Indicators", "Value"}.issubset(control.keys())
                 assert isinstance(control["Id"], str)
                 assert isinstance(control["Value"], str)
 
@@ -59,6 +69,23 @@ class TestMarkdownParser:
 
                 # Confirm policy ID format
                 assert id_pattern.match(control["Id"]), f"Invalid Policy ID format: {control['Id']}"
+
+                # Confirm indicator format
+                indicators = control["Indicators"]
+                assert isinstance(indicators, list)
+
+                for indicator in indicators:
+                    assert { "name", "color", "link" }.issubset(indicator.keys())
+                    assert indicator["name"] in valid_indicator_names
+                    assert color_pattern.match(indicator["color"])
+                    assert indicator["link"].strip() != ""
+
+                    if indicator["name"] == "BOD 25-01 Requirement":
+                        found_bod_indicator = True
+
+        # The BOD 25-01 Requirement indicator should appear at least once in
+        # the gmail baselines.
+        assert found_bod_indicator
 
     @pytest.mark.parametrize(
         ("snippet_name", "expected_fragment"),
@@ -206,6 +233,38 @@ class TestMarkdownParser:
 
         with pytest.raises(MarkdownParserError):
             MarkdownParser('.')._parse_indicators([invalid_indicator])
+
+    @pytest.mark.parametrize(('indicator_link', 'expected'),
+                             ((
+                                 '[![BOD 25-01 Requirement]'
+                                 '(https://img.shields.io/badge/BOD_25--01_Requirement-C41230)]'
+                                 '(https://www.cisa.gov/news-events/directives/bod-25-01-'
+                                 'implementation-guidance-implementing-secure-practices-'
+                                 'cloud-services)',
+                                 {'name': 'BOD 25-01 Requirement',
+                                  'color': '#C41230',
+                                  'link': ('https://img.shields.io/badge/'
+                                           'BOD_25--01_Requirement-C41230')}
+                             ),
+                              (
+                                 '[![Automated Check]'
+                                 '(https://img.shields.io/badge/Automated_Check-5E9732)]'
+                                 '(#key-terminology)',
+                                 {'name': 'Automated Check',
+                                  'color': '#5E9732',
+                                  'link': 'https://img.shields.io/badge/Automated_Check-5E9732'}
+                             )))
+    def test_parse_indicators_returns_expected_indicator(self,
+                                                          indicator_link: str,
+                                                          expected: dict):
+
+        """Tests that _parse_indicators() correctly parses a recognized
+        indicator link into its name, color, and link.
+        """
+
+        # pylint: disable=protected-access
+
+        assert MarkdownParser('.')._parse_indicators([indicator_link]) == [expected]
 
     @pytest.mark.parametrize(('data, normalize, expected'),
                              (({'Chat':

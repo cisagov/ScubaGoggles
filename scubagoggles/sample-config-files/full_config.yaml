@@ -32,10 +32,10 @@ baselines:
 # Required unless the credentials path has been saved using the ScubaGoggles setup utility or an access token is provided.
 # credentials: C:\users\johndoe\Documents\scuba\credentials.json
 
-# Access Token: This field is used to authenticate via access token string to be used in lieu of a credentials file. 
-# If provided, will take precendence over the credentials file. 
+# Metadata Server Authentication: If set, will use the Metadata Server provided in Google Compute Engine (GCE) environments for authentication. 
+# The service account associated with the GCE service must have the "iam.serviceAccountTokenCreator" role in addition to other ScubaGoggles roles. 
 # Advanced option; using a credentials file is the recommended authentication method.
-# accesstoken: <access-token>
+# usemetadataserverauth: false
 
 # Output Path: -o or --outputpath is the folder path where both the output JSON & HTML report will be created. 
 # The folder will be created if it does not exist.
@@ -68,7 +68,6 @@ customerid: my_customer
 # Recommended to leave these as the default values unless there is a specific reason to change them.
 outputfoldername: GWSBaselineConformance
 outputproviderfilename: ProviderSettingsExport
-outputactionplanfilename: ActionPlan
 outputregofilename: TestResults
 outputreportfilename: BaselineReports
 
@@ -86,7 +85,7 @@ numberofuuidcharacterstotruncate: 18
 debug: false
 
 # Dark Mode: This field is used to enable dark mode styles for the report output.
-# darkmode: true
+# darkmode: "true"
 
 # Run cache mode:  when added will run the tool in "RunCached mode".
 # When combined with --skipexport allows the user to skip authentication and provider export.
@@ -258,7 +257,6 @@ skipdoh: false
 # https://yaml.org/spec/1.2.2/#692-node-anchors for more details. In this case, the
 # anchor allows you to configure multiple omissions that share the same rationale
 # without repeating yourself.
-
 
 
 

@@ -7,13 +7,15 @@ This module uses a local credential.json file to authenticate to a GWS org
 import json
 from pathlib import Path
 
+from google.auth import iam
 from google.auth.credentials import TokenState
 from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google.oauth2.service_account import Credentials as SvcCredentials
+from google.auth.compute_engine import Credentials as GceCredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-from scubagoggles.scuba_constants import DWD_SCOPES, OAUTH_SCOPES, DASA_SCOPES
+from scubagoggles.scuba_constants import DWD_SCOPES, OAUTH_SCOPES, DASA_SCOPES, METADATA_AUTH_SCOPES
 
 # The class is worth it just for the encapsulation.  It allows the potential
 # of credential refresh multiple times, which may be beneficial during a
@@ -26,7 +28,7 @@ class GwsAuth:
     """Generates an Oauth token for accessing Google's APIs
     """
 
-    def __init__(self, credentials_path: Path, access_token: str = None,
+    def __init__(self, credentials_path: Path, metadata_auth: bool = False,
                  svc_account_email: str = None):
         """GwsAuth class initialization.
 
@@ -36,16 +38,18 @@ class GwsAuth:
 
         :param credentials_path: path to the Google JSON-format
             credentials file.
-        :param access_token: (optional) access token string that will be used
-            instead of the credentials file.
+        :param metadata_auth: (optional) if set, will attempt to authenticate
+            via metadata server provided in Google Compute Engine (GCE) services.
+            Service account must have `iam.serviceAccountTokenCreator` permission.
         :param svc_account_email: (optional) email address for the service
             account.
         """
 
         self._svc_account_email = svc_account_email
+        self._metadata_auth = metadata_auth
 
-        if access_token is not None:
-            self._token = Credentials(token=access_token, scopes=OAUTH_SCOPES)
+        if metadata_auth:
+            self._token = GceCredentials(scopes=METADATA_AUTH_SCOPES)
             return
 
         credentials_path = Path(credentials_path)
@@ -95,13 +99,29 @@ class GwsAuth:
         :return: valid Google credentials
         """
 
-        if not self._svc_account_email:
+        if self._metadata_auth or not self._svc_account_email:
             self._refresh_token()
+        if self._metadata_auth:
+            # if using metadata server auth we need a new credential with impersonation
+            # See GCE access to Google AdminSDK example at
+            # https://github.com/GoogleCloudPlatform/professional-services
+            signer = iam.Signer(Request(), self._token, self._token.service_account_email)
+            updated_credentials = SvcCredentials(
+                signer,
+                self._token.service_account_email,
+                "https://accounts.google.com/o/oauth2/token",
+                scopes=DWD_SCOPES,
+                subject=self._svc_account_email,
+            )
+            updated_credentials.refresh(Request())
+            if not updated_credentials.valid:
+                raise Exception(f"Couldn't get valid credentials for {self._svc_account_email}")
+            return updated_credentials
 
         return self._token
 
     @property
-    def groups_credentials(self):
+    def dasa_credentials(self):
         """Returns credentials for the Groups Settings API.
 
         When using a service account, returns credentials where the service
@@ -115,6 +135,8 @@ class GwsAuth:
                 str(self._credentials_path),
                 scopes=DASA_SCOPES
             )
+        if self._metadata_auth:
+            self._refresh_token()
         return self._token
 
     def _check_scopes(self):
@@ -182,7 +204,8 @@ class GwsAuth:
 
         if self._token.token_state != TokenState.FRESH:
             self._token.refresh(Request())
-            self._save_token()
+            if not self._metadata_auth:
+                self._save_token()
 
     def _save_token(self):
         """Writes the Google credentials to the token JSON file.

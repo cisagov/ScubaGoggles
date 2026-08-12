@@ -15,13 +15,19 @@ Only complete this section if not authenticating via [OAuth](OAuth.md). See [Aut
 1. Select **MANAGE DOMAIN WIDE DELEGATION**
 1. Select **Add new**
 1. Enter the `client_id` from the downloaded credentials (also visible after clicking on the created Service account under Details -> Unique ID)
-1. Enter each OAuth scope as listed in [Permissions](../prerequisites/Prerequisites.md#permissions)
+1. Enter each Domain-wide delegation scope as listed in [Permissions](../prerequisites/Prerequisites.md#domain-wide-delegation-scopes) in the OAuth scopes field. (Tip: you can copy and paste the entire block into the field.)
 1. Select **AUTHORIZE**
 1. To add the Groups Reader role to your service account, navigate to **Account** -> **Admin Roles** in the Workspace Admin Console.
 1. Locate and click the Groups Reader role, and then expand the **Admins** section.
 1. Click on **Assign service accounts**
 1. Enter the service account email address and click **ADD**.
 1. Under Set Conditions, ensure that **Access to all groups** is selected and click **ASSIGN ROLE**
+1. To add a custom role for licensing to your service account, navigate to **Account** -> **Admin Roles** in the Workspace Admin Console
+1. Click **Create new role**
+1. Enter a name such as "License Read" and select **CONTINUE**
+1. Under **Admin Privileges** search for "license" and select **License Read**. Click **CONTINUE** then **CREATE ROLE**
+1. Click on **Assign service accounts**
+1. Enter the service account email address, click **ADD**, and click **ASSIGN ROLE**
 1. Return to https://console.cloud.google.com. Open the menu on the left and click **APIs and Services** -> **Enabled API Services**
 1. On the toolbar, click **+ Enable APIs & Services**
 1. Search for and enable the **Admin SDK API**

@@ -197,7 +197,7 @@ class Orchestrator:
         (baselines,
          customerid,
          credentials,
-         accesstoken,
+         usemetadataserverauth,
          subjectemail,
          preferreddnsresolvers,
          skipdoh,
@@ -210,7 +210,7 @@ class Orchestrator:
          sitesexclusions) = itemgetter('baselines',
                                        'customerid',
                                        'credentials',
-                                       'accesstoken',
+                                       'usemetadataserverauth',
                                        'subjectemail',
                                        'preferreddnsresolvers',
                                        'skipdoh',
@@ -224,7 +224,7 @@ class Orchestrator:
 
         with Provider(customerid,
                       credentials,
-                      access_token=accesstoken,
+                      metadata_auth=usemetadataserverauth,
                       svc_account_email=subjectemail,
                       dns_resolvers=preferreddnsresolvers,
                       doh_servers=self.args_dict['preferreddohservers'],
@@ -946,7 +946,7 @@ class Orchestrator:
             args.outputpath = Path(args.outputpath)
         args.outputpath = args.outputpath.resolve()
 
-        if args.accesstoken is None:
+        if not args.usemetadataserverauth:
             if args.credentials is None:
                 raise UserRuntimeError('Google credentials file path not provided. '
                     'Either save the credentials path using the ScubaGoggles setup '
@@ -965,7 +965,7 @@ class Orchestrator:
             raise UserRuntimeError(f'? "{args.opapath}" - OPA executable '
                                    f'missing - {see_docs}') from fnf
 
-        if args.accesstoken is None and not args.credentials.exists():
+        if not args.usemetadataserverauth and not args.credentials.exists():
             raise UserRuntimeError(f'? "{args.credentials}" - Google '
                                    f'credentials file missing - {see_docs}')
 

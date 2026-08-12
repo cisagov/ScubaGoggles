@@ -1,0 +1,15 @@
+description: |
+  Minimal ScubaGoggles configuration for a baseline assessment run.
+  Use this when you want a small, readable starting point before adding
+  omit policies, annotations, or other advanced options.
+  See https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md
+
+# Document the organization this configuration belongs to.
+orgname: Department of Example
+orgunitname: Subdepartment of Example
+
+# Assess a subset of baselines. Remove entries or add more as needed.
+baselines:
+  - commoncontrols
+  - gmail
+  - drive

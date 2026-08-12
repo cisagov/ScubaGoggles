@@ -1,0 +1,27 @@
+description: |
+  Example ScubaGoggles configuration demonstrating omit policies.
+  Omitted policies appear as "Omitted" (gray) in the HTML report.
+  All omissions should be approved through your organization's risk
+  management process. See
+  https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Config.md#omit-policies
+
+orgname: Department of Example
+orgunitname: Subdepartment of Example
+
+baselines:
+  - commoncontrols
+  - gmail
+
+omitpolicy:
+  # Mail Delegation SHOULD be disabled.
+  GWS.GMAIL.1.1v1:
+    rationale: "Accepting risk for now; will reevaluate at a later date."
+    expiration: "2030-12-31"
+
+  # A custom DLP policy for Google Drive is required by the baseline.
+  GWS.COMMONCONTROLS.18.1v1:
+    rationale: &DLPRationale "The DLP capability required by the baselines is implemented by third-party product [x], which ScubaGoggles does not have the ability to check."
+
+  # A custom DLP policy for Google Chat is required by the baseline.
+  GWS.COMMONCONTROLS.18.2v1:
+    rationale: *DLPRationale
