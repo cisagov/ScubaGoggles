@@ -22,7 +22,7 @@ ReportDetailsArray(Status, Array1, Array2) := Detail if {
     Detail := Description(Fraction, " agency domain(s) found in violation: ", String)
 }
 #Default Non-existant Domain SPF Status Message
-default NXDomain := "Domain does not exist"
+default NXDomain := "Domain does not exist."
 
 NeedleInHaystack(Pattern, Haystack) := true if {
     matches := regex.find_all_string_submatch_n(Pattern, Haystack, -1)
