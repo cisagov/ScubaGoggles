@@ -31,7 +31,7 @@ NeedleInHaystack(Pattern, Haystack) := true if {
 
 SpfStatusDetailsBuilder(dnsresponse) := NXDomain if {
     some log_item in dnsresponse.log
-    NeedleInHaystack(`NXDomain`, log_item.query_result)
+    NeedleInHaystack(`(?i)NXDomain`, log_item.query_result)
 } else := NXDomain if {
     some log_item in dnsresponse.log
     NeedleInHaystack(`NXDOMAIN`, log_item.query_result)
