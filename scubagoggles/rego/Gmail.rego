@@ -29,11 +29,7 @@ NeedleInHaystack(Pattern, Haystack) := true if {
     count(matches) > 0
 }
 
-SpfStatusDetailsBuilder(dnsresponse) := "Domain exists but no answers returned." if {
-    count(dnsresponse.rdata) == 0
-} else := "More than one record found" if {
-    count(dnsresponse.rdata) > 1
-} else := NXDomain if {
+SpfStatusDetailsBuilder(dnsresponse) := NXDomain if {
     some log_item in dnsresponse.log
     NeedleInHaystack(`NXDomain`, log_item.query_result)
 } else := NXDomain if {
