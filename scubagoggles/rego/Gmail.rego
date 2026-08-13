@@ -35,14 +35,14 @@ SpfStatusDetailsBuilder(dnsresponse) := NXDomain if {
 } else := "Exceptions other than non-existant domain (NXDOMAIN) returned." if {
     some log_item in dnsresponse.log
     NeedleInHaystack(`exception`, log_item.query_result)
-} else := "SPF record found, but it does not hardfail (`\"-all`\") or redirect to one that does." if {
-    some spf_record in dnsresponse.rdata
-    not endswith(spf_record, "-all")
-    not contains(spf_record, "redirect")
-} else := "Domain exists but no answers returned." if {
+} else := "Domain has no SPF record." if {
     some log_item in dnsresponse.log
-    NeedleInHaystack(`[0]`, log_item.query_result)
-}
+    NeedleInHaystack(`(?i)no\s+SPF\s+records`, log_item.query_result)
+} else := "Domain exists but no answers returned." if {
+    count(dnsresponse.rdata) == 0
+} else := "More than one record found." if {
+    count(dnsresponse.rdata) > 1
+} else := "SPF record found, but it does not hardfail (\"-all\") or redirect to one that does."
 
 SpfStatusQueryNameBuilder(dnsresponse) := DomainName if {
     some item in dnsresponse
