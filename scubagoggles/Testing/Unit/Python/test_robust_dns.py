@@ -158,7 +158,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": "Domain does not exist",
+                    "query_result": "Query returned NXDomain",
                     "query_answers": []
                 })
             # Case where there is a valid server and the
@@ -206,7 +206,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": "Domain does not exist",
+                    "query_result": "Query returned NXDomain",
                     "query_answers": []
                 })
             # Exception case (from requests.get)
@@ -217,7 +217,7 @@ class TestRobustDNSClient:
                     log_entries.append({
                         "query_name": query,
                         "query_method": "DoH",
-                        "query_result": "Exceptions other than NXDOMAIN returned time out",
+                        "query_result": "Query resulted in exception time out",
                         "query_answers": []
                     })
                     errors.append("time out")
@@ -236,7 +236,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": "Exceptions other than NXDOMAIN returned time out",
+                    "query_result": "Query resulted in exception time out",
                     "query_answers": []
                 })
                 errors.append("time out")
@@ -245,7 +245,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "DoH",
-                    "query_result": "Domain does not exist",
+                    "query_result": "Query returned NXDomain",
                     "query_answers": []
                 })
         # Expected return value of doh_query()
@@ -326,7 +326,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "traditional",
-                    "query_result": "Domain does not exist",
+                    "query_result": "Query returned NXDOMAIN",
                     "query_answers": []
                 })
                 nxdomain = True
@@ -340,7 +340,7 @@ class TestRobustDNSClient:
                     log_entries.append({
                         "query_name": query,
                         "query_method": "traditional",
-                        "query_result": "Exceptions other than NXDOMAIN returned Timeout",
+                        "query_result": "Query resulted in exception Timeout",
                         "query_answers": []
                     })
                     errors.append("Timeout")
@@ -354,7 +354,7 @@ class TestRobustDNSClient:
                 log_entries.append({
                     "query_name": query,
                     "query_method": "traditional",
-                    "query_result": "Exceptions other than NXDOMAIN returned Timeout",
+                    "query_result": "Query resulted in exception Timeout",
                     "query_answers": []
                 })
                 errors.append("Timeout")

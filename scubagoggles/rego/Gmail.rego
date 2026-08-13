@@ -150,20 +150,6 @@ GmailId3_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.3.1")
 SpfDetails(dnsResponse) := sprintf("<li>\n  %s: %s\n</li>\n",
                                    [QueryNameBuilder(dnsResponse),
                                     QueryResultBuilder(dnsResponse)])
-# Not applicable at OU or Group level
-DomainsWithSpf contains SpfRecord.domain if {
-    some SpfRecord in input.spf_records
-    # Ensure that there's only 1 SPF record
-    count([Answer | some Answer in SpfRecord.rdata; startswith(Answer, "v=spf1")]) == 1
-    some Rdata in SpfRecord.rdata
-    startswith(Rdata, "v=spf1 ")
-    # Ensure that the policy either ends with "-all", "~all", or directs to a different SPF policy
-    true in [
-        endswith(Rdata, "-all"),
-        endswith(Rdata, "~all"),
-        contains(Rdata, "redirect")
-    ]
-}
 
 # Loop through domains and save the details for domains without proper SPF records
 DomainsWithoutSpf contains details if {

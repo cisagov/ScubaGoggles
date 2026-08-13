@@ -393,10 +393,10 @@ class Provider:
 
             if spf_count != 0:
 
-                log = (f'Query returned {spf_count} SPF record'
+                log_message = (f'Query returned {spf_count} SPF record'
                     f'{"s" if spf_count > 1 else ""}')
 
-                log_entry['query_result'] = log
+                log_entry['query_result'] = log_message
 
             elif (len(result['answers']) > 0
                   or '0 txt' in log_entry['query_result'].lower()):

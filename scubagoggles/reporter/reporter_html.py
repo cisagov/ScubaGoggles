@@ -316,8 +316,22 @@ def build_individual_report_html(*,
                         'Answers': '<br>'.join(answers) or '<br>'.join(['No answers returned']),
                     }
                 )
-        log_table = create_html_table(logs).replace(
-            '<table>', "<table class='alternating dns-table'>")
+
+        log_table = create_html_table(logs)
+
+        # The "Answers" column will hog the space in a default table
+        # configuration.  We use the following column proportions with a
+        # fixed table layout for better column spacing.
+
+        log_table = log_table.replace('<table>',
+                                      '<table class="alternating dns-table">\n'
+                                      '  <colgroup>\n'
+                                      '    <col style="width: 15%">\n'
+                                      '    <col style="width: 10%">\n'
+                                      '    <col style="width: 15%">\n'
+                                      '    <col style="width: 60%">\n'
+                                      '  </colgroup>')
+
         log_html += log_table
         log_html += '</div>'
 
