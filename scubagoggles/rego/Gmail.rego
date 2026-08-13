@@ -147,6 +147,9 @@ if {
 #--
 GmailId3_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.3.1")
 
+SpfDetails(dnsResponse) := sprintf("<li>\n  %s: %s\n</li>\n",
+                                   [QueryNameBuilder(dnsResponse),
+                                    QueryResultBuilder(dnsResponse)])
 # Not applicable at OU or Group level
 DomainsWithSpf contains SpfRecord.domain if {
     some SpfRecord in input.spf_records
