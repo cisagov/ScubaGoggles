@@ -166,16 +166,25 @@ DomainsWithSpf contains SpfRecord.domain if {
 }
 
 # Loop through domains and save the details for domains without proper SPF records
-DomainsWithoutSpf contains Details if {
+DomainsWithoutSpf contains details if {
     some DNSResponse in input.spf_records
-    count([Answer | some Answer in DNSResponse.rdata; contains(Answer, "~all")]) == 0
-    Details := concat("", [
-        "<li>",
-        QueryNameBuilder(DNSResponse),
-        ": ",
-        QueryResultBuilder(DNSResponse),
-        "</li>"
-    ])
+    count(DNSResponse.rdata) == 0
+    details := SpfDetails(DNSResponse)
+}
+
+DomainsWithoutSpf contains details if {
+    some DNSResponse in input.spf_records
+    count(DNSResponse.rdata) > 1
+    details := SpfDetails(DNSResponse)
+}
+
+DomainsWithoutSpf contains details if {
+    some DNSResponse in input.spf_records
+    count(DNSResponse.rdata) == 1
+    spfRecord := DNSResponse.rdata[0]
+    not endswith(spfRecord, "-all")
+    not contains(spfRecord, "redirect")
+    details := SpfDetails(DNSResponse)
 }
 
 # SPF Status Message
