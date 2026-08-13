@@ -32,9 +32,6 @@ NeedleInHaystack(Pattern, Haystack) := true if {
 SpfStatusDetailsBuilder(dnsresponse) := NXDomain if {
     some log_item in dnsresponse.log
     NeedleInHaystack(`(?i)NXDomain`, log_item.query_result)
-} else := NXDomain if {
-    some log_item in dnsresponse.log
-    NeedleInHaystack(`NXDOMAIN`, log_item.query_result)
 } else := "Exceptions other than non-existant domain (NXDOMAIN) returned." if {
     some log_item in dnsresponse.log
     NeedleInHaystack(`exception`, log_item.query_result)
