@@ -21,6 +21,41 @@ ReportDetailsArray(Status, Array1, Array2) := Detail if {
 	String := concat(", ", Array1)
     Detail := Description(Fraction, " agency domain(s) found in violation: ", String)
 }
+#Default Non-existant Domain SPF Status Message
+default NXDomain := "Domain does not exist."
+
+NeedleInHaystack(Pattern, Haystack) := true if {
+    matches := regex.find_all_string_submatch_n(Pattern, Haystack, -1)
+    count(matches) > 0
+}
+
+SpfStatusDetailsBuilder(dnsresponse) := NXDomain if {
+    some log_item in dnsresponse.log
+    NeedleInHaystack(`(?i)NXDomain`, log_item.query_result)
+} else := "Exceptions other than non-existant domain (NXDOMAIN) returned." if {
+    some log_item in dnsresponse.log
+    NeedleInHaystack(`exception`, log_item.query_result)
+} else := "Domain has no SPF record." if {
+    some log_item in dnsresponse.log
+    NeedleInHaystack(`(?i)no\s+SPF\s+records`, log_item.query_result)
+} else := "Domain exists but no answers returned." if {
+    count(dnsresponse.rdata) == 0
+} else := "More than one record found." if {
+    count(dnsresponse.rdata) > 1
+} else := "SPF record found, but it does not hardfail (\"-all\") or redirect to one that does."
+
+SpfStatusQueryNameBuilder(dnsresponse) := DomainName if {
+    some item in dnsresponse
+    is_string(item)
+    DomainName := item
+} else := LogItem if {
+   some log_item in dnsresponse.log
+   LogItem := log_item.query_name
+}
+
+QueryResultBuilder(DNSResponse) := SpfStatusDetailsBuilder(DNSResponse)
+
+QueryNameBuilder(DNSResponse) := SpfStatusQueryNameBuilder(DNSResponse)
 
 BaseDomains := {Domain | some Domain in input.domains}
 AliasDomains := {Alias | some Alias in input.alias_domains}
@@ -110,39 +145,59 @@ if {
 #
 # Baseline GWS.GMAIL.3.1
 #--
-
 GmailId3_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.3.1")
 
-# Not applicable at OU or Group level
-DomainsWithSpf contains SpfRecord.domain if {
-    some SpfRecord in input.spf_records
-    # Ensure that there's only 1 SPF record
-    count([Answer | some Answer in SpfRecord.rdata; startswith(Answer, "v=spf1")]) == 1
-    some Rdata in SpfRecord.rdata
-    startswith(Rdata, "v=spf1 ")
-    # Ensure that the policy either ends with "-all", "~all", or directs to a different SPF policy
-    true in [
-        endswith(Rdata, "-all"),
-        endswith(Rdata, "~all"),
-        contains(Rdata, "redirect")
-    ]
+SpfDetails(dnsResponse) := sprintf("<li>\n  %s: %s\n</li>\n",
+                                   [QueryNameBuilder(dnsResponse),
+                                    QueryResultBuilder(dnsResponse)])
+
+# Loop through domains and save the details for domains without proper SPF records
+DomainsWithoutSpf contains details if {
+    some DNSResponse in input.spf_records
+    count(DNSResponse.rdata) == 0
+    details := SpfDetails(DNSResponse)
 }
+
+DomainsWithoutSpf contains details if {
+    some DNSResponse in input.spf_records
+    count(DNSResponse.rdata) > 1
+    details := SpfDetails(DNSResponse)
+}
+
+DomainsWithoutSpf contains details if {
+    some DNSResponse in input.spf_records
+    count(DNSResponse.rdata) == 1
+    spfRecord := DNSResponse.rdata[0]
+    not endswith(spfRecord, "-all")
+    not contains(spfRecord, "redirect")
+    details := SpfDetails(DNSResponse)
+}
+
+# SPF Status Message
+SpfStatusMessage := Message if {
+    count(DomainsWithoutSpf) == 0
+    Message := "Requirement met. "
+} else := concat("", [
+    format_int(count(DomainsWithoutSpf), 10),
+    " failing domain(s): ",
+    "<ul id=\"spf-domains\">",
+    concat("", DomainsWithoutSpf),
+    "</ul>"
+])
 
 tests contains {
     "PolicyId": GmailId3_1,
     "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutSpf, BaseDomains), DNSLink]),
+    "ReportDetails": concat(" ", [SpfStatusMessage, DNSLink]),
     "ActualValue": DomainsWithoutSpf,
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    DomainsWithoutSpf := BaseDomains - DomainsWithSpf
     Status := count(DomainsWithoutSpf) == 0
 }
 #--
-
 
 ###############
 # GWS.GMAIL.4 #
