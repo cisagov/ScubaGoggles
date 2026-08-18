@@ -1,6 +1,7 @@
 .vscode
 .venv
 build
+dist
 scubagoggles.egg-info
 .DS_Store
 *.bak
