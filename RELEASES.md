@@ -36,7 +36,11 @@ The checklist below is used by the development team when it prepares a new relea
 - [ ] Update the ScubaGoggles and SCB version in the [README.md](https://github.com/cisagov/ScubaGoggles/blob/main/README.md) badge image links.
 - [ ] Update and redact the sample report using the redaction tool and manual review
 - [ ] Check README for any necessary changes and documentation updates as needed
-- [ ] Build initial release candidate by manually triggering [`Build Draft Release`](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_release.yml) workflow with expected release name (vX.Y.Z) and release version (X.Y.Z) based on semantic versioning
+- [ ] Build initial release candidate by manually triggering [`Build Draft Release`](https://github.com/cisagov/ScubaGoggles/actions/workflows/run_release.yml)
+  - Use the expected release name (vX.Y.Z) and release version (X.Y.Z) based on semantic versioning
+  - The **version** input must match `__version__` in [__init__.py](https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/__init__.py)
+  - Optionally set **compareHeadRef** (branch, tag, or SHA) when generating notes from a release branch or cherry-picked range; if omitted, notes compare against the workflow run commit SHA
+  - Do **not** rerun this workflow with a version that already exists as a published GitHub release; the release action updates that existing release instead of creating a new draft
 - [ ] Conduct release testing of each baseline
 - [ ] Fix critical defects deemed release blocking
 - [ ] Document non-critical issues for future development cycle
@@ -44,11 +48,21 @@ The checklist below is used by the development team when it prepares a new relea
 
 ## Publishing ScubaGoggles release candidate ##
 
-After running the `Build Draft Release` workflow, a draft release will be visible to development team members for review and revision. The checklist below is designed to ensure consistency in review and publishing of the release candidate as the final release. 
+After running the `Build Draft Release` workflow, a **draft** GitHub release is created with packaged assets (`.whl`, `.tar.gz`, `.zip`) and categorized release notes. The workflow does not publish the release. The checklist below is designed to ensure consistency in review and publishing of the release candidate as the final release.
 
-- [ ] Update release notes manually
-  - Adjust default change format to use PR listing as `- #{{TITLE}} ##{{NUMBER}}`
-  - Regroup changes into sections: Major new features, Bug fixes, Documentation improvements, and Baseline updates
+The generated notes are grouped from merged pull requests between the previous published release and the compare head into:
+
+- Major Changes
+- Bugs Fixed
+- Baselines (includes BOD 25-01 Additions / Removals / Updates placeholders plus other baseline changes)
+- Documentation
+- Dependencies
+- Uncategorized changes (only if some PRs could not be categorized automatically)
+
+- [ ] Review and edit the generated release notes before publishing
+  - Confirm PRs are in the correct sections; move items from **Uncategorized changes** (or remove that section if empty after edits)
+  - Fill in or remove the BOD 25-01 Additions / Removals / Updates placeholders in **Baselines**
+  - Add any cherry-picked or otherwise missing changes that were not associated with comparison commits
 - [ ] Make the release official and visible to public
   - Uncheck **Set as a pre-release**
   - Check **Set as latest release**

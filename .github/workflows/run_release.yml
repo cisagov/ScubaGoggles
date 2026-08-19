@@ -253,20 +253,14 @@ jobs:
               let labelSource = "closing issues";
 
               if (issueNumbers.length === 0) {
-                if (prLabelNames.length === 0) {
-                  core.warning(
-                    `PR #${pr.number} has no closing issues or PR labels; ` +
-                      "including in Uncategorized changes."
-                  );
-                  return "Uncategorized changes";
-                }
-
                 labelNames = prLabelNames;
                 labelSource = "pull request";
-                core.info(
-                  `PR #${pr.number} has no closing issues; using PR labels ` +
-                    `(${labelNames.join(", ")}).`
-                );
+                if (prLabelNames.length > 0) {
+                  core.info(
+                    `PR #${pr.number} has no closing issues; using PR labels ` +
+                      `(${labelNames.join(", ")}).`
+                  );
+                }
               }
 
               if (hasExcludedLabel(labelNames)) {
