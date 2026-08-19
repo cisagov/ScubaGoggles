@@ -207,7 +207,8 @@ class Orchestrator:
          outputpath,
          outputproviderfilename,
          imapexclusions,
-         sitesexclusions) = itemgetter('baselines',
+         sitesexclusions,
+         oauthbindaddr) = itemgetter('baselines',
                                        'customerid',
                                        'credentials',
                                        'usemetadataserverauth',
@@ -220,7 +221,8 @@ class Orchestrator:
                                        'outputpath',
                                        'outputproviderfilename',
                                        'imapexclusions',
-                                       'sitesexclusions')(self.args_dict)
+                                       'sitesexclusions',
+                                       'oauthbindaddr')(self.args_dict)
 
         with Provider(customerid,
                       credentials,
@@ -228,7 +230,8 @@ class Orchestrator:
                       svc_account_email=subjectemail,
                       dns_resolvers=preferreddnsresolvers,
                       doh_servers=self.args_dict['preferreddohservers'],
-                      skip_doh=skipdoh) as provider:
+                      skip_doh=skipdoh,
+                      oauth_bind_addr=oauthbindaddr) as provider:
             provider_dict = provider.call_gws_providers(baselines, quiet)
             provider_dict['successful_calls'] = list(provider.successful_calls)
             provider_dict['unsuccessful_calls'] = list(provider.unsuccessful_calls)

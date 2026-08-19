@@ -5,6 +5,7 @@ This module uses a local credential.json file to authenticate to a GWS org
 """
 
 import json
+import webbrowser
 from pathlib import Path
 
 from google.auth import iam
@@ -29,7 +30,7 @@ class GwsAuth:
     """
 
     def __init__(self, credentials_path: Path, metadata_auth: bool = False,
-                 svc_account_email: str = None):
+                 svc_account_email: str = None, oauth_bind_addr: str = None):
         """GwsAuth class initialization.
 
         The Google credentials are established when the class instance is
@@ -84,8 +85,17 @@ class GwsAuth:
                                                          OAUTH_SCOPES)
 
         try:
+            webbrowser.get()
+            open_browser = True
+        except webbrowser.Error:
+            open_browser = False
+
+        try:
             self._token = flow.run_local_server(
-                timeout_seconds=300, prompt='consent')
+                timeout_seconds=300,
+                prompt='consent',
+                open_browser=open_browser,
+                bind_addr=oauth_bind_addr)
         except AttributeError as ae:
             raise RuntimeError('Google authorization timeout') from ae
 
