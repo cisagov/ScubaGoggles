@@ -126,9 +126,9 @@ Service Specific Terms.
 
 #### GWS.GEMINI.2.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Generative AI** -\> **Gemini for Workspace.**
-3.  Select **Gemini Beta features.**
-4.  Ensure **Gemini Beta features** is set to **Off**.
+2.  Select **Generative AI** -\> **Gemini in Workspace.**
+3.  Select **Beta Gemini features.**
+4.  Ensure **Beta features** is set to **Off**.
 5.  Select **Save**.
 
 ## 3. Gemini Conversation History
