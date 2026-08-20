@@ -8,7 +8,6 @@ dynamic = ["version"]
 classifiers = ["Development Status :: 4 - Beta",
                "Intended Audience :: Information Technology",
                "Topic :: Security",
-               "Programming Language :: Python :: 3.10",
                "Programming Language :: Python :: 3.11",
                "Programming Language :: Python :: 3.12",
                "Programming Language :: Python :: 3.13",
@@ -23,7 +22,7 @@ dependencies = ["dnspython>=2.6.1",
                 "requests>=2.32.3",
                 "tqdm>=4.66.5",
                 "packaging>=26.0"]
-requires-python = ">= 3.10"
+requires-python = ">= 3.11"
 description='SCuBA security baseline assessment tool'
 authors = [{name = "CISA"}]
 license = "CC0-1.0"
