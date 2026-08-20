@@ -218,3 +218,36 @@ Conversation sharing via link SHALL NOT be enabled.
 5.  Select **Disable conversation sharing** OR select **Allow conversation sharing via Drive**.
 6.  Select **Save**.
 
+
+## 5. Gemini AI Avatar
+This section covers Gemini AI Avatar
+
+### Policies
+
+#### GWS.GEMINI.5.1v1
+Enable Avatar in Gemini SHOULD be set to OFF.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini41v1-instructions)
+
+- _Rationale:_ By disabling unneeded features, it helps reduce the potential attack surface.
+- _Last modified:_ August 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)a
+- MITRE ATT&CK TTP Mapping
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+
+### Resources
+
+-   [Turn conversation sharing on or off](https://knowledge.workspace.google.com/admin/gemini/turn-conversation-sharing-on-or-off)
+
+### Prerequisites
+
+-   None
+
+### Implementation
+
+#### GWS.GEMINI.5.1v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Generative AI** -\> **Gemini App**.
+3.  Select **Avatar in Gemini**.
+4.  Select **Disable Avatar in Gemini**.
+5.  Select **Save**.
