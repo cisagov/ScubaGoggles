@@ -445,7 +445,11 @@ NonCompliantOUs5_2 contains {
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-    EnabledCats := {trim(cat, " []\n") | some cat in split(LastEvent.NewValue, ",")}
+    EnabledCats := {
+        trim(regex.replace(cat, `\s+`, " "), " []")
+        |
+        some cat in split(LastEvent.NewValue, ",")
+    }
     MissingCats := AllReportingCategories - EnabledCats
     count(MissingCats) > 0
 }
@@ -485,7 +489,11 @@ NonCompliantOUs5_2 contains {
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue != "DELETE_APPLICATION_SETTING"
-    EnabledCats := {trim(cat, " []\n") | some cat in split(LastEvent.NewValue, ",")}
+    EnabledCats := {
+        trim(regex.replace(cat, `\s+`, " "), " []")
+        |
+        some cat in split(LastEvent.NewValue, ",")
+    }
     MissingCats := AllReportingCategories - EnabledCats
     count(MissingCats) > 0
 }
