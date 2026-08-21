@@ -233,11 +233,11 @@ Enable Avatar in Gemini SHOULD be set to OFF.
 - _Last modified:_ August 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)a
 - MITRE ATT&CK TTP Mapping
-  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1684:001: Social Engineering: Impersonation](https://attack.mitre.org/techniques/T1684/001/)
 
 ### Resources
 
--   [Turn conversation sharing on or off](https://knowledge.workspace.google.com/admin/gemini/turn-conversation-sharing-on-or-off)
+-   [Create and use an avatar in Gemini Apps]([https://knowledge.workspace.google.com/admin/gemini/turn-conversation-sharing-on-or-off](https://support.google.com/gemini/answer/16984474?hl=en&co=GENIE.Platform%3DAndroid))
 
 ### Prerequisites
 
