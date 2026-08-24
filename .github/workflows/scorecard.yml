@@ -10,7 +10,9 @@ on:
   # To guarantee Maintained check is occasionally updated. See
   # https://github.com/ossf/scorecard/blob/main/docs/checks.md#maintained
   schedule:
-    - cron: '35 19 * * 4'
+    # Run the scorecard yml workflow at midnight (00:00) every first day (1) of the month (* any month)
+    # and any weekday/weekend (last * = Sunday thru Saturday)
+    - cron: '0 0 1 * *'
   push:
     branches: [ "main" ]
 
