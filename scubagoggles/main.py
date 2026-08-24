@@ -133,6 +133,16 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     parser.add_argument('--subjectemail',
                         metavar='<email-address>',
                         help=help_msg)
+    help_msg = ('The IP address the OAuth redirect server listens on during '
+            'interactive authentication. Defaults to localhost, which is '
+            'correct for local use and for SSH port forwarding. Use '
+            '0.0.0.0 when running in a container so that a published '
+            'port can reach the redirect server. Only applies when '
+            'authenticating interactively with an OAuth client secret.')
+    parser.add_argument('--oauthbindaddr',
+                        metavar='<ip-address>',
+                        default=None,
+                        help=help_msg)
 
     help_msg = ('The customer ID the tool should run on. Defaults to '
                 '"my_customer" which will be the domain of the '
