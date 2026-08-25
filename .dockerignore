@@ -1,0 +1,36 @@
+# VCS and editor
+.git
+.github
+.gitattributes
+.gitignore
+.vscode
+.DS_Store
+**/.DS_Store
+
+# Python build artifacts
+.venv
+build
+dist
+*.egg-info
+**/__pycache__
+*.pyc
+.pytest_cache
+
+# Docs and assets not needed to build the wheel
+docs
+guides
+images
+utils
+baselines
+
+# Local run output and credentials
+**/output*
+**/token.json
+**/credentials.json
+**/GWSBaselineConformance*
+**/ProviderSettingsExport.json
+**/TestResults.json
+**/BaselineReports.html
+
+# The docker directory itself (Dockerfile is passed via -f)
+docker
