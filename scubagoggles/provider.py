@@ -457,6 +457,10 @@ class Provider:
         tags = answers[0].split(';')
         for tag in tags:
             tag = tag.strip()
+            if tag == '':
+                # There was a trailing ";" which results in an empty string when you call the split
+                # function, this is safe to ignore
+                continue
             if not tag.count('=') == 1:
                 # malformed DMARC record, discard it
                 return {}
@@ -465,6 +469,7 @@ class Provider:
                 # There's a duplicate tag, discard the entire answer
                 return {}
             dmarc_fields[tag_name] = tag_value
+        return dmarc_fields
 
     def get_dmarc_record(self, domain: str) -> dict:
         """
@@ -505,7 +510,7 @@ class Provider:
                 'qname': qname,
                 'result': result
             })
-            dmarc_record = self.parse_dns_record(result['answers'])
+            dmarc_record = self.parse_dmarc_record(result['answers'])
             if dmarc_record.get('psd') == 'n':
                 # We found the organizational domain, return its DMARC record
                 return {
@@ -517,7 +522,8 @@ class Provider:
                 # This is the PSD (public suffix domain).
                 # As no domain so far advertised itself as the organizational domain (psd=n),
                 # the organizational domain is one layer below it.
-                org_domain_result = self.parse_dns_record(tree_walk_results[-2]['result']['answers'])
+                last_result = tree_walk_results[-2]['result']['answers']
+                org_domain_result = self.parse_dmarc_record(last_result)
                 if len(org_domain_result) != 0:
                     # Mission accomplished, we found organizational domain's DMARC record
                     return {
@@ -535,8 +541,8 @@ class Provider:
         for result in reversed(tree_walk_results):
             # We didn't find the organizational domain. In this case, select the DMARC record for
             # the domain with the fewest labels (hence the "reversed()" above)
-            dmarc_record = self.parse_dns_record(result['result']['answers'])
-            if len(dmarc_record != 0):
+            dmarc_record = self.parse_dmarc_record(result['result']['answers'])
+            if len(dmarc_record) != 0:
                 return {
                     'domain': domain,
                     'rdata': result['result']['answers'],
