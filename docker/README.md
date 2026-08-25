@@ -11,7 +11,8 @@ false`.
 ## Build
 
 The build script copies the local ScubaGoggles source into a temporary Docker
-build context and installs it into the image.
+build context and installs it into the image. OPA is copied from the official
+`openpolicyagent/opa` Docker Hub image during the multi-stage build.
 
 ```sh
 ./build.sh
@@ -21,12 +22,14 @@ Defaults:
 
 - ScubaGoggles source: `<your_path>`
 - Image tag: `scubagoggles-access-token:local`
+- OPA image version: `1.17.0`
 
 Override either value if needed:
 
 ```sh
 SCUBAGOGGLES_SOURCE=/path/to/ScubaGoggles \
 IMAGE_TAG=us-docker.pkg.dev/PROJECT/REPOSITORY/scubagoggles-access-token:TAG \
+OPA_VERSION=1.17.0 \
 ./build.sh
 ```
 
@@ -58,20 +61,6 @@ command. The entrypoint rejects `--credentials`, `-c`, `--subjectemail`, and
 `--config`; use `SCUBAGOGGLES_CONFIG` for mounted config files so the entrypoint
 can merge the access token safely.
 
-## GKE
-
-Create a Kubernetes Secret from a short-lived access token:
-
-```sh
-kubectl create secret generic scubagoggles-access-token \
-  --from-literal=access-token="$SCUBAGOGGLES_ACCESS_TOKEN"
-```
-
-Update `k8s/job.yaml` with your pushed image reference, then apply it:
-
-```sh
-kubectl apply -f k8s/job.yaml
-```
 
 The example uses a PVC named `scubagoggles-output` for reports. Replace that
 volume with your cluster's preferred output storage.
