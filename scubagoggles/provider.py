@@ -441,7 +441,8 @@ class Provider:
 
         return results
 
-    def parse_dmarc_record(self, answers: list) -> dict:
+    @staticmethod
+    def _parse_dmarc_record(answers: list) -> dict:
         """
         Parse the given answer set for DMARC record values. Return an empty dict if no valid DMARC
         record is found.
@@ -484,7 +485,7 @@ class Provider:
             'qname': qname,
             'result': result
         })
-        dmarc_record = self.parse_dmarc_record(result['answers'])
+        dmarc_record = self._parse_dmarc_record(result['answers'])
         if len(dmarc_record) != 0:
             # We found the DMARC record at the author level, no need to make further queries
             return {
@@ -510,7 +511,7 @@ class Provider:
                 'qname': qname,
                 'result': result
             })
-            dmarc_record = self.parse_dmarc_record(result['answers'])
+            dmarc_record = self._parse_dmarc_record(result['answers'])
             if dmarc_record.get('psd') == 'n':
                 # We found the organizational domain, return its DMARC record
                 return {
@@ -523,7 +524,7 @@ class Provider:
                 # As no domain so far advertised itself as the organizational domain (psd=n),
                 # the organizational domain is one layer below it.
                 last_result = tree_walk_results[-2]['result']['answers']
-                org_domain_result = self.parse_dmarc_record(last_result)
+                org_domain_result = self._parse_dmarc_record(last_result)
                 if len(org_domain_result) != 0:
                     # Mission accomplished, we found organizational domain's DMARC record
                     return {
@@ -541,7 +542,7 @@ class Provider:
         for result in reversed(tree_walk_results):
             # We didn't find the organizational domain. In this case, select the DMARC record for
             # the domain with the fewest labels (hence the "reversed()" above)
-            dmarc_record = self.parse_dmarc_record(result['result']['answers'])
+            dmarc_record = self._parse_dmarc_record(result['result']['answers'])
             if len(dmarc_record) != 0:
                 return {
                     'domain': domain,
