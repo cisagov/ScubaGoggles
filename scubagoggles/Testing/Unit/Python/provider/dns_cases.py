@@ -358,7 +358,7 @@ GET_DMARC_RECORDS_CASES = [
             }
         ]
     ),
-    # DMARC record missiong for subdomain, but present on parent domain
+    # DMARC record missing for subdomain, but present on parent domain
     (
         {"sub.example.com"},
         {
@@ -410,20 +410,8 @@ GET_DMARC_RECORDS_CASES = [
     ),
     # No DMARC records found for either sub/parent domain
     (
-        {"example.com"},
+        {"sub.example.com"},
         {
-            "_dmarc.example.com": {
-                "answers": [],
-                "nxdomain": False,
-                "log_entries": [
-                    {
-                        "query_name": "_dmarc.example.com",
-                        "query_method": "traditional",
-                        "query_result": "Query returned NXDOMAIN",
-                        "query_answers": [],
-                    }
-                ],
-            },
             "_dmarc.sub.example.com": {
                 "answers": [],
                 "nxdomain": False,
@@ -436,12 +424,42 @@ GET_DMARC_RECORDS_CASES = [
                     }
                 ],
             },
+            "_dmarc.example.com": {
+                "answers": [],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
+            "_dmarc.com": {
+                "answers": [],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
         },
         [
             {
-                "domain": "example.com",
+                "domain": "sub.example.com",
                 "rdata": [],
                 "log": [
+                    {
+                        "query_name": "_dmarc.sub.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    },
                     {
                         "query_name": "_dmarc.example.com",
                         "query_method": "traditional",
@@ -449,7 +467,7 @@ GET_DMARC_RECORDS_CASES = [
                         "query_answers": [],
                     },
                     {
-                        "query_name": "_dmarc.example.com",
+                        "query_name": "_dmarc.com",
                         "query_method": "traditional",
                         "query_result": "Query returned NXDOMAIN",
                         "query_answers": [],
