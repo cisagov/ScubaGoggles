@@ -358,7 +358,7 @@ GET_DMARC_RECORDS_CASES = [
             }
         ]
     ),
-    # DMARC record missiong for subdomain, but present on parent domain
+    # DMARC record missing for subdomain, but present on parent domain
     (
         {"sub.example.com"},
         {
@@ -410,20 +410,8 @@ GET_DMARC_RECORDS_CASES = [
     ),
     # No DMARC records found for either sub/parent domain
     (
-        {"example.com"},
+        {"sub.example.com"},
         {
-            "_dmarc.example.com": {
-                "answers": [],
-                "nxdomain": False,
-                "log_entries": [
-                    {
-                        "query_name": "_dmarc.example.com",
-                        "query_method": "traditional",
-                        "query_result": "Query returned NXDOMAIN",
-                        "query_answers": [],
-                    }
-                ],
-            },
             "_dmarc.sub.example.com": {
                 "answers": [],
                 "nxdomain": False,
@@ -436,12 +424,42 @@ GET_DMARC_RECORDS_CASES = [
                     }
                 ],
             },
+            "_dmarc.example.com": {
+                "answers": [],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
+            "_dmarc.com": {
+                "answers": [],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
         },
         [
             {
-                "domain": "example.com",
+                "domain": "sub.example.com",
                 "rdata": [],
                 "log": [
+                    {
+                        "query_name": "_dmarc.sub.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    },
                     {
                         "query_name": "_dmarc.example.com",
                         "query_method": "traditional",
@@ -449,7 +467,7 @@ GET_DMARC_RECORDS_CASES = [
                         "query_answers": [],
                     },
                     {
-                        "query_name": "_dmarc.example.com",
+                        "query_name": "_dmarc.com",
                         "query_method": "traditional",
                         "query_result": "Query returned NXDOMAIN",
                         "query_answers": [],
@@ -565,4 +583,47 @@ GET_DNSINFO_CASES = [
         "expected_base_domains": [],
         "expected_alias_domains": []
     },
+]
+
+PARSE_DMARC_RECORD_CASES = [
+    # Standard case
+    (
+        ["v=DMARC1; p=reject; rua=mailto:dmarc@example.com;"],
+        {"v": "DMARC1", "p": "reject", "rua": "mailto:dmarc@example.com"}
+    ),
+    # Ignore whitespace around "=" and ";"
+    (
+        ["v\t=  DMARC1  \t;p=reject;"],
+        {"v": "DMARC1", "p": "reject"}
+    ),
+    # Discard all if multiple DMARC records are returned
+    (
+        ["v=DMARC1;", "v=DMARC1;"],
+        {}
+    ),
+    # Ignore non-DMARC txt records
+    (
+        ["v=DMARC1;", "domain-verification=abc"],
+        {"v": "DMARC1"}
+    ),
+    # Require "v" tag to be first
+    (
+        ["p=reject; v=DMARC1;"],
+        {}
+    ),
+    # Ignore invalid DMARC versions
+    (
+        ["v=DMARC0;"],
+        {}
+    ),
+    # Missing ";" deliminator
+    (
+        ["v=DMARC1 p=reject;"],
+        {}
+    ),
+    # Discard if duplicate tags
+    (
+        ["v=DMARC1;p=reject;p=reject"],
+        {}
+    ),
 ]
