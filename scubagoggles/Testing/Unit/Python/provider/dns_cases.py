@@ -584,3 +584,46 @@ GET_DNSINFO_CASES = [
         "expected_alias_domains": []
     },
 ]
+
+PARSE_DMARC_RECORD_CASES = [
+    # Standard case
+    (
+        ["v=DMARC1; p=reject; rua=mailto:dmarc@example.com;"],
+        {"v": "DMARC1", "p": "reject", "rua": "mailto:dmarc@example.com"}
+    ),
+    # Ignore whitespace around "=" and ";"
+    (
+        ["v\t=  DMARC1  \t;p=reject;"],
+        {"v": "DMARC1", "p": "reject"}
+    ),
+    # Discard all if multiple DMARC records are returned
+    (
+        ["v=DMARC1;", "v=DMARC1;"],
+        {}
+    ),
+    # Ignore non-DMARC txt records
+    (
+        ["v=DMARC1;", "domain-verification=abc"],
+        {"v": "DMARC1"}
+    ),
+    # Require "v" tag to be first
+    (
+        ["p=reject; v=DMARC1;"],
+        {}
+    ),
+    # Ignore invalid DMARC versions
+    (
+        ["v=DMARC0;"],
+        {}
+    ),
+    # Missing ";" deliminator
+    (
+        ["v=DMARC1 p=reject;"],
+        {}
+    ),
+    # Discard if duplicate tags
+    (
+        ["v=DMARC1;p=reject;p=reject"],
+        {}
+    ),
+]

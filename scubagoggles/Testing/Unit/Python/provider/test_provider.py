@@ -17,6 +17,7 @@ from scubagoggles.Testing.Unit.Python.provider.dns_cases import (
     GET_DKIM_RECORDS_CASES,
     GET_DMARC_RECORDS_CASES,
     GET_DNSINFO_CASES,
+    PARSE_DMARC_RECORD_CASES,
 )
 from scubagoggles.Testing.Unit.Python.provider.admin_ou_cases import (
     GET_SUPER_ADMIN_CASES,
@@ -1142,3 +1143,25 @@ class TestProvider:
         assert result["inbound_sso_assignments_error"] == "Unable to resolve canonical customer id"
         assert ApiReference.LIST_INBOUND_SSO_ASSIGNMENTS.value in provider._unsuccessful_calls
         authorized_session.assert_not_called()
+
+    @pytest.mark.parametrize(
+        ("dns_answers", "expected"),
+        PARSE_DMARC_RECORD_CASES
+    )
+    def test_parse_dmarc_record(
+        self,
+        dns_answers,
+        expected
+    ):
+        """
+        Verify if Provider.get_super_admins() retrieves admin users
+        from the Directory API.
+
+        :param mocker: pytest-mock fixture used to create mocks/patch functions.
+        :param cases: Parametrized test cases containing user list and expected results.
+        """
+
+        # note that parse_dmarc_record is a static function so we don't actually need to use the
+        # instantiated provider. It also doesn't actually make any DNS queries or call any APIs so
+        # no need to mock that
+        assert Provider._parse_dmarc_record(dns_answers) == expected
