@@ -3,6 +3,7 @@
 provider.py is where the GWS api calls are made.
 """
 
+import re
 import logging
 import warnings
 import json
@@ -450,14 +451,24 @@ class Provider:
         :param answers: List of strings containing the answers returned to a DNS query.
         """
         dmarc_fields = {}
+
+        # Per the RFC spec, the equals sign and semicolon deliminators can be surounded by 0 or more
+        # space or horizontal tab characters on either side (see
+        # https://www.rfc-editor.org/info/rfc9989/#section-4.8). Strip out those characters to
+        # ensure consistent parsing.
+        answers = [re.sub(r"[ \t]*=[ \t]*", "=", a) for a in answers if a]
+        answers = [re.sub(r"[ \t]*;[ \t]*", ";", a) for a in answers if a]
+
+        # DMARC records MUST start with the "v" tag, with "DMARC1" being the only acceptable value
         answers = [a for a in answers if a.startswith("v=DMARC1;")]
+
         if len(answers) != 1:
             # If there is not exactly 1 DMARC record returned for a given domain, the entire answer
             # set is discarded.
             return {}
+
         tags = answers[0].split(';')
         for tag in tags:
-            tag = tag.strip()
             if tag == '':
                 # There was a trailing ";" which results in an empty string when you call the split
                 # function, this is safe to ignore
