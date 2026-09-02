@@ -4,6 +4,7 @@
 
 name: Scorecard supply-chain security
 on:
+  pull_request:
   # For Branch-Protection check. Only the default branch is supported. See
   # https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection
   branch_protection_rule:
@@ -14,7 +15,7 @@ on:
     # and any weekday/weekend (last * = Sunday thru Saturday)
     - cron: '0 0 1 * *'
   push:
-    branches: [ "main", "1175-openssf-scorecard-test-mbaker" ]
+    branches: [ "main" ]
 
 # Declare default permissions as read only.
 permissions: read-all
