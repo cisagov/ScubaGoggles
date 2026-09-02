@@ -18,11 +18,13 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import TypeAlias
+from urllib.parse import urljoin
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from scubagoggles import __version__ as SCUBAGOGGLES_VERSION
 from scubagoggles.scuba_constants import DEFAULT_OSCAL_VERSION
 
 
@@ -38,17 +40,16 @@ CATALOG_NAMESPACE = uuid.uuid5(
     uuid.NAMESPACE_URL,
     "https://cisa.gov/scuba/google-workspace/catalog",
 )
-GITHUB_BROWSER_BASE = (
-    "https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/baselines"
-)
-GITHUB_RAW_BASE = (
-    "https://raw.githubusercontent.com/cisagov/ScubaGoggles/main/scubagoggles/baselines"
-)
+GITHUB_REPO_BROWSER_ROOT = "https://github.com/cisagov/ScubaGoggles/blob/main"
+GITHUB_REPO_RAW_ROOT = "https://raw.githubusercontent.com/cisagov/ScubaGoggles/main"
+GITHUB_BROWSER_BASE = f"{GITHUB_REPO_BROWSER_ROOT}/scubagoggles/baselines"
+GITHUB_RAW_BASE = f"{GITHUB_REPO_RAW_ROOT}/scubagoggles/baselines"
 OSCAL_CATALOG_REFERENCE = (
     "https://pages.nist.gov/OSCAL-Reference/models/"
     f"v{DEFAULT_OSCAL_VERSION}/catalog/json-reference/"
 )
 SCUBA_NS = "https://cisa.gov/scuba"
+DEVELOPMENT_VERSION_LABEL = "development build"
 
 BASELINE_OVERRIDES = {
     "assuredcontrols.md": {
@@ -87,13 +88,39 @@ def catalog_file_name(release_version: str | None = None) -> str:
     return DEFAULT_CATALOG_FILE
 
 
+def catalog_metadata_version(release_version: str | None = None) -> str:
+    """Return the catalog metadata version for release or ad hoc generation."""
+
+    if release_version:
+        return release_version
+    return f"{SCUBAGOGGLES_VERSION} ({DEVELOPMENT_VERSION_LABEL})"
+
+
 def stable_uuid(namespace: uuid.UUID, label: str) -> str:
     """Return a deterministic UUID for a generated OSCAL object."""
 
     return str(uuid.uuid5(namespace, label))
 
 
-def clean_text(value: str) -> str:
+def resolve_source_href(href: str, baseline_file: str | None = None) -> str:
+    """Resolve source Markdown hrefs to human-browsable GitHub URLs."""
+
+    href = href.strip()
+    if href.startswith(("http://", "https://", "mailto:")):
+        return href
+    if href.startswith("#"):
+        if baseline_file:
+            return f"{GITHUB_BROWSER_BASE}/{baseline_file}{href}"
+        return href
+    base_url = (
+        f"{GITHUB_BROWSER_BASE}/{baseline_file}"
+        if baseline_file
+        else f"{GITHUB_BROWSER_BASE}/"
+    )
+    return urljoin(base_url, href)
+
+
+def clean_text(value: str, baseline_file: str | None = None) -> str:
     """Convert Markdown-heavy snippets into compact OSCAL prose."""
 
     if not value:
@@ -103,7 +130,13 @@ def clean_text(value: str) -> str:
     value = re.sub(r"\[!\[[^\]]+\]\([^)]+\)\]\([^)]+\)", "", value)
     value = re.sub(r"!\[([^\]]*)\]\([^)]+\)", r"\1", value)
     value = re.sub(r"<img[^>]*>", "", value)
-    value = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r"\1 (\2)", value)
+    value = re.sub(
+        r"\[([^\]]+)\]\(([^)]+)\)",
+        lambda match: (
+            f"{match.group(1)} ({resolve_source_href(match.group(2), baseline_file)})"
+        ),
+        value,
+    )
     value = value.replace("**", "").replace("_", "")
     value = re.sub(r"^[ \t]*[-*][ \t]+", "", value, flags=re.MULTILINE)
     value = re.sub(r"[ \t]+", " ", value)
@@ -147,7 +180,11 @@ def extract_links(markdown: str) -> list[tuple[str, str]]:
     return links
 
 
-def extract_policy_field(block: str, label: str) -> str:
+def extract_policy_field(
+    block: str,
+    label: str,
+    baseline_file: str | None = None,
+) -> str:
     """Extract a Markdown policy metadata field."""
 
     pattern = rf"- _{re.escape(label)}:_\s*(.*?)(?=\n- _[^_]+:_|\n- MITRE ATT&CK|\Z)"
@@ -155,7 +192,7 @@ def extract_policy_field(block: str, label: str) -> str:
     if not match:
         pattern = rf"- _{re.escape(label)}_:\s*(.*?)(?=\n- _[^_]+:_|\n- MITRE ATT&CK|\Z)"
         match = re.search(pattern, block, re.S)
-    return clean_text(match.group(1)) if match else ""
+    return clean_text(match.group(1), baseline_file) if match else ""
 
 
 def extract_mapping(block: str) -> list[str]:
@@ -225,13 +262,17 @@ def split_section_blocks(section_text: str) -> dict[str, str]:
     return blocks
 
 
-def baseline_preamble_parts(preamble: str, baseline_id: str) -> list[JsonObject]:
+def baseline_preamble_parts(
+    preamble: str,
+    baseline_id: str,
+    baseline_file: str | None = None,
+) -> list[JsonObject]:
     """Return OSCAL parts for baseline-level Markdown before policy sections."""
 
     parts = []
     heading_matches = list(re.finditer(r"^##\s+(.+?)\s*$", preamble, re.M))
     overview_end = heading_matches[0].start() if heading_matches else len(preamble)
-    overview = clean_text(preamble[:overview_end])
+    overview = clean_text(preamble[:overview_end], baseline_file)
     if overview:
         parts.append(make_part("overview", overview, f"{baseline_id}_overview"))
 
@@ -243,7 +284,7 @@ def baseline_preamble_parts(preamble: str, baseline_id: str) -> list[JsonObject]
             if index + 1 < len(heading_matches)
             else len(preamble)
         )
-        prose = clean_text(preamble[start:end])
+        prose = clean_text(preamble[start:end], baseline_file)
         if prose:
             part_name = slug(heading_title)
             parts.append(
@@ -257,7 +298,10 @@ def baseline_preamble_parts(preamble: str, baseline_id: str) -> list[JsonObject]
     return parts
 
 
-def parse_instructions(implementation: str) -> tuple[dict[str, str], str]:
+def parse_instructions(
+    implementation: str,
+    baseline_file: str | None = None,
+) -> tuple[dict[str, str], str]:
     """Parse policy-specific and shared implementation instructions."""
 
     specific = {}
@@ -267,7 +311,7 @@ def parse_instructions(implementation: str) -> tuple[dict[str, str], str]:
         heading_title = heading.group(1).strip()
         start = heading.end()
         end = headings[idx + 1].start() if idx + 1 < len(headings) else len(implementation)
-        body = clean_text(implementation[start:end])
+        body = clean_text(implementation[start:end], baseline_file)
         if not body:
             continue
         policy_match = re.search(
@@ -486,7 +530,7 @@ def build_catalog(
 
     generated_at = oscal_timestamp()
     policy_count = sum(item["source_policies"] for item in baseline_summaries)
-    version = release_version if release_version else "scuba-google-workspace-baselines"
+    version = catalog_metadata_version(release_version)
     output_file = catalog_file_name(release_version)
     catalog = {
         "catalog": {
@@ -596,6 +640,7 @@ def build_baseline_group(
     preamble_parts = baseline_preamble_parts(
         text.split("# Baseline Policies", 1)[0],
         baseline_id,
+        file_name,
     )
     group = {
         "id": baseline_id,
@@ -653,10 +698,11 @@ def build_section_group(
     )
     section_body = text[start:end]
     blocks = split_section_blocks(section_body)
-    overview = clean_text(blocks.get("overview", ""))
-    prerequisites = clean_text(blocks.get("prerequisites", ""))
+    overview = clean_text(blocks.get("overview", ""), file_name)
+    prerequisites = clean_text(blocks.get("prerequisites", ""), file_name)
     instructions_by_policy, common_instructions = parse_instructions(
-        blocks.get("implementation", "")
+        blocks.get("implementation", ""),
+        file_name,
     )
     section_resource_links = build_section_resource_links(
         blocks,
@@ -809,10 +855,10 @@ def build_policy_control(
     )
     before_rationale = re.split(r"\n- _Rationale_?:", policy_block, maxsplit=1)[0]
     before_rationale = before_rationale.replace(title_line, "", 1)
-    policy_detail = clean_text(before_rationale)
-    rationale = extract_policy_field(policy_block, "Rationale")
-    last_modified = extract_policy_field(policy_block, "Last modified")
-    note = extract_policy_field(policy_block, "Note")
+    policy_detail = clean_text(before_rationale, file_name)
+    rationale = extract_policy_field(policy_block, "Rationale", file_name)
+    last_modified = extract_policy_field(policy_block, "Last modified", file_name)
+    note = extract_policy_field(policy_block, "Note", file_name)
     mappings = extract_mapping(policy_block)
     instructions = instructions_by_policy.get(policy_id, "")
 
@@ -951,7 +997,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--release-version",
         default=None,
-        help="Optional release version to place in OSCAL metadata.version.",
+        help=(
+            "Optional release version to place in OSCAL metadata.version. "
+            "Ad hoc runs use the ScubaGoggles package version with a "
+            "development build label."
+        ),
     )
     return parser.parse_args()
 

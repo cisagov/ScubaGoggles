@@ -78,7 +78,7 @@ omitted for readability.
           {
             "name": "overview",
             "id": "gws-assuredcontrols_overview",
-            "prose": "# CISA Google Workspace Secure Configuration Baseline for Assured Controls and Assured Controls Plus\n\nAssured Controls and Assured Controls Plus are paid add-ons within Google Workspace (GWS) relating to compliance and security.\nThis Secure Configuration Baseline (SCB) for Assured Controls provides specific policies to strengthen an organization's data security.\nThis baseline is intended as guidance for agencies that already have Assured Controls or Assured Controls Plus licenses.\nUsers who choose to implement this baseline should carefully consider the tradeoffs involved, including the potential security benefits, usability impacts, and possible increased fees for additional licenses.\n\nThe Cybersecurity and Infrastructure Security Agency's (CISA) Secure Cloud Business Applications (SCuBA) project, provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.\n\nThe CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the federal government may also find these baselines useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.\n\nFor non-federal users, the information in this document is being provided \"as is\" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products. CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.\n\nThis baseline is based on Google documentation and addresses the following:\nGoogle Support Staff Data Access (#1-google-support-staff-data-access)\nData Regions Advanced Settings (#2-data-regions-advanced-settings)"
+            "prose": "# CISA Google Workspace Secure Configuration Baseline for Assured Controls and Assured Controls Plus\n\nAssured Controls and Assured Controls Plus are paid add-ons within Google Workspace (GWS) relating to compliance and security.\nThis Secure Configuration Baseline (SCB) for Assured Controls provides specific policies to strengthen an organization's data security.\nThis baseline is intended as guidance for agencies that already have Assured Controls or Assured Controls Plus licenses.\nUsers who choose to implement this baseline should carefully consider the tradeoffs involved, including the potential security benefits, usability impacts, and possible increased fees for additional licenses.\n\nThe Cybersecurity and Infrastructure Security Agency's (CISA) Secure Cloud Business Applications (SCuBA) project, provides guidance and capabilities to secure federal civilian executive branch (FCEB) agencies' cloud business application environments and protect federal information that is created, accessed, shared, and stored in those environments.\n\nThe CISA SCuBA SCBs for GWS help secure federal information assets stored within GWS cloud business application environments through consistent, effective, and manageable security configurations. CISA created baselines tailored to the federal government's threats and risk tolerance. Organizations outside of the federal government may also find these baselines useful references to help reduce risks even if such organizations have different risk tolerances or face different threats.\n\nFor non-federal users, the information in this document is being provided \"as is\" for INFORMATIONAL PURPOSES ONLY. CISA does not endorse any commercial product or service, including any subjects of analysis. Any reference to specific commercial entities or commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply endorsement, recommendation, or favoritism by CISA. Without limiting the generality of the foregoing, some controls and settings are not available in all products. CISA has no control over vendor changes to products offerings or features. Accordingly, these SCuBA SCBs for GWS may not be applicable to the products available to you. This document does not address, ensure compliance with, or supersede any law, regulation, or other authority. Entities are responsible for complying with any recordkeeping, privacy, and other laws that may apply to the use of technology. This document is not intended to, and does not, create any right or benefit for anyone against the United States, its departments, agencies, or entities, its officers, employees, or agents, or any other person.\n\nThis baseline is based on Google documentation and addresses the following:\nGoogle Support Staff Data Access (https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/baselines/assuredcontrols.md#1-google-support-staff-data-access)\nData Regions Advanced Settings (https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/baselines/assuredcontrols.md#2-data-regions-advanced-settings)"
           }
         ],
         "groups": [
@@ -159,6 +159,13 @@ omitted for readability.
 
 </details>
 
+## Viewing the Catalog
+
+After downloading and extracting the generated OSCAL artifact, users can inspect
+the catalog with an OSCAL-aware viewer such as <https://viewer.oscal.io/>.
+This can help browse the catalog hierarchy and policy parts. Schema validation
+is performed by the pinned OSCAL CLI in CI.
+
 ## Part Name Mapping
 
 The generator uses the following OSCAL part-name assumptions.
@@ -188,12 +195,15 @@ stays readable in GitHub's Markdown view.
 | Markdown or input | OSCAL representation |
 | --- | --- |
 | Baseline README list | Creates ordered top-level `catalog.groups[]`. |
-| Generated release version | Stored in `catalog.metadata.version` and the generated filename. |
+| Generated release version | Stored in `catalog.metadata.version` and the generated filename for release artifacts. |
+| Ad hoc generator run | Uses the ScubaGoggles package version with a development build label in `catalog.metadata.version`. |
 | OSCAL version constant | Stored in `catalog.metadata.oscal-version` and the generated filename. |
 
 The baseline list comes from `scubagoggles/baselines/README.md`.
 The OSCAL version is defined by `DEFAULT_OSCAL_VERSION` in
 `scubagoggles/scuba_constants.py`.
+Markdown links copied into OSCAL prose are resolved to absolute GitHub URLs so
+the generated catalog remains portable outside the source repository checkout.
 
 ### Baseline Groups
 

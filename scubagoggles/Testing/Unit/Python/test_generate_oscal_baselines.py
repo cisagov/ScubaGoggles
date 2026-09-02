@@ -78,6 +78,19 @@ def assert_prop_order(props):
         assert list(prop) == ["name", "value", "ns"]
 
 
+def iter_prose(value):
+    """Yield every prose string from a generated OSCAL object."""
+
+    if isinstance(value, dict):
+        if "prose" in value:
+            yield value["prose"]
+        for child in value.values():
+            yield from iter_prose(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from iter_prose(child)
+
+
 def part_values(parts, name, title=None):
     """Return all prose values for a part name."""
 
@@ -117,6 +130,41 @@ class GenerateOscalBaselinesTest:
         assert generator.catalog_file_name("1.0.0") == expected_release
         assert generator.catalog_file_name("v1.0.0") == expected_release
 
+    def test_catalog_metadata_version_marks_ad_hoc_runs(self):
+        """Ad hoc catalog metadata should distinguish non-release generation."""
+
+        generator = load_generator()
+
+        assert generator.catalog_metadata_version("1.0.0") == "1.0.0"
+        assert generator.catalog_metadata_version() == (
+            f"{generator.SCUBAGOGGLES_VERSION} "
+            f"({generator.DEVELOPMENT_VERSION_LABEL})"
+        )
+
+    def test_clean_text_resolves_relative_links_in_prose(self):
+        """Relative Markdown links copied into OSCAL prose should be portable."""
+
+        generator = load_generator()
+
+        prose = generator.clean_text(
+            (
+                "See [Limitations](../../docs/usage/Limitations.md"
+                "#log-based-policy-checks) and [this section](#key-terminology)."
+            ),
+            "assuredcontrols.md",
+        )
+
+        assert (
+            "Limitations "
+            "(https://github.com/cisagov/ScubaGoggles/blob/main/"
+            "docs/usage/Limitations.md#log-based-policy-checks)"
+        ) in prose
+        assert (
+            "this section "
+            "(https://github.com/cisagov/ScubaGoggles/blob/main/"
+            "scubagoggles/baselines/assuredcontrols.md#key-terminology)"
+        ) in prose
+
     def test_generation_covers_readme_baselines(self, tmp_path):
         """Every README-listed baseline should be represented in one catalog."""
 
@@ -151,6 +199,11 @@ class GenerateOscalBaselinesTest:
         assert_prop_order(catalog["metadata"]["props"])
         assert len(catalog["groups"]) == len(discovered)
         assert len(controls) == summary["source_policies"]
+        for prose in iter_prose(catalog):
+            assert not any(
+                marker in prose
+                for marker in ("(../../", "(../", "(./", "(images/", "(#")
+            )
 
         for baseline_group in catalog["groups"]:
             assert_prop_order(baseline_group["props"])
