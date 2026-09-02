@@ -14,6 +14,7 @@ permissions:
 
 env:
   OSCAL_CLI_VERSION: "3.2.0"
+  OSCAL_CLI_SHA256: "e001b353ee245da6f4ff0ad930c4dfaa88083c63243ca004bd5f5bcef44e8ec8"
 
 jobs:
   generate-oscal:
@@ -35,6 +36,7 @@ jobs:
           OSCAL_CLI_ZIP="$RUNNER_TEMP/oscal-cli.zip"
           curl --fail --location --retry 3 --output "$OSCAL_CLI_ZIP" \
             "https://repo1.maven.org/maven2/dev/metaschema/oscal/oscal-cli-enhanced/${OSCAL_CLI_VERSION}/oscal-cli-enhanced-${OSCAL_CLI_VERSION}-oscal-cli.zip"
+          printf '%s  %s\n' "$OSCAL_CLI_SHA256" "$OSCAL_CLI_ZIP" | sha256sum --check --strict
           unzip -q "$OSCAL_CLI_ZIP" -d "$RUNNER_TEMP/oscal-cli"
           echo "$RUNNER_TEMP/oscal-cli/bin" >> "$GITHUB_PATH"
       - name: Generate OSCAL baseline catalog
