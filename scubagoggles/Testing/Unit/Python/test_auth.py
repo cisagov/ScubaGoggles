@@ -5,6 +5,7 @@ following the ScubaGoggles testing framework patterns.
 """
 
 import json
+import webbrowser
 from pathlib import Path
 
 import pytest
@@ -125,6 +126,7 @@ class TestGwsAuth:
             InstalledAppFlow, 'from_client_secrets_file',
             return_value=mock_flow
         )
+        mocker.patch('scubagoggles.auth.webbrowser.get')
 
         auth = GwsAuth(credentials_file)
 
@@ -132,7 +134,33 @@ class TestGwsAuth:
             str(credentials_file), OAUTH_SCOPES
         )
         mock_flow.run_local_server.assert_called_once_with(
-            timeout_seconds=300, prompt='consent'
+            open_browser=True, timeout_seconds=300, prompt='consent'
+        )
+        assert auth.credentials is mock_fresh_credentials
+
+    def test_init_oauth_flow_without_browser(self, mocker,
+                                             credentials_file,
+                                             mock_fresh_credentials):
+
+        """Verify the OAuth flow runs without opening a browser when no
+        runnable browser is available (e.g., inside a container).
+        """
+
+        mock_flow = mocker.Mock()
+        mock_flow.run_local_server.return_value = mock_fresh_credentials
+
+        mocker.patch.object(
+            InstalledAppFlow, 'from_client_secrets_file',
+            return_value=mock_flow
+        )
+        mocker.patch('scubagoggles.auth.webbrowser.get',
+                     side_effect=webbrowser.Error('could not locate '
+                                                  'runnable browser'))
+
+        auth = GwsAuth(credentials_file)
+
+        mock_flow.run_local_server.assert_called_once_with(
+            open_browser=False, timeout_seconds=300, prompt='consent'
         )
         assert auth.credentials is mock_fresh_credentials
 
