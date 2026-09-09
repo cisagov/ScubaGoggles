@@ -830,11 +830,11 @@ class Provider:
         Gets the high-level tenant info using the directory API
         """
         tenant_id = ''
+        primary_domain = 'Error Retrieving'
         try:
             response = self._services['directory'].customers().get(
                             customerKey = self._customer_id).execute()
             tenant_id = response.get('id')
-            primary_domain = 'Error Retrieving'
             for domain in self.list_domains():
                 if domain['isPrimary']:
                     primary_domain = domain['domainName']
