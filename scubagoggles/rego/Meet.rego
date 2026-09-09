@@ -33,7 +33,8 @@ GetFriendlyValue1_1(Value) := "anyone" if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(meetAccess))
+    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(meetAccess)),
+    "Baseline":  MeetId1_1
 } if {
     some OU, settings in input.policies
     MeetEnabled(OU)
@@ -81,7 +82,8 @@ GetFriendlyValue2_1(Value) := "any meetings (including meetings created with per
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage2_1(GetFriendlyValue2_1(meetAccess))
+    "Value": NonComplianceMessage2_1(GetFriendlyValue2_1(meetAccess)),
+    "Baseline":  MeetId2_1
 } if {
     some OU, settings in input.policies
     MeetEnabled(OU)
@@ -121,7 +123,8 @@ NonComplianceMessage3_1(value) := sprintf("Host management when video calls star
 
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage3_1(GetFriendlyEnabledValue(hostMgt))
+    "Value": NonComplianceMessage3_1(GetFriendlyEnabledValue(hostMgt)),
+    "Baseline":  MeetId3_1
 } if {
     some OU, settings in input.policies
     MeetEnabled(OU)
@@ -161,7 +164,8 @@ NonComplianceMessage4_1(value) := sprintf("Warning label for external or unident
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage4_1(GetFriendlyEnabledValue(extWarn))
+    "Value": NonComplianceMessage4_1(GetFriendlyEnabledValue(extWarn)),
+    "Baseline":  MeetId4_1
 } if {
     some OU, settings in input.policies
     MeetEnabled(OU)
@@ -198,7 +202,8 @@ MeetId5_1 := utils.PolicyIdWithSuffix("GWS.MEET.5.1")
 
 NonCompliantOUs5_1 contains {
     "Name": OU,
-    "Value": "Automatic recording is enabled."
+    "Value": "Automatic recording is enabled.",
+    "Baseline":  MeetId5_1
 } if {
     some OU, settings in input.policies
     MeetEnabled(OU)
@@ -231,7 +236,8 @@ MeetId5_2 := utils.PolicyIdWithSuffix("GWS.MEET.5.2")
 
 NonCompliantOUs5_2 contains {
     "Name": OU,
-    "Value": "Automatic transcription is enabled."
+    "Value": "Automatic transcription is enabled.",
+    "Baseline":  MeetId5_2
 } if {
     some OU, settings in input.policies
     MeetEnabled(OU)
@@ -272,7 +278,8 @@ NonComplianceMessage6_1 := "Google AI notes sharing setting is set to: Allow hos
 
 NonCompliantOUs6_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage6_1
+    "Value": NonComplianceMessage6_1,
+    "Baseline":  MeetId6_1
 } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting6_1, OU)
@@ -341,7 +348,8 @@ NonComplianceMessage6_2 := "Default sharing setting for Google AI notes is set t
 
 NonCompliantOUs6_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage6_2
+    "Value": NonComplianceMessage6_2,
+    "Baseline":  MeetId6_2
 } if {
     some OU in utils.OUsWithEvents
     Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting6_2, OU)

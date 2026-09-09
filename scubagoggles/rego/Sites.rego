@@ -33,7 +33,8 @@ NonComplianceMessage1_1 := "Service status for Sites is enabled"
 
 NonCompliantOUs1_1  contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1
+    "Value": NonComplianceMessage1_1,
+    "Baseline":  SitesId1_1
 }
 if {
     some OU, settings in input.policies

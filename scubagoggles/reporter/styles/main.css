@@ -55,6 +55,10 @@ body {
     color: var(--text-color)
 }
 
+ol {
+    padding-inline-start: 16px;
+}
+
 #baseline-docs {
     width: 6.25rem;
 }
