@@ -129,6 +129,13 @@ GET_TOPLEVEL_OU_CASES = [
         "raises": None,
         "expect_success_call": True,
     },
+    # "organizationUnits" key is missing entirely
+    {
+        "api_response": {},
+        "expected": "",
+        "raises": None,
+        "expect_success_call": True,
+    },
     # API raises exception
     {
         "api_response": None,

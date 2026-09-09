@@ -818,7 +818,7 @@ class Provider:
 
         self._successful_calls.add(ApiReference.LIST_OUS.value)
 
-        for ou in response['organizationUnits']:
+        for ou in response.get('organizationUnits', []):
             if ou['orgUnitPath'] == '/':
                 return ou['name']
 
