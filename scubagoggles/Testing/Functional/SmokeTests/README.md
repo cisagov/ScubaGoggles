@@ -16,7 +16,7 @@ This README outlines the ScubaGoggles software test automation structure and its
 - [Adding New Tests](#adding-new-tests)
 
 ## Smoke Testing Prerequisites ##
-Running the ScubaGoggles functional smoke tests requires a Windows, MacOS, or Linux computer or VM. The development environment should have Python v3.10.x installed at a minimum ([refer to our installing Python dependencies documentation if its not already installed](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md#installing-python-dependencies)), Pytest, and Selenium installed locally.
+Running the ScubaGoggles functional smoke tests requires a Windows, MacOS, or Linux computer or VM. The development environment should have Python v3.11.x installed at a minimum ([refer to our installing Python dependencies documentation if its not already installed](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md#installing-python-dependencies)), Pytest, and Selenium installed locally.
 
 ### Pytest and Selenium ###
 Pytest is a Python testing framework which is commonly used for unit, integration, and functional testing. ([Pytest Get Started](https://docs.pytest.org/en/stable/getting-started.html))
@@ -96,19 +96,19 @@ Go to the [run_smoke_test.yml workflow](https://github.com/cisagov/ScubaGoggles/
 The default values are the following:
 - ref branch: `main` but can be set to any branch
 - operating system: `['windows-latest', 'macos-latest']` ([list of supported GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories))
-- python version: `['3.10']`
+- python version: `['3.11']`
 - opa version: "0.60.0"
 
 ![Screenshot (226)](https://github.com/user-attachments/assets/6f25b7a9-3981-4866-a413-93df4bae1130)
 
-Feel free to play around with the inputs then click the "Run workflow" button when ready. The workflow will create a matrix strategy for each combination. For example, passing `['windows-latest', 'macos-latest']`, `['3.10', '3.11', 3.12']`, and OPA version `0.60.0` will create the following:
+Feel free to play around with the inputs then click the "Run workflow" button when ready. The workflow will create a matrix strategy for each combination. For example, passing `['windows-latest', 'macos-latest']`, `['3.11', '3.12', '3.13']`, and OPA version `0.60.0` will create the following:
 
 ![Screenshot (218)](https://github.com/user-attachments/assets/212b4e4b-d552-4dc9-a3f6-7f0e29accc4b)
 
 Some factors to consider:
 - Each input is required so an empty string will fail validation. `[]`, `['']`, `['', ]` may also cause the workflow to error out, although this is expected behavior.
 - `ubuntu-latest` has not been tested as a value for operating system. Support can be added for this, although its dependent on if this is something we want to test for ScubaGoggles as a whole.
-- Python versions <3.10.x are not supported and will cause the smoke test workflow to fail.
+- Python versions <3.11.x are not supported and will cause the smoke test workflow to fail.
 - [Due to the lack of an array input type from GitHub](https://github.com/orgs/community/discussions/11692), the required format is an array of strings for the operating system and python version inputs. This is something to capture as a future todo once arrays are available.
 
 ## Adding New Tests ##
