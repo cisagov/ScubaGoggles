@@ -460,7 +460,7 @@ class Provider:
         answers = [re.sub(r"[ \t]*;[ \t]*", ";", a) for a in answers if a]
 
         # DMARC records MUST start with the "v" tag, with "DMARC1" being the only acceptable value
-        answers = [a for a in answers if a.startswith("v=DMARC1;")]
+        answers = [a for a in answers if a.startswith("v=DMARC1;") or a == "v=DMARC1"]
 
         if len(answers) != 1:
             # If there is not exactly 1 DMARC record returned for a given domain, the entire answer
