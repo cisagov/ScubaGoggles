@@ -196,7 +196,8 @@ test_SpamFilterDomains_Incorrect_1 if {
                     ["{Scuba: [Scuba: (cisaent.onmicrosoft.com, ",
                        "scubagws.org)]}"])
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage18_1(value)}]
+                 "Value": NonComplianceMessage18_1(value),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -206,7 +207,8 @@ test_SpamFilterDomains_Incorrect_2 if {
 
     value := "{UseMyTestList: [MyTestList: (test.com)]}"
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage18_1(value)}]
+                 "Value": NonComplianceMessage18_1(value),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -226,7 +228,8 @@ test_SpamFilterWarnings_Incorrect_1 if {
                        "scubagws.org), MyTestList: (test.com)]}, ",
                        "{Second Rule: [MyTestList: (test.com)]}"])
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage18_2(value)}]
+                 "Value": NonComplianceMessage18_2(value),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -236,7 +239,8 @@ test_SpamFilterWarnings_Incorrect_2 if {
 
     value := "{test spam filter: [Example: (bbc.co.uk, npr.org)]}"
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage18_2(value)}]
+                 "Value": NonComplianceMessage18_2(value),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -252,7 +256,8 @@ test_SpamFilterBypass_Incorrect_1 if {
     Output := tests with input as BadGmailApi18
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage18_3("'Scuba', 'Second Rule'")}]
+                 "Value": NonComplianceMessage18_3("'Scuba', 'Second Rule'"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -261,6 +266,7 @@ test_SpamFilterBypass_Incorrect_2 if {
     Output := tests with input as BadGmailApi18a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage18_3("'BypassAll Case'")}]
+                 "Value": NonComplianceMessage18_3("'BypassAll Case'"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

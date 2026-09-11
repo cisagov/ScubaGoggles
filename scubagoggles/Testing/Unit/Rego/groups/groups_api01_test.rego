@@ -54,7 +54,8 @@ test_GroupsAPI_Collaboration_Incorrect_1 if {
     Output := tests with input as BadGroupsApi1_1
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_1("Any user")}]
+                 "Value": NonComplianceMessage1_1("Any user"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

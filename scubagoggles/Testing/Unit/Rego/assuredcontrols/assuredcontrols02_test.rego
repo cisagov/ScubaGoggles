@@ -103,7 +103,8 @@ test_Assuredcontrols2_1_Incorrect_V1 if {
     ])
     Output := tests with input as Input
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": "Features that may process data across multiple regions are enabled for Calendar"}]
+                 "Value": "Features that may process data across multiple regions are enabled for Calendar",
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -124,7 +125,8 @@ test_Assuredcontrols2_1_Incorrect_V2 if {
     ])
     Output := tests with input as Input
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": "Features that may process data across multiple regions are enabled for Calendar, Docs"}]
+                 "Value": "Features that may process data across multiple regions are enabled for Calendar, Docs",
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 

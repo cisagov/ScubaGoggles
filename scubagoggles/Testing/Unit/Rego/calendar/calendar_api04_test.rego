@@ -44,6 +44,7 @@ test_CalendarAPI_Payments_Incorrect_1 if {
     Output := tests with input as BadCalendarApi04
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage4_1("enabled")}]
+                 "Value": NonComplianceMessage4_1("enabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

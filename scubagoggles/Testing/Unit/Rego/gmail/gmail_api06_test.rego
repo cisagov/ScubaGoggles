@@ -85,7 +85,8 @@ test_ShortLinks_Incorrect_1 if {
     Output := tests with input as BadGmailApi06
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage6_1("disabled")}]
+                 "Value": NonComplianceMessage6_1("disabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -94,7 +95,8 @@ test_ShortLinks_Incorrect_2 if {
     Output := tests with input as BadGmailApi06a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage6_1("disabled")}]
+                 "Value": NonComplianceMessage6_1("disabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -110,7 +112,8 @@ test_ScanImages_Incorrect_1 if {
     Output := tests with input as BadGmailApi06
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage6_2("disabled")}]
+                 "Value": NonComplianceMessage6_2("disabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -119,7 +122,8 @@ test_ScanImages_Incorrect_2 if {
     Output := tests with input as BadGmailApi06a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage6_2("disabled")}]
+                 "Value": NonComplianceMessage6_2("disabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -135,7 +139,8 @@ test_WarnEnabled_Incorrect_1 if {
     Output := tests with input as BadGmailApi06
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage6_3("disabled")}]
+                 "Value": NonComplianceMessage6_3("disabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -144,7 +149,8 @@ test_WarnEnabled_Incorrect_2 if {
     Output := tests with input as BadGmailApi06a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage6_3("disabled")}]
+                 "Value": NonComplianceMessage6_3("disabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -160,7 +166,8 @@ test_ApplyFuture_Incorrect_1 if {
     Output := tests with input as BadGmailApi06
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage6_4("disabled")}]
+                 "Value": NonComplianceMessage6_4("disabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -169,6 +176,7 @@ test_ApplyFuture_Incorrect_2 if {
     Output := tests with input as BadGmailApi06a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage6_4("disabled")}]
+                 "Value": NonComplianceMessage6_4("disabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

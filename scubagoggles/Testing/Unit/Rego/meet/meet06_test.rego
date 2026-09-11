@@ -56,7 +56,8 @@ test_Sharing_Incorrect_V1 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage6_1}]
+                 "Value": NonComplianceMessage6_1,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -139,7 +140,8 @@ test_Default_Incorrect_V1 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage6_2}]
+                 "Value": NonComplianceMessage6_2,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

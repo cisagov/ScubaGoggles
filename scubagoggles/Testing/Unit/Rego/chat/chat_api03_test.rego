@@ -66,7 +66,8 @@ test_ChatAPI_Space_History_Incorrect_1 if {
     Output := tests with input as BadChatApi03
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage3_1("OFF by default")}]
+                 "Value": NonComplianceMessage3_1("OFF by default"),
+                 "Baseline": ChatId3_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -75,9 +76,11 @@ test_ChatAPI_Space_History_Incorrect_2 if {
     Output := tests with input as BadChatApi03a
 
     failedOU := [{"Name": "secondOU",
-                 "Value": NonComplianceMessage3_1("ALWAYS OFF")},
+                 "Value": NonComplianceMessage3_1("ALWAYS OFF"),
+                 "Baseline": ChatId3_1},
                  {"Name": "thirdOU",
-                 "Value": NonComplianceMessage3_1("Unspecified")}]
+                 "Value": NonComplianceMessage3_1("Unspecified"),
+                 "Baseline": ChatId3_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -99,6 +102,7 @@ test_ChatAPI_Space_History_Incorrect_3 if {
     Output := tests with input as BadChatApi03b
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage3_1("ON by default")}]
+                 "Value": NonComplianceMessage3_1("ON by default"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

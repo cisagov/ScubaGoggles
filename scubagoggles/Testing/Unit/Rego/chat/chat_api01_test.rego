@@ -52,7 +52,8 @@ test_ChatAPI_History_Incorrect_1 if {
     Output := tests with input as BadChatApi01
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_1("disabled")}]
+                 "Value": NonComplianceMessage1_1("disabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -68,6 +69,7 @@ test_ChatAPI_Change_History_Incorrect_1 if {
     Output := tests with input as BadChatApi01
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_2("are")}]
+                 "Value": NonComplianceMessage1_2("are"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

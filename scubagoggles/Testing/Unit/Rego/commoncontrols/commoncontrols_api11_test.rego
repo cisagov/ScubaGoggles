@@ -52,8 +52,10 @@ test_MarketplaceApps_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi11
 
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage11_1(false)},
+                  "Value": NonComplianceMessage11_1(false),
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage11_1(true)}]
+                  "Value": NonComplianceMessage11_1(true),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

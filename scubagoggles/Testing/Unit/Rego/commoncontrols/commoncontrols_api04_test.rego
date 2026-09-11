@@ -59,6 +59,7 @@ test_CCAPI_ReAuth_NonComply_1 if {
     Output := tests with input as BadCaseInputApi04
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(800 * 60))}]
+                 "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(800 * 60)),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

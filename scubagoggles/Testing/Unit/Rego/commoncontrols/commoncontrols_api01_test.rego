@@ -166,11 +166,14 @@ test_2SV_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi01
 
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage1_1b(GetFriendlyMethods("ALL"))},
+                  "Value": NonComplianceMessage1_1b(GetFriendlyMethods("ALL")),
+                 "Baseline": PolicyId},
                  {"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_1c},
+                  "Value": NonComplianceMessage1_1c,
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage1_1a}]
+                  "Value": NonComplianceMessage1_1a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -179,15 +182,20 @@ test_2SV_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi01a
 
     failedOU := [{"Name": "fifthOU",
-                  "Value": NonComplianceMessage1_1b(GetFriendlyMethods("NO_TELEPHONY"))},
+                  "Value": NonComplianceMessage1_1b(GetFriendlyMethods("NO_TELEPHONY")),
+                 "Baseline": PolicyId},
                   {"Name": "nextOU",
-                  "Value": NonComplianceMessage1_1b(GetFriendlyMethods("ALL"))},
+                  "Value": NonComplianceMessage1_1b(GetFriendlyMethods("ALL")),
+                 "Baseline": PolicyId},
                   {"Name": "seventhOU",
-                  "Value": NonComplianceMessage1_1c},
+                  "Value": NonComplianceMessage1_1c,
+                 "Baseline": PolicyId},
                   {"Name": "sixthOU",
-                  "Value": NonComplianceMessage1_1c},
+                  "Value": NonComplianceMessage1_1c,
+                 "Baseline": PolicyId},
                   {"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_1a}]
+                  "Value": NonComplianceMessage1_1a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -203,9 +211,11 @@ test_Alt2SV_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi01
 
     failedOU := [{"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_2b},
+                  "Value": NonComplianceMessage1_2b,
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage1_2a}]
+                  "Value": NonComplianceMessage1_2a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -214,11 +224,14 @@ test_Alt2SV_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi01a
 
     failedOU := [{"Name": "seventhOU",
-                  "Value": NonComplianceMessage1_2b},
+                  "Value": NonComplianceMessage1_2b,
+                 "Baseline": PolicyId},
                  {"Name": "sixthOU",
-                  "Value": NonComplianceMessage1_2b},
+                  "Value": NonComplianceMessage1_2b,
+                 "Baseline": PolicyId},
                  {"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_2a}]
+                  "Value": NonComplianceMessage1_2a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -234,11 +247,14 @@ test_NoTelephony2SV_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi01
 
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage1_3b},
+                  "Value": NonComplianceMessage1_3b,
+                 "Baseline": PolicyId},
                  {"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_3c},
+                  "Value": NonComplianceMessage1_3c,
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage1_3a}]
+                  "Value": NonComplianceMessage1_3a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -247,13 +263,17 @@ test_NoTelephony2SV_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi01a
 
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage1_3b},
+                  "Value": NonComplianceMessage1_3b,
+                 "Baseline": PolicyId},
                  {"Name": "seventhOU",
-                  "Value": NonComplianceMessage1_3c},
+                  "Value": NonComplianceMessage1_3c,
+                 "Baseline": PolicyId},
                  {"Name": "sixthOU",
-                  "Value": NonComplianceMessage1_3c},
+                  "Value": NonComplianceMessage1_3c,
+                 "Baseline": PolicyId},
                  {"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_3a}]
+                  "Value": NonComplianceMessage1_3a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -269,9 +289,11 @@ test_2SVUserEnrollment_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi01
 
     failedOU := [{"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_1c},
+                  "Value": NonComplianceMessage1_1c,
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage1_1a}]
+                  "Value": NonComplianceMessage1_1a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -281,13 +303,17 @@ test_2SVUserEnrollment_Incorrect_2 if {
 
     failedOU := [{"Name": "fourthOU",
                   "Value": NonComplianceMessage1_4(0,
-                                                   utils.DurationToSeconds("7d"))},
+                                                   utils.DurationToSeconds("7d")),
+                 "Baseline": PolicyId},
                  {"Name": "seventhOU",
-                  "Value": NonComplianceMessage1_1c},
+                  "Value": NonComplianceMessage1_1c,
+                 "Baseline": PolicyId},
                  {"Name": "sixthOU",
-                  "Value": NonComplianceMessage1_1c},
+                  "Value": NonComplianceMessage1_1c,
+                 "Baseline": PolicyId},
                  {"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_1a}]
+                  "Value": NonComplianceMessage1_1a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -303,9 +329,11 @@ test_2SVDeviceTrust_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi01
 
     failedOU := [{"Name": "thirdOU",
-                  "Value": NonComplianceMessage1_1c},
+                  "Value": NonComplianceMessage1_1c,
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage1_1a}]
+                  "Value": NonComplianceMessage1_1a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -314,12 +342,16 @@ test_2SVDeviceTrust_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi01a
 
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage1_5},
+                  "Value": NonComplianceMessage1_5,
+                 "Baseline": PolicyId},
                  {"Name": "seventhOU",
-                  "Value": NonComplianceMessage1_1c},
+                  "Value": NonComplianceMessage1_1c,
+                 "Baseline": PolicyId},
                   {"Name": "sixthOU",
-                  "Value": NonComplianceMessage1_1c},
+                  "Value": NonComplianceMessage1_1c,
+                 "Baseline": PolicyId},
                   {"Name": "thirdOU",
-                   "Value": NonComplianceMessage1_1a}]
+                   "Value": NonComplianceMessage1_1a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

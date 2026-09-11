@@ -91,7 +91,8 @@ test_CCAPI_PwdLength_NonComply_1 if {
     Output := tests with input as BadCaseInputApi05
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage5_2(6)}]
+                 "Value": NonComplianceMessage5_2(6),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -107,7 +108,8 @@ test_CCAPI_PwdSuggestLength_NonComply_1 if {
     Output := tests with input as BadCaseInputApi05a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage5_3(13)}]
+                 "Value": NonComplianceMessage5_3(13),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -123,7 +125,8 @@ test_CCAPI_PwdNextLogin_NonComply_1 if {
     Output := tests with input as BadCaseInputApi05
 
     failedOU := [{"Name": "topOU",
-                 "Value": "Enforce password policy at next sign-in is OFF"}]
+                 "Value": "Enforce password policy at next sign-in is OFF",
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -139,7 +142,8 @@ test_CCAPI_PwdReuse_NonComply_1 if {
     Output := tests with input as BadCaseInputApi05
 
     failedOU := [{"Name": "topOU",
-                 "Value": "Allow password reuse is ON"}]
+                 "Value": "Allow password reuse is ON",
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -155,6 +159,7 @@ test_CCAPI_PwdResetFrequency_NonComply_1 if {
     Output := tests with input as BadCaseInputApi05
 
     failedOU := [{"Name": "topOU",
-                 "Value": "Password reset frequency is 36000 seconds"}]
+                 "Value": "Password reset frequency is 36000 seconds",
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

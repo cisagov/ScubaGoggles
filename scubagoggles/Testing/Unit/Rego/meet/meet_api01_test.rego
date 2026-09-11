@@ -43,6 +43,7 @@ test_MeetAPI_UserAccessType_Incorrect_1 if {
     Output := tests with input as BadMeetApi01
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("OPEN"))}]
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("OPEN")),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

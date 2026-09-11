@@ -56,7 +56,8 @@ test_MultiPartyApproval_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi17
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage17_1}]
+                 "Value": NonComplianceMessage17_1,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -65,6 +66,7 @@ test_MultiPartyApproval_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi17a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage17_1}]
+                 "Value": NonComplianceMessage17_1,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
