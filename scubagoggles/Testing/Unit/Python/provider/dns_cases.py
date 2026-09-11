@@ -475,7 +475,285 @@ GET_DMARC_RECORDS_CASES = [
                 ],
             }
         ],
-    )
+    ),
+    # DMARC record missing for subdomain, but grandparent has psd=n
+    (
+        {"a.b.c.example.com"},
+        {
+            "_dmarc.a.b.c.example.com": {
+                "answers": [],
+                "nxdomain": True,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.a.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
+            "_dmarc.b.c.example.com": {
+                # DMARC record found here, but doesn't have psd tag,
+                # so tree walk should continue
+                "answers": ["v=DMARC1; p=none;"],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none;"],
+                    }
+                ],
+            },
+            "_dmarc.c.example.com": {
+                "answers": ["v=DMARC1; p=reject; psd=n"],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject; psd=n"],
+                    }
+                ],
+            },
+        },
+        [
+            {
+                "domain": "a.b.c.example.com",
+                "rdata": ["v=DMARC1; p=reject; psd=n"],
+                "log": [
+                    {
+                        "query_name": "_dmarc.a.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    },
+                    {
+                        "query_name": "_dmarc.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none;"],
+                    },
+                    {
+                        "query_name": "_dmarc.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject; psd=n"],
+                    },
+                ],
+            }
+        ],
+    ),
+    # Return record below psd=y if present
+    (
+        {"a.b.c.example.com"},
+        {
+            "_dmarc.a.b.c.example.com": {
+                "answers": [],
+                "nxdomain": True,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.a.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
+            "_dmarc.b.c.example.com": {
+                # DMARC record found here, but doesn't have psd tag,
+                # so tree walk should continue
+                "answers": ["v=DMARC1; p=none;"],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none;"],
+                    }
+                ],
+            },
+            "_dmarc.c.example.com": {
+                "answers": ["v=DMARC1; p=reject; psd=y"],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject; psd=y"],
+                    }
+                ],
+            },
+        },
+        [
+            {
+                "domain": "a.b.c.example.com",
+                "rdata": ["v=DMARC1; p=none;"],
+                "log": [
+                    {
+                        "query_name": "_dmarc.a.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    },
+                    {
+                        "query_name": "_dmarc.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none;"],
+                    },
+                    {
+                        "query_name": "_dmarc.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject; psd=y"],
+                    }
+                ],
+            }
+        ],
+    ),
+    # Return record at psd=y if no record immediately below it
+    (
+        {"a.b.c.example.com"},
+        {
+            "_dmarc.a.b.c.example.com": {
+                "answers": [],
+                "nxdomain": True,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.a.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
+            "_dmarc.b.c.example.com": {
+                "answers": [],
+                "nxdomain": True,
+                "log_entries": [
+                   {
+                        "query_name": "_dmarc.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
+            "_dmarc.c.example.com": {
+                "answers": ["v=DMARC1; p=reject; psd=y"],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject; psd=y"],
+                    }
+                ],
+            },
+        },
+        [
+            {
+                "domain": "a.b.c.example.com",
+                "rdata": ["v=DMARC1; p=reject; psd=y"],
+                "log": [
+                    {
+                        "query_name": "_dmarc.a.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    },
+                    {
+                        "query_name": "_dmarc.b.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    },
+                    {
+                        "query_name": "_dmarc.c.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject; psd=y"],
+                    }
+                ],
+            }
+        ],
+    ),
+    # Limit tree walk
+    (
+        {"a.b.c.d.e.f.g.h.i.j.mail.example.com"},
+        {
+            "_dmarc.a.b.c.d.e.f.g.h.i.j.mail.example.com": {
+                "answers": [],
+                "nxdomain": True,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.a.b.c.d.e.f.g.h.i.j.mail.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
+            # Should skip straight to this domain if the author domain doesn't have
+            # a DMARC record
+            "_dmarc.g.h.i.j.mail.example.com": {
+                "answers": [],
+                "nxdomain": True,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.g.h.i.j.mail.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
+            "_dmarc.h.i.j.mail.example.com": {
+                "answers": ["v=DMARC1; psd=n"],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.h.i.j.mail.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt record",
+                        "query_answers": ["v=DMARC1; psd=n"],
+                    }
+                ],
+            },
+        },
+        [
+            {
+                "domain": "a.b.c.d.e.f.g.h.i.j.mail.example.com",
+                "rdata": ["v=DMARC1; psd=n"],
+                "log": [
+                    {
+                        "query_name": "_dmarc.a.b.c.d.e.f.g.h.i.j.mail.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    },
+                    {
+                        "query_name": "_dmarc.g.h.i.j.mail.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    },
+                    {
+                        "query_name": "_dmarc.h.i.j.mail.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt record",
+                        "query_answers": ["v=DMARC1; psd=n"],
+                    }
+                ],
+            }
+        ],
+    ),
 ]
 
 GET_DNSINFO_CASES = [
@@ -620,6 +898,11 @@ PARSE_DMARC_RECORD_CASES = [
     (
         ["v=DMARC1 p=reject;"],
         {}
+    ),
+    # Final ";" is optional
+    (
+        ["v=DMARC1"],
+        {"v": "DMARC1"}
     ),
     # Discard if duplicate tags
     (
