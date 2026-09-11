@@ -110,7 +110,7 @@ test_DataProcessRegion_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi15a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonCompliPolicyIdanceMessage15_2,
-                 "Baseline": CommonControlsId15_2}]
+                 "Value": NonComplianceMessage15_2,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
