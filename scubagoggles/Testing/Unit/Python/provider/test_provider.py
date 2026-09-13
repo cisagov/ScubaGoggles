@@ -622,9 +622,9 @@ class TestProvider:
                 RuntimeWarning,
                 match="Exception thrown while retrieving customer list"
             ):
-                with pytest.raises(UnboundLocalError):
-                    provider.get_tenant_info()
+                result = provider.get_tenant_info()
 
+            assert result == cases["expected"]
             assert ApiReference.LIST_CUSTOMERS.value in provider._unsuccessful_calls
         else:
             result = provider.get_tenant_info()

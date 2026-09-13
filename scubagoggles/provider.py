@@ -818,6 +818,10 @@ class Provider:
 
         self._successful_calls.add(ApiReference.LIST_OUS.value)
 
+        if 'organizationUnits' not in response:
+            log.warning('Unable to determine the name of the top-level OU.')
+            return ''
+
         for ou in response['organizationUnits']:
             if ou['orgUnitPath'] == '/':
                 return ou['name']
@@ -830,11 +834,11 @@ class Provider:
         Gets the high-level tenant info using the directory API
         """
         tenant_id = ''
+        primary_domain = 'Error Retrieving'
         try:
             response = self._services['directory'].customers().get(
                             customerKey = self._customer_id).execute()
             tenant_id = response.get('id')
-            primary_domain = 'Error Retrieving'
             for domain in self.list_domains():
                 if domain['isPrimary']:
                     primary_domain = domain['domainName']

@@ -117,6 +117,13 @@ GET_TOPLEVEL_OU_CASES = [
         "raises": None,
         "expect_success_call": True,
     },
+    # "organizationUnits" key is entirely absent from the response
+    {
+        "api_response": {},
+        "expected": "",
+        "raises": None,
+        "expect_success_call": True,
+    },
     # "organizationUnits" key is present but root OU, "/", is missing
     {
         "api_response": {
