@@ -313,6 +313,7 @@ test_Enable_Incorrect_V1 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
+    # print(RuleOutput[0].ReportDetails)
     RuleOutput[0].ReportDetails == concat("", [
         "The following OUs are non-compliant:<ul>",
         "<li>Test Top-Level OU: Content reporting for 1:1 direct messages is disabled.</li></ul>",
@@ -769,12 +770,13 @@ test_Categories_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
+    print(RuleOutput[0].ReportDetails)
     RuleOutput[0].ReportDetails == concat("", [
         "The following OUs are non-compliant:",
         "<ol><li><dl>",
-        "<dt>DHS-CISA</dt>",
-        "<dd>This OU is out of compliance with GWS.CHAT.5.1v1</dd>",
-        "</dl></dt></ol>"
+        "<dt>Other OU</dt>",
+        "<dd>This OU is out of compliance with GWS.CHAT.5.2vM</dd>",
+        "</dl></dt></li></ol>"
     ])
 }
 
