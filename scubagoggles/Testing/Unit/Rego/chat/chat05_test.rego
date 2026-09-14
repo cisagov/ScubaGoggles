@@ -770,8 +770,11 @@ test_Categories_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Other OU: The following reporting types are disabled: harassment</li></ul>"
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>DHS-CISA</dt>",
+        "<dd>This OU is out of compliance with GWS.CHAT.5.1v1</dd>",
+        "</dl></dt></ol>"
     ])
 }
 
