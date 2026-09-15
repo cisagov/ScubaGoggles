@@ -327,7 +327,7 @@ class TestProvider:
             return query_responses.get(qname, {
                 "answers": [],
                 "nxdomain": False,
-                "log_entries": []
+                "log_entries": ["unexpected query"]
             })
 
         mock_query = mocker.patch.object(

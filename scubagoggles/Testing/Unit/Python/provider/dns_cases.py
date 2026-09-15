@@ -364,7 +364,7 @@ GET_DMARC_RECORDS_CASES = [
         {
             "_dmarc.sub.example.com": {
                 "answers": [],
-                "nxdomain": False,
+                "nxdomain": True,
                 "log_entries": [
                     {
                         "query_name": "_dmarc.sub.example.com",
@@ -386,6 +386,18 @@ GET_DMARC_RECORDS_CASES = [
                     }
                 ],
             },
+            "_dmarc.com": {
+                "answers": [],
+                "nxdomain": True,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
+                    }
+                ],
+            },
         },
         [
             {
@@ -403,6 +415,12 @@ GET_DMARC_RECORDS_CASES = [
                         "query_method": "traditional",
                         "query_result": "Query returned 1 txt records",
                         "query_answers": ["v=DMARC1; p=reject"],
+                    },
+                    {
+                        "query_name": "_dmarc.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": [],
                     },
                 ],
             }
