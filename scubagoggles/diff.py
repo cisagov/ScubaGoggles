@@ -76,17 +76,27 @@ def split_version(control_id: str) -> tuple[str, int | None]:
     return match.group("base"), int(match.group("version"))
 
 
-def _parse_control(
+def normalize_control(
     product: str,
     group: dict[str, Any],
-    raw: dict[str, Any],
+    control_data: dict[str, Any],
 ) -> Control | None:
-    """Normalize one raw control record."""
-    control_id = str(raw.get("Control ID", "")).strip()
+    """Normalize a ScubaGoggles report control into a Control.
+
+    Args:
+        product: Product name containing the control, such as "Gmail".
+        group: Parent control group from the ScubaGoggles report.
+        control_data: Control record from the group's ``Controls`` collection.
+
+    Returns:
+        A normalized Control, or None when the record does not contain
+        a usable control ID.
+    """
+    control_id = str(control_data.get("Control ID", "")).strip()
     if not control_id:
         return None
 
-    comments = raw.get("Comments") or []
+    comments = control_data.get("Comments") or []
     if not isinstance(comments, list):
         comments = [comments]
 
@@ -95,13 +105,13 @@ def _parse_control(
         group_name=str(group.get("GroupName", "")),
         group_number=str(group.get("GroupNumber", "")),
         control_id=control_id,
-        result=str(raw.get("Result", "")),
-        criticality=str(raw.get("Criticality", "")),
-        requirement=str(raw.get("Requirement", "")),
-        details=str(raw.get("Details", "")),
+        result=str(control_data.get("Result", "")),
+        criticality=str(control_data.get("Criticality", "")),
+        requirement=str(control_data.get("Requirement", "")),
+        details=str(control_data.get("Details", "")),
         comments=tuple(str(value) for value in comments),
-        resolution_date=raw.get("ResolutionDate"),
-        original_result=str(raw.get("OriginalResult", raw.get("Result", ""))),
+        resolution_date=control_data.get("ResolutionDate"),
+        original_result=str(control_data.get("OriginalResult", control_data.get("Result", ""))),
     )
 
 

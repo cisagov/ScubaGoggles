@@ -44,6 +44,13 @@ class TestDiff:
         assert result_diff("Pass", "Omitted") == "NewOmission"
         assert result_diff("Pass", "Error") == "Errored"
 
+    def test_split_version_unmatched_control_id(self):
+        """Control IDs without a version suffix are returned unchanged."""
+        assert split_version("GWSUNMATCHEDPOLICY") == (
+            "GWSUNMATCHEDPOLICY",
+            None,
+        )
+
     def test_split_version_is_case_insensitive(self):
         """Split version suffixes regardless of case."""
         assert split_version("GWS.COMMONCONTROLS.1.1v2") == (
