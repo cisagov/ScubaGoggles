@@ -86,7 +86,7 @@ def normalize_control(
     Args:
         product: Product name containing the control, such as "Gmail".
         group: Parent control group from the ScubaGoggles report.
-        control_data: Control record from the group's ``Controls`` collection.
+        control_data: Control record from the group's `Controls` collection.
 
     Returns:
         A normalized Control, or None when the record does not contain
@@ -127,7 +127,7 @@ def collect_controls(report: dict[str, Any]) -> dict[str, Control]:
             for raw in group.get("Controls", []) or []:
                 if not isinstance(raw, dict):
                     continue
-                control = _parse_control(str(product), group, raw)
+                control = normalize_control(str(product), group, raw)
                 if control is None:
                     continue
                 base_id = split_version(control.control_id)[0].lower()
