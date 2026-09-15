@@ -1,6 +1,7 @@
 """Custom policy parser for Data Loss Protection (DLP) rules.
 """
 
+import ast
 import logging
 import re
 
@@ -14,9 +15,11 @@ log = logging.getLogger(__name__)
 class Likelihood(IntEnum):
 
     """This class defines the possible Likelihood values used by Google
-    in DLP expressions.
+    in DLP expressions.  UNKNOWN signifies an invalid/missing likelihood value,
+    and is our value (not from Google).
     """
 
+    UNKNOWN = 0
     VERY_UNLIKELY = 1
     UNLIKELY = 2
     POSSIBLE = 3
@@ -55,8 +58,6 @@ class DlpRulesParser:
     _or_re = re.compile(_or_regexp)
 
     _expression_re = re.compile(_expression_regexp)
-
-    _dict_key_re = re.compile(r'(?P<key>\w+):')
 
     # Matches string used by Google for likelihood levels.
 
@@ -124,7 +125,12 @@ class DlpRulesParser:
             detectors = self._check_condition(rule)
 
             if not detectors:
+
+                log.debug('  no valid detectors found')
+
                 continue
+
+            log.debug('  valid detectors: %s', ', '.join(detectors))
 
             apps = self._check_apps(rule)
 
@@ -132,8 +138,10 @@ class DlpRulesParser:
 
             apps &= app_blocking
 
+            # More than one rule may together cover all required PII detectors.
+
             for app in apps:
-                app_detectors[app] = detectors & self._minimum_detectors
+                app_detectors[app].update(detectors & self._minimum_detectors)
 
         pii_apps = sorted(app for app, detectors in app_detectors.items()
                     if detectors == self._minimum_detectors)
@@ -155,7 +163,8 @@ class DlpRulesParser:
 
         The DLP conditions are expressed using Google's Common Expression
         Language (CEL).  Conditions with multiple terms are only supported
-        using the "||" (OR) operator.  for the minimum detectors,
+        using the "||" (OR) operator.  Each term must be for "all_content"
+        and use the matches_dlp_detector().
 
         :return: a set containing one or more of the "minimum required"
             detectors found in the condition.
@@ -168,65 +177,115 @@ class DlpRulesParser:
 
         if not cls._expression_re.match(condition):
 
-            log.debug('  %s - expression not in expected format', condition)
+            log.debug('  "%s" - expression not in expected format', condition)
 
             return valid_detectors
 
-        calls = cls._or_re.split(condition)
+        # "Convert" the c++-ish OR (||) operators to Python (or).  The entire
+        # condition should be able to be parsed with the AST parser - certainly
+        # the conditions that are used for PII.  Conditions that can't be
+        # parsed are ignored.
 
-        for index, call in enumerate(calls):
+        condition = cls._or_re.sub(' or ', condition)
 
-            match = cls._cond_re.match(call)
+        try:
+            expression = ast.parse(condition, mode='eval')
+        except (SyntaxError, ValueError) as e:
 
-            content_type, content, arguments = match.groups()
+            log.debug('  "%s" - unable to parse expression: %s',
+                      condition,
+                      e)
 
-            arguments = cls._likelihood_prefix_re.sub('Likelihood.', arguments)
+            return valid_detectors
 
-            arguments = cls._dict_key_re.sub(r'"\g<key>":', arguments)
+        # Each term in the expression is call.  One call is examined at a
+        # time.
 
-            # ast.literal_eval() doesn't work in this case, not jumping thru
-            # hoops to satisfy pylint as the following is no risk.
-            # pylint: disable=eval-used
+        calls = []
 
-            arguments_ok, detector = eval(f'cls._check_arguments{arguments}')
+        if isinstance(expression, ast.Expression):
 
-            if arguments_ok:
+            if (isinstance(expression.body, ast.BoolOp)
+                and isinstance(expression.body.op, ast.Or)):
 
-                # The detector will only be included for the correct content
-                # type and content.
+                calls = expression.body.values
 
-                if (content_type == 'all_content'
-                    and content == 'matches_dlp_detector'):
-                    valid_detectors.add(detector)
-                else:
+            elif isinstance(expression.body, ast.Call):
+                calls.append(expression.body)
 
-                    item = index + 1
+        for item, call in enumerate(calls, 1):
 
-                    if content_type != 'all_content':
+            detector = cls._parse_detector(call, item)
 
-                        log.debug('  condition %d: %s content type not '
-                                  '"all_content"',
-                                  item,
-                                  content_type)
-
-                    if content != 'matches_dlp_detector':
-
-                        log.debug('  condition %d: %s condition is not '
-                                  '"detector"',
-                                  item,
-                                  content)
+            if detector:
+                valid_detectors.add(detector)
 
         return valid_detectors
 
     @classmethod
-    def _check_arguments(cls,
-                         detector: str,
-                         likelihood: Likelihood,
-                         match_counts: dict) -> tuple:
+    def _parse_detector(cls, call: ast.Call, item: int) -> str:
+
+        """Given the parsed "call" data for a detector, this function
+        examines the components to determine if this is a valid detector
+        for PII content.
+
+        :param ast.Call call: parsed call from Google condition expression.
+        :param int item: position of call in expression, which is used for
+            debug logging.
+
+        :return: a string containing a valid detector, or an empty string
+        if the call data doesn't satisfy the requirments for a detector.
+        :rtype: str
+        """
+
+        error = False
+
+        # The call must be of the form: all_content.matches_dlp_detector().
+
+        if (not isinstance(call.func, ast.Attribute)
+            or not isinstance(call.func.value, ast.Name)):
+
+            log.debug('  condition %d: function not parsed', item)
+
+            return ''
+
+        content_type = call.func.value.id
+
+        content = call.func.attr
+
+        if content_type != 'all_content':
+
+            log.debug('  condition %d: %s content type not '
+                        '"all_content"',
+                        item,
+                        content_type)
+
+            error = True
+
+        if content != 'matches_dlp_detector':
+
+            log.debug('  condition %d: %s condition is not '
+                        '"detector"',
+                        item,
+                        content)
+
+            error = True
+
+        arguments_ok, detector = cls._check_arguments(call.args, item)
+
+        return detector if arguments_ok and not error else ''
+
+    @classmethod
+    def _check_arguments(cls, arguments: list, item: int) -> tuple:
 
         """Returns a tuple which includes whether the arguments for the DLP
         condition match the expected values, and the detector name if the
         arguments are correct.
+
+        :param list arguments: list of arguments parsed from the condition
+            term.
+        :param int item: position of call in expression, which is used for
+            debug logging.
 
         :return: boolean indicating whether the condition term's arguments
             are correct, followed by the detector name specified in the
@@ -234,16 +293,83 @@ class DlpRulesParser:
         :rtype: tuple
         """
 
+        # The all_content.matches_dlp_detector() must have exactly 3 arguments.
+
+        arguments_ok = len(arguments) == 3
+
+        if not arguments_ok:
+
+            log.debug('  condition %d: (%d != 3) unexpected argument count',
+                      item,
+                      len(arguments))
+
+            return arguments_ok, ''
+
+        # The first argument is the string detector name.
+
+        detector = (arguments[0].value if isinstance(arguments[0], ast.Constant)
+                    else '')
+
+        # The second argument is the likelihood.  It is parsed as an enum
+        # member of Likelihood.
+
+        likelihood = (arguments[1].attr
+                      if isinstance(arguments[1], ast.Attribute)
+                      and arguments[1].value.attr == 'Likelihood'
+                      else 'UNKNOWN')
+
+        likelihood = (Likelihood[likelihood]
+                      if likelihood in Likelihood.__members__
+                      else Likelihood.UNKNOWN)
+
+        # The third argument is a dictionary containing match counts.
+
+        match_counts = (cls.convert_ast_dict(arguments[2])
+                        if isinstance(arguments[2], ast.Dict) else {})
+
         # The arguments are correct if the likelihood is at least "likely"
         # or "greater" (e.g., "very likely"), and the minimum match counts
         # are 1.
 
-        arguments_ok = (detector in cls._minimum_detectors
-                        and likelihood >= Likelihood.LIKELY
-                        and match_counts['minimum_match_count'] == 1
-                        and match_counts['minimum_unique_match_count'] == 1)
+        arguments_ok = detector in cls._minimum_detectors
+
+        if arguments_ok:
+
+            expected_match_counts = {'minimum_match_count': 1,
+                                     'minimum_unique_match_count': 1}
+
+            arguments_ok = (likelihood >= Likelihood.LIKELY
+                            and match_counts == expected_match_counts)
+
+            if not arguments_ok:
+                log.debug('  condition %d: %s - invalid detector arguments:'
+                          ' likelihood: %s, match counts: %s',
+                          item,
+                          detector,
+                          likelihood,
+                          match_counts)
 
         return arguments_ok, detector
+
+    @staticmethod
+    def convert_ast_dict(dictionary: ast.Dict) -> dict :
+
+        """Converts an AST dictionary structure into a dictionary.
+
+        :param ast.Dict: parsed dictionary.
+
+        :return: Python dictionary created from the parsed dictionary data.
+        :rtype: dict
+        """
+
+        try:
+            result = {key.id if isinstance(key, ast.Name)
+                    else ast.literal_eval(key): ast.literal_eval(value)
+                    for key, value in zip(dictionary.keys, dictionary.values)}
+        except Exception:
+            result = {}
+
+        return result
 
     @classmethod
     def _check_apps(cls, rule: dict) -> set:
