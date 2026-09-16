@@ -140,9 +140,39 @@ def collect_controls(report: dict[str, Any]) -> dict[str, Control]:
                 controls[key] = control
     return controls
 
+def result_diff(before : str, after : str):
+    # pylint: disable=too-many-return-statements
+    "Classify a before/after result"
+    # Precedence order #2 (errorered result)
+    if after == "Error" or after.startswith("Error"):
+        return "Errored"
+
+    # Precedence order #4 (unchanged results)
+    if before == after:
+        return "Unchanged"
+
+    # Precedence order #5 (incorrect result)
+    if after == "Incorrect result":
+        return "NewIncorrectResult"
+
+    # Precedence order #6 (arbitrary 'after' pass/fail/warn/auto/manual updates)
+    if after in AUTOMATED_STATES:
+        if before == "N/A":
+            return "NewAutomatedCheck"
+        else:
+            return AUTOMATED_TRANSITIONS[after]
+    if after == "N/A":
+        return "NewManualCheck"
+    
+    # Precedence order #7 (New Omissions)
+    if after == "Omitted":
+        return "NewOmission"
+
+    # Precedence order #8 (Other)
+    return "Other"
+
 
 def classify_pair(before: Control | None, after: Control | None) -> str:
-    # pylint: disable=too-many-return-statements
     """Classify a before/after control pair."""
     # Precedence order #1 (new/removed policy)
     if before is None:
@@ -150,44 +180,29 @@ def classify_pair(before: Control | None, after: Control | None) -> str:
     if after is None:
         return "RemovedPolicy"
 
-    before_base, before_version = split_version(before.control_id)
-    after_base, after_version = split_version(after.control_id)
-
-    # Precedence order #2 (errorered result)
-    if after.result == "Error" or after.result.startswith("Error"):
-        return "Errored"
-
     # Precedence order #3 (policy version change)
+    _, before_version = split_version(before.control_id)
+    _, after_version = split_version(after.control_id)
+    policy_version_change = None
     if (
         before_version is not None
         and after_version is not None
         and before_version != after_version
     ):
-        return "PolicyVersionUpdate"
+        policy_version_change = "PolicyVersionUpdate"
 
-    # Precedence order #4 (unchanged results)
-    if before.result == after.result:
-        return "Unchanged"
+    # Handle classifications of Control result components
+    result = result_diff(before.result, after.result)
 
-    # Precedence order #5 (incorrect result)
-    if after.result == "Incorrect result":
-        return "NewIncorrectResult"
-
-    # Precedence order #6 (arbitrary 'after' pass/fail/warn/auto/manual updates)
-    if after.result in AUTOMATED_STATES:
-        if before.result == "N/A":
-            return "NewAutomatedCheck"
-        else:
-            return AUTOMATED_TRANSITIONS[after.result]
-    if after.result == "N/A":
-        return "NewManualCheck"
-    
-    # Precedence order #7 (New Omissions)
-    if after.result == "Omitted":
-        return "NewOmission"
-
-    # Precedence order #8 (Other)
-    return "Other"
+    # Respect classiciation Precedence
+    # Precedence #2
+    if result == "Errored":
+        return result
+    # Precedence #3
+    if policy_version_change is not None:
+        return policy_version_change
+    # remaining classifications
+    return result
 
 
 def _strip_html(value: str) -> str:

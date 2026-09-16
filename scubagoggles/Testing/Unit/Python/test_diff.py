@@ -1,7 +1,6 @@
 """Unit tests for the ScubaGoggles report diff functionality."""
 
-from scubagoggles.diff import compare, result_diff, split_version
-
+from scubagoggles.diff import Control, compare, result_diff, classify_pair, split_version
 
 def report(controls):
     """Build a minimal ScubaGoggles report for testing."""
@@ -43,6 +42,50 @@ class TestDiff:
         assert result_diff("Pass", "N/A") == "NewManualCheck"
         assert result_diff("Pass", "Omitted") == "NewOmission"
         assert result_diff("Pass", "Error") == "Errored"
+        assert result_diff("Other1", "Other2") == "Other"
+        assert result_diff("Error", "N/A") == "NewManualCheck"
+
+    def test_classify_pair(self):
+        """ Classify Control Pair Changes """
+        # template used for creating mock control instances for test cases
+        control_template_dict = {
+            "product":"",
+            "group_name":"",
+            "group_number":"",
+            "control_id":"",
+            "result":"",
+            "criticality":"",
+            "requirement":"",
+            "details":"",
+            "comments":tuple(),
+            "resolution_date":None,
+            "original_result":""
+        }
+        # Instance 1
+        c_dict_1 = control_template_dict.copy()
+        c_dict_1["control_id"] = "GWS.COMMONCONTROLS.1.1v1"
+        c_dict_1["result"] = "Pass"
+        c_1 = Control(**c_dict_1)
+        # Instance 2
+        c_dict_2 = control_template_dict.copy()
+        c_dict_2["control_id"] = "GWS.COMMONCONTROLS.1.1v2"
+        c_dict_2["result"] = "Fail"
+        c_2 = Control(**c_dict_2)
+        # Instance 3 (error result)
+        c_dict_3 = c_dict_2.copy()
+        c_dict_3["result"] = "Error"
+        c_3 = Control(**c_dict_3)
+        # Test cases:
+        # test new/removed policy functionality
+        assert classify_pair(None, c_1) == "NewPolicy"
+        # test version changes are returned before other result 
+        # classifications from result_diff
+        assert classify_pair(c_1, c_2) == "PolicyVersionUpdate"
+        # No policy version detected, nor any errors, so result is unchanged
+        assert classify_pair(c_1, c_1) == "Unchanged"
+        # test Error change result takes precedence before version change
+        assert classify_pair(c_1, c_3) == "Errored"
+
 
     def test_split_version_unmatched_control_id(self):
         """Control IDs without a version suffix are returned unchanged."""
