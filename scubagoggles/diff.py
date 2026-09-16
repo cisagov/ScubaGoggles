@@ -28,8 +28,9 @@ CLASSIFICATIONS = (
     "NewOmission",
     "Other",
 )
+
 AUTOMATED_STATES = frozenset({"Pass", "Fail", "Warning"})
-MANUAL_STATES = frozenset({"N/A", "No events found", "Omitted"})
+
 AUTOMATED_TRANSITIONS = {
     "Pass": "NewPass",
     "Fail": "NewFail",
@@ -140,80 +141,10 @@ def collect_controls(report: dict[str, Any]) -> dict[str, Control]:
     return controls
 
 
-def _is_error(result: str) -> bool:
-    """Return whether a result represents an error state."""
-    return result == "Error" or result.startswith("Error")
-
-
-def _manual_transition(before: str, after: str) -> str | None:
-    """Classify transitions involving manual or omitted results."""
-    # pylint: disable=too-many-return-statements
-    if before == "N/A" and after in AUTOMATED_STATES:
-        return "NewAutomatedCheck"
-    if before in AUTOMATED_STATES and after == "N/A":
-        return "NewManualCheck"
-    if after == "Omitted" and before != "Omitted":
-        return "NewOmission"
-    if before == "Omitted" and after != "Omitted":
-        if after == "N/A":
-            return "NewManualCheck"
-        return AUTOMATED_TRANSITIONS.get(after)
-    if before in MANUAL_STATES and after in AUTOMATED_STATES:
-        return AUTOMATED_TRANSITIONS.get(after)
-    return None
-
-
-def _error_transition(before: str, after: str) -> str | None:
-    """Classify transitions to or from an error result."""
-    if _is_error(after):
-        return "Errored"
-    if not _is_error(before):
-        return None
-    if after in AUTOMATED_STATES:
-        return AUTOMATED_TRANSITIONS[after]
-    if after == "N/A":
-        return "NewManualCheck"
-    if after == "Omitted":
-        return "NewOmission"
-    return "Other"
-
-
-def _standard_transition(before: str, after: str) -> str:
-    """Classify ordinary result transitions."""
-    # pylint: disable=too-many-return-statements
-    if after == "Incorrect result":
-        return "NewIncorrectResult"
-    if before == "Incorrect result":
-        if after in AUTOMATED_STATES:
-            return AUTOMATED_TRANSITIONS[after]
-        if after == "N/A":
-            return "NewManualCheck"
-        if after == "Omitted":
-            return "NewOmission"
-        return "Other"
-    if after in AUTOMATED_STATES:
-        return AUTOMATED_TRANSITIONS[after]
-    return "Other"
-
-
-def result_diff(before: str, after: str) -> str:
-    """Classify a change between two control results."""
-    if before == after:
-        return "Unchanged"
-
-    error_result = _error_transition(before, after)
-    if error_result is not None:
-        return error_result
-
-    manual_result = _manual_transition(before, after)
-    if manual_result is not None:
-        return manual_result
-
-    return _standard_transition(before, after)
-
-
 def classify_pair(before: Control | None, after: Control | None) -> str:
+    # pylint: disable=too-many-return-statements
     """Classify a before/after control pair."""
+    # Precedence order #1 (new/removed policy)
     if before is None:
         return "NewPolicy"
     if after is None:
@@ -221,15 +152,42 @@ def classify_pair(before: Control | None, after: Control | None) -> str:
 
     before_base, before_version = split_version(before.control_id)
     after_base, after_version = split_version(after.control_id)
-    if before_base.lower() != after_base.lower():
-        return "Other"
+
+    # Precedence order #2 (errorered result)
+    if after.result == "Error" or after.result.startswith("Error"):
+        return "Errored"
+
+    # Precedence order #3 (policy version change)
     if (
         before_version is not None
         and after_version is not None
         and before_version != after_version
     ):
         return "PolicyVersionUpdate"
-    return result_diff(before.result, after.result)
+
+    # Precedence order #4 (unchanged results)
+    if before.result == after.result:
+        return "Unchanged"
+
+    # Precedence order #5 (incorrect result)
+    if after.result == "Incorrect result":
+        return "NewIncorrectResult"
+
+    # Precedence order #6 (arbitrary 'after' pass/fail/warn/auto/manual updates)
+    if after.result in AUTOMATED_STATES:
+        if before.result == "N/A":
+            return "NewAutomatedCheck"
+        else:
+            return AUTOMATED_TRANSITIONS[after.result]
+    if after.result == "N/A":
+        return "NewManualCheck"
+    
+    # Precedence order #7 (New Omissions)
+    if after.result == "Omitted":
+        return "NewOmission"
+
+    # Precedence order #8 (Other)
+    return "Other"
 
 
 def _strip_html(value: str) -> str:
