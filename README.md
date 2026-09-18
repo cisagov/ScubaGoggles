@@ -63,6 +63,7 @@ We use a three-step process:
 
 ### Misc
 - [Mappings](docs/misc/mappings.md)
+- [OSCAL Catalog](docs/misc/oscal-catalog.md)
 
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative
