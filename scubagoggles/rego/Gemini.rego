@@ -84,16 +84,34 @@ if {
 
 GeminiId2_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.2.1")
 
-NonComplianceSetting2_1 := "GenAiAlphaSettingsProto alpha_enabled"
+# Google renamed this setting from the Alpha proto name to a display name.
+# Evaluate both and use the most recent event so a later OFF is not
+# overridden by a stale Alpha event.
+GeminiBetaSettings := [
+    "GenAiAlphaSettingsProto alpha_enabled",
+    "Beta Gemini Features Beta Features enabled"
+]
 
-NonComplianceMessage2_1 := "Alpha Gemini features are enabled."
+NonComplianceMessage2_1 := "Gemini Beta features are enabled."
+
+GeminiBetaEventsOU(OU) := {
+    Event |
+    some Setting in GeminiBetaSettings
+    some Event in utils.FilterEventsOU(LogEvents, Setting, OU)
+}
+
+GeminiBetaEventsGroup(Group) := {
+    Event |
+    some Setting in GeminiBetaSettings
+    some Event in utils.FilterEventsGroup(LogEvents, Setting, Group)
+}
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage2_1
 } if {
     some OU in utils.OUsWithEvents
-    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting2_1, OU)
+    Events := GeminiBetaEventsOU(OU)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
@@ -104,7 +122,7 @@ NonCompliantGroups2_1 contains {
     "Value": NonComplianceMessage2_1
 } if {
     some Group in utils.GroupsWithEvents
-    Events := utils.FilterEventsGroup(LogEvents, NonComplianceSetting2_1, Group)
+    Events := GeminiBetaEventsGroup(Group)
     count(Events) > 0
     LastEvent := utils.GetLastEvent(Events)
     LastEvent.NewValue == "true"
@@ -122,7 +140,7 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting2_1, utils.TopLevelOU)
+    Events := GeminiBetaEventsOU(utils.TopLevelOU)
     count(Events) == 0
     DefaultSafe := true
 }
@@ -139,7 +157,7 @@ tests contains {
     "NoSuchEvent": false
 }
 if {
-    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting2_1, utils.TopLevelOU)
+    Events := GeminiBetaEventsOU(utils.TopLevelOU)
     count(Events) > 0
     Conditions := {count(NonCompliantOUs2_1) == 0, count(NonCompliantGroups2_1) == 0}
     Status := (false in Conditions) == false

@@ -307,6 +307,19 @@ Default sharing setting for Google AI notes SHALL be restricted to "Guests in yo
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud Storage](https://attack.mitre.org/techniques/T1567/002/)
 
+#### GWS.MEET.6.3v1
+Screenshots of presented content SHALL only captured in notes when recording is enabled.
+
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols83v06-instructions)
+
+- _Rationale:_ Screenshots of presented content may contain sensitive information. Restricting screenshot capture to meetings where recording is enabled helps ensure visual content is only retained when the meeting host has intentionally elected to record the meeting.
+
+- _Last modified:_ August 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
+- MITRE ATT&CK TTP Mapping
+  - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)
+  - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+  - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud Storage](https://attack.mitre.org/techniques/T1567/002/)
 
 ### Resources
 - [Take notes for me in Google Meet](https://support.google.com/meet/answer/14754931)
@@ -320,7 +333,7 @@ Default sharing setting for Google AI notes SHALL be restricted to "Guests in yo
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Gemini Settings**.
-4.  Click **Google AI notes sharing**.
+4.  Click **Gemini notes sharing**.
 5.  Ensure **Allow hosts to change who notes are shared to** is unselected.
 6.  Click **Save**.
 
@@ -328,6 +341,14 @@ Default sharing setting for Google AI notes SHALL be restricted to "Guests in yo
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
 3.  Click **Gemini Settings**.
-4.  Click **Google AI notes sharing**.
-5.  Ensure **Default sharing setting for Google AI notes** is set to "The hosts and co-hosts" or "Invited Guests in your Organization".
+4.  Click **Gemini notes sharing**.
+5.  Ensure **Default sharing setting for Gemini notes** is set to "The hosts and co-hosts" or "Invited guests in your organization".
+6.  Click **Save**.
+
+#### GWS.MEET.6.3v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Menu** -> **Apps** -> **Google Workspace** -> **Google Meet**.
+3.  Click **Gemini Settings**.
+4.  Click **Visual content in notes**.
+5.  Ensure **Select when the visual notes feature is enabled** is set to "Only allow screenshots of presented content to be captured in notes when recording is enabled".
 6.  Click **Save**.

@@ -1,5 +1,20 @@
 package gmail
 import future.keywords
+import data.utils.FailTestResult
+import data.utils.PassTestResultWithMessage
+
+Gmail3SuccessMessage := sprintf("Requirement met.  %s", [DNSLink])
+
+Gmail3FailMessage(domain, message) := sprintf("1 failing domain(s): %s%s: %s%s%s",
+                                              ["<ul id=\"spf-domains\"><li>\n  ",
+                                               domain,
+                                               message,
+                                               "\n</li>\n</ul> ",
+                                               DNSLink])
+
+NoAnsMsg := "Domain exists but no answers returned."
+
+NoHardFailMsg := "SPF record found, but it does not hardfail (\"-all\") or redirect to one that does."
 
 #
 # GWS.GMAIL.3.1
@@ -17,11 +32,7 @@ test_SPF_Correct_V1 if {
         "domains": ["test.name"]
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+    PassTestResultWithMessage(PolicyId, Output, Gmail3SuccessMessage)
 }
 
 test_SPF_Correct_V2 if {
@@ -41,11 +52,7 @@ test_SPF_Correct_V2 if {
         "domains": ["test1.name", "test2.name"]
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+    PassTestResultWithMessage(PolicyId, Output, Gmail3SuccessMessage)
 }
 
 test_SPF_Correct_V3 if {
@@ -61,14 +68,10 @@ test_SPF_Correct_V3 if {
         "domains": ["test1.name"]
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+    PassTestResultWithMessage(PolicyId, Output, Gmail3SuccessMessage)
 }
 
-test_SPF_Correct_V4 if {
+test_SPF_Incorrect_V1 if {
     # Test softfail
     PolicyId := GmailId3_1
     Output := tests with input as {
@@ -81,14 +84,10 @@ test_SPF_Correct_V4 if {
         "domains": ["test.name"]
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+    FailTestResult(PolicyId, Output, Gmail3FailMessage("test.name", NoHardFailMsg))
 }
 
-test_SPF_Incorrect_V1 if {
+test_SPF_Incorrect_V2 if {
     # Test SPF when there's multiple domains and only one is correct
     PolicyId := GmailId3_1
     Output := tests with input as {
@@ -105,14 +104,10 @@ test_SPF_Incorrect_V1 if {
         "domains": ["test1.name", "test2.name"]
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["1 of 2 agency domain(s) found in violation: test2.name.", DNSLink])
+    FailTestResult(PolicyId, Output, Gmail3FailMessage("test2.name", NoAnsMsg))
 }
 
-test_SPF_Incorrect_V2 if {
+test_SPF_Incorrect_V3 if {
     # Test SPF when there's only one domain and it's wrong
     PolicyId := GmailId3_1
     Output := tests with input as {
@@ -125,15 +120,11 @@ test_SPF_Incorrect_V2 if {
         "domains": ["test.name"]
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+    FailTestResult(PolicyId, Output, Gmail3FailMessage("test.name", NoAnsMsg))
 }
 #--
 
-test_SPF_Incorrect_V3 if {
+test_SPF_Incorrect_V4 if {
     # Test no "all" mechanism
     PolicyId := GmailId3_1
     Output := tests with input as {
@@ -146,14 +137,10 @@ test_SPF_Incorrect_V3 if {
         "domains": ["test.name"]
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+    FailTestResult(PolicyId, Output, Gmail3FailMessage("test.name", NoHardFailMsg))
 }
 
-test_SPF_Incorrect_V4 if {
+test_SPF_Incorrect_V5 if {
     # Fail if multiple records
     PolicyId := GmailId3_1
     Output := tests with input as {
@@ -166,10 +153,7 @@ test_SPF_Incorrect_V4 if {
         "domains": ["test.name"]
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.", DNSLink])
+    failMsg := "More than one record found."
+    FailTestResult(PolicyId, Output, Gmail3FailMessage("test.name", failMsg))
 }
 #--

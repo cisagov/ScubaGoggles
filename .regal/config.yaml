@@ -1,6 +1,7 @@
 # Regal linter configuration
 # All rules documented here:
 # https://docs.styra.com/regal/category/rules
+
 rules:
   custom:
     naming-convention:
@@ -44,6 +45,7 @@ rules:
         - data.utils.FailTestOUNonCompliant
         - data.utils.FailTestNonCompliant
         - data.utils.FailTestNoEvent
+        - data.utils.FailTestResult
         - data.utils.PassTestResult
         - data.utils.PassTestResultWithMessage
         - data.utils.TestResult
@@ -85,6 +87,8 @@ rules:
     rule-length:
       level: ignore
     todo-comment:
+      level: ignore
+    line-length:
       level: ignore
   testing:
     test-outside-test-package:
