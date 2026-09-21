@@ -464,3 +464,39 @@ Alternatively, [Context-Aware access policies](https://support.google.com/a/answ
 3.  Select **Malware and Ransomware**.
 4.  Ensure **Drive automatically monitors unusual file changes to identify potential ransomware corruption** is set to ON.
 5.  Select **Save**.
+
+## 6. Personal Avatar
+
+This section covers whether the personal avatar feature is enabled.
+
+### Policies
+
+#### GWS.DRIVEDOCS.6.1v1
+Personal Avatar SHOULD be deselected.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
+- _Rationale:_ By disabling personal avatar if not needed lessens the potential attack surface
+- _Last modified:_ September 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ TBD
+- MITRE ATT&CK TTP Mapping
+  - TBD
+
+### Resources
+
+-   [Create, use & manage your personal avatar with Gemini in Google Vids]([https://developers.google.com/drive/](https://support.google.com/docs/answer/16970930?hl=en))
+
+### Prerequisites
+
+-   None
+
+### Implementation
+
+To configure the settings for Drive SDK:
+
+#### GWS.DRIVEDOCS.6.1v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Apps -\> Google Workspace -\> Drive and Docs.**
+3.  Select **Google Vids -\> Personal Avatar.**
+4.  Uncheck the **Allow people in your organization to use their own voice and appearance through personal avatar features to generate content in Google Vids.** checkbox.
+5.  Select **Save**.
