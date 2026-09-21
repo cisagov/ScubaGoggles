@@ -15,6 +15,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Security Updates for Files](#3-security-updates-for-files)
 -   [Drive SDK](#4-drive-sdk)
 -   [Drive for Desktop](#5-drive-for-desktop)
+-   [Personal Avatar](#6-personal-avatar)
 
 Settings can be assigned to certain users within GWS individually, through organizational units, or through configuration groups. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
