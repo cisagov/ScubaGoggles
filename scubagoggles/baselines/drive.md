@@ -475,7 +475,7 @@ This section covers whether the personal avatar feature is enabled.
 #### GWS.DRIVEDOCS.6.1v1
 Personal Avatar SHOULD be deselected.
 
-[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs110v06-instructions)
 
 - _Rationale:_ By disabling personal avatar if not needed lessens the potential attack surface
 - _Last modified:_ September 2026
