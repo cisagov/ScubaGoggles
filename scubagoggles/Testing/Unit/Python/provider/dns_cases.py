@@ -358,19 +358,32 @@ GET_DMARC_RECORDS_CASES = [
             }
         ]
     ),
-    # DMARC record missing for subdomain, but present on parent domain
+    # If DMARC record not available at author level and none of the parent records have psd=n or
+    # psd=y, select the DMARC record with the fewest labels
     (
-        {"sub.example.com"},
+        {"a.b.example.com"},
         {
-            "_dmarc.sub.example.com": {
+            "_dmarc.a.b.example.com": {
                 "answers": [],
                 "nxdomain": True,
                 "log_entries": [
                     {
-                        "query_name": "_dmarc.sub.example.com",
+                        "query_name": "_dmarc.a.b.example.com",
                         "query_method": "traditional",
                         "query_result": "Query returned NXDOMAIN",
                         "query_answers": [],
+                    }
+                ],
+            },
+            "_dmarc.b.example.com": {
+                "answers": ["v=DMARC1; p=none"],
+                "nxdomain": False,
+                "log_entries": [
+                    {
+                        "query_name": "_dmarc.b.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none"],
                     }
                 ],
             },
@@ -401,14 +414,20 @@ GET_DMARC_RECORDS_CASES = [
         },
         [
             {
-                "domain": "sub.example.com",
+                "domain": "a.b.example.com",
                 "rdata": ["v=DMARC1; p=reject"],
                 "log": [
                     {
-                        "query_name": "_dmarc.sub.example.com",
+                        "query_name": "_dmarc.a.b.example.com",
                         "query_method": "traditional",
                         "query_result": "Query returned NXDOMAIN",
                         "query_answers": [],
+                    },
+                    {
+                        "query_name": "_dmarc.b.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none"],
                     },
                     {
                         "query_name": "_dmarc.example.com",
