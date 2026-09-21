@@ -203,8 +203,13 @@ test_SecuritySandbox_Incorrect_V2 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Security sandbox is disabled</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>Test Top-Level OU</dt>",
+        "<dd>This OU is out of compliance with GWS.GMAIL.16.1vM</dd>",
+        "</dl></li></ol>"
+        ])
 }
 
 test_SecuritySandbox_Incorrect_V3 if {
@@ -242,8 +247,12 @@ test_SecuritySandbox_Incorrect_V3 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Security sandbox is disabled</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>Test Top-Level OU</dt>",
+        "<dd>This OU is out of compliance with GWS.GMAIL.16.1vM</dd>",
+        "</dl></li></ol>"])
 }
 
 test_SecuritySandbox_Incorrect_V4 if {
@@ -271,8 +280,12 @@ test_SecuritySandbox_Incorrect_V4 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Security sandbox is disabled</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>Secondary OU</dt>",
+        "<dd>This OU is out of compliance with GWS.GMAIL.16.1vM</dd>",
+        "</dl></li></ol>"])
 }
 
 test_SecuritySandbox_Incorrect_V5 if {
@@ -310,8 +323,12 @@ test_SecuritySandbox_Incorrect_V5 if {
     count(RuleOutput) == 1
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Security sandbox is disabled</li></ul>"])
+    RuleOutput[0].ReportDetails == concat("", [
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>Secondary OU</dt>",
+        "<dd>This OU is out of compliance with GWS.GMAIL.16.1vM</dd>",
+        "</dl></li></ol>"])
 }
 #--
 

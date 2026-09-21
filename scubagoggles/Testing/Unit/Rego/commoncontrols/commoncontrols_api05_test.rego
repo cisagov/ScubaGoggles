@@ -75,7 +75,8 @@ test_CCAPI_PwdStrength_NonComply_1 if {
     Output := tests with input as BadCaseInputApi05
 
     failedOU := [{"Name": "topOU",
-                 "Value": "Password strength is WEAK, not STRONG"}]
+                 "Value": "Password strength is WEAK, not STRONG",
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 

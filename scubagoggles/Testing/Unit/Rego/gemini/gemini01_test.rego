@@ -172,8 +172,11 @@ test_1_1_Incorrect_V1 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>topOU: Gemini access regardless of license is enabled.</li></ul>"
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>topOU</dt>",
+        "<dd>This OU is out of compliance with GWS.GEMINI.1.1vM</dd>",
+        "</dl></li></ol>"
     ])
 }
 
@@ -225,8 +228,8 @@ test_1_1_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following groups are non-compliant:<ul>",
-        "<li>group1: Gemini access regardless of license is enabled.</li></ul>"
+        "The following groups are non-compliant:",
+        "<ol></ol>"
     ])
 }
 #--
