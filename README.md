@@ -1,12 +1,11 @@
 ![ScubaGoggles Logo](https://github.com/cisagov/ScubaGoggles/raw/main/docs/images/ScubaGoggles%20GitHub%20Graphic%20v2.jpg)
 
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cisagov/ScubaGoggles/badge)](https://scorecard.dev/viewer/?uri=github.com/cisagov/ScubaGoggles)
-
 [![GitHub Release][github-release-img]][release]
 [![PyPI - Version][pypi-version-img]][pypi]
 [![CI Pipeline][ci-pipeline-img]][ci-pipeline]
 [![GitHub Downloads][github-downloads-img]][release]
 [![PyPI Downloads][pypi-downloads-img]][pypi]
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cisagov/ScubaGoggles/badge)](https://scorecard.dev/viewer/?uri=github.com/cisagov/ScubaGoggles)
 [![GitHub License][github-license-img]][license]
 
 Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google
