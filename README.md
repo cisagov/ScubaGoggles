@@ -1,5 +1,6 @@
 ![ScubaGoggles Logo](https://github.com/cisagov/ScubaGoggles/raw/main/docs/images/ScubaGoggles%20GitHub%20Graphic%20v2.jpg)
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cisagov/ScubaGoggles/badge)](https://scorecard.dev/viewer/?uri=github.com/cisagov/ScubaGoggles)
 
 [![GitHub Release][github-release-img]][release]
 [![PyPI - Version][pypi-version-img]][pypi]
