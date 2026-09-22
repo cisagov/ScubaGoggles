@@ -5,9 +5,8 @@
 [![CI Pipeline][ci-pipeline-img]][ci-pipeline]
 [![GitHub Downloads][github-downloads-img]][release]
 [![PyPI Downloads][pypi-downloads-img]][pypi]
-[![GitHub License][github-license-img]][license]
-
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cisagov/ScubaGoggles/badge)](https://scorecard.dev/viewer/?uri=github.com/cisagov/ScubaGoggles)
+[![GitHub License][github-license-img]][license]
 
 Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google
 Workspace (GWS) organization's configuration conforms to the policies
