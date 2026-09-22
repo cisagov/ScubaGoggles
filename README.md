@@ -4,6 +4,7 @@
 [![GitHub Release][github-release-img]][release]
 [![PyPI - Version][pypi-version-img]][pypi]
 [![CI Pipeline][ci-pipeline-img]][ci-pipeline]
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cisagov/ScubaGoggles/badge)](https://scorecard.dev/viewer/?uri=github.com/cisagov/ScubaGoggles)
 [![GitHub Downloads][github-downloads-img]][release]
 [![PyPI Downloads][pypi-downloads-img]][pypi]
 [![GitHub License][github-license-img]][license]
