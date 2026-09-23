@@ -278,7 +278,6 @@ test_DMARCMessageReject_Correct_V4 if {
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    print(RuleOutput)
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
@@ -309,7 +308,6 @@ test_DMARCMessageReject_Correct_V5 if {
     }
 
     RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    print(RuleOutput)
     count(RuleOutput) == 1
     RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
