@@ -82,7 +82,7 @@ test_DMARC_Incorrect_V1 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat(" ", ["1 of 2 agency domain(s) found in violation: test2.name.", DNSLink])
-    
+
 }
 
 test_DMARC_Incorrect_V2 if {
@@ -141,7 +141,15 @@ test_DMARCMessageReject_Correct_V1 if {
             {
                 "domain": "test.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                    "v=DMARC1; p=reject;"
+                ],
+                "log": [
+                    {
+                        "query_name": "_dmarc.test.name",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject;"],
+                    }
                 ]
             }
         ],
@@ -163,13 +171,29 @@ test_DMARCMessageReject_Correct_V2 if {
             {
                 "domain": "test1.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                    "v=DMARC1; p=reject;"
+                ],
+                "log": [
+                    {
+                        "query_name": "_dmarc.test.name",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject;"]
+                    }
                 ]
             },
             {
                 "domain": "test2.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                    "v=DMARC1; p=reject;"
+                ],
+                "log": [
+                    {
+                        "query_name": "_dmarc.test2.name",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject;"]
+                    }
                 ]
             }
         ],
@@ -183,6 +207,116 @@ test_DMARCMessageReject_Correct_V2 if {
     RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
 }
 
+test_DMARCMessageReject_Correct_V3 if {
+    # Test DMARC when we need to check sp from a parent record
+    PolicyId := GmailId4_2
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "a.example.com",
+                "rdata": [
+                    "v=DMARC1; p=none; sp=reject; psd=n"
+                ],
+                "log": [
+                    # DMARC record not published at the author domain level
+                    {
+                        "query_name": "_dmarc.a.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": []
+                    },
+                    # A parent domain has it. It has p=none, but the policy should still pass, because it's a parent
+                    # domain we check sp before p
+                    {
+                        "query_name": "_dmarc.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none; sp=reject; psd=n"]
+                    }
+                ]
+            }
+        ],
+        "domains": ["a.example.com"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+}
+
+test_DMARCMessageReject_Correct_V4 if {
+    # Test DMARC when we need to check parent record, p is reject and there is no sp
+    PolicyId := GmailId4_2
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "a.example.com",
+                "rdata": [
+                    "v=DMARC1; p=reject; psd=n"
+                ],
+                "log": [
+                    # DMARC record not published at the author domain level
+                    {
+                        "query_name": "_dmarc.a.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": []
+                    },
+                    # A parent domain has it. There is no sp so check p
+                    {
+                        "query_name": "_dmarc.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject; psd=n"]
+                    }
+                ]
+            }
+        ],
+        "domains": ["a.example.com"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    print(RuleOutput)
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+}
+
+test_DMARCMessageReject_Correct_V5 if {
+    # Test DMARC when there is extra whitespace
+    PolicyId := GmailId4_2
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "a.example.com",
+                "rdata": [
+                    "v=DMARC1; p =   reject ; "
+                ],
+                "log": [
+                    {
+                        "query_name": "_dmarc.a.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p =   reject ; "]
+                    }
+                ]
+            }
+        ],
+        "domains": ["a.example.com"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    print(RuleOutput)
+    count(RuleOutput) == 1
+    RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["Requirement met.", DNSLink])
+}
+
+
 test_DMARCMessageReject_Incorrect_V1 if {
     # Test DMARC when there's multiple domains and only one is correct
     PolicyId := GmailId4_2
@@ -191,12 +325,28 @@ test_DMARCMessageReject_Incorrect_V1 if {
             {
                 "domain": "test1.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"
+                    "v=DMARC1; p=reject;"
+                ],
+                "log": [
+                    {
+                        "query_name": "_dmarc.test.name",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject;"]
+                    }
                 ]
             },
             {
                 "domain": "test2.name",
-                "rdata": ["v=DMARC1; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": ["v=DMARC1;"],
+                "log": [
+                    {
+                        "query_name": "_dmarc.test2.name",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1;"]
+                    }
+                ]
             }
         ],
         "domains": ["test1.name", "test2.name"]
@@ -216,7 +366,15 @@ test_DMARCMessageReject_Incorrect_V2 if {
         "dmarc_records": [
             {
                 "domain": "test.name",
-                "rdata": ["v=DMARC1; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov"]
+                "rdata": ["v=DMARC1; p=none"],
+                "log": [
+                    {
+                        "query_name": "_dmarc.test.name",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none"],
+                    }
+                ]
             }
         ],
         "domains": ["test.name"]
@@ -237,8 +395,16 @@ test_DMARCMessageReject_Incorrect_V3 if {
             {
                 "domain": "test.name",
                 "rdata": [
-                    "v=DMARC1; p=reject; pct=100; rua=mailto:DMARC@hq.dhs.gov, mailto:reports@dmarc.cyber.dhs.gov",
+                    "v=DMARC1; p=reject; pct=100;",
                     "v=DMARC1; p=reject"
+                ],
+                "log": [
+                    {
+                        "query_name": "_dmarc.test.name",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 2 txt records",
+                        "query_answers": ["v=DMARC1; p=reject; pct=100;", "v=DMARC1; p=reject"],
+                    }
                 ]
             }
         ],
@@ -252,6 +418,84 @@ test_DMARCMessageReject_Incorrect_V3 if {
     RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: test.name.",
         MultipleWarning, DNSLink])
 }
+
+test_DMARCMessageReject_Incorrect_V4 if {
+    # Test DMARC when we need to check parent record, p is reject but sp is none
+    PolicyId := GmailId4_2
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "a.example.com",
+                "rdata": [
+                    "v=DMARC1; p=reject; sp=none; psd=n"
+                ],
+                "log": [
+                    # DMARC record not published at the author domain level
+                    {
+                        "query_name": "_dmarc.a.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": []
+                    },
+                    # A parent domain has it. It has p=reject, but the policy should still fail, because it's a parent
+                    # domain we check sp before p
+                    {
+                        "query_name": "_dmarc.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=reject; sp=none; psd=n"]
+                    }
+                ]
+            }
+        ],
+        "domains": ["a.example.com"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: a.example.com.", DNSLink])
+}
+
+test_DMARCMessageReject_Incorrect_V5 if {
+    # Test DMARC when we need to check parent record, p is none and there is no sp
+    PolicyId := GmailId4_2
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "a.example.com",
+                "rdata": [
+                    "v=DMARC1; p=none; psd=n"
+                ],
+                "log": [
+                    # DMARC record not published at the author domain level
+                    {
+                        "query_name": "_dmarc.a.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned NXDOMAIN",
+                        "query_answers": []
+                    },
+                    # A parent domain has it. There is no sp so check p
+                    {
+                        "query_name": "_dmarc.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none; psd=n"]
+                    }
+                ]
+            }
+        ],
+        "domains": ["a.example.com"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: a.example.com.", DNSLink])
+}
+#--
 
 #
 # GWS.GMAIL.4.3
