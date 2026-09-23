@@ -284,19 +284,19 @@ StandarizeDmarcRecord(RecordContents) := Standardized if {
 
 AuthorDomainCompliant(DmarcRecord) := true if {
     FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
-    FinalQname == $"_dmarc.{DmarcRecord.domain}"
+    FinalQname == concat("", ["_dmarc.", DmarcRecord.domain])
     some Rdata in DmarcRecord.rdata
     contains(StandarizeDmarcRecord(Rdata), "p=reject;")
 } else := false
 
 ParentDomainCompliant(DmarcRecord) := true if {
     FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
-    FinalQname != $"_dmarc.{DmarcRecord.domain}"
+    FinalQname != concat("", ["_dmarc.", DmarcRecord.domain])
     some Rdata in DmarcRecord.rdata
     contains(StandarizeDmarcRecord(Rdata), "sp=reject;")
 } else := true if {
     FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
-    FinalQname != $"_dmarc.{DmarcRecord.domain}"
+    FinalQname != concat("", ["_dmarc.", DmarcRecord.domain])
     some Rdata in DmarcRecord.rdata
     not contains(StandarizeDmarcRecord(Rdata), "sp=")
     contains(StandarizeDmarcRecord(Rdata), "p=reject;")
