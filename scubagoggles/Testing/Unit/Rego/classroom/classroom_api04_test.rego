@@ -61,6 +61,6 @@ test_ClassroomAPI_Unenrollment_Incorrect_1 if {
 
     failedOU := [{"Name": "thirdOU",
                  "Value": NonComplianceMessage4_1("Students and teachers"),
-                 "Baseline": ClassroomId4_1}]
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
