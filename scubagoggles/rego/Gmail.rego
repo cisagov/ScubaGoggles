@@ -279,7 +279,11 @@ StandarizeDmarcRecord(RecordContents) := Standardized if {
     # https://www.rfc-editor.org/info/rfc9989/#section-4.8). Strip out those characters to
     # ensure consistent parsing.
     StandardizedEquals := regex.replace(RecordContents, `[ \t]*=[ \t]*`, "=")
-    Standardized := regex.replace(StandardizedEquals, `[ \t]*;[ \t]*`, ";")
+    StandardizedSemicolon := regex.replace(StandardizedEquals, `[ \t]*;[ \t]*`, ";")
+    # The final semicolon is optional but our logic below counts on it being there, so append a
+    # semicolon. This will result in double semicolons in some cases, but that will not mess up the
+    # Rego check.
+    Standardized := concat("", [StandardizedSemicolon, ";"])
 }
 
 AuthorDomainCompliant(DmarcRecord) := true if {
