@@ -31,8 +31,7 @@ NonComplianceMessage1_1(value) := sprintf("Group access set to: %s", [value])
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(whoCanShare)),
-    "Baseline":  GroupsId1_1
+    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(whoCanShare))
 } if {
     some OU, settings in input.policies
     GroupsEnabled(OU)
@@ -67,8 +66,7 @@ NonComplianceMessage1_2(value) := sprintf("Allowing external group members is se
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(GetFriendlyYesNoBoolean(allowExternal)),
-    "Baseline":  GroupsId1_2
+    "Value": NonComplianceMessage1_2(GetFriendlyYesNoBoolean(allowExternal))
 } if {
     some OU, settings in input.policies
     GroupsEnabled(OU)
@@ -103,8 +101,7 @@ NonComplianceMessage1_3(value) := sprintf("Allowing external email is set to: %s
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3(GetFriendlyYesNoBoolean(allowExternal)),
-    "Baseline":  GroupsId1_3
+    "Value": NonComplianceMessage1_3(GetFriendlyYesNoBoolean(allowExternal))
 } if {
     some OU, settings in input.policies
     GroupsEnabled(OU)
@@ -151,8 +148,7 @@ NonComplianceMessage2_1(value) := sprintf("Groups can be created by: %s", [value
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage2_1(GetFriendlyValue2_1(whoCreates)),
-    "Baseline":  GroupsId2_1
+    "Value": NonComplianceMessage2_1(GetFriendlyValue2_1(whoCreates))
 } if {
     some OU, settings in input.policies
     GroupsEnabled(OU)
@@ -203,8 +199,7 @@ NonComplianceMessage3_1(value) := sprintf("Group conversations can be viewed by:
 
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage3_1(GetFriendlyValue3_1(whoCanView)),
-    "Baseline":  GroupsId3_1
+    "Value": NonComplianceMessage3_1(GetFriendlyValue3_1(whoCanView))
 } if {
     some OU, settings in input.policies
     GroupsEnabled(OU)
@@ -246,8 +241,7 @@ NonComplianceMessage4_1(canHideGroups, newGroupsHidden) := concat("; ", msgs) if
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage4_1(canHideGroups, newGroupsHidden),
-    "Baseline":  GroupsId4_1
+    "Value": NonComplianceMessage4_1(canHideGroups, newGroupsHidden)
 } if {
     some OU, settings in input.policies
     GroupsEnabled(OU)

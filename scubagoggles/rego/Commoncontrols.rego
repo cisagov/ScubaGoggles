@@ -142,8 +142,7 @@ Is2SVEnforced(enforce2SV) := true if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1a,
-    "Baseline":  CommonControlsId1_1
+    "Value": NonComplianceMessage1_1a
 }
 if {
     some OU, settings in input.policies
@@ -153,8 +152,7 @@ if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1b(GetFriendlyMethods(enforceMethod)),
-    "Baseline":  CommonControlsId1_1
+    "Value": NonComplianceMessage1_1b(GetFriendlyMethods(enforceMethod))
 }
 if {
     some OU, settings in input.policies
@@ -170,8 +168,7 @@ if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1c,
-    "Baseline":  CommonControlsId1_1
+    "Value": NonComplianceMessage1_1c
 }
 if {
     some OU, settings in input.policies
@@ -185,8 +182,7 @@ if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1c,
-    "Baseline":  CommonControlsId1_1
+    "Value": NonComplianceMessage1_1c
 }
 if {
     some OU, settings in input.policies
@@ -232,8 +228,7 @@ NonComplianceMessage1_2b := NonComplianceMessage1_1c
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2a,
-    "Baseline":  CommonControlsId1_2
+    "Value": NonComplianceMessage1_2a
 }
 if {
     some OU, settings in input.policies
@@ -243,8 +238,7 @@ if {
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2b,
-    "Baseline":  CommonControlsId1_2
+    "Value": NonComplianceMessage1_2b
 }
 if {
     some OU, settings in input.policies
@@ -287,8 +281,7 @@ NonComplianceMessage1_3c := NonComplianceMessage1_1c
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3a,
-    "Baseline":  CommonControlsId1_3
+    "Value": NonComplianceMessage1_3a
 }
 if {
     some OU, settings in input.policies
@@ -298,8 +291,7 @@ if {
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3b,
-    "Baseline":  CommonControlsId1_3
+    "Value": NonComplianceMessage1_3b
 }
 if {
     some OU, settings in input.policies
@@ -315,8 +307,7 @@ if {
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3c,
-    "Baseline":  CommonControlsId1_3
+    "Value": NonComplianceMessage1_3c
 }
 if {
     some OU, settings in input.policies
@@ -331,8 +322,7 @@ if {
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3c,
-    "Baseline":  CommonControlsId1_3
+    "Value": NonComplianceMessage1_3c
 }
 if {
     some OU, settings in input.policies
@@ -383,8 +373,7 @@ NonComplianceMessage1_4(value,
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1a,
-    "Baseline":  CommonControlsId1_4
+    "Value": NonComplianceMessage1_1a
 }
 if {
     some OU, settings in input.policies
@@ -394,8 +383,7 @@ if {
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_4(enrollSeconds, expectedPeriod),
-    "Baseline":  CommonControlsId1_4
+    "Value": NonComplianceMessage1_4(enrollSeconds, expectedPeriod)
 }
 if {
     expectedPeriod := utils.DurationToSeconds("7d")
@@ -416,8 +404,7 @@ if {
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1c,
-    "Baseline":  CommonControlsId1_4
+    "Value": NonComplianceMessage1_1c
 }
 if {
     some OU, settings in input.policies
@@ -454,8 +441,7 @@ NonComplianceMessage1_5 := "User is allowed to trust device."
 
 NonCompliantOUs1_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1a,
-    "Baseline":  CommonControlsId1_5
+    "Value": NonComplianceMessage1_1a
 }
 if {
     some OU, settings in input.policies
@@ -465,8 +451,7 @@ if {
 
 NonCompliantOUs1_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_5,
-    "Baseline":  CommonControlsId1_5
+    "Value": NonComplianceMessage1_5
 }
 if {
     some OU, settings in input.policies
@@ -482,8 +467,7 @@ if {
 
 NonCompliantOUs1_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1c,
-    "Baseline":  CommonControlsId1_5
+    "Value": NonComplianceMessage1_1c
 }
 if {
     some OU, settings in input.policies
@@ -584,8 +568,7 @@ NonComplianceMessage3_1 := "Post Single Sign-on (SSO) verification is disabled."
 # so only a check at the OU-level is implemented here.
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage3_1,
-    "Baseline":  CommonControlsId3_1
+    "Value": NonComplianceMessage3_1
 }
 if {
     some OU in utils.OUsWithEvents
@@ -648,8 +631,7 @@ NonComplianceMessage3_2 := "Post Single Sign-on (SSO) verification is disabled."
 # so only a check at the OU-level is implemented here.
 NonCompliantOUs3_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage3_2,
-    "Baseline":  CommonControlsId3_2
+    "Value": NonComplianceMessage3_2
 }
 
 if {
@@ -715,8 +697,7 @@ GetFriendlyValue4_1(Value) := "Session never expires" if {
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(durationSeconds)),
-    "Baseline":  CommonControlsId4_1
+    "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(durationSeconds))
 }
 if {
     # This is the requirement limit for session duration:
@@ -759,8 +740,7 @@ PasswordStrength := "STRONG"
 NonCompliantOUs5_1 contains {
     "Name": OU,
     "Value": sprintf("Password strength is %s, not %s",
-                     [CurrentStrength, PasswordStrength]),
-    "Baseline":  CommonControlsId5_1
+                     [CurrentStrength, PasswordStrength])
 }
 if {
     some OU, settings in input.policies
@@ -796,8 +776,7 @@ NonComplianceMessage5_2(Value) := sprintf(FormatMessage5_2,
 
 NonCompliantOUs5_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_2(CurrentLength),
-    "Baseline":  CommonControlsId5_2
+    "Value": NonComplianceMessage5_2(CurrentLength)
 }
 if {
     some OU, settings in input.policies
@@ -833,8 +812,7 @@ NonComplianceMessage5_3(Value) := sprintf(FormatMessage5_3,
 
 NonCompliantOUs5_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_3(CurrentLength),
-    "Baseline":  CommonControlsId5_3
+    "Value": NonComplianceMessage5_3(CurrentLength)
 }
 if {
     some OU, settings in input.policies
@@ -866,8 +844,7 @@ NonComplianceMessage5_4 := "Enforce password policy at next sign-in is OFF"
 
 NonCompliantOUs5_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_4,
-    "Baseline":  CommonControlsId5_4
+    "Value": NonComplianceMessage5_4
 }
 if {
     some OU, settings in input.policies
@@ -898,8 +875,7 @@ NonComplianceMessage5_5 := "Allow password reuse is ON"
 
 NonCompliantOUs5_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_5,
-    "Baseline":  CommonControlsId5_5
+    "Value": NonComplianceMessage5_5
 }
 if {
     some OU, settings in input.policies
@@ -929,8 +905,7 @@ CommonControlsId5_6 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.5.6")
 NonCompliantOUs5_6 contains {
     "Name": OU,
     "Value": sprintf("Password reset frequency is %s",
-                     [utils.GetFriendlyDuration(expirationValue)]),
-    "Baseline":  CommonControlsId5_6
+                     [utils.GetFriendlyDuration(expirationValue)])
 }
 if {
     some OU, settings in input.policies
@@ -1102,8 +1077,7 @@ NonComplianceMessage6_1 := concat(" ", [
 
 NonCompliantOUs6_1 contains {
     "Name": DisplayNameByPath(OuPath),
-    "Value": NonComplianceMessage6_1,
-    "Baseline":  CommonControlsId6_1
+    "Value": NonComplianceMessage6_1
 }
 if {
     some user in input.privileged_users
@@ -1226,8 +1200,7 @@ NonComplianceMessage7_1(value) := sprintf("Conflicting accounts are managed by %
 
 NonCompliantOUs7_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_1(GetFriendlyConflictMethod(conflictAcctMgmt)),
-    "Baseline":  CommonControlsId7_1
+    "Value": NonComplianceMessage7_1(GetFriendlyConflictMethod(conflictAcctMgmt))
 }
 if {
     some OU, settings in input.policies
@@ -1264,8 +1237,7 @@ NonComplianceMessage8_1 := "Super admins are allowed to recover their accounts."
 
 NonCompliantOUs8_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage8_1,
-    "Baseline":  CommonControlsId8_1
+    "Value": NonComplianceMessage8_1
 }
 if {
     some OU, settings in input.policies
@@ -1296,8 +1268,7 @@ NonComplianceMessage8_2 := "Users and non-super admins are allowed to recover th
 
 NonCompliantOUs8_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage8_2,
-    "Baseline":  CommonControlsId8_2
+    "Value": NonComplianceMessage8_2
 }
 if {
     some OU, settings in input.policies
@@ -1491,8 +1462,7 @@ NonComplianceMessage10_3 := "Trust internal apps is ON."
 
 NonCompliantOUs10_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage10_3,
-    "Baseline":  CommonControlsId10_3
+    "Value": NonComplianceMessage10_3
 }
 if {
     some OU, settings in input.policies
@@ -1533,7 +1503,6 @@ GetFriendlyValue10_4(Value) := "Allow users to access any third-party apps" if {
 NonCompliantOUs10_4 contains {
     "Name": OU,
     "Value": concat("", ["Unconfigured third-party app access is set to: ", GetFriendlyValue10_4(accessLevel), "."]),
-    "Baseline":  CommonControlsId10_4
 }
 if {
     some OU, settings in input.policies
@@ -1565,8 +1534,7 @@ NonComplianceMessage10_5 := "Users are allowed to manage access to less secure a
 
 NonCompliantOUs10_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage10_5,
-    "Baseline":  CommonControlsId10_5
+    "Value": NonComplianceMessage10_5
 }
 if {
     some OU, settings in input.policies
@@ -1610,8 +1578,7 @@ NonComplianceMessage11_1(anyApp) := sprintf("%s app from the Marketplace.",
 
 NonCompliantOUs11_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage11_1(true),
-    "Baseline":  CommonControlsId11_1
+    "Value": NonComplianceMessage11_1(true)
 }
 if {
     some OU, settings in input.policies
@@ -1621,8 +1588,7 @@ if {
 
 NonCompliantOUs11_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage11_1(false),
-    "Baseline":  CommonControlsId11_1
+    "Value": NonComplianceMessage11_1(false)
 }
 if {
     some OU, settings in input.policies
@@ -1634,8 +1600,7 @@ if {
 
 NonCompliantOUs11_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage11_1(false),
-    "Baseline":  CommonControlsId11_1
+    "Value": NonComplianceMessage11_1(false)
 }
 if {
     some OU, settings in input.policies
@@ -1680,8 +1645,7 @@ NonComplianceMessage12_1a := "Takeout is enabled for services without an individ
 
 NonCompliantOUs12_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage12_1a,
-    "Baseline":  CommonControlsId12_1
+    "Value": NonComplianceMessage12_1a
 
 }
 if {
@@ -1702,8 +1666,7 @@ Takeout := {"blogger": "Blogger",
 
 NonCompliantOUs12_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage12_1(EnabledApps),
-    "Baseline":  CommonControlsId12_1
+    "Value": NonComplianceMessage12_1(EnabledApps)
 
 }
 if {
@@ -1852,8 +1815,7 @@ GetFriendlyValue15_1(Value) := "unspecified" if {
 
 NonCompliantOUs15_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage15_1(GetFriendlyValue15_1(region)),
-    "Baseline":  CommonControlsId15_1
+    "Value": NonComplianceMessage15_1(GetFriendlyValue15_1(region))
 }
 if {
     some OU, settings in input.policies
@@ -1887,8 +1849,7 @@ NonComplianceMessage15_2 :=
 
 NonCompliantOUs15_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage15_2,
-    "Baseline":  CommonControlsId15_2
+    "Value": NonComplianceMessage15_2
 }
 if {
     some OU, settings in input.policies
@@ -1921,8 +1882,7 @@ NonComplianceMessage16_1 := "Access to additional services without individual co
 
 NonCompliantOUs16_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage16_1,
-    "Baseline":  CommonControlsId16_1
+    "Value": NonComplianceMessage16_1
 }
 if {
     some OU, settings in input.policies
@@ -1961,8 +1921,7 @@ NonComplianceMessage16_2 := "Early access apps are ENABLED"
 
 NonCompliantOUs16_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage16_2,
-    "Baseline":  CommonControlsId16_2
+    "Value": NonComplianceMessage16_2
 }
 if {
     some OU, settings in input.policies
@@ -2030,8 +1989,7 @@ NonComplianceMessage17_1 := "Multi-party approval is not required for sensitive 
 
 NonCompliantOUs17_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage17_1,
-    "Baseline":  CommonControlsId17_1
+    "Value": NonComplianceMessage17_1
 }
 if {
     some OU, settings in input.policies

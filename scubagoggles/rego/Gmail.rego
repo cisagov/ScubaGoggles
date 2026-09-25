@@ -80,8 +80,7 @@ NonComplianceMessage1_1(value) := sprintf("Mail delegation is %s", [value])
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1(GetFriendlyEnabledValue(mailDelegation)),
-    "Baseline":  GmailId1_1
+    "Value": NonComplianceMessage1_1(GetFriendlyEnabledValue(mailDelegation))
 }
 if {
     some OU, settings in input.policies
@@ -418,8 +417,7 @@ NonComplianceMessage5_1(value) := sprintf("%s from untrusted senders is set to: 
 
 NonCompliantOUs5_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_1(GetFriendlyEnabledValue(noEncrypt)),
-    "Baseline":  GmailId5_1
+    "Value": NonComplianceMessage5_1(GetFriendlyEnabledValue(noEncrypt))
 }
 if {
     some OU, settings in input.policies
@@ -456,8 +454,7 @@ NonComplianceMessage5_2(value) := sprintf("%s with scripts from untrusted sender
 
 NonCompliantOUs5_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_2(GetFriendlyEnabledValue(noEncrypt)),
-    "Baseline":  GmailId5_2
+    "Value": NonComplianceMessage5_2(GetFriendlyEnabledValue(noEncrypt))
 }
 if {
     some OU, settings in input.policies
@@ -494,8 +491,7 @@ NonComplianceMessage5_3(value) := sprintf("Protection against anomalous attachme
 
 NonCompliantOUs5_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_3(GetFriendlyEnabledValue(protectAtt)),
-    "Baseline":  GmailId5_3
+    "Value": NonComplianceMessage5_3(GetFriendlyEnabledValue(protectAtt))
 }
 if {
     some OU, settings in input.policies
@@ -532,8 +528,7 @@ NonComplianceMessage5_4(value) := sprintf("Automatically enables all future adde
 
 NonCompliantOUs5_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_4(GetFriendlyEnabledValue(futureAtt)),
-    "Baseline":  GmailId5_4
+    "Value": NonComplianceMessage5_4(GetFriendlyEnabledValue(futureAtt))
 }
 if {
     some OU, settings in input.policies
@@ -579,8 +574,7 @@ AttachConfigs := [
 
 NonCompliantOUs5_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_5(types),
-    "Baseline":  GmailId5_5
+    "Value": NonComplianceMessage5_5(types)
 }
 if {
     some OU, settings in input.policies
@@ -628,8 +622,7 @@ NonComplianceMessage6_1(value) := sprintf("Identify links behind shortened URLs 
 
 NonCompliantOUs6_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage6_1(GetFriendlyEnabledValue(shortLinks)),
-    "Baseline":  GmailId6_1
+    "Value": NonComplianceMessage6_1(GetFriendlyEnabledValue(shortLinks))
 }
 if {
     some OU, settings in input.policies
@@ -666,8 +659,7 @@ NonComplianceMessage6_2(value) := sprintf("Scan linked images is: %s",
 
 NonCompliantOUs6_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage6_2(GetFriendlyEnabledValue(scanImages)),
-    "Baseline":  GmailId6_2
+    "Value": NonComplianceMessage6_2(GetFriendlyEnabledValue(scanImages))
 }
 if {
     some OU, settings in input.policies
@@ -704,8 +696,7 @@ NonComplianceMessage6_3(value) := sprintf("Show warning prompt for click on link
 
 NonCompliantOUs6_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage6_3(GetFriendlyEnabledValue(warnEnabled)),
-    "Baseline":  GmailId6_3
+    "Value": NonComplianceMessage6_3(GetFriendlyEnabledValue(warnEnabled))
 }
 if {
     some OU, settings in input.policies
@@ -742,8 +733,7 @@ NonComplianceMessage6_4(value) := sprintf("Apply future recommended settings aut
 
 NonCompliantOUs6_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage6_4(GetFriendlyEnabledValue(applyFuture)),
-    "Baseline":  GmailId6_4
+    "Value": NonComplianceMessage6_4(GetFriendlyEnabledValue(applyFuture))
 }
 if {
     some OU, settings in input.policies
@@ -785,8 +775,7 @@ NonComplianceMessage7_1(value) := sprintf("Protect against domain spoofing using
 
 NonCompliantOUs7_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_1(GetFriendlyEnabledValue(spoofProtect)),
-    "Baseline":  GmailId7_1
+    "Value": NonComplianceMessage7_1(GetFriendlyEnabledValue(spoofProtect))
 }
 if {
     some OU, settings in input.policies
@@ -823,8 +812,7 @@ NonComplianceMessage7_2(value) := sprintf("Protect against spoofing of employee 
 
 NonCompliantOUs7_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_2(GetFriendlyEnabledValue(spoofProtect)),
-    "Baseline":  GmailId7_2
+    "Value": NonComplianceMessage7_2(GetFriendlyEnabledValue(spoofProtect))
 }
 if {
     some OU, settings in input.policies
@@ -861,8 +849,7 @@ NonComplianceMessage7_3(value) := sprintf("Protect against inbound emails spoofi
 
 NonCompliantOUs7_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_3(GetFriendlyEnabledValue(spoofProtect)),
-    "Baseline":  GmailId7_3
+    "Value": NonComplianceMessage7_3(GetFriendlyEnabledValue(spoofProtect))
 }
 if {
     some OU, settings in input.policies
@@ -899,8 +886,7 @@ NonComplianceMessage7_4(value) := sprintf("Protect against any unauthenticated e
 
 NonCompliantOUs7_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_4(GetFriendlyEnabledValue(unauthEmail)),
-    "Baseline":  GmailId7_4
+    "Value": NonComplianceMessage7_4(GetFriendlyEnabledValue(unauthEmail))
 }
 if {
     some OU, settings in input.policies
@@ -937,8 +923,7 @@ NonComplianceMessage7_5(value) := sprintf("Protect your Groups from inbound emai
 
 NonCompliantOUs7_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_5(GetFriendlyEnabledValue(detectSpoof)),
-    "Baseline":  GmailId7_5
+    "Value": NonComplianceMessage7_5(GetFriendlyEnabledValue(detectSpoof))
 }
 if {
     some OU, settings in input.policies
@@ -983,8 +968,7 @@ SpoofConfigs := [
 
 NonCompliantOUs7_6 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_6(types),
-    "Baseline":  GmailId7_6
+    "Value": NonComplianceMessage7_6(types)
 }
 if {
     some OU, settings in input.policies
@@ -1029,8 +1013,7 @@ NonComplianceMessage7_7(value) := sprintf("Automatically enable all future added
 
 NonCompliantOUs7_7 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_7(GetFriendlyEnabledValue(applyFuture)),
-    "Baseline":  GmailId7_7
+    "Value": NonComplianceMessage7_7(GetFriendlyEnabledValue(applyFuture))
 }
 if {
     some OU, settings in input.policies
@@ -1071,8 +1054,7 @@ NonComplianceMessage8_1(value) := sprintf("User email uploads is %s", [value])
 
 NonCompliantOUs8_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage8_1(GetFriendlyEnabledValue(emailUploads)),
-    "Baseline":  GmailId8_1
+    "Value": NonComplianceMessage8_1(GetFriendlyEnabledValue(emailUploads))
 }
 if {
     some OU, settings in input.policies
@@ -1157,8 +1139,7 @@ ImapExclusionsFormatted contains Message if {
 
 NonCompliantOUs9_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue9_1(imapEnable, popEnable),
-    "Baseline":  GmailId9_1
+    "Value": GetFriendlyValue9_1(imapEnable, popEnable)
 }
 if {
     some OU, settings in input.policies
@@ -1210,8 +1191,7 @@ NonComplianceMessage10_1(value) := sprintf("Google Workspace Sync is %s",
 
 NonCompliantOUs10_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage10_1(GetFriendlyEnabledValue(syncEnable)),
-    "Baseline":  GmailId10_1
+    "Value": NonComplianceMessage10_1(GetFriendlyEnabledValue(syncEnable))
 }
 if {
     some OU, settings in input.policies
@@ -1252,8 +1232,7 @@ NonComplianceMessage11_1(value) := sprintf("Automatic email forwarding is set to
 
 NonCompliantOUs11_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage11_1(GetFriendlyEnabledValue(autoforward)),
-    "Baseline":  GmailId11_1
+    "Value": NonComplianceMessage11_1(GetFriendlyEnabledValue(autoforward))
 }
 if {
     some OU, settings in input.policies
@@ -1294,8 +1273,7 @@ NonComplianceMessage12_1(value) := sprintf("Per-user Outbound Gateways are %s",
 
 NonCompliantOUs12_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage12_1(GetFriendlyEnabledValue(outGatewayEnable)),
-    "Baseline":  GmailId12_1
+    "Value": NonComplianceMessage12_1(GetFriendlyEnabledValue(outGatewayEnable))
 }
 if {
     some OU, settings in input.policies
@@ -1342,8 +1320,7 @@ NonCompliantOUs13_1 contains {
     "Value": concat(" ", [
         "Warn for external participants is set to",
         GetFriendlyValue13_1(LastEvent.NewValue)
-    ]),
-    "Baseline":  GmailId13_1
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
@@ -1440,8 +1417,7 @@ NonComplianceMessage15_1(value) := sprintf("Enhanced pre-delivery message scanni
 
 NonCompliantOUs15_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage15_1(GetFriendlyEnabledValue(preScanning)),
-    "Baseline":  GmailId15_1
+    "Value": NonComplianceMessage15_1(GetFriendlyEnabledValue(preScanning))
 }
 if {
     some OU, settings in input.policies
@@ -1484,8 +1460,7 @@ NonCompliantOUs16_1 contains {
     "Value": concat(" ", [
         "Security sandbox is",
         GetFriendlyEnabledValue(LastEvent.NewValue)
-    ]),
-    "Baseline":  GmailId16_1
+    ])
 }
 if {
     some OU in utils.OUsWithEvents
@@ -1544,8 +1519,7 @@ NonComplianceMessage17_1 := "Comprehensive mail storage is disabled"
 
 NonCompliantOUs17_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage17_1,
-    "Baseline":  GmailId17_1
+    "Value": NonComplianceMessage17_1
 }
 if {
     some OU, settings in input.policies
@@ -1591,8 +1565,7 @@ NonComplianceMessage18_1(value) := sprintf(Message18_1, [value])
 
 NonCompliantOUs18_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage18_1(domainsFound),
-    "Baseline":  GmailId18_1
+    "Value": NonComplianceMessage18_1(domainsFound)
 }
 if {
     some OU, settings in input.policies
@@ -1632,8 +1605,7 @@ NonComplianceMessage18_2(value) := sprintf(Message18_2, [value])
 
 NonCompliantOUs18_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage18_2(domainsFound),
-    "Baseline":  GmailId18_2
+    "Value": NonComplianceMessage18_2(domainsFound)
 }
 if {
     some OU, settings in input.policies
@@ -1673,8 +1645,7 @@ NonComplianceMessage18_3(value) := sprintf(Message18_3, [value])
 
 NonCompliantOUs18_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage18_3(message),
-    "Baseline":  GmailId18_3
+    "Value": NonComplianceMessage18_3(message)
 }
 if {
     some OU, settings in input.policies

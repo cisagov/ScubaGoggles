@@ -19,8 +19,7 @@ NonComplianceMessage1_1 := "Access approvals setting is disabled."
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1,
-    "Baseline":  AssuredControlsId1_1
+    "Value": NonComplianceMessage1_1
 }
 if {
     some OU, settings in input.policies
@@ -60,8 +59,7 @@ NonComplianceMessage1_2(value) := sprintf("Data access management is %s.",
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(allowedAudience)),
-    "Baseline":  AssuredControlsId1_2
+    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(allowedAudience))
 }
 if {
     some OU, settings in input.policies
@@ -148,8 +146,7 @@ NonCompliantOUs2_1 contains {
     "Value": concat(" ", [
         "Features that may process data across multiple regions are enabled for",
         concat(", ", AppsEnabled)
-    ]),
-    "Baseline":  AssuredControlsId2_1
+    ])
 }
 if {
     some OU in utils.OUsWithEvents

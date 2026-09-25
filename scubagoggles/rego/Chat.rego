@@ -22,8 +22,7 @@ NonComplianceMessage1_1(value) := sprintf("Default conversation history is %s",
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1(utils.GetFriendlyEnabledValue(chatHistory)),
-    "Baseline":  ChatId1_1
+    "Value": NonComplianceMessage1_1(utils.GetFriendlyEnabledValue(chatHistory))
 } if {
     some OU, settings in input.policies
     ChatEnabled(OU)
@@ -65,8 +64,7 @@ NonComplianceMessage1_2(value) := sprintf("Users %s allowed to change their hist
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(changeHistory)),
-    "Baseline":  ChatId1_2
+    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(changeHistory))
 } if {
     some OU, settings in input.policies
     ChatEnabled(OU)
@@ -114,8 +112,7 @@ NonComplianceMessage2_1(value) := sprintf("External file sharing is set to: %s",
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage2_1(GetFriendlyValue2_1(allowSharing)),
-    "Baseline":  ChatId2_1
+    "Value": NonComplianceMessage2_1(GetFriendlyValue2_1(allowSharing))
 } if {
     some OU, settings in input.policies
     ChatEnabled(OU)
@@ -168,8 +165,7 @@ GetFriendlyValue3_1(Value) := "OFF by default" if {
 
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage3_1(GetFriendlyValue3_1(spaceHistory)),
-    "Baseline":  ChatId3_1
+    "Value": NonComplianceMessage3_1(GetFriendlyValue3_1(spaceHistory))
 } if {
     some OU, settings in input.policies
     ChatEnabled(OU)
@@ -215,8 +211,7 @@ NonComplianceMessage4_1(value) := sprintf("Allow external chat within: %s",
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(externalRestrict)),
-    "Baseline":  ChatId4_1
+    "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(externalRestrict))
 } if {
     some OU, settings in input.policies
     ChatEnabled(OU)
@@ -287,8 +282,7 @@ GetFriendlyValue5_1(NonCompBooleans) := Description if {
 
 NonCompliantOUs5_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue5_1(NonCompBooleans),
-    "Baseline":  ChatId5_1
+    "Value": GetFriendlyValue5_1(NonCompBooleans)
 } if {
     some OU in utils.OUsWithEvents
     # Toplevel OU will be handled separately due to the quirk with DELETE_APPLICATION_SETTING events for
@@ -328,8 +322,7 @@ NonCompliantOUs5_1 contains {
 
 NonCompliantOUs5_1 contains {
     "Name": OU,
-    "Value": GetFriendlyValue5_1(NonCompBooleans),
-    "Baseline":  ChatId5_1
+    "Value": GetFriendlyValue5_1(NonCompBooleans)
 } if {
     # NOTE: the top-level OU is a special case, see comments above.
     OU := utils.TopLevelOU
@@ -440,8 +433,7 @@ NonCompliantOUs5_2 contains {
     "Value": concat("", [
         "The following reporting types are disabled: ",
         concat(", ", [GetFriendlyCategory(Cat) | some Cat in MissingCats])
-    ]),
-    "Baseline":  ChatId5_2
+    ])
 } if {
     some OU in utils.OUsWithEvents
     # As with GWS.CHAT.5.1, the top-level OU is a special case.
@@ -467,8 +459,7 @@ NonCompliantOUs5_2 contains {
     "Value": concat("", [
         "The following reporting types are disabled: ",
         concat(", ", [GetFriendlyCategory(Cat) | some Cat in AllReportingCategories])
-    ]),
-    "Baseline":  ChatId5_2
+    ])
 } if {
     # As with GWS.CHAT.5.1, the top-level OU is a special case.
     OU := utils.TopLevelOU
@@ -487,8 +478,7 @@ NonCompliantOUs5_2 contains {
     "Value": concat("", [
         "The following reporting types are disabled: ",
         concat(", ", [GetFriendlyCategory(Cat) | some Cat in MissingCats])
-    ]),
-    "Baseline":  ChatId5_2
+    ])
 } if {
     # As with GWS.CHAT.5.1, the top-level OU is a special case.
     OU := utils.TopLevelOU
