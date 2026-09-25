@@ -56,8 +56,7 @@ test_AccessApproval_Incorrect_1 if {
     Output := tests with input as BadAssuredControlsApi01
 
     failedOU := [{"Name": "topOU",
-                  "Value": NonComplianceMessage1_1,
-                  "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage1_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -75,10 +74,8 @@ test_AccessManagement_Incorrect_1 if {
     nextOUMsgValue := GetFriendlyValue1_2("PREFERENCE_UNSPECIFIED")
     topOUMsgValue := GetFriendlyValue1_2("EU_GOOGLE_STAFF")
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage1_2(nextOUMsgValue),
-                  "Baseline": PolicyId},
+                  "Value": NonComplianceMessage1_2(nextOUMsgValue)},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage1_2(topOUMsgValue),
-                  "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage1_2(topOUMsgValue)}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

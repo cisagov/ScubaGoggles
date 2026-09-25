@@ -140,8 +140,7 @@ test_SSO_Incorrect_V1 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                  "Value": NonComplianceMessage3_1,
-                 "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage3_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -179,8 +178,7 @@ test_SSO_Incorrect_V2 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage3_1,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage3_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -258,11 +256,9 @@ test_SSO_Incorrect_V5 if {
     }
 
     failedOU := [{"Name": "Test Second-Level OU",
-                  "Value": NonComplianceMessage3_1,
-                 "Baseline": PolicyId},
+                  "Value": NonComplianceMessage3_1},
                  {"Name": "Test Top-Level OU",
-                  "Value": NonComplianceMessage3_1,
-                 "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage3_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
@@ -401,8 +397,7 @@ test_SSO_Profiles_Incorrect_V1 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                  "Value": NonComplianceMessage3_2,
-                 "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage3_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -440,8 +435,7 @@ test_SSO_Profiles_Incorrect_V2 if {
     }
 
     failedOU := [{"Name": "Test Top-Level OU",
-                 "Value": NonComplianceMessage3_2,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage3_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -519,11 +513,9 @@ test_SSO_Profiles_Incorrect_V5 if {
     }
 
     failedOU := [{"Name": "Test Second-Level OU",
-                  "Value": NonComplianceMessage3_2,
-                 "Baseline": PolicyId},
+                  "Value": NonComplianceMessage3_2},
                  {"Name": "Test Top-Level OU",
-                  "Value": NonComplianceMessage3_2,
-                 "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage3_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

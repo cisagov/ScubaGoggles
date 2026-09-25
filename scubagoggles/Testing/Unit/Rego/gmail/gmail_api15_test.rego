@@ -59,8 +59,7 @@ test_PreScanning_Incorrect_1 if {
     Output := tests with input as BadGmailApi15
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage15_1("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage15_1("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -69,7 +68,6 @@ test_PreScanning_Incorrect_2 if {
     Output := tests with input as BadGmailApi15a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage15_1("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage15_1("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

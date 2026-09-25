@@ -53,8 +53,7 @@ test_ConflictingAccounts_Incorrect_1 if {
 
     message := NonComplianceMessage7_1(GetFriendlyConflictMethod("AUTOMATICALLY_SEND_INVITATIONS"))
     failedOU := [{"Name": "topOU",
-                 "Value": message,
-                 "Baseline": PolicyId}]
+                 "Value": message}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -64,7 +63,6 @@ test_ConflictingAccounts_Incorrect_2 if {
 
     message := NonComplianceMessage7_1(GetFriendlyConflictMethod("PRESERVE_CONFLICTING_ACCOUNT"))
     failedOU := [{"Name": "topOU",
-                 "Value": message,
-                 "Baseline": PolicyId}]
+                 "Value": message}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

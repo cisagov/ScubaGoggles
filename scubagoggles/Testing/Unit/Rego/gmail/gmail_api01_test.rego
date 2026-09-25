@@ -59,8 +59,7 @@ test_MailDelegation_Incorrect_1 if {
     Output := tests with input as BadGmailApi01
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_1("enabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_1("enabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -69,7 +68,6 @@ test_MailDelegation_Incorrect_2 if {
     Output := tests with input as BadGmailApi01a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_1("enabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_1("enabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

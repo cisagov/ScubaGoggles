@@ -70,11 +70,9 @@ test_DataAtRestRegion_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi15
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage15_1("unrestricted (any region)"),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage15_1("unrestricted (any region)")},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage15_1("Europe only"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage15_1("Europe only")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -83,8 +81,7 @@ test_DataAtRestRegion_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi15a
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage15_1("unspecified"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage15_1("unspecified")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -100,8 +97,7 @@ test_DataProcessRegion_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi15
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage15_2,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage15_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -110,7 +106,6 @@ test_DataProcessRegion_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi15a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage15_2,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage15_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

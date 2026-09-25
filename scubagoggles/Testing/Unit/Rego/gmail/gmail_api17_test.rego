@@ -63,8 +63,7 @@ test_MailStorage_Incorrect_1 if {
     Output := tests with input as BadGmailApi17
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage17_1,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage17_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -73,7 +72,6 @@ test_MailStorage_Incorrect_2 if {
     Output := tests with input as BadGmailApi17a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage17_1,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage17_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

@@ -60,7 +60,6 @@ test_ClassroomAPI_Unenrollment_Incorrect_1 if {
     Output := tests with input as BadClassroomApi05
 
     failedOU := [{"Name": "fourthOU",
-                 "Value": NonComplianceMessage5_1("all pending and verified teachers"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage5_1("all pending and verified teachers")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

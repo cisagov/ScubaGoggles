@@ -56,10 +56,8 @@ test_GroupsAPI_Creator_Incorrect_1 if {
     Output := tests with input as BadGroupsApi02
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage2_1("Any user"),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage2_1("Any user")},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage2_1("Users in your domain only"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage2_1("Users in your domain only")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

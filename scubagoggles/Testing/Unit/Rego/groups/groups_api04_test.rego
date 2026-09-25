@@ -77,11 +77,9 @@ test_GroupsAPI_HiddenGroups_Incorrect_1 if {
     Output := tests with input as BadGroupsApi04
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage4_1(false, true),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage4_1(false, true)},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage4_1(true, false),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage4_1(true, false)}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -90,10 +88,8 @@ test_GroupsAPI_HiddenGroups_Incorrect_2 if {
     Output := tests with input as BadGroupsApi04a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage4_1(true, false),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage4_1(true, false)},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage4_1(false, true),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage4_1(false, true)}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

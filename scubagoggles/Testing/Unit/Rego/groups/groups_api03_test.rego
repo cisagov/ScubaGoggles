@@ -56,10 +56,8 @@ test_GroupsAPI_ViewTopics_Incorrect_1 if {
     Output := tests with input as BadGroupsApi03
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage3_1("Any user"),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage3_1("Any user")},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage3_1("Managers"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage3_1("Managers")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

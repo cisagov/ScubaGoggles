@@ -1,6 +1,17 @@
 package chat
 import future.keywords
 
+import data.utils.FailTestOUNonCompliant
+import data.utils.FailTestResult
+import data.utils.NonCompliantMessage
+
+ChatNonCompliantMessage(GroupsOrOU, Listing) := message if {
+
+    ouMessage := NonCompliantMessage(GroupsOrOU, Listing)
+
+    message := sprintf("%s<br>%s", [ouMessage, Chat5Warning])
+}
+
 #
 # GWS.CHAT.5.1
 #--
@@ -309,19 +320,12 @@ test_Enable_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ol><li><dl>",
-        "<dt>Test Top-Level OU</dt>",
-        "<dd>This OU is out of compliance with GWS.CHAT.5.1vM</dd>",
-        "</dl></li></ol>",
-        "<br>",
-        Chat5Warning
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                "Value": "Content reporting for 1:1 direct messages is disabled."}]
+
+    expectedMessage := ChatNonCompliantMessage("OUs", failedOU)
+
+    FailTestResult(PolicyId, Output, expectedMessage)
 }
 
 test_Enable_Incorrect_V2 if {
@@ -375,19 +379,12 @@ test_Enable_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ol><li><dl>",
-        "<dt>Test Top-Level OU</dt>",
-        "<dd>This OU is out of compliance with GWS.CHAT.5.1vM</dd>",
-        "</dl></li></ol>",
-        "<br>",
-        Chat5Warning
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                "Value": "Content reporting for spaces is restricted to discoverable spaces only."}]
+
+    expectedMessage := ChatNonCompliantMessage("OUs", failedOU)
+
+    FailTestResult(PolicyId, Output, expectedMessage)
 }
 
 test_Enable_Incorrect_V3 if {
@@ -481,19 +478,12 @@ test_Enable_Incorrect_V3 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ol><li><dl>",
-        "<dt>Other OU</dt>",
-        "<dd>This OU is out of compliance with GWS.CHAT.5.1vM</dd>",
-        "</dl></li></ol>",
-        "<br>",
-        Chat5Warning
-    ])
+    failedOU := [{"Name": "Other OU",
+                "Value": "Content reporting for spaces is disabled."}]
+
+    expectedMessage := ChatNonCompliantMessage("OUs", failedOU)
+
+    FailTestResult(PolicyId, Output, expectedMessage)
 }
 
 test_Enable_Incorrect_V4 if {
@@ -717,16 +707,10 @@ test_Categories_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ol><li><dl><dt>Test Top-Level OU</dt>",
-        "<dd>This OU is out of compliance with GWS.CHAT.5.2vM</dd>",
-        "</dl></li></ol>"
-    ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": "The following reporting types are disabled: other"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Categories_Incorrect_V2 if {
@@ -776,17 +760,10 @@ test_Categories_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ol><li><dl>",
-        "<dt>Other OU</dt>",
-        "<dd>This OU is out of compliance with GWS.CHAT.5.2vM</dd>",
-        "</dl></li></ol>"
-    ])
+    failedOU := [{"Name": "Other OU",
+                  "Value": "The following reporting types are disabled: harassment"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_Categories_Incorrect_V3 if {

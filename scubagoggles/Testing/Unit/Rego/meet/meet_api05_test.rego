@@ -42,8 +42,7 @@ test_AutoRecord_Incorrect_1 if {
     Output := tests with input as BadMeetApi05
 
     failedOU := [{"Name": "topOU",
-                 "Value": "Automatic recording is enabled.",
-                 "Baseline": PolicyId}]
+                 "Value": "Automatic recording is enabled."}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -59,7 +58,6 @@ test_AutoTranscribe_Incorrect_1 if {
     Output := tests with input as BadMeetApi05
 
     failedOU := [{"Name": "topOU",
-                 "Value": "Automatic transcription is enabled.",
-                 "Baseline": PolicyId}]
+                 "Value": "Automatic transcription is enabled."}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

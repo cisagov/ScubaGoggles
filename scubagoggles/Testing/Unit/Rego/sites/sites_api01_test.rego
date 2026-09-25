@@ -94,11 +94,9 @@ test_SitesAPI_Incorrect_1 if {
     Output := tests with input as BadSitesApi01
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_1,
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage1_1},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage1_1,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -107,7 +105,6 @@ test_SitesAPI_Incorrect_2 if {
     Output := tests with input as BadSitesApi01a
 
     failedOU := [{"Name": "topOU (group \"Even More Secret Group\")",
-                 "Value": NonComplianceMessage1_1,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

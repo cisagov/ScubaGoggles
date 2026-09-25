@@ -89,8 +89,7 @@ test_ManagerOverride_Incorrect_1 if {
     Output := tests with input as BadDriveApi02
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage2_1,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage2_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -99,8 +98,7 @@ test_ManagerOverride_Incorrect_2 if {
     Output := tests with input as BadDriveApi02a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage2_1,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage2_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -116,8 +114,7 @@ test_NonMemberExternalAccess_1 if {
     Output := tests with input as BadDriveApi02
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage2_2,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage2_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -126,7 +123,6 @@ test_NonMemberExternalAccess_2 if {
     Output := tests with input as BadDriveApi02a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage2_2,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage2_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

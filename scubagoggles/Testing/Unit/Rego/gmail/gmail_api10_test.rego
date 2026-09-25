@@ -43,7 +43,6 @@ test_SyncEnable_Incorrect_1 if {
     Output := tests with input as BadGmailApi10
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage10_1("enabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage10_1("enabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

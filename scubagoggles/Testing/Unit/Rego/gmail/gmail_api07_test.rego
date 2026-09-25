@@ -111,8 +111,7 @@ test_DomainNameSpoofing_Incorrect_1 if {
     Output := tests with input as BadGmailApi07
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage7_1("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_1("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -121,8 +120,7 @@ test_DomainNameSpoofing_Incorrect_2 if {
     Output := tests with input as BadGmailApi07a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage7_1("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_1("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -138,8 +136,7 @@ test_EmployeeNameSpoofing_Incorrect_1 if {
     Output := tests with input as BadGmailApi07
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage7_2("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_2("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -148,8 +145,7 @@ test_EmployeeNameSpoofing_Incorrect_2 if {
     Output := tests with input as BadGmailApi07a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage7_2("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_2("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -165,8 +161,7 @@ test_DomainSpoofing_Incorrect_1 if {
     Output := tests with input as BadGmailApi07
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage7_3("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_3("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -175,8 +170,7 @@ test_DomainSpoofing_Incorrect_2 if {
     Output := tests with input as BadGmailApi07a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage7_3("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_3("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -192,8 +186,7 @@ test_UnauthenticatedEmailSpoofing_Incorrect_1 if {
     Output := tests with input as BadGmailApi07
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage7_4("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_4("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -202,8 +195,7 @@ test_UnauthenticatedEmailSpoofing_Incorrect_2 if {
     Output := tests with input as BadGmailApi07a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage7_4("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_4("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -219,8 +211,7 @@ test_GroupsSpoofing_Incorrect_1 if {
     Output := tests with input as BadGmailApi07
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage7_5("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_5("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -229,8 +220,7 @@ test_GroupsSpoofing_Incorrect_2 if {
     Output := tests with input as BadGmailApi07a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage7_5("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_5("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -248,8 +238,7 @@ test_SpoofConsequence_Incorrect_1 if {
     types := ["domain", "domain name", "employee name", "groups",
               "unauthenticated"]
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage7_6(types),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_6(types)}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -259,8 +248,7 @@ test_SpoofConsequence_Incorrect_2 if {
 
     types := ["domain", "domain name", "unauthenticated"]
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage7_6(types),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_6(types)}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -276,8 +264,7 @@ test_FutureSettings_Incorrect_1 if {
     Output := tests with input as BadGmailApi07
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage7_7("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_7("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -286,7 +273,6 @@ test_FutureSettings_Incorrect_2 if {
     Output := tests with input as BadGmailApi07a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage7_7("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage7_7("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

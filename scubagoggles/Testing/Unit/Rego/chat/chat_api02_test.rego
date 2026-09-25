@@ -52,7 +52,6 @@ test_ChatAPI_External_Sharing_Incorrect_1 if {
     Output := tests with input as BadChatApi02
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage2_1("Images only"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage2_1("Images only")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

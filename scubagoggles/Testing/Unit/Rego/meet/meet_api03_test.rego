@@ -40,7 +40,6 @@ test_MeetAPI_HostMgt_Incorrect_1 if {
     Output := tests with input as BadMeetApi03
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage3_1("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage3_1("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

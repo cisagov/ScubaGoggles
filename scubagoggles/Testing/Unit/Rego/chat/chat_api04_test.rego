@@ -77,8 +77,7 @@ test_ChatAPI_External_Messages_Incorrect_1 if {
     Output := tests with input as BadChatApi04
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage4_1("all domains"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage4_1("all domains")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -87,7 +86,6 @@ test_ChatAPI_External_Messages_Incorrect_2 if {
     Output := tests with input as BadChatApi04a
 
     failedOU := [{"Name": "secondOU",
-                 "Value": NonComplianceMessage4_1("Unspecified"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage4_1("Unspecified")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

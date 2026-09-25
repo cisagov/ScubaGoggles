@@ -58,8 +58,7 @@ test_SecurityUpdate_Incorrect_1 if {
     Output := tests with input as BadDriveApi04
 
     failedOU := [{"Name": "topOU",
-                  "Value": NonComplianceMessage4_1,
-                 "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage4_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -68,7 +67,6 @@ test_SecurityUpdate_Incorrect_2 if {
     Output := tests with input as BadDriveApi04a
 
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage4_1,
-                 "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage4_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

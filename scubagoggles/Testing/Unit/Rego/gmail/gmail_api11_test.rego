@@ -41,7 +41,6 @@ test_Autoforward_Incorrect_1 if {
     Output := tests with input as BadGmailApi11
 
     failedOU := [{"Name": "topOU",
-                  "Value": NonComplianceMessage11_1(GetFriendlyEnabledValue(true)),
-                 "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage11_1(GetFriendlyEnabledValue(true))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

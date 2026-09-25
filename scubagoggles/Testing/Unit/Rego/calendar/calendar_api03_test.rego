@@ -45,8 +45,7 @@ test_CalendarAPI_Interoperability_Incorrect_1 if {
     Output := tests with input as BadCalendarApi03
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage3_1("enabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage3_1("enabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 

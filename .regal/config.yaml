@@ -46,6 +46,7 @@ rules:
         - data.utils.FailTestNonCompliant
         - data.utils.FailTestNoEvent
         - data.utils.FailTestResult
+        - data.utils.NonCompliantMessage
         - data.utils.PassTestResult
         - data.utils.PassTestResultWithMessage
         - data.utils.TestResult

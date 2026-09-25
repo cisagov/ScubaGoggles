@@ -73,8 +73,7 @@ test_SAAcctRecovery_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi08
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage8_1,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage8_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -83,8 +82,7 @@ test_SAAcctRecovery_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi08a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage8_1,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage8_1}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -100,8 +98,7 @@ test_UserAcctRecovery_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi08
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage8_2,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage8_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -110,8 +107,7 @@ test_UserAcctRecovery_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi08a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage8_2,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage8_2}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 

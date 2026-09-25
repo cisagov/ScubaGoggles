@@ -44,7 +44,6 @@ test_CalendarAPI_WarnExternal_Incorrect_1 if {
     Output := tests with input as BadCalendarApi02
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage2_1("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage2_1("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

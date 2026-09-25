@@ -60,7 +60,6 @@ test_ClassroomAPI_DataAccess_Incorrect_1 if {
     Output := tests with input as BadClassroomApi03
 
     failedOU := [{"Name": "fourthOU",
-                 "Value": NonComplianceMessage3_1("ON - CLEVER"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage3_1("ON - CLEVER")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

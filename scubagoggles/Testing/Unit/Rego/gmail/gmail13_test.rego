@@ -1,6 +1,8 @@
 package gmail
 import future.keywords
 
+import data.utils.FailTestOUNonCompliant
+
 #
 # GWS.GMAIL.13.1
 #--
@@ -223,17 +225,10 @@ test_ExternalReplyWarning_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ol><li><dl>",
-        "<dt>Test Top-Level OU</dt>",
-        "<dd>This OU is out of compliance with GWS.GMAIL.13.1vM</dd>",
-        "</dl></li></ol>"
-        ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": "Warn for external participants is set to disabled"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ExternalReplyWarning_Incorrect_V3 if {
@@ -273,17 +268,10 @@ test_ExternalReplyWarning_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ol><li><dl>",
-        "<dt>Test Top-Level OU</dt>",
-        "<dd>This OU is out of compliance with GWS.GMAIL.13.1vM</dd>",
-        "</dl></li></ol>"
-        ])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": "Warn for external participants is set to disabled"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ExternalReplyWarning_Incorrect_V4 if {
@@ -310,17 +298,10 @@ test_ExternalReplyWarning_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ol><li><dl>",
-        "<dt>Secondary OU</dt>",
-        "<dd>This OU is out of compliance with GWS.GMAIL.13.1vM</dd>",
-        "</dl></li></ol>"
-        ])
+    failedOU := [{"Name": "Secondary OU",
+                  "Value": "Warn for external participants is set to disabled"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_ExternalReplyWarning_Incorrect_V5 if {
@@ -360,16 +341,9 @@ test_ExternalReplyWarning_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:",
-        "<ol><li><dl>",
-        "<dt>Secondary OU</dt>",
-        "<dd>This OU is out of compliance with GWS.GMAIL.13.1vM</dd>",
-        "</dl></li></ol>"
-        ])
+    failedOU := [{"Name": "Secondary OU",
+                  "Value": "Warn for external participants is set to disabled"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--

@@ -40,7 +40,6 @@ test_MeetAPI_ExtWarn_Incorrect_1 if {
     Output := tests with input as BadMeetApi04
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage4_1("disabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage4_1("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

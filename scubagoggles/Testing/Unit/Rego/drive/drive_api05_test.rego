@@ -75,8 +75,7 @@ test_DriveDesktop_Incorrect_1 if {
     Output := tests with input as BadDriveApi05
 
     failedOU := [{"Name": "topOU",
-                  "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(false, true)),
-                 "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(false, true))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -85,7 +84,6 @@ test_DriveDesktop_Incorrect_2 if {
     Output := tests with input as BadDriveApi05a
 
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(false, true)),
-                 "Baseline": PolicyId}]
+                  "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(false, true))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

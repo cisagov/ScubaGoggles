@@ -41,7 +41,6 @@ test_EmailUploads_Incorrect_1 if {
     Output := tests with input as BadGmailApi08
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage8_1("enabled"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage8_1("enabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

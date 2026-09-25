@@ -141,11 +141,9 @@ test_ExtSharing_Incorrect_1 if {
     Output := tests with input as BadDriveApi01
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWLISTED_DOMAINS")),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWLISTED_DOMAINS"))},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWED")),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -154,8 +152,7 @@ test_ExtSharing_Incorrect_2 if {
     Output := tests with input as BadDriveApi01a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWLISTED_DOMAINS")),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWLISTED_DOMAINS"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -171,11 +168,9 @@ test_ReceiveExt_Incorrect_1 if {
     Output := tests with input as BadDriveApi01a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_2(GetSharingValue("ALLOWLISTED_DOMAINS")),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage1_2(GetSharingValue("ALLOWLISTED_DOMAINS"))},
                  {"Name": "thirdOU",
-                 "Value": NonComplianceMessage1_2(GetSharingValue("DISALLOWED")),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_2(GetSharingValue("DISALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -191,11 +186,9 @@ test_UserExtSharing_Incorrect_1 if {
     Output := tests with input as BadDriveApi01
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_3(GetSharingValue("ALLOWLISTED_DOMAINS")),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage1_3(GetSharingValue("ALLOWLISTED_DOMAINS"))},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage1_3(GetSharingValue("ALLOWED")),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_3(GetSharingValue("ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -211,11 +204,9 @@ test_NonGoogle_Incorrect_1 if {
     Output := tests with input as BadDriveApi01
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_4(GetSharingValue("ALLOWLISTED_DOMAINS")),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage1_4(GetSharingValue("ALLOWLISTED_DOMAINS"))},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage1_4(GetSharingValue("ALLOWED")),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_4(GetSharingValue("ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -224,8 +215,7 @@ test_NonGoogle_Incorrect_2 if {
     Output := tests with input as BadDriveApi01a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_4(GetSharingValue("ALLOWLISTED_DOMAINS")),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_4(GetSharingValue("ALLOWLISTED_DOMAINS"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -241,11 +231,9 @@ test_AllowPublish_Incorrect_1 if {
     Output := tests with input as BadDriveApi01
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_5,
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage1_5},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage1_5,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_5}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -254,8 +242,7 @@ test_AllowPublish_Incorrect_2 if {
     Output := tests with input as BadDriveApi01a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_5,
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_5}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -272,8 +259,7 @@ test_AccessCheck_Incorrect_1 if {
 
     value := "RECIPIENTS_OR_AUDIENCE_OR_PUBLIC"
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_6(GetFriendlyValue1_6(value)),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_6(GetFriendlyValue1_6(value))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -283,8 +269,7 @@ test_AccessCheck_Incorrect_2 if {
 
     value := "RECIPIENTS_OR_AUDIENCE"
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_6(GetFriendlyValue1_6(value)),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_6(GetFriendlyValue1_6(value))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -301,11 +286,9 @@ test_MoveContent_Incorrect_1 if {
 
     value := "ALL_ELIGIBLE_USERS"
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(value)),
-                 "Baseline": PolicyId},
+                 "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(value))},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(value)),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(value))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -315,8 +298,7 @@ test_MoveContent_Incorrect_2 if {
 
     value := "ELIGIBLE_INTERNAL_USERS"
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(value)),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(value))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -333,8 +315,7 @@ test_DefaultAccess_Incorrect_1 if {
 
     value := "PRIMARY_AUDIENCE_WITH_LINK"
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(value)),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(value))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -344,8 +325,7 @@ test_DefaultAccess_Incorrect_2 if {
 
     value := "PRIMARY_AUDIENCE_WITH_LINK_OR_SEARCH"
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(value)),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(value))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -361,7 +341,6 @@ test_HighlightExternal_Incorrect_1 if {
     Output := tests with input as BadDriveApi01
 
     failedOU := [{"Name": "topOU",
-                 "Value": "Highlight external files is disabled.",
-                 "Baseline": PolicyId}]
+                 "Value": "Highlight external files is disabled."}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
