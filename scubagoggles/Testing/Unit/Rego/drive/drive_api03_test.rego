@@ -77,9 +77,11 @@ test_SecurityUpdate_Incorrect_1 if {
 
     failedOU := [{"Name": "nextOU",
                   "Value": NonComplianceMessage3_1("REMOVE_FROM_IMPACTED_FILES",
-                                                   false)},
+                                                   false),
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                  "Value": NonComplianceMessage3_1("", true)}]
+                  "Value": NonComplianceMessage3_1("", true),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -88,9 +90,11 @@ test_SecurityUpdate_Incorrect_2 if {
     Output := tests with input as BadDriveApi03a
 
     failedOU := [{"Name": "nextOU",
-                  "Value": NonComplianceMessage3_1("", true)},
+                  "Value": NonComplianceMessage3_1("", true),
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
                   "Value": NonComplianceMessage3_1("REMOVE_FROM_IMPACTED_FILES",
-                                                   false)}]
+                                                   false),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

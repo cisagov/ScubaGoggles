@@ -29,7 +29,8 @@ NonComplianceMessage1_1(value) := sprintf("Who can join classes in your domain i
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(whoCanJoin))
+    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(whoCanJoin)),
+    "Baseline":  ClassroomId1_1
 } if {
     some OU, settings in input.policies
     ClassroomEnabled(OU)
@@ -75,7 +76,8 @@ NonComplianceMessage1_2(value) := sprintf("Which classes can users in your domai
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(whichClasses))
+    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(whichClasses)),
+    "Baseline":  ClassroomId1_2
 } if {
     some OU, settings in input.policies
     ClassroomEnabled(OU)
@@ -125,7 +127,8 @@ NonComplianceMessage2_1(value) := sprintf("Users %s to authorize apps to %s",
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage2_1(GetFriendlyValue2_1(dataAccessEnabled))
+    "Value": NonComplianceMessage2_1(GetFriendlyValue2_1(dataAccessEnabled)),
+    "Baseline":  ClassroomId2_1
 } if {
     some OU, settings in input.policies
     ClassroomEnabled(OU)
@@ -172,7 +175,8 @@ NonComplianceMessage3_1(value) := sprintf("Roster import is set to: %s", [value]
 
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage3_1(GetFriendlyValue3_1(rosterImportOption))
+    "Value": NonComplianceMessage3_1(GetFriendlyValue3_1(rosterImportOption)),
+    "Baseline":  ClassroomId3_1
 } if {
     some OU, settings in input.policies
     ClassroomEnabled(OU)
@@ -217,7 +221,8 @@ NonComplianceMessage4_1(value) := sprintf("Who can unenroll students from classe
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(whoCanUnenroll))
+    "Value": NonComplianceMessage4_1(GetFriendlyValue4_1(whoCanUnenroll)),
+    "Baseline":  ClassroomId4_1
 } if {
     some OU, settings in input.policies
     ClassroomEnabled(OU)
@@ -265,7 +270,8 @@ NonComplianceMessage5_1(value) := sprintf("Who can create classes is set to: %s"
 
 NonCompliantOUs5_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(whoCanCreate))
+    "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(whoCanCreate)),
+    "Baseline":  ClassroomId5_1
 } if {
     some OU, settings in input.policies
     ClassroomEnabled(OU)

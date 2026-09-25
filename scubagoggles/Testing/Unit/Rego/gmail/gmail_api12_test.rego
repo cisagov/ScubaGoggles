@@ -43,6 +43,7 @@ test_OutGateways_Incorrect_1 if {
     Output := tests with input as BadGmailApi12
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage12_1("enabled")}]
+                 "Value": NonComplianceMessage12_1("enabled"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

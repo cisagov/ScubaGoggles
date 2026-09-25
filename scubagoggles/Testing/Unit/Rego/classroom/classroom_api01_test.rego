@@ -66,7 +66,8 @@ test_ClassroomAPI_JoinClassroom_Incorrect_1 if {
     Output := tests with input as BadClassroomApi01
 
     failedOU := [{"Name": "thirdOU",
-                 "Value": NonComplianceMessage1_1("Any Google Workspace user")}]
+                 "Value": NonComplianceMessage1_1("Any Google Workspace user"),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -83,8 +84,10 @@ test_ClassroomAPI_JoinClasses_Incorrect_1 if {
 
     whichClasses := "Any Google Workspace class"
     failedOU := [{"Name": "thirdOU",
-                 "Value": NonComplianceMessage1_2(whichClasses)},
+                 "Value": NonComplianceMessage1_2(whichClasses),
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage1_2(whichClasses)}]
+                 "Value": NonComplianceMessage1_2(whichClasses),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

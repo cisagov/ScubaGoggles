@@ -58,7 +58,8 @@ test_EntServices_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi16
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage16_1}]
+                 "Value": NonComplianceMessage16_1,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -67,7 +68,8 @@ test_EntServices_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi16a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage16_1}]
+                 "Value": NonComplianceMessage16_1,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -83,7 +85,8 @@ test_EarlyAccess_Incorrect_1 if {
     Output := tests with input as BadCaseInputApi16
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage16_2}]
+                 "Value": NonComplianceMessage16_2,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -92,6 +95,7 @@ test_EarlyAccess_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi16a
 
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage16_2}]
+                 "Value": NonComplianceMessage16_2,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

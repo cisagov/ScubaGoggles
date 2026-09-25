@@ -57,9 +57,9 @@ EnumGroupSettings(NonCompGroups) := NonCompliantMessage("groups", NonCompGroups)
 # Create a html formatted list detailing the settings for each OU/group
 # - Listing: a set of dicts, each with a "Name" and "Value" fields
 NonCompliantMessage(GroupsOrOU, Listing) := message if {
-    items := [concat("", ["<li>", item.Name, ": ", item.Value, "</li>"])
+    items := [concat("", ["<li>","<dl>","<dt>", item.Name, "</dt>", "<dd>This OU is out of compliance with ", item.Baseline, "</dd>", "</dl>", "</li>"])
               | some item in Listing]
-    message := sprintf("The following %s are non-compliant:<ul>%s</ul>",
+    message := sprintf("The following %s are non-compliant:<ol>%s</ol>",
                        [GroupsOrOU, concat("", items)])
 }
 

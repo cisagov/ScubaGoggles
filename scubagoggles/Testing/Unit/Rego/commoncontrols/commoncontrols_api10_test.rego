@@ -565,7 +565,8 @@ test_TrustInternalApps_Incorrect_1 if {
     }
 
     failedOU := [{"Name": "topOU",
-                  "Value": NonComplianceMessage10_3}]
+                  "Value": NonComplianceMessage10_3,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -610,7 +611,8 @@ test_ThirdPartyApps_Incorrect_1 if {
 
     failedOU := [{"Name": "topOU",
                   "Value": concat("", ["Unconfigured third-party app access is set to:",
-                  " Allow users to access any third-party apps."])}]
+                  " Allow users to access any third-party apps."]),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -633,7 +635,8 @@ test_ThirdPartyApps_Incorrect_2 if {
     failedOU := [{"Name": "topOU",
                   "Value": concat("", ["Unconfigured third-party app access is set to:",
                   " Allow users to access third-party apps that only",
-                  " request basic info needed for Sign in with Google."])}]
+                  " request basic info needed for Sign in with Google."]),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -671,6 +674,7 @@ test_LessSecureApps_Incorrect_1 if {
     }
 
     failedOU := [{"Name": "topOU",
-                  "Value": NonComplianceMessage10_5}]
+                  "Value": NonComplianceMessage10_5,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

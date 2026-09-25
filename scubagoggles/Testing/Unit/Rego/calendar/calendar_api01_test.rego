@@ -54,7 +54,8 @@ test_CalendarAPI_PrimaryShare_Incorrect_1 if {
 
     failedMsgValue := GetFriendlyValue1_1("EXTERNAL_ALL_INFO_READ_WRITE")
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_1(failedMsgValue)}]
+                 "Value": NonComplianceMessage1_1(failedMsgValue),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -71,6 +72,7 @@ test_CalendarAPI_SecondaryShare_Incorrect_1 if {
 
     failedMsgValue := GetFriendlyValue1_2("EXTERNAL_ALL_INFO_READ_WRITE_MANAGE")
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_2(failedMsgValue)}]
+                 "Value": NonComplianceMessage1_2(failedMsgValue),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

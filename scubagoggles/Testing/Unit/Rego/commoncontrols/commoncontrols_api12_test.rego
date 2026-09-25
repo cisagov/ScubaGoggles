@@ -103,9 +103,11 @@ test_Takeout_Incorrect_1 if {
                     "play",
                     "youtube"]
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage12_1a},
+                 "Value": NonComplianceMessage12_1a,
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                 "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps))}]
+                 "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps)),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -116,10 +118,14 @@ test_Takeout_Incorrect_2 if {
     EnabledApps1 := ["play_console", "youtube"]
     EnabledApps2 := ["blogger", "maps", "play"]
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps1))},
-                 {"Name": "thirdOU", "Value": NonComplianceMessage12_1a},
+                 "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps1)),
+                 "Baseline": PolicyId},
+                 {"Name": "thirdOU", "Value": NonComplianceMessage12_1a,
+                 "Baseline": PolicyId},
                  {"Name": "thirdOU",
-                 "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps2))},
-                 {"Name": "topOU", "Value": NonComplianceMessage12_1a}]
+                 "Value": NonComplianceMessage12_1(TakeoutApps(EnabledApps2)),
+                 "Baseline": PolicyId},
+                 {"Name": "topOU", "Value": NonComplianceMessage12_1a,
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }

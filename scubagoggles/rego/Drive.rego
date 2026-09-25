@@ -42,7 +42,8 @@ ExternalSharingAllowed(OU) := true if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(externalSharing))
+    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(externalSharing)),
+    "Baseline":  DriveId1_1
 }
 if {
     some OU, settings in input.policies
@@ -94,7 +95,8 @@ NonComplianceMessage1_2(Value) := sprintf("File sharing with %s domains, %s",
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(GetSharingValue("DISALLOWED"))
+    "Value": NonComplianceMessage1_2(GetSharingValue("DISALLOWED")),
+    "Baseline":  DriveId1_2
 }
 if {
     some OU, settings in input.policies
@@ -106,7 +108,8 @@ if {
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(GetSharingValue(extShare))
+    "Value": NonComplianceMessage1_2(GetSharingValue(extShare)),
+    "Baseline":  DriveId1_2
 }
 if {
     some OU, settings in input.policies
@@ -152,7 +155,8 @@ NonComplianceMessage1_3(Value) := sprintf("File sharing with %s domains, %s",
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3(GetSharingValue(extShare))
+    "Value": NonComplianceMessage1_3(GetSharingValue(extShare)),
+    "Baseline":  DriveId1_3
 }
 if {
     some OU, settings in input.policies
@@ -171,7 +175,8 @@ if {
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_3(GetSharingValue(extShare))
+    "Value": NonComplianceMessage1_3(GetSharingValue(extShare)),
+    "Baseline":  DriveId1_3
 }
 if {
     some OU, settings in input.policies
@@ -219,7 +224,8 @@ NonComplianceMessage1_4(Value) := sprintf("File sharing with %s domains, %s",
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_4(GetSharingValue(extShare))
+    "Value": NonComplianceMessage1_4(GetSharingValue(extShare)),
+    "Baseline":  DriveId1_4
 }
 if {
     some OU, settings in input.policies
@@ -238,7 +244,8 @@ if {
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_4(GetSharingValue(extShare))
+    "Value": NonComplianceMessage1_4(GetSharingValue(extShare)),
+    "Baseline":  DriveId1_4
 }
 if {
     some OU, settings in input.policies
@@ -285,7 +292,8 @@ NonComplianceMessage1_5 := "Published web content can be made visible to anyone 
 
 NonCompliantOUs1_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_5
+    "Value": NonComplianceMessage1_5,
+    "Baseline":  DriveId1_5
 }
 if {
     some OU, settings in input.policies
@@ -338,7 +346,8 @@ GetFriendlyValue1_6(Value) :=
 
 NonCompliantOUs1_6 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_6(GetFriendlyValue1_6(accessCheck))
+    "Value": NonComplianceMessage1_6(GetFriendlyValue1_6(accessCheck)),
+    "Baseline":  DriveId1_6
 }
 if {
     some OU, settings in input.policies
@@ -383,7 +392,8 @@ GetFriendlyValue1_7(Value):= "Setting is compliant." if {
 
 NonCompliantOUs1_7 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(moveContent))
+    "Value": NonComplianceMessage1_7(GetFriendlyValue1_7(moveContent)),
+    "Baseline":  DriveId1_7
 }
 if {
     some OU, settings in input.policies
@@ -437,7 +447,8 @@ GetFriendlyValue1_8(Value):= "private to the owner." if {
 
 NonCompliantOUs1_8 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(defaultAccess))
+    "Value": NonComplianceMessage1_8(GetFriendlyValue1_8(defaultAccess)),
+    "Baseline":  DriveId1_8
 }
 if {
     some OU, settings in input.policies
@@ -471,7 +482,8 @@ DriveId1_9 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.9")
 
 NonCompliantOUs1_9 contains {
     "Name": OU,
-    "Value": "Highlight external files is disabled."
+    "Value": "Highlight external files is disabled.",
+    "Baseline":  DriveId1_9
 }
 if {
     some OU, settings in input.policies
@@ -542,7 +554,8 @@ NonComplianceMessage2_1 := "Members with manager access can override shared driv
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage2_1
+    "Value": NonComplianceMessage2_1,
+    "Baseline":  DriveId2_1
 }
 if {
     some OU, settings in input.policies
@@ -578,7 +591,8 @@ NonComplianceMessage2_2 := "Users who aren't shared drive members are not allowe
 
 NonCompliantOUs2_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage2_2
+    "Value": NonComplianceMessage2_2,
+    "Baseline":  DriveId2_2
 }
 if {
     some OU, settings in input.policies
@@ -623,7 +637,8 @@ else := "Users are allowed to remove/apply the security update for files they ow
 
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage3_1(securityUpdate, userUpdate)
+    "Value": NonComplianceMessage3_1(securityUpdate, userUpdate),
+    "Baseline":  DriveId3_1
 }
 if {
     some OU, settings in input.policies
@@ -669,7 +684,8 @@ NonComplianceMessage4_1 := "Drive SDK is enabled."
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage4_1
+    "Value": NonComplianceMessage4_1,
+    "Baseline":  DriveId4_1
 }
 if {
     some OU, settings in input.policies
@@ -723,7 +739,8 @@ GetFriendlyValue5_1(CompanyOnly, DesktopEnabled) := "enabled and can be used on 
 NonCompliantOUs5_1 contains {
     "Name": OU,
     "Value": NonComplianceMessage5_1(GetFriendlyValue5_1(allowAuthorized,
-                                                         desktopEnabled))
+                                                         desktopEnabled)),
+    "Baseline":  DriveId5_1
 }
 if {
     some OU, settings in input.policies

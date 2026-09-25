@@ -93,11 +93,14 @@ test_ImapPopEnable_Incorrect_1 if {
     Output := tests with input as BadGmailApi09
 
     failedOU := [{"Name": "nextOU",
-                 "Value": GetFriendlyValue9_1(true, false)},
+                 "Value": GetFriendlyValue9_1(true, false),
+                 "Baseline": PolicyId},
                  {"Name": "thirdOU",
-                 "Value": GetFriendlyValue9_1(false, true)},
+                 "Value": GetFriendlyValue9_1(false, true),
+                 "Baseline": PolicyId},
                  {"Name": "topOU",
-                 "Value": GetFriendlyValue9_1(true, true)}]
+                 "Value": GetFriendlyValue9_1(true, true),
+                 "Baseline": PolicyId}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 

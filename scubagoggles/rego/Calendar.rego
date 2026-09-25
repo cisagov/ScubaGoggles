@@ -28,7 +28,8 @@ NonComplianceMessage1_1(value) := sprintf(SharingFmtMsg, ["primary", value])
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(primaryShare))
+    "Value": NonComplianceMessage1_1(GetFriendlyValue1_1(primaryShare)),
+    "Baseline": CalendarId1_1
 }
 if {
     some OU, settings in input.policies
@@ -67,7 +68,8 @@ NonComplianceMessage1_2(value) := sprintf(SharingFmtMsg, ["secondary", value])
 
 NonCompliantOUs1_2 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(secondaryShare))
+    "Value": NonComplianceMessage1_2(GetFriendlyValue1_2(secondaryShare)),
+    "Baseline": CalendarId1_2
 }
 if {
     some OU, settings in input.policies
@@ -109,7 +111,8 @@ NonComplianceMessage2_1(value) := sprintf("External Sharing Guest Prompt is %s",
 
 NonCompliantOUs2_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage2_1(utils.GetFriendlyEnabledValue(extWarnPrompt))
+    "Value": NonComplianceMessage2_1(utils.GetFriendlyEnabledValue(extWarnPrompt)),
+    "Baseline": CalendarId2_1
 }
 if {
     some OU, settings in input.policies
@@ -150,7 +153,8 @@ NonComplianceMessage3_1(value) := sprintf("Calendar interoperation is %s",
 
 NonCompliantOUs3_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage3_1(utils.GetFriendlyEnabledValue(interoperability))
+    "Value": NonComplianceMessage3_1(utils.GetFriendlyEnabledValue(interoperability)),
+    "Baseline": CalendarId3_1
 }
 if {
     some OU, settings in input.policies
@@ -208,7 +212,8 @@ NonComplianceMessage4_1(value) := sprintf("Paid calendar appointments are %s",
 
 NonCompliantOUs4_1 contains {
     "Name": OU,
-    "Value": NonComplianceMessage4_1(utils.GetFriendlyEnabledValue(payments))
+    "Value": NonComplianceMessage4_1(utils.GetFriendlyEnabledValue(payments)),
+    "Baseline": CalendarId4_1
 }
 if {
     some OU, settings in input.policies

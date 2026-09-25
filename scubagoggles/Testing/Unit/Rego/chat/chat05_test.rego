@@ -314,8 +314,11 @@ test_Enable_Incorrect_V1 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Content reporting for 1:1 direct messages is disabled.</li></ul>",
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>Test Top-Level OU</dt>",
+        "<dd>This OU is out of compliance with GWS.CHAT.5.1vM</dd>",
+        "</dl></li></ol>",
         "<br>",
         Chat5Warning
     ])
@@ -377,8 +380,11 @@ test_Enable_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: Content reporting for spaces is restricted to discoverable spaces only.</li></ul>",
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>Test Top-Level OU</dt>",
+        "<dd>This OU is out of compliance with GWS.CHAT.5.1vM</dd>",
+        "</dl></li></ol>",
         "<br>",
         Chat5Warning
     ])
@@ -480,8 +486,11 @@ test_Enable_Incorrect_V3 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Other OU: Content reporting for spaces is disabled.</li></ul>",
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>Other OU</dt>",
+        "<dd>This OU is out of compliance with GWS.CHAT.5.1vM</dd>",
+        "</dl></li></ol>",
         "<br>",
         Chat5Warning
     ])
@@ -713,8 +722,10 @@ test_Categories_Incorrect_V1 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Test Top-Level OU: The following reporting types are disabled: other</li></ul>"
+        "The following OUs are non-compliant:",
+        "<ol><li><dl><dt>Test Top-Level OU</dt>",
+        "<dd>This OU is out of compliance with GWS.CHAT.5.2vM</dd>",
+        "</dl></li></ol>"
     ])
 }
 
@@ -770,8 +781,11 @@ test_Categories_Incorrect_V2 if {
     not RuleOutput[0].RequirementMet
     not RuleOutput[0].NoSuchEvent
     RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>Other OU: The following reporting types are disabled: harassment</li></ul>"
+        "The following OUs are non-compliant:",
+        "<ol><li><dl>",
+        "<dt>Other OU</dt>",
+        "<dd>This OU is out of compliance with GWS.CHAT.5.2vM</dd>",
+        "</dl></li></ol>"
     ])
 }
 
