@@ -59,6 +59,10 @@ ol {
     padding-inline-start: 16px;
 }
 
+dd {
+    margin-left: 1rem;
+}
+
 #baseline-docs {
     width: 6.25rem;
 }
