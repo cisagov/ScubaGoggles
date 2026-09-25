@@ -454,20 +454,25 @@ refresh();
 def run_diff(
     before: Path,
     after: Path,
-    outputpath: Path,
-    outjsonfilename: str,
+    outputpath: Path | None = None,
+    outjsonfilename: str = "DiffOutJson",
+    outreportfilename: str = "DiffReport.html",
+    outcsvfilename: str = "DiffReport.html",
     quiet: bool = False,
 ) -> None:
     """Compare two reports and write JSON, CSV, and HTML outputs."""
     result = compare(load_report(before), load_report(after))
+    if outputpath is None:
+        outputpath = Path.cwd()
+
     outputpath.mkdir(parents=True, exist_ok=True)
     json_path = outputpath / outjsonfilename
-    html_path = outputpath / "DiffReport.html"
-    csv_path = outputpath / "DiffResults.csv"
+    report_path = outputpath / outreportfilename
+    csv_path = outputpath / outcsvfilename
     write_json(result, json_path)
-    write_html(result, html_path)
+    write_html(result, report_path)
     write_csv(result, csv_path)
     if not quiet:
         print(f"Diff JSON: {json_path}")
-        print(f"Diff HTML: {html_path}")
+        print(f"Diff Report HTML: {report_path}")
         print(f"Diff CSV:  {csv_path}")
