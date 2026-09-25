@@ -54,7 +54,7 @@ The application consolidates all configuration capabilities into a single, profe
 ### Prerequisites
 
 1. **ScubaGoggles** must be installed and available
-2. **Python 3.10+** is required
+2. **Python 3.11+** is required
 3. **Streamlit** UI dependency
 
 ### Install Dependencies
