@@ -1,0 +1,48 @@
+name: Generate OSCAL Baseline Catalog
+
+on:
+  push:
+    paths:
+      - "scubagoggles/baselines/**/*.md"
+      - "scubagoggles/scuba_constants.py"
+      - "scubagoggles/utils/generate_oscal_baselines.py"
+      - "scubagoggles/utils/validate_oscal_baselines.py"
+      - ".github/actions/setup-oscal-cli/action.yml"
+      - ".github/workflows/generate_oscal_baselines.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate-oscal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Set up OSCAL CLI
+        uses: ./.github/actions/setup-oscal-cli
+      - name: Generate OSCAL baseline catalog
+        run: |
+          python3 scubagoggles/utils/generate_oscal_baselines.py \
+            --input-dir scubagoggles/baselines \
+            --output-dir dist/oscal-baseline-catalog
+      - name: Validate generated OSCAL catalog metadata
+        run: |
+          python3 scubagoggles/utils/validate_oscal_baselines.py \
+            --output-dir dist/oscal-baseline-catalog
+      - name: Validate OSCAL catalog schema
+        run: |
+          CATALOG_FILE="$(python3 scubagoggles/utils/validate_oscal_baselines.py \
+            --output-dir dist/oscal-baseline-catalog \
+            --print-catalog-path)"
+          oscal-cli --version
+          oscal-cli validate "$CATALOG_FILE"
+      - name: Upload generated OSCAL catalog
+        uses: actions/upload-artifact@v7
+        with:
+          name: oscal-baseline-catalog
+          path: dist/oscal-baseline-catalog/
