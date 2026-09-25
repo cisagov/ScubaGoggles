@@ -1,7 +1,7 @@
 '''Code for running robust DNS queries, including logic for retries over both the traditional DNS
 as well as DNS over HTTPS (DoH)'''
 
-import re
+import ipaddress
 import dns
 from dns import resolver
 
@@ -140,6 +140,19 @@ class RobustDNSClient:
             "errors": errors
         }
 
+    @staticmethod
+    def _doh_uri(server: str, dohpath: str = "dns-query") -> str:
+        """Bracket IPv6 literals while preserving other server authorities."""
+        try:
+            address = ipaddress.ip_address(server)
+        except ValueError:
+            # Hostnames and already bracketed authorities need no conversion.
+            pass
+        else:
+            if address.version == 6:
+                server = f"[{server}]"
+        return f"https://{server}/{dohpath}"
+
     def get_doh_server(self) -> str:
         """Iterates through several DoH servers. Returns the first successful server.
         If none are successful, returns None.
@@ -153,12 +166,7 @@ class RobustDNSClient:
         for server in doh_servers:
             try:
 
-                # Add square brackets if the DoH server is an IPv6
-                pattern = r"^[0-9a-fA-F]{4}(:[0-9a-fA-F]{4}){3}$"
-                if re.match(pattern, server):
-                    server = "[" + server + "]"
-
-                uri = f"https://{server}/dns-query"
+                uri = self._doh_uri(server)
 
                 # Attempt to resolve DoH server if no preferred list is specified.
                 # The domain chosen is somewhat arbitrary, as we don't care what the answer is,
@@ -207,18 +215,13 @@ class RobustDNSClient:
                 "errors": errors
             }
 
-        # Add square brackets if the selected DoH server is an IPv6
-        pattern = r"^[0-9a-fA-F]{4}(:[0-9a-fA-F]{4}){3}$"
-        if re.match(pattern, self.doh_server):
-            self.doh_server = "[" + self.doh_server + "]"
-
         # DoH is available, query for the domain
         try_number = 0
         while try_number < max_tries:
             try_number += 1
 
             # form the DoH query
-            uri = f"https://{self.doh_server}/{dohpath}"
+            uri = self._doh_uri(self.doh_server, dohpath)
 
             try:
                 query = dns.message.make_query(qname, dns.rdatatype.TXT)
