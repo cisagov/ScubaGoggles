@@ -317,19 +317,6 @@ def write_csv(result: dict[str, Any], path: Path) -> None:
             writer.writerow(csv_row)
 
 
-def _classification_css(classification: str) -> str:
-    """Map a classification to a CSS class."""
-    if classification in {"NewFail", "Errored", "NewIncorrectResult"}:
-        return "bad"
-    if classification in {"NewPass", "NewAutomatedCheck"}:
-        return "good"
-    if classification == "NewWarning":
-        return "warn"
-    if classification == "Unchanged":
-        return "unchanged"
-    return "neutral"
-
-
 def _html_filters() -> str:
     """Build the classification filter controls."""
     labels = []
@@ -359,11 +346,18 @@ def _html_record_rows(result: dict[str, Any]) -> str:
     """Build the control result table rows."""
     rows = []
     for record in result["Records"]:
+        current_state = str(record["ResultAfter"]) or ""
         classification = str(record["Classification"])
+        
+        # class labels reflect color coded rows
+        class_label = current_state.lower()
+        if class_label not in {"pass", "fail", "warning"}:
+            class_label = "other"
+
         escaped_classification = html.escape(classification)
         control = record["Control ID (After)"] or record["Control ID (Before)"]
         rows.append(
-            f'<tr class="{_classification_css(classification)}" '
+            f'<tr class="{class_label}" '
             f'data-classification="{escaped_classification}">'
             f'<td>{html.escape(str(record["Product"]))}</td>'
             f'<td>{html.escape(str(record["GroupNumber"] or ""))} '
@@ -399,11 +393,10 @@ th, td {{ padding: .5rem; border: 1px solid #ddd; text-align: left; vertical-ali
 th {{ background: #eee; }}
 .controls {{ padding: 1rem; background: #fff; border: 1px solid #ddd; margin: 1rem 0;
              display: flex; gap: 1rem; flex-wrap: wrap; }}
-.bad {{ background: #ffe6e6; }}
-.good {{ background: #e7f6e7; }}
-.warn {{ background: #fff4d6; }}
-.unchanged {{ color: #888; }}
-.neutral {{ background: #f1f1f1; }}
+.fail {{ background: #ffe6e6; }}
+.pass {{ background: #e7f6e7; }}
+.warning {{ background: #fff4d6; }}
+.other {{ background: #f1f1f1; }}
 code {{ white-space: nowrap; }}
 .summary {{ overflow: auto; margin-bottom: 2rem; }}
 </style>
