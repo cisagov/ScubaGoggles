@@ -110,8 +110,7 @@ test_GroupsAPI_ExternalAccess_Incorrect_1 if {
     Output := tests with input as BadGroupsApi1_2
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_2("Yes"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_2("Yes")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
@@ -167,8 +166,7 @@ test_GroupsAPI_ExternalEmail_Incorrect_1 if {
     Output := tests with input as BadGroupsApi1_3
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage1_3("Yes"),
-                 "Baseline": PolicyId}]
+                 "Value": NonComplianceMessage1_3("Yes")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
