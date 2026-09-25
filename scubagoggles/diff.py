@@ -430,8 +430,7 @@ function refresh() {{
     .map((item) => item.dataset.filter));
   document.querySelectorAll('#records tr').forEach((row) => {{
     const classification = row.dataset.classification;
-    row.style.display = (active.has(classification) &&
-      (unchanged.checked || classification !== 'Unchanged')) ? '' : 'none';
+    row.style.display = active.has(classification) ? '' : 'none';
   }});
 }}
 checks.forEach((item) => item.addEventListener('change', refresh));
