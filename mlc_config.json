@@ -8,6 +8,9 @@
         "pattern":"^https://github.com/cisagov/ScubaGoggles/blob/main*"
     },
     {
+        "pattern":"^https://viewer\\.oscal\\.io"
+    },
+    {
         "pattern":"^mailto:user@company.com"
     },
     {
