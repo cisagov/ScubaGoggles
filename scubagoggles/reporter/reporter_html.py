@@ -299,16 +299,39 @@ def build_individual_report_html(*,
             for query in domain['log']:
                 qname = '&#8203;'.join(query['query_name'])
                 answers = ['&#8203;'.join(answer) for answer in query['query_answers']]
+                if 'message' in domain:
+                    logs.append(
+                        {
+                            'Query Name': qname,
+                            'Query Method': query['query_method'],
+                            'Summary': domain['message'],
+                            'Answers': '<br>'.join(['No answers returned']),
+                        }
+                    )
                 logs.append(
                     {
                         'Query Name': qname,
                         'Query Method': query['query_method'],
                         'Summary': query['query_result'],
-                        'Answers': '<br>'.join(answers),
+                        'Answers': '<br>'.join(answers) or '<br>'.join(['No answers returned']),
                     }
                 )
-        log_table = create_html_table(logs).replace(
-            '<table>', "<table class='alternating dns-table'>")
+
+        log_table = create_html_table(logs)
+
+        # The "Answers" column will hog the space in a default table
+        # configuration.  We use the following column proportions with a
+        # fixed table layout for better column spacing.
+
+        log_table = log_table.replace('<table>',
+                                      '<table class="alternating dns-table">\n'
+                                      '  <colgroup>\n'
+                                      '    <col style="width: 15%">\n'
+                                      '    <col style="width: 10%">\n'
+                                      '    <col style="width: 15%">\n'
+                                      '    <col style="width: 60%">\n'
+                                      '  </colgroup>')
+
         log_html += log_table
         log_html += '</div>'
 

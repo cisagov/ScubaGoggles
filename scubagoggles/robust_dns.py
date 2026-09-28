@@ -14,7 +14,7 @@ class RobustDNSClient:
 
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
-        :param doh_servers: (optional) list of DoH servers that should be used 
+        :param doh_servers: (optional) list of DoH servers that should be used
             for DoH queries.
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.

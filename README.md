@@ -1,10 +1,11 @@
 ![ScubaGoggles Logo](https://github.com/cisagov/ScubaGoggles/raw/main/docs/images/ScubaGoggles%20GitHub%20Graphic%20v2.jpg)
 
-
 [![GitHub Release][github-release-img]][release]
 [![PyPI - Version][pypi-version-img]][pypi]
+[![CI Pipeline][ci-pipeline-img]][ci-pipeline]
 [![GitHub Downloads][github-downloads-img]][release]
 [![PyPI Downloads][pypi-downloads-img]][pypi]
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cisagov/ScubaGoggles/badge)](https://scorecard.dev/viewer/?uri=github.com/cisagov/ScubaGoggles)
 [![GitHub License][github-license-img]][license]
 
 Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google
@@ -70,6 +71,8 @@ submitted with an alternate compatible license. If accepted, those
 contributions will be listed herein with the appropriate license.
 
 [release]: https://github.com/cisagov/ScubaGoggles/releases
+[ci-pipeline]: https://github.com/cisagov/ScubaGoggles/actions/workflows/run_pipeline.yml
+[ci-pipeline-img]: https://img.shields.io/github/actions/workflow/status/cisagov/ScubaGoggles/run_pipeline.yml?branch=main&label=CI%20Pipeline
 [github-release-img]: https://img.shields.io/github/v/release/cisagov/ScubaGoggles?label=GitHub&logo=github
 [github-downloads-img]: https://img.shields.io/github/downloads/cisagov/ScubaGoggles/total?label=GitHub%20downloads
 [pypi]: https://pypi.org/project/scubagoggles/

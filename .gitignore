@@ -28,3 +28,7 @@ opa
 opa_windows_amd64.exe
 opa_darwin_amd64
 opa_linux_amd64_static
+
+# regal
+input.json
+regal.exe

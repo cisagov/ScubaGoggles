@@ -405,3 +405,8 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+.dns-table {
+  width: 100%;
+  table-layout: fixed;
+}

@@ -49,7 +49,6 @@ However, these features require additional licensing and are not available by de
 Access Approvals SHOULD be enabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Unauthorized data access increases the risk of exposing sensitive data to untrusted entities. Unauthorized access and actions to an organization's data may be reduced by requiring approval of Google staff requests to access organizations' data.
 - _Last modified:_ November 2025
