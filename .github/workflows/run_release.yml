@@ -87,7 +87,7 @@ jobs:
 
       - name: Get previous release tag
         id: previous-release
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           RELEASE_VERSION: ${{ inputs.version }}
         with:
@@ -163,7 +163,7 @@ jobs:
             core.setOutput("tag", previousRelease.tag_name);
 
       - name: Generate release notes
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           RELEASE_VERSION: ${{ inputs.version }}
           COMPARE_HEAD_REF: ${{ inputs.compareHeadRef }}
