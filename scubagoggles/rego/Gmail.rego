@@ -262,11 +262,58 @@ if {
 
 GmailId4_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.2")
 
-# Not applicable at OU or Group level
+# Some quirks about DMARC policies:
+# - If the DMARC record is published at the author domain (i.e., the domain that sent the email) then
+#   we need to look at the "p" tag.
+# - If the DMARC record is published at a parent domain (i.e., if "a.b.example.com" is the author
+#   domain, the parent domains are b.example.com, example.com, and com), the we need to first
+#   the "sp" tag. If there is no "sp", in that case we fall back to the "p" tag, if present.
+#
+# We can determine if we got the DMARC record from the author domain by looking at the "log" entries.
+# If the author domain published it, the final query name from the log will be equal to "_dmarc" +
+# the domain name.
+
+StandarizeDmarcRecord(RecordContents) := Standardized if {
+    # Per the RFC spec, the equals sign and semicolon deliminators can be surounded by 0 or more
+    # space or horizontal tab characters on either side (see
+    # https://www.rfc-editor.org/info/rfc9989/#section-4.8). Strip out those characters to
+    # ensure consistent parsing.
+    StandardizedEquals := regex.replace(RecordContents, `[ \t]*=[ \t]*`, "=")
+    StandardizedSemicolon := regex.replace(StandardizedEquals, `[ \t]*;[ \t]*`, ";")
+    # The final semicolon is optional but our logic below counts on it being there, so append a
+    # semicolon. This will result in double semicolons in some cases, but that will not mess up the
+    # Rego check.
+    Standardized := concat("", [StandardizedSemicolon, ";"])
+}
+
+AuthorDomainCompliant(DmarcRecord) := true if {
+    FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
+    FinalQname == concat("", ["_dmarc.", DmarcRecord.domain])
+    some Rdata in DmarcRecord.rdata
+    contains(StandarizeDmarcRecord(Rdata), "p=reject;")
+} else := false
+
+ParentDomainCompliant(DmarcRecord) := true if {
+    FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
+    FinalQname != concat("", ["_dmarc.", DmarcRecord.domain])
+    some Rdata in DmarcRecord.rdata
+    contains(StandarizeDmarcRecord(Rdata), "sp=reject;")
+} else := true if {
+    FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
+    FinalQname != concat("", ["_dmarc.", DmarcRecord.domain])
+    some Rdata in DmarcRecord.rdata
+    not contains(StandarizeDmarcRecord(Rdata), "sp=")
+    contains(StandarizeDmarcRecord(Rdata), "p=reject;")
+} else := false
+
 DomainsWithPreject contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
-    some Rdata in DmarcRecord.rdata
-    contains(Rdata, "p=reject;")
+    Conditions := {
+        AuthorDomainCompliant(DmarcRecord),
+        ParentDomainCompliant(DmarcRecord)
+    }
+    # Pass if either of the above conditions are true
+    true in Conditions
     DmarcRecord.domain in DomainsWithDmarc
 }
 
