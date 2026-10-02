@@ -52,6 +52,8 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+      - name: Set up OSCAL CLI
+        uses: ./.github/actions/setup-oscal-cli
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
@@ -67,6 +69,21 @@ jobs:
           [[ "$reqv" == "$sgv" ]] \
             || (echo "version mismatch - current: $sgv" && exit 1)
           ./scubagoggles/utils/build.sh -r "$PWD" -t "$GITHUB_REF_NAME"
+      - name: Generate OSCAL baseline catalog artifact
+        shell: bash
+        run: |
+          python3 scubagoggles/utils/generate_oscal_baselines.py \
+            --input-dir scubagoggles/baselines \
+            --output-dir dist/oscal-baseline-catalog \
+            --release-version "$RELEASE_VERSION"
+          CATALOG_FILE="$(python3 scubagoggles/utils/validate_oscal_baselines.py \
+            --output-dir dist/oscal-baseline-catalog \
+            --release-version "$RELEASE_VERSION" \
+            --print-catalog-path)"
+          oscal-cli --version
+          oscal-cli validate "$CATALOG_FILE"
+          cd dist
+          zip -r "scubagoggles-oscal-baseline-catalog-v${RELEASE_VERSION}.zip" oscal-baseline-catalog
 
       - name: Get previous release tag
         id: previous-release
@@ -631,4 +648,5 @@ jobs:
             scubagoggles-*-py3-none-any.whl
             scubagoggles-*.tar.gz
             scubagoggles-*.zip
+            dist/scubagoggles-oscal-baseline-catalog-v${{ inputs.version }}.zip
           fail_on_unmatched_files: true

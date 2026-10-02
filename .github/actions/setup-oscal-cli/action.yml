@@ -1,0 +1,28 @@
+name: Setup OSCAL CLI
+description: Set up Java and install a checksum-verified OSCAL CLI.
+inputs:
+  oscal-cli-version:
+    required: false
+    default: "3.2.0"
+  oscal-cli-sha256:
+    required: false
+    default: "e001b353ee245da6f4ff0ad930c4dfaa88083c63243ca004bd5f5bcef44e8ec8"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Java
+      uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: "17"
+
+    - name: Install OSCAL CLI
+      shell: bash
+      run: |
+        OSCAL_CLI_ZIP="$RUNNER_TEMP/oscal-cli.zip"
+        curl --fail --location --retry 3 --output "$OSCAL_CLI_ZIP" \
+          "https://repo1.maven.org/maven2/dev/metaschema/oscal/oscal-cli-enhanced/${{ inputs.oscal-cli-version }}/oscal-cli-enhanced-${{ inputs.oscal-cli-version }}-oscal-cli.zip"
+        printf '%s  %s\n' "${{ inputs.oscal-cli-sha256 }}" "$OSCAL_CLI_ZIP" | sha256sum --check --strict
+        unzip -q "$OSCAL_CLI_ZIP" -d "$RUNNER_TEMP/oscal-cli"
+        echo "$RUNNER_TEMP/oscal-cli/bin" >> "$GITHUB_PATH"
