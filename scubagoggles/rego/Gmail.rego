@@ -290,20 +290,20 @@ AuthorDomainCompliant(DmarcRecord) := true if {
     FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
     FinalQname == concat("", ["_dmarc.", DmarcRecord.domain])
     some Rdata in DmarcRecord.rdata
-    contains(StandarizeDmarcRecord(Rdata), "p=reject;")
+    contains(StandarizeDmarcRecord(Rdata), ";p=reject;")
 } else := false
 
 ParentDomainCompliant(DmarcRecord) := true if {
     FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
     FinalQname != concat("", ["_dmarc.", DmarcRecord.domain])
     some Rdata in DmarcRecord.rdata
-    contains(StandarizeDmarcRecord(Rdata), "sp=reject;")
+    contains(StandarizeDmarcRecord(Rdata), ";sp=reject;")
 } else := true if {
     FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
     FinalQname != concat("", ["_dmarc.", DmarcRecord.domain])
     some Rdata in DmarcRecord.rdata
-    not contains(StandarizeDmarcRecord(Rdata), "sp=")
-    contains(StandarizeDmarcRecord(Rdata), "p=reject;")
+    not contains(StandarizeDmarcRecord(Rdata), ";sp=")
+    contains(StandarizeDmarcRecord(Rdata), ";p=reject;")
 } else := false
 
 DomainsWithPreject contains DmarcRecord.domain if {

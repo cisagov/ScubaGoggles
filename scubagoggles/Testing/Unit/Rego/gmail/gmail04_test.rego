@@ -495,6 +495,37 @@ test_DMARCMessageReject_Incorrect_V5 if {
 }
 #--
 
+test_DMARCMessageReject_Incorrect_V6 if {
+    # DMARC published at author level but p=none and sp=reject
+    PolicyId := GmailId4_2
+    Output := tests with input as {
+        "dmarc_records": [
+            {
+                "domain": "a.example.com",
+                "rdata": [
+                    "v=DMARC1; p=none; sp=reject"
+                ],
+                "log": [
+                    {
+                        "query_name": "_dmarc.a.example.com",
+                        "query_method": "traditional",
+                        "query_result": "Query returned 1 txt records",
+                        "query_answers": ["v=DMARC1; p=none; sp=reject"]
+                    }
+                ]
+            }
+        ],
+        "domains": ["a.example.com"]
+    }
+
+    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
+    count(RuleOutput) == 1
+    not RuleOutput[0].RequirementMet
+    not RuleOutput[0].NoSuchEvent
+    RuleOutput[0].ReportDetails == concat(" ", ["1 of 1 agency domain(s) found in violation: a.example.com.", DNSLink])
+}
+#--
+
 #
 # GWS.GMAIL.4.3
 #--
