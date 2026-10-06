@@ -26,7 +26,7 @@ We use a three-step process:
 
 ### Installation
 
-- [Download and Python Install](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md)
+- [Download and Install Python](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/DownloadAndInstall.md)
 - [Download the OPA Executable](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/OPA.md)
 - [Configure Defaults](https://github.com/cisagov/ScubaGoggles/blob/main/docs/installation/Defaults.md)
 
