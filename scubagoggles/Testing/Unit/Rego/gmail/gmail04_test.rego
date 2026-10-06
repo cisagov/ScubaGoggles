@@ -175,7 +175,7 @@ test_DMARCMessageReject_Correct_V2 if {
                 ],
                 "log": [
                     {
-                        "query_name": "_dmarc.test.name",
+                        "query_name": "_dmarc.test1.name",
                         "query_method": "traditional",
                         "query_result": "Query returned 1 txt records",
                         "query_answers": ["v=DMARC1; p=reject;"]
@@ -327,7 +327,7 @@ test_DMARCMessageReject_Incorrect_V1 if {
                 ],
                 "log": [
                     {
-                        "query_name": "_dmarc.test.name",
+                        "query_name": "_dmarc.test1.name",
                         "query_method": "traditional",
                         "query_result": "Query returned 1 txt records",
                         "query_answers": ["v=DMARC1; p=reject;"]
