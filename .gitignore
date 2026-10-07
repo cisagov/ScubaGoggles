@@ -24,6 +24,11 @@ scubagoggles.egg-info
 !**/sample-report/IndividualReports/*
 **/GWSBaselineConformance*
 
+# diff output (written to the current directory by default)
+**/DiffResults.json
+**/DiffResults.csv
+**/DiffReport.html
+
 # opa
 opa
 opa_windows_amd64.exe

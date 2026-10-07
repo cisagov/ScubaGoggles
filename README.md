@@ -48,6 +48,7 @@ We use a three-step process:
 - [Configuration UI](https://github.com/cisagov/ScubaGoggles/blob/main/scubagoggles/ui/README.md) — web-based form for building config files
 - [Usage: Examples](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Examples.md)
 - [Reviewing Output](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/ReviewOutput.md)
+- [Comparing Two Runs](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Diff.md) — report how each policy's result changed between two runs
 - [Limitations](https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Limitations.md)
 
 ### Troubleshooting
