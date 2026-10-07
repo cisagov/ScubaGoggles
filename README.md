@@ -5,6 +5,7 @@
 [![CI Pipeline][ci-pipeline-img]][ci-pipeline]
 [![GitHub Downloads][github-downloads-img]][release]
 [![PyPI Downloads][pypi-downloads-img]][pypi]
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cisagov/ScubaGoggles/badge)](https://scorecard.dev/viewer/?uri=github.com/cisagov/ScubaGoggles)
 [![GitHub License][github-license-img]][license]
 
 Developed by CISA, ScubaGoggles is an assessment tool that verifies a Google
@@ -63,6 +64,7 @@ We use a three-step process:
 
 ### Misc
 - [Mappings](docs/misc/mappings.md)
+- [OSCAL Catalog](docs/misc/oscal-catalog.md)
 
 ## Project License
 Unless otherwise noted, this project is distributed under the Creative
