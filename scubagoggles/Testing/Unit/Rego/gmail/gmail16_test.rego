@@ -1,6 +1,8 @@
 package gmail
 import future.keywords
 
+import data.utils.FailTestOUNonCompliant
+
 #
 # GWS.GMAIL.16.1
 #--
@@ -199,12 +201,10 @@ test_SecuritySandbox_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Security sandbox is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": "Security sandbox is disabled"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_SecuritySandbox_Incorrect_V3 if {
@@ -238,12 +238,10 @@ test_SecuritySandbox_Incorrect_V3 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Test Top-Level OU: ",
-        "Security sandbox is disabled</li></ul>"])
+    failedOU := [{"Name": "Test Top-Level OU",
+                  "Value": "Security sandbox is disabled"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_SecuritySandbox_Incorrect_V4 if {
@@ -267,12 +265,10 @@ test_SecuritySandbox_Incorrect_V4 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Security sandbox is disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                  "Value": "Security sandbox is disabled"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_SecuritySandbox_Incorrect_V5 if {
@@ -306,12 +302,9 @@ test_SecuritySandbox_Incorrect_V5 if {
         },
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", ["The following OUs are non-compliant:<ul><li>Secondary OU: ",
-        "Security sandbox is disabled</li></ul>"])
+    failedOU := [{"Name": "Secondary OU",
+                  "Value": "Security sandbox is disabled"}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 #--
-

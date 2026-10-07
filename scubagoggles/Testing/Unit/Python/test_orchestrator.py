@@ -341,7 +341,7 @@ class TestOrchestrator:
                                 'Criticality': 'Should',
                                 'Details': (
                                     'The following OUs are non-compliant:'
-                                    '<ul><li>Example OU: enabled</li></ul>'
+                                    '<ol><li>Example OU: enabled</li></ol>'
                                 ),
                             },
                             {
