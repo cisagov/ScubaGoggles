@@ -446,25 +446,39 @@ refresh();
 def run_diff(
     before: Path,
     after: Path,
+    *,
     outputpath: Path | None = None,
-    outjsonfilename: str = "DiffOutJson",
-    outreportfilename: str = "DiffReport.html",
-    outcsvfilename: str = "DiffReport.html",
+    outjsonfilename: str = "DiffResults",
+    outcsvfilename: str = "DiffResults",
+    outreportfilename: str = "DiffReport",
     quiet: bool = False,
-) -> None:
-    """Compare two reports and write JSON, CSV, and HTML outputs."""
+) -> dict[str, Path]:
+    """Compare two reports and write JSON, CSV, and HTML outputs.
+
+    Args:
+        before: Path to the earlier ("before") ScubaGoggles report.
+        after: Path to the later ("after") ScubaGoggles report.
+        outputpath: Folder to write the three outputs to. Created if it
+            does not exist. Defaults to the current directory.
+        outjsonfilename: Base name (no extension) of the diff JSON.
+        outcsvfilename: Base name (no extension) of the diff CSV.
+        outreportfilename: Base name (no extension) of the diff HTML report.
+        quiet: Suppress printing the output file paths.
+
+    Returns:
+        The paths written, keyed "JsonPath", "CsvPath", and "ReportPath".
+    """
     result = compare(load_report(before), load_report(after))
     if outputpath is None:
         outputpath = Path.cwd()
 
     outputpath.mkdir(parents=True, exist_ok=True)
-    json_path = outputpath / outjsonfilename
-    report_path = outputpath / outreportfilename
-    csv_path = outputpath / outcsvfilename
+    json_path = outputpath / f"{outjsonfilename}.json"
+    csv_path = outputpath / f"{outcsvfilename}.csv"
+    report_path = outputpath / f"{outreportfilename}.html"
     write_json(result, json_path)
-    write_html(result, report_path)
     write_csv(result, csv_path)
+    write_html(result, report_path)
     if not quiet:
-        print(f"Diff JSON: {json_path}")
-        print(f"Diff Report HTML: {report_path}")
-        print(f"Diff CSV:  {csv_path}")
+        print(f"ScubaGoggles diff written to:\n  {json_path}\n  {csv_path}\n  {report_path}")
+    return {"JsonPath": json_path, "CsvPath": csv_path, "ReportPath": report_path}

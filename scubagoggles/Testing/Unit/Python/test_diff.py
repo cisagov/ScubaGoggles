@@ -1,6 +1,15 @@
 """Unit tests for the ScubaGoggles report diff functionality."""
 
-from scubagoggles.diff import Control, compare, result_diff, classify_pair, split_version
+import argparse
+import json
+
+from scubagoggles.diff import (Control,
+                               compare,
+                               result_diff,
+                               classify_pair,
+                               run_diff,
+                               split_version)
+from scubagoggles.main import get_diff_args
 
 def report(controls):
     """Build a minimal ScubaGoggles report for testing."""
@@ -130,3 +139,64 @@ class TestDiff:
         assert classifications["GWS.COMMONCONTROLS.1.2v1"] == "RemovedPolicy"
         assert classifications["GWS.COMMONCONTROLS.1.3v1"] == "NewFail"
         assert classifications["GWS.COMMONCONTROLS.1.4v1"] == "NewPolicy"
+
+    def test_run_diff_default_file_names(self, tmp_path):
+        """Write three separate outputs with the default file names."""
+        before_path = tmp_path / "before.json"
+        after_path = tmp_path / "after.json"
+        before_path.write_text(
+            json.dumps(report([control("GWS.COMMONCONTROLS.1.1v1", "Pass")])),
+            encoding="utf-8",
+        )
+        after_path.write_text(
+            json.dumps(report([control("GWS.COMMONCONTROLS.1.1v1", "Fail")])),
+            encoding="utf-8",
+        )
+        out_dir = tmp_path / "diff"
+
+        paths = run_diff(before_path, after_path, outputpath=out_dir, quiet=True)
+
+        assert paths == {
+            "JsonPath": out_dir / "DiffResults.json",
+            "CsvPath": out_dir / "DiffResults.csv",
+            "ReportPath": out_dir / "DiffReport.html",
+        }
+        assert json.loads(paths["JsonPath"].read_text(encoding="utf-8"))["Records"]
+        assert paths["CsvPath"].read_text(encoding="utf-8").startswith("Product,")
+        assert paths["ReportPath"].read_text(encoding="utf-8").startswith("<!doctype html>")
+
+    def test_run_diff_custom_file_names(self, tmp_path):
+        """Custom base names get the matching extension appended."""
+        before_path = tmp_path / "before.json"
+        before_path.write_text(
+            json.dumps(report([control("GWS.COMMONCONTROLS.1.1v1", "Pass")])),
+            encoding="utf-8",
+        )
+
+        paths = run_diff(before_path,
+                         before_path,
+                         outputpath=tmp_path,
+                         outjsonfilename="Q2Json",
+                         outcsvfilename="Q2Csv",
+                         outreportfilename="Q2Report",
+                         quiet=True)
+
+        assert paths["JsonPath"].name == "Q2Json.json"
+        assert paths["CsvPath"].name == "Q2Csv.csv"
+        assert paths["ReportPath"].name == "Q2Report.html"
+        assert all(path.exists() for path in paths.values())
+
+    def test_diff_cli_arguments(self):
+        """The diff subcommand requires both reports and defaults the rest."""
+        parser = argparse.ArgumentParser()
+        get_diff_args(parser)
+
+        args = parser.parse_args(["--beforepath", "b.json", "--afterpath", "a.json"])
+
+        assert args.beforepath.name == "b.json"
+        assert args.afterpath.name == "a.json"
+        assert args.outputpath is None
+        assert args.outjsonfilename == "DiffResults"
+        assert args.outcsvfilename == "DiffResults"
+        assert args.outputreportfilename == "DiffReport"
+        assert args.quiet is False
