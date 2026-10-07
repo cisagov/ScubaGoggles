@@ -9,8 +9,10 @@ import pytest
 
 from scubagoggles.diff import (CLASSIFICATIONS,
                                CSV_FIELDS,
+                               DIFF_REPORT_CSS,
                                Control,
                                _csv_safe,
+                               _result_text_class,
                                _row_color,
                                compare,
                                result_category,
@@ -590,3 +592,95 @@ class TestDiffHtmlReport:
 
         assert '<script id="dark-mode-flag" type="application/json">true</script>' \
                in path.read_text(encoding="utf-8")
+
+    def test_products_follow_run_order(self, tmp_path):
+        """List products in the order a ScubaGoggles run reports them."""
+        reports = {"MetaData": {}, "Results": {}}
+        for product in ("gmail", "calendar", "commoncontrols"):
+            reports["Results"][product] = [
+                {"GroupName": "G", "GroupNumber": "1",
+                 "Controls": [control(f"GWS.{product.upper()}.1.1v1", "Pass")]}
+            ]
+        result = compare(reports, reports)
+        path = tmp_path / "report.html"
+
+        write_html(result, path)
+
+        assert list(result["Diff"]) == ["calendar", "commoncontrols", "gmail"]
+        assert list(result["Summary"]) == ["calendar", "commoncontrols", "gmail"]
+        headings = re.findall(r"<h2>([^<]+)</h2>", path.read_text(encoding="utf-8"))
+        assert headings == ["Summary", "Google Calendar", "Common Controls", "Gmail"]
+
+    def test_legend_lists_fail_and_error_separately(self, tmp_path):
+        """Give Error its own legend entry, though it shares Fail's color."""
+        reports = report([control("GWS.COMMONCONTROLS.1.1v1", "Pass")])
+        path = tmp_path / "report.html"
+
+        write_html(compare(reports, reports), path)
+        page = path.read_text(encoding="utf-8")
+
+        assert '<span class="swatch diff-red"></span>Fail (Result After)</span>' in page
+        assert '<span class="swatch diff-red"></span>Error (Result After)</span>' in page
+
+    @pytest.mark.parametrize(
+        ("result", "expected"),
+        [
+            ("Pass", "result-pass"),
+            ("Fail", "result-fail"),
+            ("Warning", "result-warning"),
+            (" PASS ", "result-pass"),
+            ("N/A", ""),
+            ("No events found", ""),
+            ("Omitted", ""),
+            ("Error", ""),
+            ("Incorrect result", ""),
+            ("Bug", ""),
+            ("", ""),
+            (None, ""),
+        ],
+    )
+    def test_result_text_class(self, result, expected):
+        """Color only Pass, Fail, and Warning result text."""
+        assert _result_text_class(result) == expected
+
+    def test_write_html_result_text_colors(self, tmp_path):
+        """Color both result cells so a Pass -> Fail change is visible."""
+        before = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.3v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.4v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.5v1", "Pass"),
+        ])
+        after = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Fail"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Warning"),
+            control("GWS.COMMONCONTROLS.1.3v1", "N/A"),
+            control("GWS.COMMONCONTROLS.1.4v1", "Omitted"),
+            control("GWS.COMMONCONTROLS.1.5v1", "Error"),
+        ])
+        path = tmp_path / "report.html"
+
+        write_html(compare(before, after), path)
+        page = path.read_text(encoding="utf-8")
+
+        assert re.search(r'<td class="result-cell result-pass">Pass</td>\s*'
+                         r'<td class="result-cell result-fail">Fail</td>', page)
+        assert '<td class="result-cell result-warning">Warning</td>' in page
+        for result in ("N/A", "Omitted", "Error"):
+            assert f'<td class="result-cell">{result}</td>' in page
+        assert not re.search(r'result-cell result-\w+">(N/A|Omitted|Error)<', page)
+
+    def test_report_css_colors(self):
+        """Define result text colors and table lines for both themes."""
+        css = DIFF_REPORT_CSS.read_text(encoding="utf-8")
+
+        for variable in ("--result-pass-color", "--result-fail-color",
+                         "--result-warning-color", "--table-border-color"):
+            # Once under :root (light) and once under html[data-theme='dark'].
+            assert css.count(f"{variable}:") == 2, variable
+        assert re.search(r"html\[data-theme='dark'\][\s\S]*--result-pass-color", css)
+        assert re.search(r"--table-border-color:\s*black;", css)
+        assert re.search(r"--table-border-color:\s*#7b7b7b;", css)
+        assert re.search(r"th, td \{[\s\S]*?border: 1px solid var\(--table-border-color\);",
+                         css)

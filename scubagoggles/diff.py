@@ -452,8 +452,13 @@ def _control_sort_key(record: dict[str, Any]) -> str:
 
 
 def _ordered_products(products) -> list[str]:
-    """Return product names in report order (alphabetical, ignoring case)."""
-    return sorted(products, key=str.lower)
+    """Return products in the order a ScubaGoggles run reports them.
+
+    A run sorts its baselines by short name (e.g., "assuredcontrols",
+    "calendar", ...) and builds its JSON results and HTML report in that
+    order, so the diff does the same.
+    """
+    return sorted(products)
 
 
 def _report_annotations(report: dict[str, Any]) -> dict[str, Any]:
@@ -651,7 +656,8 @@ def _html_legend() -> list[str]:
     """Build the row color legend."""
     return [
         '<div class="legend">',
-        '  <span><span class="swatch diff-red"></span>Fail / Error (Result After)</span>',
+        '  <span><span class="swatch diff-red"></span>Fail (Result After)</span>',
+        '  <span><span class="swatch diff-red"></span>Error (Result After)</span>',
         '  <span><span class="swatch diff-yellow"></span>Warning (Result After)</span>',
         '  <span><span class="swatch diff-green"></span>Pass (Result After)</span>',
         '  <span><span class="swatch diff-grey"></span>'
