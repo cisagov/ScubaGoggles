@@ -10,28 +10,80 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from scubagoggles.orchestrator import Orchestrator
 from scubagoggles.version import Version
 
 SCHEMA_VERSION = "1.0"
 VERSION_RE = re.compile(r"^(?P<base>.+?)(?:v(?P<version>\d+))$", re.IGNORECASE)
 
+# Display order for the summary table's classification columns, their filter
+# checkboxes, and the JSON summary counts. The order is by severity, in tiers:
+#
+#   1. Broken now:            Errored, NewFail
+#   2. Degraded:              NewWarning
+#   3. Needs manual review:   NewIncorrectResult, PolicyVersionUpdate,
+#                             NewOmission, NoLogEvents, Other
+#   4. Coverage shape:        NewAutomatedCheck, NewManualCheck, NewLogBasedCheck
+#   5. Good news / admin:     NewPass, NewPolicy, RemovedPolicy
+#   6. Hidden by default:     Unchanged
+#
+# Row color keys off Result (After), so the tiers roughly track the row
+# colors and column order and row color tell one severity story.
 CLASSIFICATIONS = (
-    "NewPolicy",
-    "RemovedPolicy",
     "Errored",
-    "PolicyVersionUpdate",
-    "Unchanged",
-    "NewIncorrectResult",
-    "NewPass",
     "NewFail",
     "NewWarning",
+    "NewIncorrectResult",
+    "PolicyVersionUpdate",
+    "NewOmission",
+    "NoLogEvents",
+    "Other",
     "NewAutomatedCheck",
     "NewManualCheck",
     "NewLogBasedCheck",
-    "NoLogEvents",
-    "NewOmission",
-    "Other",
+    "NewPass",
+    "NewPolicy",
+    "RemovedPolicy",
+    "Unchanged",
 )
+
+# Classification -> label shown in the HTML report's Diff column.
+# Classifications not listed are shown as their raw token.
+CLASSIFICATION_LABELS = {
+    "NewFail": "New Fail",
+    "NewPass": "New Pass",
+    "NewWarning": "New Warning",
+    "NewOmission": "New Omission",
+    "NewAutomatedCheck": "New Automated Check",
+    "NewManualCheck": "New Manual Check",
+    "NewLogBasedCheck": "New Log-Based Check",
+    "NoLogEvents": "No Log Events",
+    "NewIncorrectResult": "New Incorrect Result (false positive)",
+    "NewPolicy": "New Policy",
+    "RemovedPolicy": "Removed Policy",
+    "PolicyVersionUpdate": "Policy Version Update",
+}
+
+# Result category -> HTML row color. Rows are colored by Result (After), so
+# the color shows the control's current state; anything else is grey.
+ROW_COLORS = {
+    "Fail": "red",
+    "Error": "red",
+    "Warning": "yellow",
+    "Pass": "green",
+}
+
+# Result category -> CSS class coloring a Result (Before) / Result (After)
+# cell's text, so a reader can see which way a policy moved.
+RESULT_TEXT_CLASSES = {
+    "Pass": "result-pass",
+    "Fail": "result-fail",
+    "Warning": "result-warning",
+}
+
+REPORTER_DIR = Path(__file__).parent / "reporter"
+DIFF_REPORT_CSS = REPORTER_DIR / "styles" / "DiffReport.css"
+DIFF_REPORT_JS = REPORTER_DIR / "scripts" / "DiffReport.js"
 
 # Normalized (lower-cased, trimmed) Result strings and the category each one
 # is compared as. Any Result starting with "Error" (e.g., "Error - Test
@@ -514,126 +566,241 @@ def write_csv(result: dict[str, Any], path: Path) -> None:
                 writer.writerow({field: _csv_safe(value) for field, value in row.items()})
 
 
-def _html_filters() -> str:
-    """Build the classification filter controls."""
-    labels = []
-    for classification in CLASSIFICATIONS:
-        escaped = html.escape(classification)
-        labels.append(
-            f'<label><input type="checkbox" data-filter="{escaped}" checked>'
-            f" {escaped}</label>"
-        )
-    return "".join(labels)
+def _escape(value: Any) -> str:
+    """HTML-escape a value for the report; None becomes an empty string."""
+    return html.escape("" if value is None else str(value))
 
 
-def _html_summary(result: dict[str, Any]) -> str:
-    """Build the summary table body."""
-    products = sorted(result["Summary"], key=str.lower)
-    rows = []
-    for product in products:
-        cells = "".join(
-            f"<td>{result['Summary'][product].get(classification, 0)}</td>"
-            for classification in CLASSIFICATIONS
-        )
-        rows.append(f"<tr><td>{html.escape(product)}</td>{cells}</tr>")
-    return "".join(rows)
+def _product_display_name(product: str) -> str:
+    """Return a product's full name, such as "Gmail" or "Google Drive and Docs"."""
+    full_names = Orchestrator.gws_products()["prod_to_fullname"]
+    return full_names.get(product.lower(), product)
 
 
-def _html_record_rows(result: dict[str, Any]) -> str:
-    """Build the control result table rows."""
-    rows = []
-    for product, records in result["Diff"].items():
-        for record in records:
-            current_state = str(record["ResultAfter"]) or ""
-            classification = str(record["Classification"])
-
-            # class labels reflect color coded rows
-            class_label = current_state.lower()
-            if class_label not in {"pass", "fail", "warning"}:
-                class_label = "other"
-
-            escaped_classification = html.escape(classification)
-            control = record["Control ID (After)"] or record["Control ID (Before)"]
-            rows.append(
-                f'<tr class="{class_label}" '
-                f'data-classification="{escaped_classification}">'
-                f'<td>{html.escape(product)}</td>'
-                f'<td>{html.escape(str(record["GroupNumber"] or ""))} '
-                f'{html.escape(str(record["GroupName"] or ""))}</td>'
-                f'<td><code>{html.escape(str(control))}</code></td>'
-                f'<td>{html.escape(str(record["ResultBefore"] or ""))}</td>'
-                f'<td>{html.escape(str(record["ResultAfter"] or ""))}</td>'
-                f'<td>{escaped_classification}</td>'
-                f'<td>{html.escape(str(record["DetailsAfter"] or ""))}</td>'
-                "</tr>"
-            )
-    return "".join(rows)
+def _classification_label(classification: str) -> str:
+    """Return the report label for a classification."""
+    return CLASSIFICATION_LABELS.get(classification, classification)
 
 
-def write_html(result: dict[str, Any], path: Path) -> None:
-    """Write a self-contained HTML diff report."""
-    headers = "".join(
-        f"<th>{html.escape(classification)}</th>" for classification in CLASSIFICATIONS
+def _row_color(record: dict[str, Any]) -> str:
+    """Return the row color for a record.
+
+    Removed policies have no after result and are grey. Every other row is
+    colored by its Result (After): Fail and Error red, Warning yellow, Pass
+    green, and anything else (N/A, No events found, Omitted, ...) grey.
+    """
+    if record["Classification"] == "RemovedPolicy":
+        return "grey"
+    return ROW_COLORS.get(result_category(record["ResultAfter"]), "grey")
+
+
+def _result_text_class(result: str | None) -> str:
+    """Return the CSS class coloring a Result (Before/After) cell's text."""
+    return RESULT_TEXT_CLASSES.get(result_category(result), "")
+
+
+def _html_header() -> list[str]:
+    """Build the report title and the unchanged / dark mode toggles."""
+    return [
+        '<div class="report-header">',
+        '  <div class="report-title">',
+        "    <h1>ScubaGoggles Diff Report</h1>",
+        '    <p class="report-subtitle">Comparison between two ScubaGoggles results '
+        "files</p>",
+        "  </div>",
+        '  <div class="controls-bar">',
+        '    <label><input type="checkbox" id="toggle-unchanged"> Show unchanged rows</label>',
+        '    <label><input type="checkbox" id="toggle-dark"> Dark Mode</label>',
+        "  </div>",
+        "</div>",
+    ]
+
+
+def _html_sources(metadata: dict[str, Any]) -> list[str]:
+    """Build the Before/After source cards and the products-only callouts."""
+    lines = ['<div class="source-summary">']
+    for side in ("Before", "After"):
+        source = metadata.get(side) or {}
+        lines += [
+            '  <div class="source-card">',
+            f"    <h3>{side}</h3>",
+            f"    <div>Tool version: {_escape(source.get('ToolVersion'))}</div>",
+            f"    <div>Timestamp: {_escape(source.get('TimestampZulu'))}</div>",
+            f'    <div class="uuid">Report UUID: {_escape(source.get("ReportUUID"))}</div>',
+            "  </div>",
+        ]
+    lines.append("</div>")
+    lines.append(
+        f'<p class="diff-generated">Diff generated {_escape(metadata.get("TimestampZulu"))} '
+        f'by ScubaGoggles {_escape(metadata.get("ToolVersion"))}.</p>'
     )
-    filters = _html_filters()
-    summary_rows = _html_summary(result)
-    record_rows = _html_record_rows(result)
+
+    callouts = (
+        ("ProductsOnlyInBefore", "Products only in Before (all controls Removed Policy)"),
+        ("ProductsOnlyInAfter", "Products only in After (all controls New Policy)"),
+    )
+    for key, text in callouts:
+        products = metadata.get(key) or []
+        if products:
+            names = ", ".join(_product_display_name(product) for product in products)
+            lines.append(f"<p><strong>{text}:</strong> {_escape(names)}</p>")
+    return lines
+
+
+def _html_legend() -> list[str]:
+    """Build the row color legend."""
+    return [
+        '<div class="legend">',
+        '  <span><span class="swatch diff-red"></span>Fail / Error (Result After)</span>',
+        '  <span><span class="swatch diff-yellow"></span>Warning (Result After)</span>',
+        '  <span><span class="swatch diff-green"></span>Pass (Result After)</span>',
+        '  <span><span class="swatch diff-grey"></span>'
+        "Manual (N/A) / No events found / Omitted / Removed Policy</span>",
+        "  <span>Unchanged rows are hidden by default (use the toggle above).</span>",
+        "</div>",
+    ]
+
+
+def _html_summary(result: dict[str, Any]) -> list[str]:
+    """Build the per-product summary table with its classification filters.
+
+    Every classification gets a column, including ones absent from this
+    diff, so each one has a filter checkbox. Unchanged has no checkbox; it is
+    governed by the "Show unchanged rows" toggle and always counted in Total.
+    """
+    lines = [
+        "<h2>Summary</h2>",
+        '<div class="filter-controls">',
+        '  <span class="filter-hint">Use the checkboxes in the column headers to filter '
+        "classifications. Filters apply to this table and the product tables below.</span>",
+        '  <button type="button" id="toggle-all-filters" class="filter-btn">'
+        "Uncheck all filters</button>",
+        "</div>",
+        '<table class="summary-table">',
+    ]
+
+    header = ["<tr><th>Product</th>"]
+    for classification in CLASSIFICATIONS:
+        name = _escape(classification)
+        if classification == "Unchanged":
+            header.append(f'<th class="classification-col" data-classification="{name}">'
+                          f"{name}</th>")
+        else:
+            header.append(f'<th class="classification-col classification-filter" '
+                          f'data-classification="{name}"><label><input type="checkbox" '
+                          f'class="classification-toggle" data-classification="{name}" '
+                          f"checked> {name}</label></th>")
+    header.append("<th>Total</th></tr>")
+    lines.append("".join(header))
+
+    for product, counts in result["Summary"].items():
+        row = [f"<tr><td>{_escape(_product_display_name(product))}</td>"]
+        total = 0
+        for classification in CLASSIFICATIONS:
+            count = counts.get(classification, 0)
+            total += count
+            css_class = "count count-zero" if count == 0 else "count"
+            row.append(f'<td class="{css_class}" data-classification="{_escape(classification)}" '
+                       f'data-count="{count}">{count}</td>')
+        row.append(f'<td class="summary-total">{total}</td></tr>')
+        lines.append("".join(row))
+
+    lines.append("</table>")
+    return lines
+
+
+def _html_result_cell(record: dict[str, Any], side: str) -> str:
+    """Build a Result (Before/After) cell.
+
+    A side marked "Incorrect result" (a false positive) also shows the
+    underlying tool-computed result.
+    """
+    result = record[f"Result{side}"]
+    content = _escape(result)
+    underlying = record.get(f"UnderlyingResult{side}")
+    if record.get(f"MarkedIncorrect{side}") and underlying:
+        content += f' <span class="underlying">(underlying: {_escape(underlying)})</span>'
+    css_class = f"result-cell {_result_text_class(result)}".strip()
+    return f'  <td class="{css_class}">{content}</td>'
+
+
+def _html_product_tables(result: dict[str, Any]) -> list[str]:
+    """Build one diff table per product."""
+    lines = []
+    for product, records in result["Diff"].items():
+        lines += [
+            f"<h2>{_escape(_product_display_name(product))}</h2>",
+            '<table class="policy-diff">',
+            "<tr><th>Control ID</th><th>Group</th><th>Diff</th><th>Result (Before)</th>"
+            "<th>Result (After)</th><th>Requirement</th><th>Details (After)</th></tr>",
+        ]
+        for record in records:
+            classification = record["Classification"]
+            row_class = f"diff-row diff-{_row_color(record)}"
+            if classification == "Unchanged":
+                row_class += " diff-unchanged-row"
+
+            # Show "before -> after" when the IDs differ (a policy version update).
+            before_id = record["Control ID (Before)"]
+            after_id = record["Control ID (After)"]
+            if before_id and after_id and before_id != after_id:
+                control_id = f"{_escape(before_id)} &rarr; {_escape(after_id)}"
+            else:
+                control_id = _escape(after_id or before_id)
+
+            group = f"{record['GroupNumber'] or ''} {record['GroupName'] or ''}".strip()
+            lines += [
+                f'<tr class="{row_class}" data-classification="{_escape(classification)}">',
+                f"  <td>{control_id}</td>",
+                f"  <td>{_escape(group)}</td>",
+                f'  <td class="classification-label">'
+                f"{_escape(_classification_label(classification))}</td>",
+                _html_result_cell(record, "Before"),
+                _html_result_cell(record, "After"),
+                f"  <td>{_escape(record['Requirement'])}</td>",
+                f"  <td>{_escape(record['DetailsAfter'])}</td>",
+                "</tr>",
+            ]
+        lines.append("</table>")
+    return lines
+
+
+def write_html(result: dict[str, Any], path: Path, darkmode: bool = False) -> None:
+    """Write a self-contained HTML diff report.
+
+    The report's CSS and JavaScript are inlined. Unchanged rows are written
+    but hidden until the "Show unchanged rows" toggle is checked, and every
+    report string is HTML-escaped.
+
+    Args:
+        result: The diff result from compare().
+        path: The HTML file to write.
+        darkmode: Open the report in dark mode.
+    """
+    body = (_html_header()
+            + _html_sources(result["MetaData"])
+            + _html_legend()
+            + _html_summary(result)
+            + _html_product_tables(result))
+    css = DIFF_REPORT_CSS.read_text(encoding="utf-8")
+    javascript = DIFF_REPORT_JS.read_text(encoding="utf-8")
+    dark_flag = "true" if darkmode else "false"
+    body_html = "\n".join(body)
     document = f"""<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ScubaGoggles Report Diff</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScubaGoggles Diff Report</title>
 <style>
-body {{ font-family: system-ui, sans-serif; margin: 2rem; background: #fafafa; color: #222; }}
-table {{ border-collapse: collapse; width: 100%; background: #fff; }}
-th, td {{ padding: .5rem; border: 1px solid #ddd; text-align: left; vertical-align: top; }}
-th {{ background: #eee; }}
-.controls {{ padding: 1rem; background: #fff; border: 1px solid #ddd; margin: 1rem 0;
-             display: flex; gap: 1rem; flex-wrap: wrap; }}
-.fail {{ background: #ffe6e6; }}
-.pass {{ background: #e7f6e7; }}
-.warning {{ background: #fff4d6; }}
-.other {{ background: #f1f1f1; }}
-code {{ white-space: nowrap; }}
-.summary {{ overflow: auto; margin-bottom: 2rem; }}
+{css}
 </style>
 </head>
 <body>
-<h1>ScubaGoggles Report Diff</h1>
-<div class="controls">
-<strong>Filter:</strong>{filters}
-<label><input id="showUnchanged" type="checkbox" checked> Show unchanged</label>
-</div>
-<h2>Summary</h2>
-<div class="summary">
-<table>
-<thead><tr><th>Product</th>{headers}</tr></thead>
-<tbody>{summary_rows}</tbody>
-</table>
-</div>
-<h2>Controls</h2>
-<table>
-<thead>
-<tr><th>Product</th><th>Group</th><th>Control</th><th>Before</th>
-<th>After</th><th>Classification</th><th>Details</th></tr>
-</thead>
-<tbody id="records">{record_rows}</tbody>
-</table>
+{body_html}
+<script id="dark-mode-flag" type="application/json">{dark_flag}</script>
 <script>
-const checks = [...document.querySelectorAll('[data-filter]')];
-const unchanged = document.getElementById('showUnchanged');
-function refresh() {{
-  const active = new Set(checks.filter((item) => item.checked)
-    .map((item) => item.dataset.filter));
-  document.querySelectorAll('#records tr').forEach((row) => {{
-    const classification = row.dataset.classification;
-    row.style.display = active.has(classification) ? '' : 'none';
-  }});
-}}
-checks.forEach((item) => item.addEventListener('change', refresh));
-unchanged.addEventListener('change', refresh);
-refresh();
+{javascript}
 </script>
 </body>
 </html>
@@ -649,6 +816,7 @@ def run_diff(
     outjsonfilename: str = "DiffResults",
     outcsvfilename: str = "DiffResults",
     outreportfilename: str = "DiffReport",
+    darkmode: bool = False,
     quiet: bool = False,
 ) -> dict[str, Path]:
     """Compare two reports and write JSON, CSV, and HTML outputs.
@@ -661,6 +829,7 @@ def run_diff(
         outjsonfilename: Base name (no extension) of the diff JSON.
         outcsvfilename: Base name (no extension) of the diff CSV.
         outreportfilename: Base name (no extension) of the diff HTML report.
+        darkmode: Open the HTML report in dark mode.
         quiet: Suppress printing the output file paths.
 
     Returns:
@@ -676,7 +845,7 @@ def run_diff(
     report_path = outputpath / f"{outreportfilename}.html"
     write_json(result, json_path)
     write_csv(result, csv_path)
-    write_html(result, report_path)
+    write_html(result, report_path, darkmode=darkmode)
     if not quiet:
         print(f"ScubaGoggles diff written to:\n  {json_path}\n  {csv_path}\n  {report_path}")
     return {"JsonPath": json_path, "CsvPath": csv_path, "ReportPath": report_path}

@@ -3,19 +3,23 @@
 import argparse
 import csv
 import json
+import re
 
 import pytest
 
-from scubagoggles.diff import (CSV_FIELDS,
+from scubagoggles.diff import (CLASSIFICATIONS,
+                               CSV_FIELDS,
                                Control,
                                _csv_safe,
+                               _row_color,
                                compare,
                                result_category,
                                result_diff,
                                classify_pair,
                                run_diff,
                                split_version,
-                               write_csv)
+                               write_csv,
+                               write_html)
 from scubagoggles.main import get_diff_args
 
 # Before result, after result, and the expected classification.
@@ -299,7 +303,7 @@ class TestDiff:
         summary = compare(before, after)["Summary"]
 
         assert summary == {"commoncontrols": {"Unchanged": 1, "NewPass": 1, "NewFail": 1}}
-        assert list(summary["commoncontrols"]) == ["Unchanged", "NewPass", "NewFail"]
+        assert list(summary["commoncontrols"]) == ["NewFail", "NewPass", "Unchanged"]
 
     def test_compare_products_only_in_one_report(self):
         """List products present in only one report and drop empty ones."""
@@ -498,4 +502,91 @@ class TestDiff:
         assert args.outjsonfilename == "DiffResults"
         assert args.outcsvfilename == "DiffResults"
         assert args.outputreportfilename == "DiffReport"
+        assert args.darkmode == "false"
         assert args.quiet is False
+
+
+class TestDiffHtmlReport:
+    """Test the HTML diff report."""
+
+    def test_classification_order(self):
+        """Lay classifications out in severity tiers, Unchanged last."""
+        assert CLASSIFICATIONS == (
+            "Errored", "NewFail",
+            "NewWarning",
+            "NewIncorrectResult", "PolicyVersionUpdate", "NewOmission", "NoLogEvents", "Other",
+            "NewAutomatedCheck", "NewManualCheck", "NewLogBasedCheck",
+            "NewPass", "NewPolicy", "RemovedPolicy",
+            "Unchanged",
+        )
+
+    @pytest.mark.parametrize(
+        ("classification", "result_after", "expected"),
+        [
+            ("NewFail", "Fail", "red"),
+            ("Errored", "Error", "red"),
+            ("Errored", "Error - Test results missing", "red"),
+            ("NewWarning", "Warning", "yellow"),
+            ("NewPass", "Pass", "green"),
+            ("NewAutomatedCheck", "Fail", "red"),
+            ("PolicyVersionUpdate", "Pass", "green"),
+            ("NewManualCheck", "N/A", "grey"),
+            ("NoLogEvents", "No events found", "grey"),
+            ("NewOmission", "Omitted", "grey"),
+            ("NewIncorrectResult", "Incorrect result", "grey"),
+            ("RemovedPolicy", None, "grey"),
+        ],
+    )
+    def test_row_color_follows_result_after(self, classification, result_after, expected):
+        """Color rows by the current result, not by the classification."""
+        record = {"Classification": classification, "ResultAfter": result_after}
+        assert _row_color(record) == expected
+
+    def test_write_html(self, tmp_path):
+        """Render the summary, filters, product tables, and row details."""
+        before = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.3v1", "Pass"),
+        ])
+        before["Results"]["drive"] = [
+            {"GroupName": "D", "GroupNumber": "1",
+             "Controls": [control("GWS.DRIVE.1.1v1", "Pass")]}
+        ]
+        after = report([
+            control("GWS.COMMONCONTROLS.1.1v2", "Fail", Details="<script>x</script>"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Incorrect result", OriginalResult="Fail"),
+            control("GWS.COMMONCONTROLS.1.3v1", "Pass"),
+        ])
+        path = tmp_path / "report.html"
+
+        write_html(compare(before, after), path)
+        page = path.read_text(encoding="utf-8")
+
+        assert "<title>ScubaGoggles Diff Report</title>" in page
+        # Every classification but Unchanged has a filter checkbox, in order.
+        toggles = re.findall(r'class="classification-toggle" data-classification="(\w+)"', page)
+        assert toggles == [name for name in CLASSIFICATIONS if name != "Unchanged"]
+        assert '<td class="summary-total">3</td>' in page
+        # Product sections use the product's full name.
+        assert "<h2>Common Controls</h2>" in page
+        assert "Products only in Before (all controls Removed Policy):</strong> " \
+               "Google Drive and Docs" in page
+        # Row details.
+        assert "GWS.COMMONCONTROLS.1.1v1 &rarr; GWS.COMMONCONTROLS.1.1v2" in page
+        assert "(underlying: Fail)" in page
+        assert 'class="diff-row diff-green diff-unchanged-row" data-classification="Unchanged"' \
+               in page
+        assert '<td class="result-cell result-fail">Fail</td>' in page
+        assert "<script>x</script>" not in page
+        assert '<script id="dark-mode-flag" type="application/json">false</script>' in page
+
+    def test_write_html_dark_mode(self, tmp_path):
+        """Open the report in dark mode when asked."""
+        reports = report([control("GWS.COMMONCONTROLS.1.1v1", "Pass")])
+        path = tmp_path / "report.html"
+
+        write_html(compare(reports, reports), path, darkmode=True)
+
+        assert '<script id="dark-mode-flag" type="application/json">true</script>' \
+               in path.read_text(encoding="utf-8")

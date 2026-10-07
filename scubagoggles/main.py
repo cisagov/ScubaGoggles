@@ -313,6 +313,7 @@ def get_diff_args(parser: argparse.ArgumentParser):
                      outjsonfilename=args.outjsonfilename,
                      outcsvfilename=args.outcsvfilename,
                      outreportfilename=args.outputreportfilename,
+                     darkmode=args.darkmode == 'true',
                      quiet=args.quiet)
         except ValueError as ve:
             raise UserRuntimeError(str(ve)) from ve
@@ -361,6 +362,13 @@ def get_diff_args(parser: argparse.ArgumentParser):
                         default='DiffReport',
                         metavar='<name>',
                         help=help_msg)
+
+    parser.add_argument('--darkmode',
+                        '-dm',
+                        metavar='<dark-mode>',
+                        choices=('true', 'false'),
+                        default='false',
+                        help='Open the diff HTML report in dark mode')
 
     help_msg = 'This switch suppresses printing the output file paths.'
     parser.add_argument('--quiet', action='store_true', help=help_msg)
