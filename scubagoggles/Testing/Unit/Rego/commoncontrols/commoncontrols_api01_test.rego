@@ -1,7 +1,6 @@
 package commoncontrols
 
 import future.keywords
-import data.utils
 import data.utils.FailTestOUNonCompliant
 import data.utils.PassTestResult
 
@@ -154,6 +153,38 @@ BadCaseInputApi01a := {
     }
 }
 
+# For the following test input, the top-level orgunit is compliant with all 1.*
+# The "nextOU" orgunit relies on both 2SV enablement settings from "topOU",
+# but the other values are non-compliant.
+
+BadCaseInputApi01b := {
+    "policies": {
+        "topOU": {
+            "security_two_step_verification_device_trust": {
+                "allowTrustingDevice": false},
+            "security_two_step_verification_enforcement": {
+                "enforcedFrom": "2024-02-16T23:22:21.732Z"},
+            "security_two_step_verification_enforcement_factor": {
+                "allowedSignInFactorSet": "PASSKEY_ONLY"},
+            "security_two_step_verification_enrollment": {
+                "allowEnrollment": true},
+            "security_two_step_verification_grace_period": {
+                "enrollmentGracePeriod": "168h"}
+        },
+        "nextOU": {
+            "security_two_step_verification_enforcement_factor": {
+                "allowedSignInFactorSet": "ALL"},
+            "security_two_step_verification_grace_period": {
+                "enrollmentGracePeriod": "1209600s"},
+            "security_two_step_verification_device_trust": {
+                "allowTrustingDevice": true}
+        }
+    },
+    "tenant_info": {
+        "topLevelOU": "topOU"
+    }
+}
+
 test_2SV_Correct_1 if {
     PolicyId := CommonControlsId1_1
     Output := tests with input as GoodCaseInputApi01
@@ -188,6 +219,15 @@ test_2SV_Incorrect_2 if {
                   "Value": NonComplianceMessage1_1c},
                   {"Name": "thirdOU",
                   "Value": NonComplianceMessage1_1a}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_2SV_Incorrect_3 if {
+    PolicyId := CommonControlsId1_1
+    Output := tests with input as BadCaseInputApi01b
+
+    failedOU := [{"Name": "nextOU",
+                  "Value": NonComplianceMessage1_1b(GetFriendlyMethods("ALL"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -257,6 +297,15 @@ test_NoTelephony2SV_Incorrect_2 if {
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
+test_NoTelephony2SV_Incorrect_3 if {
+    PolicyId := CommonControlsId1_3
+    Output := tests with input as BadCaseInputApi01b
+
+    failedOU := [{"Name": "nextOU",
+                  "Value": NonComplianceMessage1_3b}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
 test_2SVUserEnrollment_Correct_1 if {
     PolicyId := CommonControlsId1_4
     Output := tests with input as GoodCaseInputApi01
@@ -280,14 +329,22 @@ test_2SVUserEnrollment_Incorrect_2 if {
     Output := tests with input as BadCaseInputApi01a
 
     failedOU := [{"Name": "fourthOU",
-                  "Value": NonComplianceMessage1_4(0,
-                                                   utils.DurationToSeconds("7d"))},
+                  "Value": NonComplianceMessage1_4(0)},
                  {"Name": "seventhOU",
                   "Value": NonComplianceMessage1_1c},
                  {"Name": "sixthOU",
                   "Value": NonComplianceMessage1_1c},
                  {"Name": "thirdOU",
                   "Value": NonComplianceMessage1_1a}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_2SVUserEnrollment_Incorrect_3 if {
+    PolicyId := CommonControlsId1_4
+    Output := tests with input as BadCaseInputApi01b
+
+    failedOU := [{"Name": "nextOU",
+                  "Value": NonComplianceMessage1_4(1209600)}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -321,5 +378,14 @@ test_2SVDeviceTrust_Incorrect_2 if {
                   "Value": NonComplianceMessage1_1c},
                   {"Name": "thirdOU",
                    "Value": NonComplianceMessage1_1a}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_2SVDeviceTrust_Incorrect_3 if {
+    PolicyId := CommonControlsId1_5
+    Output := tests with input as BadCaseInputApi01b
+
+    failedOU := [{"Name": "nextOU",
+                  "Value": NonComplianceMessage1_5}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
