@@ -3,13 +3,91 @@
 import argparse
 import json
 
+import pytest
+
 from scubagoggles.diff import (Control,
                                compare,
+                               result_category,
                                result_diff,
                                classify_pair,
                                run_diff,
                                split_version)
 from scubagoggles.main import get_diff_args
+
+# Before result, after result, and the expected classification.
+RESULT_DIFF_CASES = [
+    # Landing on Fail
+    ("Pass", "Fail", "NewFail"),
+    ("Warning", "Fail", "NewFail"),
+    ("Omitted", "Fail", "NewFail"),
+    ("Incorrect result", "Fail", "NewFail"),
+    ("Error", "Fail", "NewFail"),
+    # Landing on Pass
+    ("Fail", "Pass", "NewPass"),
+    ("Warning", "Pass", "NewPass"),
+    ("Omitted", "Pass", "NewPass"),
+    ("Incorrect result", "Pass", "NewPass"),
+    ("Error", "Pass", "NewPass"),
+    ("Error - Test results missing", "Pass", "NewPass"),
+    # Landing on Warning
+    ("Pass", "Warning", "NewWarning"),
+    ("Fail", "Warning", "NewWarning"),
+    ("Omitted", "Warning", "NewWarning"),
+    ("Incorrect result", "Warning", "NewWarning"),
+    ("Error", "Warning", "NewWarning"),
+    # Manual check becoming automated
+    ("N/A", "Pass", "NewAutomatedCheck"),
+    ("N/A", "Fail", "NewAutomatedCheck"),
+    ("N/A", "Warning", "NewAutomatedCheck"),
+    # Automated check becoming manual
+    ("Pass", "N/A", "NewManualCheck"),
+    ("Fail", "N/A", "NewManualCheck"),
+    ("Warning", "N/A", "NewManualCheck"),
+    ("Incorrect result", "N/A", "NewManualCheck"),
+    ("Error", "N/A", "NewManualCheck"),
+    # Remaining changes into or out of Omitted
+    ("Pass", "Omitted", "NewOmission"),
+    ("N/A", "Omitted", "NewOmission"),
+    ("Omitted", "N/A", "NewOmission"),
+    ("Incorrect result", "Omitted", "NewOmission"),
+    ("Omitted", "SomeFutureResult", "NewOmission"),
+    # Newly marked incorrect
+    ("Pass", "Incorrect result", "NewIncorrectResult"),
+    ("Fail", "Incorrect result", "NewIncorrectResult"),
+    ("Omitted", "Incorrect result", "NewIncorrectResult"),
+    # Errored keys off the after result, even when it is unchanged
+    ("Pass", "Error", "Errored"),
+    ("Pass", "Error - Test results missing", "Errored"),
+    ("Error", "Error", "Errored"),
+    # Unchanged
+    ("Pass", "Pass", "Unchanged"),
+    ("N/A", "N/A", "Unchanged"),
+    ("Omitted", "Omitted", "Unchanged"),
+    ("Incorrect result", "Incorrect result", "Unchanged"),
+    ("pass", "Pass", "Unchanged"),
+    # Other
+    ("Other1", "Other2", "Other"),
+    ("SomeFutureResult", "Pass", "Other"),
+    ("", "Pass", "Other"),
+    # "No events found": a log-based check that is already automated but has
+    # no log event to assess yet
+    ("No events found", "Pass", "NewPass"),
+    ("No events found", "Fail", "NewFail"),
+    ("No events found", "Warning", "NewWarning"),
+    ("No events found", "N/A", "NewManualCheck"),
+    ("N/A", "No events found", "NewLogBasedCheck"),
+    ("Pass", "No events found", "NoLogEvents"),
+    ("Fail", "No events found", "NoLogEvents"),
+    ("Warning", "No events found", "NoLogEvents"),
+    ("Error", "No events found", "NoLogEvents"),
+    ("Error - Test results missing", "No events found", "NoLogEvents"),
+    ("Omitted", "No events found", "NoLogEvents"),
+    ("Incorrect result", "No events found", "NoLogEvents"),
+    ("SomeFutureResult", "No events found", "NoLogEvents"),
+    ("No events found", "Omitted", "NewOmission"),
+    ("No events found", "Error", "Errored"),
+    ("No events found", "No events found", "Unchanged"),
+]
 
 def report(controls):
     """Build a minimal ScubaGoggles report for testing."""
@@ -44,15 +122,33 @@ def control(control_id, result):
 class TestDiff:
     """Test the report diff behavior."""
 
-    def test_result_diff(self):
-        """Classify result changes."""
-        assert result_diff("Pass", "Fail") == "NewFail"
-        assert result_diff("Fail", "Pass") == "NewPass"
-        assert result_diff("Pass", "N/A") == "NewManualCheck"
-        assert result_diff("Pass", "Omitted") == "NewOmission"
-        assert result_diff("Pass", "Error") == "Errored"
-        assert result_diff("Other1", "Other2") == "Other"
-        assert result_diff("Error", "N/A") == "NewManualCheck"
+    @pytest.mark.parametrize(
+        ("result", "expected"),
+        [
+            ("Pass", "Pass"),
+            ("Fail", "Fail"),
+            ("Warning", "Warning"),
+            ("N/A", "NA"),
+            ("No events found", "NoEvents"),
+            ("Omitted", "Omitted"),
+            ("Incorrect result", "Incorrect"),
+            ("Error", "Error"),
+            ("Error - Test results missing", "Error"),
+            (" pass ", "Pass"),
+            ("INCORRECT RESULT", "Incorrect"),
+            ("SomeFutureResult", "Other"),
+            ("", "Other"),
+            (None, "Other"),
+        ],
+    )
+    def test_result_category(self, result, expected):
+        """Map open-ended Result strings to comparison categories."""
+        assert result_category(result) == expected
+
+    @pytest.mark.parametrize(("before", "after", "expected"), RESULT_DIFF_CASES)
+    def test_result_diff(self, before, after, expected):
+        """Classify every before/after result change."""
+        assert result_diff(before, after) == expected
 
     def test_classify_pair(self):
         """ Classify Control Pair Changes """
@@ -87,7 +183,7 @@ class TestDiff:
         # Test cases:
         # test new/removed policy functionality
         assert classify_pair(None, c_1) == "NewPolicy"
-        # test version changes are returned before other result 
+        # test version changes are returned before other result
         # classifications from result_diff
         assert classify_pair(c_1, c_2) == "PolicyVersionUpdate"
         # No policy version detected, nor any errors, so result is unchanged

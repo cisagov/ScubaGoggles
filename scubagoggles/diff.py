@@ -25,17 +25,51 @@ CLASSIFICATIONS = (
     "NewWarning",
     "NewAutomatedCheck",
     "NewManualCheck",
+    "NewLogBasedCheck",
+    "NoLogEvents",
     "NewOmission",
     "Other",
 )
 
-AUTOMATED_STATES = frozenset({"Pass", "Fail", "Warning"})
+# Normalized (lower-cased, trimmed) Result strings and the category each one
+# is compared as. Any Result starting with "Error" (e.g., "Error - Test
+# results missing") is "Error", and anything not listed is "Other".
+#
+# "No events found" is its own category, not "NA". It comes from a log-based
+# check that is already automated but has no admin log event to assess yet.
+# "NA" is a check that is manual by design. See:
+# https://github.com/cisagov/ScubaGoggles/blob/main/docs/usage/Limitations.md#log-based-policy-checks
+RESULT_CATEGORIES = {
+    "pass": "Pass",
+    "fail": "Fail",
+    "warning": "Warning",
+    "n/a": "NA",
+    "no events found": "NoEvents",
+    "omitted": "Omitted",
+    "incorrect result": "Incorrect",
+}
 
+# Result categories that land on an automated result, and the classification
+# for landing there.
 AUTOMATED_TRANSITIONS = {
     "Pass": "NewPass",
     "Fail": "NewFail",
     "Warning": "NewWarning",
 }
+
+# Categories a control can move out of into an automated result (beyond "NA",
+# which is NewAutomatedCheck) and still be classified by where it lands.
+# "NoEvents" is here because a log-based check that finds a new log event was
+# already automated: it is now able to report the setting's state.
+LANDING_SOURCES = frozenset(
+    {"Pass", "Fail", "Warning", "NoEvents", "Omitted", "Incorrect", "Error"}
+)
+
+# Categories a control can move out of into a manual check and be
+# classified NewManualCheck.
+MANUAL_SOURCES = frozenset(
+    {"Pass", "Fail", "Warning", "NoEvents", "Incorrect", "Error"}
+)
 
 
 @dataclass(frozen=True)
@@ -140,32 +174,75 @@ def collect_controls(report: dict[str, Any]) -> dict[str, Control]:
                 controls[key] = control
     return controls
 
-def result_diff(before : str, after : str):
+
+def _normalize_result(result: str | None) -> str:
+    """Return a Result string lower-cased and trimmed for comparison."""
+    return (result or "").strip().lower()
+
+
+def result_category(result: str | None) -> str:
+    """Return the comparison category of an open-ended Result string.
+
+    Args:
+        result: A control's Result value, such as "Pass" or "No events found".
+
+    Returns:
+        One of "Pass", "Fail", "Warning", "NA", "NoEvents", "Omitted",
+        "Incorrect", "Error", or "Other". Unrecognized values are "Other", so
+        a new Result value never breaks the diff.
+    """
+    value = _normalize_result(result)
+    if value.startswith("error"):
+        return "Error"
+    return RESULT_CATEGORIES.get(value, "Other")
+
+
+def result_diff(before: str | None, after: str | None) -> str:
     # pylint: disable=too-many-return-statements
-    "Classify a before/after result"
-    # Precedence order #2 (errorered result)
-    if after == "Error" or after.startswith("Error"):
+    """Classify a before/after result.
+
+    Classifications are named for the state the control lands in, so any
+    change ending in Pass, Fail, or Warning is NewPass, NewFail, or
+    NewWarning, including changes out of Omitted, Error, a cleared
+    "Incorrect result" marking, or "No events found". A change into
+    "No events found" is NewLogBasedCheck when coming from N/A and
+    NoLogEvents otherwise.
+    """
+    before_category = result_category(before)
+    after_category = result_category(after)
+
+    # Precedence order #2 (errored result): keyed off the after result only,
+    # so a control that recovered from an error is classified by where it lands.
+    if after_category == "Error":
         return "Errored"
 
     # Precedence order #4 (unchanged results)
-    if before == after:
+    if (before_category == after_category
+            and _normalize_result(before) == _normalize_result(after)):
         return "Unchanged"
 
     # Precedence order #5 (incorrect result)
-    if after == "Incorrect result":
+    if after_category == "Incorrect":
         return "NewIncorrectResult"
 
-    # Precedence order #6 (arbitrary 'after' pass/fail/warn/auto/manual updates)
-    if after in AUTOMATED_STATES:
-        if before == "N/A":
+    # Precedence order #6 (specific result changes)
+    if after_category in AUTOMATED_TRANSITIONS:
+        if before_category == "NA":
             return "NewAutomatedCheck"
-        else:
-            return AUTOMATED_TRANSITIONS[after]
-    if after == "N/A":
+        if before_category in LANDING_SOURCES:
+            return AUTOMATED_TRANSITIONS[after_category]
+    if after_category == "NA" and before_category in MANUAL_SOURCES:
         return "NewManualCheck"
-    
-    # Precedence order #7 (New Omissions)
-    if after == "Omitted":
+    # Landing on "No events found": a manual-by-design check that became a
+    # log-based check is NewLogBasedCheck; any other change into it (e.g., a
+    # log event aging out of retention) is NoLogEvents.
+    if after_category == "NoEvents":
+        if before_category == "NA":
+            return "NewLogBasedCheck"
+        return "NoLogEvents"
+
+    # Precedence order #7 (remaining changes into or out of Omitted)
+    if "Omitted" in (before_category, after_category):
         return "NewOmission"
 
     # Precedence order #8 (Other)
@@ -348,7 +425,7 @@ def _html_record_rows(result: dict[str, Any]) -> str:
     for record in result["Records"]:
         current_state = str(record["ResultAfter"]) or ""
         classification = str(record["Classification"])
-        
+
         # class labels reflect color coded rows
         class_label = current_state.lower()
         if class_label not in {"pass", "fail", "warning"}:
