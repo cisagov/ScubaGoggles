@@ -1,17 +1,21 @@
 """Unit tests for the ScubaGoggles report diff functionality."""
 
 import argparse
+import csv
 import json
 
 import pytest
 
-from scubagoggles.diff import (Control,
+from scubagoggles.diff import (CSV_FIELDS,
+                               Control,
+                               _csv_safe,
                                compare,
                                result_category,
                                result_diff,
                                classify_pair,
                                run_diff,
-                               split_version)
+                               split_version,
+                               write_csv)
 from scubagoggles.main import get_diff_args
 
 # Before result, after result, and the expected classification.
@@ -105,9 +109,9 @@ def report(controls):
     }
 
 
-def control(control_id, result):
-    """Build a minimal control for testing."""
-    return {
+def control(control_id, result, **fields):
+    """Build a minimal control for testing; fields override the defaults."""
+    data = {
         "Control ID": control_id,
         "Requirement": "Requirement",
         "Result": result,
@@ -116,6 +120,17 @@ def control(control_id, result):
         "OriginalResult": result,
         "Comments": [],
         "ResolutionDate": None,
+    }
+    data.update(fields)
+    return data
+
+
+def records_by_id(result):
+    """Map each diff record's control ID to the record, across products."""
+    return {
+        record["Control ID (After)"] or record["Control ID (Before)"]: record
+        for records in result["Diff"].values()
+        for record in records
     }
 
 
@@ -162,8 +177,6 @@ class TestDiff:
             "criticality":"",
             "requirement":"",
             "details":"",
-            "comments":tuple(),
-            "resolution_date":None,
             "original_result":""
         }
         # Instance 1
@@ -228,13 +241,203 @@ class TestDiff:
         )
         result = compare(before, after)
         classifications = {
-            r["Control ID (After)"] or r["Control ID (Before)"]: r["Classification"]
-            for r in result["Records"]
+            control_id: record["Classification"]
+            for control_id, record in records_by_id(result).items()
         }
         assert classifications["GWS.COMMONCONTROLS.1.1v2"] == "PolicyVersionUpdate"
         assert classifications["GWS.COMMONCONTROLS.1.2v1"] == "RemovedPolicy"
         assert classifications["GWS.COMMONCONTROLS.1.3v1"] == "NewFail"
         assert classifications["GWS.COMMONCONTROLS.1.4v1"] == "NewPolicy"
+
+    def test_compare_schema(self):
+        """Emit the versioned, per-product diff schema."""
+        before = report([control("GWS.COMMONCONTROLS.1.1v1", "Pass")])
+        before["MetaData"].update({"ReportUUID": "before-uuid",
+                                   "TimestampZulu": "2026-01-01T00:00:00.000Z",
+                                   "TenantId": "not-copied"})
+        after = report([control("GWS.COMMONCONTROLS.1.1v1", "Fail")])
+
+        result = compare(before, after)
+
+        assert list(result) == ["SchemaVersion", "MetaData", "Summary", "Diff"]
+        assert result["SchemaVersion"] == "1.0"
+        metadata = result["MetaData"]
+        assert metadata["Tool"] == "ScubaGoggles"
+        assert metadata["ToolVersion"]
+        assert metadata["TimestampZulu"].endswith("Z")
+        assert metadata["Before"] == {"ReportUUID": "before-uuid",
+                                      "TimestampZulu": "2026-01-01T00:00:00.000Z",
+                                      "ToolVersion": "1.0.0"}
+        assert list(result["Diff"]) == ["commoncontrols"]
+        assert list(result["Diff"]["commoncontrols"][0]) == [
+            "Control ID (Before)",
+            "Control ID (After)",
+            "Requirement",
+            "GroupName",
+            "GroupNumber",
+            "ResultBefore",
+            "ResultAfter",
+            "Classification",
+            "CriticalityBefore",
+            "CriticalityAfter",
+            "DetailsAfter",
+        ]
+
+    def test_compare_summary_counts_only_present_classifications(self):
+        """Summary counts follow the classification order and skip zeros."""
+        before = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Fail"),
+            control("GWS.COMMONCONTROLS.1.3v1", "Pass"),
+        ])
+        after = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.3v1", "Fail"),
+        ])
+
+        summary = compare(before, after)["Summary"]
+
+        assert summary == {"commoncontrols": {"Unchanged": 1, "NewPass": 1, "NewFail": 1}}
+        assert list(summary["commoncontrols"]) == ["Unchanged", "NewPass", "NewFail"]
+
+    def test_compare_products_only_in_one_report(self):
+        """List products present in only one report and drop empty ones."""
+        before = report([control("GWS.COMMONCONTROLS.1.1v1", "Pass")])
+        before["Results"]["drive"] = [
+            {"GroupName": "D", "GroupNumber": "1",
+             "Controls": [control("GWS.DRIVE.1.1v1", "Pass")]}
+        ]
+        after = report([control("GWS.COMMONCONTROLS.1.1v1", "Pass")])
+        after["Results"]["calendar"] = []
+
+        result = compare(before, after)
+
+        assert result["MetaData"]["ProductsOnlyInBefore"] == ["drive"]
+        assert result["MetaData"]["ProductsOnlyInAfter"] == ["calendar"]
+        assert list(result["Diff"]) == ["commoncontrols", "drive"]
+        assert result["Diff"]["drive"][0]["Classification"] == "RemovedPolicy"
+
+    def test_compare_orders_controls_numerically(self):
+        """Order group and policy numbers numerically, not as text."""
+        ids = ["GWS.COMMONCONTROLS.10.1v1",
+               "GWS.COMMONCONTROLS.2.1v1",
+               "GWS.COMMONCONTROLS.1.10v1",
+               "GWS.COMMONCONTROLS.1.2v1"]
+        reports = report([control(control_id, "Pass") for control_id in ids])
+
+        records = compare(reports, reports)["Diff"]["commoncontrols"]
+
+        assert [record["Control ID (After)"] for record in records] == [
+            "GWS.COMMONCONTROLS.1.2v1",
+            "GWS.COMMONCONTROLS.1.10v1",
+            "GWS.COMMONCONTROLS.2.1v1",
+            "GWS.COMMONCONTROLS.10.1v1",
+        ]
+
+    def test_compare_converts_html_to_plain_text(self):
+        """Store Requirement and DetailsAfter as plain text."""
+        requirement = ('Disable &quot;X&quot;.<div class="badges">\n'
+                       '<a href="#"><span>Automated Check</span></a></div>\n')
+        details = "Requirement not met.<br><br><ul><li>OU &amp; group</li></ul>"
+        reports = report([control("GWS.COMMONCONTROLS.1.1v1", "Fail",
+                                  Requirement=requirement, Details=details)])
+
+        record = compare(reports, reports)["Diff"]["commoncontrols"][0]
+
+        assert record["Requirement"] == 'Disable "X".'
+        assert record["DetailsAfter"] == "Requirement not met. OU & group"
+
+    def test_compare_incorrect_result_fields(self):
+        """Report the marking and underlying result when a side is marked."""
+        before = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Pass"),
+        ])
+        after = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Incorrect result", OriginalResult="Fail"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Fail"),
+        ])
+
+        records = records_by_id(compare(before, after))
+
+        marked = records["GWS.COMMONCONTROLS.1.1v1"]
+        assert marked["Classification"] == "NewIncorrectResult"
+        assert marked["MarkedIncorrectBefore"] is False
+        assert marked["MarkedIncorrectAfter"] is True
+        assert marked["UnderlyingResultBefore"] == "Pass"
+        assert marked["UnderlyingResultAfter"] == "Fail"
+        unmarked = records["GWS.COMMONCONTROLS.1.2v1"]
+        assert "MarkedIncorrectAfter" not in unmarked
+        assert "UnderlyingResultAfter" not in unmarked
+
+    def test_compare_fail_to_fail_annotations(self):
+        """Compare annotations only for controls failing in both reports."""
+        ids = ["GWS.COMMONCONTROLS.1.1v1",
+               "GWS.COMMONCONTROLS.1.2v1",
+               "GWS.COMMONCONTROLS.1.3v1"]
+        before = report([control(ids[0], "Fail"),
+                         control(ids[1], "Fail"),
+                         control(ids[2], "Pass")])
+        before["AnnotatedFailedPolicies"] = {
+            ids[1]: {"Comment": "Planned", "RemediationDate": "2026-12-31"},
+        }
+        after = report([control(ids[0], "Fail"),
+                        control(ids[1], "Fail"),
+                        control(ids[2], "Fail")])
+        after["AnnotatedFailedPolicies"] = {
+            ids[0]: {"Comment": "New note", "RemediationDate": None},
+            ids[1]: {"Comment": "Planned", "RemediationDate": "2026-12-31"},
+            ids[2]: {"Comment": "Regressed", "RemediationDate": None},
+        }
+
+        records = records_by_id(compare(before, after))
+
+        assert records[ids[0]]["AnnotationChanged"] is True
+        assert records[ids[0]]["Comment"] == "New note"
+        assert records[ids[1]]["AnnotationChanged"] is False
+        assert records[ids[1]]["RemediationDate"] == "2026-12-31"
+        assert "AnnotationChanged" not in records[ids[2]]
+
+    def test_write_csv(self, tmp_path):
+        """Write one row per control with every column on every row."""
+        before = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Pass"),
+        ])
+        after = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.2v1", "Fail", Details="=HYPERLINK(1)"),
+        ])
+        path = tmp_path / "diff.csv"
+
+        write_csv(compare(before, after), path)
+
+        with path.open(newline="", encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+        assert list(rows[0]) == list(CSV_FIELDS)
+        assert [row["Classification"] for row in rows] == ["Unchanged", "NewFail"]
+        assert rows[0]["Product"] == "commoncontrols"
+        assert rows[0]["MarkedIncorrectAfter"] == ""
+        assert rows[1]["DetailsAfter"] == "'=HYPERLINK(1)"
+
+    @pytest.mark.parametrize(
+        ("value", "expected"),
+        [
+            ("=1+1", "'=1+1"),
+            ("+1", "'+1"),
+            ("-1", "'-1"),
+            ("@SUM(A1)", "'@SUM(A1)"),
+            ("\tcmd", "'\tcmd"),
+            ("plain", "plain"),
+            ("", ""),
+            (None, None),
+            (True, True),
+        ],
+    )
+    def test_csv_safe(self, value, expected):
+        """Prefix values a spreadsheet would read as a formula."""
+        assert _csv_safe(value) == expected
 
     def test_run_diff_default_file_names(self, tmp_path):
         """Write three separate outputs with the default file names."""
@@ -257,7 +460,7 @@ class TestDiff:
             "CsvPath": out_dir / "DiffResults.csv",
             "ReportPath": out_dir / "DiffReport.html",
         }
-        assert json.loads(paths["JsonPath"].read_text(encoding="utf-8"))["Records"]
+        assert json.loads(paths["JsonPath"].read_text(encoding="utf-8"))["Diff"]
         assert paths["CsvPath"].read_text(encoding="utf-8").startswith("Product,")
         assert paths["ReportPath"].read_text(encoding="utf-8").startswith("<!doctype html>")
 

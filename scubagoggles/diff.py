@@ -5,12 +5,14 @@ import csv
 import html
 import json
 import re
-from collections import defaultdict
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-SCHEMA_VERSION = "0.1"
+from scubagoggles.version import Version
+
+SCHEMA_VERSION = "1.0"
 VERSION_RE = re.compile(r"^(?P<base>.+?)(?:v(?P<version>\d+))$", re.IGNORECASE)
 
 CLASSIFICATIONS = (
@@ -84,9 +86,7 @@ class Control:
     criticality: str
     requirement: str
     details: str
-    comments: tuple[str, ...]
-    resolution_date: str | None
-    original_result: str
+    original_result: str | None
 
 
 def load_report(path: Path) -> dict[str, Any]:
@@ -131,10 +131,6 @@ def normalize_control(
     if not control_id:
         return None
 
-    comments = control_data.get("Comments") or []
-    if not isinstance(comments, list):
-        comments = [comments]
-
     return Control(
         product=product,
         group_name=str(group.get("GroupName", "")),
@@ -144,9 +140,7 @@ def normalize_control(
         criticality=str(control_data.get("Criticality", "")),
         requirement=str(control_data.get("Requirement", "")),
         details=str(control_data.get("Details", "")),
-        comments=tuple(str(value) for value in comments),
-        resolution_date=control_data.get("ResolutionDate"),
-        original_result=str(control_data.get("OriginalResult", control_data.get("Result", ""))),
+        original_result=control_data.get("OriginalResult"),
     )
 
 
@@ -282,77 +276,206 @@ def classify_pair(before: Control | None, after: Control | None) -> str:
     return result
 
 
-def _strip_html(value: str) -> str:
-    """Strip HTML tags and normalize whitespace."""
+# CSV columns: one row per control, with every column on every row. Column
+# names mirror the JSON field names, with the product in a leading column.
+CSV_FIELDS = (
+    "Product",
+    "Control ID (Before)",
+    "Control ID (After)",
+    "GroupNumber",
+    "GroupName",
+    "Classification",
+    "ResultBefore",
+    "ResultAfter",
+    "CriticalityBefore",
+    "CriticalityAfter",
+    "Requirement",
+    "DetailsAfter",
+    "MarkedIncorrectBefore",
+    "MarkedIncorrectAfter",
+    "UnderlyingResultBefore",
+    "UnderlyingResultAfter",
+    "AnnotationChanged",
+    "Comment",
+    "RemediationDate",
+)
+
+# Leading characters a spreadsheet evaluates as the start of a formula.
+CSV_FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r")
+
+
+def _plain_text(value: str | None) -> str:
+    """Convert report HTML to plain text.
+
+    The indicator badges block appended to a Requirement is dropped, the
+    remaining tags are removed, entities are decoded, and whitespace is
+    collapsed.
+    """
+    if not value:
+        return ""
+    value = re.sub(r"(?s)<div class=['\"]badges['\"].*$", "", value)
     value = re.sub(r"<[^>]+>", " ", value)
     return re.sub(r"\s+", " ", html.unescape(value)).strip()
 
 
-def make_record(before: Control | None, after: Control | None) -> dict[str, Any]:
-    """Create one normalized diff record."""
-    classification = classify_pair(before, after)
+def _annotation(annotations: dict[str, Any], control_id: str) -> tuple[Any, Any]:
+    """Return the (Comment, RemediationDate) annotated for a control."""
+    entry = annotations.get(control_id)
+    if not isinstance(entry, dict):
+        return None, None
+    return entry.get("Comment"), entry.get("RemediationDate")
+
+
+def make_record(
+    before: Control | None,
+    after: Control | None,
+    before_annotations: dict[str, Any] | None = None,
+    after_annotations: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Create one diff record.
+
+    Args:
+        before: The control in the before report, or None if absent.
+        after: The control in the after report, or None if absent.
+        before_annotations: The before report's AnnotatedFailedPolicies.
+        after_annotations: The after report's AnnotatedFailedPolicies.
+
+    Returns:
+        The record. When either side is marked "Incorrect result", it also
+        carries MarkedIncorrectBefore/After and UnderlyingResultBefore/After.
+        When the control fails in both reports, it also carries
+        AnnotationChanged, Comment, and RemediationDate.
+    """
     current = after or before
     assert current is not None
-    requirement = after.requirement if after else before.requirement if before else ""
-    before_comments = before.comments if before else ()
-    after_comments = after.comments if after else ()
-    annotations_changed = bool(
-        before
-        and after
-        and (before_comments != after_comments or before.resolution_date != after.resolution_date)
-    )
-    return {
-        "Product": current.product,
+    record = {
         "Control ID (Before)": before.control_id if before else None,
         "Control ID (After)": after.control_id if after else None,
-        "GroupNumber": after.group_number if after else (before.group_number if before else None),
-        "GroupName": after.group_name if after else (before.group_name if before else None),
-        "Classification": classification,
+        "Requirement": _plain_text(current.requirement),
+        "GroupName": current.group_name,
+        "GroupNumber": current.group_number,
         "ResultBefore": before.result if before else None,
         "ResultAfter": after.result if after else None,
+        "Classification": classify_pair(before, after),
         "CriticalityBefore": before.criticality if before else None,
         "CriticalityAfter": after.criticality if after else None,
-        "Requirement": _strip_html(requirement),
-        "DetailsAfter": after.details if after else None,
-        "AnnotationChanged": annotations_changed,
-        "Comments": list(after.comments) if after else [],
-        "ResolutionDate": after.resolution_date if after else None,
-        "UnderlyingResultBefore": before.original_result if before else None,
-        "UnderlyingResultAfter": after.original_result if after else None,
+        "DetailsAfter": _plain_text(after.details) if after else None,
+    }
+
+    # False-positive (marked incorrect) fields: the marking on each side and
+    # the tool-computed result underneath it.
+    before_incorrect = before is not None and result_category(before.result) == "Incorrect"
+    after_incorrect = after is not None and result_category(after.result) == "Incorrect"
+    if before_incorrect or after_incorrect:
+        record["MarkedIncorrectBefore"] = before_incorrect
+        record["MarkedIncorrectAfter"] = after_incorrect
+        record["UnderlyingResultBefore"] = before.original_result if before else None
+        record["UnderlyingResultAfter"] = after.original_result if after else None
+
+    # Annotation fields, compared only for a control failing in both reports.
+    if (before is not None and after is not None
+            and result_category(before.result) == "Fail"
+            and result_category(after.result) == "Fail"):
+        before_comment, before_date = _annotation(before_annotations or {},
+                                                  before.control_id)
+        after_comment, after_date = _annotation(after_annotations or {},
+                                                after.control_id)
+        record["AnnotationChanged"] = (before_comment != after_comment
+                                       or before_date != after_date)
+        record["Comment"] = after_comment
+        record["RemediationDate"] = after_date
+
+    return record
+
+
+def _control_sort_key(record: dict[str, Any]) -> str:
+    """Return a sort key ordering control IDs numerically.
+
+    Every run of digits in the base control ID is zero-padded, so
+    GWS.GMAIL.9.1 sorts before GWS.GMAIL.10.1.
+    """
+    control_id = record["Control ID (After)"] or record["Control ID (Before)"]
+    base_id = split_version(control_id)[0]
+    return re.sub(r"\d+", lambda match: match.group().zfill(10), base_id)
+
+
+def _ordered_products(products) -> list[str]:
+    """Return product names in report order (alphabetical, ignoring case)."""
+    return sorted(products, key=str.lower)
+
+
+def _report_annotations(report: dict[str, Any]) -> dict[str, Any]:
+    """Return a report's AnnotatedFailedPolicies, or an empty dict."""
+    annotations = report.get("AnnotatedFailedPolicies")
+    return annotations if isinstance(annotations, dict) else {}
+
+
+def _run_metadata(report: dict[str, Any]) -> dict[str, Any]:
+    """Return the identifying metadata of one input report."""
+    metadata = report.get("MetaData")
+    if not isinstance(metadata, dict):
+        metadata = {}
+    return {
+        "ReportUUID": metadata.get("ReportUUID"),
+        "TimestampZulu": metadata.get("TimestampZulu"),
+        "ToolVersion": metadata.get("ToolVersion"),
     }
 
 
-def _record_sort_key(record: dict[str, Any]) -> tuple[str, str, str]:
-    """Return the stable sort key for a diff record."""
-    control_id = record["Control ID (After)"] or record["Control ID (Before)"]
-    return (
-        str(record["Product"]).lower(),
-        str(record["GroupNumber"]),
-        str(control_id).lower(),
-    )
-
-
 def compare(before_report: dict[str, Any], after_report: dict[str, Any]) -> dict[str, Any]:
-    """Compare two ScubaGoggles reports."""
+    """Compare two ScubaGoggles reports.
+
+    Returns:
+        The diff: SchemaVersion, MetaData, a per-product Summary of
+        classification counts, and the per-product Diff records. Products
+        with no records are left out.
+    """
     before = collect_controls(before_report)
     after = collect_controls(after_report)
-    keys = sorted(set(before) | set(after))
-    records = [make_record(before.get(key), after.get(key)) for key in keys]
-    records.sort(key=_record_sort_key)
+    before_annotations = _report_annotations(before_report)
+    after_annotations = _report_annotations(after_report)
 
-    summary: dict[str, dict[str, int]] = defaultdict(
-        lambda: {name: 0 for name in CLASSIFICATIONS}
-    )
-    for record in records:
-        summary[str(record["Product"])][record["Classification"]] += 1
+    diff: dict[str, list[dict[str, Any]]] = {}
+    for key in set(before) | set(after):
+        current = after.get(key) or before[key]
+        record = make_record(before.get(key),
+                             after.get(key),
+                             before_annotations,
+                             after_annotations)
+        diff.setdefault(current.product, []).append(record)
+
+    ordered_diff = {}
+    summary = {}
+    for product in _ordered_products(diff):
+        records = sorted(diff[product], key=_control_sort_key)
+        counts: dict[str, int] = {}
+        for record in records:
+            classification = record["Classification"]
+            counts[classification] = counts.get(classification, 0) + 1
+        # Counts follow the classification order; any classification outside
+        # it is appended rather than dropped.
+        ordered_counts = {name: counts[name] for name in CLASSIFICATIONS if name in counts}
+        ordered_counts.update(counts)
+        ordered_diff[product] = records
+        summary[product] = ordered_counts
+
+    before_products = set(before_report["Results"])
+    after_products = set(after_report["Results"])
+    timestamp_zulu = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
     return {
         "SchemaVersion": SCHEMA_VERSION,
-        "Tool": "ScubaGogglesDiff",
-        "Before": before_report.get("MetaData", {}),
-        "After": after_report.get("MetaData", {}),
-        "Summary": dict(summary),
-        "Records": records,
+        "MetaData": {
+            "Tool": "ScubaGoggles",
+            "ToolVersion": Version.number,
+            "TimestampZulu": timestamp_zulu,
+            "Before": _run_metadata(before_report),
+            "After": _run_metadata(after_report),
+            "ProductsOnlyInBefore": _ordered_products(before_products - after_products),
+            "ProductsOnlyInAfter": _ordered_products(after_products - before_products),
+        },
+        "Summary": summary,
+        "Diff": ordered_diff,
     }
 
 
@@ -364,34 +487,31 @@ def write_json(result: dict[str, Any], path: Path) -> None:
     )
 
 
+def _csv_safe(value: Any) -> Any:
+    """Keep a spreadsheet from evaluating a CSV value as a formula.
+
+    A string starting with =, +, -, @, tab, or carriage return is prefixed
+    with a single quote so it is read as text. Other values are unchanged.
+    """
+    if isinstance(value, str) and value.startswith(CSV_FORMULA_PREFIXES):
+        return "'" + value
+    return value
+
+
 def write_csv(result: dict[str, Any], path: Path) -> None:
-    """Write a diff result as CSV."""
-    fieldnames = [
-        "Product",
-        "Control ID (Before)",
-        "Control ID (After)",
-        "GroupNumber",
-        "GroupName",
-        "Classification",
-        "ResultBefore",
-        "ResultAfter",
-        "CriticalityBefore",
-        "CriticalityAfter",
-        "Requirement",
-        "DetailsAfter",
-        "AnnotationChanged",
-        "Comments",
-        "ResolutionDate",
-        "UnderlyingResultBefore",
-        "UnderlyingResultAfter",
-    ]
+    """Write a diff result as CSV, one row per control.
+
+    Unchanged rows are included. Fields a record does not carry are left
+    empty, and every value is protected against formula evaluation.
+    """
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=CSV_FIELDS)
         writer.writeheader()
-        for row in result["Records"]:
-            csv_row = dict(row)
-            csv_row["Comments"] = " | ".join(csv_row["Comments"])
-            writer.writerow(csv_row)
+        for product, records in result["Diff"].items():
+            for record in records:
+                row = {"Product": product}
+                row.update({field: record.get(field) for field in CSV_FIELDS[1:]})
+                writer.writerow({field: _csv_safe(value) for field, value in row.items()})
 
 
 def _html_filters() -> str:
@@ -422,30 +542,31 @@ def _html_summary(result: dict[str, Any]) -> str:
 def _html_record_rows(result: dict[str, Any]) -> str:
     """Build the control result table rows."""
     rows = []
-    for record in result["Records"]:
-        current_state = str(record["ResultAfter"]) or ""
-        classification = str(record["Classification"])
+    for product, records in result["Diff"].items():
+        for record in records:
+            current_state = str(record["ResultAfter"]) or ""
+            classification = str(record["Classification"])
 
-        # class labels reflect color coded rows
-        class_label = current_state.lower()
-        if class_label not in {"pass", "fail", "warning"}:
-            class_label = "other"
+            # class labels reflect color coded rows
+            class_label = current_state.lower()
+            if class_label not in {"pass", "fail", "warning"}:
+                class_label = "other"
 
-        escaped_classification = html.escape(classification)
-        control = record["Control ID (After)"] or record["Control ID (Before)"]
-        rows.append(
-            f'<tr class="{class_label}" '
-            f'data-classification="{escaped_classification}">'
-            f'<td>{html.escape(str(record["Product"]))}</td>'
-            f'<td>{html.escape(str(record["GroupNumber"] or ""))} '
-            f'{html.escape(str(record["GroupName"] or ""))}</td>'
-            f'<td><code>{html.escape(str(control))}</code></td>'
-            f'<td>{html.escape(str(record["ResultBefore"] or ""))}</td>'
-            f'<td>{html.escape(str(record["ResultAfter"] or ""))}</td>'
-            f'<td>{escaped_classification}</td>'
-            f'<td>{html.escape(str(record["DetailsAfter"] or ""))}</td>'
-            "</tr>"
-        )
+            escaped_classification = html.escape(classification)
+            control = record["Control ID (After)"] or record["Control ID (Before)"]
+            rows.append(
+                f'<tr class="{class_label}" '
+                f'data-classification="{escaped_classification}">'
+                f'<td>{html.escape(product)}</td>'
+                f'<td>{html.escape(str(record["GroupNumber"] or ""))} '
+                f'{html.escape(str(record["GroupName"] or ""))}</td>'
+                f'<td><code>{html.escape(str(control))}</code></td>'
+                f'<td>{html.escape(str(record["ResultBefore"] or ""))}</td>'
+                f'<td>{html.escape(str(record["ResultAfter"] or ""))}</td>'
+                f'<td>{escaped_classification}</td>'
+                f'<td>{html.escape(str(record["DetailsAfter"] or ""))}</td>'
+                "</tr>"
+            )
     return "".join(rows)
 
 
