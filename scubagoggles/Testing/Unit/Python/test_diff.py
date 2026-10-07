@@ -3,7 +3,9 @@
 import argparse
 import csv
 import json
+import logging
 import re
+from datetime import datetime, timezone
 
 import pytest
 
@@ -15,11 +17,14 @@ from scubagoggles.diff import (CLASSIFICATIONS,
                                _result_text_class,
                                _row_color,
                                compare,
+                               load_report,
                                result_category,
                                result_diff,
                                classify_pair,
                                run_diff,
+                               run_timestamp,
                                split_version,
+                               warn_if_out_of_order,
                                write_csv,
                                write_html)
 from scubagoggles.main import get_diff_args
@@ -103,6 +108,7 @@ def report(controls):
     """Build a minimal ScubaGoggles report for testing."""
     return {
         "MetaData": {"Tool": "ScubaGoggles", "ToolVersion": "1.0.0"},
+        "Summary": {},
         "Results": {
             "commoncontrols": [
                 {
@@ -684,3 +690,113 @@ class TestDiffHtmlReport:
         assert re.search(r"--table-border-color:\s*#7b7b7b;", css)
         assert re.search(r"th, td \{[\s\S]*?border: 1px solid var\(--table-border-color\);",
                          css)
+
+
+class TestDiffInputs:
+    """Test reading and checking the two input reports."""
+
+    def test_load_report_reads_byte_order_mark(self, tmp_path):
+        """Read a report saved with a UTF-8 byte order mark."""
+        path = tmp_path / "bom.json"
+        path.write_text(json.dumps(report([])), encoding="utf-8-sig")
+
+        assert load_report(path)["Summary"] == {}
+
+    @pytest.mark.parametrize(
+        ("content", "message"),
+        [
+            (None, "Unable to read"),
+            ("", "is empty"),
+            ("   \n", "is empty"),
+            ("{not json", "is not valid JSON"),
+            ("[]", "expected a JSON object"),
+            ('{"Summary": {}, "Results": {}}', "required top-level key 'MetaData'"),
+            ('{"MetaData": {}, "Results": {}}', "required top-level key 'Summary'"),
+            ('{"MetaData": {}, "Summary": {}}', "required top-level key 'Results'"),
+            ('{"MetaData": {}, "Summary": {}, "Results": []}', "Results is not an object"),
+        ],
+    )
+    def test_load_report_errors(self, tmp_path, content, message):
+        """Reject a missing, empty, malformed, or incomplete report."""
+        path = tmp_path / "report.json"
+        if content is not None:
+            path.write_text(content, encoding="utf-8")
+
+        with pytest.raises(ValueError, match=re.escape(message)):
+            load_report(path)
+
+    @pytest.mark.parametrize(
+        ("timestamp", "expected"),
+        [
+            ("2026-01-01T00:00:00.000Z", datetime(2026, 1, 1, tzinfo=timezone.utc)),
+            ("2026-01-01 05:30:00+05:30", datetime(2026, 1, 1, tzinfo=timezone.utc)),
+            ("2026-01-01T00:00:00", datetime(2026, 1, 1, tzinfo=timezone.utc)),
+            (None, None),
+            ("", None),
+            ("3", None),
+            ("2026-13-45T00:00:00Z", None),
+            ("not a date", None),
+        ],
+    )
+    def test_run_timestamp(self, timestamp, expected):
+        """Parse an ISO 8601 run timestamp, or return None."""
+        metadata = {} if timestamp is None else {"TimestampZulu": timestamp}
+        assert run_timestamp({"MetaData": metadata}) == expected
+
+    @pytest.mark.parametrize(
+        ("before_time", "after_time", "expected"),
+        [
+            ("2026-02-01T00:00:00.000Z", "2026-01-01T00:00:00.000Z", "is older than"),
+            ("2026-01-01T00:00:00.000Z", "2026-01-01T00:00:00.000Z", "has the same timestamp as"),
+            ("2026-01-01T00:00:00.000Z", "2026-02-01T00:00:00.000Z", None),
+            (None, "2026-01-01T00:00:00.000Z", None),
+            ("2026-02-01T00:00:00.000Z", "garbage", None),
+        ],
+    )
+    def test_warn_if_out_of_order(self, caplog, before_time, after_time, expected):
+        """Warn only when the after run is not later than the before run."""
+        before = {"MetaData": {} if before_time is None else {"TimestampZulu": before_time}}
+        after = {"MetaData": {"TimestampZulu": after_time}}
+
+        with caplog.at_level(logging.WARNING, logger="scubagoggles.diff"):
+            warn_if_out_of_order(before, after)
+
+        if expected is None:
+            assert not caplog.records
+        else:
+            assert len(caplog.records) == 1
+            assert expected in caplog.records[0].getMessage()
+            assert "--afterpath" in caplog.records[0].getMessage()
+
+    def test_run_diff_compares_out_of_order_reports(self, tmp_path, caplog):
+        """Warn about a swapped pair but still write the diff."""
+        before = report([control("GWS.COMMONCONTROLS.1.1v1", "Pass")])
+        before["MetaData"]["TimestampZulu"] = "2026-02-01T00:00:00.000Z"
+        after = report([control("GWS.COMMONCONTROLS.1.1v1", "Fail")])
+        after["MetaData"]["TimestampZulu"] = "2026-01-01T00:00:00.000Z"
+        before_path = tmp_path / "before.json"
+        after_path = tmp_path / "after.json"
+        before_path.write_text(json.dumps(before), encoding="utf-8")
+        after_path.write_text(json.dumps(after), encoding="utf-8")
+
+        with caplog.at_level(logging.WARNING, logger="scubagoggles.diff"):
+            paths = run_diff(before_path, after_path, outputpath=tmp_path / "out", quiet=True)
+
+        assert "is older than" in caplog.text
+        assert all(path.exists() for path in paths.values())
+
+    def test_duplicate_control_id_keeps_last(self, caplog):
+        """Warn about a repeated control ID and compare the last one."""
+        before = report([control("GWS.COMMONCONTROLS.1.1v1", "Pass")])
+        after = report([
+            control("GWS.COMMONCONTROLS.1.1v1", "Pass"),
+            control("GWS.COMMONCONTROLS.1.1v1", "Fail"),
+        ])
+
+        with caplog.at_level(logging.WARNING, logger="scubagoggles.diff"):
+            result = compare(before, after)
+
+        assert "GWS.COMMONCONTROLS.1.1v1 appears more than once" in caplog.text
+        records = result["Diff"]["commoncontrols"]
+        assert len(records) == 1
+        assert records[0]["ResultAfter"] == "Fail"

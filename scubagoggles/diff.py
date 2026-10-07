@@ -4,6 +4,7 @@ from __future__ import annotations
 import csv
 import html
 import json
+import logging
 import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -13,7 +14,16 @@ from typing import Any
 from scubagoggles.orchestrator import Orchestrator
 from scubagoggles.version import Version
 
+log = logging.getLogger(__name__)
+
 SCHEMA_VERSION = "1.0"
+
+# Top-level keys every ScubaGoggles report (ScubaResults file) carries.
+REQUIRED_REPORT_KEYS = ("MetaData", "Summary", "Results")
+
+# A run timestamp must start with an ISO 8601 date and time; this keeps loose
+# fragments that a date parser might accept from being read as one.
+TIMESTAMP_RE = re.compile(r"^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}")
 VERSION_RE = re.compile(r"^(?P<base>.+?)(?:v(?P<version>\d+))$", re.IGNORECASE)
 
 # Display order for the summary table's classification columns, their filter
@@ -144,14 +154,25 @@ class Control:
 def load_report(path: Path) -> dict[str, Any]:
     """Load and validate a ScubaGoggles report."""
     try:
-        with path.open("r", encoding="utf-8") as handle:
-            data = json.load(handle)
-    except (OSError, json.JSONDecodeError) as exc:
-        message = f"Unable to read ScubaGoggles report '{path}': {exc}"
-        raise ValueError(message) from exc
-    if not isinstance(data, dict) or not isinstance(data.get("Results"), dict):
-        message = f"'{path}' is not a supported ScubaGoggles report: missing Results object"
-        raise ValueError(message)
+        # utf-8-sig also reads a file saved with a byte order mark.
+        text = path.read_text(encoding="utf-8-sig")
+    except OSError as exc:
+        raise ValueError(f"Unable to read ScubaGoggles report '{path}': {exc}") from exc
+    if not text.strip():
+        raise ValueError(f"ScubaGoggles report '{path}' is empty.")
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"ScubaGoggles report '{path}' is not valid JSON: {exc}") from exc
+    if not isinstance(data, dict):
+        raise ValueError(f"'{path}' is not a ScubaGoggles report: expected a JSON object.")
+    for key in REQUIRED_REPORT_KEYS:
+        if key not in data:
+            raise ValueError(f"ScubaGoggles report '{path}' is missing the required "
+                             f"top-level key '{key}'. Is this a ScubaResults file "
+                             "produced by ScubaGoggles?")
+    if not isinstance(data["Results"], dict):
+        raise ValueError(f"'{path}' is not a ScubaGoggles report: Results is not an object.")
     return data
 
 
@@ -197,7 +218,11 @@ def normalize_control(
 
 
 def collect_controls(report: dict[str, Any]) -> dict[str, Control]:
-    """Collect normalized controls keyed by product and base control ID."""
+    """Collect normalized controls keyed by product and base control ID.
+
+    If a report carries the same base control ID more than once within a
+    product, a warning is logged and the last one is used.
+    """
     controls: dict[str, Control] = {}
     for product, groups in report["Results"].items():
         if not isinstance(groups, list):
@@ -214,9 +239,10 @@ def collect_controls(report: dict[str, Any]) -> dict[str, Control]:
                 base_id = split_version(control.control_id)[0].lower()
                 key = f"{control.product.lower()}:{base_id}"
                 if key in controls:
-                    raise ValueError(
-                        f"Duplicate control ID in report: {control.control_id}"
-                    )
+                    log.warning("Control %s appears more than once in the %s results; "
+                                "comparing the last one (%s).",
+                                controls[key].control_id, control.product,
+                                control.control_id)
                 controls[key] = control
     return controls
 
@@ -814,6 +840,48 @@ def write_html(result: dict[str, Any], path: Path, darkmode: bool = False) -> No
     path.write_text(document, encoding="utf-8")
 
 
+def run_timestamp(report: dict[str, Any]) -> datetime | None:
+    """Return a report's MetaData.TimestampZulu as a UTC datetime.
+
+    Returns None when the timestamp is missing or is not an ISO 8601 date and
+    time, so callers skip any comparison rather than guess at an order.
+    """
+    metadata = report.get("MetaData")
+    value = metadata.get("TimestampZulu") if isinstance(metadata, dict) else None
+    if not isinstance(value, str) or not TIMESTAMP_RE.match(value.strip()):
+        return None
+    value = value.strip()
+    if value.endswith(("Z", "z")):
+        value = value[:-1] + "+00:00"
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def warn_if_out_of_order(before_report: dict[str, Any], after_report: dict[str, Any]) -> None:
+    """Warn when the after report's run is not later than the before report's.
+
+    The order is not enforced, because the two reports may be two tenants
+    captured at the same time, where order carries no meaning. A swapped pair
+    still produces a self-consistent diff, but every change reads in reverse.
+    The check is skipped when either timestamp is missing or unparseable.
+    """
+    before_time = run_timestamp(before_report)
+    after_time = run_timestamp(after_report)
+    if before_time is None or after_time is None or after_time > before_time:
+        return
+    relation = "has the same timestamp as" if after_time == before_time else "is older than"
+    log.warning("The --afterpath run (%s) %s the --beforepath run (%s). If the two files "
+                "were passed in the wrong order, every change is reported in reverse: a "
+                "policy that was fixed shows as NewFail. Comparing them as given.",
+                after_report["MetaData"]["TimestampZulu"], relation,
+                before_report["MetaData"]["TimestampZulu"])
+
+
 def run_diff(
     before: Path,
     after: Path,
@@ -841,7 +909,10 @@ def run_diff(
     Returns:
         The paths written, keyed "JsonPath", "CsvPath", and "ReportPath".
     """
-    result = compare(load_report(before), load_report(after))
+    before_report = load_report(before)
+    after_report = load_report(after)
+    warn_if_out_of_order(before_report, after_report)
+    result = compare(before_report, after_report)
     if outputpath is None:
         outputpath = Path.cwd()
 
