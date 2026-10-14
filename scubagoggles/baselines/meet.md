@@ -315,7 +315,7 @@ Screenshots of presented content SHALL only captured in notes when recording is 
 - _Rationale:_ Screenshots of presented content may contain sensitive information. Restricting screenshot capture to meetings where recording is enabled helps ensure visual content is only retained when the meeting host has intentionally elected to record the meeting.
 
 - _Last modified:_ August 2026
-- _Note:_ Entities are responsible to comply with applicable records retention, management requirements. and FOIA request for meeting recordings.
+- _Note:_ Entities are responsible to comply with applicable records retention, management requirements, and FOIA request for meeting recordings.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1113: Screen Capture](https://attack.mitre.org/techniques/T1113/)
