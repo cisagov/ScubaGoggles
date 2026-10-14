@@ -32,7 +32,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </label>
 </div>
             <h1>Common Controls Baseline Report</h1>
-
+            
             <table class = "meta-table">
   <tr>
     <th>Customer Name</th>
@@ -43,26 +43,26 @@ described in the Secure Configuration Baselines (SCBs)"/>
     <th>Tool Version</th>
   </tr>
   <tr>
-    <td>Cool Example Org</td>
+    <td>example.org</td>
     <td>example.org</td>
     <td>ABCDEFG</td>
-    <td>07/20/2026 12:43:08 PDT</td>
+    <td>10/14/2026 14:01:43 Pacific Daylight Time</td>
     <td>1</td>
-    <td>v1.0.0</td>
+    <td>v1.0.1</td>
   </tr>
 </table>
 
             <div id="indicator-legend">
   <div id="indicator-legend-label">Policy Indicators:</div>
   <ul id="indicator-legend-list">
-    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</a><span style="color: var(--text-color);">Automatically verified by ScubaGoggles</span></li>
+    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</a><span style="color: var(--text-color);">Automatically verified by ScubaGoggles</span></li>
     <li class="indicator-legend-item"><span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span><span style="color: var(--text-color);">Required by CISA BOD 25-01</span></li>
-    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #005288; color: white;" title="Customizable via config file">Configurable</a><span style="color: var(--text-color);">Customizable via config file</span></li>
+    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #005288; color: white;" title="Customizable via config file">Configurable</a><span style="color: var(--text-color);">Customizable via config file</span></li>
     <li class="indicator-legend-item"><span class="indicator-badge" style="background-color: #F6E8E5; color: black;" title="Requires log-based verification">Log-Based Check</span><span style="color: var(--text-color);">Requires log-based verification</span></li>
-    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</a><span style="color: var(--text-color);">Requires manual verification</span></li>
+    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</a><span style="color: var(--text-color);">Requires manual verification</span></li>
 </ul>
 </div>
-<h2>COMMONCONTROLS-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#1-phishing-resistant-multifactor-authentication" target="_blank">Phishing-Resistant Multifactor Authentication</a></h2>
+<h2>COMMONCONTROLS-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#1-phishing-resistant-multifactor-authentication" target="_blank">Phishing-Resistant Multifactor Authentication</a></h2>
 <table>
   <thead>
     <tr>
@@ -82,17 +82,22 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Jeffrey Burns's OU: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Anna White's OU: Allowed 2-step verification (2SV) method is set to "Any except verification codes via text, phone call".</li><li>Anna White's OU v2: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Allowed 2-step verification (2SV) method is set to "Any".</li><li>Cool Example Org (group WORKSPACE_ALL_ADMIN_GROUP): 2-step verification (2SV) is not enforced.</li><li>Cool Example Org (group chenrichard@example.net): Allowed 2-step verification (2SV) method is set to "Any".</li><li>Christina Garcia's OU (in Jeffrey Burns's OU): 2-step verification (2SV) is not enforced.</li><li>Mark Duncan's OU: Users cannot enable 2-step verification (2SV).</li><li>Kimberly Shelton's OU: Allowed 2-step verification (2SV) method is set to "Any".</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Allowed 2-step verification (2SV) method is set to "Any except verification codes via text, phone call".</dd></dl></li>
+<li><dl><dt>example.org (group haynesgrace@example.com)</dt><dd>Allowed 2-step verification (2SV) method is set to "Any".</dd></dl></li>
+</ol>
+</td>
     </tr>
-    <tr class="fail-status">
+    <tr class="pass-status">
       <td>GWS.COMMONCONTROLS.1.2v1</td>
       <td>If phishing-resistant MFA has not been enforced, an alternative MFA method SHALL be enforced for all users.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Fail</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Anna White's OU v2: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org (group WORKSPACE_ALL_ADMIN_GROUP): 2-step verification (2SV) is not enforced.</li><li>Christina Garcia's OU (in Jeffrey Burns's OU): 2-step verification (2SV) is not enforced.</li><li>Mark Duncan's OU: Users cannot enable 2-step verification (2SV).</li></ul></td>
+      <td>Requirement met.</td>
     </tr>
     <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.1.3v1</td>
@@ -102,7 +107,11 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Jeffrey Burns's OU: Verification codes via text and phone call allowed.</li><li>Anna White's OU v2: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: Verification codes via text and phone call allowed.</li><li>Cool Example Org (group WORKSPACE_ALL_ADMIN_GROUP): 2-step verification (2SV) is not enforced.</li><li>Cool Example Org (group chenrichard@example.net): Verification codes via text and phone call allowed.</li><li>Christina Garcia's OU (in Jeffrey Burns's OU): 2-step verification (2SV) is not enforced.</li><li>Mark Duncan's OU: Users cannot enable 2-step verification (2SV).</li><li>Kimberly Shelton's OU: Verification codes via text and phone call allowed.</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org (group haynesgrace@example.com)</dt><dd>Verification codes via text and phone call allowed.</dd></dl></li>
+</ol>
+</td>
     </tr>
     <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.1.4v1</td>
@@ -112,7 +121,12 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Jeffrey Burns's OU: New user enrollment period 180 days (longer than 7 days)</li><li>Anna White's OU v2: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org (group WORKSPACE_ALL_ADMIN_GROUP): 2-step verification (2SV) is not enforced.</li><li>Cool Example Org (group chenrichard@example.net): New user enrollment period is NONE</li><li>Christina Garcia's OU (in Jeffrey Burns's OU): 2-step verification (2SV) is not enforced.</li><li>Mark Duncan's OU: Users cannot enable 2-step verification (2SV).</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>New user enrollment period 14 days (longer than 7 days)</dd></dl></li>
+<li><dl><dt>example.org (group haynesgrace@example.com)</dt><dd>New user enrollment period 30 days (longer than 7 days)</dd></dl></li>
+</ol>
+</td>
     </tr>
     <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.1.5v1</td>
@@ -122,10 +136,15 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: 2-step verification (2SV) is not enforced.</li><li>Jeffrey Burns's OU: User is allowed to trust device.</li><li>Anna White's OU: User is allowed to trust device.</li><li>Anna White's OU v2: 2-step verification (2SV) is not enforced.</li><li>Cool Example Org: User is allowed to trust device.</li><li>Cool Example Org (group WORKSPACE_ALL_ADMIN_GROUP): 2-step verification (2SV) is not enforced.</li><li>Cool Example Org (group chenrichard@example.net): User is allowed to trust device.</li><li>Christina Garcia's OU (in Jeffrey Burns's OU): 2-step verification (2SV) is not enforced.</li><li>Mark Duncan's OU: Users cannot enable 2-step verification (2SV).</li><li>Kimberly Shelton's OU: User is allowed to trust device.</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>User is allowed to trust device.</dd></dl></li>
+<li><dl><dt>example.org (group haynesgrace@example.com)</dt><dd>User is allowed to trust device.</dd></dl></li>
+</ol>
+</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#2-context-aware-access" target="_blank">Context-aware Access</a></h2>
+</table><h2>COMMONCONTROLS-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#2-context-aware-access" target="_blank">Context-aware Access</a></h2>
 <table>
   <thead>
     <tr>
@@ -148,7 +167,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>No relevant event in the current logs. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#3-login-challenges" target="_blank">Login Challenges</a></h2>
+</table><h2>COMMONCONTROLS-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#3-login-challenges" target="_blank">Login Challenges</a></h2>
 <table>
   <thead>
     <tr>
@@ -168,7 +187,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">No events found</td>
       <td>Should</td>
-      <td>No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br></td>
+      <td>No relevant event in the current logs for the top-level OU, example.org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br></td>
     </tr>
     <tr class="other-status">
       <td>GWS.COMMONCONTROLS.3.2v1</td>
@@ -178,10 +197,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">No events found</td>
       <td>Should</td>
-      <td>No relevant event in the current logs for the top-level OU, Cool Example Org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br></td>
+      <td>No relevant event in the current logs for the top-level OU, example.org. While we are unable to determine the state from the logs, the default setting is non-compliant; manual check recommended.<br><br></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#4-user-session-duration" target="_blank">User Session Duration</a></h2>
+</table><h2>COMMONCONTROLS-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#4-user-session-duration" target="_blank">User Session Duration</a></h2>
 <table>
   <thead>
     <tr>
@@ -201,10 +220,14 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Anna White's OU: Web session duration: 24 hours</li><li>Kimberly Shelton's OU: Web session duration: 20 hours</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Web session duration: 14 days</dd></dl></li>
+</ol>
+</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-5 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#5-secure-passwords" target="_blank">Secure Passwords</a></h2>
+</table><h2>COMMONCONTROLS-5 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#5-secure-passwords" target="_blank">Secure Passwords</a></h2>
 <table>
   <thead>
     <tr>
@@ -216,15 +239,15 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="fail-status">
+    <tr class="pass-status">
       <td>GWS.COMMONCONTROLS.5.1v1</td>
       <td>User password strength SHALL be enforced.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Fail</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Password strength is WEAK, not STRONG</li></ul></td>
+      <td>Requirement met.</td>
     </tr>
     <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.5.2v1</td>
@@ -234,7 +257,11 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Anna White's OU: Minimum password length: 8, less than 12</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Minimum password length: 8, less than 12</dd></dl></li>
+</ol>
+</td>
     </tr>
     <tr class="warning-status">
       <td>GWS.COMMONCONTROLS.5.3v1</td>
@@ -243,7 +270,11 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: Minimum password length: 12, recommended is at least 16</li><li>Jeffrey Burns's OU: Minimum password length: 12, recommended is at least 16</li><li>Anna White's OU: Minimum password length: 8, recommended is at least 16</li><li>Cool Example Org: Minimum password length: 12, recommended is at least 16</li><li>Troy Arnold's OU: Minimum password length: 15, recommended is at least 16</li><li>Kimberly Shelton's OU: Minimum password length: 12, recommended is at least 16</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Minimum password length: 8, recommended is at least 16</dd></dl></li>
+</ol>
+</td>
     </tr>
     <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.5.4v1</td>
@@ -253,30 +284,34 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>2SV Exempt: Enforce password policy at next sign-in is OFF</li><li>Anna White's OU: Enforce password policy at next sign-in is OFF</li><li>Cool Example Org: Enforce password policy at next sign-in is OFF</li><li>Troy Arnold's OU: Enforce password policy at next sign-in is OFF</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl></li>
+</ol>
+</td>
     </tr>
-    <tr class="fail-status">
+    <tr class="pass-status">
       <td>GWS.COMMONCONTROLS.5.5v1</td>
       <td>User passwords SHALL NOT be reused.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Fail</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Jeffrey Burns's OU: Allow password reuse is ON</li><li>Anna White's OU: Allow password reuse is ON</li></ul></td>
+      <td>Requirement met.</td>
     </tr>
-    <tr class="fail-status">
+    <tr class="pass-status">
       <td>GWS.COMMONCONTROLS.5.6v1</td>
       <td>User passwords SHALL NOT expire.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Fail</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Jeffrey Burns's OU: Password reset frequency is 30 days</li><li>Anna White's OU: Password reset frequency is 5184000 seconds</li></ul></td>
+      <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-6 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#6-privileged-accounts" target="_blank">Privileged Accounts</a></h2>
+</table><h2>COMMONCONTROLS-6 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#6-privileged-accounts" target="_blank">Privileged Accounts</a></h2>
 <table>
   <thead>
     <tr>
@@ -288,15 +323,15 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="fail-status">
+    <tr class="pass-status">
       <td>GWS.COMMONCONTROLS.6.1v1</td>
       <td>All administrative accounts SHALL be provisioned as cloud-only accounts separate from an agency&#x27;s authoritative on-premises or other federated identity providers.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Fail</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: SSO is enabled for an OU containing privileged accounts. Privileged accounts must authenticate via Google Workspace, not via an external identity provider.</li><li>Erica Little's OU: SSO is enabled for an OU containing privileged accounts. Privileged accounts must authenticate via Google Workspace, not via an external identity provider.</li></ul></td>
+      <td>Requirement met.</td>
     </tr>
     <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.6.2v1</td>
@@ -307,10 +342,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following super admins are configured: chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net, chenrichard@example.net. <i>Note: Exceptions are allowed for "break glass" super admin accounts. "Break glass" accounts can be specified in a config file. 0 break glass accounts are currently configured.<i></td>
+      <td>The following super admins are configured: haynesgrace@example.com, haynesgrace@example.com, haynesgrace@example.com, haynesgrace@example.com, haynesgrace@example.com, haynesgrace@example.com, haynesgrace@example.com, haynesgrace@example.com, haynesgrace@example.com. <i>Note: Exceptions are allowed for "break glass" super admin accounts. "Break glass" accounts can be specified in a config file. 0 break glass accounts are currently configured.<i></td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-7 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#7-conflicting-account-management" target="_blank">Conflicting Account Management</a></h2>
+</table><h2>COMMONCONTROLS-7 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#7-conflicting-account-management" target="_blank">Conflicting Account Management</a></h2>
 <table>
   <thead>
     <tr>
@@ -322,17 +357,17 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="other-status">
+    <tr class="pass-status">
       <td>GWS.COMMONCONTROLS.7.1v1</td>
       <td>Account conflict management SHOULD be configured to replace conflicting unmanaged accounts with managed accounts.<div class="badges">
-<span class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</span></div>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">N/A</td>
-      <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td class="report-status">Pass</td>
+      <td>Should</td>
+      <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-8 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#8-account-recovery-options" target="_blank">Account Recovery Options</a></h2>
+</table><h2>COMMONCONTROLS-8 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#8-account-recovery-options" target="_blank">Account Recovery Options</a></h2>
 <table>
   <thead>
     <tr>
@@ -352,7 +387,12 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org (group chenrichard@example.net): Super admins are allowed to recover their accounts.</li><li>Cool Example Org (group chenrichard@example.net): Super admins are allowed to recover their accounts.</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Super admins are allowed to recover their accounts.</dd></dl></li>
+<li><dl><dt>example.org (group haynesgrace@example.com)</dt><dd>Super admins are allowed to recover their accounts.</dd></dl></li>
+</ol>
+</td>
     </tr>
     <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.8.2v1</td>
@@ -362,7 +402,11 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Users and non-super admins are allowed to recover their accounts.</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Users and non-super admins are allowed to recover their accounts.</dd></dl></li>
+</ol>
+</td>
     </tr>
     <tr class="other-status">
       <td>GWS.COMMONCONTROLS.8.3v1</td>
@@ -371,10 +415,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Currently not able to be Doris Jimenez's OUed automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-9 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#9-gws-advanced-protection-program" target="_blank">GWS Advanced Protection Program</a></h2>
+</table><h2>COMMONCONTROLS-9 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#9-gws-advanced-protection-program" target="_blank">GWS Advanced Protection Program</a></h2>
 <table>
   <thead>
     <tr>
@@ -393,7 +437,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Currently not able to be Doris Jimenez's OUed automatically; please manually check.</td>
     </tr>
     <tr class="other-status">
       <td>GWS.COMMONCONTROLS.9.2v1</td>
@@ -402,10 +446,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Currently not able to be Doris Jimenez's OUed automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-10 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#10-app-access-to-google-apis" target="_blank">App Access to Google APIs</a></h2>
+</table><h2>COMMONCONTROLS-10 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#10-app-access-to-google-apis" target="_blank">App Access to Google APIs</a></h2>
 <table>
   <thead>
     <tr>
@@ -427,15 +471,15 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Shall</td>
       <td>Requirement met.</td>
     </tr>
-    <tr class="pass-status">
+    <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.10.2v1</td>
       <td>Agencies SHALL NOT allow users to grant consent for access to low-risk scopes.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Pass</td>
+      <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>Requirement met.</td>
+      <td>The following services allow access: CHAT, DRIVE, GMAIL.</td>
     </tr>
     <tr class="pass-status">
       <td>GWS.COMMONCONTROLS.10.3v1</td>
@@ -457,18 +501,18 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Shall</td>
       <td>Requirement met.</td>
     </tr>
-    <tr class="fail-status">
+    <tr class="pass-status">
       <td>GWS.COMMONCONTROLS.10.5v1</td>
       <td>Access to GWS applications by less secure applications that do not meet security authentication standards SHALL be prevented.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Fail</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Users are allowed to manage access to less secure apps.</li></ul></td>
+      <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-11 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#11-authorized-google-marketplace-apps" target="_blank">Authorized Google Marketplace Apps</a></h2>
+</table><h2>COMMONCONTROLS-11 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#11-authorized-google-marketplace-apps" target="_blank">Authorized Google Marketplace Apps</a></h2>
 <table>
   <thead>
     <tr>
@@ -488,10 +532,14 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Troy Arnold's OU: Users can install and run any internal app, even if it's not allowlisted.</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org (group haynesgrace@example.com)</dt><dd>Users can install and run any app from the Marketplace.</dd></dl></li>
+</ol>
+</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-12 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#12-google-takeout-services-for-users" target="_blank">Google Takeout Services for Users</a></h2>
+</table><h2>COMMONCONTROLS-12 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#12-google-takeout-services-for-users" target="_blank">Google Takeout Services for Users</a></h2>
 <table>
   <thead>
     <tr>
@@ -511,10 +559,14 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:<ul><li>Jeffrey Burns's OU: The following apps with individual admin control have Takeout enabled: YouTube</li><li>Cool Example Org: Takeout is enabled for services without an individual admin control.</li><li>Cool Example Org: The following apps with individual admin control have Takeout enabled: Blogger, Google Books, Timeline - Location History</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>The following apps with individual admin control have Takeout enabled: Google Books, Google Maps, Google Pay, Google Photos, Google Play, Google Play Console, Timeline - Location History, YouTube</dd></dl></li>
+</ol>
+</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-13 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#13-system-defined-rules" target="_blank">System-defined Rules</a></h2>
+</table><h2>COMMONCONTROLS-13 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#13-system-defined-rules" target="_blank">System-defined Rules</a></h2>
 <table>
   <thead>
     <tr>
@@ -534,10 +586,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>Of the 30 required rules, 29 are enabled and 1 is disabled.  See <a href="#alerts">System Defined Alerts</a> for more details.</td>
+      <td>Of the 30 required rules, 24 are enabled and 6 are disabled.  See <a href="#alerts">System Defined Alerts</a> for more details.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-14 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#14-google-workspace-logs" target="_blank">Google Workspace Logs</a></h2>
+</table><h2>COMMONCONTROLS-14 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#14-google-workspace-logs" target="_blank">Google Workspace Logs</a></h2>
 <table>
   <thead>
     <tr>
@@ -556,7 +608,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Currently not able to be Doris Jimenez's OUed automatically; please manually check.</td>
     </tr>
     <tr class="other-status">
       <td>GWS.COMMONCONTROLS.14.2v1</td>
@@ -565,10 +617,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Currently not able to be Doris Jimenez's OUed automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-15 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#15-data-regions-and-storage" target="_blank">Data Regions and Storage</a></h2>
+</table><h2>COMMONCONTROLS-15 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#15-data-regions-and-storage" target="_blank">Data Regions and Storage</a></h2>
 <table>
   <thead>
     <tr>
@@ -580,28 +632,36 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="pass-status">
+    <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.15.1v1</td>
       <td>The data storage region SHALL be set to be the United States for all users in the agency&#x27;s GWS environment.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Pass</td>
+      <td class="report-status">Fail</td>
       <td>Shall</td>
-      <td>Requirement met.</td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Region selected to store data at rest: unrestricted (any region)</dd></dl></li>
+</ol>
+</td>
     </tr>
-    <tr class="pass-status">
+    <tr class="fail-status">
       <td>GWS.COMMONCONTROLS.15.2v1</td>
       <td>Data SHALL be processed in the region selected for data at rest.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Pass</td>
-      <td>Should</td>
-      <td>Requirement met.</td>
+      <td class="report-status">Fail</td>
+      <td>Shall</td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Data processing not restricted to selected data at rest region</dd></dl></li>
+</ol>
+</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-16 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#16-additional-google-services" target="_blank">Additional Google Services</a></h2>
+</table><h2>COMMONCONTROLS-16 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#16-additional-google-services" target="_blank">Additional Google Services</a></h2>
 <table>
   <thead>
     <tr>
@@ -613,14 +673,14 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="warning-status">
+    <tr class="pass-status">
       <td>GWS.COMMONCONTROLS.16.1v1</td>
       <td>Service status for Google services that do not have an individual control SHOULD be set to OFF for everyone.<div class="badges">
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Warning</td>
+      <td class="report-status">Pass</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Access to additional services without individual control is ON</li></ul></td>
+      <td>Requirement met.</td>
     </tr>
     <tr class="warning-status">
       <td>GWS.COMMONCONTROLS.16.2v1</td>
@@ -629,28 +689,32 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Early access apps are ENABLED</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Early access apps are ENABLED</dd></dl></li>
+</ol>
+</td>
     </tr>
     <tr class="other-status">
       <td>GWS.COMMONCONTROLS.16.3v1</td>
       <td>Looker Studio Sharing outside org SHOULD be set to OFF.<div class="badges">
-<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+<span class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</span></div>
 </td>
       <td class="report-status">N/A</td>
-      <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Should/Not-Implemented</td>
+      <td>Currently not able to be Doris Jimenez's OUed automatically; please manually check.</td>
     </tr>
     <tr class="other-status">
       <td>GWS.COMMONCONTROLS.16.4v1</td>
       <td>Pinpoint access to drive SHOULD be set to OFF.<div class="badges">
-<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
+<span class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</span></div>
 </td>
       <td class="report-status">N/A</td>
-      <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Should/Not-Implemented</td>
+      <td>Currently not able to be Doris Jimenez's OUed automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-17 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#17-multi-party-approval" target="_blank">Multi-Party Approval</a></h2>
+</table><h2>COMMONCONTROLS-17 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#17-multi-party-approval" target="_blank">Multi-Party Approval</a></h2>
 <table>
   <thead>
     <tr>
@@ -665,15 +729,18 @@ described in the Secure Configuration Baselines (SCBs)"/>
     <tr class="warning-status">
       <td>GWS.COMMONCONTROLS.17.1v1</td>
       <td>Require multi-party approval for sensitive admin actions SHOULD be enabled.<div class="badges">
-<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span>
-<span class="indicator-badge" style="background-color: #F6E8E5; color: black;" title="Requires log-based verification">Log-Based Check</span></div>
+<span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
       <td class="report-status">Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Require multi party approval for sensitive admin actions is DISABLED</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>example.org</dt><dd>Multi-party approval is not required for sensitive admin actions.</dd></dl></li>
+</ol>
+</td>
     </tr>
   </tbody>
-</table><h2>COMMONCONTROLS-18 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/commoncontrols.md#18-data-loss-prevention" target="_blank">Data Loss Prevention</a></h2>
+</table><h2>COMMONCONTROLS-18 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/commoncontrols.md#18-data-loss-prevention" target="_blank">Data Loss Prevention</a></h2>
 <table>
   <thead>
     <tr>
@@ -692,7 +759,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Currently not able to be Doris Jimenez's OUed automatically; please manually check.</td>
     </tr>
     <tr class="other-status">
       <td>GWS.COMMONCONTROLS.18.2v1</td>
@@ -701,11 +768,11 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Should/Not-Implemented</td>
-      <td>Currently not able to be tested automatically; please manually check.</td>
+      <td>Currently not able to be Doris Jimenez's OUed automatically; please manually check.</td>
     </tr>
   </tbody>
 </table>
-
+            
 <hr>
 <h2 id="subscriptions">Tenant Licensing Information</h2>
 
@@ -721,27 +788,12 @@ described in the Secure Configuration Baselines (SCBs)"/>
     <tr>
       <td>Google Workspace Enterprise Plus</td>
       <td>Active</td>
-      <td>101</td>
-    </tr>
-    <tr>
-      <td>Gemini Enterprise - Legacy</td>
-      <td>Active</td>
-      <td>50</td>
-    </tr>
-    <tr>
-      <td>Cloud Identity Free</td>
-      <td>Active</td>
-      <td>101</td>
-    </tr>
-    <tr>
-      <td>Google Workspace Assured Controls Plus</td>
-      <td>Active</td>
-      <td>50</td>
+      <td>100</td>
     </tr>
   </tbody>
 </table>
 
-
+            
 <hr>
 <h2 id="alerts">System Defined Alerts</h2>
 
@@ -759,10 +811,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Google Workspace accounts engaging in suspicious activity may have their account suspended. Google Workspace accounts must comply with the Google Workspace Terms of Service, Google Workspace for Education Terms of Service, Google Cloud Platform Terms of Service or Cloud Identity Terms of Service.</td>
       <td>Enabled</td>
     </tr>
-    <tr class="enabled-alerts">
+    <tr class="disabled-alerts">
       <td>Calendar settings changed</td>
       <td>An admin has changed Google Workspace Calendar settings.</td>
-      <td>Enabled</td>
+      <td>Disabled</td>
     </tr>
     <tr class="enabled-alerts">
       <td>Device compromised</td>
@@ -774,15 +826,15 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>A Super Administrator for your Google account has started exporting data from your domain.</td>
       <td>Enabled</td>
     </tr>
-    <tr class="enabled-alerts">
+    <tr class="disabled-alerts">
       <td>Drive settings changed</td>
       <td>An admin has changed Google Workspace Drive settings.</td>
-      <td>Enabled</td>
+      <td>Disabled</td>
     </tr>
-    <tr class="enabled-alerts">
+    <tr class="disabled-alerts">
       <td>Email settings changed</td>
       <td>An admin has changed Google Workspace Gmail settings.</td>
-      <td>Enabled</td>
+      <td>Disabled</td>
     </tr>
     <tr class="enabled-alerts">
       <td>Gmail potential employee spoofing</td>
@@ -809,10 +861,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Messages detected as malware post-delivery that are automatically reclassified.</td>
       <td>Enabled</td>
     </tr>
-    <tr class="enabled-alerts">
+    <tr class="disabled-alerts">
       <td>Mobile settings changed</td>
       <td>An admin has changed mobile management settings.</td>
-      <td>Enabled</td>
+      <td>Disabled</td>
     </tr>
     <tr class="enabled-alerts">
       <td>Phishing in inboxes due to bad whitelist</td>
@@ -869,20 +921,20 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Google detected suspicious login attempts from potential applications or computer programs.</td>
       <td>Enabled</td>
     </tr>
-    <tr class="enabled-alerts">
+    <tr class="disabled-alerts">
       <td>User granted Admin privilege</td>
       <td>A user is granted an admin privilege.</td>
-      <td>Enabled</td>
+      <td>Disabled</td>
     </tr>
     <tr class="enabled-alerts">
       <td>User suspended (Google identity alert)</td>
       <td>Google detected suspicious activity and suspended the account.</td>
       <td>Enabled</td>
     </tr>
-    <tr class="disabled-alerts">
+    <tr class="enabled-alerts">
       <td>User suspended due to suspicious activity</td>
       <td>Google suspended a user's account due to a potential compromise detected.</td>
-      <td>Disabled</td>
+      <td>Enabled</td>
     </tr>
     <tr class="enabled-alerts">
       <td>User suspended for spamming</td>
@@ -894,10 +946,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Google detected suspicious activity such as spamming through a SMTP relay service and suspended the account.</td>
       <td>Enabled</td>
     </tr>
-    <tr class="enabled-alerts">
+    <tr class="disabled-alerts">
       <td>User's Admin privilege revoked</td>
       <td>A user is revoked of their admin privilege.</td>
-      <td>Enabled</td>
+      <td>Disabled</td>
     </tr>
     <tr class="enabled-alerts">
       <td>User-reported phishing</td>
@@ -907,7 +959,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
   </tbody>
 </table>
 
-
+            
         </main>
         <span id="sgr_settings" data-darkmode="None" data-redaction="None"></span>
     </body>
