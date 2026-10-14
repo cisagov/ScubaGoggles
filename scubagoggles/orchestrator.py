@@ -370,11 +370,11 @@ class Orchestrator:
 
                     if 'Requirement' in control:
                         control["Requirement"] = control["Requirement"].strip()
-                        if "<ul>" in control["Details"]:
-                            control["Details"] = control ["Details"].replace("<ul>", " ")
+                        if "<ol>" in control["Details"]:
+                            control["Details"] = control ["Details"].replace("<ol>", " ")
                             control["Details"] = control ["Details"].replace("<li>", "\n- ")
                             control["Details"] = control ["Details"].replace("</li>", " ")
-                            control["Details"] = control ["Details"].replace("</ul>", "")
+                            control["Details"] = control ["Details"].replace("</ol>", "")
                             control["Details"] = control["Details"].strip()
 
                         # Check if the control result is "Fail"

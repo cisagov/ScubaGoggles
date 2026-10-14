@@ -1,6 +1,9 @@
 package gemini
 import future.keywords
 
+import data.utils.FailTestGroupNonCompliant
+import data.utils.FailTestOUNonCompliant
+
 #
 # GWS.GEMINI.1.1
 #--
@@ -167,14 +170,10 @@ test_1_1_Incorrect_V1 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following OUs are non-compliant:<ul>",
-        "<li>topOU: Gemini access regardless of license is enabled.</li></ul>"
-    ])
+    failedOU := [{"Name": "topOU",
+                  "Value": "Gemini access regardless of license is enabled."}]
+
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
 test_1_1_Incorrect_V2 if {
@@ -220,13 +219,9 @@ test_1_1_Incorrect_V2 if {
         }
     }
 
-    RuleOutput := [Result | some Result in Output; Result.PolicyId == PolicyId]
-    count(RuleOutput) == 1
-    not RuleOutput[0].RequirementMet
-    not RuleOutput[0].NoSuchEvent
-    RuleOutput[0].ReportDetails == concat("", [
-        "The following groups are non-compliant:<ul>",
-        "<li>group1: Gemini access regardless of license is enabled.</li></ul>"
-    ])
+    failedOU := [{"Name": "group1",
+                  "Value": "Gemini access regardless of license is enabled."}]
+
+    FailTestGroupNonCompliant(PolicyId, Output, failedOU)
 }
 #--

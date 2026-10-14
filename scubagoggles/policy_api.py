@@ -126,13 +126,16 @@ class PolicyAPI:
         'calendar_appointment_schedules': {'settings': {
             'enablePayments': isBool}},
         'calendar_external_invitations': {'settings': {'warnOnInvite': isBool}},
-        'calendar_interoperability': {'settings': {
+        'calendar_interoperability': {'reducer': _merge_reducer,
+                                      'settings': {
             'enableExchangeRoomBooking': isBool,
             'enableFullEventDetails': isBool,
             'enableInteroperability': isBool}},
-        'calendar_primary_calendar_max_allowed_external_sharing': {'settings': {
-            'maxAllowedExternalSharing': isEnum}},
+        'calendar_primary_calendar_max_allowed_external_sharing': {
+            'reducer': _merge_reducer,
+            'settings': {'maxAllowedExternalSharing': isEnum}},
         'calendar_secondary_calendar_max_allowed_external_sharing': {
+            'reducer': _merge_reducer,
             'settings': {'maxAllowedExternalSharing': isEnum}},
         'calendar_service_status': {'settings': {'serviceState': isState}},
         'chat_chat_file_sharing': {'settings': {
@@ -204,7 +207,9 @@ class PolicyAPI:
         'enterprise_service_restrictions_service_status': {'settings': {
             'serviceState': isState}},
         'gmail_auto_forwarding': {'settings': {'enableAutoForwarding': isBool}},
-        'gmail_blocked_sender_lists': {'parser': GmailRulesParser,
+        'gmail_blocked_sender_lists': {
+            'parser': GmailRulesParser,
+            'reducer': _max_map_reducer,
             'settings': {'blockedSenders': isListDict}},
         'gmail_comprehensive_mail_storage': {'parser': GmailRulesParser,
             'settings': {'ruleId': isString}},
@@ -224,13 +229,17 @@ class PolicyAPI:
             'allowedIpAddresses': isListStrings}},
         'gmail_enhanced_pre_delivery_message_scanning': {'settings': {
             'enableImprovedSuspiciousContentDetection': isBool}},
-        'gmail_imap_access': {'settings': {'enableImapAccess': isBool}},
+        'gmail_imap_access': {
+            'reducer': _merge_reducer,
+            'settings': {'enableImapAccess': isBool}},
         'gmail_links_and_external_images': {'settings': {
             'applyFutureSettingsAutomatically': isBool,
             'enableAggressiveWarningsOnUntrustedLinks': isBool,
             'enableExternalImageScanning': isBool,
             'enableShortenerScanning': isBool}},
-        'gmail_mail_delegation': {'settings': {'enableMailDelegation': isBool}},
+        'gmail_mail_delegation': {
+            'reducer': _merge_reducer,
+            'settings': {'enableMailDelegation': isBool}},
         'gmail_pop_access': {'settings': {'enablePopAccess': isBool}},
         'gmail_rule_states': {'reducer': _max_map_reducer,
                               'settings': {'ruleStates': isListDict}},
@@ -343,9 +352,11 @@ class PolicyAPI:
         'takeout_service_status': {'settings': {'serviceState': isState}},
         'tasks_service_status': {'settings': {'serviceState': isState}},
         'vault_service_status': {'settings': {'serviceState': isState}},
-        'workspace_marketplace_apps_access_options': {'settings': {
-            'accessLevel': isEnum,
-            'allowAllInternalApps': isBool}},
+        'workspace_marketplace_apps_access_options': {
+            'reducer': _merge_reducer,
+            'settings': {
+                'accessLevel': isEnum,
+                'allowAllInternalApps': isBool}},
         'youtube_user_takeout': {'settings': {'takeoutStatus': isEnum}}}
 
     # In this section of Google's Policy API documentation:
@@ -367,6 +378,7 @@ class PolicyAPI:
 
     _defaults = {
         'calendar_external_invitations': {'warnOnInvite': True},
+        'calendar_interoperability': {'enableInteroperability': False},
         'calendar_primary_calendar_max_allowed_external_sharing': {
             'maxAllowedExternalSharing': 'EXTERNAL_FREE_BUSY_ONLY'},
         'calendar_secondary_calendar_max_allowed_external_sharing': {
@@ -391,15 +403,16 @@ class PolicyAPI:
         'drive_and_docs_general_access_default': {
             'defaultFileAccess': 'LINK_SHARING_PRIVATE'},
         'gmail_auto_forwarding': {'enableAutoForwarding': True},
-        'gmail_workspace_sync_for_outlook': {
-            'enableGoogleWorkspaceSyncForMicrosoftOutlook': True},
         'gmail_email_spam_filter_ip_allowlist': {
             'allowedIpAddresses': []},
         'gmail_links_and_external_images': {
             'applyFutureSettingsAutomatically': True,
             'enableAggressiveWarningsOnUntrustedLinks': False},
+        'gmail_mail_delegation': {'enableMailDelegation': False},
         'gmail_spoofing_and_authentication': {
             'applyFutureSettingsAutomatically': True},
+        'gmail_workspace_sync_for_outlook': {
+            'enableGoogleWorkspaceSyncForMicrosoftOutlook': True},
         'groups_for_business_groups_sharing': {
             'collaborationCapability': 'DOMAIN_USERS_ONLY',
             'createGroupsAccessLevel': 'USERS_IN_DOMAIN',
@@ -413,10 +426,14 @@ class PolicyAPI:
             'enableAccountRecovery': False},
         'security_two_step_verification_device_trust': {
             'allowTrustingDevice': True},
+        'security_two_step_verification_enforcement': {
+            'enforcedFrom': '1970-01-01T00:00:00Z'},
         'security_two_step_verification_enforcement_factor': {
             'allowedSignInFactorSet': 'ALL'},
         'security_two_step_verification_enrollment': {
             'allowEnrollment': True},
+        'security_two_step_verification_grace_period': {
+            'enrollmentGracePeriod': "0s"},
         'security_user_account_recovery': {'enableAccountRecovery': False},
         'workspace_marketplace_apps_access_options': {
             'accessLevel': 'ALLOW_ALL',
@@ -430,14 +447,7 @@ class PolicyAPI:
 
     _defaults.update({
         'access_management_user_scoping': {
-            'accessManagementRegime': 'PREFERENCE_UNSPECIFIED'},
-        'calendar_interoperability': {
-            'enableInteroperability': False},
-        'gmail_mail_delegation': {'enableMailDelegation': False},
-        'security_two_step_verification_enforcement': {
-            'enforcedFrom': '1970-01-01T00:00:00Z'},
-        'security_two_step_verification_grace_period': {
-            'enrollmentGracePeriod': "0s"},
+            'accessManagementRegime': 'PREFERENCE_UNSPECIFIED'}
     })
 
     # This is the URL to the Policies API.
@@ -565,7 +575,7 @@ class PolicyAPI:
 
         orgunit_id_map = {}
 
-        for orgunit_data in response['organizationUnits']:
+        for orgunit_data in response.get('organizationUnits', ()):
             orgunit_id = orgunit_data['orgUnitId'].removeprefix('id:')
             orgunit_id_map[orgunit_id] = {'name': orgunit_data['name'],
                                           'path': orgunit_data['orgUnitPath']}

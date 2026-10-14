@@ -190,8 +190,8 @@ def convert_html_lists_to_plaintext(text: str) -> str:
 
     if not isinstance(text, str):
         return text
-    text = text.replace('<ul>', ' ')
-    text = text.replace('</ul>', '')
+    text = text.replace('<ol>', ' ')
+    text = text.replace('</ol>', '')
     text = text.replace('<li>', '\n- ')
     text = text.replace('</li>', ' ')
     return text.strip()

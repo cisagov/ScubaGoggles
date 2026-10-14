@@ -9,3 +9,10 @@ SCuBA controls have been mapped to both NIST SP 800-53 and the MITRE ATT&CK fram
 
 ## MITRE ATT&CK
 Mappings to the MITRE ATT&CK framework are displayed within the baseline documents themselves, within the bulleted list following each policy statement.
+
+## OSCAL Catalog
+The generated [OSCAL Catalog](oscal-catalog.md) release artifact preserves the
+NIST SP 800-53 mappings as policy control properties and the MITRE ATT&CK
+mappings as policy control links. The catalog keeps the source baseline
+hierarchy so section-level context is represented once and inherited by the
+policy controls in that section.
