@@ -71,28 +71,6 @@ if {
     Group := utils.GetEventGroup(Event)
 }
 
-ToggleServiceEvents contains {
-    "Timestamp": time.parse_rfc3339_ns(Item.id.time),
-    "TimestampStr": Item.id.time,
-    "ServiceName": ServiceName,
-    "NewValue": NewValue,
-    "OrgUnit": OrgUnit,
-    "Group": Group
-}
-if {
-    some Item in input.commoncontrols_logs.items
-    some Event in Item.events
-    Event.name == "TOGGLE_SERVICE_ENABLED"
-
-    "SERVICE_NAME" in {Parameter.name | some Parameter in Event.parameters}
-    "NEW_VALUE" in {Parameter.name | some Parameter in Event.parameters}
-
-    ServiceName := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "SERVICE_NAME"][0]
-    NewValue := [Parameter.value | some Parameter in Event.parameters; Parameter.name == "NEW_VALUE"][0]
-    OrgUnit := utils.GetEventOu(Event)
-    Group := utils.GetEventGroup(Event)
-}
-
 LogEvents := utils.GetEvents("commoncontrols_logs")
 
 ########################
