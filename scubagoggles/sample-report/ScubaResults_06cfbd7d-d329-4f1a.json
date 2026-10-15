@@ -2556,13 +2556,13 @@
                     "allowEnrollment": true
                 },
                 "gmail_comprehensive_mail_storage": {
-                    "ruleId": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll",
+                    "ruleId": "b155f-02rvqlb32hhi2fk:12345",
                     "enabled": true
                 },
                 "gmail_rule_states": {
                     "ruleStates": [
                         {
-                            "ruleId": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll",
+                            "ruleId": "b155f-02rvqlb32hhi2fk:12345",
                             "enabled": true
                         }
                     ]
@@ -3279,7 +3279,7 @@
                 "gmail_email_address_lists": {
                     "emailAddressList": [
                         {
-                            "id": "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll",
+                            "id": "592cd-02rvqlb30hfhzs9:12345",
                             "name": "Scuba",
                             "addressList": {
                                 "address": [
@@ -3299,7 +3299,7 @@
                             }
                         },
                         {
-                            "id": "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te",
+                            "id": "81ecc-02rvqlb30hfhzs9:123456",
                             "name": "Crystal Peterson's email list",
                             "blockedAddressList": {
                                 "address": [
@@ -3313,7 +3313,7 @@
                             }
                         },
                         {
-                            "id": "fb61c-02rvqlb30hfhzs9:00gjdgxs1t3h5sf",
+                            "id": "fb61c-02rvqlb30hfhzs9:234567",
                             "name": "Testing",
                             "blockedAddressList": {
                                 "address": [
@@ -3324,7 +3324,7 @@
                             }
                         },
                         {
-                            "id": "059a0-02rvqlb30hfhzs9:00gjdgxs4d34og8",
+                            "id": "059a0-02rvqlb30hfhzs9:2345678",
                             "name": "Example",
                             "addressList": {
                                 "address": [
@@ -3344,7 +3344,7 @@
                             }
                         },
                         {
-                            "id": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1",
+                            "id": "0765e-02rvqlb30hfhzs9:234562",
                             "name": "Monica Boone's email list",
                             "addressList": {
                                 "address": [
@@ -3383,27 +3383,27 @@
                 "gmail_rule_states": {
                     "ruleStates": [
                         {
-                            "ruleId": "592cd-02rvqlb30hfhzs9:00gjdgxs30j0zll",
+                            "ruleId": "592cd-02rvqlb30hfhzs9:12345",
                             "enabled": true
                         },
                         {
-                            "ruleId": "81ecc-02rvqlb30hfhzs9:00gjdgxs1fob9te",
+                            "ruleId": "81ecc-02rvqlb30hfhzs9:123456",
                             "enabled": true
                         },
                         {
-                            "ruleId": "fb61c-02rvqlb30hfhzs9:00gjdgxs1t3h5sf",
+                            "ruleId": "fb61c-02rvqlb30hfhzs9:234567",
                             "enabled": true
                         },
                         {
-                            "ruleId": "059a0-02rvqlb30hfhzs9:00gjdgxs4d34og8",
+                            "ruleId": "059a0-02rvqlb30hfhzs9:2345678",
                             "enabled": true
                         },
                         {
-                            "ruleId": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1",
+                            "ruleId": "0765e-02rvqlb30hfhzs9:234562",
                             "enabled": true
                         },
                         {
-                            "ruleId": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te",
+                            "ruleId": "008f2-02rvqlb32nzzmh1:123456",
                             "enabled": true
                         },
                         {
@@ -3411,11 +3411,11 @@
                             "enabled": true
                         },
                         {
-                            "ruleId": "4906c-02rvqlb32nzzmh1:00gjdgxs1t3h5sf",
+                            "ruleId": "4906c-02rvqlb32nzzmh1:234567",
                             "enabled": true
                         },
                         {
-                            "ruleId": "705ca-02rvqlb32nzzmh1:00gjdgxs4d34og8",
+                            "ruleId": "705ca-02rvqlb32nzzmh1:2345678",
                             "enabled": true
                         },
                         {
@@ -3762,7 +3762,7 @@
                     "enableMailAndContactsImport": false
                 },
                 "gmail_comprehensive_mail_storage": {
-                    "ruleId": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te",
+                    "ruleId": "008f2-02rvqlb32nzzmh1:123456",
                     "enabled": true
                 },
                 "gmail_smime_encryption": {
@@ -3904,7 +3904,7 @@
                 "gmail_attachment_compliance": {
                     "attachmentComplianceRules": [
                         {
-                            "ruleId": "705ca-02rvqlb32nzzmh1:00gjdgxs4d34og8",
+                            "ruleId": "705ca-02rvqlb32nzzmh1:2345678",
                             "description": "Scuba Attachment compliance",
                             "condition": {
                                 "affectInboundMessages": true,
@@ -3964,7 +3964,7 @@
                 "gmail_objectionable_content": {
                     "objectionableContentRules": [
                         {
-                            "ruleId": "4906c-02rvqlb32nzzmh1:00gjdgxs1t3h5sf",
+                            "ruleId": "4906c-02rvqlb32nzzmh1:234567",
                             "description": "Scuba Objectionable content",
                             "condition": {
                                 "affectInboundMessages": true,
@@ -353708,7 +353708,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -353745,7 +353745,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -353782,7 +353782,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -353823,190 +353823,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
-                                            },
-                                            {
-                                                "name": "rule_type",
-                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "kind": "admin#reports#activity",
-                    "id": {
-                        "time": "2026-07-08T18:21:59.132Z",
-                        "uniqueQualifier": "-4986048609809439922",
-                        "applicationName": "admin",
-                        "customerId": "ABCDEFG"
-                    },
-                    "etag": "\"UPU6gOXXZ2H1z218i4QV7r7f3CGdqgX-Bgz0NazqV4s/0iAPmMd4Umpd7-_DOJzVeBB9mSA\"",
-                    "actor": {
-                        "callerType": "USER",
-                        "email": "robinfry@example.com",
-                        "profileId": "111111111111111111111"
-                    },
-                    "ipAddress": "143.130.36.126",
-                    "isAgenticAction": false,
-                    "networkInfo": {
-                        "ipAsn": [
-                            0,
-                            15169
-                        ],
-                        "regionCode": "US",
-                        "subdivisionCode": "US-VA"
-                    },
-                    "events": [
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "CREATE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "Sarah Poole's group"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "ComprehensiveMailStorage enabled"
-                                },
-                                {
-                                    "name": "NEW_VALUE",
-                                    "value": "true"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "enterprise"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "CREATE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "Sarah Poole's group"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "ComprehensiveMailStorage enabled"
-                                },
-                                {
-                                    "name": "NEW_VALUE",
-                                    "value": "true"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "guest"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "CREATE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "Sarah Poole's group"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "RuleState rule_state[0] enabled"
-                                },
-                                {
-                                    "name": "NEW_VALUE",
-                                    "value": "false"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "enterprise"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
-                                            },
-                                            {
-                                                "name": "rule_type",
-                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "CREATE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "Sarah Poole's group"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "RuleState rule_state[0] enabled"
-                                },
-                                {
-                                    "name": "NEW_VALUE",
-                                    "value": "false"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "guest"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -354074,7 +353891,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -354111,7 +353928,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -354148,7 +353965,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -354189,7 +354006,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -354257,7 +354074,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -354294,7 +354111,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -354331,7 +354148,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -354372,7 +354189,190 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
+                                            },
+                                            {
+                                                "name": "rule_type",
+                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "kind": "admin#reports#activity",
+                    "id": {
+                        "time": "2026-07-08T18:21:59.132Z",
+                        "uniqueQualifier": "-4986048609809439922",
+                        "applicationName": "admin",
+                        "customerId": "ABCDEFG"
+                    },
+                    "etag": "\"UPU6gOXXZ2H1z218i4QV7r7f3CGdqgX-Bgz0NazqV4s/0iAPmMd4Umpd7-_DOJzVeBB9mSA\"",
+                    "actor": {
+                        "callerType": "USER",
+                        "email": "robinfry@example.com",
+                        "profileId": "111111111111111111111"
+                    },
+                    "ipAddress": "143.130.36.126",
+                    "isAgenticAction": false,
+                    "networkInfo": {
+                        "ipAsn": [
+                            0,
+                            15169
+                        ],
+                        "regionCode": "US",
+                        "subdivisionCode": "US-VA"
+                    },
+                    "events": [
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "CREATE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "Sarah Poole's group"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "ComprehensiveMailStorage enabled"
+                                },
+                                {
+                                    "name": "NEW_VALUE",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "enterprise"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "CREATE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "Sarah Poole's group"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "ComprehensiveMailStorage enabled"
+                                },
+                                {
+                                    "name": "NEW_VALUE",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "guest"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "CREATE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "Sarah Poole's group"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "RuleState rule_state[0] enabled"
+                                },
+                                {
+                                    "name": "NEW_VALUE",
+                                    "value": "false"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "enterprise"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
+                                            },
+                                            {
+                                                "name": "rule_type",
+                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "CREATE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "Sarah Poole's group"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "RuleState rule_state[0] enabled"
+                                },
+                                {
+                                    "name": "NEW_VALUE",
+                                    "value": "false"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "guest"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -354440,7 +354440,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             }
                                         ]
                                     }
@@ -354477,7 +354477,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             }
                                         ]
                                     }
@@ -354514,7 +354514,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -354555,190 +354555,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
-                                            },
-                                            {
-                                                "name": "rule_type",
-                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "kind": "admin#reports#activity",
-                    "id": {
-                        "time": "2026-06-25T13:30:45.327Z",
-                        "uniqueQualifier": "-8623543717051431177",
-                        "applicationName": "admin",
-                        "customerId": "ABCDEFG"
-                    },
-                    "etag": "\"UPU6gOXXZ2H1z218i4QV7r7f3CGdqgX-Bgz0NazqV4s/0iAPmMd4Umpd7-_DOJzVeBB9mSA\"",
-                    "actor": {
-                        "callerType": "USER",
-                        "email": "robinfry@example.com",
-                        "profileId": "111111111111111111111"
-                    },
-                    "ipAddress": "143.130.36.126",
-                    "isAgenticAction": false,
-                    "networkInfo": {
-                        "ipAsn": [
-                            0,
-                            15169
-                        ],
-                        "regionCode": "US",
-                        "subdivisionCode": "US-VA"
-                    },
-                    "events": [
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "CREATE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "2SV Exempt"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "ComprehensiveMailStorage enabled"
-                                },
-                                {
-                                    "name": "NEW_VALUE",
-                                    "value": "true"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "enterprise"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "CREATE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "2SV Exempt"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "ComprehensiveMailStorage enabled"
-                                },
-                                {
-                                    "name": "NEW_VALUE",
-                                    "value": "true"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "guest"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "CREATE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "2SV Exempt"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "RuleState rule_state[0] enabled"
-                                },
-                                {
-                                    "name": "NEW_VALUE",
-                                    "value": "false"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "enterprise"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
-                                            },
-                                            {
-                                                "name": "rule_type",
-                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "CREATE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "2SV Exempt"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "RuleState rule_state[0] enabled"
-                                },
-                                {
-                                    "name": "NEW_VALUE",
-                                    "value": "false"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "guest"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -354806,7 +354623,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             }
                                         ]
                                     }
@@ -354843,7 +354660,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             }
                                         ]
                                     }
@@ -354880,7 +354697,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -354921,7 +354738,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -354989,7 +354806,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             }
                                         ]
                                     }
@@ -355026,7 +354843,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             }
                                         ]
                                     }
@@ -355063,7 +354880,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -355104,7 +354921,190 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
+                                            },
+                                            {
+                                                "name": "rule_type",
+                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "kind": "admin#reports#activity",
+                    "id": {
+                        "time": "2026-06-25T13:30:45.327Z",
+                        "uniqueQualifier": "-8623543717051431177",
+                        "applicationName": "admin",
+                        "customerId": "ABCDEFG"
+                    },
+                    "etag": "\"UPU6gOXXZ2H1z218i4QV7r7f3CGdqgX-Bgz0NazqV4s/0iAPmMd4Umpd7-_DOJzVeBB9mSA\"",
+                    "actor": {
+                        "callerType": "USER",
+                        "email": "robinfry@example.com",
+                        "profileId": "111111111111111111111"
+                    },
+                    "ipAddress": "143.130.36.126",
+                    "isAgenticAction": false,
+                    "networkInfo": {
+                        "ipAsn": [
+                            0,
+                            15169
+                        ],
+                        "regionCode": "US",
+                        "subdivisionCode": "US-VA"
+                    },
+                    "events": [
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "CREATE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "2SV Exempt"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "ComprehensiveMailStorage enabled"
+                                },
+                                {
+                                    "name": "NEW_VALUE",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "enterprise"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "CREATE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "2SV Exempt"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "ComprehensiveMailStorage enabled"
+                                },
+                                {
+                                    "name": "NEW_VALUE",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "guest"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "CREATE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "2SV Exempt"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "RuleState rule_state[0] enabled"
+                                },
+                                {
+                                    "name": "NEW_VALUE",
+                                    "value": "false"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "enterprise"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
+                                            },
+                                            {
+                                                "name": "rule_type",
+                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "CREATE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "2SV Exempt"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "RuleState rule_state[0] enabled"
+                                },
+                                {
+                                    "name": "NEW_VALUE",
+                                    "value": "false"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "guest"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -356847,7 +356847,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -356892,7 +356892,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -356963,7 +356963,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -357008,7 +357008,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -357079,7 +357079,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -357124,7 +357124,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -357195,7 +357195,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -357240,7 +357240,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -358009,7 +358009,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -358054,7 +358054,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -358125,7 +358125,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -358170,7 +358170,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -358241,7 +358241,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -358286,7 +358286,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -358357,7 +358357,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -358402,7 +358402,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "0765e-02rvqlb30hfhzs9:00gjdgxs2s8eyo1"
+                                                "value": "0765e-02rvqlb30hfhzs9:234562"
                                             },
                                             {
                                                 "name": "DESCRIPTION",
@@ -358937,7 +358937,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -358982,7 +358982,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -359053,7 +359053,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -359098,7 +359098,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -359169,7 +359169,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -359214,7 +359214,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -359285,7 +359285,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -359330,7 +359330,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -367621,7 +367621,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -367666,7 +367666,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -367737,7 +367737,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -367782,7 +367782,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "b155f-02rvqlb32hhi2fk:00gjdgxs30j0zll"
+                                                "value": "b155f-02rvqlb32hhi2fk:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368088,7 +368088,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368133,7 +368133,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368205,7 +368205,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368250,7 +368250,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368321,7 +368321,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368366,7 +368366,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368437,7 +368437,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368482,7 +368482,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368553,7 +368553,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368598,7 +368598,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368669,7 +368669,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368714,7 +368714,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "008f2-02rvqlb32nzzmh1:00gjdgxs1fob9te"
+                                                "value": "008f2-02rvqlb32nzzmh1:123456"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368833,7 +368833,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -368870,7 +368870,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -368907,7 +368907,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -368948,189 +368948,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
-                                            },
-                                            {
-                                                "name": "rule_type",
-                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "kind": "admin#reports#activity",
-                    "id": {
-                        "time": "2026-07-14T20:08:20.964Z",
-                        "uniqueQualifier": "-8447496516894137059",
-                        "applicationName": "admin",
-                        "customerId": "ABCDEFG"
-                    },
-                    "etag": "\"UPU6gOXXZ2H1z218i4QV7r7f3CGdqgX-Bgz0NazqV4s/0iAPmMd4Umpd7-_DOJzVeBB9mSA\"",
-                    "actor": {
-                        "callerType": "USER",
-                        "email": "robinfry@example.com",
-                        "profileId": "111111111111111111111"
-                    },
-                    "ipAddress": "1db6:87d5:c44f:af8f:9624:57d0:3029:e989",
-                    "isAgenticAction": false,
-                    "networkInfo": {
-                        "ipAsn": [
-                            701
-                        ],
-                        "regionCode": "US",
-                        "subdivisionCode": "US-VA"
-                    },
-                    "events": [
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "DELETE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "Sarah Poole's group"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "ComprehensiveMailStorage enabled"
-                                },
-                                {
-                                    "name": "OLD_VALUE",
-                                    "value": "true"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "enterprise"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "DELETE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "Sarah Poole's group"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "ComprehensiveMailStorage enabled"
-                                },
-                                {
-                                    "name": "OLD_VALUE",
-                                    "value": "true"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "guest"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "DELETE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "Sarah Poole's group"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "RuleState rule_state[0] enabled"
-                                },
-                                {
-                                    "name": "OLD_VALUE",
-                                    "value": "false"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "enterprise"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
-                                            },
-                                            {
-                                                "name": "rule_type",
-                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "APPLICATION_SETTINGS",
-                            "name": "DELETE_APPLICATION_SETTING",
-                            "parameters": [
-                                {
-                                    "name": "APPLICATION_NAME",
-                                    "value": "Gmail"
-                                },
-                                {
-                                    "name": "ORG_UNIT_NAME",
-                                    "value": "Sarah Poole's group"
-                                },
-                                {
-                                    "name": "SETTING_NAME",
-                                    "value": "RuleState rule_state[0] enabled"
-                                },
-                                {
-                                    "name": "OLD_VALUE",
-                                    "value": "false"
-                                },
-                                {
-                                    "name": "APPLICATION_EDITION",
-                                    "value": "guest"
-                                },
-                                {
-                                    "name": "SETTING_METADATA",
-                                    "messageValue": {
-                                        "parameter": [
-                                            {
-                                                "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -369197,7 +369015,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -369234,7 +369052,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -369271,7 +369089,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -369312,7 +369130,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -369379,7 +369197,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -369416,7 +369234,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             }
                                         ]
                                     }
@@ -369453,7 +369271,7 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -369494,7 +369312,189 @@
                                         "parameter": [
                                             {
                                                 "name": "rule_key",
-                                                "value": "87c16-02rvqlb32jwmzwy:00gjdgxs30j0zll"
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
+                                            },
+                                            {
+                                                "name": "rule_type",
+                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "kind": "admin#reports#activity",
+                    "id": {
+                        "time": "2026-07-14T20:08:20.964Z",
+                        "uniqueQualifier": "-8447496516894137059",
+                        "applicationName": "admin",
+                        "customerId": "ABCDEFG"
+                    },
+                    "etag": "\"UPU6gOXXZ2H1z218i4QV7r7f3CGdqgX-Bgz0NazqV4s/0iAPmMd4Umpd7-_DOJzVeBB9mSA\"",
+                    "actor": {
+                        "callerType": "USER",
+                        "email": "robinfry@example.com",
+                        "profileId": "111111111111111111111"
+                    },
+                    "ipAddress": "1db6:87d5:c44f:af8f:9624:57d0:3029:e989",
+                    "isAgenticAction": false,
+                    "networkInfo": {
+                        "ipAsn": [
+                            701
+                        ],
+                        "regionCode": "US",
+                        "subdivisionCode": "US-VA"
+                    },
+                    "events": [
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "DELETE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "Sarah Poole's group"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "ComprehensiveMailStorage enabled"
+                                },
+                                {
+                                    "name": "OLD_VALUE",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "enterprise"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "DELETE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "Sarah Poole's group"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "ComprehensiveMailStorage enabled"
+                                },
+                                {
+                                    "name": "OLD_VALUE",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "guest"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "DELETE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "Sarah Poole's group"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "RuleState rule_state[0] enabled"
+                                },
+                                {
+                                    "name": "OLD_VALUE",
+                                    "value": "false"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "enterprise"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
+                                            },
+                                            {
+                                                "name": "rule_type",
+                                                "value": "COMPREHENSIVE_MAIL_STORAGE"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "APPLICATION_SETTINGS",
+                            "name": "DELETE_APPLICATION_SETTING",
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Gmail"
+                                },
+                                {
+                                    "name": "ORG_UNIT_NAME",
+                                    "value": "Sarah Poole's group"
+                                },
+                                {
+                                    "name": "SETTING_NAME",
+                                    "value": "RuleState rule_state[0] enabled"
+                                },
+                                {
+                                    "name": "OLD_VALUE",
+                                    "value": "false"
+                                },
+                                {
+                                    "name": "APPLICATION_EDITION",
+                                    "value": "guest"
+                                },
+                                {
+                                    "name": "SETTING_METADATA",
+                                    "messageValue": {
+                                        "parameter": [
+                                            {
+                                                "name": "rule_key",
+                                                "value": "87c16-02rvqlb32jwmzwy:12345"
                                             },
                                             {
                                                 "name": "rule_type",
@@ -391735,12 +391735,12 @@
         "privileged_users_error": null,
         "inbound_sso_assignments": [
             {
-                "name": "inboundSsoAssignments/aQUJDREVGRw==LU8wM3BoOGEyejJkdms1dHM",
+                "name": "inboundSsoAssignments/ABCDEFGHIJKLMNOP",
                 "customer": "customers/ABCDEFG",
-                "targetOrgUnit": "orgUnits/03ph8a2z2dvk5ts",
+                "targetOrgUnit": "orgUnits/12345",
                 "ssoMode": "SAML_SSO",
                 "samlSsoInfo": {
-                    "inboundSamlSsoProfile": "inboundSamlSsoProfiles/039do9ad3sc7k74"
+                    "inboundSamlSsoProfile": "inboundSamlSsoProfiles/12345"
                 },
                 "signInBehavior": {
                     "redirectCondition": "NEVER"
