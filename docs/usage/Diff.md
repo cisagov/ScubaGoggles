@@ -66,6 +66,9 @@ that was fixed between the two runs is classified `NewFail`.
 | `--darkmode`, `-dm` | No | `false` | `true` to open the HTML report in dark mode. |
 | `--quiet` | No | Off | Do not print the paths of the files written. |
 
+The files can be UTF-8 (with or without a byte order mark) or UTF-16 with a
+byte order mark, which is what Windows PowerShell 5.1 writes by default.
+
 A file that is missing, empty, not valid JSON, or missing any of the
 `MetaData`, `Summary`, or `Results` top-level keys is rejected with an error.
 

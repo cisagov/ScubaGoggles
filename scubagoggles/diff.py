@@ -1,6 +1,7 @@
 """Compare two saved ScubaGoggles reports."""
 from __future__ import annotations
 
+import codecs
 import csv
 import html
 import json
@@ -20,6 +21,9 @@ SCHEMA_VERSION = "1.0"
 
 # Top-level keys every ScubaGoggles report (ScubaResults file) carries.
 REQUIRED_REPORT_KEYS = ("MetaData", "Summary", "Results")
+
+# Byte order marks that identify a UTF-16 encoded report.
+UTF16_BOMS = (codecs.BOM_UTF16_LE, codecs.BOM_UTF16_BE)
 
 # A run timestamp must start with an ISO 8601 date and time; this keeps loose
 # fragments that a date parser might accept from being read as one.
@@ -154,10 +158,18 @@ class Control:
 def load_report(path: Path) -> dict[str, Any]:
     """Load and validate a ScubaGoggles report."""
     try:
-        # utf-8-sig also reads a file saved with a byte order mark.
-        text = path.read_text(encoding="utf-8-sig")
+        raw = path.read_bytes()
     except OSError as exc:
         raise ValueError(f"Unable to read ScubaGoggles report '{path}': {exc}") from exc
+    # utf-8-sig also reads a file saved with a UTF-8 byte order mark. A file
+    # with a UTF-16 byte order mark (what Windows PowerShell 5.1 writes by
+    # default) is read as UTF-16.
+    encoding = "utf-16" if raw.startswith(UTF16_BOMS) else "utf-8-sig"
+    try:
+        text = raw.decode(encoding)
+    except UnicodeDecodeError as exc:
+        raise ValueError(f"ScubaGoggles report '{path}' is not UTF-8 or UTF-16 text: "
+                         f"{exc}") from exc
     if not text.strip():
         raise ValueError(f"ScubaGoggles report '{path}' is empty.")
     try:

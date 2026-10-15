@@ -702,6 +702,31 @@ class TestDiffInputs:
 
         assert load_report(path)["Summary"] == {}
 
+    @pytest.mark.parametrize("encoding", ["utf-16-le", "utf-16-be"])
+    def test_load_report_reads_utf16(self, tmp_path, encoding):
+        """Read a report saved as UTF-16 with a byte order mark."""
+        path = tmp_path / "utf16.json"
+        path.write_bytes("﻿".encode(encoding)
+                         + json.dumps(report([])).encode(encoding))
+
+        assert load_report(path)["Summary"] == {}
+
+    @pytest.mark.parametrize(
+        ("content", "message"),
+        [
+            (b"\xff\xfe\r\x00\n\x00", "is empty"),
+            (b"\xff{}", "is not UTF-8 or UTF-16 text"),
+        ],
+    )
+    def test_load_report_encoding_errors(self, tmp_path, content, message):
+        """Name the file for a UTF-16 blank file and for undecodable bytes."""
+        path = tmp_path / "report.json"
+        path.write_bytes(content)
+
+        with pytest.raises(ValueError, match=re.escape(message)) as excinfo:
+            load_report(path)
+        assert str(path) in str(excinfo.value)
+
     @pytest.mark.parametrize(
         ("content", "message"),
         [
