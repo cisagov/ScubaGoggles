@@ -447,7 +447,10 @@ class PolicyAPI:
 
     _defaults.update({
         'access_management_user_scoping': {
-            'accessManagementRegime': 'PREFERENCE_UNSPECIFIED'}
+            'accessManagementRegime': 'PREFERENCE_UNSPECIFIED'},
+        'access_approval_axa_user_scoping': {
+            'requiresCustomerApproval': False
+        }
     })
 
     # This is the URL to the Policies API.
