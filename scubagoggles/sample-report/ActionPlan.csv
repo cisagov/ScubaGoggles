@@ -1,232 +1,246 @@
 Control ID,Requirement,Result,Criticality,Details,OriginalResult,OriginalDetails,Comments,ResolutionDate,Non-Compliance Reason,Remediation Completion Date,Justification
-GWS.CALENDAR.1.2v1,"External sharing options for secondary calendars SHALL be configured to &quot;Only free/busy information (hide event details).&quot;<div class=""badges"">
+GWS.CALENDAR.1.1v1,"External sharing options for primary calendars SHALL be configured to &quot;Only free/busy information (hide event details).&quot;<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>External sharing options for secondary calendars is set to: Share all information, but outsiders cannot change calendars</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org (group wilsonrichard@example.org)</dt><dd>External sharing options for primary calendars is set to: Share all information, and allow managing of calendars</dd></dl> 
+
+- <dl><dt>Brandon Sanchez's OU</dt><dd>External sharing options for primary calendars is set to: Share all information, but outsiders cannot change calendars</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>External sharing options for secondary calendars is set to: Share all information, but outsiders cannot change calendars</dd></dl>",[],, , , 
-GWS.CHAT.1.1v1,"Chat history SHALL be enabled for information traceability.<div class=""badges"">
+- <dl><dt>Cool Example Org (group zleonard@example.org)</dt><dd>External sharing options for primary calendars is set to: Share all information, and allow managing of calendars</dd></dl> 
+
+- <dl><dt>Mr. Adam Roberts's OU</dt><dd>External sharing options for primary calendars is set to: Share all information, but outsiders cannot change calendars</dd></dl>",[],, , , 
+GWS.CALENDAR.2.1v1,"External invitations warnings SHALL be enabled to prompt users before sending invitations.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Default conversation history is disabled</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org (group kellythomas@example.com)</dt><dd>External Sharing Guest Prompt is disabled</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Default conversation history is disabled</dd></dl>",[],, , , 
-GWS.CHAT.1.2v1,"Users SHALL NOT be allowed to change their history setting.<div class=""badges"">
-<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org (group stephanie38@example.org)</dt><dd>External Sharing Guest Prompt is disabled</dd></dl>",[],, , , 
+GWS.CHAT.5.1v1,"Chat content reporting SHALL be enabled for all conversation types.<div class=""badges"">
+<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span>
+<span class=""indicator-badge"" style=""background-color: #F6E8E5; color: black;"" title=""Requires log-based verification"">Log-Based Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Users are allowed to change their history setting</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org</dt><dd>Content reporting for group direct messages is disabled. Content reporting for spaces is disabled.</dd></dl> 
+
+<br>WARNING: from the log events alone, it is not possible to distinguish between an OU inheriting settings from its parent and content reporting being disabled entirely. It's possible this tool classified some child OUs as compliant due to this limitation; manual check recommended for child OUs due to this edge case.<br><br>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Users are allowed to change their history setting</dd></dl>",[],, , , 
-GWS.CHAT.2.1v1,"External file sharing SHALL be disabled to protect sensitive information from unauthorized or accidental sharing.<div class=""badges"">
-<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
- 
+- <dl><dt>Cool Example Org</dt><dd>Content reporting for group direct messages is disabled. Content reporting for spaces is disabled.</dd></dl> 
 
-- <dl><dt>example.org</dt><dd>External file sharing is set to: Allow all files</dd></dl>",Fail,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>External file sharing is set to: Allow all files</dd></dl>",[],, , , 
-GWS.CHAT.4.1v1,"External chat messaging SHALL be restricted to allowlisted domains only.<div class=""badges"">
-<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Allow external chat within: all domains</dd></dl>",Fail,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Allow external chat within: all domains</dd></dl>",[],, , , 
+<br>WARNING: from the log events alone, it is not possible to distinguish between an OU inheriting settings from its parent and content reporting being disabled entirely. It's possible this tool classified some child OUs as compliant due to this limitation; manual check recommended for child OUs due to this edge case.<br><br>",[],, , , 
 GWS.COMMONCONTROLS.1.1v1,"Phishing-Resistant MFA SHALL be required for all users.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Allowed 2-step verification (2SV) method is set to ""Any except verification codes via text, phone call"".</dd></dl> 
+- <dl><dt>2SV Exempt</dt><dd>Allowed 2-step verification (2SV) method is set to ""Any except verification codes via text, phone call"".</dd></dl> 
 
-- <dl><dt>example.org (group thompsonmanuel@example.com)</dt><dd>Allowed 2-step verification (2SV) method is set to ""Any"".</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org</dt><dd>Allowed 2-step verification (2SV) method is set to ""Any except verification codes via text, phone call"".</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Allowed 2-step verification (2SV) method is set to ""Any except verification codes via text, phone call"".</dd></dl> 
+- <dl><dt>2SV Exempt</dt><dd>Allowed 2-step verification (2SV) method is set to ""Any except verification codes via text, phone call"".</dd></dl> 
 
-- <dl><dt>example.org (group brian57@example.net)</dt><dd>Allowed 2-step verification (2SV) method is set to ""Any"".</dd></dl>",[],, , , 
-GWS.COMMONCONTROLS.1.3v1,"SMS or Voice SHALL NOT be used as the MFA method.<div class=""badges"">
-<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org (group cordovageoffrey@example.org)</dt><dd>Verification codes via text and phone call allowed.</dd></dl>",Fail,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org (group christopher23@example.net)</dt><dd>Verification codes via text and phone call allowed.</dd></dl>",[],, , , 
+- <dl><dt>Cool Example Org</dt><dd>Allowed 2-step verification (2SV) method is set to ""Any except verification codes via text, phone call"".</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.1.4v1,"The Google 2-Step Verification (2SV) new user enrollment period SHALL be set to at least one day and at most one week.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>New user enrollment period 14 days (longer than 7 days)</dd></dl> 
+- <dl><dt>2SV Exempt</dt><dd>New user enrollment period is NONE</dd></dl> 
 
-- <dl><dt>example.org (group uschroeder@example.net)</dt><dd>New user enrollment period 30 days (longer than 7 days)</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org</dt><dd>New user enrollment period 14 days (longer than 7 days)</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>New user enrollment period 14 days (longer than 7 days)</dd></dl> 
+- <dl><dt>2SV Exempt</dt><dd>New user enrollment period is NONE</dd></dl> 
 
-- <dl><dt>example.org (group meganquinn@example.org)</dt><dd>New user enrollment period 30 days (longer than 7 days)</dd></dl>",[],, , , 
+- <dl><dt>Cool Example Org</dt><dd>New user enrollment period 14 days (longer than 7 days)</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.1.5v1,"Allow users to trust the device SHALL be disabled.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>User is allowed to trust device.</dd></dl> 
+- <dl><dt>2SV Exempt</dt><dd>User is allowed to trust device.</dd></dl> 
 
-- <dl><dt>example.org (group tanyajohnson@example.org)</dt><dd>User is allowed to trust device.</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org</dt><dd>User is allowed to trust device.</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>User is allowed to trust device.</dd></dl> 
+- <dl><dt>2SV Exempt</dt><dd>User is allowed to trust device.</dd></dl> 
 
-- <dl><dt>example.org (group johnnydavidson@example.org)</dt><dd>User is allowed to trust device.</dd></dl>",[],, , , 
+- <dl><dt>Cool Example Org</dt><dd>User is allowed to trust device.</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.4.1v1,"Users SHALL be forced to re-authenticate after an established 12-hour GWS login session has expired.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Web session duration: 14 days</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Diana Nelson's OU</dt><dd>Web session duration: 24 hours</dd></dl> 
+
+- <dl><dt>Tyler Rodriguez's OU</dt><dd>Web session duration: 20 hours</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Web session duration: 14 days</dd></dl>",[],, , , 
+- <dl><dt>Anita Dawson's OU</dt><dd>Web session duration: 24 hours</dd></dl> 
+
+- <dl><dt>Brandon Lewis's OU</dt><dd>Web session duration: 20 hours</dd></dl>",[],, , , 
+GWS.COMMONCONTROLS.5.1v1,"User password strength SHALL be enforced.<div class=""badges"">
+<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
+<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Cool Example Org</dt><dd>Password strength is WEAK, not STRONG</dd></dl>",Fail,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Cool Example Org</dt><dd>Password strength is WEAK, not STRONG</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.5.2v1,"User password length SHALL be at least 12 characters.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Minimum password length: 8, less than 12</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Mark Smith's OU</dt><dd>Minimum password length: 8, less than 12</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Minimum password length: 8, less than 12</dd></dl>",[],, , , 
+- <dl><dt>Jacob Nelson's OU</dt><dd>Minimum password length: 8, less than 12</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.5.4v1,"Password policy SHALL be enforced at next sign-in.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>2SV Exempt</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl> 
+
+- <dl><dt>Amy Perez's OU</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl> 
+
+- <dl><dt>Cool Example Org</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl> 
+
+- <dl><dt>Kristen Allen's OU</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl>",[],, , , 
+- <dl><dt>2SV Exempt</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl> 
+
+- <dl><dt>Tiffany Brown's OU</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl> 
+
+- <dl><dt>Cool Example Org</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl> 
+
+- <dl><dt>Jennifer Valencia's OU</dt><dd>Enforce password policy at next sign-in is OFF</dd></dl>",[],, , , 
+GWS.COMMONCONTROLS.5.5v1,"User passwords SHALL NOT be reused.<div class=""badges"">
+<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
+<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Jesus Perry's OU</dt><dd>Allow password reuse is ON</dd></dl> 
+
+- <dl><dt>Meredith Peters's OU</dt><dd>Allow password reuse is ON</dd></dl>",Fail,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Marissa Mcintyre's OU</dt><dd>Allow password reuse is ON</dd></dl> 
+
+- <dl><dt>Gary Contreras's OU</dt><dd>Allow password reuse is ON</dd></dl>",[],, , , 
+GWS.COMMONCONTROLS.5.6v1,"User passwords SHALL NOT expire.<div class=""badges"">
+<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
+<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>John Smith's OU</dt><dd>Password reset frequency is 30 days</dd></dl> 
+
+- <dl><dt>Daniel Small's OU</dt><dd>Password reset frequency is 5184000 seconds</dd></dl>",Fail,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Alyssa Butler's OU</dt><dd>Password reset frequency is 30 days</dd></dl> 
+
+- <dl><dt>James Keller's OU</dt><dd>Password reset frequency is 5184000 seconds</dd></dl>",[],, , , 
+GWS.COMMONCONTROLS.6.1v1,"All administrative accounts SHALL be provisioned as cloud-only accounts separate from an agency&#x27;s authoritative on-premises or other federated identity providers.<div class=""badges"">
+<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
+<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Cool Example Org</dt><dd>SSO is enabled for an OU containing privileged accounts. Privileged accounts must authenticate via Google Workspace, not via an external identity provider.</dd></dl> 
+
+- <dl><dt>Brianna Marquez's OU</dt><dd>SSO is enabled for an OU containing privileged accounts. Privileged accounts must authenticate via Google Workspace, not via an external identity provider.</dd></dl>",Fail,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Cool Example Org</dt><dd>SSO is enabled for an OU containing privileged accounts. Privileged accounts must authenticate via Google Workspace, not via an external identity provider.</dd></dl> 
+
+- <dl><dt>Kimberly Smith's OU</dt><dd>SSO is enabled for an OU containing privileged accounts. Privileged accounts must authenticate via Google Workspace, not via an external identity provider.</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.6.2v1,"A minimum of **two** and a maximum of **eight** separate and distinct super admin users SHALL be configured.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span>
-<span class=""indicator-badge"" style=""background-color: #005288; color: white;"" title=""Customizable via config file"">Configurable</span></div>",Fail,Shall,"The following super admins are configured: stephaniejones@example.org, stephaniejones@example.org, stephaniejones@example.org, stephaniejones@example.org, stephaniejones@example.org, stephaniejones@example.org, stephaniejones@example.org, stephaniejones@example.org, stephaniejones@example.org. <i>Note: Exceptions are allowed for ""break glass"" super admin accounts. ""Break glass"" accounts can be specified in a config file. 0 break glass accounts are currently configured.<i>",Fail,"The following super admins are configured: qsampson@example.com, qsampson@example.com, qsampson@example.com, qsampson@example.com, qsampson@example.com, qsampson@example.com, qsampson@example.com, qsampson@example.com, qsampson@example.com. <i>Note: Exceptions are allowed for ""break glass"" super admin accounts. ""Break glass"" accounts can be specified in a config file. 0 break glass accounts are currently configured.<i>",[],, , , 
+<span class=""indicator-badge"" style=""background-color: #005288; color: white;"" title=""Customizable via config file"">Configurable</span></div>",Fail,Shall,"The following super admins are configured: pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org, pearsonbobby@example.org. <i>Note: Exceptions are allowed for ""break glass"" super admin accounts. ""Break glass"" accounts can be specified in a config file. 3 break glass accounts are currently configured.<i>",Fail,"The following super admins are configured: linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org, linkathleen@example.org. <i>Note: Exceptions are allowed for ""break glass"" super admin accounts. ""Break glass"" accounts can be specified in a config file. 3 break glass accounts are currently configured.<i>",[],, , , 
 GWS.COMMONCONTROLS.8.1v1,"Account self-recovery for super admins SHALL be disabled.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Super admins are allowed to recover their accounts.</dd></dl> 
+- <dl><dt>Cool Example Org (group ejohnson@example.net)</dt><dd>Super admins are allowed to recover their accounts.</dd></dl> 
 
-- <dl><dt>example.org (group antoniobrooks@example.org)</dt><dd>Super admins are allowed to recover their accounts.</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org (group ejohnson@example.net)</dt><dd>Super admins are allowed to recover their accounts.</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Super admins are allowed to recover their accounts.</dd></dl> 
+- <dl><dt>Cool Example Org (group victor74@example.com)</dt><dd>Super admins are allowed to recover their accounts.</dd></dl> 
 
-- <dl><dt>example.org (group fitzgeraldamy@example.net)</dt><dd>Super admins are allowed to recover their accounts.</dd></dl>",[],, , , 
+- <dl><dt>Cool Example Org (group victor74@example.com)</dt><dd>Super admins are allowed to recover their accounts.</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.8.2v1,"Account self-recovery for users and non-super admins SHALL be disabled.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Users and non-super admins are allowed to recover their accounts.</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org</dt><dd>Users and non-super admins are allowed to recover their accounts.</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Users and non-super admins are allowed to recover their accounts.</dd></dl>",[],, , , 
-GWS.COMMONCONTROLS.10.2v1,"Agencies SHALL NOT allow users to grant consent for access to low-risk scopes.<div class=""badges"">
+- <dl><dt>Cool Example Org</dt><dd>Users and non-super admins are allowed to recover their accounts.</dd></dl>",[],, , , 
+GWS.COMMONCONTROLS.10.5v1,"Access to GWS applications by less secure applications that do not meet security authentication standards SHALL be prevented.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following services allow access: CHAT, DRIVE, GMAIL.",Fail,"The following services allow access: CHAT, DRIVE, GMAIL.",[],, , , 
+<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Cool Example Org</dt><dd>Users are allowed to manage access to less secure apps.</dd></dl>",Fail,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Cool Example Org</dt><dd>Users are allowed to manage access to less secure apps.</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.11.1v1,"Only approved Google Workspace (GWS) Marketplace applications SHALL be allowed for installation.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org (group gdelgado@example.com)</dt><dd>Users can install and run any app from the Marketplace.</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Phyllis Freeman's OU</dt><dd>Users can install and run any internal app, even if it's not allowlisted.</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org (group ujohnson@example.org)</dt><dd>Users can install and run any app from the Marketplace.</dd></dl>",[],, , , 
+- <dl><dt>Lisa Gill's OU</dt><dd>Users can install and run any internal app, even if it's not allowlisted.</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.12.1v1,"Google Takeout services SHALL be disabled.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>The following apps with individual admin control have Takeout enabled: Google Books, Google Maps, Google Pay, Google Photos, Google Play, Google Play Console, Timeline - Location History, YouTube</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Angel Zamora's OU</dt><dd>The following apps with individual admin control have Takeout enabled: YouTube</dd></dl> 
+
+- <dl><dt>Cool Example Org</dt><dd>Takeout is enabled for services without an individual admin control.</dd></dl> 
+
+- <dl><dt>Cool Example Org</dt><dd>The following apps with individual admin control have Takeout enabled: Blogger, Google Books, Timeline - Location History</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>The following apps with individual admin control have Takeout enabled: Google Books, Google Maps, Google Pay, Google Photos, Google Play, Google Play Console, Timeline - Location History, YouTube</dd></dl>",[],, , , 
+- <dl><dt>Justin Hall's OU</dt><dd>The following apps with individual admin control have Takeout enabled: YouTube</dd></dl> 
+
+- <dl><dt>Cool Example Org</dt><dd>Takeout is enabled for services without an individual admin control.</dd></dl> 
+
+- <dl><dt>Cool Example Org</dt><dd>The following apps with individual admin control have Takeout enabled: Blogger, Google Books, Timeline - Location History</dd></dl>",[],, , , 
 GWS.COMMONCONTROLS.13.1v1,"Required system-defined alerting rules, as listed in the policy group description, SHALL be enabled with alerts.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"Of the 30 required rules, 24 are enabled and 6 are disabled.  See <a href=""#alerts"">System Defined Alerts</a> for more details.",Fail,"Of the 30 required rules, 24 are enabled and 6 are disabled.  See <a href=""#alerts"">System Defined Alerts</a> for more details.",[],, , , 
-GWS.COMMONCONTROLS.15.1v1,"The data storage region SHALL be set to be the United States for all users in the agency&#x27;s GWS environment.<div class=""badges"">
-<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Region selected to store data at rest: unrestricted (any region)</dd></dl>",Fail,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Region selected to store data at rest: unrestricted (any region)</dd></dl>",[],, , , 
-GWS.COMMONCONTROLS.15.2v1,"Data SHALL be processed in the region selected for data at rest.<div class=""badges"">
-<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Data processing not restricted to selected data at rest region</dd></dl>",Fail,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Data processing not restricted to selected data at rest region</dd></dl>",[],, , , 
+<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"Of the 30 required rules, 29 are enabled and 1 is disabled.  See <a href=""#alerts"">System Defined Alerts</a> for more details.",Fail,"Of the 30 required rules, 29 are enabled and 1 is disabled.  See <a href=""#alerts"">System Defined Alerts</a> for more details.",[],, , , 
 GWS.DRIVEDOCS.1.1v1,"External sharing SHALL be restricted to allowlisted domains.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl> 
+- <dl><dt>Cool Example Org (group alewis@example.org)</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl> 
 
-- <dl><dt>example.org (group benitezcathy@example.org)</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Ernest Johnson's OU</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl> 
+- <dl><dt>Cool Example Org (group schmidtjason@example.com)</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl> 
 
-- <dl><dt>example.org (group udorsey@example.com)</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl>",[],, , , 
-GWS.DRIVEDOCS.1.6v1,"Agencies SHALL set access checking to &quot;recipients only.&quot;<div class=""badges"">
-<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</dd></dl>",Fail,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</dd></dl>",[],, , , 
-GWS.DRIVEDOCS.3.1v1,"Agencies SHALL enable the security update for Google Drive files.<div class=""badges"">
-<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Users are allowed to remove/apply the security update for files they own or manage.</dd></dl>",Fail,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Users are allowed to remove/apply the security update for files they own or manage.</dd></dl>",[],, , , 
-GWS.DRIVEDOCS.5.1v1,"Google Drive for Desktop SHALL be enabled for authorized devices only.<div class=""badges"">
-<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
-<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Drive for Desktop is enabled and can be used on any device.</dd></dl>",Fail,"The following OUs are non-compliant:
- 
-
-- <dl><dt>example.org</dt><dd>Drive for Desktop is enabled and can be used on any device.</dd></dl>",[],, , , 
+- <dl><dt>Chelsea Cook's OU</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl>",[],, , , 
 GWS.GMAIL.3.1v1,"An SPF policy SHALL be published for each domain that fails all non-approved senders.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span>
@@ -242,57 +256,76 @@ GWS.GMAIL.3.1v1,"An SPF policy SHALL be published for each domain that fails all
 GWS.GMAIL.4.1v1,"A DMARC policy SHALL be published at the full domain or the second-level domain for all Google Workspace domains, including user alias domains.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span>
-<span class=""indicator-badge"" style=""background-color: #005288; color: white;"" title=""Customizable via config file"">Configurable</span></div>",Fail,Shall,1 of 2 agency domain(s) found in violation: example.org.,Fail,1 of 2 agency domain(s) found in violation: example.org.,[],, , , 
+<span class=""indicator-badge"" style=""background-color: #005288; color: white;"" title=""Customizable via config file"">Configurable</span></div>",Fail,Shall,"2 of 4 agency domain(s) found in violation: berry.info, example.org.",Fail,"2 of 4 agency domain(s) found in violation: anderson.com, example.org.",[],, , , 
 GWS.GMAIL.4.2v1,"The DMARC message rejection option SHALL be p=reject.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span>
-<span class=""indicator-badge"" style=""background-color: #005288; color: white;"" title=""Customizable via config file"">Configurable</span></div>",Fail,Shall,1 of 2 agency domain(s) found in violation: example.org.,Fail,1 of 2 agency domain(s) found in violation: example.org.,[],, , , 
+<span class=""indicator-badge"" style=""background-color: #005288; color: white;"" title=""Customizable via config file"">Configurable</span></div>",Fail,Shall,"2 of 4 agency domain(s) found in violation: petersen.com, example.org.",Fail,"2 of 4 agency domain(s) found in violation: lloyd.org, example.org.",[],, , , 
 GWS.GMAIL.4.3v1,"The DMARC point of contact for aggregate reports SHALL include `reports@dmarc.cyber.dhs.gov`.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span>
-<span class=""indicator-badge"" style=""background-color: #005288; color: white;"" title=""Customizable via config file"">Configurable</span></div>",Fail,Shall,"2 of 2 agency domain(s) found in violation: example.org, example.org.Melissa Parker's OU-google-a.com.",Fail,"2 of 2 agency domain(s) found in violation: example.org, example.org.Derrick Esparza's OU-google-a.com.",[],, , , 
+<span class=""indicator-badge"" style=""background-color: #005288; color: white;"" title=""Customizable via config file"">Configurable</span></div>",Fail,Shall,"3 of 4 agency domain(s) found in violation: jackson.info, example.org, example.org.test-google-a.com.",Fail,"3 of 4 agency domain(s) found in violation: davis.com, example.org, example.org.test-google-a.com.",[],, , , 
 GWS.GMAIL.5.5v1,"Emails flagged by SCuBA policies GWS.GMAIL.5.1 through GWS.GMAIL.5.3 SHALL NOT be kept in inbox.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>encrypted, scripts attachment emails not removed from inbox</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org</dt><dd>anomalous type, encrypted attachment emails not removed from inbox</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>encrypted, scripts attachment emails not removed from inbox</dd></dl>",[],, , , 
-GWS.GMAIL.6.3v1,"&quot;Show warning prompt for any click on links to untrusted domains&quot; SHALL be enabled.<div class=""badges"">
+- <dl><dt>Cool Example Org</dt><dd>anomalous type, encrypted attachment emails not removed from inbox</dd></dl>",[],, , , 
+GWS.GMAIL.7.6v1,"Emails flagged by SCuBA policies GWS.GMAIL.7.1 through GWS.GMAIL.7.5 SHALL NOT be kept in inbox.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Show warning prompt for click on links to untrusted domains is: disabled</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Cool Example Org</dt><dd>domain name, employee name spoof emails not removed from inbox</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Show warning prompt for click on links to untrusted domains is: disabled</dd></dl>",[],, , , 
+- <dl><dt>Cool Example Org</dt><dd>domain name, employee name spoof emails not removed from inbox</dd></dl>",[],, , , 
 GWS.GMAIL.9.1v1,"POP and IMAP access SHALL be disabled to protect sensitive agency or organization emails from being accessed through legacy applications or other third-party mail clients.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span>
 <span class=""indicator-badge"" style=""background-color: #005288; color: white;"" title=""Customizable via config file"">Configurable</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>IMAP and POP access are enabled</dd></dl> 
+- <dl><dt>Cool Example Org (group xbarrera@example.com)</dt><dd>IMAP access is enabled</dd></dl> 
 
-- <dl><dt>example.org (group stricklandcharles@example.net)</dt><dd>POP access is enabled</dd></dl> 
+- <dl><dt>Laura Smith's OU</dt><dd>POP access is enabled</dd></dl> 
 
-- <dl><dt>Laura Evans's OU</dt><dd>POP access is enabled</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Jason Miller's OU (in Karen Wade's OU/Kristin Pineda's OU)</dt><dd>IMAP access is enabled</dd></dl> 
+
+<br>Note: IMAP is enabled in the following locations but ScubaGoggles was configured to allow exceptions for them:<ul>
+- Cool Example Org (group xbarrera@example.com).  
+- Kristin Pineda's OU (in Karen Wade's OU).  
+- Laura Smith's OU. <i>Justification: because perfectly valid reasons</i> </ul>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>IMAP and POP access are enabled</dd></dl> 
+- <dl><dt>Cool Example Org (group deborah96@example.com)</dt><dd>IMAP access is enabled</dd></dl> 
 
-- <dl><dt>example.org (group myersjoseph@example.com)</dt><dd>POP access is enabled</dd></dl> 
+- <dl><dt>Cassidy Hughes's OU</dt><dd>POP access is enabled</dd></dl> 
 
-- <dl><dt>Elizabeth Barnett's OU</dt><dd>POP access is enabled</dd></dl>",[],, , , 
-GWS.GROUPS.4.1v1,"The ability for groups to be hidden from the directory SHALL be disabled.<div class=""badges"">
+- <dl><dt>Daniel Wong's OU (in Veronica Chan's OU/Eileen Bryan's OU)</dt><dd>IMAP access is enabled</dd></dl> 
+
+<br>Note: IMAP is enabled in the following locations but ScubaGoggles was configured to allow exceptions for them:<ul>
+- Cool Example Org (group deborah96@example.com).  
+- Eileen Bryan's OU (in Veronica Chan's OU).  
+- Cassidy Hughes's OU. <i>Justification: because perfectly valid reasons</i> </ul>",[],, , , 
+GWS.GMAIL.12.1v1,"The option to use a per-user outbound gateway that is a mail server other than the Google Workspace (GWS) mail servers SHALL be disabled.<div class=""badges"">
 <span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
 <span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Group owners can hide groups</dd></dl>",Fail,"The following OUs are non-compliant:
+- <dl><dt>Steve Prince's OU (in Wayne Davis's OU/Kimberly Thompson's OU)</dt><dd>Per-user Outbound Gateways are enabled</dd></dl>",Fail,"The following OUs are non-compliant:
  
 
-- <dl><dt>example.org</dt><dd>Group owners can hide groups</dd></dl>",[],, , , 
+- <dl><dt>Casey Gates's OU (in Robert Dunlap's OU/Sheila Smith's OU)</dt><dd>Per-user Outbound Gateways are enabled</dd></dl>",[],, , , 
+GWS.GMAIL.18.1v1,"Domains SHALL NOT be added to lists that bypass spam filters.<div class=""badges"">
+<span class=""indicator-badge"" style=""background-color: #C41230; color: white;"" title=""Required by CISA BOD 25-01"">BOD 25-01 Requirement</span>
+<span class=""indicator-badge"" style=""background-color: #5E9732; color: black;"" title=""Automatically verified by ScubaGoggles"">Automated Check</span></div>",Fail,Shall,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Cool Example Org</dt><dd>Spam filters are bypassed for one or more domains: {Scuba: [Scuba: (santos.com, example.org)]}</dd></dl>",Fail,"The following OUs are non-compliant:
+ 
+
+- <dl><dt>Cool Example Org</dt><dd>Spam filters are bypassed for one or more domains: {Scuba: [Scuba: (stevenson.info, example.org)]}</dd></dl>",[],, , , 

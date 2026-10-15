@@ -43,24 +43,24 @@ described in the Secure Configuration Baselines (SCBs)"/>
     <th>Tool Version</th>
   </tr>
   <tr>
-    <td>example.org</td>
+    <td>Cool Example Org</td>
     <td>example.org</td>
     <td>ABCDEFG</td>
-    <td>10/14/2026 14:01:43 Pacific Daylight Time</td>
+    <td>10/15/2026 15:53:04 Pacific Daylight Time</td>
     <td>1</td>
-    <td>v1.0.1</td>
+    <td>v1.1.0</td>
   </tr>
 </table>
 
             <div id="indicator-legend">
   <div id="indicator-legend-label">Policy Indicators:</div>
   <ul id="indicator-legend-list">
-    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/drive.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</a><span style="color: var(--text-color);">Automatically verified by ScubaGoggles</span></li>
+    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/drive.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</a><span style="color: var(--text-color);">Automatically verified by ScubaGoggles</span></li>
     <li class="indicator-legend-item"><span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span><span style="color: var(--text-color);">Required by CISA BOD 25-01</span></li>
-    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/drive.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</a><span style="color: var(--text-color);">Requires manual verification</span></li>
+    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/drive.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #046B9A; color: white;" title="Requires manual verification">Manual</a><span style="color: var(--text-color);">Requires manual verification</span></li>
 </ul>
 </div>
-<h2>DRIVEDOCS-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/drive.md#1-sharing-outside-the-organization" target="_blank">Sharing Outside the Organization</a></h2>
+<h2>DRIVEDOCS-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/drive.md#1-sharing-outside-the-organization" target="_blank">Sharing Outside the Organization</a></h2>
 <table>
   <thead>
     <tr>
@@ -82,8 +82,8 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Shall</td>
       <td>The following OUs are non-compliant:
 <ol>
-<li><dl><dt>example.org</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl></li>
-<li><dl><dt>example.org (group christopher62@example.net)</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl></li>
+<li><dl><dt>Cool Example Org (group paul86@example.net)</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl></li>
+<li><dl><dt>Rebecca Gonzales's OU</dt><dd>Files owned by users or shared drives can be shared outside of the organization</dd></dl></li>
 </ol>
 </td>
     </tr>
@@ -106,19 +106,14 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Shall</td>
       <td>Requirement met.</td>
     </tr>
-    <tr class="warning-status">
+    <tr class="pass-status">
       <td>GWS.DRIVEDOCS.1.4v1</td>
       <td>If sharing outside of the organization, agencies SHOULD disable sharing of files with individuals who are not using a Google account.<div class="badges">
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Warning</td>
+      <td class="report-status">Pass</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:
-<ol>
-<li><dl><dt>example.org</dt><dd>File sharing with any domains, with non-Google users.</dd></dl></li>
-<li><dl><dt>example.org (group christopher62@example.net)</dt><dd>File sharing with any domains, with non-Google users.</dd></dl></li>
-</ol>
-</td>
+      <td>Requirement met.</td>
     </tr>
     <tr class="warning-status">
       <td>GWS.DRIVEDOCS.1.5v1</td>
@@ -129,23 +124,20 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Should</td>
       <td>The following OUs are non-compliant:
 <ol>
-<li><dl><dt>example.org</dt><dd>Published web content can be made visible to anyone with a link</dd></dl></li>
+<li><dl><dt>Cool Example Org (group paul86@example.net)</dt><dd>Published web content can be made visible to anyone with a link</dd></dl></li>
+<li><dl><dt>Rebecca Gonzales's OU</dt><dd>Published web content can be made visible to anyone with a link</dd></dl></li>
 </ol>
 </td>
     </tr>
-    <tr class="fail-status">
+    <tr class="pass-status">
       <td>GWS.DRIVEDOCS.1.6v1</td>
       <td>Agencies SHALL set access checking to &quot;recipients only.&quot;<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Fail</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:
-<ol>
-<li><dl><dt>example.org</dt><dd>Access Checker allows users to share files to recipients only, suggested target audience, or public (no Google account required)</dd></dl></li>
-</ol>
-</td>
+      <td>Requirement met.</td>
     </tr>
     <tr class="warning-status">
       <td>GWS.DRIVEDOCS.1.7v1</td>
@@ -156,8 +148,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Should</td>
       <td>The following OUs are non-compliant:
 <ol>
-<li><dl><dt>example.org</dt><dd>Anyone can distribute content outside of the organization</dd></dl></li>
-<li><dl><dt>example.org (group christopher62@example.net)</dt><dd>Only users inside the organization can distribute content outside of the organization</dd></dl></li>
+<li><dl><dt>Cool Example Org (group paul86@example.net)</dt><dd>Anyone can distribute content outside of the organization</dd></dl></li>
 </ol>
 </td>
     </tr>
@@ -188,7 +179,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Should/Not-Implemented</td>
-      <td>Currently not able to be Patricia Arroyo's OUed automatically; please manually check.</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
     <tr class="other-status">
       <td>GWS.DRIVEDOCS.1.11v1</td>
@@ -197,10 +188,10 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Should/Not-Implemented</td>
-      <td>Currently not able to be Patricia Arroyo's OUed automatically; please manually check.</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/drive.md#2-shared-drive-creation" target="_blank">Shared Drive Creation</a></h2>
+</table><h2>DRIVEDOCS-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/drive.md#2-shared-drive-creation" target="_blank">Shared Drive Creation</a></h2>
 <table>
   <thead>
     <tr>
@@ -212,18 +203,14 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="warning-status">
+    <tr class="pass-status">
       <td>GWS.DRIVEDOCS.2.1v1</td>
       <td>Agencies SHOULD NOT allow members with manager access to override shared Google Drive creation settings.<div class="badges">
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Warning</td>
+      <td class="report-status">Pass</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:
-<ol>
-<li><dl><dt>example.org</dt><dd>Members with manager access can override shared drive settings.</dd></dl></li>
-</ol>
-</td>
+      <td>Requirement met.</td>
     </tr>
     <tr class="pass-status">
       <td>GWS.DRIVEDOCS.2.2v1</td>
@@ -236,7 +223,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/drive.md#3-security-updates-for-files" target="_blank">Security Updates for Files</a></h2>
+</table><h2>DRIVEDOCS-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/drive.md#3-security-updates-for-files" target="_blank">Security Updates for Files</a></h2>
 <table>
   <thead>
     <tr>
@@ -248,22 +235,18 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="fail-status">
+    <tr class="pass-status">
       <td>GWS.DRIVEDOCS.3.1v1</td>
       <td>Agencies SHALL enable the security update for Google Drive files.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Fail</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:
-<ol>
-<li><dl><dt>example.org</dt><dd>Users are allowed to remove/apply the security update for files they own or manage.</dd></dl></li>
-</ol>
-</td>
+      <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/drive.md#4-drive-sdk" target="_blank">Drive SDK</a></h2>
+</table><h2>DRIVEDOCS-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/drive.md#4-drive-sdk" target="_blank">Drive SDK</a></h2>
 <table>
   <thead>
     <tr>
@@ -285,7 +268,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>DRIVEDOCS-5 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.1/scubagoggles/baselines/drive.md#5-drive-for-desktop" target="_blank">Drive for Desktop</a></h2>
+</table><h2>DRIVEDOCS-5 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/drive.md#5-drive-for-desktop" target="_blank">Drive for Desktop</a></h2>
 <table>
   <thead>
     <tr>
@@ -297,19 +280,15 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="fail-status">
+    <tr class="pass-status">
       <td>GWS.DRIVEDOCS.5.1v1</td>
       <td>Google Drive for Desktop SHALL be enabled for authorized devices only.<div class="badges">
 <span class="indicator-badge" style="background-color: #C41230; color: white;" title="Required by CISA BOD 25-01">BOD 25-01 Requirement</span>
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Fail</td>
+      <td class="report-status">Pass</td>
       <td>Shall</td>
-      <td>The following OUs are non-compliant:
-<ol>
-<li><dl><dt>example.org</dt><dd>Drive for Desktop is enabled and can be used on any device.</dd></dl></li>
-</ol>
-</td>
+      <td>Requirement met.</td>
     </tr>
     <tr class="other-status">
       <td>GWS.DRIVEDOCS.5.2v1</td>
@@ -318,7 +297,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">N/A</td>
       <td>Shall/Not-Implemented</td>
-      <td>Currently not able to be Patricia Arroyo's OUed automatically; please manually check.</td>
+      <td>Currently not able to be tested automatically; please manually check.</td>
     </tr>
   </tbody>
 </table>
