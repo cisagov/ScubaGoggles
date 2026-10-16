@@ -13,6 +13,7 @@ from pathlib import Path
 from google.auth.exceptions import RefreshError
 
 from scubagoggles.config import UserConfig
+from scubagoggles.diff import run_diff
 from scubagoggles.getopa import getopa
 from scubagoggles.orchestrator import Orchestrator, UserRuntimeError
 from scubagoggles.purge import purge_reports
@@ -298,6 +299,81 @@ def get_ui_args(parser: argparse.ArgumentParser):
                         action='store_true',
                         help='Enable dark mode (not enabled by default)')
 
+def get_diff_args(parser: argparse.ArgumentParser):
+    """Adds the arguments for the diff parser
+
+    :param argparse.ArgumentParser parser: argparse object
+    """
+
+    def diff_dispatch(args):
+        try:
+            run_diff(args.beforepath,
+                     args.afterpath,
+                     outputpath=args.outputpath,
+                     outjsonfilename=args.outjsonfilename,
+                     outcsvfilename=args.outcsvfilename,
+                     outreportfilename=args.outputreportfilename,
+                     darkmode=args.darkmode == 'true',
+                     quiet=args.quiet)
+        except ValueError as ve:
+            raise UserRuntimeError(str(ve)) from ve
+
+    parser.set_defaults(dispatch=diff_dispatch)
+
+    parser.add_argument('--beforepath',
+                        required=True,
+                        metavar='<ScubaResults-JSON-file>',
+                        type=path_parser,
+                        help='Path to the earlier ("before") ScubaResults JSON file.')
+
+    parser.add_argument('--afterpath',
+                        required=True,
+                        metavar='<ScubaResults-JSON-file>',
+                        type=path_parser,
+                        help='Path to the later ("after") ScubaResults JSON file.')
+
+    help_msg = ('The folder path where the diff JSON, CSV, and HTML report '
+                'will be created. Created if it does not exist. Defaults to '
+                'the current directory.')
+    parser.add_argument('--outputpath',
+                        '-o',
+                        default=None,
+                        metavar='<directory>',
+                        type=path_parser,
+                        help=help_msg)
+
+    help_msg = ('Base name (without extension) of the diff JSON file. '
+                'Defaults to DiffResults.')
+    parser.add_argument('--outjsonfilename',
+                        default='DiffResults',
+                        metavar='<name>',
+                        help=help_msg)
+
+    help_msg = ('Base name (without extension) of the diff CSV file. '
+                'Defaults to DiffResults.')
+    parser.add_argument('--outcsvfilename',
+                        default='DiffResults',
+                        metavar='<name>',
+                        help=help_msg)
+
+    help_msg = ('Base name (without extension) of the diff HTML report. '
+                'Defaults to DiffReport.')
+    parser.add_argument('--outputreportfilename',
+                        default='DiffReport',
+                        metavar='<name>',
+                        help=help_msg)
+
+    parser.add_argument('--darkmode',
+                        '-dm',
+                        metavar='<dark-mode>',
+                        choices=('true', 'false'),
+                        default='false',
+                        help='Open the diff HTML report in dark mode')
+
+    help_msg = 'This switch suppresses printing the output file paths.'
+    parser.add_argument('--quiet', action='store_true', help=help_msg)
+
+
 def get_opa_args(parser: argparse.ArgumentParser, user_config: UserConfig):
     """Adds the arguments for the "get OPA" parser.
 
@@ -453,6 +529,9 @@ def dive():
 
     # run gws with -h to see arguments for the gws subparser
     scubagoggles gws -h
+
+    # compare two earlier runs and write the diff to a 'diff' folder
+    scubagoggles diff --beforepath before.json --afterpath after.json -o ./diff
     """
 
     helpFormatter = argparse.RawDescriptionHelpFormatter
@@ -495,6 +574,12 @@ def dive():
                                        description=help_msg,
                                        help=help_msg)
     get_ui_args(gws_parser)
+
+    help_msg = 'Compare two ScubaGoggles ScubaResults JSON files'
+    diff_parser = subparsers.add_parser('diff',
+                                        description=help_msg,
+                                        help=help_msg)
+    get_diff_args(diff_parser)
 
     help_msg = 'Download OPA executable'
     getopa_parser = subparsers.add_parser('getopa',
