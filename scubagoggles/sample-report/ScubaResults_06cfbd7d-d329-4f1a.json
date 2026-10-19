@@ -391259,7 +391259,7 @@
             {
                 "domain": "manning.info",
                 "rdata": [
-                    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA393DgvoAHByhn2JdvMIDnCbHKxlTCf5jZjYSwdu7LjxAgyEu5Lf0Luks32fb+Bfb7/8+W0NF30KTmiFRNIElLZUfMmJJeAI7Uzn82t5nbpL0wrZ1P5CT0OE+LZ6XqZS8BfHcFVSb9f/kQ5Hoe+rGpRRcwjBjcUT1TINKI8+32NEOpoGyYI0w9e0apjxvUe1aB\" \"RtxjcC0w7wIevPmOIFOzDPnOxmGTeto3MWY9IGSMz8EeeawqApNaFx9bD1dCZueJWx7PndtJ6JXZhm1QK34ZXfifY1wN84sC0ypaIzIBqrjCRmlao+7VhDl16aYJHYjPVKLsJCYhSoGvYf/9w4IeQIDAQAB"
+                    "v=DKIM1; k=rsa; p=12345"
                 ],
                 "log": [
                     {
@@ -391267,7 +391267,7 @@
                         "query_method": "traditional",
                         "query_result": "Query returned 1 txt records",
                         "query_answers": [
-                            "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA393DgvoAHByhn2JdvMIDnCbHKxlTCf5jZjYSwdu7LjxAgyEu5Lf0Luks32fb+Bfb7/8+W0NF30KTmiFRNIElLZUfMmJJeAI7Uzn82t5nbpL0wrZ1P5CT0OE+LZ6XqZS8BfHcFVSb9f/kQ5Hoe+rGpRRcwjBjcUT1TINKI8+32NEOpoGyYI0w9e0apjxvUe1aB\" \"RtxjcC0w7wIevPmOIFOzDPnOxmGTeto3MWY9IGSMz8EeeawqApNaFx9bD1dCZueJWx7PndtJ6JXZhm1QK34ZXfifY1wN84sC0ypaIzIBqrjCRmlao+7VhDl16aYJHYjPVKLsJCYhSoGvYf/9w4IeQIDAQAB"
+                            "v=DKIM1; k=rsa; p=12345"
                         ]
                     }
                 ]
@@ -393108,7 +393108,7 @@
             "log": "warning",
             "outputlog": null,
             "dispatch": null,
-            "credentials": "C:\\Users\\ExampleUser\\Repos\\ScubaGoggles\\creds\\scubagws_service.json",
+            "credentials": "C:\\Users\\ExampleUser\\Repos\\ScubaGoggles\\creds\\service.json",
             "darkmode": null,
             "cicdtestingmode": null,
             "usemetadataserverauth": false,
@@ -393185,7 +393185,7 @@
                 }
             ],
             "sitesexclusions": [],
-            "OrgName": "ScubaTest",
+            "OrgName": "Example",
             "fullnamesdict": {
                 "gmail": "Gmail",
                 "calendar": "Google Calendar",
