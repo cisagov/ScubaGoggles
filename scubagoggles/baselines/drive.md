@@ -215,7 +215,7 @@ To configure the settings for Sharing options:
 #### GWS.DRIVEDOCS.1.1v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  Select **Sharing outside of your domain** -\> **ALLOWLISTED DOMAINS – Files owned by users or shared drives in your domain can be shared with Google accounts in compatible allowlisted domains**
-    - _Note:_ Selecting **OFF – Files owned by users in your domain cannot be shared outside of your domain** is more restrictive and also satisfies this policy.
+    - _Note:_ Selecting **OFF – Files owned by users in your domain can't be shared outside of your domain** is more restrictive and also satisfies this policy.
 
 #### GWS.DRIVEDOCS.1.2v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
