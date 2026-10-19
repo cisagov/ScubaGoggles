@@ -123,14 +123,27 @@ NonComplianceMessage1_1b(value) := sprintf("Allowed %s method is set to \"%s\"."
 
 NonComplianceMessage1_1c := sprintf("%s is not enforced.", [TwoSV])
 
+RFC3339 := "2006-01-02T15:04:05Z07:00"
+
+Is2SVEnforcementEnabled(enforce2SV) := true if {
+
+    # 2SV enforcement is enabled if the given time is NOT the "unix epoch" time,
+    # which is the zero value.  If enabled, the date also must be before the
+    # current time (see Is2SVEnforced below).
+
+    enforceValue := time.parse_ns(RFC3339, enforce2SV)
+    enforceValue != 0
+} else := false
+
 Today := time.now_ns()
 
 Is2SVEnforced(enforce2SV) := true if {
+
     # 2SV is enforced if the given time (as an ISO8601/RFC3339 date/time string)
     # of enforcement is before the current time (today, right now).
-    RFC3339 := "2006-01-02T15:04:05Z07:00"
+
+    Is2SVEnforcementEnabled(enforce2SV)
     enforceValue := time.parse_ns(RFC3339, enforce2SV)
-    enforceValue != 0
     enforceValue <= Today
 } else := false
 
@@ -152,6 +165,20 @@ if {
 
 NonCompliantOUs1_1 contains {
     "Name": OU,
+    "Value": NonComplianceMessage1_1c
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    not Is2SVEnforced(enforce2SV)
+}
+
+NonCompliantOUs1_1 contains {
+    "Name": OU,
     "Value": NonComplianceMessage1_1b(GetFriendlyMethods(enforceMethod))
 }
 if {
@@ -160,42 +187,12 @@ if {
                                           "allowEnrollment",
                                           OU)
     enable2SV
+    enforce2SV := utils.GetApiSettingValue("security_two_step_verification_enforcement",
+                                           "enforcedFrom",
+                                           OU)
+    Is2SVEnforced(enforce2SV)
     enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
     enforceMethod != "PASSKEY_ONLY"
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true
-}
-
-NonCompliantOUs1_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage1_1c
-}
-if {
-    some OU, settings in input.policies
-    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
-                                          "allowEnrollment",
-                                          OU)
-    enable2SV
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == false
-}
-
-NonCompliantOUs1_1 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage1_1c
-}
-if {
-    some OU, settings in input.policies
-    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
-                                          "allowEnrollment",
-                                          OU)
-    enable2SV
-    enforceMethod := utils.GetApiSettingValue("security_two_step_verification_enforcement_factor",
-                                              "allowedSignInFactorSet",
-                                              OU)
-    enforceMethod == "PASSKEY_ONLY"
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == false
 }
 
 tests contains {
@@ -247,7 +244,7 @@ if {
                                           OU)
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == false
+    not Is2SVEnforced(enforce2SV)
 }
 
 tests contains {
@@ -291,6 +288,20 @@ if {
 
 NonCompliantOUs1_3 contains {
     "Name": OU,
+    "Value": NonComplianceMessage1_3c
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
+    not Is2SVEnforced(enforce2SV)
+}
+
+NonCompliantOUs1_3 contains {
+    "Name": OU,
     "Value": NonComplianceMessage1_3b
 }
 if {
@@ -299,43 +310,15 @@ if {
                                           "allowEnrollment",
                                           OU)
     enable2SV
+    enforce2SV := utils.GetApiSettingValue("security_two_step_verification_enforcement",
+                                           "enforcedFrom",
+                                           OU)
+    Is2SVEnforced(enforce2SV)
+
+    # ALL is the only option that allows telephony.
+
     enforceMethod := settings.security_two_step_verification_enforcement_factor.allowedSignInFactorSet
     enforceMethod == "ALL"
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true
-}
-
-NonCompliantOUs1_3 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage1_3c
-}
-if {
-    some OU, settings in input.policies
-    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
-                                          "allowEnrollment",
-                                          OU)
-    enable2SV
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == false
-    enforcedFrom = "1970-01-01T00:00:00Z"
-}
-
-NonCompliantOUs1_3 contains {
-    "Name": OU,
-    "Value": NonComplianceMessage1_3c
-}
-if {
-    some OU, settings in input.policies
-    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
-                                          "allowEnrollment",
-                                          OU)
-    enable2SV
-    enforceMethod := utils.GetApiSettingValue("security_two_step_verification_enforcement_factor",
-                                              "allowedSignInFactorSet",
-                                              OU)
-    enforceMethod != "ALL"
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == false
 }
 
 tests contains {
@@ -363,13 +346,13 @@ if {
 CommonControlsId1_4 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.1.4")
 
 Prefix1_4 := "New user enrollment period"
-NonComplianceMessage1_4(value,
-                        expected) := sprintf("%s is NONE", [Prefix1_4]) if {
-                            value == 0
-                        } else := sprintf("%s %s (longer than %s)",
-                                          [Prefix1_4,
-                                           utils.GetFriendlyDuration(value),
-                                           utils.GetFriendlyDuration(expected)])
+ExpectedPeriod1_4 := utils.DurationToSeconds("7d")
+NonComplianceMessage1_4(value) := sprintf("%s is NONE", [Prefix1_4]) if {
+    value == 0
+} else := sprintf("%s %s (longer than %s)",
+                  [Prefix1_4,
+                  utils.GetFriendlyDuration(value),
+                  utils.GetFriendlyDuration(ExpectedPeriod1_4)])
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
@@ -383,27 +366,6 @@ if {
 
 NonCompliantOUs1_4 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_4(enrollSeconds, expectedPeriod)
-}
-if {
-    expectedPeriod := utils.DurationToSeconds("7d")
-    some OU, settings in input.policies
-    enrollPeriod := settings.security_two_step_verification_grace_period.enrollmentGracePeriod
-    enrollSeconds := utils.DurationToSeconds(enrollPeriod)
-    true in {
-        enrollSeconds == 0,
-        enrollSeconds > expectedPeriod
-    }
-    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
-                                          "allowEnrollment",
-                                          OU)
-    enable2SV
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true
-}
-
-NonCompliantOUs1_4 contains {
-    "Name": OU,
     "Value": NonComplianceMessage1_1c
 }
 if {
@@ -413,8 +375,30 @@ if {
                                           OU)
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == false
-    enforcedFrom = "1970-01-01T00:00:00Z"
+    not Is2SVEnforced(enforce2SV)
+}
+
+NonCompliantOUs1_4 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_4(enrollSeconds)
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforce2SV := utils.GetApiSettingValue("security_two_step_verification_enforcement",
+                                           "enforcedFrom",
+                                           OU)
+    Is2SVEnforced(enforce2SV)
+
+    enrollPeriod := settings.security_two_step_verification_grace_period.enrollmentGracePeriod
+    enrollSeconds := utils.DurationToSeconds(enrollPeriod)
+    true in {
+        enrollSeconds == 0,
+        enrollSeconds > ExpectedPeriod1_4
+    }
 }
 
 tests contains {
@@ -451,22 +435,6 @@ if {
 
 NonCompliantOUs1_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage1_5
-}
-if {
-    some OU, settings in input.policies
-    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
-                                          "allowEnrollment",
-                                          OU)
-    enable2SV
-    trustDevice := settings.security_two_step_verification_device_trust.allowTrustingDevice
-    trustDevice
-    enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == true
-}
-
-NonCompliantOUs1_5 contains {
-    "Name": OU,
     "Value": NonComplianceMessage1_1c
 }
 if {
@@ -476,8 +444,26 @@ if {
                                           OU)
     enable2SV
     enforce2SV := settings.security_two_step_verification_enforcement.enforcedFrom
-    Is2SVEnforced(enforce2SV) == false
-    enforcedFrom = "1970-01-01T00:00:00Z"
+    not Is2SVEnforced(enforce2SV)
+}
+
+NonCompliantOUs1_5 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage1_5
+}
+if {
+    some OU, settings in input.policies
+    enable2SV := utils.GetApiSettingValue("security_two_step_verification_enrollment",
+                                          "allowEnrollment",
+                                          OU)
+    enable2SV
+    enforce2SV := utils.GetApiSettingValue("security_two_step_verification_enforcement",
+                                           "enforcedFrom",
+                                           OU)
+    Is2SVEnforced(enforce2SV)
+
+    trustDevice := settings.security_two_step_verification_device_trust.allowTrustingDevice
+    trustDevice
 }
 
 tests contains {
