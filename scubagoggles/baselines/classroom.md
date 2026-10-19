@@ -48,7 +48,7 @@ This section covers who has the ability to join classes and what classes the use
 ### Policies
 
 #### GWS.CLASSROOM.1.1v1
-"Who can join classes in your domain" SHOULD be set to "Users in your domain only."
+"Who can join classes in your domain" SHOULD be set to "Users in allowlisted domains."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -60,7 +60,7 @@ This section covers who has the ability to join classes and what classes the use
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.CLASSROOM.1.2v1
-"Which classes users in your domain can join" SHOULD be set to "Classes in your domain only."
+"Which classes users in your domain can join" SHOULD be set to "Classes in allowlisted domains."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -88,11 +88,11 @@ To configure the settings for Class Membership:
 4.  Select **About class membership**.
 
 #### GWS.CLASSROOM.1.1v1 Instructions
-1.  For **Who can join classes in your domain**, select **Users in your domain only**.
+1.  For **Who can join classes in your domain**, select **Users in allowlisted domains**.
 2.  Select **Save**.
 
 #### GWS.CLASSROOM.1.2v1 Instructions
-1.  For **Which classes can users in your domain join**, select **Classes in your domain only**.
+1.  For **Which classes can users in your domain join**, select **Classes in allowlisted domains**.
 2.  Select **Save**.
 
 ## 2. Classroom API
