@@ -609,7 +609,7 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
 #### GWS.GMAIL.7.5v1
-"Protect your Groups from inbound emails spoofing your domain" SHALL be enabled.
+"Protect your Groups from inbound emails spoofing your domain" SHALL be enabled for all groups.
 
 [![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
@@ -688,6 +688,7 @@ To configure the settings for Spoofing and Authentication Protection:
 
 #### GWS.GMAIL.7.5v1 Instructions
 1.  Check the **Protect your groups from inbound emails spoofing your domain** checkbox.
+2.  Change **Allow this setting to** from **Only private groups (default)** to **All groups**
 
 #### GWS.GMAIL.7.6v1 Instructions
 1.  Under each setting from Policy 7.1 through Policy 7.5, make sure either "Move email to spam" or "Quarantine" is selected.
