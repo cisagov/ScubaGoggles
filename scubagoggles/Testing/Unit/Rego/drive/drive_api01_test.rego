@@ -140,19 +140,43 @@ test_ExtSharing_Incorrect_1 if {
     PolicyId := DriveId1_1
     Output := tests with input as BadDriveApi01
 
-    failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWLISTED_DOMAINS"))},
-                 {"Name": "topOU",
+    failedOU := [{"Name": "topOU",
                  "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
-test_ExtSharing_Incorrect_2 if {
+test_ExtSharing_Correct_2 if {
+    # Top OU disallows external sharing, next OU restricts it to allowlisted
+    # domains - both are compliant.
     PolicyId := DriveId1_1
     Output := tests with input as BadDriveApi01a
 
+    PassTestResult(PolicyId, Output)
+}
+
+test_ExtSharing_Incorrect_2 if {
+    PolicyId := DriveId1_1
+    Output := tests with input as {
+        "policies": {
+            "topOU": {
+                "drive_and_docs_external_sharing": {
+                    "externalSharingMode": "ALLOWLISTED_DOMAINS"
+                },
+                "drive_and_docs_service_status": {"serviceState": "ENABLED"}
+            },
+            "nextOU": {
+                "drive_and_docs_external_sharing": {
+                    "externalSharingMode": "ALLOWED"
+                }
+            }
+        },
+        "tenant_info": {
+            "topLevelOU": "topOU"
+        }
+    }
+
     failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWLISTED_DOMAINS"))}]
+                 "Value": NonComplianceMessage1_1(GetFriendlyValue1_1("ALLOWED"))}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
