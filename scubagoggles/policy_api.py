@@ -258,6 +258,7 @@ class PolicyAPI:
             'domainSpoofingConsequence': isEnum,
             'employeeNameSpoofingConsequence': isEnum,
             'groupsSpoofingConsequence': isEnum,
+            'groupsSpoofingVisibilityType': isEnum,
             'unauthenticatedEmailConsequence': isEnum}},
         'gmail_user_email_uploads': {'settings': {
             'enableMailAndContactsImport': isBool}},
@@ -452,6 +453,12 @@ class PolicyAPI:
             'requiresCustomerApproval': False
         }
     })
+
+    # The Admin console defaults this to private groups only. Google does not
+    # list that default, but GWS.GMAIL.7.5 has to fail when the Policy API
+    # omits the field instead of treating a missing value as compliant.
+    _defaults['gmail_spoofing_and_authentication'][
+        'groupsSpoofingVisibilityType'] = 'PRIVATE_GROUPS_ONLY'
 
     # This is the URL to the Policies API.
     _baseURL = 'https://cloudidentity.googleapis.com/v1/policies'
