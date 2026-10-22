@@ -642,7 +642,9 @@ tests contains {
     "NoSuchEvent": true
 }
 if {
-    DefaultSafe := false
+    # Unlike the SSO profile for the organization (3.1), the default for
+    # other SSO profiles is to apply additional login challenges and 2SV.
+    DefaultSafe := true
     not Check3_2_OK
 }
 
@@ -1478,13 +1480,14 @@ CommonControlsId10_4 := utils.PolicyIdWithSuffix("GWS.COMMONCONTROLS.10.4")
 
 # NOTE: this setting cannot be set at the group level.
 
-# NOTE: Google documentation lists the setting options as ACCESS_LEVEL_UNSPECIFIED, BLOCK_ALL and ALLOW_SIGN_IN_ONLY
-# But actual setting options are UNSPECIFIED_UBER_BLOCK, BLOCK_ALL_SCOPES and ALLOW_SIGN_IN_SCOPES_ONLY
+# NOTE: The Policy API returns ACCESS_LEVEL_UNSPECIFIED, BLOCK_ALL and ALLOW_SIGN_IN_ONLY,
+# as documented by Google. The legacy values (UNSPECIFIED_UBER_BLOCK, BLOCK_ALL_SCOPES and
+# ALLOW_SIGN_IN_SCOPES_ONLY) are also accepted.
 GetFriendlyValue10_4(Value) := "Allow users to access any third-party apps" if {
-    Value == "UNSPECIFIED_UBER_BLOCK"
+    Value in {"ACCESS_LEVEL_UNSPECIFIED", "UNSPECIFIED_UBER_BLOCK"}
 } else := "Allow users to access third-party apps that only request basic info needed for Sign in with Google" if {
-    Value == "ALLOW_SIGN_IN_SCOPES_ONLY"
-}
+    Value in {"ALLOW_SIGN_IN_ONLY", "ALLOW_SIGN_IN_SCOPES_ONLY"}
+} else := Value
 
 NonCompliantOUs10_4 contains {
     "Name": OU,
@@ -1493,6 +1496,7 @@ NonCompliantOUs10_4 contains {
 if {
     some OU, settings in input.policies
     accessLevel := settings.api_controls_unconfigured_third_party_apps.accessLevel
+    not accessLevel in {"BLOCK_ALL", "BLOCK_ALL_SCOPES"}
 }
 
 tests contains {
