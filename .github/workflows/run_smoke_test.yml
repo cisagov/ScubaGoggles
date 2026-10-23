@@ -27,7 +27,7 @@ on:
         description: "Choose python version(s), format must be an array of strings:"
         required: true
         type: string
-        default: "['3.10', '3.14']"
+        default: "['3.11', '3.15']"
       opa-version:
         description: "Choose OPA version"
         required: true
@@ -53,7 +53,7 @@ jobs:
           # Default values for other events
           else
             operatingsystem_val="['windows-latest', 'macos-latest', 'ubuntu-latest']"
-            pythonversion_val="['3.10', '3.14']"
+            pythonversion_val="['3.11', '3.15']"
             opaversion_val="latest"
           fi
           echo "operating-system=$operatingsystem_val" >> "$GITHUB_OUTPUT"
@@ -86,7 +86,7 @@ jobs:
 
       - name: Setup credentials for service account
         id: create-json
-        uses: jsdaniell/create-json@v1.2.3
+        uses: jsdaniell/create-json@938ec496e0f6d88bccb05409cbc40a23a7697337 #v1.2.4
         with:
           name: "credentials.json"
           json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
