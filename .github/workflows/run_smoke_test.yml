@@ -86,7 +86,7 @@ jobs:
 
       - name: Setup credentials for service account
         id: create-json
-        uses: jsdaniell/create-json@v1.2.3
+        uses: jsdaniell/create-json@938ec496e0f6d88bccb05409cbc40a23a7697337 #v1.2.4
         with:
           name: "credentials.json"
           json: ${{ secrets.GWS_GITHUB_AUTOMATION_CREDS }}
