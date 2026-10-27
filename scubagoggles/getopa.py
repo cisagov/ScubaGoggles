@@ -214,7 +214,7 @@ def test_opa(opa_exe_file: Path):
 
     log.info('Test run OPA executable')
 
-    result = subprocess.run(f'{opa_exe_file} version'.split(),
+    result = subprocess.run([str(opa_exe_file), 'version'],
                             capture_output = True,
                             check = False)
 

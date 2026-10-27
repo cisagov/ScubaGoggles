@@ -440,7 +440,7 @@ test_SSO_Profiles_Incorrect_V2 if {
 }
 
 test_SSO_Profiles_Incorrect_V3 if {
-    # Test no relevant events
+    # Test no relevant events (the default for other SSO profiles is compliant)
     PolicyId := CommonControlsId3_2
     Output := tests with input as {
         "commoncontrols_logs": {"items": [
@@ -451,7 +451,7 @@ test_SSO_Profiles_Incorrect_V3 if {
         }
     }
 
-    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_SSO_Profiles_Incorrect_V4 if {
@@ -476,7 +476,7 @@ test_SSO_Profiles_Incorrect_V4 if {
         }
     }
 
-    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", false)
+    FailTestNoEvent(PolicyId, Output, "Test Top-Level OU", true)
 }
 
 test_SSO_Profiles_Incorrect_V5 if {

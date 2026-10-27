@@ -579,8 +579,34 @@ test_ThirdPartyApps_Correct_1 if {
         "policies": {
             "topOU": {
                 "api_controls_unconfigured_third_party_apps": {
-                    "accessLevel": "BLOCK_ALL_SCOPES",
-                    "accessLevelUnder18": "UNDERAGE_UBER_BLOCK_UNSPECIFIED"
+                    "accessLevel": "BLOCK_ALL",
+                    "accessLevelUnder18": "ACCESS_LEVEL_UNDER18_UNSPECIFIED"
+                }
+            }
+        },
+        "tenant_info": {
+            "topLevelOU": "topOU"
+        }
+    }
+
+    PassTestResult(PolicyId, Output)
+}
+
+test_ThirdPartyApps_Correct_2 if {
+    # Test inheritance: child OU explicitly set to the compliant value
+    PolicyId := CommonControlsId10_4
+    Output := tests with input as {
+        "policies": {
+            "topOU": {
+                "api_controls_unconfigured_third_party_apps": {
+                    "accessLevel": "BLOCK_ALL",
+                    "accessLevelUnder18": "ACCESS_LEVEL_UNDER18_UNSPECIFIED"
+                }
+            },
+            "childOU": {
+                "api_controls_unconfigured_third_party_apps": {
+                    "accessLevel": "BLOCK_ALL",
+                    "accessLevelUnder18": "ACCESS_LEVEL_UNDER18_UNSPECIFIED"
                 }
             }
         },
@@ -598,8 +624,8 @@ test_ThirdPartyApps_Incorrect_1 if {
         "policies": {
             "topOU": {
                 "api_controls_unconfigured_third_party_apps": {
-                    "accessLevel": "UNSPECIFIED_UBER_BLOCK",
-                    "accessLevelUnder18": "UNDERAGE_UBER_BLOCK_UNSPECIFIED"
+                    "accessLevel": "ACCESS_LEVEL_UNSPECIFIED",
+                    "accessLevelUnder18": "ACCESS_LEVEL_UNDER18_UNSPECIFIED"
                 }
             }
         },
@@ -620,8 +646,8 @@ test_ThirdPartyApps_Incorrect_2 if {
         "policies": {
             "topOU": {
                 "api_controls_unconfigured_third_party_apps": {
-                    "accessLevel": "ALLOW_SIGN_IN_SCOPES_ONLY",
-                    "accessLevelUnder18": "UNDERAGE_UBER_BLOCK_UNSPECIFIED"
+                    "accessLevel": "ALLOW_SIGN_IN_ONLY",
+                    "accessLevelUnder18": "ACCESS_LEVEL_UNDER18_UNSPECIFIED"
                 }
             }
         },
@@ -634,6 +660,58 @@ test_ThirdPartyApps_Incorrect_2 if {
                   "Value": concat("", ["Unconfigured third-party app access is set to:",
                   " Allow users to access third-party apps that only",
                   " request basic info needed for Sign in with Google."])}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_ThirdPartyApps_Incorrect_3 if {
+    # Test inheritance: compliant top-level OU, non-compliant child OU
+    PolicyId := CommonControlsId10_4
+    Output := tests with input as {
+        "policies": {
+            "topOU": {
+                "api_controls_unconfigured_third_party_apps": {
+                    "accessLevel": "BLOCK_ALL",
+                    "accessLevelUnder18": "ACCESS_LEVEL_UNDER18_UNSPECIFIED"
+                }
+            },
+            "childOU": {
+                "api_controls_unconfigured_third_party_apps": {
+                    "accessLevel": "ALLOW_SIGN_IN_ONLY",
+                    "accessLevelUnder18": "ACCESS_LEVEL_UNDER18_UNSPECIFIED"
+                }
+            }
+        },
+        "tenant_info": {
+            "topLevelOU": "topOU"
+        }
+    }
+
+    failedOU := [{"Name": "childOU",
+                  "Value": concat("", ["Unconfigured third-party app access is set to:",
+                  " Allow users to access third-party apps that only",
+                  " request basic info needed for Sign in with Google."])}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_ThirdPartyApps_Incorrect_4 if {
+    # Test that an unrecognized value is reported as non-compliant
+    PolicyId := CommonControlsId10_4
+    Output := tests with input as {
+        "policies": {
+            "topOU": {
+                "api_controls_unconfigured_third_party_apps": {
+                    "accessLevel": "SOME_NEW_VALUE",
+                    "accessLevelUnder18": "ACCESS_LEVEL_UNDER18_UNSPECIFIED"
+                }
+            }
+        },
+        "tenant_info": {
+            "topLevelOU": "topOU"
+        }
+    }
+
+    failedOU := [{"Name": "topOU",
+                  "Value": "Unconfigured third-party app access is set to: SOME_NEW_VALUE."}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
