@@ -14,6 +14,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Gemini Beta features](#2-gemini-beta-features)
 -   [Gemini Conversation History](#3-gemini-conversation-history)
 -   [Gemini Conversation Sharing](#4-gemini-conversation-sharing)
+-   [Gemini Omni](#5-gemini-omni)
 
 ## Assumptions
 
@@ -215,5 +216,45 @@ Conversation sharing SHALL be set to OFF.
 2.  Select **Generative AI** -\> **Gemini App**.
 3.  Select **Sharing**
 4.  Ensure **Allow conversation sharing via link** is set to OFF.
+5.  Select **Save**.
+
+## 5. Gemini Omni
+Gemini Omni is available directly within Google Vids and allows users to
+generate AI video clips. This section covers Gemini Omni features, including
+personal avatars, which allow users to verify and capture their likeness and
+then select it as a character in Gemini Omni generations within Vids. Personal
+avatars are on by default and can be disabled by admins in the Admin console.
+
+### Policies
+
+#### GWS.GEMINI.5.1v1
+Allow personal avatars in Google Vids SHOULD be disabled.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
+
+- _Rationale:_ Personal avatars generate realistic video of a user's likeness and voice. Disabling this feature when there is no mission need reduces the attack surface and limits the availability of AI-generated content that could be used to impersonate agency personnel.
+- _Last modified:_ October 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ CM-7
+- MITRE ATT&CK TTP Mapping
+  - [T1684: Social Engineering](https://attack.mitre.org/techniques/T1684/)
+    - [T1684:001: Social Engineering: Impersonation](https://attack.mitre.org/techniques/T1684/001/)
+
+### Resources
+
+-   [Turn Vids on or off for users: Manage personal avatars in Vids](https://knowledge.workspace.google.com/admin/users/access/turn-vids-on-or-off-for-users#manage_personal_avatars_in_vids)
+-   [Cast yourself in AI video clips using your personal avatar with Gemini Omni in Vids](https://workspaceupdates.googleblog.com/2026/07/cast-yourself-in-ai-video-clips-using-your-personal-avatar-with-Gemini-Omni-in-Vids.html)
+
+### Prerequisites
+
+-   None
+
+### Implementation
+
+#### GWS.GEMINI.5.1v1 Instructions
+1.  Sign in to the [Google Admin Console](https://admin.google.com).
+2.  Select **Apps** -\> **Google Workspace** -\> **Drive and Docs**.
+3.  Select **Google Vids** -\> **Personal avatar**.
+4.  Ensure **Allow personal avatars in Google Vids** is **Unchecked**.
 5.  Select **Save**.
 
