@@ -232,13 +232,75 @@ tests contains {
 
 GeminiId5_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.5.1")
 
+NonComplianceSetting5_1 := "VidsLikeness enabled"
+
+NonComplianceMessage5_1 := "Personal avatars in Google Vids are enabled."
+
+# Personal avatars are ON by default, so deleting the top-level OU
+# setting reverts it to the non-compliant default.
+PersonalAvatarEnabled(Event, _) if {
+    Event.NewValue == "true"
+}
+
+PersonalAvatarEnabled(Event, OU) if {
+    Event.NewValue == "DELETE_APPLICATION_SETTING"
+    OU == utils.TopLevelOU
+}
+
+NonCompliantOUs5_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage5_1
+} if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting5_1, OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    PersonalAvatarEnabled(LastEvent, OU)
+}
+
+NonCompliantGroups5_1 contains {
+    "Name": Group,
+    "Value": NonComplianceMessage5_1
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, NonComplianceSetting5_1, Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "true"
+}
+
 tests contains {
     "PolicyId": GeminiId5_1,
-    "Prerequisites": [],
-    "Criticality": "Should/Not-Implemented",
-    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
-    "ActualValue": "",
-    "RequirementMet": false,
+    "Prerequisites": [
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Should",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event in the current logs",
+    "RequirementMet": DefaultSafe,
     "NoSuchEvent": true
+}
+if {
+    DefaultSafe := false
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting5_1, utils.TopLevelOU)
+    count(Events) == 0
+}
+
+tests contains {
+    "PolicyId": GeminiId5_1,
+    "Prerequisites": [
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs5_1, NonCompliantGroups5_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs5_1, "NonCompliantGroups": NonCompliantGroups5_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting5_1, utils.TopLevelOU)
+    count(Events) > 0
+    Conditions := {count(NonCompliantOUs5_1) == 0, count(NonCompliantGroups5_1) == 0}
+    Status := (false in Conditions) == false
 }
 #--

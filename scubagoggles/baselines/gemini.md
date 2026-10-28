@@ -230,7 +230,8 @@ avatars are on by default and can be disabled by admins in the Admin console.
 #### GWS.GEMINI.5.1v1
 Allow personal avatars in Google Vids SHOULD be disabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsgemini51v1-instructions)
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Personal avatars generate realistic video of a user's likeness and voice. Disabling this feature when there is no mission need reduces the attack surface and limits the availability of AI-generated content that could be used to impersonate agency personnel.
 - _Last modified:_ October 2026
