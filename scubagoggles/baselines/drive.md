@@ -54,10 +54,7 @@ External sharing SHALL be restricted to allowlisted domains.
 
 - _Rationale:_ Documents may contain personally identifiable information or sensitive information. Restricting external sharing to allowlisted domains reduces the risk of inadvertent data leakage.
 - _Last modified:_ August 2025
-- _Note:_
-  - This policy restricts information sharing
-  - This policy prevents data leakage outside of the organization
-  - If specific users have a need for broader external sharing (e.g., for community outreach), external sharing MAY be enabled for specific Organization Units (OUs).
+- _Note:_ If specific users have a need for broader external sharing (e.g., for community outreach), external sharing MAY be enabled for specific Organization Units (OUs).
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -70,21 +67,20 @@ Receiving files from non-allowlisted domains SHOULD be disabled.
 
 - _Rationale:_ Users given access to external files may inadvertently input personally identifiable information or sensitive information. Additionally, files created externally may contain malicious content. Disallowing external files from being shared may reduce the risk of data loss or external threats.
 - _Last modified:_ August 2025
-- _Note:_ This policy is only applicable if external sharing is set to **ALLOWLISTED DOMAINS**.
+- _Note:_ This policy is only applicable if external sharing is set to either **ON** or **ALLOWLISTED DOMAINS**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-3, SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.3v1
-Warnings SHALL be enabled when a user is attempting to share with someone in a non-allowlisted domain.
+#### GWS.DRIVEDOCS.1.3v2
+External sharing warnings SHALL be enabled.
 
 [![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users may not always be aware that a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
-- _Last modified:_ August 2025
-- _Note:_ This policy is only applicable if external sharing is set to **ALLOWLISTED DOMAINS**.
+- _Last modified:_ October 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AT-2b
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -97,7 +93,7 @@ If sharing outside of the organization, agencies SHOULD disable sharing of files
 
 - _Rationale:_ Allowing users to view shared files when they are not signed in to a Google account diminishes oversight and accountability, increasing the potential for a data breach. This policy reduces that risk by requiring all users to be signed in when viewing shared Google Docs/Google Drive materials.
 - _Last modified:_ August 2025
-- _Note:_ This policy is only applicable if external sharing is set to **ON**.
+- _Note:_ This policy is only applicable if external sharing is set to either **ON** or **ALLOWLISTED DOMAINS**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -110,6 +106,7 @@ Any Organizational Units that allow external sharing SHOULD disable content avai
 
 - _Rationale:_ Allowing users to view shared files when they are not signed in to a Google account diminishes oversight and accountability and increases the chance of a potential data breach. This policy reduces that risk by requiring all people to be signed in when viewing shared Google Docs/Google Drive materials.
 - _Last modified:_ August 2025
+- _Note:_ This policy is only applicable if external sharing is set to **ON**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -135,6 +132,7 @@ Users SHOULD NOT be allowed to upload or move content to shared drives owned by 
 
 - _Rationale:_ Once a document is moved outside of the organization's drives, the organization no longer has control over the dissemination of the document. By preventing users from distributing content to external shared drives, the organization maintains more control over the document.
 - _Last modified:_ August 2025
+- _Note:_ This policy is only applicable if external sharing is set to either **ON** or **ALLOWLISTED DOMAINS**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -209,58 +207,70 @@ To configure the settings for Sharing options:
 #### Policy Group 1 Common Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Drive and Docs**.
-4.  Follow implementation for each individual policy
-5.  Select **Save**
+4.  Follow implementation for each individual policy.
+5.  Select **Save**.
+
+_Note:_ the settings relevant to this section's baseline policies are displayed in the admin center
+using the customer name (i.e., workspace instance name) and the name of the org unit the setting
+applies to. The instructions that follow say `CUSTOMER_NAME` wherever the admin center would display
+the actual customer name and `OU_NAME` wherever the admin center would display the actual org unit name.
 
 #### GWS.DRIVEDOCS.1.1v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Select **Sharing outside of your domain** -\> **ALLOWLISTED DOMAINS – Files owned by users or shared drives in your domain can be shared with Google accounts in compatible allowlisted domains**
-    - _Note:_ Selecting **OFF – Files owned by users in your domain can't be shared outside of your domain** is more restrictive and also satisfies this policy.
+2.  Select **Sharing outside of `CUSTOMER_NAME`** -\> **ALLOWLISTED DOMAINS – Files owned by users or shared drives in `OU_NAME` can be shared with Google accounts in compatible allowlisted domains**.
+    - _Note:_ Selecting **OFF – Files owned by users in `OU_NAME` can't be shared outside of `CUSTOMER_NAME`** is more restrictive and also satisfies this policy.
 
 #### GWS.DRIVEDOCS.1.2v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Deselect **Allow users to receive files from users or shared drives outside of allowlisted domains**.
+2.  The next step depends on how **Sharing outside of `CUSTOMER_NAME`** is configured.
+    - If set to **OFF**: deselect **Allow users in `OU_NAME` to receive files from users or shared drives outside of `CUSTOMER_NAME`**.
+    - If set to **ALLOWLISTED DOMAINS**: deselect **Allow users in `OU_NAME` to receive files from users or shared drives outside of allowlisted domains**.
 
 #### GWS.DRIVEDOCS.1.3v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Select **Warn when files owned by users or shared drives in your organization are shared with users in allowlisted domains**.
+2.  The next step depends on how **Sharing outside of `CUSTOMER_NAME`** is configured.
+    - If set to **OFF**: no action needed.
+    - If set to **ALLOWLISTED DOMAINS**: select **Warn when files owned by users or shared drives in `OU_NAME` are shared with users in allowlisted domains**.
+    - If set to **ON**: select **Warn when files owned by users or shared drives in `OU_NAME` are shared outside of `CUSTOMER_NAME`**.
 
 #### GWS.DRIVEDOCS.1.4v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Deselect **Allow users or shared drives in your organization to share items with people outside of your organization who aren't using a Google account.**
+2.  The next step depends on how **Sharing outside of `CUSTOMER_NAME`** is configured.
+    - If set to **OFF**: no action needed.
+    - If set to **ALLOWLISTED DOMAINS**: deselect **Allow sharing with guest accounts and visitors without a Google account in allowlisted domains.**.
+    - If set to **ON**: deselect **Allow users or Shared Drives in `OU_NAME` to share items with guest accounts and visitors without Google accounts**.
 
 #### GWS.DRIVEDOCS.1.5v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Deselect **When sharing outside of your organization is allowed, users in your organization can make files and published web content visible to anyone with the link.**
+2.  The next step depends on how **Sharing outside of `CUSTOMER_NAME`** is configured.
+    - If set to **OFF** or **ALLOWLISTED DOMAINS**: no action needed.
+    - If set to **ON**: deselect **When sharing outside of `CUSTOMER_NAME` is allowed, users in `OU_NAME` can make files and published web content visible to anyone with the link**.
 
 #### GWS.DRIVEDOCS.1.6v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Select **Access Checker** -\> **Recipients only.**
+2.  Select **Access Checker** -\> **Recipients only**.
 
 #### GWS.DRIVEDOCS.1.7v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Select **Distributing content outside of your domain** -\> **No one**
+2.  The next step depends on how **Sharing outside of `CUSTOMER_NAME`** is configured.
+    - If set to **OFF**: no action needed.
+    - If set to either **ALLOWLISTED DOMAINS** or **ON**: set **Distributing content outside of `CUSTOMER_NAME`** to **No one**.
 
 #### GWS.DRIVEDOCS.1.8v1 Instructions
 1.  Select **Sharing settings -\> General access default.**
-2.  Select **When users in your organization create items, the default access will be -\> Private to the owner.**
+2.  Select **When users in `OU_NAME` create items, the default access will be -\> Private to the owner**.
 
 #### GWS.DRIVEDOCS.1.9v1 Instructions
 1.  Select **Sharing settings -\> Highlight External Files**.
-2.  Check the **Mark files shared or owned externally as "external" to indicate that content may be viewable outside your organization. Applies to Drive, Docs, Sheets, Slides, Drawings, and Vids.** box to turn on the indicator.
-3.  Select **Save**.
+2.  Check the **Mark files shared or owned externally as "external" to indicate that content may be viewable outside `CUSTOMER_NAME`. Applies to Drive, Docs, Sheets, Slides, Drawings, and Vids.** box to turn on the indicator.
 
 #### GWS.DRIVEDOCS.1.10v1 Instructions
-1.  Select **Sharing settings -\> Sharing options**
-2.  Select **Form responses**
-3.  Uncheck the **Allow forms owned by users in your organization to accept responses from anyone with the link outside your organization, even if external sharing isn't allowed. If this option isn’t selected, settings for sharing outside your organization apply to forms** box
-4.  Select **Save**.
+1.  Select **Sharing settings -\> Form responses**.
+2.  Deselect **Allow forms owned by users in `OU_NAME` to accept responses from anyone with the link outside `CUSTOMER_NAME`, even if external sharing isn't allowed**.
 
 #### GWS.DRIVEDOCS.1.11v1 Instructions
-1.  Select **Sharing settings -\> Sharing options**
-2.  Select **Form responses**
-3.  Uncheck the **Allow users in your organization to submit responses to forms from users or shared drives outside of your organization, even if receiving external files isn’t allowed. If this option isn’t selected, settings for receiving files external to your organization apply to forms** box
-4.  Select **Save**.
+1.  Select **Sharing settings -\> **Form responses**.
+2.  Deselect **Allow users in `OU_NAME` to submit responses to forms from users or shared drives outside of `CUSOMTER_NAME`, even if receiving external files isn’t allowed**.
 
 ## 2. Shared Drive Creation
 
