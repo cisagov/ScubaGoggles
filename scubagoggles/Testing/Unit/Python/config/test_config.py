@@ -31,8 +31,7 @@ class TestUserConfig:
 
     def test_default_config_file_is_used(self, mocker):
         """Test that the default config file path is used when no config is provided."""
-        # Mock the _transition_config_file to avoid legacy file checks
-        mocker.patch.object(UserConfig, '_transition_config_file')
+
         # Mock Path.exists to return False so no file is loaded
         mocker.patch.object(Path, 'exists', return_value=False)
 
@@ -43,10 +42,8 @@ class TestUserConfig:
         assert config.config_path == expected_default
         assert config.file_exists is False
 
-    def test_if_custom_config_file_is_used(self, valid_config_file, mocker):
+    def test_if_custom_config_file_is_used(self, valid_config_file):
         """Test that a custom config file is used when provided."""
-        # Mock the _transition_config_file to avoid legacy file checks
-        mocker.patch.object(UserConfig, '_transition_config_file')
 
         config = UserConfig(config_file=str(valid_config_file))
 
@@ -56,10 +53,8 @@ class TestUserConfig:
         # Verify config values are loaded from the custom file
         assert config.output_dir == Path('./output').expanduser()
 
-    def test_if_custom_config_file_is_not_used(self, temp_dir, mocker):
+    def test_if_custom_config_file_is_not_used(self, temp_dir):
         """Test behavior when custom config file does not exist."""
-        # Mock the _transition_config_file to avoid legacy file checks
-        mocker.patch.object(UserConfig, '_transition_config_file')
 
         # Provide a path to a non-existent config file
         non_existent_path = temp_dir / "non_existent_config.yaml"
@@ -74,10 +69,8 @@ class TestUserConfig:
         assert config.output_dir == Path('./').expanduser()
         assert config.credentials_file is None
 
-    def test_write_creates_config_file(self, temp_dir, mocker):
+    def test_write_creates_config_file(self, temp_dir):
         """Test that write() creates the config file."""
-        # Mock the _transition_config_file to avoid legacy file checks
-        mocker.patch.object(UserConfig, '_transition_config_file')
 
         # Create a path for a new config file
         new_config_path = temp_dir / "new_config.yaml"
@@ -107,10 +100,8 @@ class TestUserConfig:
         assert new_config.output_dir == custom_output
         assert new_config.credentials_file == creds_file
 
-    def test_validate_raises_key_error(self, invalid_config_file, mocker):
+    def test_validate_raises_key_error(self, invalid_config_file):
         """Test that _validate raises KeyError for invalid configuration keys."""
-        # Mock the _transition_config_file to avoid legacy file checks
-        mocker.patch.object(UserConfig, '_transition_config_file')
 
         # Verify that creating UserConfig with invalid keys raises KeyError
         with pytest.raises(KeyError) as exc_info:

@@ -54,9 +54,9 @@ class TestReporter:
                     "Criticality": "Should",
                     "Details": (
                         "The following OUs are non-compliant:\n"
-                        "<ul>\n"
+                        "<ol>\n"
                         "  <li>Terry Hahn's OU: Mail delegation is enabled</li>\n"
-                        "</ul>"
+                        "</ol>"
                     ),
                 },
                 {
@@ -66,9 +66,9 @@ class TestReporter:
                     "Criticality": "Should",
                     "Details": (
                         "The following OUs are non-compliant:\n"
-                        "<ul>\n"
+                        "<ol>\n"
                         "  <li>Terry Hahn's OU: DKIM is not enabled</li>\n"
-                        "</ul>"
+                        "</ol>"
                     ),
                 },
             ],
@@ -456,9 +456,9 @@ class TestReporter:
                 "Criticality": "Should",
                 "ReportDetails": (
                     "The following OUs are non-compliant:\n"
-                    "<ul>\n"
+                    "<ol>\n"
                     "  <li>Terry Hahn's OU: Mail delegation is enabled</li>\n"
-                    "</ul>"
+                    "</ol>"
                 ),
                 "ActualValue": { "NonCompliantOUs": ["Terry Hahn's OU"] },
                 "RequirementMet": False,
@@ -503,9 +503,9 @@ class TestReporter:
                 "Criticality": "Should",
                 "Details": (
                     "The following OUs are non-compliant:\n"
-                    "<ul>\n"
+                    "<ol>\n"
                     "  <li>Terry Hahn's OU: Mail delegation is enabled</li>\n"
-                    "</ul>"
+                    "</ol>"
                 ),
                 "OmittedEvaluationResult": "N/A",
                 "OmittedEvaluationDetails": "N/A",

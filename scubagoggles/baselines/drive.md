@@ -53,7 +53,7 @@ External sharing SHALL be restricted to allowlisted domains.
 [![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ Documents may contain personally identifiable information or sensitive information. Disabling external sharing reduces the risk of inadvertent data leakage.
+- _Rationale:_ Documents may contain personally identifiable information or sensitive information. Restricting external sharing to allowlisted domains reduces the risk of inadvertent data leakage.
 - _Last modified:_ August 2025
 - _Note:_
   - This policy restricts information sharing
@@ -171,7 +171,7 @@ Out-of-Domain file-level warnings SHALL be enabled.
 #### GWS.DRIVEDOCS.1.10v1
 If external sharing is not allowed, then forms owned by users within the organization SHOULD NOT be able to accept responses from anyone accessing the link from outside the organization.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs110v06-instructions)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs110v1-instructions)
 
 - _Rationale:_ If external sharing is not allowed, enabling the ability to accept responses from anyone bypasses the external sharing restrictions in place. Users external to the organization could use forms to maliciously collect and share data without oversight. Implementing this policy reduces these risks.
 - _Last modified:_ August 2025
@@ -183,7 +183,7 @@ If external sharing is not allowed, then forms owned by users within the organiz
 #### GWS.DRIVEDOCS.1.11v1
 If receiving external files is not allowed, then users in the organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of the organization.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs111v06-instructions)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs111v1-instructions)
 
 - _Rationale:_ If receiving external files is not allowed, enabling the ability to submit responses to forms from users or shared drives outside of the organization bypasses the external sharing restrictions in place. Users external to the organization could use forms to maliciously collect and share data without oversight. Implementing this policy reduces these risks.
 - _Last modified:_ August 2025
@@ -215,7 +215,8 @@ To configure the settings for Sharing options:
 
 #### GWS.DRIVEDOCS.1.1v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
-2.  Select **Sharing outside of your domain** -\> **OFF – Files owned by users in your domain cannot be shared outside of your domain**
+2.  Select **Sharing outside of your domain** -\> **ALLOWLISTED DOMAINS – Files owned by users or shared drives in your domain can be shared with Google accounts in compatible allowlisted domains**
+    - _Note:_ Selecting **OFF – Files owned by users in your domain can't be shared outside of your domain** is more restrictive and also satisfies this policy.
 
 #### GWS.DRIVEDOCS.1.2v1 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
@@ -253,13 +254,13 @@ To configure the settings for Sharing options:
 #### GWS.DRIVEDOCS.1.10v1 Instructions
 1.  Select **Sharing settings -\> Sharing options**
 2.  Select **Form responses**
-3.  Check the **Allow forms owned by users in XXXX to accept responses from anyone with the link outside XXXX, even if external sharing isn't allowed. If this option isn’t selected, settings for sharing outside XXXX apply to forms** box
+3.  Uncheck the **Allow forms owned by users in your organization to accept responses from anyone with the link outside your organization, even if external sharing isn't allowed. If this option isn’t selected, settings for sharing outside your organization apply to forms** box
 4.  Select **Save**.
 
 #### GWS.DRIVEDOCS.1.11v1 Instructions
 1.  Select **Sharing settings -\> Sharing options**
 2.  Select **Form responses**
-3.  Check the **Allow users in XXXX to submit responses to forms from users or shared drives outside of XXXX, even if receiving external files isn’t allowed. If this option isn’t selected, settings for receiving files external to XXXX apply to forms** box
+3.  Uncheck the **Allow users in your organization to submit responses to forms from users or shared drives outside of your organization, even if receiving external files isn’t allowed. If this option isn’t selected, settings for receiving files external to your organization apply to forms** box
 4.  Select **Save**.
 
 ## 2. Shared Drive Creation
@@ -414,7 +415,7 @@ Google Drive for Desktop SHALL be enabled for authorized devices only.
 #### GWS.DRIVEDOCS.5.2v1
 Monitoring for potential ransomware corruption SHALL be enabled.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols52v06-instructions)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs52v1-instructions)
 
 - _Rationale:_ This setting helps protect against malware and ransomware by auto-detecting potential attacks. This strengthens the overall security posture and limits potential damage from ransomware.
 - _Last modified:_ April 2026

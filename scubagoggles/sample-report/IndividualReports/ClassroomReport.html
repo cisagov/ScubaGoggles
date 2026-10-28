@@ -46,19 +46,19 @@ described in the Secure Configuration Baselines (SCBs)"/>
     <td>Cool Example Org</td>
     <td>example.org</td>
     <td>ABCDEFG</td>
-    <td>07/20/2026 12:43:08 PDT</td>
+    <td>10/15/2026 15:53:04 Pacific Daylight Time</td>
     <td>1</td>
-    <td>v1.0.0</td>
+    <td>v1.1.0</td>
   </tr>
 </table>
 
             <div id="indicator-legend">
   <div id="indicator-legend-label">Policy Indicators:</div>
   <ul id="indicator-legend-list">
-    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/classroom.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</a><span style="color: var(--text-color);">Automatically verified by ScubaGoggles</span></li>
+    <li class="indicator-legend-item"><a href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/classroom.md#key-terminology" target="_blank" class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</a><span style="color: var(--text-color);">Automatically verified by ScubaGoggles</span></li>
 </ul>
 </div>
-<h2>CLASSROOM-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/classroom.md#1-class-membership" target="_blank">Class Membership</a></h2>
+<h2>CLASSROOM-1 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/classroom.md#1-class-membership" target="_blank">Class Membership</a></h2>
 <table>
   <thead>
     <tr>
@@ -89,7 +89,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/classroom.md#2-classroom-api" target="_blank">Classroom API</a></h2>
+</table><h2>CLASSROOM-2 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/classroom.md#2-classroom-api" target="_blank">Classroom API</a></h2>
 <table>
   <thead>
     <tr>
@@ -101,17 +101,21 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="pass-status">
+    <tr class="warning-status">
       <td>GWS.CLASSROOM.2.1v1</td>
       <td>Users SHOULD NOT be able to authorize apps to access their Google Classroom data.<div class="badges">
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Pass</td>
+      <td class="report-status">Warning</td>
       <td>Should</td>
-      <td>Requirement met.</td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>Jennifer Richards's OU</dt><dd>Users able to authorize apps to access their Google Classroom data</dd></dl></li>
+</ol>
+</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/classroom.md#3-roster-import" target="_blank">Roster Import</a></h2>
+</table><h2>CLASSROOM-3 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/classroom.md#3-roster-import" target="_blank">Roster Import</a></h2>
 <table>
   <thead>
     <tr>
@@ -133,7 +137,7 @@ described in the Secure Configuration Baselines (SCBs)"/>
       <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/classroom.md#4-student-unenrollment" target="_blank">Student Unenrollment</a></h2>
+</table><h2>CLASSROOM-4 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/classroom.md#4-student-unenrollment" target="_blank">Student Unenrollment</a></h2>
 <table>
   <thead>
     <tr>
@@ -145,17 +149,17 @@ described in the Secure Configuration Baselines (SCBs)"/>
     </tr>
   </thead>
   <tbody>
-    <tr class="warning-status">
+    <tr class="pass-status">
       <td>GWS.CLASSROOM.4.1v1</td>
       <td>Only teachers SHOULD be allowed to unenroll students from classes.<div class="badges">
 <span class="indicator-badge" style="background-color: #5E9732; color: black;" title="Automatically verified by ScubaGoggles">Automated Check</span></div>
 </td>
-      <td class="report-status">Warning</td>
+      <td class="report-status">Pass</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Who can unenroll students from classes is set to: Students and teachers</li></ul></td>
+      <td>Requirement met.</td>
     </tr>
   </tbody>
-</table><h2>CLASSROOM-5 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.0.0/scubagoggles/baselines/classroom.md#5-class-creation" target="_blank">Class Creation</a></h2>
+</table><h2>CLASSROOM-5 <a class="control_group" href="https://github.com/cisagov/scubagoggles/blob/v1.1.0/scubagoggles/baselines/classroom.md#5-class-creation" target="_blank">Class Creation</a></h2>
 <table>
   <thead>
     <tr>
@@ -174,7 +178,11 @@ described in the Secure Configuration Baselines (SCBs)"/>
 </td>
       <td class="report-status">Warning</td>
       <td>Should</td>
-      <td>The following OUs are non-compliant:<ul><li>Cool Example Org: Who can create classes is set to: anyone in this domain</li></ul></td>
+      <td>The following OUs are non-compliant:
+<ol>
+<li><dl><dt>Cool Example Org</dt><dd>Who can create classes is set to: all pending and verified teachers</dd></dl></li>
+</ol>
+</td>
     </tr>
   </tbody>
 </table>

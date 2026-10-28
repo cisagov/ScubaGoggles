@@ -21,6 +21,41 @@ ReportDetailsArray(Status, Array1, Array2) := Detail if {
 	String := concat(", ", Array1)
     Detail := Description(Fraction, " agency domain(s) found in violation: ", String)
 }
+#Default Non-existant Domain SPF Status Message
+default NXDomain := "Domain does not exist."
+
+NeedleInHaystack(Pattern, Haystack) := true if {
+    matches := regex.find_all_string_submatch_n(Pattern, Haystack, -1)
+    count(matches) > 0
+}
+
+SpfStatusDetailsBuilder(dnsresponse) := NXDomain if {
+    some log_item in dnsresponse.log
+    NeedleInHaystack(`(?i)NXDomain`, log_item.query_result)
+} else := "Exceptions other than non-existant domain (NXDOMAIN) returned." if {
+    some log_item in dnsresponse.log
+    NeedleInHaystack(`exception`, log_item.query_result)
+} else := "Domain has no SPF record." if {
+    some log_item in dnsresponse.log
+    NeedleInHaystack(`(?i)no\s+SPF\s+records`, log_item.query_result)
+} else := "Domain exists but no answers returned." if {
+    count(dnsresponse.rdata) == 0
+} else := "More than one record found." if {
+    count(dnsresponse.rdata) > 1
+} else := "SPF record found, but it does not hardfail (\"-all\") or redirect to one that does."
+
+SpfStatusQueryNameBuilder(dnsresponse) := DomainName if {
+    some item in dnsresponse
+    is_string(item)
+    DomainName := item
+} else := LogItem if {
+   some log_item in dnsresponse.log
+   LogItem := log_item.query_name
+}
+
+QueryResultBuilder(DNSResponse) := SpfStatusDetailsBuilder(DNSResponse)
+
+QueryNameBuilder(DNSResponse) := SpfStatusQueryNameBuilder(DNSResponse)
 
 BaseDomains := {Domain | some Domain in input.domains}
 AliasDomains := {Alias | some Alias in input.alias_domains}
@@ -110,39 +145,59 @@ if {
 #
 # Baseline GWS.GMAIL.3.1
 #--
-
 GmailId3_1 := utils.PolicyIdWithSuffix("GWS.GMAIL.3.1")
 
-# Not applicable at OU or Group level
-DomainsWithSpf contains SpfRecord.domain if {
-    some SpfRecord in input.spf_records
-    # Ensure that there's only 1 SPF record
-    count([Answer | some Answer in SpfRecord.rdata; startswith(Answer, "v=spf1")]) == 1
-    some Rdata in SpfRecord.rdata
-    startswith(Rdata, "v=spf1 ")
-    # Ensure that the policy either ends with "-all", "~all", or directs to a different SPF policy
-    true in [
-        endswith(Rdata, "-all"),
-        endswith(Rdata, "~all"),
-        contains(Rdata, "redirect")
-    ]
+SpfDetails(dnsResponse) := sprintf("<li>\n  %s: %s\n</li>\n",
+                                   [QueryNameBuilder(dnsResponse),
+                                    QueryResultBuilder(dnsResponse)])
+
+# Loop through domains and save the details for domains without proper SPF records
+DomainsWithoutSpf contains details if {
+    some DNSResponse in input.spf_records
+    count(DNSResponse.rdata) == 0
+    details := SpfDetails(DNSResponse)
 }
+
+DomainsWithoutSpf contains details if {
+    some DNSResponse in input.spf_records
+    count(DNSResponse.rdata) > 1
+    details := SpfDetails(DNSResponse)
+}
+
+DomainsWithoutSpf contains details if {
+    some DNSResponse in input.spf_records
+    count(DNSResponse.rdata) == 1
+    spfRecord := DNSResponse.rdata[0]
+    not endswith(spfRecord, "-all")
+    not contains(spfRecord, "redirect")
+    details := SpfDetails(DNSResponse)
+}
+
+# SPF Status Message
+SpfStatusMessage := Message if {
+    count(DomainsWithoutSpf) == 0
+    Message := "Requirement met. "
+} else := concat("", [
+    format_int(count(DomainsWithoutSpf), 10),
+    " failing domain(s): ",
+    "<ul id=\"spf-domains\">",
+    concat("", DomainsWithoutSpf),
+    "</ul>"
+])
 
 tests contains {
     "PolicyId": GmailId3_1,
     "Prerequisites": ["directory/v1/domains/list", "get_spf_records"],
     "Criticality": "Shall",
-    "ReportDetails": concat(" ", [ReportDetailsArray(Status, DomainsWithoutSpf, BaseDomains), DNSLink]),
+    "ReportDetails": concat(" ", [SpfStatusMessage, DNSLink]),
     "ActualValue": DomainsWithoutSpf,
     "RequirementMet": Status,
     "NoSuchEvent": false
 }
 if {
-    DomainsWithoutSpf := BaseDomains - DomainsWithSpf
     Status := count(DomainsWithoutSpf) == 0
 }
 #--
-
 
 ###############
 # GWS.GMAIL.4 #
@@ -207,11 +262,58 @@ if {
 
 GmailId4_2 := utils.PolicyIdWithSuffix("GWS.GMAIL.4.2")
 
-# Not applicable at OU or Group level
+# Some quirks about DMARC policies:
+# - If the DMARC record is published at the author domain (i.e., the domain that sent the email) then
+#   we need to look at the "p" tag.
+# - If the DMARC record is published at a parent domain (i.e., if "a.b.example.com" is the author
+#   domain, the parent domains are b.example.com, example.com, and com), the we need to first
+#   the "sp" tag. If there is no "sp", in that case we fall back to the "p" tag, if present.
+#
+# We can determine if we got the DMARC record from the author domain by looking at the "log" entries.
+# If the author domain published it, the final query name from the log will be equal to "_dmarc" +
+# the domain name.
+
+StandarizeDmarcRecord(RecordContents) := Standardized if {
+    # Per the RFC spec, the equals sign and semicolon deliminators can be surounded by 0 or more
+    # space or horizontal tab characters on either side (see
+    # https://www.rfc-editor.org/info/rfc9989/#section-4.8). Strip out those characters to
+    # ensure consistent parsing.
+    StandardizedEquals := regex.replace(RecordContents, `[ \t]*=[ \t]*`, "=")
+    StandardizedSemicolon := regex.replace(StandardizedEquals, `[ \t]*;[ \t]*`, ";")
+    # The final semicolon is optional but our logic below counts on it being there, so append a
+    # semicolon. This will result in double semicolons in some cases, but that will not mess up the
+    # Rego check.
+    Standardized := concat("", [StandardizedSemicolon, ";"])
+}
+
+AuthorDomainCompliant(DmarcRecord) := true if {
+    FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
+    FinalQname == concat("", ["_dmarc.", DmarcRecord.domain])
+    some Rdata in DmarcRecord.rdata
+    contains(StandarizeDmarcRecord(Rdata), ";p=reject;")
+} else := false
+
+ParentDomainCompliant(DmarcRecord) := true if {
+    FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
+    FinalQname != concat("", ["_dmarc.", DmarcRecord.domain])
+    some Rdata in DmarcRecord.rdata
+    contains(StandarizeDmarcRecord(Rdata), ";sp=reject;")
+} else := true if {
+    FinalQname := DmarcRecord.log[count(DmarcRecord.log)-1].query_name
+    FinalQname != concat("", ["_dmarc.", DmarcRecord.domain])
+    some Rdata in DmarcRecord.rdata
+    not contains(StandarizeDmarcRecord(Rdata), ";sp=")
+    contains(StandarizeDmarcRecord(Rdata), ";p=reject;")
+} else := false
+
 DomainsWithPreject contains DmarcRecord.domain if {
     some DmarcRecord in input.dmarc_records
-    some Rdata in DmarcRecord.rdata
-    contains(Rdata, "p=reject;")
+    Conditions := {
+        AuthorDomainCompliant(DmarcRecord),
+        ParentDomainCompliant(DmarcRecord)
+    }
+    # Pass if either of the above conditions are true
+    true in Conditions
     DmarcRecord.domain in DomainsWithDmarc
 }
 

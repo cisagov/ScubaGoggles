@@ -1,6 +1,7 @@
 .vscode
 .venv
 build
+dist
 scubagoggles.egg-info
 .DS_Store
 *.bak
@@ -23,8 +24,17 @@ scubagoggles.egg-info
 !**/sample-report/IndividualReports/*
 **/GWSBaselineConformance*
 
+# diff output (written to the current directory by default)
+**/DiffResults.json
+**/DiffResults.csv
+**/DiffReport.html
+
 # opa
 opa
 opa_windows_amd64.exe
 opa_darwin_amd64
 opa_linux_amd64_static
+
+# regal
+input.json
+regal.exe

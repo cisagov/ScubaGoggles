@@ -267,8 +267,9 @@ class GmailRulesParser:
             address_list = list_entry.get('addressList',
                                           list_entry.get('blockedAddressList'))
 
-            new_item['list'] = ([e['address'] for e in address_list['address']]
-                                if rule_id in enabled_lists else [])
+            new_item['list'] = (([e['address'] for e in address_list['address']]
+                                 if rule_id in enabled_lists else [])
+                                if address_list else [])
 
         return address_lists
 

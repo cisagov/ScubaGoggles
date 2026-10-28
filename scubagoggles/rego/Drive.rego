@@ -17,9 +17,7 @@ DriveEnabled(orgunit) := utils.AppEnabled(input.policies, "drive_and_docs", orgu
 
 DriveId1_1 := utils.PolicyIdWithSuffix("GWS.DRIVEDOCS.1.1")
 
-GetFriendlyValue1_1(Value) := "with Google accounts in compatible allowlisted domains" if {
-    Value == "ALLOWLISTED_DOMAINS"
-} else := "outside of the organization" if {
+GetFriendlyValue1_1(Value) := "outside of the organization" if {
     Value == "ALLOWED"
 } else := Value
 
@@ -48,7 +46,9 @@ if {
     some OU, settings in input.policies
     DriveEnabled(OU)
     externalSharing := settings.drive_and_docs_external_sharing.externalSharingMode
-    externalSharing != "DISALLOWED"
+    # Sharing restricted to allowlisted domains is compliant, as is the more
+    # restrictive setting of disallowing external sharing entirely.
+    not externalSharing in {"ALLOWLISTED_DOMAINS", "DISALLOWED"}
 }
 
 tests contains {

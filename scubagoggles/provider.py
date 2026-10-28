@@ -3,6 +3,7 @@
 provider.py is where the GWS api calls are made.
 """
 
+import re
 import logging
 import warnings
 import json
@@ -209,8 +210,8 @@ class Provider:
             account.
         :param dns_resolvers: (optional) list of DNS resolvers that should be
             used for DNS queries.
-        :param doh_servers: (optional) list of DoH servers that should be used 
-            for DoH queries.           
+        :param doh_servers: (optional) list of DoH servers that should be used
+            for DoH queries.
         :param skip_doh: (optional) whether or not failed DNS queries should be
             retried over DoH.
         """
@@ -358,19 +359,59 @@ class Provider:
         )
 
     def get_spf_records(self, domains: set) -> list:
-        """
-        Gets the SPF records for each domain in domains.
+
+        """Gets the SPF records for each domain in domains.
+
+        SPF records are specialized TXT records that begin with "v=spf1".
+        Only 1 SPF record is valid, although the query may return more
+        than one for a domain.
 
         :param domains: The list of domain names (strings).
         """
+
         results = []
-        for domain in domains:
+
+        # Domains are sorted to have a consistent view in reporting.
+
+        for domain in sorted(domains):
+
             result = self._dns_client.query(domain)
-            results.append({
-                'domain': domain,
-                'rdata': result['answers'],
-                'log': result['log_entries']
-            })
+
+            # Extract only the SPF records from the result.  The other TXT
+            # records have nothing to do with SPF.
+
+            spf = [t for t in result['answers'] if t.startswith('v=spf1')]
+
+            # We're going to modify the log entry returned to make it specific
+            # to SPF.  If one query failed, there will be more than 1 log entry,
+            # but it's always the last (or only) one we're interested in
+            # modifying.
+
+            log_entry = result['log_entries'][-1]
+            log_entry['query_answers'] = spf
+
+            spf_count = len(spf)
+
+            if spf_count != 0:
+
+                log_message = (f'Query returned {spf_count} SPF record'
+                    f'{"s" if spf_count > 1 else ""}')
+
+                log_entry['query_result'] = log_message
+
+            elif (len(result['answers']) > 0
+                  or '0 txt' in log_entry['query_result'].lower()):
+
+                # This is the case where either the domain has no TXT records
+                # or this is no SPF record.  The query was successful in this
+                # case.
+
+                log_entry['query_result'] = 'Query returned no SPF records'
+
+            results.append({'domain': domain,
+                            'rdata': spf,
+                            'log': result['log_entries']})
+
         return results
 
     def get_dkim_records(self, domains: set) -> list:
@@ -401,6 +442,132 @@ class Provider:
 
         return results
 
+    @staticmethod
+    def _parse_dmarc_record(answers: list) -> dict:
+        """
+        Parse the given answer set for DMARC record values. Return an empty dict if no valid DMARC
+        record is found.
+
+        :param answers: List of strings containing the answers returned to a DNS query.
+        """
+        dmarc_fields = {}
+
+        # Per the RFC spec, the equals sign and semicolon deliminators can be surounded by 0 or more
+        # space or horizontal tab characters on either side (see
+        # https://www.rfc-editor.org/info/rfc9989/#section-4.8). Strip out those characters to
+        # ensure consistent parsing.
+        answers = [re.sub(r"[ \t]*=[ \t]*", "=", a) for a in answers if a]
+        answers = [re.sub(r"[ \t]*;[ \t]*", ";", a) for a in answers if a]
+
+        # DMARC records MUST start with the "v" tag, with "DMARC1" being the only acceptable value
+        answers = [a for a in answers if a.startswith("v=DMARC1;") or a == "v=DMARC1"]
+
+        if len(answers) != 1:
+            # If there is not exactly 1 DMARC record returned for a given domain, the entire answer
+            # set is discarded.
+            return {}
+
+        tags = answers[0].split(';')
+        for tag in tags:
+            if tag == '':
+                # There was a trailing ";" which results in an empty string when you call the split
+                # function, this is safe to ignore
+                continue
+            if not tag.count('=') == 1:
+                # malformed DMARC record, discard it
+                return {}
+            tag_name, tag_value = tag.split('=')
+            if tag_name in dmarc_fields:
+                # There's a duplicate tag, discard the entire answer
+                return {}
+            dmarc_fields[tag_name] = tag_value
+        return dmarc_fields
+
+    def get_dmarc_record(self, domain: str) -> dict:
+        """
+        Find the DMARC record for a given domain.
+        """
+        log_entries = []
+        tree_walk_results = []
+        qname = f'_dmarc.{domain}'
+        result = self._dns_client.query(qname)
+        log_entries.extend(result['log_entries'])
+        tree_walk_results.append({
+            'qname': qname,
+            'result': result
+        })
+        dmarc_record = self._parse_dmarc_record(result['answers'])
+        if len(dmarc_record) != 0:
+            # We found the DMARC record at the author level, no need to make further queries
+            return {
+                'domain': domain,
+                'rdata': result['answers'],
+                'log': log_entries
+            }
+
+        # The domain does not exist at the author level. Time to "walk" the DNS tree per RFC 9989
+        # section 4.10.
+        labels = domain.split('.')
+        # If there are 8 or more labels, skip to the final 7 labels. Otherwise, just remove 1 label
+        if len(labels) >= 8:
+            labels = labels[-7:]
+        else:
+            labels = labels[1:]
+
+        while len(labels) > 0:
+            qname = '_dmarc.' + '.'.join(labels)
+            result = self._dns_client.query(qname)
+            log_entries.extend(result['log_entries'])
+            tree_walk_results.append({
+                'qname': qname,
+                'result': result
+            })
+            dmarc_record = self._parse_dmarc_record(result['answers'])
+            if dmarc_record.get('psd') == 'n':
+                # We found the organizational domain, return its DMARC record
+                return {
+                    'domain': domain,
+                    'rdata': result['answers'],
+                    'log': log_entries
+                }
+            if dmarc_record.get('psd') == 'y':
+                # This is the PSD (public suffix domain).
+                # As no domain so far advertised itself as the organizational domain (psd=n),
+                # the organizational domain is one layer below it.
+                last_result = tree_walk_results[-2]['result']['answers']
+                org_domain_result = self._parse_dmarc_record(last_result)
+                if len(org_domain_result) != 0:
+                    # Mission accomplished, we found organizational domain's DMARC record
+                    return {
+                        'domain': domain,
+                        'rdata': tree_walk_results[-2]['result']['answers'],
+                        'log': log_entries
+                    }
+                # The organizational domain didn't publish a DMARC record, but we found the PSD, so
+                # break out of the loop
+                break
+
+            # If we didn't find the org domain or the PSD, strip away one more label and try again
+            labels = labels[1:]
+
+        for result in reversed(tree_walk_results):
+            # We didn't find the organizational domain. In this case, select the DMARC record for
+            # the domain with the fewest labels (hence the "reversed()" above)
+            dmarc_record = self._parse_dmarc_record(result['result']['answers'])
+            if len(dmarc_record) != 0:
+                return {
+                    'domain': domain,
+                    'rdata': result['result']['answers'],
+                    'log': log_entries
+                }
+
+        # We didn't find any valid DMARC records
+        return {
+            'domain': domain,
+            'rdata': [],
+            'log': log_entries
+        }
+
     def get_dmarc_records(self, domains: set) -> list:
         """
         Gets the DMARC records for each domain in domains.
@@ -409,22 +576,7 @@ class Provider:
         """
         results = []
         for domain in domains:
-            log_entries = []
-            qname = f'_dmarc.{domain}'
-            result = self._dns_client.query(qname)
-            log_entries.extend(result['log_entries'])
-            if len(result['answers']) == 0:
-                # The domain does not exist. If the record is not available at the full domain
-                # level, we need to check at the organizational domain level.
-                labels = domain.split('.')
-                org_domain = f'{labels[-2]}.{labels[-1]}'
-                result = self._dns_client.query(f'_dmarc.{org_domain}')
-                log_entries.extend(result['log_entries'])
-            results.append({
-                'domain': domain,
-                'rdata': result['answers'],
-                'log': log_entries
-            })
+            results.append(self.get_dmarc_record(domain))
         return results
 
     def get_dnsinfo(self):
@@ -444,11 +596,13 @@ class Provider:
             d['domainName']
             for d in self.list_domains() if d.get('verified', True)
         }
+
         # Get domain aliases
         alias_domains = {
             d['domainAliasName']
             for d in self.list_alias_domains() if d.get('verified', True)
         }
+
         all_domains = base_domains.union(alias_domains)
 
         if len(all_domains) == 0:
@@ -857,7 +1011,11 @@ class Provider:
             ],
             'drive': ['Drive and Docs'],
             'gmail': ['Gmail'],
-            'gemini': ['Gemini app', 'Gemini in Workspace apps'],
+            'gemini': [
+                'Gemini app',
+                'Gemini in Workspace',
+                'Gemini in Workspace apps'
+            ],
             'groups': ['Groups for Business'],
             'meet': ['Google Meet', 'Google Meet GenAI'],
             'sites': ['Sites'],

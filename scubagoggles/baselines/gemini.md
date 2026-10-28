@@ -11,7 +11,7 @@ For non-federal users, the information in this document is being provided "as is
 This baseline is based on Google documentation available at [Google Workspace Admin Help: Gemini for Google Workspace](https://support.google.com/a/topic/13853688?hl=en&ref_topic=9197&sjid=1480967616439197109-NA) and addresses the following:
 
 -   [Gemini App Access](#1-gemini-app-access)
--   [Gemini Alpha features](#2-gemini-alpha-features)
+-   [Gemini Beta features](#2-gemini-beta-features)
 -   [Gemini Conversation History](#3-gemini-conversation-history)
 -   [Gemini Conversation Sharing](#4-gemini-conversation-sharing)
 
@@ -86,29 +86,29 @@ Allowing user access to Gemini under any license creates the risk of data leakag
 5.  Select **Save**.
 
 
-## 2. Gemini Alpha features
-GWS permits administrators to restrict or enable access to Gemini Alpha features
+## 2. Gemini Beta features
+GWS permits administrators to restrict or enable access to Gemini Beta features
 before they're made generally available.
 
-Note that Gemini Alpha features are subject to the Pre-General Availability
+Note that Gemini Beta features are subject to the Pre-General Availability
 Offering Terms (excluding Section 6.1(b)) of the Google Workspace Service
 Specific Terms. Section 6.1(d) prohibits government customers from using live or
-production data in connection with Pre-Gemini Alpha Offerings.
+production data in connection with Pre-Gemini Beta Offerings.
 
 ### Policies
 
 #### GWS.GEMINI.2.1v1
-Gemini Alpha features SHALL be disabled.
+Gemini Beta features SHALL be disabled.
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 [![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
-- _Rationale:_ Allowing access to Gemini Alpha features may expose users to features that
+- _Rationale:_ Allowing access to Gemini Beta features may expose users to features that
 have not yet been fully vetted and may still need to undergo robust testing to verify
 compliance with applicable security standards. Additionally, government customers are
 prohibited from using production data with pre-general availability offerings, per the Google Workspace
 Service Specific Terms.
-- _Last modified:_ July 2025
+- _Last modified:_ August 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -127,8 +127,8 @@ Service Specific Terms.
 #### GWS.GEMINI.2.1v1 Instructions
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Generative AI** -\> **Gemini in Workspace.**
-3.  Select **Alpha Gemini features.**
-4.  Ensure **Turn off access to Alpha features in Gemini for Google Workspace** is selected.
+3.  Select **Beta Gemini features.**
+4.  Ensure **Beta features** is set to **Off**.
 5.  Select **Save**.
 
 ## 3. Gemini Conversation History
