@@ -15,7 +15,6 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Security Updates for Files](#3-security-updates-for-files)
 -   [Drive SDK](#4-drive-sdk)
 -   [Drive for Desktop](#5-drive-for-desktop)
--   [Personal Avatar](#6-personal-avatar)
 
 Settings can be assigned to certain users within GWS individually, through organizational units, or through configuration groups. Before changing a setting, the user can select the organizational unit, configuration group, or individual users to which they want to apply changes.
 
@@ -465,40 +464,4 @@ Alternatively, [Context-Aware access policies](https://support.google.com/a/answ
 2.  Select **Menu-\>Apps-\>Google Workspace-\>Drive and Docs**.
 3.  Select **Malware and Ransomware**.
 4.  Ensure **Drive automatically monitors unusual file changes to identify potential ransomware corruption** is set to ON.
-5.  Select **Save**.
-
-## 6. Personal Avatar
-
-This section covers whether the personal avatar feature is enabled.
-
-### Policies
-
-#### GWS.DRIVEDOCS.6.1v1
-Personal Avatar SHOULD be deselected.
-
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs110v06-instructions)
-
-- _Rationale:_ By disabling personal avatar if not needed lessens the potential attack surface
-- _Last modified:_ September 2026
-- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ TBD
-- MITRE ATT&CK TTP Mapping
-  - TBD
-
-### Resources
-
--   [Create, use & manage your personal avatar with Gemini in Google Vids]([https://developers.google.com/drive/](https://support.google.com/docs/answer/16970930?hl=en))
-
-### Prerequisites
-
--   None
-
-### Implementation
-
-To configure the settings for Drive SDK:
-
-#### GWS.DRIVEDOCS.6.1v1 Instructions
-1.  Sign in to the [Google Admin Console](https://admin.google.com).
-2.  Select **Apps -\> Google Workspace -\> Drive and Docs.**
-3.  Select **Google Vids -\> Personal Avatar.**
-4.  Uncheck the **Allow people in your organization to use their own voice and appearance through personal avatar features to generate content in Google Vids.** checkbox.
 5.  Select **Save**.
