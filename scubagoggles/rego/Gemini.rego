@@ -221,3 +221,24 @@ tests contains {
     "NoSuchEvent": true
 }
 #--
+
+##############
+# GWS.GEMINI.5 #
+##############
+
+#
+# Baseline GWS.GEMINI.5.1
+#--
+
+GeminiId5_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.5.1")
+
+tests contains {
+    "PolicyId": GeminiId5_1,
+    "Prerequisites": [],
+    "Criticality": "Should/Not-Implemented",
+    "ReportDetails": "Currently not able to be tested automatically; please manually check.",
+    "ActualValue": "",
+    "RequirementMet": false,
+    "NoSuchEvent": true
+}
+#--
