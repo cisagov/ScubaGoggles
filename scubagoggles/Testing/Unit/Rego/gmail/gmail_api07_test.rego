@@ -18,8 +18,10 @@ GoodGmailApi07 := {
                 "domainSpoofingConsequence": "SPAM_FOLDER",
                 "employeeNameSpoofingConsequence": "QUARANTINE",
                 "groupsSpoofingConsequence": "QUARANTINE",
+                "groupsSpoofingVisibilityType": "ALL_GROUPS",
                 "unauthenticatedEmailConsequence": "QUARANTINE"
             },
+            "gmail_service_status": {"serviceState": "ENABLED"}
         },
          "nextOU": {
         },
@@ -48,6 +50,7 @@ BadGmailApi07 := {
                 "domainSpoofingConsequence": "WARNING",
                 "employeeNameSpoofingConsequence": "WARNING",
                 "groupsSpoofingConsequence": "WARNING",
+                "groupsSpoofingVisibilityType": "PRIVATE_GROUPS_ONLY",
                 "unauthenticatedEmailConsequence": "WARNING"
             },
                 "gmail_service_status": {"serviceState": "ENABLED"
@@ -73,6 +76,7 @@ BadGmailApi07a := {
                 "domainSpoofingConsequence": "SPAM_FOLDER",
                 "employeeNameSpoofingConsequence": "QUARANTINE",
                 "groupsSpoofingConsequence": "SPAM_FOLDER",
+                "groupsSpoofingVisibilityType": "ALL_GROUPS",
                 "unauthenticatedEmailConsequence": "QUARANTINE"
             },
                 "gmail_service_status": {"serviceState": "ENABLED"
@@ -88,6 +92,7 @@ BadGmailApi07a := {
                 "detectUnauthenticatedEmails": false,
                 "domainNameSpoofingConsequence": "WARNING",
                 "domainSpoofingConsequence": "WARNING",
+                "groupsSpoofingVisibilityType": "PRIVATE_GROUPS_ONLY",
                 "unauthenticatedEmailConsequence": "WARNING"
             },
                 "gmail_service_status": {"serviceState": "ENABLED"
@@ -211,7 +216,9 @@ test_GroupsSpoofing_Incorrect_1 if {
     Output := tests with input as BadGmailApi07
 
     failedOU := [{"Name": "topOU",
-                 "Value": NonComplianceMessage7_5("disabled")}]
+                 "Value": concat("; ", [
+                    NonComplianceMessage7_5("disabled"),
+                    NonComplianceMessage7_5Visibility("only private groups")])}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
 
@@ -220,6 +227,44 @@ test_GroupsSpoofing_Incorrect_2 if {
     Output := tests with input as BadGmailApi07a
 
     failedOU := [{"Name": "nextOU",
+                 "Value": concat("; ", [
+                    NonComplianceMessage7_5("disabled"),
+                    NonComplianceMessage7_5Visibility("only private groups")])}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_GroupsSpoofing_PrivateGroupsOnly if {
+    PolicyId := GmailId7_5
+    Output := tests with input as object.union(GoodGmailApi07, {"policies": object.union(
+        GoodGmailApi07.policies,
+        {"topOU": object.union(
+            GoodGmailApi07.policies.topOU,
+            {"gmail_spoofing_and_authentication": object.union(
+                GoodGmailApi07.policies.topOU.gmail_spoofing_and_authentication,
+                {"groupsSpoofingVisibilityType": "PRIVATE_GROUPS_ONLY"}
+            )}
+        )}
+    )})
+
+    failedOU := [{"Name": "topOU",
+                 "Value": NonComplianceMessage7_5Visibility("only private groups")}]
+    FailTestOUNonCompliant(PolicyId, Output, failedOU)
+}
+
+test_GroupsSpoofing_CheckboxDisabled if {
+    PolicyId := GmailId7_5
+    Output := tests with input as object.union(GoodGmailApi07, {"policies": object.union(
+        GoodGmailApi07.policies,
+        {"topOU": object.union(
+            GoodGmailApi07.policies.topOU,
+            {"gmail_spoofing_and_authentication": object.union(
+                GoodGmailApi07.policies.topOU.gmail_spoofing_and_authentication,
+                {"detectGroupsSpoofing": false}
+            )}
+        )}
+    )})
+
+    failedOU := [{"Name": "topOU",
                  "Value": NonComplianceMessage7_5("disabled")}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
