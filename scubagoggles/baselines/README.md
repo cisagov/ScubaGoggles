@@ -2,7 +2,6 @@ Individual baselines can be visited directly at the links below:
 
 - [Assured Controls](assuredcontrols.md)
 - [Common Controls](commoncontrols.md)
-- [Gemini](gemini.md)
 - [Gmail](gmail.md)
 - [Google Calendar](calendar.md)
 - [Google Chat](chat.md)
@@ -11,3 +10,4 @@ Individual baselines can be visited directly at the links below:
 - [Google Meet](meet.md)
 - [Google Sites](sites.md)
 - [Groups for Business](groups.md)
+- [Super Intelligence (SI)](si.md)

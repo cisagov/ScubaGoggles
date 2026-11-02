@@ -1,15 +1,15 @@
-package gemini
+package si
 
 import future.keywords
 import data.utils
 
-LogEvents := utils.GetEvents("gemini_logs")
+LogEvents := utils.GetEvents("si_logs")
 
 #
-# Baseline GWS.GEMINI.1.1
+# Baseline GWS.SI.1.1
 #--
 
-GeminiId1_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.1.1")
+SIId1_1 := utils.PolicyIdWithSuffix("GWS.SI.1.1")
 
 NonComplianceSetting1_1 := "BardNonDuetEnablementProto enable_bard_non_duet_access"
 
@@ -42,7 +42,7 @@ NonCompliantGroups1_1 contains {
 }
 
 tests contains {
-    "PolicyId": GeminiId1_1,
+    "PolicyId": SIId1_1,
     "Prerequisites": [
         "reports/v1/activities/list",
         "policy/gemini_app_service_status.serviceState"
@@ -60,7 +60,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": GeminiId1_1,
+    "PolicyId": SIId1_1,
     "Prerequisites": [
         "reports/v1/activities/list",
         "policy/gemini_app_service_status.serviceState"
@@ -79,10 +79,10 @@ if {
 }
 
 #
-# Baseline GWS.GEMINI.2.1
+# Baseline GWS.SI.2.1
 #--
 
-GeminiId2_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.2.1")
+SIId2_1 := utils.PolicyIdWithSuffix("GWS.SI.2.1")
 
 # Google renamed this setting from the Alpha proto name to a display name.
 # Evaluate both and use the most recent event so a later OFF is not
@@ -129,7 +129,7 @@ NonCompliantGroups2_1 contains {
 }
 
 tests contains {
-    "PolicyId": GeminiId2_1,
+    "PolicyId": SIId2_1,
     "Prerequisites": [
         "reports/v1/activities/list"
     ],
@@ -146,7 +146,7 @@ if {
 }
 
 tests contains {
-    "PolicyId": GeminiId2_1,
+    "PolicyId": SIId2_1,
     "Prerequisites": [
         "reports/v1/activities/list"
     ],
@@ -163,18 +163,18 @@ if {
     Status := (false in Conditions) == false
 }
 
-##############
-# GWS.GEMINI.3 #
-##############
+##########
+# GWS.SI.3 #
+##########
 
 #
-# Baseline GWS.GEMINI.3.1
+# Baseline GWS.SI.3.1
 #--
 
-GeminiId3_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.1")
+SIId3_1 := utils.PolicyIdWithSuffix("GWS.SI.3.1")
 
 tests contains {
-    "PolicyId": GeminiId3_1,
+    "PolicyId": SIId3_1,
     "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
@@ -185,13 +185,13 @@ tests contains {
 #--
 
 #
-# Baseline GWS.GEMINI.3.2
+# Baseline GWS.SI.3.2
 #--
 
-GeminiId3_2 := utils.PolicyIdWithSuffix("GWS.GEMINI.3.2")
+SIId3_2 := utils.PolicyIdWithSuffix("GWS.SI.3.2")
 
 tests contains {
-    "PolicyId": GeminiId3_2,
+    "PolicyId": SIId3_2,
     "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",
@@ -201,18 +201,18 @@ tests contains {
 }
 #--
 
-##############
-# GWS.GEMINI.4 #
-##############
+##########
+# GWS.SI.4 #
+##########
 
 #
-# Baseline GWS.GEMINI.4.1
+# Baseline GWS.SI.4.1
 #--
 
-GeminiId4_1 := utils.PolicyIdWithSuffix("GWS.GEMINI.4.1")
+SIId4_1 := utils.PolicyIdWithSuffix("GWS.SI.4.1")
 
 tests contains {
-    "PolicyId": GeminiId4_1,
+    "PolicyId": SIId4_1,
     "Prerequisites": [],
     "Criticality": "Shall/Not-Implemented",
     "ReportDetails": "Currently not able to be tested automatically; please manually check.",

@@ -128,7 +128,7 @@ GET_GWS_LOGS_CASES = [
     },
     # Gemini Beta features use APPLICATION_NAME "Gemini in Workspace"
     {
-        "products": ["gemini", "gmail"],
+        "products": ["si", "gmail"],
         "event": "CHANGE_APPLICATION_SETTING",
         "reports": [
             {
@@ -181,7 +181,7 @@ GET_GWS_LOGS_CASES = [
                     ],
                 },
             ],
-            "gemini": [
+            "si": [
                 {
                     "id": "gemini-beta",
                     "events": [

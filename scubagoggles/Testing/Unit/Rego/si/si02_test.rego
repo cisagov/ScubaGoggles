@@ -1,16 +1,16 @@
-package gemini
+package si
 import future.keywords
 
 import data.utils.FailTestGroupNonCompliant
 import data.utils.FailTestOUNonCompliant
 
 #
-# GWS.GEMINI.2.1
+# GWS.SI.2.1
 #--
 test_2_1_Correct_V1 if {
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -44,9 +44,9 @@ test_2_1_Correct_V1 if {
 
 test_2_1_Correct_V2 if {
     # Setting inheritance
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2020-12-20T00:02:28.672Z"},
                 "events": [{
@@ -107,9 +107,9 @@ test_2_1_Correct_V2 if {
 
 test_2_1_Incorrect_V1 if {
     # Gemini Beta features enabled
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -142,9 +142,9 @@ test_2_1_Incorrect_V1 if {
 
 test_2_1_Incorrect_V2 if {
     # Any license allowed in group
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -191,9 +191,9 @@ test_2_1_Incorrect_V2 if {
 
 test_2_1_Incorrect_V3 if {
     # Gemini Beta features enabled but Gemini disabled for OU
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -226,9 +226,9 @@ test_2_1_Incorrect_V3 if {
 
 test_2_1_Correct_V3 if {
     # Current display setting name disabled
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -262,9 +262,9 @@ test_2_1_Correct_V3 if {
 
 test_2_1_Correct_V4 if {
     # Later display-name OFF must override a stale Alpha proto ON
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -311,9 +311,9 @@ test_2_1_Correct_V4 if {
 
 test_2_1_Incorrect_V4 if {
     # Current display setting name enabled
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{
@@ -346,9 +346,9 @@ test_2_1_Incorrect_V4 if {
 
 test_2_1_Incorrect_V5 if {
     # Later display-name ON must override a stale Alpha proto OFF
-    PolicyId := GeminiId2_1
+    PolicyId := SIId2_1
     Output := tests with input as {
-        "gemini_logs": {"items": [
+        "si_logs": {"items": [
             {
                 "id": {"time": "2022-12-20T00:02:28.672Z"},
                 "events": [{

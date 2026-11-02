@@ -1373,9 +1373,9 @@ class ScubaConfigApp:
             'title': 'Classroom',
             'description': 'Educational platform security and privacy controls',
         },
-        'gemini': {
+        'si': {
             'icon': '🤖',
-            'title': 'Gemini',
+            'title': 'Super Intelligence (SI)',
             'description': 'AI-powered features and data processing controls',
         },
     }

@@ -22,7 +22,7 @@ rego_dir = test_dir.parent.parent / 'rego'
 
 gws_baselines = [
     "gmail",
-    "gemini",
+    "si",
     "assuredcontrols",
     "calendar",
     "groups",

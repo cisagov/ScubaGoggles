@@ -2,7 +2,6 @@ Individual baselines can be visited directly at the links below:
 
 - [Assured Controls](/scubagoggles/baselines/assuredcontrols.md)
 - [Common Controls](/scubagoggles/baselines/commoncontrols.md)
-- [Gemini](/scubagoggles/baselines/gemini.md)
 - [Gmail](/scubagoggles/baselines/gmail.md)
 - [Google Calendar](/scubagoggles/baselines/calendar.md)
 - [Google Chat](/scubagoggles/baselines/chat.md)
@@ -11,3 +10,4 @@ Individual baselines can be visited directly at the links below:
 - [Google Meet](/scubagoggles/baselines/meet.md)
 - [Google Sites](/scubagoggles/baselines/sites.md)
 - [Groups for Business](/scubagoggles/baselines/groups.md)
+- [Super Intelligence (SI)](/scubagoggles/baselines/si.md)
