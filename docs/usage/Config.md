@@ -142,6 +142,10 @@ For each annotated policy, the config file allows you to indicate the following:
 
 **Exercise care when marking incorrect results because this can inadvertently introduce blind spots when assessing your system.**
 
+### Former Policy IDs
+
+Policies that moved to a renamed baseline keep working under their former IDs in `omitpolicy` and `annotatepolicy`. ScubaGoggles replaces each former ID with the current ID and outputs a warning to update the config file. For example, the Gemini baseline was renamed to the [Super Intelligence (SI)](../../scubagoggles/baselines/si.md) baseline, so `GWS.GEMINI.1.1v1` is treated as `GWS.SI.1.1v1`. If a config file lists both the former and the current ID of a policy, the entry for the current ID is used.
+
 ### Break Glass Accounts
 
 In some cases, it may be appropriate to specify the number of break glass accounts to be omitted from the total admin count. For example:

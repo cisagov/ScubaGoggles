@@ -22,6 +22,7 @@ import yaml
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
 from scubagoggles.scuba_constants import BASELINE_ALIASES
 from scubagoggles.ui.validation import ConfigValidator
+from scubagoggles.utils import replace_former_policy_ids
 
 
 class _IndentedListDumper(yaml.SafeDumper):
@@ -726,7 +727,11 @@ class ScubaConfigApp:
 
         for key in ('omitpolicy', 'annotatepolicy'):
             if key in config and isinstance(config[key], dict):
-                data[key] = config[key]
+                data[key], replaced = replace_former_policy_ids(config[key])
+                if replaced:
+                    updated = ', '.join(f'{former} → {current}'
+                                        for former, current in replaced.items())
+                    st.warning(f"⚠️ **Updated former policy IDs in {key}:** {updated}")
 
         for key, coerce in (
             ('breakglassaccounts', None),

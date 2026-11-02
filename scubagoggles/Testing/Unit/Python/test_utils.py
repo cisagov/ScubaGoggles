@@ -175,3 +175,30 @@ class TestUtils:
         else:
             with pytest.raises(ValueError):
                 utils.strtobool(strval)
+
+    @pytest.mark.parametrize('policies, expected, replaced',
+        [({'GWS.GEMINI.1.1v1': 'a', 'GWS.GMAIL.1.1v1': 'b'},
+          {'GWS.SI.1.1v1': 'a', 'GWS.GMAIL.1.1v1': 'b'},
+          {'GWS.GEMINI.1.1v1': 'GWS.SI.1.1v1'}),
+         # Former IDs are matched without regard to case
+         ({'gws.gemini.3.2v1': 'a'},
+          {'GWS.SI.3.2v1': 'a'},
+          {'gws.gemini.3.2v1': 'GWS.SI.3.2v1'}),
+         # The entry for the current ID is kept, regardless of order
+         ({'GWS.GEMINI.2.1v1': 'former', 'GWS.SI.2.1v1': 'current'},
+          {'GWS.SI.2.1v1': 'current'},
+          {'GWS.GEMINI.2.1v1': 'GWS.SI.2.1v1'}),
+         ({'gws.si.2.1v1': 'current', 'GWS.GEMINI.2.1v1': 'former'},
+          {'gws.si.2.1v1': 'current'},
+          {'GWS.GEMINI.2.1v1': 'GWS.SI.2.1v1'}),
+         # Current and non-string IDs are unchanged
+         ({'GWS.SI.1.1v1': 'a', 1: 2},
+          {'GWS.SI.1.1v1': 'a', 1: 2},
+          {}),
+         ({}, {}, {})])
+    def test_replace_former_policy_ids(self, policies, expected, replaced):
+
+        """Unit test for replace_former_policy_ids
+        """
+
+        assert utils.replace_former_policy_ids(policies) == (expected, replaced)

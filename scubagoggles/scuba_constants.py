@@ -70,6 +70,13 @@ BASELINE_ALIASES = {
     'gemini': 'si'
 }
 
+# Former policy ID prefixes and the current prefixes that replaced them when
+# policies moved to a renamed baseline (e.g., GWS.GEMINI.1.1v1 is now
+# GWS.SI.1.1v1).
+POLICY_ID_ALIASES = {
+    'GWS.GEMINI.': 'GWS.SI.'
+}
+
 class AuthFlow(Flag):
     """Indicates which authentication flow(s) a scope applies to.
 

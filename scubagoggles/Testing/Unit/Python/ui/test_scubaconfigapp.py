@@ -581,20 +581,39 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
         (
             {"omitpolicy": "abcdef", "skipdoh": ""},
             {"skipdoh": False}
+        ),
+        # former policy IDs are replaced with the current policy IDs
+        (
+            {"omitpolicy": {"GWS.GEMINI.1.1v1": "a"},
+             "annotatepolicy": {"GWS.GEMINI.4.1v1": "b", "GWS.GMAIL.1.1v1": "c"}},
+            {"omitpolicy": {"GWS.SI.1.1v1": "a"},
+             "annotatepolicy": {"GWS.SI.4.1v1": "b", "GWS.GMAIL.1.1v1": "c"}}
         )
     ])
     def test_import_policy_and_account_sections(self, mocker, config, expected_value):
         """
         Tests the import_policy_and_account_sections() function
-        This unit test handles different branching cases related to when the 
+        This unit test handles different branching cases related to when the
         config attribute (streamlit session state) should be updated.
         """
         session_state_mock = mocker.patch("streamlit.session_state")
         session_state_mock.config_data = {}
+        st_warning = mocker.patch("streamlit.warning")
 
         scubaconfigapp.ScubaConfigApp._import_policy_and_account_sections(config)
 
         assert session_state_mock.config_data == expected_value
+
+        # One warning for each section that has former policy IDs
+        former_ids = {key: [policy_id for policy_id in config[key]
+                            if str(policy_id).startswith("GWS.GEMINI.")]
+                      for key in ("omitpolicy", "annotatepolicy")
+                      if isinstance(config.get(key), dict)}
+        former_ids = {key: ids for key, ids in former_ids.items() if ids}
+        assert st_warning.call_count == len(former_ids)
+        for call, (key, ids) in zip(st_warning.call_args_list, former_ids.items()):
+            assert key in call.args[0]
+            assert all(former_id in call.args[0] for former_id in ids)
 
         if "skipdoh" in config:
             session_state_mock.__setitem__.assert_called_once_with(

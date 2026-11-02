@@ -550,6 +550,32 @@ class TestScubaArgumentParser:
 
         assert args.baselines == ['si', 'chat']
 
+    @pytest.mark.parametrize('param', ('omitpolicy', 'annotatepolicy'))
+    def test_config_former_policy_id_is_resolved(self, tmp_path, monkeypatch,
+                                                 param):
+        """A former policy ID in the config file resolves to the current ID,
+        which is then validated against the current baseline."""
+        warnings = []
+        monkeypatch.setattr(
+            scap.log,
+            'warning',
+            lambda message, *args: warnings.append(message % args),
+        )
+        value = {'rationale': 'Accepted risk'}
+
+        args = self._parse_config(
+            tmp_path,
+            monkeypatch,
+            {'baselines': ['gemini'], param: {'GWS.GEMINI.1.1v1': value}},
+        )
+
+        assert getattr(args, param) == {'GWS.SI.1.1v1': value}
+        assert warnings == [
+            f'Config file parameter "{param}" uses the former policy ID '
+            'GWS.GEMINI.1.1v1, which is now GWS.SI.1.1v1. Please update the '
+            'config file.'
+        ]
+
     @pytest.mark.parametrize(
         ('cli_args', 'expected'),
         (

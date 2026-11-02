@@ -12,7 +12,7 @@ import yaml
 from scubagoggles.orchestrator import UserRuntimeError
 from scubagoggles.reporter.md_parser import MarkdownParser
 from scubagoggles.scuba_constants import BASELINE_ALIASES
-from scubagoggles.utils import path_parser
+from scubagoggles.utils import path_parser, replace_former_policy_ids
 
 
 log = logging.getLogger(__name__)
@@ -112,9 +112,10 @@ class ScubaArgumentParser:
                 continue
             vars(args)[param] = self._validate_argument(param, config[param])
 
-        # Baseline aliases must be resolved before the policy IDs are
-        # validated against the baselines.
+        # Baseline and policy ID aliases must be resolved before the policy
+        # IDs are validated against the baselines.
         self.resolve_baseline_aliases(args)
+        self.resolve_policy_id_aliases(args)
 
         # Check for logical errors in the resulting configuration
         self.validate_config(args)
@@ -238,6 +239,27 @@ class ScubaArgumentParser:
                 baselines.append(baseline)
 
         args.baselines = baselines
+
+    @staticmethod
+    def resolve_policy_id_aliases(args : argparse.Namespace) -> None:
+        """
+        Replace any former policy IDs (e.g., GWS.GEMINI.1.1v1) in the policy
+        omissions and annotations with the current policy IDs (e.g.,
+        GWS.SI.1.1v1), warning the user to update the config file.
+        """
+
+        for option_name in ('omitpolicy', 'annotatepolicy'):
+            policies = vars(args).get(option_name)
+            if not isinstance(policies, dict):
+                continue
+
+            resolved, replaced = replace_former_policy_ids(policies)
+            for former_id, current_id in replaced.items():
+                log.warning('Config file parameter "%s" uses the former policy ID '
+                            '%s, which is now %s. Please update the config file.',
+                            option_name, former_id, current_id)
+
+            setattr(args, option_name, resolved)
 
     @staticmethod
     def validate_config(args : argparse.Namespace) -> None:
