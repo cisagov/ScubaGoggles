@@ -255,6 +255,6 @@ Allow personal avatars in Google Vids SHOULD be disabled.
 1.  Sign in to the [Google Admin Console](https://admin.google.com).
 2.  Select **Apps** -\> **Google Workspace** -\> **Drive and Docs**.
 3.  Select **Google Vids** -\> **Personal avatar**.
-4.  Ensure **Allow personal avatars in Google Vids** is **Unchecked**.
+4.  Ensure **Allow people in your organization to use their own voice and appearance through personal avatar features to generate content in Google Vids** is **Unchecked**.
 5.  Select **Save**.
 
