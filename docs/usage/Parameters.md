@@ -67,13 +67,13 @@ scubagoggles gws ----usemetadataserverauth
 
 ## Baselines
 
-**-b or --baselines** string to list of one or more abbreviated GWS baseline names that the tool will assess. Defaults to all baselines. Choices: assuredcontrols, calendar, chat, classroom, commoncontrols, drive, gemini, gmail, groups, meet, sites.
+**-b or --baselines** string to list of one or more abbreviated GWS baseline names that the tool will assess. Defaults to all baselines. Choices: assuredcontrols, calendar, chat, classroom, commoncontrols, drive, gmail, groups, meet, si, sites.
 
 | Parameter   | Value                                             |
 |-------------|---------------------------------------------------|
 | Optional    | Yes                                               |
 | Datatype    | List of Strings                                   |
-| Default     | ["assuredcontrols", "calendar", "chat", "classroom", "commoncontrols", "drive", "gemini", "gmail", "groups", "meet", "sites"] |
+| Default     | ["assuredcontrols", "calendar", "chat", "classroom", "commoncontrols", "drive", "gmail", "groups", "meet", "si", "sites"] |
 | Config File | Yes                                               |
 
 The list of acceptable values are:
@@ -86,10 +86,10 @@ The list of acceptable values are:
 | Google Classroom                             | classroom       |
 | Common Controls                              | commoncontrols  |
 | Google Drive                                 | drive           |
-| Google Gemini                                | gemini          |
 | Gmail                                        | gmail           |
 | Groups for Business                          | groups          |
 | Google Meet                                  | meet            |
+| Super Intelligence (SI)                      | si              |
 | Google Sites                                 | sites           |
 
 Here is an example using `--baselines`:

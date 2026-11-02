@@ -32,7 +32,7 @@ The ScubaGoggles Configuration UI provides a comprehensive web interface for cre
 The application consolidates all configuration capabilities into a single, professional interface with the following features:
 
 - **Organization Configuration**: Configure organization name (required), unit name, and assessment description
-- **Product Selection**: Choose from 11 Google Workspace baselines (Common Controls, Assured Controls, Gmail, Drive, Calendar, Meet, Groups, Chat, Sites, Classroom, Gemini) with icons, policy counts, and Select All/Clear All functionality
+- **Product Selection**: Choose from 11 Google Workspace baselines (Common Controls, Assured Controls, Gmail, Drive, Calendar, Meet, Groups, Chat, Sites, Classroom, Super Intelligence (SI)) with icons, policy counts, and Select All/Clear All functionality
 - **Policy Omission Management**: Exclude specific policies from assessment with documented rationale, optional expiration dates, and summary views
 - **Policy Annotation**: Add comments and documentation to policies, mark incorrect results, set remediation dates with visual status indicators
 - **Break Glass Account Configuration**: Define and manage super admin emergency access accounts with email validation
