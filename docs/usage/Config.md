@@ -144,7 +144,7 @@ For each annotated policy, the config file allows you to indicate the following:
 
 ### Former Policy IDs
 
-Policies that moved to a renamed baseline keep working under their former IDs in `omitpolicy` and `annotatepolicy`. ScubaGoggles replaces each former ID with the current ID and outputs a warning to update the config file. For example, the Gemini baseline was renamed to the [Super Intelligence (SI)](../../scubagoggles/baselines/si.md) baseline, so `GWS.GEMINI.1.1v1` is treated as `GWS.SI.1.1v1`. If a config file lists both the former and the current ID of a policy, the entry for the current ID is used.
+Policies that moved to a renamed or different baseline keep working under their former IDs in `omitpolicy` and `annotatepolicy`. ScubaGoggles replaces each former ID with the current ID and outputs a warning to update the config file. For example, the Gemini baseline was renamed to the [Super Intelligence (SI)](../../scubagoggles/baselines/si.md) baseline, so `GWS.GEMINI.1.1v1` is treated as `GWS.SI.1.1v1`, and the Google Meet Gemini settings moved to the SI baseline, so `GWS.MEET.6.1v1` is treated as `GWS.SI.6.1v1`. See [Removed Policies](../../scubagoggles/baselines/removedpolicies.md) for the full list. If a config file lists both the former and the current ID of a policy, the entry for the current ID is used.
 
 ### Break Glass Accounts
 

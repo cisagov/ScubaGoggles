@@ -56,3 +56,22 @@ Conversation sharing SHALL be set to OFF.
 - _Removal date:_ November 2026
 - _Removal rationale:_ Reworked into the new Super Intelligence (SI) baseline policy GWS.SI.4.1v1.
 </details>
+
+<details>
+<summary> Google Meet </summary>
+
+#### GWS.MEET.6.1v1
+Administrators SHOULD NOT be allowed to override the default sharing level for meeting notes set by the organization.
+- _Removal date:_ November 2026
+- _Removal rationale:_ Reworked into the new Super Intelligence (SI) baseline policy GWS.SI.6.1v1.
+
+#### GWS.MEET.6.2v1
+Default sharing setting for Google AI notes SHALL be restricted to "Guests in your organization."
+- _Removal date:_ November 2026
+- _Removal rationale:_ Reworked into the new Super Intelligence (SI) baseline policy GWS.SI.6.2v1.
+
+#### GWS.MEET.6.3v1
+Screenshots of presented content SHALL only captured in notes when recording is enabled.
+- _Removal date:_ November 2026
+- _Removal rationale:_ Reworked into the new Super Intelligence (SI) baseline policy GWS.SI.6.3v1.
+</details>

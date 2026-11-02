@@ -1014,10 +1014,11 @@ class Provider:
             'si': [
                 'Gemini app',
                 'Gemini in Workspace',
-                'Gemini in Workspace apps'
+                'Gemini in Workspace apps',
+                'Google Meet GenAI'
             ],
             'groups': ['Groups for Business'],
-            'meet': ['Google Meet', 'Google Meet GenAI'],
+            'meet': ['Google Meet'],
             'sites': ['Sites'],
             'classroom': ['Classroom']
         }

@@ -212,6 +212,67 @@ GET_GWS_LOGS_CASES = [
         },
         "expect_warning": False,
     },
+    # Google Meet Gemini settings use APPLICATION_NAME "Google Meet GenAI",
+    # which belongs to the SI baseline rather than Meet
+    {
+        "products": ["si", "meet"],
+        "event": "CHANGE_APPLICATION_SETTING",
+        "reports": [
+            {
+                "id": "meet-genai",
+                "events": [
+                    {
+                        "parameters": [
+                            {
+                                "name": "APPLICATION_NAME",
+                                "value": "Google Meet GenAI",
+                            },
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "meet",
+                "events": [
+                    {
+                        "parameters": [
+                            {"name": "APPLICATION_NAME", "value": "Google Meet"},
+                        ]
+                    }
+                ]
+            },
+        ],
+        "expected": {
+            "si": [
+                {
+                    "id": "meet-genai",
+                    "events": [
+                        {
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Google Meet GenAI",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+            "meet": [
+                {
+                    "id": "meet",
+                    "events": [
+                        {
+                            "parameters": [
+                                {"name": "APPLICATION_NAME", "value": "Google Meet"},
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+        "expect_warning": False,
+    },
     # Exception thrown when trying to retrieve logs
     {
         "products": ["gmail", "drive"],

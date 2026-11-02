@@ -71,10 +71,11 @@ BASELINE_ALIASES = {
 }
 
 # Former policy ID prefixes and the current prefixes that replaced them when
-# policies moved to a renamed baseline (e.g., GWS.GEMINI.1.1v1 is now
-# GWS.SI.1.1v1).
+# policies moved to another baseline (e.g., GWS.GEMINI.1.1v1 is now
+# GWS.SI.1.1v1, and GWS.MEET.6.1v1 is now GWS.SI.6.1v1).
 POLICY_ID_ALIASES = {
-    'GWS.GEMINI.': 'GWS.SI.'
+    'GWS.GEMINI.': 'GWS.SI.',
+    'GWS.MEET.6.': 'GWS.SI.6.'
 }
 
 class AuthFlow(Flag):

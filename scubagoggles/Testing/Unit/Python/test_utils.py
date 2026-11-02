@@ -180,6 +180,10 @@ class TestUtils:
         [({'GWS.GEMINI.1.1v1': 'a', 'GWS.GMAIL.1.1v1': 'b'},
           {'GWS.SI.1.1v1': 'a', 'GWS.GMAIL.1.1v1': 'b'},
           {'GWS.GEMINI.1.1v1': 'GWS.SI.1.1v1'}),
+         # Google Meet group 6 moved to SI group 6; other Meet groups did not
+         ({'GWS.MEET.6.3v1': 'a', 'GWS.MEET.5.1v1': 'b'},
+          {'GWS.SI.6.3v1': 'a', 'GWS.MEET.5.1v1': 'b'},
+          {'GWS.MEET.6.3v1': 'GWS.SI.6.3v1'}),
          # Former IDs are matched without regard to case
          ({'gws.gemini.3.2v1': 'a'},
           {'GWS.SI.3.2v1': 'a'},
