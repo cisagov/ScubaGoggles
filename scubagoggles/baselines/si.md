@@ -15,6 +15,7 @@ This baseline is based on Google documentation available at [Google Workspace Ad
 -   [Gemini Conversation History](#3-gemini-conversation-history)
 -   [Gemini Conversation Sharing](#4-gemini-conversation-sharing)
 -   [Google Meet Gemini Settings](#6-google-meet-gemini-settings)
+-   [Gemini Data Regions](#7-gemini-data-regions)
 
 ## Assumptions
 
@@ -298,3 +299,39 @@ Screenshots of presented content SHALL only be captured in notes when recording 
 4.  Click **Visual content in notes**.
 5.  Ensure **Select when the visual notes feature is enabled** is set to "Only allow screenshots of presented content to be captured in notes when recording is enabled".
 6.  Click **Save**.
+
+## 7. Gemini Data Regions
+Data regions advanced settings can be used to restrict Gemini features that process data globally.
+However, these settings only apply to users with the Assured Controls Plus add-on. See
+[Data Regions Advanced Settings](assuredcontrols.md#2-data-regions-advanced-settings)
+for the corresponding settings for other GWS products.
+
+### Policies
+
+#### GWS.SI.7.1v1
+Data processing across multiple regions SHOULD be disabled for the Gemini app and Gemini in Google Workspace apps.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
+
+- _Rationale:_ This policy prevents Gemini from processing data in a region other than the United States, reducing potential exposure to unauthorized entities. Implementation of this policy helps prevent agency data from being subject to the laws of other nations.
+- _Last modified:_ November 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SC-7(10)(a)
+- MITRE ATT&CK TTP Mapping
+    - [T1591: Gather Victim Organization Information](https://attack.mitre.org/techniques/T1591)
+        - [T1591:001 Gather Victim Organization Information: Determine Physical Location](https://attack.mitre.org/techniques/T1591/001/)
+    - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
+    - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
+
+### Resources
+- [GWS Admin Help \| Set up advanced settings for data regions](https://support.google.com/a/answer/14310030)
+
+### Prerequisites
+- Organizations with the Enterprise Plus or the Data Regions add-on subscriptions are able to modify the advanced data regions settings. However, these settings only apply to users with both the Enterprise Plus and the Assured Controls Plus licenses.
+
+### Implementation
+
+#### GWS.SI.7.1v1 Instructions
+1. Sign in to the [Google Admin Console](https://admin.google.com/) as an administrator.
+2. Navigate to **Data** -\> **Compliance** -\> **Data Regions** -\> **Advanced Settings**.
+3. Select **Gemini app and Gemini in Google Workspace apps**, choose **Disable features that may process data across multiple regions**, and click **SAVE**.

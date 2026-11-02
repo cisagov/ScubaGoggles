@@ -1015,7 +1015,8 @@ class Provider:
                 'Gemini app',
                 'Gemini in Workspace',
                 'Gemini in Workspace apps',
-                'Google Meet GenAI'
+                'Google Meet GenAI',
+                'Data regions'
             ],
             'groups': ['Groups for Business'],
             'meet': ['Google Meet'],

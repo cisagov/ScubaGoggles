@@ -273,6 +273,51 @@ GET_GWS_LOGS_CASES = [
         },
         "expect_warning": False,
     },
+    # Data regions settings apply to both Assured Controls and the Gemini
+    # settings in the SI baseline, so each product receives the event
+    {
+        "products": ["assuredcontrols", "si"],
+        "event": "CHANGE_APPLICATION_SETTING",
+        "reports": [
+            {
+                "id": "data-regions",
+                "events": [
+                    {
+                        "parameters": [
+                            {"name": "APPLICATION_NAME", "value": "Data regions"},
+                        ]
+                    }
+                ]
+            },
+        ],
+        "expected": {
+            "assuredcontrols": [
+                {
+                    "id": "data-regions",
+                    "events": [
+                        {
+                            "parameters": [
+                                {"name": "APPLICATION_NAME", "value": "Data regions"},
+                            ],
+                        },
+                    ],
+                },
+            ],
+            "si": [
+                {
+                    "id": "data-regions",
+                    "events": [
+                        {
+                            "parameters": [
+                                {"name": "APPLICATION_NAME", "value": "Data regions"},
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+        "expect_warning": False,
+    },
     # Exception thrown when trying to retrieve logs
     {
         "products": ["gmail", "drive"],

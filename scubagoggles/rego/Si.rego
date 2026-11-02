@@ -380,3 +380,80 @@ tests contains {
 }
 
 #--
+
+##########
+# GWS.SI.7 #
+##########
+
+#
+# Baseline GWS.SI.7.1
+#--
+
+SIId7_1 := utils.PolicyIdWithSuffix("GWS.SI.7.1")
+
+NonComplianceSetting7_1 := "GeminiNonRegionalizedFunctionalityStateSettingsProto state"
+
+NonComplianceMessage7_1 := concat(" ", [
+    "Features that may process data across multiple regions are enabled for",
+    "Gemini app and Gemini in Google Workspace apps"
+])
+
+NonCompliantOUs7_1 contains {
+    "Name": OU,
+    "Value": NonComplianceMessage7_1
+} if {
+    some OU in utils.OUsWithEvents
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting7_1, OU)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "ENABLED"
+}
+
+NonCompliantGroups7_1 contains {
+    "Name": Group,
+    "Value": NonComplianceMessage7_1
+} if {
+    some Group in utils.GroupsWithEvents
+    Events := utils.FilterEventsGroup(LogEvents, NonComplianceSetting7_1, Group)
+    count(Events) > 0
+    LastEvent := utils.GetLastEvent(Events)
+    LastEvent.NewValue == "ENABLED"
+}
+
+# As with GWS.ASSUREDCONTROLS.2.1, without an event for the top-level OU
+# there is no data to show that multi-region processing has been disabled.
+tests contains {
+    "PolicyId": SIId7_1,
+    "Prerequisites": [
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Should",
+    "ReportDetails": utils.NoSuchEventDetails(DefaultSafe, utils.TopLevelOU),
+    "ActualValue": "No relevant event for the top-level OU in the current logs",
+    "RequirementMet": DefaultSafe,
+    "NoSuchEvent": true
+}
+if {
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting7_1, utils.TopLevelOU)
+    count(Events) == 0
+    DefaultSafe := false
+}
+
+tests contains {
+    "PolicyId": SIId7_1,
+    "Prerequisites": [
+        "reports/v1/activities/list"
+    ],
+    "Criticality": "Should",
+    "ReportDetails": utils.ReportDetails(NonCompliantOUs7_1, NonCompliantGroups7_1),
+    "ActualValue": {"NonCompliantOUs": NonCompliantOUs7_1, "NonCompliantGroups": NonCompliantGroups7_1},
+    "RequirementMet": Status,
+    "NoSuchEvent": false
+}
+if {
+    Events := utils.FilterEventsOU(LogEvents, NonComplianceSetting7_1, utils.TopLevelOU)
+    count(Events) > 0
+    Conditions := {count(NonCompliantOUs7_1) == 0, count(NonCompliantGroups7_1) == 0}
+    Status := (false in Conditions) == false
+}
+#--
