@@ -608,14 +608,14 @@ A Google Workspace solution is not strictly required to satisfy this baseline co
     - [T1566:001: Phishing: Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001/)
     - [T1566:002: Phishing: Spearphishing Link](https://attack.mitre.org/techniques/T1566/002/)
 
-#### GWS.GMAIL.7.5v1
+#### GWS.GMAIL.7.5v2
 "Protect your Groups from inbound emails spoofing your domain" SHALL be enabled for all groups.
 
 [![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Inbound emails spoofing the user's domain can deceive users into interacting with malicious content, posing a security risk. This risk can be reduced by enabling protection against such spoofing, enhancing the safety and integrity of user data and systems.
-- _Last modified:_ July 2023
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ SI-8
 - MITRE ATT&CK TTP Mapping
   - [T1434: Internal Spearphishing](https://attack.mitre.org/techniques/T1434/)
@@ -686,7 +686,7 @@ To configure the settings for Spoofing and Authentication Protection:
 #### GWS.GMAIL.7.4v1 Instructions
 1.  Check the **Protect against any unauthenticated emails** checkbox.
 
-#### GWS.GMAIL.7.5v1 Instructions
+#### GWS.GMAIL.7.5v2 Instructions
 1.  Check the **Protect your groups from inbound emails spoofing your domain** checkbox.
 2.  Change **Allow this setting to** from **Only private groups (default)** to **All groups**
 
