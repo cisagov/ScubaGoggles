@@ -253,7 +253,7 @@ Default sharing setting for Google AI notes SHALL be restricted to "Guests in yo
   - [T1567:002: Exfiltration Over Web Service: Exfiltration to Cloud Storage](https://attack.mitre.org/techniques/T1567/002/)
 
 #### GWS.SI.6.3v1
-Screenshots of presented content SHALL only captured in notes when recording is enabled.
+Screenshots of presented content SHALL only be captured in notes when recording is enabled.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwssi63v1-instructions)
 
