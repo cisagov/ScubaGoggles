@@ -20,6 +20,7 @@ import streamlit as st
 import yaml
 
 from scubagoggles.reporter.md_parser import MarkdownParser, MarkdownParserError
+from scubagoggles.scuba_constants import BASELINE_ALIASES
 from scubagoggles.ui.validation import ConfigValidator
 
 
@@ -654,6 +655,11 @@ class ScubaConfigApp:
             baselines = [baselines]
         elif not isinstance(baselines, list):
             baselines = []
+
+        # Replace any baseline aliases (e.g., "gemini") with the current
+        # baseline names (e.g., "si"), removing any duplicates.
+        baselines = list(dict.fromkeys(BASELINE_ALIASES.get(b, b)
+                                       for b in baselines))
 
         baseline_info = self.get_baseline_info()
         valid = [b for b in baselines if b in baseline_info]

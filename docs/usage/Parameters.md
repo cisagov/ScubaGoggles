@@ -92,6 +92,8 @@ The list of acceptable values are:
 | Super Intelligence (SI)                      | si              |
 | Google Sites                                 | sites           |
 
+`gemini` is also accepted as an alias for `si`, the Super Intelligence (SI) baseline formerly named Gemini.
+
 Here is an example using `--baselines`:
 
 ```powershell

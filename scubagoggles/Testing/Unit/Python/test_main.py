@@ -51,6 +51,8 @@ class TestMain:
         uuid_choices = (0, 13, 18, 36)
         monkeypatch.setattr(main, "NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES", uuid_choices)
 
+        monkeypatch.setattr(main, "BASELINE_ALIASES", {"oldbaseline": "abaseline"})
+
         created = {"orchestrator_args": None, "start_called": 0}
 
         class DummyOrchestrator:
@@ -91,13 +93,15 @@ class TestMain:
             assert created["start_called"] == 1
             created["start_called"] = 0
 
-            # Common expected baselines (sorted tuple)
+            # Common expected baselines (sorted tuple); the choices also
+            # accept the baseline aliases, but the default does not include them
             expected_baselines = ("abaseline", "zbaseline")
             baselines = parser._option_string_actions["--baselines"]
             assert baselines.nargs == "+"
             assert baselines.default == expected_baselines
-            assert baselines.choices == expected_baselines
+            assert baselines.choices == ("abaseline", "oldbaseline", "zbaseline")
             assert baselines.metavar == "<baseline>"
+            assert "oldbaseline (alias for abaseline)" in baselines.help
 
             # Credentials branch
             cred = parser._option_string_actions["--credentials"]

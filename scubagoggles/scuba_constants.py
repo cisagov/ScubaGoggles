@@ -63,6 +63,13 @@ NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES = (
     0, 13, 18, 36
 )
 
+# Former baseline short names that are still accepted in place of the current
+# baseline short names (e.g., "gemini" for the Super Intelligence (SI)
+# baseline).
+BASELINE_ALIASES = {
+    'gemini': 'si'
+}
+
 class AuthFlow(Flag):
     """Indicates which authentication flow(s) a scope applies to.
 

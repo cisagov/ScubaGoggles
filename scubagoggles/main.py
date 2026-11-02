@@ -23,7 +23,9 @@ from scubagoggles.user_setup import default_file_names, user_setup
 from scubagoggles.utils import path_parser
 from scubagoggles.version import Version
 from scubagoggles.ui.launch import launch_from_ui_command as ui_launch
-from scubagoggles.scuba_constants import NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES, OPA_VERSION
+from scubagoggles.scuba_constants import (BASELINE_ALIASES,
+                                         NUMBER_OF_UUID_CHARACTERS_TO_TRUNCATE_CHOICES,
+                                         OPA_VERSION)
 
 EXIT_FAILURE = 1
 
@@ -41,6 +43,7 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
 
     gws = Orchestrator.gws_products()
     gws_baselines = tuple(sorted(gws['gws_baselines']))
+    baseline_choices = tuple(sorted(gws_baselines + tuple(BASELINE_ALIASES)))
 
     def gws_dispatch(args):
         Orchestrator(args).start_automation()
@@ -89,14 +92,17 @@ def get_gws_args(parser: argparse.ArgumentParser, user_config: UserConfig):
                         action='store_true',
                         help=help_msg)
 
+    aliases = ', '.join(f'{alias} (alias for {name})'
+                        for alias, name in sorted(BASELINE_ALIASES.items()))
     help_msg = ('A list of one or more abbreviated GWS baseline names that the '
                 'tool will assess. Defaults to all baselines. '
-                f'Choices: {(", ".join(gws_baselines))}')
+                f'Choices: {(", ".join(gws_baselines))}. '
+                f'Also accepted: {aliases}')
     parser.add_argument('--baselines',
                         '-b',
                         nargs='+',
                         default=gws_baselines,
-                        choices=gws_baselines,
+                        choices=baseline_choices,
                         metavar='<baseline>',
                         help=help_msg)
 

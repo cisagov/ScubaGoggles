@@ -12,6 +12,7 @@ import yaml
 
 import scubagoggles.scuba_argument_parser as scap
 from scubagoggles.main import get_gws_args
+from scubagoggles.orchestrator import Orchestrator
 from scubagoggles.scuba_argument_parser import ScubaArgumentParser
 
 
@@ -366,6 +367,26 @@ class TestScubaArgumentParser:
         assert len(warnings) == 1
         assert "groups.99" in warnings[0]
 
+    @pytest.mark.parametrize(
+        ("baselines", "expected"),
+        (
+            (["gemini"], ["si"]),
+            (["gmail", "gemini"], ["gmail", "si"]),
+            (["gemini", "si"], ["si"]),
+            (["si", "gemini", "gmail"], ["si", "gmail"]),
+            (("gmail", "si"), ["gmail", "si"]),
+            (["unknown"], ["unknown"]),
+            (None, None),
+        ),
+    )
+    def test_resolve_baseline_aliases(self, baselines, expected) -> None:
+        """Verify baseline aliases resolve to current names without duplicates."""
+        args = NamespaceWithContains(baselines=baselines)
+
+        ScubaArgumentParser.resolve_baseline_aliases(args)
+
+        assert args.baselines == expected
+
     @staticmethod
     def _parser(tmp_path):
         parser = argparse.ArgumentParser()
@@ -520,3 +541,29 @@ class TestScubaArgumentParser:
         )
 
         assert args.description == 'Agency configuration'
+
+    def test_config_baseline_alias_is_resolved(self, tmp_path, monkeypatch):
+        """A baseline alias in the config file resolves to the current name."""
+        args = self._parse_config(
+            tmp_path, monkeypatch, {'baselines': ['gemini', 'chat', 'si']}
+        )
+
+        assert args.baselines == ['si', 'chat']
+
+    @pytest.mark.parametrize(
+        ('cli_args', 'expected'),
+        (
+            (['--baselines', 'gemini'], ['si']),
+            (['--baselines', 'gmail', 'gemini', 'si'], ['gmail', 'si']),
+            # The default baselines include the current names only.
+            ([], sorted(Orchestrator.gws_products()['gws_baselines'])),
+        ),
+    )
+    def test_cli_baseline_alias_is_resolved(self, tmp_path, monkeypatch,
+                                            cli_args, expected):
+        """A baseline alias on the command line resolves to the current name."""
+        monkeypatch.setattr(sys, 'argv', ['scubagoggles', 'gws', *cli_args])
+
+        args = self._parser(tmp_path).parse_args_with_config()
+
+        assert args.baselines == expected

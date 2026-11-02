@@ -11,6 +11,7 @@ import yaml
 
 from scubagoggles.orchestrator import UserRuntimeError
 from scubagoggles.reporter.md_parser import MarkdownParser
+from scubagoggles.scuba_constants import BASELINE_ALIASES
 from scubagoggles.utils import path_parser
 
 
@@ -84,6 +85,7 @@ class ScubaArgumentParser:
             args.sitesexclusions = []
 
         if not 'config' in vars(args) or not args.config:
+            self.resolve_baseline_aliases(args)
             return args
 
         # Create a mapping of the short param aliases to the long form
@@ -109,6 +111,10 @@ class ScubaArgumentParser:
             if param in cli_args:
                 continue
             vars(args)[param] = self._validate_argument(param, config[param])
+
+        # Baseline aliases must be resolved before the policy IDs are
+        # validated against the baselines.
+        self.resolve_baseline_aliases(args)
 
         # Check for logical errors in the resulting configuration
         self.validate_config(args)
@@ -214,6 +220,24 @@ class ScubaArgumentParser:
                 aux_parser.add_argument(*dests)
         cli_args, _ = aux_parser.parse_known_args()
         return cli_args
+
+    @staticmethod
+    def resolve_baseline_aliases(args : argparse.Namespace) -> None:
+        """
+        Replace any baseline aliases in --baselines (e.g., "gemini") with the
+        current baseline names (e.g., "si"), removing any duplicates.
+        """
+
+        if 'baselines' not in vars(args) or args.baselines is None:
+            return
+
+        baselines = []
+        for baseline in args.baselines:
+            baseline = BASELINE_ALIASES.get(baseline, baseline)
+            if baseline not in baselines:
+                baselines.append(baseline)
+
+        args.baselines = baselines
 
     @staticmethod
     def validate_config(args : argparse.Namespace) -> None:

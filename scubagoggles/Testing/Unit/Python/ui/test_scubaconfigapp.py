@@ -364,6 +364,13 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
                 ["b1", "b2", "b5"],
                 ["b1", "b2"],
                 "⚠️ **Skipped unknown baselines:** b3, b4"
+            ),
+            # baseline alias resolves to the current name without duplicates
+            (
+                {"baselines": ["gemini", "gmail", "si"]},
+                ["gmail", "si"],
+                ["si", "gmail"],
+                ""
             )
         ]
     )
