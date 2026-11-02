@@ -11,3 +11,5 @@ Individual baselines can be visited directly at the links below:
 - [Google Sites](/scubagoggles/baselines/sites.md)
 - [Groups for Business](/scubagoggles/baselines/groups.md)
 - [Super Intelligence (SI)](/scubagoggles/baselines/si.md)
+
+- [Removed Policies](/scubagoggles/baselines/removedpolicies.md)

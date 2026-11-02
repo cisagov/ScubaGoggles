@@ -430,9 +430,11 @@ class ScubaConfigApp:
         if not baseline_dir.exists():
             return {}
 
+        # Only the known baselines are parsed, so the other Markdown files in
+        # the directory (e.g., README.md and removedpolicies.md) are skipped.
         products = [
             f.stem for f in baseline_dir.glob('*.md')
-            if f.name != 'README.md'
+            if f.stem in ScubaConfigApp._BASELINE_INFO
         ]
         if not products:
             return {}

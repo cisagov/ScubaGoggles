@@ -85,12 +85,17 @@ version suffix removed (`GWS.GMAIL.1.1v1` becomes `GWS.GMAIL.1.1`):
   runs, the before and after results are reported for information only, not as
   a pass/fail change.
 - **Base ID present in only one file**: `NewPolicy` (only in *after*) or
-  `RemovedPolicy` (only in *before*).
+  `RemovedPolicy` (only in *before*). A base ID present in the before file but
+  absent from the after file corresponds to a policy that was removed from the
+  baseline. See the baselines'
+  [removedpolicies.md](../../scubagoggles/baselines/removedpolicies.md).
 
   > **Note:** `RemovedPolicy` is inferred purely from presence. That usually
   > means the policy was removed from the baseline, but it also happens when the
   > after run did not assess that control or product (for example, comparing
-  > two runs with different `--baselines`).
+  > two runs with different `--baselines`). Cross-reference
+  > `removedpolicies.md` when you need to distinguish a genuine baseline
+  > removal from a control that was merely not evaluated.
 
 > **Note:** Compare reports from ScubaGoggles v1 onward. Earlier releases were
 > drafts and betas whose policy IDs carried versions such as `v0.6`, which are
@@ -214,6 +219,9 @@ control's *current* state, not the kind of change (which is in the Diff column):
 | Pass | green |
 | N/A / No events found / Omitted / Incorrect result / other | grey |
 | Removed from the baseline (`RemovedPolicy`) | grey |
+
+Policies removed from the baselines are tracked in
+[removedpolicies.md](../../scubagoggles/baselines/removedpolicies.md).
 
 The **Result (Before)** and **Result (After)** text is also colored (Pass
 green, Fail red, Warning amber), so a reader can see which way a policy moved.

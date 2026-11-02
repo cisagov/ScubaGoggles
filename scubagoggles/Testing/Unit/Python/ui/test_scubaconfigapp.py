@@ -118,6 +118,14 @@ class TestScubaConfig: # pylint: disable=too-many-public-methods
                 True,
                 {},
             ),
+            # Markdown files that are not baselines are skipped
+            (
+                [Path("gmail.md"), Path("README.md"), Path("removedpolicies.md")],
+                False,
+                {
+                    "gmail": "gmail controls by product",
+                },
+            ),
             (
                 [],
                 False,
