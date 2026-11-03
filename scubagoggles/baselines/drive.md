@@ -81,6 +81,7 @@ External sharing warnings SHALL be enabled.
 
 - _Rationale:_ Users may not always be aware that a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
 - _Last modified:_ November 2026
+- _Note:_ This policy is only applicable if external sharing is set to either **ON** or **ALLOWLISTED DOMAINS**.
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AT-2b
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
