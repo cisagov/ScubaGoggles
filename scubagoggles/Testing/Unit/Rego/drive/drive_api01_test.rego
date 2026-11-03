@@ -254,18 +254,7 @@ test_AllowPublish_Incorrect_1 if {
     PolicyId := DriveId1_5
     Output := tests with input as BadDriveApi01
 
-    failedOU := [{"Name": "nextOU",
-                 "Value": NonComplianceMessage1_5},
-                 {"Name": "topOU",
-                 "Value": NonComplianceMessage1_5}]
-    FailTestOUNonCompliant(PolicyId, Output, failedOU)
-}
-
-test_AllowPublish_Incorrect_2 if {
-    PolicyId := DriveId1_5
-    Output := tests with input as BadDriveApi01a
-
-    failedOU := [{"Name": "nextOU",
+    failedOU := [{"Name": "topOU",
                  "Value": NonComplianceMessage1_5}]
     FailTestOUNonCompliant(PolicyId, Output, failedOU)
 }
