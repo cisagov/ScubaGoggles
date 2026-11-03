@@ -172,7 +172,7 @@ Forms owned by users within the organization SHOULD NOT be able to accept respon
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs110v2-instructions)
 
 - _Rationale:_ Enabling the ability to accept responses from anyone bypasses the external sharing restrictions in place. Users external to the organization could use forms to maliciously collect and share data without oversight. Implementing this policy reduces these risks.
-- _Last modified:_ August 2025
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
