@@ -80,7 +80,7 @@ External sharing warnings SHALL be enabled.
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
 - _Rationale:_ Users may not always be aware that a given user is external to their organization. Warning them before sharing increases user awareness and accountability.
-- _Last modified:_ October 2026
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AT-2b
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -100,7 +100,7 @@ If sharing outside of the organization, agencies SHOULD disable sharing of files
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
 #### GWS.DRIVEDOCS.1.5v1
-Any Organizational Units that allow external sharing SHOULD disable content availability to "anyone with the link."
+Any organizational units that allow external sharing SHOULD disable content availability to "anyone with the link."
 
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
@@ -144,7 +144,7 @@ Users SHOULD NOT be allowed to upload or move content to shared drives owned by 
 [![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
 
-- _Rationale:_ By implementing least privilege and setting the default to "Private to owner," the organization is able to prevent broad accidental sharing of information.
+- _Rationale:_ By implementing least privilege and setting the default to "Private to owner," the organization is able to reduce the risk of broad accidental sharing of information.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-6
 - MITRE ATT&CK TTP Mapping
@@ -165,25 +165,25 @@ Out-of-Domain file-level warnings SHALL be enabled.
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.10v1
-If external sharing is not allowed, then forms owned by users within the organization SHOULD NOT be able to accept responses from anyone accessing the link from outside the organization.
+#### GWS.DRIVEDOCS.1.10v2
+Forms owned by users within the organization SHOULD NOT be able to accept responses from anyone accessing the link from outside the organization.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs110v1-instructions)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs110v2-instructions)
 
-- _Rationale:_ If external sharing is not allowed, enabling the ability to accept responses from anyone bypasses the external sharing restrictions in place. Users external to the organization could use forms to maliciously collect and share data without oversight. Implementing this policy reduces these risks.
+- _Rationale:_ Enabling the ability to accept responses from anyone bypasses the external sharing restrictions in place. Users external to the organization could use forms to maliciously collect and share data without oversight. Implementing this policy reduces these risks.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
   - [T1537: Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537/)
 
-#### GWS.DRIVEDOCS.1.11v1
-If receiving external files is not allowed, then users in the organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of the organization.
+#### GWS.DRIVEDOCS.1.11v2
+Users in the organization SHOULD NOT be able to submit responses to forms from users or shared drives outside of the organization.
 
-[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs111v1-instructions)
+[![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwsdrivedocs111v2-instructions)
 
-- _Rationale:_ If receiving external files is not allowed, enabling the ability to submit responses to forms from users or shared drives outside of the organization bypasses the external sharing restrictions in place. Users external to the organization could use forms to maliciously collect and share data without oversight. Implementing this policy reduces these risks.
-- _Last modified:_ August 2025
+- _Rationale:_ Enabling the ability to submit responses to forms from users or shared drives outside of the organization bypasses the external sharing restrictions in place. Users external to the organization could use forms to maliciously collect and share data without oversight. Implementing this policy reduces these risks.
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ IA-8, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1530: Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/)
@@ -226,7 +226,7 @@ the actual customer name and `OU_NAME` wherever the admin center would display t
     - If set to **OFF**: deselect **Allow users in `OU_NAME` to receive files from users or shared drives outside of `CUSTOMER_NAME`**.
     - If set to **ALLOWLISTED DOMAINS**: deselect **Allow users in `OU_NAME` to receive files from users or shared drives outside of allowlisted domains**.
 
-#### GWS.DRIVEDOCS.1.3v1 Instructions
+#### GWS.DRIVEDOCS.1.3v2 Instructions
 1.  Select **Sharing settings** -\> **Sharing options**.
 2.  The next step depends on how **Sharing outside of `CUSTOMER_NAME`** is configured.
     - If set to **OFF**: no action needed.
@@ -264,11 +264,11 @@ the actual customer name and `OU_NAME` wherever the admin center would display t
 1.  Select **Sharing settings -\> Highlight External Files**.
 2.  Check the **Mark files shared or owned externally as "external" to indicate that content may be viewable outside `CUSTOMER_NAME`. Applies to Drive, Docs, Sheets, Slides, Drawings, and Vids.** box to turn on the indicator.
 
-#### GWS.DRIVEDOCS.1.10v1 Instructions
+#### GWS.DRIVEDOCS.1.10v2 Instructions
 1.  Select **Sharing settings -\> Form responses**.
 2.  Deselect **Allow forms owned by users in `OU_NAME` to accept responses from anyone with the link outside `CUSTOMER_NAME`, even if external sharing isn't allowed**.
 
-#### GWS.DRIVEDOCS.1.11v1 Instructions
+#### GWS.DRIVEDOCS.1.11v2 Instructions
 1.  Select **Sharing settings -\> **Form responses**.
 2.  Deselect **Allow users in `OU_NAME` to submit responses to forms from users or shared drives outside of `CUSOMTER_NAME`, even if receiving external files isn’t allowed**.
 
