@@ -213,6 +213,21 @@ class TestOrchestrator:
         with pytest.raises(UserRuntimeError, match='credentials file path'):
             orchestrator.start_automation()
 
+    def test_start_automation_needs_no_credentials_without_export(
+            self,
+            orchestrator,
+            mocker,
+    ):
+        """A cached run that skips the export never authenticates."""
+        orchestrator._args.credentials = None
+        orchestrator._args.runcached = True
+        orchestrator._args.skipexport = True
+        *_, cached = self._patch_start_automation_dependencies(mocker, orchestrator)
+
+        orchestrator.start_automation()
+
+        cached.assert_called_once()
+
     def test_start_automation_raises_error_if_no_opa_exe_exists(
             self,
             orchestrator,

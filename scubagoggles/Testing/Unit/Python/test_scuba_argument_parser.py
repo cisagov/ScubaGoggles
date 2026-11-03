@@ -82,7 +82,7 @@ class FakeParser:
         self.parse_args_calls = 0
         self._actions: list[argparse.Action] = []
 
-    def parse_args(self) -> argparse.Namespace:
+    def parse_args(self, _args=None) -> argparse.Namespace:
         """Return the stored namespace and count how many times it was used."""
         self.parse_args_calls += 1
         return self.parsed_args

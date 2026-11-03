@@ -1,0 +1,281 @@
+# Common Controls test plan. Every policy in the baseline has an entry; see
+# ../../README.md for the format. Comments name the exported setting types.
+
+GWS.COMMONCONTROLS.1.1:  # security_two_step_verification_enrollment, _enforcement, _enforcement_factor
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.1.2:  # security_two_step_verification_enrollment, _enforcement
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.1.3:  # security_two_step_verification_enrollment, _enforcement, _enforcement_factor
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.1.4:  # security_two_step_verification_enrollment, _enforcement, _grace_period
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.1.5:  # security_two_step_verification_enrollment, _enforcement, _device_trust
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.2.1:  # Reports API logs (TOGGLE_CAA_ENABLEMENT)
+  live_testing: allowed
+  write_api: none
+  scope: tenant
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.3.1:  # Reports API logs (SsoPolicyProto challenge_selection_behavior)
+  live_testing: allowed
+  write_api: none
+  scope: ou
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.3.2:  # Reports API logs (SsoPolicyProto challenge_selection_behavior)
+  live_testing: allowed
+  write_api: none
+  scope: ou
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.4.1:  # security_session_controls
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  cases:
+    - name: session_12h
+      test_driver: cached
+      expected_result: Pass
+      settings:
+        security_session_controls.webSessionDuration: 43200s
+    - name: session_24h
+      test_driver: cached
+      expected_result: Fail
+      settings:
+        security_session_controls.webSessionDuration: 86400s
+    - name: session_duration_missing
+      test_driver: cached
+      expected_result: Error
+      description: The provider could not read the setting, so the report shows Error.
+      patch:
+        - helper: missing_setting
+          args: {setting: security_session_controls.webSessionDuration}
+
+GWS.COMMONCONTROLS.5.1:  # security_password
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.5.2:  # security_password
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.5.3:  # security_password
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  cases:
+    - name: min_length_16
+      test_driver: cached
+      expected_result: Pass
+      settings:
+        security_password.minimumLength: 16
+    - name: min_length_12
+      test_driver: cached
+      expected_result: Warning
+      settings:
+        security_password.minimumLength: 12
+
+GWS.COMMONCONTROLS.5.4:  # security_password
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.5.5:  # security_password
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.5.6:  # security_password
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.6.1:  # Directory API (OUs, users, privileged roles), Cloud Identity API (inboundSsoAssignments)
+  live_testing: allowed
+  write_api: [directory_api, cloud_identity_api]
+  scope: ou_group
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.6.2:  # Directory API (super admins), breakglassaccounts config
+  live_testing: allowed
+  write_api: directory_api
+  scope: tenant
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.7.1:  # provisioning_conflicting_accounts_management
+  live_testing: allowed
+  write_api: none
+  scope: tenant
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.8.1:  # security_super_admin_account_recovery
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.8.2:  # security_user_account_recovery
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.8.3:
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Not-Implemented in Rego.
+
+GWS.COMMONCONTROLS.9.1:
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Not-Implemented in Rego.
+
+GWS.COMMONCONTROLS.9.2:
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Not-Implemented in Rego.
+
+GWS.COMMONCONTROLS.10.1:  # api_controls_google_services
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.10.2:  # api_controls_google_services
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.10.3:  # api_controls_internal_apps
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.10.4:  # api_controls_unconfigured_third_party_apps
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.10.5:  # security_less_secure_apps
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.11.1:  # workspace_marketplace_apps_access_options
+  live_testing: allowed
+  write_api: none
+  scope: ou_group
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.12.1:  # takeout_service_status, *_user_takeout (9 types)
+  live_testing: allowed
+  write_api: none
+  scope: ou_group
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.13.1:  # rule_system_defined_alerts
+  live_testing: allowed
+  write_api: none
+  scope: tenant
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.14.1:
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Not-Implemented in Rego.
+
+GWS.COMMONCONTROLS.14.2:
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Not-Implemented in Rego.
+
+GWS.COMMONCONTROLS.15.1:  # data_regions_data_at_rest_region
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.15.2:  # data_regions_data_processing_region
+  live_testing: denied
+  write_api: unknown
+  scope: unknown
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.16.1:  # enterprise_service_restrictions_service_status
+  live_testing: allowed
+  write_api: none
+  scope: ou_group
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.16.2:  # early_access_apps_service_status
+  live_testing: allowed
+  write_api: none
+  scope: ou_group
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.16.3:  # Looker Studio
+  live_testing: allowed
+  write_api: none
+  scope: unknown
+  reason: Not-Implemented in Rego.
+
+GWS.COMMONCONTROLS.16.4:  # Pinpoint
+  live_testing: allowed
+  write_api: none
+  scope: ou_group
+  reason: Not-Implemented in Rego.
+
+GWS.COMMONCONTROLS.17.1:  # multi_party_approval_require_approvals
+  live_testing: allowed
+  write_api: none
+  scope: tenant
+  reason: Cases not written yet.
+
+GWS.COMMONCONTROLS.18.1:  # rule_dlp is exported
+  live_testing: allowed
+  write_api: policy_api
+  scope: ou_group
+  reason: Not-Implemented in Rego.
+
+GWS.COMMONCONTROLS.18.2:  # rule_dlp is exported
+  live_testing: allowed
+  write_api: policy_api
+  scope: ou_group
+  reason: Not-Implemented in Rego.
