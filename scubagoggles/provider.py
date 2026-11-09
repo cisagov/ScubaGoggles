@@ -1015,6 +1015,7 @@ class Provider:
                 'Gemini app',
                 'Gemini in Workspace',
                 'Gemini in Workspace apps',
+                'Drive and Editors GenAI',
                 'Google Meet GenAI',
                 'Data regions'
             ],

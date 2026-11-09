@@ -55,6 +55,11 @@ Gemini conversation retention SHALL be set to minimum of 18 months.
 Conversation sharing SHALL be set to OFF.
 - _Removal date:_ November 2026
 - _Removal rationale:_ Reworked into the new Super Intelligence (SI) baseline policy GWS.SI.4.1v1.
+
+#### GWS.GEMINI.5.1v1
+Allow personal avatars in Google Vids SHOULD be disabled.
+- _Removal date:_ November 2026
+- _Removal rationale:_ Reworked into the new Super Intelligence (SI) baseline policy GWS.SI.5.1v1.
 </details>
 
 <details>

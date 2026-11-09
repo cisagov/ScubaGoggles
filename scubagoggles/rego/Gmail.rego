@@ -968,21 +968,38 @@ GmailId7_5 := utils.PolicyIdWithSuffix("GWS.GMAIL.7.5")
 NonComplianceMessage7_5(value) := sprintf("Protect your Groups from inbound emails spoofing your domain is set to: %s",
                                           [value])
 
+NonComplianceMessage7_5Visibility(value) := sprintf("Protect your Groups from inbound emails spoofing your domain applies to: %s",
+                                                    [value])
+
+FriendlyGroupsVisibility7_5(value) := "all groups" if {
+    value == "ALL_GROUPS"
+} else := "only private groups" if {
+    value == "PRIVATE_GROUPS_ONLY"
+} else := value
+
 NonCompliantOUs7_5 contains {
     "Name": OU,
-    "Value": NonComplianceMessage7_5(GetFriendlyEnabledValue(detectSpoof))
+    "Value": concat("; ", problems)
 }
 if {
     some OU, settings in input.policies
     GmailEnabled(OU)
-    detectSpoof := settings.gmail_spoofing_and_authentication.detectDomainSpoofingFromUnauthenticatedSenders
-    detectSpoof != true
+    spoofSettings := settings.gmail_spoofing_and_authentication
+    problems := array.concat(
+        [NonComplianceMessage7_5(GetFriendlyEnabledValue(spoofSettings.detectGroupsSpoofing)) |
+            spoofSettings.detectGroupsSpoofing != true],
+        [NonComplianceMessage7_5Visibility(
+            FriendlyGroupsVisibility7_5(spoofSettings.groupsSpoofingVisibilityType)) |
+            spoofSettings.groupsSpoofingVisibilityType != "ALL_GROUPS"]
+    )
+    count(problems) > 0
 }
 
 tests contains {
     "PolicyId": GmailId7_5,
     "Prerequisites": [
-        "policy/gmail_spoofing_and_authentication.detectDomainSpoofingFromUnauthenticatedSenders",
+        "policy/gmail_spoofing_and_authentication.detectGroupsSpoofing",
+        "policy/gmail_spoofing_and_authentication.groupsSpoofingVisibilityType",
         "policy/gmail_service_status.serviceState"
     ],
     "Criticality": "Shall",
