@@ -56,8 +56,8 @@ for more details on configuring these additional services.
 #### GWS.GEMINI.1.1v1
 Gemini app user access SHALL be set to OFF for everyone without a license.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Only Gemini data for users with the appropriate license will be
 protected from use in generative AI training by the Google Workspace Terms of Service. Data for users without the
@@ -101,8 +101,8 @@ production data in connection with Pre-Gemini Beta Offerings.
 #### GWS.GEMINI.2.1v1
 Gemini Beta features SHALL be disabled.
 
+[![BOD 25-01 Requirement](https://img.shields.io/badge/BOD_25--01_Requirement-C41230)](https://www.cisa.gov/news-events/directives/bod-25-01-implementation-guidance-implementing-secure-practices-cloud-services)
 [![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
-[![Log-Based Check](https://img.shields.io/badge/Log--Based_Check-F6E8E5)](../../docs/usage/Limitations.md#log-based-policy-checks)
 
 - _Rationale:_ Allowing access to Gemini Beta features may expose users to features that
 have not yet been fully vetted and may still need to undergo robust testing to verify
