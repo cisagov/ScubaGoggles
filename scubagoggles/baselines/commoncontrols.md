@@ -1405,8 +1405,54 @@ Require multi-party approval for sensitive admin actions SHOULD be enabled.
 - _Last modified:_ August 2025
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
 - MITRE ATT&CK TTP Mapping
-  - No TTP Mappings
+  - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
+  - [TT1136: Create Account](https://attack.mitre.org/techniques/T1136/)
+    - [TT1136:003 Cloud Account](https://attack.mitre.org/techniques/T1136/003/)
+  - [T1484: Domain or Tenant Policy Modification](https://attack.mitre.org/techniques/T1484/)
+    - [T1484:002 Trust Modification](https://attack.mitre.org/techniques/T1484/002/)
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006 Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+    - [T1556:009 Conditional Access Policies](https://attack.mitre.org/techniques/T1556/009/)
 
+#### GWS.COMMONCONTROLS.17.2v1
+Multi-party approval SHOULD be required for all security settings and API access to security settings.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
+- _Rationale_: Changes to security settings, such as disabling 2-step verification (2SV), could introduce serious vulnerabilities to the GWS environment. Requiring multiple super admins to approve changes to those settings mitigates this risk.
+- _Last modified:_ November 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
+- MITRE ATT&CK TTP Mapping
+  - [T1556: Modify Authentication Process](https://attack.mitre.org/techniques/T1556/)
+    - [T1556:006 Multi-Factor Authentication](https://attack.mitre.org/techniques/T1556/006/)
+    - [T1556:009 Conditional Access Policies](https://attack.mitre.org/techniques/T1556/009/)
+  - [T1484: Domain or Tenant Policy Modification](https://attack.mitre.org/techniques/T1484/)
+    - [T1484:002 Trust Modification](https://attack.mitre.org/techniques/T1484/002/)
+
+#### GWS.COMMONCONTROLS.17.3v1
+Multi-party approval SHOULD be required for domain admin settings.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
+- _Rationale_: Changes to sensitive admin settings, including adding or removing domains from your Google account, could introduce serious vulnerabilities to the GWS environment. Requiring multiple super admins to approve domain changes mitigates this risk.
+- _Last modified:_ November 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
+- MITRE ATT&CK TTP Mapping
+  - [T1484: Domain or Tenant Policy Modification](https://attack.mitre.org/techniques/T1484/)
+    - [T1484:002 Trust Modification](https://attack.mitre.org/techniques/T1484/002/)
+
+#### GWS.COMMONCONTROLS.17.4v1
+Multi-party approval SHOULD be required for role management.
+
+[![Automated Check](https://img.shields.io/badge/Automated_Check-5E9732)](#key-terminology)
+
+- _Rationale_: Modifying roles or changing role assignments is a potential way for attackers to circumvent multi-party requirements and establish persistent access to a GWS tenant. Requiring multiple super admins to approve changes to those role assignments mitigates this risk.
+- _Last modified:_ November 2026
+- _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-5
+- MITRE ATT&CK TTP Mapping
+  - [T1098: Account Manipulation](https://attack.mitre.org/techniques/T1098/)
+  - [TT1136: Create Account](https://attack.mitre.org/techniques/T1136/)
+    - [TT1136:003 Cloud Account](https://attack.mitre.org/techniques/T1136/003/)
 ### Resources
 -	[GWS Admin Help \| Multi-party approval for sensitive actions](https://support.google.com/a/answer/13790448?hl=en-Link)
 
