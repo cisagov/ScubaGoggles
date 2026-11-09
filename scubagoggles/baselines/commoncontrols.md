@@ -1317,13 +1317,13 @@ User access to Early Access applications SHOULD be disabled.
     - [T1204:002: User Execution: Malicious File](https://attack.mitre.org/techniques/T1204/002/)
     - [T1204:003: User Execution: Malicious Image](https://attack.mitre.org/techniques/T1204/003/)
 
-#### GWS.COMMONCONTROLS.16.3v1
-Looker Studio Sharing outside org SHOULD be set to OFF.
+#### GWS.COMMONCONTROLS.16.3v2
+Data Studio Sharing outside org SHOULD be set to OFF.
 
 [![Manual](https://img.shields.io/badge/Manual-046B9A)](#gwscommoncontrols163v1-instructions)
 
-- _Rationale_: Disabling Looker Studio asset sharing outside of the organization helps keep sensitive data, reports, and dashboards within the organization's control. This policy helps mitigate the risk of unauthorized access, data leakage, or exposure of proprietary information to external entities. By restricting sharing, the organization can maintain compliance with data governance standards, protect intellectual property, and safeguard customer or business-critical data. Additionally, this approach reduces the likelihood of accidental sharing or misuse of information, enhancing overall security and operational integrity.
-- _Last modified:_ February 2026
+- _Rationale_: Disabling Data Studio asset sharing outside of the organization helps keep sensitive data, reports, and dashboards within the organization's control. This policy helps mitigate the risk of unauthorized access, data leakage, or exposure of proprietary information to external entities. By restricting sharing, the organization can maintain compliance with data governance standards, protect intellectual property, and safeguard customer or business-critical data. Additionally, this approach reduces the likelihood of accidental sharing or misuse of information, enhancing overall security and operational integrity.
+- _Last modified:_ November 2026
 - _NIST SP 800-53 Rev. 5 FedRAMP High Baseline Mapping:_ AC-3, SC-7(10)
 - MITRE ATT&CK TTP Mapping
   - [T1567: Exfiltration Over Web Service](https://attack.mitre.org/techniques/T1567/)
@@ -1380,7 +1380,7 @@ Pinpoint access to drive SHOULD be set to OFF.
 4. Click **Save**.
 
 #### GWS.COMMONCONTROLS.16.3v1 Instructions
-1. In the list of all services, scroll to and click on the **Looker Studio** service.
+1. In the list of all services, scroll to and click on the **Data Studio** service.
 2. Select **Sharing setting**.
 3. Ensure **OFF** is checked.
 4. Click **Save**.
