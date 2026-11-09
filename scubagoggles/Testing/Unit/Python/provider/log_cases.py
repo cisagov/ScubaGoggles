@@ -158,6 +158,19 @@ GET_GWS_LOGS_CASES = [
                 ]
             },
             {
+                "id": "gemini-vids",
+                "events": [
+                    {
+                        "parameters": [
+                            {
+                                "name": "APPLICATION_NAME",
+                                "value": "Drive and Editors GenAI",
+                            },
+                        ]
+                    }
+                ]
+            },
+            {
                 "id": "gmail",
                 "events": [
                     {
@@ -203,6 +216,19 @@ GET_GWS_LOGS_CASES = [
                                 {
                                     "name": "APPLICATION_NAME",
                                     "value": "Gemini in Workspace apps",
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "id": "gemini-vids",
+                    "events": [
+                        {
+                            "parameters": [
+                                {
+                                    "name": "APPLICATION_NAME",
+                                    "value": "Drive and Editors GenAI",
                                 },
                             ],
                         },
