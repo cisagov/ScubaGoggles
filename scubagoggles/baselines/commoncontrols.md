@@ -1379,7 +1379,7 @@ Pinpoint access to drive SHOULD be set to OFF.
 3. Ensure **OFF for everyone** is checked.
 4. Click **Save**.
 
-#### GWS.COMMONCONTROLS.16.3v1 Instructions
+#### GWS.COMMONCONTROLS.16.3v2 Instructions
 1. In the list of all services, scroll to and click on the **Data Studio** service.
 2. Select **Sharing setting**.
 3. Ensure **OFF** is checked.
