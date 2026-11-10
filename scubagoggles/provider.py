@@ -1283,25 +1283,16 @@ class Provider:
 
         return {'license_data': subscriptions}
 
-    def call_gws_providers(self, products: list, quiet) -> dict:
+    def _collect_organizational_units(self) -> dict:
         """
-        Calls the relevant GWS APIs to get the data we need for the baselines.
-        Data such as the admin audit log, super admin users etc.
+        Collects organizational unit data and names for the provider output.
 
-        :param products: list of product names to check
-        :param quiet: suppress tqdm output
+        :return: dict with organizational_units and organizational_unit_names
+            keys populated on success; may be empty or partial on failure.
         """
-        # create a inverse dictionary containing a mapping of event => list of products
-        events_to_products = create_subset_inverted_dict(EVENTS, products)
-        events_to_products_bar = tqdm(events_to_products.items(),
-                                      leave = False,
-                                      disable = quiet)
-
-        # main aggregator dict
-        product_to_logs = create_key_to_list(products)
         product_to_items = {}
         ou_ids = set()
-        ou_ids.add('') # certain settings have no OU
+        ou_ids.add('')  # certain settings have no OU
         try:
             # Add top level organization unit name
             ou_ids.add(self._top_ou)
@@ -1319,19 +1310,39 @@ class Provider:
                 f'Exception thrown while getting tenant data: {exc}',
                 RuntimeWarning
             )
+        return product_to_items
+
+    def _collect_gws_logs(self, products: list, quiet: bool) -> dict:
+        """
+        Collects GWS admin audit logs for the requested products.
+
+        :param products: list of product names to check
+        :param quiet: suppress tqdm output
+        :return: product_to_logs aggregator dict mapping product name to log list
+        """
+        # create a inverse dictionary containing a mapping of event => list of products
+        events_to_products = create_subset_inverted_dict(EVENTS, products)
+        events_to_products_bar = tqdm(events_to_products.items(),
+                                      leave=False,
+                                      disable=quiet)
+
+        product_to_logs = create_key_to_list(products)
 
         # call the api once per event type
         try:
             for event, product_list in events_to_products_bar:
-                products = ', '.join(product_list)
-                bar_descr = f'Running Provider: Exporting {event} events for {products}...'
+                products_str = ', '.join(product_list)
+                bar_descr = (
+                    f'Running Provider: Exporting {event} events '
+                    f'for {products_str}...'
+                )
                 events_to_products_bar.set_description(bar_descr)
 
                 # gets the GWS admin audit logs and merges them into product_to_logs
                 # aggregator dict
                 product_to_logs = merge_dicts(
                     product_to_logs,
-                    self.get_gws_logs(products = product_list, event = event)
+                    self.get_gws_logs(products=product_list, event=event)
                 )
                 self._successful_calls.add(ApiReference.LIST_ACTIVITIES.value)
         except Exception as exc:
@@ -1339,12 +1350,23 @@ class Provider:
                 f'outputs will be incorrect: {exc}', RuntimeWarning)
             self._unsuccessful_calls.add(ApiReference.LIST_ACTIVITIES.value)
 
-        with PolicyAPI(self._gws_auth, self._top_ou) as policy_api:
-            policies = policy_api.get_policies()
-            self._missing_policies = policy_api.verify(policies)
+        return product_to_logs
 
-        product_to_items['policies'] = policies
+    def _assemble_provider_items(
+        self,
+        product_to_items: dict,
+        product_to_logs: dict,
+        quiet: bool
+    ) -> dict:
+        """
+        Repacks product logs under {product}_logs keys and collects additional
+        provider data (tenant info, DNS, common controls, group settings).
 
+        :param product_to_items: aggregate dictionary to populate
+        :param product_to_logs: product name to log list aggregator
+        :param quiet: suppress tqdm output
+        :return: updated product_to_items dictionary
+        """
         # repacks the main aggregator into the original form
         # that the api returns the data in; under an 'items' key.
         # Then we put this key under a {product}_log key for the Rego code
@@ -1395,6 +1417,29 @@ class Provider:
                 f'Uncaught Exception thrown while getting other data: {exc}',
                 RuntimeWarning
             )
+
+        return product_to_items
+
+    def call_gws_providers(self, products: list, quiet) -> dict:
+        """
+        Calls the relevant GWS APIs to get the data we need for the baselines.
+        Data such as the admin audit log, super admin users etc.
+
+        :param products: list of product names to check
+        :param quiet: suppress tqdm output
+        """
+        product_to_items = self._collect_organizational_units()
+        product_to_logs = self._collect_gws_logs(products, quiet)
+
+        with PolicyAPI(self._gws_auth, self._top_ou) as policy_api:
+            policies = policy_api.get_policies()
+            self._missing_policies = policy_api.verify(policies)
+
+        product_to_items['policies'] = policies
+
+        product_to_items = self._assemble_provider_items(
+            product_to_items, product_to_logs, quiet
+        )
 
         product_to_items['successful_calls'] = list(self._successful_calls)
         product_to_items['unsuccessful_calls'] = list(self._unsuccessful_calls)
