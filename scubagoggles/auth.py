@@ -122,11 +122,13 @@ class GwsAuth:
 
     @property
     def dasa_credentials(self):
-        """Returns credentials for the Groups Settings API.
+        """Returns credentials for the Groups Settings API and the Enterprise
+        License Manager API.
 
         When using a service account, returns credentials where the service
         account acts as itself (no DwD subject), relying on the Groups Reader
-        admin role being assigned directly to the service account (DASA).
+        admin role and a License Read admin role being assigned directly to
+        the service account (DASA).
 
         For OAuth and access-token flows, returns the standard credentials.
         """
