@@ -946,7 +946,11 @@ class Orchestrator:
             args.outputpath = Path(args.outputpath)
         args.outputpath = args.outputpath.resolve()
 
-        if not args.usemetadataserverauth:
+        # Credentials are only used for the export; a cached run that skips
+        # the export (--runcached --skipexport) never contacts Google.
+        needs_credentials = not args.usemetadataserverauth and not args.skipexport
+
+        if needs_credentials:
             if args.credentials is None:
                 raise UserRuntimeError('Google credentials file path not provided. '
                     'Either save the credentials path using the ScubaGoggles setup '
@@ -965,7 +969,7 @@ class Orchestrator:
             raise UserRuntimeError(f'? "{args.opapath}" - OPA executable '
                                    f'missing - {see_docs}') from fnf
 
-        if not args.usemetadataserverauth and not args.credentials.exists():
+        if needs_credentials and not args.credentials.exists():
             raise UserRuntimeError(f'? "{args.credentials}" - Google '
                                    f'credentials file missing - {see_docs}')
 

@@ -59,18 +59,22 @@ class ScubaArgumentParser:
     def __init__(self, parser):
         self.parser = parser
 
-    def parse_args(self) -> argparse.Namespace:
+    def parse_args(self, argv: list[str] | None = None) -> argparse.Namespace:
         """
         Parse the arguments without loading config file.
-        """
-        return self.parser.parse_args()
 
-    def parse_args_with_config(self) -> argparse.Namespace:
+        :param argv: [optional] arguments to parse; defaults to sys.argv.
+        """
+        return self.parser.parse_args(argv)
+
+    def parse_args_with_config(self, argv: list[str] | None = None) -> argparse.Namespace:
         """
         Parse the arguments and the config file, if provided, resolving any
         differences between the two.
+
+        :param argv: [optional] arguments to parse; defaults to sys.argv.
         """
-        args = self.parse_args()
+        args = self.parse_args(argv)
 
         self._start_logging(args)
 
